@@ -22,7 +22,7 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
      * @deprecated
      * @var string
      */
-    final public const FUNC_CALLS_TO_STATIC_CALLS = 'func_calls_to_static_calls';
+    public const FUNC_CALLS_TO_STATIC_CALLS = 'func_calls_to_static_calls';
 
     /**
      * @var FuncCallToStaticCall[]

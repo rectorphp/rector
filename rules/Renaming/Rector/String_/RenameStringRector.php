@@ -23,7 +23,7 @@ final class RenameStringRector extends AbstractRector implements ConfigurableRec
      * @deprecated
      * @var string
      */
-    final public const STRING_CHANGES = 'string_changes';
+    public const STRING_CHANGES = 'string_changes';
 
     /**
      * @var array<string, string>

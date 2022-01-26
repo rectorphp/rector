@@ -28,7 +28,7 @@ final class ReservedObjectRector extends AbstractRector implements ConfigurableR
      * @deprecated
      * @var string
      */
-    final public const RESERVED_KEYWORDS_TO_REPLACEMENTS = 'reserved_keywords_to_replacements';
+    public const RESERVED_KEYWORDS_TO_REPLACEMENTS = 'reserved_keywords_to_replacements';
 
     /**
      * @var array<string, string>

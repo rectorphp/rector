@@ -27,7 +27,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Allo
      * @api
      * @var string
      */
-    final public const DELIMITER = 'delimiter';
+    public const DELIMITER = 'delimiter';
 
     /**
      * @var string

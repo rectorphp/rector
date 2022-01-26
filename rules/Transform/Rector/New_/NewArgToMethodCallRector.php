@@ -26,7 +26,7 @@ final class NewArgToMethodCallRector extends AbstractRector implements Configura
      * @deprecated
      * @var string
      */
-    final public const NEW_ARGS_TO_METHOD_CALLS = 'new_args_to_method_calls';
+    public const NEW_ARGS_TO_METHOD_CALLS = 'new_args_to_method_calls';
 
     /**
      * @var NewArgToMethodCall[]

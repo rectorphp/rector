@@ -18,7 +18,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     /**
      * @var string
      */
-    final public const NAME = 'console';
+    public const NAME = 'console';
 
     /**
      * @var string

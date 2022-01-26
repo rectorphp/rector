@@ -28,7 +28,7 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
      * @deprecated
      * @var string
      */
-    final public const METHOD_RETURN_TYPES = 'method_return_types';
+    public const METHOD_RETURN_TYPES = 'method_return_types';
 
     /**
      * @var AddReturnTypeDeclaration[]

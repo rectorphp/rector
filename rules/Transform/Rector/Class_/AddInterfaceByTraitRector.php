@@ -25,7 +25,7 @@ final class AddInterfaceByTraitRector extends AbstractRector implements Configur
      * @deprecated
      * @var string
      */
-    final public const INTERFACE_BY_TRAIT = 'interface_by_trait';
+    public const INTERFACE_BY_TRAIT = 'interface_by_trait';
 
     /**
      * @var array<string, string>

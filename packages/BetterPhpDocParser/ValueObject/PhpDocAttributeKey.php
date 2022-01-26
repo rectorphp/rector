@@ -11,26 +11,26 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    final public const START_AND_END = 'start_and_end';
+    public const START_AND_END = 'start_and_end';
 
     /**
      * Fully qualified name of identifier type class
      * @var string
      */
-    final public const RESOLVED_CLASS = 'resolved_class';
+    public const RESOLVED_CLASS = 'resolved_class';
 
     /**
      * @var string
      */
-    final public const PARENT = NativePhpDocAttributeKey::PARENT;
+    public const PARENT = NativePhpDocAttributeKey::PARENT;
 
     /**
      * @var string
      */
-    final public const LAST_PHP_DOC_TOKEN_POSITION = 'last_token_position';
+    public const LAST_PHP_DOC_TOKEN_POSITION = 'last_token_position';
 
     /**
      * @var string
      */
-    final public const ORIG_NODE = NativePhpDocAttributeKey::ORIG_NODE;
+    public const ORIG_NODE = NativePhpDocAttributeKey::ORIG_NODE;
 }

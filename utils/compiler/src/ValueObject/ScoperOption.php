@@ -12,25 +12,25 @@ final class ScoperOption
     /**
      * @var string
      */
-    final public const FINDERS = 'finders';
+    public const FINDERS = 'finders';
 
     /**
      * @var string
      */
-    final public const PATCHERS = 'patchers';
+    public const PATCHERS = 'patchers';
 
     /**
      * @var string
      */
-    final public const WHITELIST = 'whitelist';
+    public const WHITELIST = 'whitelist';
 
     /**
      * @var string
      */
-    final public const FILES_WHITELIST = 'files-whitelist';
+    public const FILES_WHITELIST = 'files-whitelist';
 
     /**
      * @var string
      */
-    final public const PREFIX = 'prefix';
+    public const PREFIX = 'prefix';
 }

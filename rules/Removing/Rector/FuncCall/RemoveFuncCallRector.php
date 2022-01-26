@@ -25,7 +25,7 @@ final class RemoveFuncCallRector extends AbstractRector implements ConfigurableR
      * @deprecated
      * @var string
      */
-    final public const REMOVE_FUNC_CALLS = 'remove_func_calls';
+    public const REMOVE_FUNC_CALLS = 'remove_func_calls';
 
     /**
      * @var RemoveFuncCall[]

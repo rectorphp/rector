@@ -25,7 +25,7 @@ final class WrapReturnRector extends AbstractRector implements ConfigurableRecto
      * @deprecated
      * @var string
      */
-    final public const TYPE_METHOD_WRAPS = 'type_method_wraps';
+    public const TYPE_METHOD_WRAPS = 'type_method_wraps';
 
     /**
      * @var WrapReturn[]

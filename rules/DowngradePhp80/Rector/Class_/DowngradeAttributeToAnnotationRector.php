@@ -33,7 +33,7 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
      * @deprecated
      * @var string
      */
-    final public const ATTRIBUTE_TO_ANNOTATION = 'attribute_to_annotation';
+    public const ATTRIBUTE_TO_ANNOTATION = 'attribute_to_annotation';
 
     /**
      * @var DowngradeAttributeToAnnotation[]

@@ -17,7 +17,7 @@ final class NodeTypes
     /**
      * @var array<class-string<PhpDocTagValueNode>>
      */
-    final public const TYPE_AWARE_NODES = [
+    public const TYPE_AWARE_NODES = [
         VarTagValueNode::class,
         ParamTagValueNode::class,
         ReturnTagValueNode::class,
@@ -29,7 +29,7 @@ final class NodeTypes
     /**
      * @var string[]
      */
-    final public const TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES = [
+    public const TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES = [
         'JMS\Serializer\Annotation\Type',
         'Doctrine\ORM\Mapping\OneToMany',
         'Symfony\Component\Validator\Constraints\Choice',

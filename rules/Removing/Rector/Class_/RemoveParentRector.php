@@ -25,7 +25,7 @@ final class RemoveParentRector extends AbstractRector implements ConfigurableRec
      * @deprecated
      * @var string
      */
-    final public const PARENT_TYPES_TO_REMOVE = 'parents_types_to_remove';
+    public const PARENT_TYPES_TO_REMOVE = 'parents_types_to_remove';
 
     /**
      * @var string[]

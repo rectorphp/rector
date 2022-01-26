@@ -28,7 +28,7 @@ final class CallableInMethodCallToVariableRector extends AbstractRector implemen
      * @deprecated
      * @var string
      */
-    final public const CALLABLE_IN_METHOD_CALL_TO_VARIABLE = 'callable_in_method_call_to_variable';
+    public const CALLABLE_IN_METHOD_CALL_TO_VARIABLE = 'callable_in_method_call_to_variable';
 
     /**
      * @var CallableInMethodCallToVariable[]

@@ -41,7 +41,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
     /**
      * @var string
      */
-    final public const HAS_GENERIC_TYPE_PARENT = 'has_generic_type_parent';
+    public const HAS_GENERIC_TYPE_PARENT = 'has_generic_type_parent';
 
     private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
 

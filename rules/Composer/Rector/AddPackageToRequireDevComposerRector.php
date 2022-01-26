@@ -21,7 +21,7 @@ final class AddPackageToRequireDevComposerRector implements ComposerRectorInterf
      * @deprecated
      * @var string
      */
-    final public const PACKAGES_AND_VERSIONS = 'packages_and_version';
+    public const PACKAGES_AND_VERSIONS = 'packages_and_version';
 
     /**
      * @var PackageAndVersion[]

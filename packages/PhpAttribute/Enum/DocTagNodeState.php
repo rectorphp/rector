@@ -9,5 +9,5 @@ final class DocTagNodeState
     /**
      * @var string
      */
-    final public const REMOVE_ARRAY = '__remove_array__';
+    public const REMOVE_ARRAY = '__remove_array__';
 }

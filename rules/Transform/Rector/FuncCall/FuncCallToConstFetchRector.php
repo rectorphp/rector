@@ -23,7 +23,7 @@ final class FuncCallToConstFetchRector extends AbstractRector implements Configu
      * @deprecated
      * @var string
      */
-    final public const FUNCTIONS_TO_CONSTANTS = 'functions_to_constants';
+    public const FUNCTIONS_TO_CONSTANTS = 'functions_to_constants';
 
     /**
      * @var string[]

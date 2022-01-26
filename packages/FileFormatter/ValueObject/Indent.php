@@ -19,7 +19,7 @@ final class Indent implements Stringable
     /**
      * @var array<string, string>
      */
-    final public const CHARACTERS = [
+    public const CHARACTERS = [
         self::SPACE => ' ',
         self::TAB => "\t",
     ];

@@ -21,7 +21,7 @@ final class ChangePackageVersionComposerRector implements ComposerRectorInterfac
      * @deprecated
      * @var string
      */
-    final public const PACKAGES_AND_VERSIONS = 'packages_and_versions';
+    public const PACKAGES_AND_VERSIONS = 'packages_and_versions';
 
     /**
      * @var PackageAndVersion[]

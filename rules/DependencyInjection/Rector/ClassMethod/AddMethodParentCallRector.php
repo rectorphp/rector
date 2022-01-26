@@ -27,7 +27,7 @@ final class AddMethodParentCallRector extends AbstractRector implements Configur
      * @deprecated
      * @var string
      */
-    final public const METHODS_BY_PARENT_TYPES = 'methods_by_parent_type';
+    public const METHODS_BY_PARENT_TYPES = 'methods_by_parent_type';
 
     /**
      * @var array<string, string>

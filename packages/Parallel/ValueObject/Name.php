@@ -12,35 +12,35 @@ final class Name
     /**
      * @var string
      */
-    final public const LINE = 'line';
+    public const LINE = 'line';
 
     /**
      * @var string
      */
-    final public const MESSAGE = 'message';
+    public const MESSAGE = 'message';
 
     /**
      * @var string
      */
-    final public const RELATIVE_FILE_PATH = 'relative_file_path';
+    public const RELATIVE_FILE_PATH = 'relative_file_path';
 
     /**
      * @var string
      */
-    final public const DIFF = 'diff';
+    public const DIFF = 'diff';
 
     /**
      * @var string
      */
-    final public const DIFF_CONSOLE_FORMATTED = 'diff_console_formatted';
+    public const DIFF_CONSOLE_FORMATTED = 'diff_console_formatted';
 
     /**
      * @var string
      */
-    final public const APPLIED_RECTORS = 'applied_rectors';
+    public const APPLIED_RECTORS = 'applied_rectors';
 
     /**
      * @var string
      */
-    final public const RECTOR_CLASS = 'rector_class';
+    public const RECTOR_CLASS = 'rector_class';
 }

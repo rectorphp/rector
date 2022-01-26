@@ -41,7 +41,7 @@ final class DoctrineAnnotationClassToAttributeRector extends AbstractRector impl
      * @deprecated
      * @var string
      */
-    final public const REMOVE_ANNOTATIONS = 'remove_annotations';
+    public const REMOVE_ANNOTATIONS = 'remove_annotations';
 
     /**
      * @var string

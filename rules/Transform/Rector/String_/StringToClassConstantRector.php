@@ -22,7 +22,7 @@ final class StringToClassConstantRector extends AbstractRector implements Config
      * @deprecated
      * @var string
      */
-    final public const STRINGS_TO_CLASS_CONSTANTS = 'strings_to_class_constants';
+    public const STRINGS_TO_CLASS_CONSTANTS = 'strings_to_class_constants';
 
     /**
      * @var StringToClassConstant[]

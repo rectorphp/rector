@@ -28,7 +28,7 @@ final class OrderAttributesRector extends AbstractRector implements Configurable
      * @deprecated
      * @var string
      */
-    final public const ATTRIBUTES_ORDER = 'attributes_order';
+    public const ATTRIBUTES_ORDER = 'attributes_order';
 
     /**
      * @var array<string, int>

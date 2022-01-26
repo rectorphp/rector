@@ -25,7 +25,7 @@ final class PropertyFetchToMethodCallRector extends AbstractRector implements Co
      * @deprecated
      * @var string
      */
-    final public const PROPERTIES_TO_METHOD_CALLS = 'properties_to_method_calls';
+    public const PROPERTIES_TO_METHOD_CALLS = 'properties_to_method_calls';
 
     /**
      * @var PropertyFetchToMethodCall[]

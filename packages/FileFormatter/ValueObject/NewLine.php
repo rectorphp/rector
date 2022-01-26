@@ -17,17 +17,17 @@ final class NewLine implements Stringable
     /**
      * @var string
      */
-    final public const LINE_FEED = 'lf';
+    public const LINE_FEED = 'lf';
 
     /**
      * @var string
      */
-    final public const CARRIAGE_RETURN = 'cr';
+    public const CARRIAGE_RETURN = 'cr';
 
     /**
      * @var string
      */
-    final public const CARRIAGE_RETURN_LINE_FEED = 'crlf';
+    public const CARRIAGE_RETURN_LINE_FEED = 'crlf';
 
     /**
      * @var array<string, string>

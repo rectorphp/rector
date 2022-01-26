@@ -27,7 +27,7 @@ final class RemoveAnnotationRector extends AbstractRector implements Configurabl
      * @deprecated
      * @var string
      */
-    final public const ANNOTATIONS_TO_REMOVE = 'annotations_to_remove';
+    public const ANNOTATIONS_TO_REMOVE = 'annotations_to_remove';
 
     /**
      * @var string[]

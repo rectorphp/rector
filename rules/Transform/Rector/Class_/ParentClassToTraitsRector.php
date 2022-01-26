@@ -28,7 +28,7 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
      * @deprecated
      * @var string
      */
-    final public const PARENT_CLASS_TO_TRAITS = 'parent_class_to_traits';
+    public const PARENT_CLASS_TO_TRAITS = 'parent_class_to_traits';
 
     /**
      * @var ParentClassToTraits[]

@@ -33,7 +33,7 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
      * @api
      * @var string
      */
-    final public const LIMIT_VALUE = 'limit_value';
+    public const LIMIT_VALUE = 'limit_value';
 
     /**
      * @var int

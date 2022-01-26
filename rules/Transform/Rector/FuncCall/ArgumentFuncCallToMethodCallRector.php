@@ -36,7 +36,7 @@ final class ArgumentFuncCallToMethodCallRector extends AbstractRector implements
      * @deprecated
      * @var string
      */
-    final public const FUNCTIONS_TO_METHOD_CALLS = 'functions_to_method_calls';
+    public const FUNCTIONS_TO_METHOD_CALLS = 'functions_to_method_calls';
 
     /**
      * @var ArgumentFuncCallToMethodCallInterface[]

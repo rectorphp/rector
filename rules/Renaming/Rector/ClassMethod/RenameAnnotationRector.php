@@ -27,7 +27,7 @@ final class RenameAnnotationRector extends AbstractRector implements Configurabl
      * @deprecated
      * @var string
      */
-    final public const RENAMED_ANNOTATIONS = 'renamed_annotations';
+    public const RENAMED_ANNOTATIONS = 'renamed_annotations';
 
     /**
      * @var RenameAnnotationInterface[]

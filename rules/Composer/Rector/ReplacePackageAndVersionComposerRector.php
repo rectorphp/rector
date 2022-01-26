@@ -21,7 +21,7 @@ final class ReplacePackageAndVersionComposerRector implements ComposerRectorInte
      * @deprecated
      * @var string
      */
-    final public const REPLACE_PACKAGES_AND_VERSIONS = 'replace_packages_and_versions';
+    public const REPLACE_PACKAGES_AND_VERSIONS = 'replace_packages_and_versions';
 
     /**
      * @var ReplacePackageAndVersion[]

@@ -24,7 +24,7 @@ final class ReplaceStringWithClassConstantRector extends AbstractRector implemen
      * @deprecated
      * @var string
      */
-    final public const REPLACE_STRING_WITH_CLASS_CONSTANT = 'replace_string_with_class_constant';
+    public const REPLACE_STRING_WITH_CLASS_CONSTANT = 'replace_string_with_class_constant';
 
     /**
      * @var ReplaceStringWithClassConstant[]

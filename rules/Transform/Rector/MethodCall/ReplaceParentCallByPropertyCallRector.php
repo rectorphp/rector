@@ -22,7 +22,7 @@ final class ReplaceParentCallByPropertyCallRector extends AbstractRector impleme
      * @deprecated
      * @var string
      */
-    final public const PARENT_CALLS_TO_PROPERTIES = 'parent_calls_to_properties';
+    public const PARENT_CALLS_TO_PROPERTIES = 'parent_calls_to_properties';
 
     /**
      * @var ReplaceParentCallByPropertyCall[]

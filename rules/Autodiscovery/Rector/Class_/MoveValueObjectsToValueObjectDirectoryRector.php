@@ -28,18 +28,18 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
     /**
      * @var string
      */
-    final public const TYPES = 'types';
+    public const TYPES = 'types';
 
     /**
      * @var string
      */
-    final public const SUFFIXES = 'suffixes';
+    public const SUFFIXES = 'suffixes';
 
     /**
      * @api
      * @var string
      */
-    final public const ENABLE_VALUE_OBJECT_GUESSING = 'enable_value_object_guessing';
+    public const ENABLE_VALUE_OBJECT_GUESSING = 'enable_value_object_guessing';
 
     /**
      * @var string[]|class-string<Controller>[]

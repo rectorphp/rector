@@ -32,7 +32,7 @@ final class NewToConstructorInjectionRector extends AbstractRector implements Co
      * @deprecated
      * @var string
      */
-    final public const TYPES_TO_CONSTRUCTOR_INJECTION = 'types_to_constructor_injection';
+    public const TYPES_TO_CONSTRUCTOR_INJECTION = 'types_to_constructor_injection';
 
     /**
      * @var ObjectType[]

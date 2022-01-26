@@ -13,7 +13,7 @@ final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueIn
     /**
      * @var string
      */
-    final public const ANY_VALUE_BEFORE = '*ANY_VALUE_BEFORE*';
+    public const ANY_VALUE_BEFORE = '*ANY_VALUE_BEFORE*';
 
     /**
      * @param int<0, max> $position

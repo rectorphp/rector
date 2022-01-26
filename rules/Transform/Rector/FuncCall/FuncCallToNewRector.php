@@ -23,7 +23,7 @@ final class FuncCallToNewRector extends AbstractRector implements ConfigurableRe
      * @deprecated
      * @var string
      */
-    final public const FUNCTIONS_TO_NEWS = 'functions_to_news';
+    public const FUNCTIONS_TO_NEWS = 'functions_to_news';
 
     /**
      * @var string[]

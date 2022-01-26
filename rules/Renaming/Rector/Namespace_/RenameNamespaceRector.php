@@ -30,7 +30,7 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
      * @deprecated
      * @var string
      */
-    final public const OLD_TO_NEW_NAMESPACES = 'old_to_new_namespaces';
+    public const OLD_TO_NEW_NAMESPACES = 'old_to_new_namespaces';
 
     /**
      * @var array<string, string>

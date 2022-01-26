@@ -15,12 +15,12 @@ final class VariableNodeUse
     /**
      * @var string
      */
-    final public const TYPE_USE = 'use';
+    public const TYPE_USE = 'use';
 
     /**
      * @var string
      */
-    final public const TYPE_ASSIGN = 'assign';
+    public const TYPE_ASSIGN = 'assign';
 
     public function __construct(
         private readonly int $startTokenPosition,

@@ -9,7 +9,7 @@ final class StaticEasyPrefixer
     /**
      * @var string[]
      */
-    final public const EXCLUDED_CLASSES = [
+    public const EXCLUDED_CLASSES = [
         // part of public interface of configs.php
         'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
         // for SmartFileInfo

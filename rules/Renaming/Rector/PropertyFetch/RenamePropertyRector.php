@@ -29,7 +29,7 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
      * @deprecated
      * @var string
      */
-    final public const RENAMED_PROPERTIES = 'old_to_new_property_by_types';
+    public const RENAMED_PROPERTIES = 'old_to_new_property_by_types';
 
     /**
      * @var RenameProperty[]

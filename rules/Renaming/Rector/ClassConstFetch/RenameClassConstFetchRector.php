@@ -26,7 +26,7 @@ final class RenameClassConstFetchRector extends AbstractRector implements Config
      * @deprecated
      * @var string
      */
-    final public const CLASS_CONSTANT_RENAME = 'constant_rename';
+    public const CLASS_CONSTANT_RENAME = 'constant_rename';
 
     /**
      * @var RenameClassConstFetchInterface[]

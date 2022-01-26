@@ -33,12 +33,12 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @var class-string<ReturnTypeWillChange>
      */
-    final public const RETURN_TYPE_WILL_CHANGE_ATTRIBUTE = 'ReturnTypeWillChange';
+    public const RETURN_TYPE_WILL_CHANGE_ATTRIBUTE = 'ReturnTypeWillChange';
 
     /**
      * @var array<string, array<string, string[]>>
      */
-    final public const ADD_RETURN_TYPE_WILL_CHANGE = [
+    public const ADD_RETURN_TYPE_WILL_CHANGE = [
         'PHPStan\Type\MixedType' => [
             'ArrayAccess' => ['offsetGet'],
         ],

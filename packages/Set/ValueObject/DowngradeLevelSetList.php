@@ -11,55 +11,55 @@ final class DowngradeLevelSetList implements SetListInterface
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_80 = __DIR__ . '/../../../config/set/level/down-to-php80.php';
+    public const DOWN_TO_PHP_80 = __DIR__ . '/../../../config/set/level/down-to-php80.php';
 
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_74 = __DIR__ . '/../../../config/set/level/down-to-php74.php';
+    public const DOWN_TO_PHP_74 = __DIR__ . '/../../../config/set/level/down-to-php74.php';
 
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_73 = __DIR__ . '/../../../config/set/level/down-to-php73.php';
+    public const DOWN_TO_PHP_73 = __DIR__ . '/../../../config/set/level/down-to-php73.php';
 
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_72 = __DIR__ . '/../../../config/set/level/down-to-php72.php';
+    public const DOWN_TO_PHP_72 = __DIR__ . '/../../../config/set/level/down-to-php72.php';
 
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_71 = __DIR__ . '/../../../config/set/level/down-to-php71.php';
+    public const DOWN_TO_PHP_71 = __DIR__ . '/../../../config/set/level/down-to-php71.php';
 
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_70 = __DIR__ . '/../../../config/set/level/down-to-php70.php';
+    public const DOWN_TO_PHP_70 = __DIR__ . '/../../../config/set/level/down-to-php70.php';
 
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_56 = __DIR__ . '/../../../config/set/level/down-to-php56.php';
+    public const DOWN_TO_PHP_56 = __DIR__ . '/../../../config/set/level/down-to-php56.php';
 
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_55 = __DIR__ . '/../../../config/set/level/down-to-php55.php';
+    public const DOWN_TO_PHP_55 = __DIR__ . '/../../../config/set/level/down-to-php55.php';
 
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_54 = __DIR__ . '/../../../config/set/level/down-to-php54.php';
+    public const DOWN_TO_PHP_54 = __DIR__ . '/../../../config/set/level/down-to-php54.php';
 
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_53 = __DIR__ . '/../../../config/set/level/down-to-php53.php';
+    public const DOWN_TO_PHP_53 = __DIR__ . '/../../../config/set/level/down-to-php53.php';
 
     /**
      * @var string
      */
-    final public const DOWN_TO_PHP_52 = __DIR__ . '/../../../config/set/level/down-to-php52.php';
+    public const DOWN_TO_PHP_52 = __DIR__ . '/../../../config/set/level/down-to-php52.php';
 }
