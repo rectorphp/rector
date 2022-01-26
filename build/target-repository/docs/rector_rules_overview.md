@@ -1,4 +1,4 @@
-# 517 Rules Overview
+# 519 Rules Overview
 
 <br>
 
@@ -28,11 +28,11 @@
 
 - [DowngradePhp56](#downgradephp56) (5)
 
-- [DowngradePhp70](#downgradephp70) (18)
+- [DowngradePhp70](#downgradephp70) (19)
 
 - [DowngradePhp71](#downgradephp71) (10)
 
-- [DowngradePhp72](#downgradephp72) (4)
+- [DowngradePhp72](#downgradephp72) (5)
 
 - [DowngradePhp73](#downgradephp73) (6)
 
@@ -4464,6 +4464,29 @@ Downgrade calling a value that is not directly callable in PHP 5 (property, stat
 
 <br>
 
+### DowngradeUnnecessarilyParenthesizedExpressionRector
+
+Remove parentheses around expressions allowed by Uniform variable syntax RFC where they are not necessary to prevent parse errors on PHP 5.
+
+- class: [`Rector\DowngradePhp70\Rector\Expr\DowngradeUnnecessarilyParenthesizedExpressionRector`](../rules/DowngradePhp70/Rector/Expr/DowngradeUnnecessarilyParenthesizedExpressionRector.php)
+
+```diff
+-($f)['foo'];
+-($f)->foo;
+-($f)->foo();
+-($f)::$foo;
+-($f)::foo();
+-($f)();
++$f['foo'];
++$f->foo;
++$f->foo();
++$f::$foo;
++$f::foo();
++$f();
+```
+
+<br>
+
 ### SplitGroupedUseImportsRector
 
 Refactor grouped use imports to standalone lines
@@ -4678,6 +4701,32 @@ Downgrade Symmetric array destructuring to `list()` function
 <br>
 
 ## DowngradePhp72
+
+### DowngradeJsonDecodeNullAssociativeArgRector
+
+Downgrade `json_decode()` with null associative argument function
+
+- class: [`Rector\DowngradePhp72\Rector\FuncCall\DowngradeJsonDecodeNullAssociativeArgRector`](../rules/DowngradePhp72/Rector/FuncCall/DowngradeJsonDecodeNullAssociativeArgRector.php)
+
+```diff
+ declare(strict_types=1);
+
+ function exactlyNull(string $json)
+ {
+-    $value = json_decode($json, null);
++    $value = json_decode($json, true);
+ }
+
+ function possiblyNull(string $json, ?bool $associative)
+ {
++    if ($associative === null) {
++        $associative = true;
++    }
+     $value = json_decode($json, $associative);
+ }
+```
+
+<br>
 
 ### DowngradeObjectTypeDeclarationRector
 
