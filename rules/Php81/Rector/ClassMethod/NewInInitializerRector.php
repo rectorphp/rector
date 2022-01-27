@@ -4,8 +4,10 @@ declare (strict_types=1);
 namespace Rector\Php81\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -81,7 +83,7 @@ CODE_SAMPLE
                 if (!$toPropertyAssign->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
                     continue;
                 }
-                if (!$toPropertyAssign->expr->right instanceof \PhpParser\Node\Expr\New_) {
+                if ($this->isNotNewOrWithDynamicClass($toPropertyAssign->expr->right)) {
                     continue;
                 }
                 /** @var NullableType $currentParamType */
@@ -98,6 +100,10 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS;
+    }
+    private function isNotNewOrWithDynamicClass(\PhpParser\Node\Expr $expr) : bool
+    {
+        return !$expr instanceof \PhpParser\Node\Expr\New_ || !$expr->class instanceof \PhpParser\Node\Name\FullyQualified;
     }
     private function processPropertyPromotion(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param, string $paramName) : void
     {
