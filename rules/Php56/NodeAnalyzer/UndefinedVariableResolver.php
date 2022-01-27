@@ -158,8 +158,7 @@ final class UndefinedVariableResolver
             return true;
         }
 
-        $nodeScope = $variable->getAttribute(AttributeKey::SCOPE);
-        if (! $nodeScope instanceof Scope) {
+        if ($this->isDifferentWithOriginalNodeOrNoScope($variable)) {
             return true;
         }
 
@@ -179,6 +178,17 @@ final class UndefinedVariableResolver
         }
 
         return $this->hasPreviousCheckedWithEmpty($variable);
+    }
+
+    private function isDifferentWithOriginalNodeOrNoScope(Variable $variable): bool
+    {
+        $originalNode = $variable->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if (! $this->nodeComparator->areNodesEqual($variable, $originalNode)) {
+            return true;
+        }
+
+        $nodeScope = $variable->getAttribute(AttributeKey::SCOPE);
+        return ! $nodeScope instanceof Scope;
     }
 
     private function hasPreviousCheckedWithIsset(Variable $variable): bool
