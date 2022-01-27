@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20220126\React\Promise;
+namespace RectorPrefix20220127\React\Promise;
 
-interface ExtendedPromiseInterface extends \RectorPrefix20220126\React\Promise\PromiseInterface
+interface ExtendedPromiseInterface extends \RectorPrefix20220127\React\Promise\PromiseInterface
 {
     /**
      * Consumes the promise's ultimate value if the promise fulfills, or handles the

@@ -99,7 +99,7 @@ CODE_SAMPLE
     private function createPropertyAnnotation(string $validatorAnnotation) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode
     {
         if (\strpos($validatorAnnotation, '(') !== \false) {
-            \preg_match_all('#(?P<validatorName>.*)(?<=[\\w])\\((?P<validatorOptions>.*)\\)#', $validatorAnnotation, $matches);
+            \preg_match_all('#(?P<validatorName>.*)(?<=[\\w])\\s*\\((?P<validatorOptions>.*)\\)#', $validatorAnnotation, $matches);
             $validator = $matches['validatorName'][0];
             $options = $matches['validatorOptions'][0];
             \preg_match_all('#\\s*(?P<optionName>[a-z0-9]+)\\s*=\\s*(?P<optionValue>"(?:"|[^"])*"|\'(?:\\\\\'|[^\'])*\'|(?:\\s|[^,"\']*))#ixS', $options, $optionNamesValues);

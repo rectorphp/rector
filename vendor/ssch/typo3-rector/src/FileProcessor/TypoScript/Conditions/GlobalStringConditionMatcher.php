@@ -19,7 +19,7 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
         $subConditions = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $subConditions['subCondition']);
         $newConditions = [];
         foreach ($subConditions as $subCondition) {
-            \preg_match('#(?<type>ENV|IENV|GP|TSFE|LIT)' . self::ZERO_ONE_OR_MORE_WHITESPACES . ':' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<property>.*)\\s*(?<operator>' . self::ALLOWED_OPERATORS_REGEX . ')' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<value>.*)$#Ui', $subCondition, $matches);
+            \preg_match('#(?<type>ENV|IENV|GP|TSFE|LIT|_COOKIE)' . self::ZERO_ONE_OR_MORE_WHITESPACES . '[:|]' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<property>.*)\\s*(?<operator>' . self::ALLOWED_OPERATORS_REGEX . ')' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<value>.*)$#Ui', $subCondition, $matches);
             $type = \trim($matches['type']);
             $property = \trim($matches['property']);
             $operator = \trim($matches['operator']);
@@ -36,6 +36,9 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
                     break;
                 case 'GP':
                     $newConditions[] = $this->refactorGetPost($property, $operator, $value);
+                    break;
+                case '_COOKIE':
+                    $newConditions[] = $this->refactorCookie($property, $operator, $value);
                     break;
                 case 'LIT':
                     $newConditions[] = \sprintf('"%s" %s "%s"', $value, self::OPERATOR_MAPPING[$operator], $property);
@@ -64,5 +67,9 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
             return \sprintf('request.getQueryParams()[\'%1$s\'] %2$s %3$s', $parameters[0], self::OPERATOR_MAPPING[$operator], $value);
         }
         return \sprintf('traverse(request.getQueryParams(), \'%1$s\') %2$s %3$s || traverse(request.getParsedBody(), \'%1$s\') %2$s %3$s', \implode('/', $parameters), self::OPERATOR_MAPPING[$operator], $value);
+    }
+    private function refactorCookie(string $property, string $operator, string $value) : string
+    {
+        return \sprintf('request.getCookieParams()[\'%1$s\'] %3$s \'%2$s\'', $property, $value, self::OPERATOR_MAPPING[$operator]);
     }
 }

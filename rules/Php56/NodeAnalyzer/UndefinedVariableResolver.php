@@ -29,7 +29,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220126\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220127\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class UndefinedVariableResolver
 {
     /**
@@ -52,7 +52,7 @@ final class UndefinedVariableResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20220126\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20220127\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -151,8 +151,7 @@ final class UndefinedVariableResolver
         if ($this->isListAssign($parentNode)) {
             return \true;
         }
-        $nodeScope = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$nodeScope instanceof \PHPStan\Analyser\Scope) {
+        if ($this->isDifferentWithOriginalNodeOrNoScope($variable)) {
             return \true;
         }
         $variableName = $this->nodeNameResolver->getName($variable);
@@ -167,6 +166,15 @@ final class UndefinedVariableResolver
             return \true;
         }
         return $this->hasPreviousCheckedWithEmpty($variable);
+    }
+    private function isDifferentWithOriginalNodeOrNoScope(\PhpParser\Node\Expr\Variable $variable) : bool
+    {
+        $originalNode = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+        if (!$this->nodeComparator->areNodesEqual($variable, $originalNode)) {
+            return \true;
+        }
+        $nodeScope = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        return !$nodeScope instanceof \PHPStan\Analyser\Scope;
     }
     private function hasPreviousCheckedWithIsset(\PhpParser\Node\Expr\Variable $variable) : bool
     {

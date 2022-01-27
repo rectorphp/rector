@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20220126\React\Dns\Protocol;
+namespace RectorPrefix20220127\React\Dns\Protocol;
 
-use RectorPrefix20220126\React\Dns\Model\Message;
-use RectorPrefix20220126\React\Dns\Model\Record;
-use RectorPrefix20220126\React\Dns\Query\Query;
+use RectorPrefix20220127\React\Dns\Model\Message;
+use RectorPrefix20220127\React\Dns\Model\Record;
+use RectorPrefix20220127\React\Dns\Query\Query;
 use InvalidArgumentException;
 /**
  * DNS protocol parser
@@ -39,7 +39,7 @@ final class Parser
             return null;
         }
         list($id, $fields, $qdCount, $anCount, $nsCount, $arCount) = \array_values(\unpack('n*', \substr($data, 0, 12)));
-        $message = new \RectorPrefix20220126\React\Dns\Model\Message();
+        $message = new \RectorPrefix20220127\React\Dns\Model\Message();
         $message->id = $id;
         $message->rcode = $fields & 0xf;
         $message->ra = ($fields >> 7 & 1) === 1;
@@ -100,7 +100,7 @@ final class Parser
         }
         list($type, $class) = \array_values(\unpack('n*', \substr($data, $consumed, 4)));
         $consumed += 4;
-        return array(new \RectorPrefix20220126\React\Dns\Query\Query(\implode('.', $labels), $type, $class), $consumed);
+        return array(new \RectorPrefix20220127\React\Dns\Query\Query(\implode('.', $labels), $type, $class), $consumed);
     }
     /**
      * @param string $data
@@ -128,45 +128,45 @@ final class Parser
         }
         $rdata = null;
         $expected = $consumed + $rdLength;
-        if (\RectorPrefix20220126\React\Dns\Model\Message::TYPE_A === $type) {
+        if (\RectorPrefix20220127\React\Dns\Model\Message::TYPE_A === $type) {
             if ($rdLength === 4) {
                 $rdata = \inet_ntop(\substr($data, $consumed, $rdLength));
                 $consumed += $rdLength;
             }
-        } elseif (\RectorPrefix20220126\React\Dns\Model\Message::TYPE_AAAA === $type) {
+        } elseif (\RectorPrefix20220127\React\Dns\Model\Message::TYPE_AAAA === $type) {
             if ($rdLength === 16) {
                 $rdata = \inet_ntop(\substr($data, $consumed, $rdLength));
                 $consumed += $rdLength;
             }
-        } elseif (\RectorPrefix20220126\React\Dns\Model\Message::TYPE_CNAME === $type || \RectorPrefix20220126\React\Dns\Model\Message::TYPE_PTR === $type || \RectorPrefix20220126\React\Dns\Model\Message::TYPE_NS === $type) {
+        } elseif (\RectorPrefix20220127\React\Dns\Model\Message::TYPE_CNAME === $type || \RectorPrefix20220127\React\Dns\Model\Message::TYPE_PTR === $type || \RectorPrefix20220127\React\Dns\Model\Message::TYPE_NS === $type) {
             list($rdata, $consumed) = $this->readDomain($data, $consumed);
-        } elseif (\RectorPrefix20220126\React\Dns\Model\Message::TYPE_TXT === $type || \RectorPrefix20220126\React\Dns\Model\Message::TYPE_SPF === $type) {
+        } elseif (\RectorPrefix20220127\React\Dns\Model\Message::TYPE_TXT === $type || \RectorPrefix20220127\React\Dns\Model\Message::TYPE_SPF === $type) {
             $rdata = array();
             while ($consumed < $expected) {
                 $len = \ord($data[$consumed]);
                 $rdata[] = (string) \substr($data, $consumed + 1, $len);
                 $consumed += $len + 1;
             }
-        } elseif (\RectorPrefix20220126\React\Dns\Model\Message::TYPE_MX === $type) {
+        } elseif (\RectorPrefix20220127\React\Dns\Model\Message::TYPE_MX === $type) {
             if ($rdLength > 2) {
                 list($priority) = \array_values(\unpack('n', \substr($data, $consumed, 2)));
                 list($target, $consumed) = $this->readDomain($data, $consumed + 2);
                 $rdata = array('priority' => $priority, 'target' => $target);
             }
-        } elseif (\RectorPrefix20220126\React\Dns\Model\Message::TYPE_SRV === $type) {
+        } elseif (\RectorPrefix20220127\React\Dns\Model\Message::TYPE_SRV === $type) {
             if ($rdLength > 6) {
                 list($priority, $weight, $port) = \array_values(\unpack('n*', \substr($data, $consumed, 6)));
                 list($target, $consumed) = $this->readDomain($data, $consumed + 6);
                 $rdata = array('priority' => $priority, 'weight' => $weight, 'port' => $port, 'target' => $target);
             }
-        } elseif (\RectorPrefix20220126\React\Dns\Model\Message::TYPE_SSHFP === $type) {
+        } elseif (\RectorPrefix20220127\React\Dns\Model\Message::TYPE_SSHFP === $type) {
             if ($rdLength > 2) {
                 list($algorithm, $hash) = \array_values(\unpack('C*', \substr($data, $consumed, 2)));
                 $fingerprint = \bin2hex(\substr($data, $consumed + 2, $rdLength - 2));
                 $consumed += $rdLength;
                 $rdata = array('algorithm' => $algorithm, 'type' => $hash, 'fingerprint' => $fingerprint);
             }
-        } elseif (\RectorPrefix20220126\React\Dns\Model\Message::TYPE_SOA === $type) {
+        } elseif (\RectorPrefix20220127\React\Dns\Model\Message::TYPE_SOA === $type) {
             list($mname, $consumed) = $this->readDomain($data, $consumed);
             list($rname, $consumed) = $this->readDomain($data, $consumed);
             if ($mname !== null && $rname !== null && isset($data[$consumed + 20 - 1])) {
@@ -174,23 +174,23 @@ final class Parser
                 $consumed += 20;
                 $rdata = array('mname' => $mname, 'rname' => $rname, 'serial' => $serial, 'refresh' => $refresh, 'retry' => $retry, 'expire' => $expire, 'minimum' => $minimum);
             }
-        } elseif (\RectorPrefix20220126\React\Dns\Model\Message::TYPE_OPT === $type) {
+        } elseif (\RectorPrefix20220127\React\Dns\Model\Message::TYPE_OPT === $type) {
             $rdata = array();
             while (isset($data[$consumed + 4 - 1])) {
                 list($code, $length) = \array_values(\unpack('n*', \substr($data, $consumed, 4)));
                 $value = (string) \substr($data, $consumed + 4, $length);
-                if ($code === \RectorPrefix20220126\React\Dns\Model\Message::OPT_TCP_KEEPALIVE && $value === '') {
+                if ($code === \RectorPrefix20220127\React\Dns\Model\Message::OPT_TCP_KEEPALIVE && $value === '') {
                     $value = null;
-                } elseif ($code === \RectorPrefix20220126\React\Dns\Model\Message::OPT_TCP_KEEPALIVE && $length === 2) {
+                } elseif ($code === \RectorPrefix20220127\React\Dns\Model\Message::OPT_TCP_KEEPALIVE && $length === 2) {
                     list($value) = \array_values(\unpack('n', $value));
                     $value = \round($value * 0.1, 1);
-                } elseif ($code === \RectorPrefix20220126\React\Dns\Model\Message::OPT_TCP_KEEPALIVE) {
+                } elseif ($code === \RectorPrefix20220127\React\Dns\Model\Message::OPT_TCP_KEEPALIVE) {
                     break;
                 }
                 $rdata[$code] = $value;
                 $consumed += 4 + $length;
             }
-        } elseif (\RectorPrefix20220126\React\Dns\Model\Message::TYPE_CAA === $type) {
+        } elseif (\RectorPrefix20220127\React\Dns\Model\Message::TYPE_CAA === $type) {
             if ($rdLength > 3) {
                 list($flag, $tagLength) = \array_values(\unpack('C*', \substr($data, $consumed, 2)));
                 if ($tagLength > 0 && $rdLength - 2 - $tagLength > 0) {
@@ -209,7 +209,7 @@ final class Parser
         if ($consumed !== $expected || $rdata === null) {
             return array(null, null);
         }
-        return array(new \RectorPrefix20220126\React\Dns\Model\Record($name, $type, $class, $ttl, $rdata), $consumed);
+        return array(new \RectorPrefix20220127\React\Dns\Model\Record($name, $type, $class, $ttl, $rdata), $consumed);
     }
     private function readDomain($data, $consumed)
     {

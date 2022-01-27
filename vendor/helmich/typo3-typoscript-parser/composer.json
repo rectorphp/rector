@@ -28,7 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220126\\Helmich\\TypoScriptParser\\": "src\/"
+            "RectorPrefix20220127\\Helmich\\TypoScriptParser\\": "src\/"
         }
     },
     "autoload-dev": {
@@ -36,8 +36,8 @@
             "vendor\/phpunit\/phpunit\/src\/Framework\/Assert\/Functions.php"
         ],
         "psr-4": {
-            "RectorPrefix20220126\\Helmich\\TypoScriptParser\\Tests\\Functional\\": "tests\/functional",
-            "RectorPrefix20220126\\Helmich\\TypoScriptParser\\Tests\\Unit\\": "tests\/unit"
+            "RectorPrefix20220127\\Helmich\\TypoScriptParser\\Tests\\Functional\\": "tests\/functional",
+            "RectorPrefix20220127\\Helmich\\TypoScriptParser\\Tests\\Unit\\": "tests\/unit"
         }
     }
 }
