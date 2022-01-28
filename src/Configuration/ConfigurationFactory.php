@@ -5,9 +5,9 @@ namespace Rector\Core\Configuration;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\ValueObject\Configuration;
-use RectorPrefix20220127\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220127\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220127\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220128\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220128\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220128\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ConfigurationFactory
 {
     /**
@@ -20,7 +20,7 @@ final class ConfigurationFactory
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\RectorPrefix20220127\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220127\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(\RectorPrefix20220128\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220128\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->parameterProvider = $parameterProvider;
         $this->symfonyStyle = $symfonyStyle;
@@ -36,7 +36,7 @@ final class ConfigurationFactory
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
-    public function createFromInput(\RectorPrefix20220127\Symfony\Component\Console\Input\InputInterface $input) : \Rector\Core\ValueObject\Configuration
+    public function createFromInput(\RectorPrefix20220128\Symfony\Component\Console\Input\InputInterface $input) : \Rector\Core\ValueObject\Configuration
     {
         $isDryRun = (bool) $input->getOption(\Rector\Core\Configuration\Option::DRY_RUN);
         $shouldClearCache = (bool) $input->getOption(\Rector\Core\Configuration\Option::CLEAR_CACHE);
@@ -52,7 +52,7 @@ final class ConfigurationFactory
         $memoryLimit = $input->getOption(\Rector\Core\Configuration\Option::MEMORY_LIMIT);
         return new \Rector\Core\ValueObject\Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit);
     }
-    private function shouldShowProgressBar(\RectorPrefix20220127\Symfony\Component\Console\Input\InputInterface $input, string $outputFormat) : bool
+    private function shouldShowProgressBar(\RectorPrefix20220128\Symfony\Component\Console\Input\InputInterface $input, string $outputFormat) : bool
     {
         $noProgressBar = (bool) $input->getOption(\Rector\Core\Configuration\Option::NO_PROGRESS_BAR);
         if ($noProgressBar) {
@@ -80,7 +80,7 @@ final class ConfigurationFactory
     /**
      * @return string[]|mixed[]
      */
-    private function resolvePaths(\RectorPrefix20220127\Symfony\Component\Console\Input\InputInterface $input) : array
+    private function resolvePaths(\RectorPrefix20220128\Symfony\Component\Console\Input\InputInterface $input) : array
     {
         $commandLinePaths = (array) $input->getArgument(\Rector\Core\Configuration\Option::SOURCE);
         // command line has priority

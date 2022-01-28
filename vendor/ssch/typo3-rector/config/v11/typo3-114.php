@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220127;
+namespace RectorPrefix20220128;
 
 use Ssch\TYPO3Rector\Rector\v11\v4\UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

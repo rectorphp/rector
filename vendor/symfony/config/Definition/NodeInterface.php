@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220127\Symfony\Component\Config\Definition;
+namespace RectorPrefix20220128\Symfony\Component\Config\Definition;
 
-use RectorPrefix20220127\Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException;
-use RectorPrefix20220127\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use RectorPrefix20220127\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
+use RectorPrefix20220128\Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException;
+use RectorPrefix20220128\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix20220128\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 /**
  * Common Interface among all nodes.
  *

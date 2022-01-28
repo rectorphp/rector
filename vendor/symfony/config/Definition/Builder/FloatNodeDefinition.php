@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220127\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20220128\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220127\Symfony\Component\Config\Definition\FloatNode;
+use RectorPrefix20220128\Symfony\Component\Config\Definition\FloatNode;
 /**
  * This class provides a fluent interface for defining a float node.
  *
  * @author Jeanmonod David <david.jeanmonod@gmail.com>
  */
-class FloatNodeDefinition extends \RectorPrefix20220127\Symfony\Component\Config\Definition\Builder\NumericNodeDefinition
+class FloatNodeDefinition extends \RectorPrefix20220128\Symfony\Component\Config\Definition\Builder\NumericNodeDefinition
 {
     /**
      * Instantiates a Node.
@@ -25,6 +25,6 @@ class FloatNodeDefinition extends \RectorPrefix20220127\Symfony\Component\Config
      */
     protected function instantiateNode()
     {
-        return new \RectorPrefix20220127\Symfony\Component\Config\Definition\FloatNode($this->name, $this->parent, $this->min, $this->max, $this->pathSeparator);
+        return new \RectorPrefix20220128\Symfony\Component\Config\Definition\FloatNode($this->name, $this->parent, $this->min, $this->max, $this->pathSeparator);
     }
 }
