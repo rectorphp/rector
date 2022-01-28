@@ -47,7 +47,6 @@ final class VcsIgnoredFilterIterator extends \FilterIterator
         $ignored = \false;
         foreach ($this->parentsDirectoryDownward($fileRealPath) as $parentDirectory) {
             if ($this->isIgnored($parentDirectory)) {
-                $ignored = \true;
                 // rules in ignored directories are ignored, no need to check further.
                 break;
             }

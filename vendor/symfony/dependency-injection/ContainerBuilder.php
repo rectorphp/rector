@@ -1205,7 +1205,7 @@ class ContainerBuilder extends \RectorPrefix20220128\Symfony\Component\Dependenc
             }
             return $result;
         }
-        if (!\is_string($value) || 38 > \strlen($value)) {
+        if (!\is_string($value) || 38 > \strlen($value) || !\preg_match('/env[_(]/i', $value)) {
             return $value;
         }
         $envPlaceholders = $bag instanceof \RectorPrefix20220128\Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag ? $bag->getEnvPlaceholders() : $this->envPlaceholders;

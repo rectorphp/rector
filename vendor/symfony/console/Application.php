@@ -831,6 +831,14 @@ class Application implements \RectorPrefix20220128\Symfony\Contracts\Service\Res
             if (!$this->signalRegistry) {
                 throw new \RectorPrefix20220128\Symfony\Component\Console\Exception\RuntimeException('Unable to subscribe to signal events. Make sure that the `pcntl` extension is installed and that "pcntl_*" functions are not disabled by your php.ini\'s "disable_functions" directive.');
             }
+            if (\RectorPrefix20220128\Symfony\Component\Console\Terminal::hasSttyAvailable()) {
+                $sttyMode = \shell_exec('stty -g');
+                foreach ([\SIGINT, \SIGTERM] as $signal) {
+                    $this->signalRegistry->register($signal, static function () use($sttyMode) {
+                        \shell_exec('stty ' . $sttyMode);
+                    });
+                }
+            }
             if ($this->dispatcher) {
                 foreach ($this->signalsToDispatchEvent as $signal) {
                     $event = new \RectorPrefix20220128\Symfony\Component\Console\Event\ConsoleSignalEvent($command, $input, $output, $signal);

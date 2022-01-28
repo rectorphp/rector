@@ -4,10 +4,8 @@ declare (strict_types=1);
 namespace Rector\Php81\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -18,6 +16,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,6 +27,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NewInInitializerRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
+    /**
+     * @readonly
+     * @var \Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer
+     */
+    private $complexNewAnalyzer;
+    public function __construct(\Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer $complexNewAnalyzer)
+    {
+        $this->complexNewAnalyzer = $complexNewAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace property declaration of new state with direct new', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -69,27 +77,28 @@ CODE_SAMPLE
             return null;
         }
         $params = $this->matchConstructorParams($node);
-        if ($params === null) {
+        if ($params === []) {
             return null;
         }
         foreach ($params as $param) {
-            if (!$param->type instanceof \PhpParser\Node\NullableType) {
-                continue;
-            }
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
             $toPropertyAssigns = $this->betterNodeFinder->findClassMethodAssignsToLocalProperty($node, $paramName);
+            $toPropertyAssigns = \array_filter($toPropertyAssigns, function ($v) : bool {
+                return $v->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce;
+            });
             foreach ($toPropertyAssigns as $toPropertyAssign) {
-                if (!$toPropertyAssign->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
+                /** @var Coalesce $coalesce */
+                $coalesce = $toPropertyAssign->expr;
+                if (!$coalesce->right instanceof \PhpParser\Node\Expr\New_) {
                     continue;
                 }
-                if ($this->isNotNewOrWithDynamicClass($toPropertyAssign->expr->right)) {
+                if ($this->complexNewAnalyzer->isDynamic($coalesce->right)) {
                     continue;
                 }
                 /** @var NullableType $currentParamType */
                 $currentParamType = $param->type;
                 $param->type = $currentParamType->type;
-                $coalesce = $toPropertyAssign->expr;
                 $param->default = $coalesce->right;
                 $this->removeNode($toPropertyAssign);
                 $this->processPropertyPromotion($node, $param, $paramName);
@@ -100,10 +109,6 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS;
-    }
-    private function isNotNewOrWithDynamicClass(\PhpParser\Node\Expr $expr) : bool
-    {
-        return !$expr instanceof \PhpParser\Node\Expr\New_ || !$expr->class instanceof \PhpParser\Node\Name\FullyQualified;
     }
     private function processPropertyPromotion(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param, string $paramName) : void
     {
@@ -130,19 +135,21 @@ CODE_SAMPLE
         return \true;
     }
     /**
-     * @return mixed[]|null
+     * @return Param[]
      */
-    private function matchConstructorParams(\PhpParser\Node\Stmt\ClassMethod $classMethod)
+    private function matchConstructorParams(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         if (!$this->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
-            return null;
+            return [];
         }
         if ($classMethod->params === []) {
-            return null;
+            return [];
         }
         if ($classMethod->stmts === []) {
-            return null;
+            return [];
         }
-        return $classMethod->params;
+        return \array_filter($classMethod->params, function ($v) : bool {
+            return $v->type instanceof \PhpParser\Node\NullableType;
+        });
     }
 }

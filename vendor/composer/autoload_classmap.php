@@ -2678,6 +2678,7 @@ return array(
     'Rector\\Php80\\ValueObject\\DoctrineTagAndAnnotationToAttribute' => $baseDir . '/rules/Php80/ValueObject/DoctrineTagAndAnnotationToAttribute.php',
     'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => $baseDir . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
     'Rector\\Php80\\ValueObject\\StrStartsWith' => $baseDir . '/rules/Php80/ValueObject/StrStartsWith.php',
+    'Rector\\Php81\\NodeAnalyzer\\ComplexNewAnalyzer' => $baseDir . '/rules/Php81/NodeAnalyzer/ComplexNewAnalyzer.php',
     'Rector\\Php81\\NodeFactory\\EnumFactory' => $baseDir . '/rules/Php81/NodeFactory/EnumFactory.php',
     'Rector\\Php81\\Rector\\ClassConst\\FinalizePublicClassConstantRector' => $baseDir . '/rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php',
     'Rector\\Php81\\Rector\\ClassMethod\\NewInInitializerRector' => $baseDir . '/rules/Php81/Rector/ClassMethod/NewInInitializerRector.php',

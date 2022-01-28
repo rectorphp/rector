@@ -45,7 +45,9 @@ abstract class AbstractPipes implements \RectorPrefix20220128\Symfony\Component\
     public function close()
     {
         foreach ($this->pipes as $pipe) {
-            \fclose($pipe);
+            if (\is_resource($pipe)) {
+                \fclose($pipe);
+            }
         }
         $this->pipes = [];
     }

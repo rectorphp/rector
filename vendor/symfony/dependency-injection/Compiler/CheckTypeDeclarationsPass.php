@@ -160,6 +160,9 @@ final class CheckTypeDeclarationsPass extends \RectorPrefix20220128\Symfony\Comp
         }
         $class = null;
         if ($value instanceof \RectorPrefix20220128\Symfony\Component\DependencyInjection\Definition) {
+            if ($value->getFactory()) {
+                return;
+            }
             $class = $value->getClass();
             if ($class && isset(self::BUILTIN_TYPES[\strtolower($class)])) {
                 $class = \strtolower($class);

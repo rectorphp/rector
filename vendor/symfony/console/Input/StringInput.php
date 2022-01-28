@@ -22,7 +22,7 @@ use RectorPrefix20220128\Symfony\Component\Console\Exception\InvalidArgumentExce
  */
 class StringInput extends \RectorPrefix20220128\Symfony\Component\Console\Input\ArgvInput
 {
-    public const REGEX_STRING = '([^\\s]+?)(?:\\s|(?<!\\\\)"|(?<!\\\\)\'|$)';
+    public const REGEX_STRING = '([^\\s\\\\]+?)';
     public const REGEX_QUOTED_STRING = '(?:"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\')';
     /**
      * @param string $input A string representing the parameters from the CLI
@@ -42,19 +42,32 @@ class StringInput extends \RectorPrefix20220128\Symfony\Component\Console\Input\
         $tokens = [];
         $length = \strlen($input);
         $cursor = 0;
+        $token = null;
         while ($cursor < $length) {
+            if ('\\' === $input[$cursor]) {
+                $token .= $input[++$cursor] ?? '';
+                ++$cursor;
+                continue;
+            }
             if (\preg_match('/\\s+/A', $input, $match, 0, $cursor)) {
+                if (null !== $token) {
+                    $tokens[] = $token;
+                    $token = null;
+                }
             } elseif (\preg_match('/([^="\'\\s]+?)(=?)(' . self::REGEX_QUOTED_STRING . '+)/A', $input, $match, 0, $cursor)) {
-                $tokens[] = $match[1] . $match[2] . \stripcslashes(\str_replace(['"\'', '\'"', '\'\'', '""'], '', \substr($match[3], 1, -1)));
+                $token .= $match[1] . $match[2] . \stripcslashes(\str_replace(['"\'', '\'"', '\'\'', '""'], '', \substr($match[3], 1, -1)));
             } elseif (\preg_match('/' . self::REGEX_QUOTED_STRING . '/A', $input, $match, 0, $cursor)) {
-                $tokens[] = \stripcslashes(\substr($match[0], 1, -1));
+                $token .= \stripcslashes(\substr($match[0], 1, -1));
             } elseif (\preg_match('/' . self::REGEX_STRING . '/A', $input, $match, 0, $cursor)) {
-                $tokens[] = \stripcslashes($match[1]);
+                $token .= $match[1];
             } else {
                 // should never happen
                 throw new \RectorPrefix20220128\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Unable to parse input near "... %s ...".', \substr($input, $cursor, 10)));
             }
             $cursor += \strlen($match[0]);
+        }
+        if (null !== $token) {
+            $tokens[] = $token;
         }
         return $tokens;
     }

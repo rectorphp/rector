@@ -201,11 +201,15 @@ class EnvVarProcessor implements \RectorPrefix20220128\Symfony\Component\Depende
             return $result;
         }
         if ('resolve' === $prefix) {
-            return \preg_replace_callback('/%%|%([^%\\s]+)%/', function ($match) use($name) {
+            return \preg_replace_callback('/%%|%([^%\\s]+)%/', function ($match) use($name, $getEnv) {
                 if (!isset($match[1])) {
                     return '%';
                 }
-                $value = $this->container->getParameter($match[1]);
+                if (\strncmp($match[1], 'env(', \strlen('env(')) === 0 && \substr_compare($match[1], ')', -\strlen(')')) === 0 && 'env()' !== $match[1]) {
+                    $value = $getEnv(\substr($match[1], 4, -1));
+                } else {
+                    $value = $this->container->getParameter($match[1]);
+                }
                 if (!\is_scalar($value)) {
                     throw new \RectorPrefix20220128\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('Parameter "%s" found when resolving env var "%s" must be scalar, "%s" given.', $match[1], $name, \get_debug_type($value)));
                 }

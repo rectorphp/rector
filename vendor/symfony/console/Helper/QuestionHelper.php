@@ -212,16 +212,23 @@ class QuestionHelper extends \RectorPrefix20220128\Symfony\Component\Console\Hel
         $matches = $autocomplete($ret);
         $numMatches = \count($matches);
         $sttyMode = \shell_exec('stty -g');
+        $isStdin = 'php://stdin' === (\stream_get_meta_data($inputStream)['uri'] ?? null);
+        $r = [$inputStream];
+        $w = [];
         // Disable icanon (so we can fread each keypress) and echo (we'll do echoing here instead)
         \shell_exec('stty -icanon -echo');
         // Add highlighted text style
         $output->getFormatter()->setStyle('hl', new \RectorPrefix20220128\Symfony\Component\Console\Formatter\OutputFormatterStyle('black', 'white'));
         // Read a keypress
         while (!\feof($inputStream)) {
+            while ($isStdin && 0 === @\stream_select($r, $w, $w, 0, 100)) {
+                // Give signal handlers a chance to run
+                $r = [$inputStream];
+            }
             $c = \fread($inputStream, 1);
             // as opposed to fgets(), fread() returns an empty string when the stream content is empty, not false.
             if (\false === $c || '' === $ret && '' === $c && null === $question->getDefault()) {
-                \shell_exec(\sprintf('stty %s', $sttyMode));
+                \shell_exec('stty ' . $sttyMode);
                 throw new \RectorPrefix20220128\Symfony\Component\Console\Exception\MissingInputException('Aborted.');
             } elseif ("" === $c) {
                 // Backspace Character
@@ -306,7 +313,7 @@ class QuestionHelper extends \RectorPrefix20220128\Symfony\Component\Console\Hel
             }
         }
         // Reset stty so it behaves normally again
-        \shell_exec(\sprintf('stty %s', $sttyMode));
+        \shell_exec('stty ' . $sttyMode);
         return $fullChoice;
     }
     private function mostRecentlyEnteredValue(string $entered) : string
@@ -355,7 +362,7 @@ class QuestionHelper extends \RectorPrefix20220128\Symfony\Component\Console\Hel
         }
         $value = \fgets($inputStream, 4096);
         if (self::$stty && \RectorPrefix20220128\Symfony\Component\Console\Terminal::hasSttyAvailable()) {
-            \shell_exec(\sprintf('stty %s', $sttyMode));
+            \shell_exec('stty ' . $sttyMode);
         }
         if (\false === $value) {
             throw new \RectorPrefix20220128\Symfony\Component\Console\Exception\MissingInputException('Aborted.');
@@ -400,10 +407,10 @@ class QuestionHelper extends \RectorPrefix20220128\Symfony\Component\Console\Hel
             return self::$stdinIsInteractive;
         }
         if (\function_exists('stream_isatty')) {
-            return self::$stdinIsInteractive = \stream_isatty(\fopen('php://stdin', 'r'));
+            return self::$stdinIsInteractive = @\stream_isatty(\fopen('php://stdin', 'r'));
         }
         if (\function_exists('posix_isatty')) {
-            return self::$stdinIsInteractive = \posix_isatty(\fopen('php://stdin', 'r'));
+            return self::$stdinIsInteractive = @\posix_isatty(\fopen('php://stdin', 'r'));
         }
         if (!\function_exists('exec')) {
             return self::$stdinIsInteractive = \true;

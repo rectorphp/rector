@@ -101,6 +101,7 @@ class ResolveChildDefinitionsPass extends \RectorPrefix20220128\Symfony\Componen
         $def->setAutowired($parentDef->isAutowired());
         $def->setChanges($parentDef->getChanges());
         $def->setBindings($definition->getBindings() + $parentDef->getBindings());
+        $def->setSynthetic($definition->isSynthetic());
         // overwrite with values specified in the decorator
         $changes = $definition->getChanges();
         if (isset($changes['class'])) {
