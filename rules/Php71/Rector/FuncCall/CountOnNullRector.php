@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
@@ -22,6 +23,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -45,7 +47,8 @@ final class CountOnNullRector extends AbstractRector implements MinPhpVersionInt
 
     public function __construct(
         private readonly CountableTypeAnalyzer $countableTypeAnalyzer,
-        private readonly CountableAnalyzer $countableAnalyzer
+        private readonly CountableAnalyzer $countableAnalyzer,
+        private readonly VariableAnalyzer $variableAnalyzer
     ) {
     }
 
@@ -193,7 +196,15 @@ CODE_SAMPLE
 
         // skip node in trait, as impossible to analyse
         $trait = $this->betterNodeFinder->findParentType($funcCall, Trait_::class);
-        return $trait instanceof Trait_;
+        if ($trait instanceof Trait_) {
+            return true;
+        }
+
+        if (! $funcCall->args[0]->value instanceof Variable) {
+            return false;
+        }
+
+        return $this->variableAnalyzer->isStaticOrGlobal($funcCall->args[0]->value);
     }
 
     private function castToArray(Expr $countedExpr, FuncCall $funcCall): FuncCall
