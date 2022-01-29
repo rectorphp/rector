@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220128\Symfony\Component\Console\Output;
+namespace RectorPrefix20220129\Symfony\Component\Console\Output;
 
-use RectorPrefix20220128\Symfony\Component\Console\Formatter\NullOutputFormatter;
-use RectorPrefix20220128\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20220129\Symfony\Component\Console\Formatter\NullOutputFormatter;
+use RectorPrefix20220129\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * NullOutput suppresses all output.
  *
@@ -20,23 +20,23 @@ use RectorPrefix20220128\Symfony\Component\Console\Formatter\OutputFormatterInte
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class NullOutput implements \RectorPrefix20220128\Symfony\Component\Console\Output\OutputInterface
+class NullOutput implements \RectorPrefix20220129\Symfony\Component\Console\Output\OutputInterface
 {
     private $formatter;
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\RectorPrefix20220128\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
+    public function setFormatter(\RectorPrefix20220129\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
     {
         // do nothing
     }
     /**
      * {@inheritdoc}
      */
-    public function getFormatter() : \RectorPrefix20220128\Symfony\Component\Console\Formatter\OutputFormatterInterface
+    public function getFormatter() : \RectorPrefix20220129\Symfony\Component\Console\Formatter\OutputFormatterInterface
     {
         // to comply with the interface we must return a OutputFormatterInterface
-        return $this->formatter = $this->formatter ?? new \RectorPrefix20220128\Symfony\Component\Console\Formatter\NullOutputFormatter();
+        return $this->formatter = $this->formatter ?? new \RectorPrefix20220129\Symfony\Component\Console\Formatter\NullOutputFormatter();
     }
     /**
      * {@inheritdoc}

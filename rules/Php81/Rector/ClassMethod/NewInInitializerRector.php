@@ -13,9 +13,12 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,9 +35,21 @@ final class NewInInitializerRector extends \Rector\Core\Rector\AbstractRector im
      * @var \Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer
      */
     private $complexNewAnalyzer;
-    public function __construct(\Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer $complexNewAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    /**
+     * @readonly
+     * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
+     */
+    private $classChildAnalyzer;
+    public function __construct(\Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer $complexNewAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer)
     {
         $this->complexNewAnalyzer = $complexNewAnalyzer;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->classChildAnalyzer = $classChildAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -80,6 +95,9 @@ CODE_SAMPLE
         if ($params === []) {
             return null;
         }
+        if ($this->isOverrideAbstractMethod($node)) {
+            return null;
+        }
         foreach ($params as $param) {
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
@@ -109,6 +127,12 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS;
+    }
+    private function isOverrideAbstractMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflectionFromClassMethod($classMethod);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        return $classReflection instanceof \PHPStan\Reflection\ClassReflection && $this->classChildAnalyzer->hasAbstractParentClassMethod($classReflection, $methodName);
     }
     private function processPropertyPromotion(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param, string $paramName) : void
     {
@@ -145,7 +169,7 @@ CODE_SAMPLE
         if ($classMethod->params === []) {
             return [];
         }
-        if ($classMethod->stmts === []) {
+        if ((array) $classMethod->stmts === []) {
             return [];
         }
         return \array_filter($classMethod->params, function ($v) : bool {

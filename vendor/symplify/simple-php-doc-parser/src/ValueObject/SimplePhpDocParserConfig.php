@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220128\Symplify\SimplePhpDocParser\ValueObject;
+namespace RectorPrefix20220129\Symplify\SimplePhpDocParser\ValueObject;
 
 /**
  * @api
