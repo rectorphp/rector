@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
@@ -21,6 +22,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -50,10 +52,16 @@ final class CountOnNullRector extends \Rector\Core\Rector\AbstractRector impleme
      * @var \Rector\Php71\NodeAnalyzer\CountableAnalyzer
      */
     private $countableAnalyzer;
-    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer $countableTypeAnalyzer, \Rector\Php71\NodeAnalyzer\CountableAnalyzer $countableAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
+     */
+    private $variableAnalyzer;
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer $countableTypeAnalyzer, \Rector\Php71\NodeAnalyzer\CountableAnalyzer $countableAnalyzer, \Rector\Core\NodeAnalyzer\VariableAnalyzer $variableAnalyzer)
     {
         $this->countableTypeAnalyzer = $countableTypeAnalyzer;
         $this->countableAnalyzer = $countableAnalyzer;
+        $this->variableAnalyzer = $variableAnalyzer;
     }
     public function provideMinPhpVersion() : int
     {
@@ -165,7 +173,13 @@ CODE_SAMPLE
         }
         // skip node in trait, as impossible to analyse
         $trait = $this->betterNodeFinder->findParentType($funcCall, \PhpParser\Node\Stmt\Trait_::class);
-        return $trait instanceof \PhpParser\Node\Stmt\Trait_;
+        if ($trait instanceof \PhpParser\Node\Stmt\Trait_) {
+            return \true;
+        }
+        if (!$funcCall->args[0]->value instanceof \PhpParser\Node\Expr\Variable) {
+            return \false;
+        }
+        return $this->variableAnalyzer->isStaticOrGlobal($funcCall->args[0]->value);
     }
     private function castToArray(\PhpParser\Node\Expr $countedExpr, \PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
     {
