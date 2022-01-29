@@ -13,6 +13,8 @@ use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Core\ValueObject\Visibility;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,6 +27,7 @@ final class RemoveUnusedPromotedPropertyRector extends AbstractRector implements
     public function __construct(
         private readonly PropertyFetchFinder $propertyFetchFinder,
         private readonly PropertyManipulator $propertyManipulator,
+        private readonly VisibilityManipulator $visibilityManipulator
     ) {
     }
 
@@ -93,7 +96,7 @@ CODE_SAMPLE
 
         foreach ($node->getParams() as $param) {
             // only private local scope; removing public property might be dangerous
-            if ($param->flags !== Class_::MODIFIER_PRIVATE) {
+            if (! $this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
                 continue;
             }
 
