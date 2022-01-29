@@ -12,6 +12,8 @@ use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Core\ValueObject\Visibility;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,10 +32,16 @@ final class RemoveUnusedPromotedPropertyRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
-    public function __construct(\Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
+     */
+    private $visibilityManipulator;
+    public function __construct(\Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
     {
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->propertyManipulator = $propertyManipulator;
+        $this->visibilityManipulator = $visibilityManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -90,7 +98,7 @@ CODE_SAMPLE
         }
         foreach ($node->getParams() as $param) {
             // only private local scope; removing public property might be dangerous
-            if ($param->flags !== \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE) {
+            if (!$this->visibilityManipulator->hasVisibility($param, \Rector\Core\ValueObject\Visibility::PRIVATE)) {
                 continue;
             }
             if ($this->propertyManipulator->isPropertyUsedInReadContext($param)) {
