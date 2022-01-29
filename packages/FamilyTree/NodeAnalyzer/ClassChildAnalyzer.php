@@ -40,22 +40,47 @@ final class ClassChildAnalyzer
 
     public function hasParentClassMethod(ClassReflection $classReflection, string $methodName): bool
     {
-        foreach ($classReflection->getParents() as $parentClassReflections) {
-            if (! $parentClassReflections->hasMethod($methodName)) {
-                continue;
-            }
+        return $this->resolveParentClassMethods($classReflection, $methodName) !== [];
+    }
 
-            $constructMethodReflection = $parentClassReflections->getNativeMethod($methodName);
-            if (! $constructMethodReflection instanceof PhpMethodReflection) {
-                continue;
-            }
+    public function hasAbstractParentClassMethod(ClassReflection $classReflection, string $methodName): bool
+    {
+        $parentClassMethods = $this->resolveParentClassMethods($classReflection, $methodName);
+        if ($parentClassMethods === []) {
+            return false;
+        }
 
-            $methodDeclaringMethodClass = $constructMethodReflection->getDeclaringClass();
-            if ($methodDeclaringMethodClass->getName() === $parentClassReflections->getName()) {
+        foreach ($parentClassMethods as $parentClassMethod) {
+            if ($parentClassMethod->isAbstract()) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @return PhpMethodReflection[]
+     */
+    private function resolveParentClassMethods(ClassReflection $classReflection, string $methodName): array
+    {
+        $parentClassMethods = [];
+        foreach ($classReflection->getParents() as $parentClassReflections) {
+            if (! $parentClassReflections->hasMethod($methodName)) {
+                continue;
+            }
+
+            $methodReflection = $parentClassReflections->getNativeMethod($methodName);
+            if (! $methodReflection instanceof PhpMethodReflection) {
+                continue;
+            }
+
+            $methodDeclaringMethodClass = $methodReflection->getDeclaringClass();
+            if ($methodDeclaringMethodClass->getName() === $parentClassReflections->getName()) {
+                $parentClassMethods[] = $methodReflection;
+            }
+        }
+
+        return $parentClassMethods;
     }
 }

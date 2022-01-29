@@ -14,9 +14,12 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -30,7 +33,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NewInInitializerRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private readonly ComplexNewAnalyzer $complexNewAnalyzer
+        private readonly ComplexNewAnalyzer $complexNewAnalyzer,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly ClassChildAnalyzer $classChildAnalyzer
     ) {
     }
 
@@ -87,6 +92,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isOverrideAbstractMethod($node)) {
+            return null;
+        }
+
         foreach ($params as $param) {
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
@@ -122,6 +131,17 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NEW_INITIALIZERS;
+    }
+
+    private function isOverrideAbstractMethod(ClassMethod $classMethod): bool
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflectionFromClassMethod($classMethod);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+
+        return $classReflection instanceof ClassReflection && $this->classChildAnalyzer->hasAbstractParentClassMethod(
+            $classReflection,
+            $methodName
+        );
     }
 
     private function processPropertyPromotion(ClassMethod $classMethod, Param $param, string $paramName): void
@@ -167,7 +187,7 @@ CODE_SAMPLE
             return [];
         }
 
-        if ($classMethod->stmts === []) {
+        if ((array) $classMethod->stmts === []) {
             return [];
         }
 

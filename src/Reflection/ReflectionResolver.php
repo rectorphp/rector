@@ -55,6 +55,17 @@ final class ReflectionResolver
         return $this->reflectionProvider->getClass($className);
     }
 
+    public function resolveClassReflectionFromClassMethod(ClassMethod $classMethod): ?ClassReflection
+    {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        return $scope->getClassReflection();
+    }
+
     /**
      * @param class-string $className
      */
