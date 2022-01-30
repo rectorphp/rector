@@ -7,7 +7,7 @@ use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220129\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20220130\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -33,7 +33,7 @@ final class ExtensionComposerRector implements \Rector\Composer\Contract\Rector\
     {
         $this->currentFileProvider = $currentFileProvider;
     }
-    public function refactor(\RectorPrefix20220129\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20220130\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         if ('typo3-cms-extension' !== $composerJson->getType()) {
             return;
@@ -83,7 +83,7 @@ CODE_SAMPLE
 CODE_SAMPLE
 , [self::TYPO3_VERSION_CONSTRAINT => '^10.4'])]);
     }
-    private function addExtensionKey(\RectorPrefix20220129\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    private function addExtensionKey(\RectorPrefix20220130\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $extra = $composerJson->getExtra();
         if (isset($extra['typo3/cms']['extension-key'])) {
@@ -96,7 +96,7 @@ CODE_SAMPLE
         $extra['typo3/cms']['extension-key'] = \basename(\dirname($fileInfo->getRealPath()));
         $composerJson->setExtra($extra);
     }
-    private function addDescription(\RectorPrefix20220129\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    private function addDescription(\RectorPrefix20220130\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $description = $composerJson->getDescription();
         if ('' !== $description && null !== $description) {
@@ -104,7 +104,7 @@ CODE_SAMPLE
         }
         $composerJson->setDescription('Add description...');
     }
-    private function addLicense(\RectorPrefix20220129\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    private function addLicense(\RectorPrefix20220130\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $license = $composerJson->getLicense();
         if ('' !== $license && null !== $license && [] !== $license) {
@@ -112,7 +112,7 @@ CODE_SAMPLE
         }
         $composerJson->setLicense('GPL-2.0-or-later');
     }
-    private function fixPackageName(\RectorPrefix20220129\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    private function fixPackageName(\RectorPrefix20220130\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $name = $composerJson->getName();
         if ('' === $name) {

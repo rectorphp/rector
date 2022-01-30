@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220129;
+namespace RectorPrefix20220130;
 
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;

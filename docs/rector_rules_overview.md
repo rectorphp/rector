@@ -8498,7 +8498,7 @@ Change docs types to union types, where possible (properties are covered by Type
 
 ### FinalizePublicClassConstantRector
 
-Add final to constants that
+Add final to constants that does not have children
 
 - class: [`Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector`](../rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php)
 
