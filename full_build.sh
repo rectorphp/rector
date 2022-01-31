@@ -37,32 +37,43 @@ rm rector.php
 cp ../build/target-repository/bootstrap.php .
 cp ../preload.php .
 
-# allow to specify PHP71_BIN_PATH env
+# Check php 7.1 can be used locally with PHP71_BIN_PATH env
+# Prefixing build only works on php < 8.0, can be used locally with PHP80_BIN_PATH env
+
+#
 # usage:
 #
-#   export PHP71_BIN_PATH=/opt/homebrew/Cellar/php@7.1/7.1.33_4/bin/php && sh ./full_build.sh
+#   export PHP71_BIN_PATH=/opt/homebrew/Cellar/php@7.1/7.1.33_4/bin/php PHP80_BIN_PATH=/opt/homebrew/Cellar/php@8.0/8.0.14/bin/php && sh ./full_build.sh
 #
 if test -z ${PHP71_BIN_PATH+y}; then
-    eval "bin/rector list --ansi";
+    bin/rector list --ansi;
 else
-    eval "$PHP71_BIN_PATH bin/rector list --ansi";
+    echo "verify downgraded rector with specify PHP71_BIN_PATH env";
+    $PHP71_BIN_PATH bin/rector list --ansi;
 fi
 
 cd ..
-rm -rf rector-build
 
-# Prefixed build only works on PHP < 8.1 now, so only able to run on CI.
 # We may need a way to specify PHP path on run build/build-rector-scoped.sh, eg:
 #
 #     /path/to/php/bin/php build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
 #
 #
-# sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
-# cd rector-prefixed-downgraded
-# cp ../build/target-repository/bootstrap.php .
-# cp ../preload.php .
-# bin/rector list --ansi
-# bin/rector process vendor/symfony/string/Slugger/ --dry-run
+sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
+cd rector-prefixed-downgraded
+cp ../build/target-repository/bootstrap.php .
+cp ../preload.php .
 
-# cd ..
-# rm -rf rector-prefixed-downgraded
+if test -z ${PHP71_BIN_PATH+y}; then
+    bin/rector list --ansi;
+    bin/rector process vendor/symfony/string/Slugger/ --dry-run;
+else
+    echo "verify scoped rector with specify PHP71_BIN_PATH env";
+    $PHP71_BIN_PATH bin/rector list --ansi;
+    $PHP71_BIN_PATH bin/rector process vendor/symfony/string/Slugger/ --dry-run;
+fi
+
+cd ..
+
+rm -rf rector-prefixed-downgraded
+rm -rf rector-build
