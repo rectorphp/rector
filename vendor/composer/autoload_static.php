@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9c009dbc4a1e9bcf49c60d87a504e6c4
+class ComposerStaticInite5728a483456fa7726fa2b4081d92d75
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -398,6 +398,7 @@ class ComposerStaticInit9c009dbc4a1e9bcf49c60d87a504e6c4
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayItemNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayItemNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprFalseNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprFalseNode.php',
@@ -924,7 +925,6 @@ class ComposerStaticInit9c009dbc4a1e9bcf49c60d87a504e6c4
         'RectorPrefix20220131\\Nette\\Utils\\Type' => __DIR__ . '/..' . '/nette/utils/src/Utils/Type.php',
         'RectorPrefix20220131\\Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix20220131\\Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
-        'RectorPrefix20220131\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'RectorPrefix20220131\\Psr\\Cache\\CacheException' => __DIR__ . '/..' . '/psr/cache/src/CacheException.php',
         'RectorPrefix20220131\\Psr\\Cache\\CacheItemInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemInterface.php',
         'RectorPrefix20220131\\Psr\\Cache\\CacheItemPoolInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemPoolInterface.php',
@@ -3868,9 +3868,9 @@ class ComposerStaticInit9c009dbc4a1e9bcf49c60d87a504e6c4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9c009dbc4a1e9bcf49c60d87a504e6c4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9c009dbc4a1e9bcf49c60d87a504e6c4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9c009dbc4a1e9bcf49c60d87a504e6c4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite5728a483456fa7726fa2b4081d92d75::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite5728a483456fa7726fa2b4081d92d75::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite5728a483456fa7726fa2b4081d92d75::$classMap;
 
         }, null, ClassLoader::class);
     }
