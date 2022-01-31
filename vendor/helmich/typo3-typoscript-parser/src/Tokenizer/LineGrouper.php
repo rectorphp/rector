@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220130\Helmich\TypoScriptParser\Tokenizer;
+namespace RectorPrefix20220131\Helmich\TypoScriptParser\Tokenizer;
 
 /**
  * Class LineGrouper

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Util;
 
-use RectorPrefix20220130\Nette\Utils\Strings;
+use RectorPrefix20220131\Nette\Utils\Strings;
 use Rector\Core\ValueObject\Configuration;
 use Rector\RectorGenerator\Exception\ConfigurationException;
 /**
@@ -31,7 +31,7 @@ final class MemoryLimiter
     }
     private function validateMemoryLimitFormat(string $memoryLimit) : void
     {
-        $memoryLimitFormatMatch = \RectorPrefix20220130\Nette\Utils\Strings::match($memoryLimit, self::VALID_MEMORY_LIMIT_REGEX);
+        $memoryLimitFormatMatch = \RectorPrefix20220131\Nette\Utils\Strings::match($memoryLimit, self::VALID_MEMORY_LIMIT_REGEX);
         if ($memoryLimitFormatMatch !== null) {
             return;
         }

@@ -12,7 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220130\Webmozart\Assert\Assert;
+use RectorPrefix20220131\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\String_\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
  */
@@ -65,8 +65,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? $configuration;
-        \RectorPrefix20220130\Webmozart\Assert\Assert::allString(\array_keys($methodNamesByType));
-        \RectorPrefix20220130\Webmozart\Assert\Assert::allString($methodNamesByType);
+        \RectorPrefix20220131\Webmozart\Assert\Assert::allString(\array_keys($methodNamesByType));
+        \RectorPrefix20220131\Webmozart\Assert\Assert::allString($methodNamesByType);
         /** @var array<string, string> $methodNamesByType */
         $this->methodNamesByType = $methodNamesByType;
     }
