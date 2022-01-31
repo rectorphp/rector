@@ -47,6 +47,14 @@ const UNPREFIX_CLASSES_BY_FILE = [
     ],
     'packages/Testing/PHPUnit/AbstractTestCase.php' => ['PHPUnit\Framework\TestCase'],
 ];
+
+
+/**
+ * @see https://regex101.com/r/RBZ0bN/1
+ * @var string
+ */
+const POLYFILL_STUBS_NAME_REGEX = '#vendor\/symfony\/polyfill\-(.*)\/Resources\/stubs#';
+
 // see https://github.com/humbug/php-scoper
 return [
     ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
@@ -236,5 +244,18 @@ return [
 
             return Strings::replace($content, '#services\->load\(\'#', "services->load('" . $prefix . '\\');
         },
+
+        // remove namespace from polyfill stubs
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::match($filePath, POLYFILL_STUBS_NAME_REGEX)) {
+                return $content;
+            }
+
+            // remove alias to class have origin PHP names - fix in
+            $content = Strings::replace($content, '#\\\\class_alias(.*?);#', '');
+
+            return Strings::replace($content, '#namespace ' . $prefix . ';#', '');
+        },
+
     ],
 ];
