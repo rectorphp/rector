@@ -13,6 +13,7 @@ use Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClas
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeAbstractPrivateMethodInTraitRector;
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeRecursiveDirectoryIteratorHasChildrenRector;
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector;
+use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStringReturnTypeOnToStringRector;
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector;
@@ -82,4 +83,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeReflectionClassGetConstantsFilterRector::class);
     $services->set(DowngradeArrayFilterNullableCallbackRector::class);
     $services->set(DowngradeNumberFormatNoFourthArgRector::class);
+    $services->set(DowngradeStringReturnTypeOnToStringRector::class);
 };
