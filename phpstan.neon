@@ -615,3 +615,8 @@ parameters:
 
         # mapper re-use
         - '#Parameter \#1 \$type of method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectWithoutClassTypeMapper\:\:mapToPhpParserNode\(\) expects PHPStan\\Type\\ObjectWithoutClassType, PHPStan\\Type\\Accessory\\Has(Property|Method)Type given#'
+
+        # due to new https://github.com/symplify/symplify/pull/3912 NoMixedPropertyFetcherRule
+        - '#Anonymous variables in a property fetch can lead to false dead property\. Make sure the variable type is known#'
+        # due to new https://github.com/symplify/symplify/pull/3913 NoMixedMethodCallerRule
+        - '#Anonymous variables in a method call can lead to false dead methods\. Make sure the variable type is known#'

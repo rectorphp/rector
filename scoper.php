@@ -46,6 +46,7 @@ const UNPREFIX_CLASSES_BY_FILE = [
         'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson',
     ],
     'packages/Testing/PHPUnit/AbstractTestCase.php' => ['PHPUnit\Framework\TestCase'],
+    'vendor/symfony/polyfill-php80/Resources/stubs/Attribute.php' => ['Attribute'],
 ];
 // see https://github.com/humbug/php-scoper
 return [
