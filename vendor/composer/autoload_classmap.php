@@ -2035,6 +2035,7 @@ return array(
     'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeAbstractPrivateMethodInTraitRector' => $baseDir . '/rules/DowngradePhp80/Rector/ClassMethod/DowngradeAbstractPrivateMethodInTraitRector.php',
     'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeRecursiveDirectoryIteratorHasChildrenRector' => $baseDir . '/rules/DowngradePhp80/Rector/ClassMethod/DowngradeRecursiveDirectoryIteratorHasChildrenRector.php',
     'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeStaticTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp80/Rector/ClassMethod/DowngradeStaticTypeDeclarationRector.php',
+    'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeStringReturnTypeOnToStringRector' => $baseDir . '/rules/DowngradePhp80/Rector/ClassMethod/DowngradeStringReturnTypeOnToStringRector.php',
     'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeTrailingCommasInParamUseRector' => $baseDir . '/rules/DowngradePhp80/Rector/ClassMethod/DowngradeTrailingCommasInParamUseRector.php',
     'Rector\\DowngradePhp80\\Rector\\Class_\\DowngradeAttributeToAnnotationRector' => $baseDir . '/rules/DowngradePhp80/Rector/Class_/DowngradeAttributeToAnnotationRector.php',
     'Rector\\DowngradePhp80\\Rector\\Class_\\DowngradePropertyPromotionRector' => $baseDir . '/rules/DowngradePhp80/Rector/Class_/DowngradePropertyPromotionRector.php',
