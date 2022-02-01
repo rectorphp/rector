@@ -417,11 +417,6 @@ parameters:
             paths:
                 - packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php
 
-        -
-            message: '#Method Rector\\VersionBonding\\PhpVersionedFilter\:\:filter\(\) should return array<T of Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<int, \(Rector\\VersionBonding\\Contract\\MinPhpVersionInterface&T of Rector\\Core\\Contract\\Rector\\RectorInterface\)\|T of Rector\\Core\\Contract\\Rector\\RectorInterface\>#'
-            paths:
-                - packages/VersionBonding/PhpVersionedFilter.php
-
         # use lighter service for performance reasons
         -
             path: packages/Caching/ValueObject/Storage/FileCacheStorage.php
@@ -597,17 +592,9 @@ parameters:
         # impossible to validate json string is a class-string
         - '#Parameter \#1 \$rectorClass of class Rector\\ChangesReporting\\ValueObject\\RectorWithLineChange constructor expects class\-string<Rector\\Core\\Contract\\Rector\\RectorInterface\>\|Rector\\Core\\Contract\\Rector\\RectorInterface, string given#'
 
-        # will be solved once https://github.com/phpstan/phpstan-src/pull/914 gets released
-        -
-            message: '#sprintf\(\) call mask types does not match provided arguments types#'
-            paths:
-                - src/Exception/ShouldNotHappenException.php
-
         -
             message: '#Only booleans are allowed in an if condition, array\|null given#'
             path: rules/Naming/Naming/PropertyNaming.php
-
-        - '#Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string<Rector\\RectorInstaller\\GeneratedConfig\>\|Rector\\RectorInstaller\\GeneratedConfig, string given#'
 
         -
             path: src/Bootstrap/ExtensionConfigResolver.php
