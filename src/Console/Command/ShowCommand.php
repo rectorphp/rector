@@ -50,7 +50,7 @@ final class ShowCommand extends \RectorPrefix20220201\Symfony\Component\Console\
         if ($rectorCount === 0) {
             $warningMessage = \sprintf('No Rectors were loaded.%sAre sure your "rector.php" config is in the root?%sTry "--config <path>" option to include it.', \PHP_EOL . \PHP_EOL, \PHP_EOL);
             $this->outputStyle->warning($warningMessage);
-            return self::SUCCESS;
+            return self::FAILURE;
         }
         $rectorCount = \count($rectors);
         foreach ($rectors as $rector) {
@@ -58,6 +58,9 @@ final class ShowCommand extends \RectorPrefix20220201\Symfony\Component\Console\
         }
         $message = \sprintf('%d loaded Rectors', $rectorCount);
         $this->outputStyle->success($message);
-        return \RectorPrefix20220201\Symfony\Component\Console\Command\Command::SUCCESS;
+        $this->outputStyle->error('The "show" command is deprecated and will be removed, as it was used only for more output on Rector run. Use the "--debug" option and process command for debugging output instead.');
+        // to spot the error message
+        \sleep(3);
+        return \RectorPrefix20220201\Symfony\Component\Console\Command\Command::FAILURE;
     }
 }
