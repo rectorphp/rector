@@ -17,10 +17,6 @@ jobs:
                         name: 'Rector List'
                         run: bin/rector list --ansi
 
-                    -
-                        name: 'Show command'
-                        run: bin/rector show --ansi
-
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
         timeout-minutes: 30

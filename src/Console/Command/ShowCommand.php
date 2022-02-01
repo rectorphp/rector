@@ -55,7 +55,8 @@ final class ShowCommand extends Command
                 PHP_EOL
             );
             $this->outputStyle->warning($warningMessage);
-            return self::SUCCESS;
+
+            return self::FAILURE;
         }
 
         $rectorCount = count($rectors);
@@ -66,6 +67,12 @@ final class ShowCommand extends Command
         $message = sprintf('%d loaded Rectors', $rectorCount);
         $this->outputStyle->success($message);
 
-        return Command::SUCCESS;
+        $this->outputStyle->error(
+            'The "show" command is deprecated and will be removed, as it was used only for more output on Rector run. Use the "--debug" option and process command for debugging output instead.'
+        );
+        // to spot the error message
+        sleep(3);
+
+        return Command::FAILURE;
     }
 }
