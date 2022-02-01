@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220131;
+namespace RectorPrefix20220201;
 
 use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Php73\Rector\BooleanOr\IsCountableRector;

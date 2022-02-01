@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220131;
+namespace RectorPrefix20220201;
 
-use RectorPrefix20220131\Symplify\SymplifyKernel\ValueObject\KernelBootAndApplicationRun;
-use RectorPrefix20220131\Symplify\VendorPatches\Kernel\VendorPatchesKernel;
+use RectorPrefix20220201\Symplify\SymplifyKernel\ValueObject\KernelBootAndApplicationRun;
+use RectorPrefix20220201\Symplify\VendorPatches\Kernel\VendorPatchesKernel;
 $possibleAutoloadPaths = [__DIR__ . '/../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/../../../autoload.php', __DIR__ . '/../../../vendor/autoload.php'];
 foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
     if (!\file_exists($possibleAutoloadPath)) {
@@ -12,5 +12,5 @@ foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
     }
     require_once $possibleAutoloadPath;
 }
-$kernelBootAndApplicationRun = new \RectorPrefix20220131\Symplify\SymplifyKernel\ValueObject\KernelBootAndApplicationRun(\RectorPrefix20220131\Symplify\VendorPatches\Kernel\VendorPatchesKernel::class);
+$kernelBootAndApplicationRun = new \RectorPrefix20220201\Symplify\SymplifyKernel\ValueObject\KernelBootAndApplicationRun(\RectorPrefix20220201\Symplify\VendorPatches\Kernel\VendorPatchesKernel::class);
 $kernelBootAndApplicationRun->run();

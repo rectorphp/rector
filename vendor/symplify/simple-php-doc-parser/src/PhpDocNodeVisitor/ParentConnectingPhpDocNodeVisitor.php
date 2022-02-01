@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220131\Symplify\SimplePhpDocParser\PhpDocNodeVisitor;
+namespace RectorPrefix20220201\Symplify\SimplePhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
-use RectorPrefix20220131\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey;
+use RectorPrefix20220201\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey;
 /**
  * @api
  *
@@ -12,7 +12,7 @@ use RectorPrefix20220131\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttribute
  *
  * @see \Symplify\SimplePhpDocParser\Tests\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitorTest
  */
-final class ParentConnectingPhpDocNodeVisitor extends \RectorPrefix20220131\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+final class ParentConnectingPhpDocNodeVisitor extends \RectorPrefix20220201\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var Node[]
@@ -26,7 +26,7 @@ final class ParentConnectingPhpDocNodeVisitor extends \RectorPrefix20220131\Symp
     {
         if ($this->stack !== []) {
             $parentNode = $this->stack[\count($this->stack) - 1];
-            $node->setAttribute(\RectorPrefix20220131\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey::PARENT, $parentNode);
+            $node->setAttribute(\RectorPrefix20220201\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey::PARENT, $parentNode);
         }
         $this->stack[] = $node;
         return $node;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220131;
+namespace RectorPrefix20220201;
 
 use Ssch\TYPO3Rector\Rector\v9\v4\AdditionalFieldProviderRector;
 use Ssch\TYPO3Rector\Rector\v9\v4\BackendUtilityShortcutExistsRector;

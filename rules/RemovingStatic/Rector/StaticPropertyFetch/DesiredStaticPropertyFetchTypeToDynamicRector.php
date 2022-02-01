@@ -17,7 +17,7 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
-use RectorPrefix20220131\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220201\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -39,7 +39,7 @@ final class DesiredStaticPropertyFetchTypeToDynamicRector extends \Rector\Core\R
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \RectorPrefix20220131\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \RectorPrefix20220201\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->propertyNaming = $propertyNaming;
         $this->propertyToAddCollector = $propertyToAddCollector;

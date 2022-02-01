@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\SideEffect;
 
-use RectorPrefix20220131\Nette\Utils\Strings;
+use RectorPrefix20220201\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -97,7 +97,7 @@ final class SideEffectNodeDetector
             return \false;
         }
         $className = $new->class->toString();
-        $namespace = \RectorPrefix20220131\Nette\Utils\Strings::before($className, '\\', 1);
+        $namespace = \RectorPrefix20220201\Nette\Utils\Strings::before($className, '\\', 1);
         return $namespace === 'PhpParser';
     }
     private function isClassCallerThrowable(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
