@@ -53,13 +53,13 @@ final class ExpectationAnalyzer
             if (!$this->isValidExpectsCall($expects)) {
                 continue;
             }
-            $expectsArg = $expects->args[0];
-            /** @var MethodCall $expectsValue */
+            $expectsArg = $expects->getArgs()[0];
             $expectsValue = $expectsArg->value;
             if (!$this->isValidAtCall($expectsValue)) {
                 continue;
             }
-            $atArg = $expectsValue->args[0];
+            /** @var MethodCall|StaticCall $expectsValue */
+            $atArg = $expectsValue->getArgs()[0];
             $atValue = $atArg->value;
             if (!$atValue instanceof \PhpParser\Node\Scalar\LNumber) {
                 continue;
@@ -81,15 +81,15 @@ final class ExpectationAnalyzer
         }
         return \count($call->getArgs()) === 1;
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
-     */
-    public function isValidAtCall($call) : bool
+    public function isValidAtCall(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($call, 'at')) {
+        if (!$expr instanceof \PhpParser\Node\Expr\StaticCall && !$expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
-        return \count($call->getArgs()) === 1;
+        if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($expr, 'at')) {
+            return \false;
+        }
+        return \count($expr->getArgs()) === 1;
     }
     private function getMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
     {
