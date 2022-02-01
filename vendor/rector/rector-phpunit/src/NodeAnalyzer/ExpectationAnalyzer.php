@@ -7,6 +7,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
@@ -70,25 +71,25 @@ final class ExpectationAnalyzer
         }
         return $expectationMockCollection;
     }
-    public function isValidExpectsCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     */
+    public function isValidExpectsCall($call) : bool
     {
-        if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($methodCall, 'expects')) {
+        if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($call, 'expects')) {
             return \false;
         }
-        if (\count($methodCall->args) !== 1) {
-            return \false;
-        }
-        return \true;
+        return \count($call->getArgs()) === 1;
     }
-    public function isValidAtCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     */
+    public function isValidAtCall($call) : bool
     {
-        if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($methodCall, 'at')) {
+        if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($call, 'at')) {
             return \false;
         }
-        if (\count($methodCall->args) !== 1) {
-            return \false;
-        }
-        return \true;
+        return \count($call->getArgs()) === 1;
     }
     private function getMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
     {

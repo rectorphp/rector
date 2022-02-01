@@ -151,8 +151,8 @@ CODE_SAMPLE
     }
     private function removeNonExistingClassSeeAnnotation(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
-        $seePhpDocTagNodes = $phpDocInfo->getTagsByName(self::SEE);
         /** @var PhpDocTagNode[] $seePhpDocTagNodes */
+        $seePhpDocTagNodes = $phpDocInfo->getTagsByName(self::SEE);
         foreach ($seePhpDocTagNodes as $seePhpDocTagNode) {
             if (!$seePhpDocTagNode->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode) {
                 continue;

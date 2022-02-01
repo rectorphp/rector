@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \true);
+    $parameters->set(\Rector\Core\Configuration\Option::PARALLEL, \true);
     $parameters->set(\Rector\Core\Configuration\Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
     $parameters->set(\Rector\Core\Configuration\Option::SKIP, [
         // for tests
@@ -24,4 +25,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_81);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::DEAD_CODE);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::CODE_QUALITY);
+    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::CODING_STYLE);
+    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::EARLY_RETURN);
 };
