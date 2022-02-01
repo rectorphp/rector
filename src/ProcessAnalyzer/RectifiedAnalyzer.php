@@ -5,21 +5,16 @@ declare(strict_types=1);
 namespace Rector\Core\ProcessAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\RectifiedNode;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * This service verify if the Node already rectified with same Rector rule before current Rector rule with condition
  *
  *        Same Rector Rule <-> Same Node <-> Same File
- *
- * Limitation:
- *
- *   It only check against Node which not a Class_
- *
- * which possibly changed by other process.
  */
 final class RectifiedAnalyzer
 {
@@ -28,12 +23,13 @@ final class RectifiedAnalyzer
      */
     private array $previousFileWithNodes = [];
 
-    public function verify(RectorInterface $rector, Node $node, File $currentFile): ?RectifiedNode
-    {
-        if ($node instanceof Class_) {
-            return null;
-        }
+    public function __construct(
+        private readonly NodeNameResolver $nodeNameResolver
+    ) {
+    }
 
+    public function verify(RectorInterface $rector, Node $node, ?Node $originalNode, File $currentFile): ?RectifiedNode
+    {
         $smartFileInfo = $currentFile->getSmartFileInfo();
         $realPath = $smartFileInfo->getRealPath();
 
@@ -49,6 +45,20 @@ final class RectifiedAnalyzer
         }
 
         if ($rectifiedNode->getNode() !== $node) {
+            return null;
+        }
+
+        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
+        $nodeName = $this->nodeNameResolver->getName($node);
+        $originalNodeName = $originalNode instanceof Node
+            ? $this->nodeNameResolver->getName($originalNode)
+            : null;
+
+        if (is_string($nodeName) && $nodeName === $originalNodeName && $createdByRule !== [] && ! in_array(
+            $rector::class,
+            $createdByRule,
+            true
+        )) {
             return null;
         }
 
