@@ -230,7 +230,8 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         if (!$this->isMatchingNodeType($nodeClass)) {
             return null;
         }
-        if ($this->shouldSkipCurrentNode($node)) {
+        $originalNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+        if ($this->shouldSkipCurrentNode($node, $originalNode)) {
             return null;
         }
         $this->currentRectorProvider->changeCurrentRector($this);
@@ -239,14 +240,14 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         // show current Rector class on --debug
         $this->printDebugApplying();
         $originalAttributes = $node->getAttributes();
-        $originalNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE) ?? clone $node;
+        $originalNode = $originalNode ?? clone $node;
         $node = $this->refactor($node);
         // nothing to change → continue
         if ($node === null) {
             return null;
         }
         if (\is_array($node)) {
-            $this->createdByRuleDecorator->decorate($originalNode, static::class);
+            $this->createdByRule($node, $originalNode);
             $originalNodeHash = \spl_object_hash($originalNode);
             $this->nodesToReturn[$originalNodeHash] = $node;
             if ($node !== []) {
@@ -261,7 +262,6 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         if (!$this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
             return $node;
         }
-        $this->createdByRuleDecorator->decorate($node, static::class);
         $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($this), $originalNode->getLine());
         $this->file->addRectorClassWithLine($rectorWithLineChange);
         // update parents relations - must run before connectParentNodes()
@@ -269,10 +269,12 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $this->connectParentNodes($node);
         // is equals node type? return node early
         if (\get_class($originalNode) === \get_class($node)) {
+            $this->createdByRule($node, $originalNode);
             return $node;
         }
         // is different node type? do not traverse children to avoid looping
         $this->infiniteLoopValidator->process($node, $originalNode, static::class);
+        $this->createdByRuleDecorator->decorate($node, static::class);
         // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
         $originalNodeHash = \spl_object_hash($originalNode);
         if ($originalNode instanceof \PhpParser\Node\Stmt && $node instanceof \PhpParser\Node\Expr) {
@@ -407,6 +409,19 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $this->nodeRemover->removeNodes($nodes);
     }
     /**
+     * @param mixed[]|\PhpParser\Node $node
+     */
+    private function createdByRule($node, \PhpParser\Node $originalNode) : void
+    {
+        if ($node instanceof \PhpParser\Node) {
+            $node = [$node];
+        }
+        foreach ($node as $singleNode) {
+            $this->createdByRuleDecorator->decorate($singleNode, static::class);
+        }
+        $this->createdByRuleDecorator->decorate($originalNode, static::class);
+    }
+    /**
      * @param class-string<Node> $nodeClass
      */
     private function isMatchingNodeType(string $nodeClass) : bool
@@ -418,7 +433,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         }
         return \false;
     }
-    private function shouldSkipCurrentNode(\PhpParser\Node $node) : bool
+    private function shouldSkipCurrentNode(\PhpParser\Node $node, ?\PhpParser\Node $originalNode) : bool
     {
         if ($this->nodesToRemoveCollector->isNodeRemoved($node)) {
             return \true;
@@ -430,7 +445,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         if ($this->skipper->shouldSkipElementAndFileInfo($this, $smartFileInfo)) {
             return \true;
         }
-        $rectifiedNode = $this->rectifiedAnalyzer->verify($this, $node, $this->file);
+        $rectifiedNode = $this->rectifiedAnalyzer->verify($this, $node, $originalNode, $this->file);
         return $rectifiedNode instanceof \Rector\Core\ValueObject\RectifiedNode;
     }
     private function printDebugApplying() : void
