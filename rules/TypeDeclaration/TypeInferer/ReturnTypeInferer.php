@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
@@ -30,6 +31,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
@@ -50,14 +52,15 @@ final class ReturnTypeInferer
      */
     public function __construct(
         array $returnTypeInferers,
-        private  readonly TypeNormalizer $typeNormalizer,
+        private readonly TypeNormalizer $typeNormalizer,
         PriorityAwareSorter $priorityAwareSorter,
-        private  readonly GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
-        private  readonly PhpVersionProvider $phpVersionProvider,
-        private  readonly ParameterProvider $parameterProvider,
-        private  readonly BetterNodeFinder $betterNodeFinder,
-        private  readonly ReflectionProvider $reflectionProvider,
-        private  readonly NodeTypeResolver $nodeTypeResolver
+        private readonly GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly ParameterProvider $parameterProvider,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
         $this->returnTypeInferers = $priorityAwareSorter->sort($returnTypeInferers);
     }
@@ -105,6 +108,11 @@ final class ReturnTypeInferer
                 continue;
             }
 
+            $type = $this->verifyThisType($type, $functionLike);
+            if (! $type instanceof Type) {
+                continue;
+            }
+
             // normalize ConstStringType to ClassStringType
             $resolvedType = $this->genericClassStringTypeNormalizer->normalize($type);
             return $this->resolveTypeWithVoidHandling($functionLike, $resolvedType);
@@ -125,6 +133,27 @@ final class ReturnTypeInferer
         }
 
         return $type;
+    }
+
+    public function verifyThisType(Type $type, FunctionLike $functionLike): ?Type
+    {
+        if (! $type instanceof ThisType) {
+            return $type;
+        }
+
+        $class = $this->betterNodeFinder->findParentType($functionLike, Class_::class);
+        $objectType = $type->getStaticObjectType();
+        $objectTypeClassName = $objectType->getClassName();
+
+        if (! $class instanceof Class_) {
+            return $type;
+        }
+
+        if ($this->nodeNameResolver->isName($class, $objectTypeClassName)) {
+            return $type;
+        }
+
+        return new MixedType();
     }
 
     private function resolveTypeWithVoidHandling(ClassMethod|Function_|Closure $functionLike, Type $resolvedType): Type
