@@ -124,7 +124,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $usePhpdoc = $configuration[self::USE_PHPDOC] ?? false;
+        $usePhpdoc = $configuration[self::USE_PHPDOC] ?? (bool) current($configuration);
         Assert::boolean($usePhpdoc);
 
         $this->usePhpdoc = $usePhpdoc;
