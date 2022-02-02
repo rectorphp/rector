@@ -14,5 +14,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Old\Long\AnyNamespace' => 'Short\AnyNamespace',
             'PHPUnit_Framework_' => 'PHPUnit\Framework\\',
             'Foo\Bar' => 'Foo\Tmp',
+            'App\Repositories' => 'App\Repositories\Example',
         ]);
 };

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Renaming\Rector\Namespace_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -134,18 +133,19 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
 
     private function processFullyQualified(Name $name, RenamedNamespace $renamedNamespace): ?FullyQualified
     {
-        $newName = $this->isPartialNamespace($name) ? $this->resolvePartialNewName(
-            $name,
-            $renamedNamespace
-        ) : $renamedNamespace->getNameInNewNamespace();
-
-        $values = array_values($this->oldToNewNamespaces);
-        if (! isset($this->isChangedInNamespaces[$newName])) {
-            return new FullyQualified($newName);
+        if (str_starts_with($name->toString(), $renamedNamespace->getNewNamespace() . '\\')) {
+            return null;
         }
 
-        if (! in_array($newName, $values, true)) {
-            return new FullyQualified($newName);
+        $nameInNewNamespace = $renamedNamespace->getNameInNewNamespace();
+
+        $values = array_values($this->oldToNewNamespaces);
+        if (! isset($this->isChangedInNamespaces[$nameInNewNamespace])) {
+            return new FullyQualified($nameInNewNamespace);
+        }
+
+        if (! in_array($nameInNewNamespace, $values, true)) {
+            return new FullyQualified($nameInNewNamespace);
         }
 
         return null;
@@ -172,29 +172,5 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
         $newClassName = $fullyQualifiedNode->toString();
 
         return array_key_exists($newClassName, $this->oldToNewNamespaces);
-    }
-
-    private function isPartialNamespace(Name $name): bool
-    {
-        $resolvedName = $name->getAttribute(AttributeKey::RESOLVED_NAME);
-        if (! $resolvedName instanceof Name) {
-            return false;
-        }
-
-        if ($resolvedName instanceof FullyQualified) {
-            return ! $this->isName($name, $resolvedName->toString());
-        }
-
-        return false;
-    }
-
-    private function resolvePartialNewName(Name $name, RenamedNamespace $renamedNamespace): string
-    {
-        $nameInNewNamespace = $renamedNamespace->getNameInNewNamespace();
-
-        // first dummy implementation - improve
-        $cutOffFromTheLeft = Strings::length($nameInNewNamespace) - Strings::length($name->toString());
-
-        return Strings::substring($nameInNewNamespace, $cutOffFromTheLeft);
     }
 }
