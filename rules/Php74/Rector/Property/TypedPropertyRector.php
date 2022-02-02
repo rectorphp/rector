@@ -18,6 +18,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
@@ -32,7 +33,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -43,8 +44,23 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\DoctrineTypedPropertyRectorTest
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\ImportedTest
  */
-final class TypedPropertyRector extends AbstractRector implements MinPhpVersionInterface
+final class TypedPropertyRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
+    /**
+     * @var string
+     */
+    public const INLINE_PUBLIC = 'inline_public';
+
+    /**
+     * Default to false, which only apply changes:
+     *
+     *  – private modifier property
+     *  - protected modifier property on final class without extends
+     *
+     * Set to true will allow change other modifiers as well as far as not forbidden, eg: callable type, null type, etc.
+     */
+    private bool $inlinePublic = false;
+
     public function __construct(
         private readonly VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
         private readonly VendorLockResolver $vendorLockResolver,
@@ -58,12 +74,17 @@ final class TypedPropertyRector extends AbstractRector implements MinPhpVersionI
     ) {
     }
 
+    public function configure(array $configuration): void
+    {
+        $this->inlinePublic = $configuration[self::INLINE_PUBLIC] ?? (bool) current($configuration);
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
             'Changes property `@var` annotations from annotation to type.',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 final class SomeClass
 {
@@ -80,6 +101,10 @@ final class SomeClass
     private int $count;
 }
 CODE_SAMPLE
+                ,
+                    [
+                        self::INLINE_PUBLIC => false,
+                    ]
                 ),
             ]
         );
@@ -247,6 +272,10 @@ CODE_SAMPLE
 
         if ($this->isModifiedByTrait($class, $propertyName)) {
             return true;
+        }
+
+        if ($this->inlinePublic) {
+            return $this->propertyAnalyzer->hasForbiddenType($property);
         }
 
         if ($property->isPrivate()) {
