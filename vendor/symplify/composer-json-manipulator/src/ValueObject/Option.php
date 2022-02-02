@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220201\Symplify\ComposerJsonManipulator\ValueObject;
+namespace RectorPrefix20220202\Symplify\ComposerJsonManipulator\ValueObject;
 
 final class Option
 {
