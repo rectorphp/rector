@@ -167,7 +167,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $shouldRemoveAnnotations = $configuration[self::REMOVE_ANNOTATIONS] ?? \true;
+        $shouldRemoveAnnotations = $configuration[self::REMOVE_ANNOTATIONS] ?? (bool) \current($configuration);
         \RectorPrefix20220202\Webmozart\Assert\Assert::boolean($shouldRemoveAnnotations);
         $this->shouldRemoveAnnotations = $shouldRemoveAnnotations;
     }
