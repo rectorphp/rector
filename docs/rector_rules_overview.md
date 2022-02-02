@@ -1,4 +1,4 @@
-# 520 Rules Overview
+# 521 Rules Overview
 
 <br>
 
@@ -38,7 +38,7 @@
 
 - [DowngradePhp74](#downgradephp74) (12)
 
-- [DowngradePhp80](#downgradephp80) (27)
+- [DowngradePhp80](#downgradephp80) (28)
 
 - [DowngradePhp81](#downgradephp81) (8)
 
@@ -5746,6 +5746,33 @@ Downgrade `str_starts_with()` to `strncmp()` version
 
 <br>
 
+### DowngradeStringReturnTypeOnToStringRector
+
+Add "string" return on current `__toString()` method when parent method has string return on `__toString()` method
+
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStringReturnTypeOnToStringRector`](../rules/DowngradePhp80/Rector/ClassMethod/DowngradeStringReturnTypeOnToStringRector.php)
+
+```diff
+ abstract class ParentClass
+ {
+     public function __toString(): string
+     {
+         return 'value';
+     }
+ }
+
+ class ChildClass extends ParentClass
+ {
+-    public function __toString()
++    public function __toString(): string
+     {
+         return 'value';
+     }
+ }
+```
+
+<br>
+
 ### DowngradeThrowExprRector
 
 Downgrade throw expression
@@ -8040,7 +8067,25 @@ Add null default to properties with PHP 7.4 property nullable type
 
 Changes property `@var` annotations from annotation to type.
 
+:wrench: **configure it!**
+
 - class: [`Rector\Php74\Rector\Property\TypedPropertyRector`](../rules/Php74/Rector/Property/TypedPropertyRector.php)
+
+```php
+use Rector\Php74\Rector\Property\TypedPropertyRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(TypedPropertyRector::class)
+        ->configure([
+            TypedPropertyRector::INLINE_PUBLIC => false,
+        ]);
+};
+```
+
+↓
 
 ```diff
  final class SomeClass

@@ -1,4 +1,4 @@
-# 39 Rules Overview
+# 38 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -87,11 +87,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ArrayArgumentToDataProviderRector::class)
-        ->configure([
-ArrayArgumentToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => ValueObjectInliner::inline([
-    new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number'),
-    ]),
-]]);
+        ->call('configure', [[
+            ArrayArgumentToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => ValueObjectInliner::inline([
+                new ArrayArgumentToDataProvider(
+                    'PHPUnit\Framework\TestCase',
+                    'doTestMultiple',
+                    'doTestSingle',
+                    'number'
+                ),
+            ]),
+        ]]);
 };
 ```
 
@@ -575,21 +580,6 @@ Turns getMock*() methods to `createMock()`
 ```diff
 -$this->getMockWithoutInvokingTheOriginalConstructor("Class");
 +$this->createMock("Class");
-```
-
-<br>
-
-## MigrateAtToConsecutiveExpectationsRector
-
-Migrates deprecated `$this->at` to `$this->withConsecutive` and `$this->willReturnOnConsecutiveCalls`
-
-- class: [`Rector\PHPUnit\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector`](../src/Rector/ClassMethod/MigrateAtToConsecutiveExpectationsRector.php)
-
-```diff
- $mock = $this->createMock(Foo::class);
--$mock->expects($this->at(0))->with('0')->method('someMethod')->willReturn('1');
--$mock->expects($this->at(1))->with('1')->method('someMethod')->willReturn('2');
-+$mock->method('someMethod')->withConsecutive(['0'], ['1'])->willReturnOnConsecutiveCalls('1', '2');
 ```
 
 <br>
