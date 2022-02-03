@@ -9,9 +9,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\ResolvedMethodReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -176,6 +180,18 @@ CODE_SAMPLE
         $setterMethodName = 'set' . ucfirst($propertyName);
         if (! $propertyCallerType->hasMethod($setterMethodName)->yes()) {
             return null;
+        }
+
+        $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
+        if ($scope instanceof Scope) {
+            $methodReflection = $propertyCallerType->getMethod($setterMethodName, $scope);
+
+            if ($methodReflection instanceof ResolvedMethodReflection) {
+                $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+                if (count($parametersAcceptor->getParameters()) > 1) {
+                    return null;
+                }
+            }
         }
 
         return $this->nodeFactory->createMethodCall($propertyFetch->var, $setterMethodName, [$expr]);
