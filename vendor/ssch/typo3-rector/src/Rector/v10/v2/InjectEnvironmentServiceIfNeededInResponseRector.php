@@ -17,9 +17,9 @@ use PHPStan\Type\VerbosityLevel;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20220202\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20220202\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
-use RectorPrefix20220202\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20220203\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20220203\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix20220203\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -127,7 +127,7 @@ CODE_SAMPLE
     }
     private function createEnvironmentServiceProperty() : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20220202\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder(self::ENVIRONMENT_SERVICE);
+        $propertyBuilder = new \RectorPrefix20220203\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder(self::ENVIRONMENT_SERVICE);
         $propertyBuilder->makeProtected();
         $type = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType('TYPO3\\CMS\\Extbase\\Service\\EnvironmentService');
         $propertyBuilder->setDocComment(new \PhpParser\Comment\Doc(\sprintf('/**%s * @var \\%s%s */', \PHP_EOL, $type->describe(\PHPStan\Type\VerbosityLevel::typeOnly()), \PHP_EOL)));
@@ -149,11 +149,11 @@ CODE_SAMPLE
     }
     private function addInjectEnvironmentServiceMethod(\PhpParser\Node\Stmt\Class_ $node) : void
     {
-        $paramBuilder = new \RectorPrefix20220202\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder(self::ENVIRONMENT_SERVICE);
+        $paramBuilder = new \RectorPrefix20220203\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder(self::ENVIRONMENT_SERVICE);
         $paramBuilder->setType(new \PhpParser\Node\Name\FullyQualified('TYPO3\\CMS\\Extbase\\Service\\EnvironmentService'));
         $param = $paramBuilder->getNode();
         $propertyAssignNode = $this->nodeFactory->createPropertyAssignmentWithExpr(self::ENVIRONMENT_SERVICE, new \PhpParser\Node\Expr\Variable(self::ENVIRONMENT_SERVICE));
-        $classMethodBuilder = new \RectorPrefix20220202\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('injectEnvironmentService');
+        $classMethodBuilder = new \RectorPrefix20220203\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('injectEnvironmentService');
         $classMethodBuilder->addParam($param);
         $classMethodBuilder->addStmt($propertyAssignNode);
         $classMethodBuilder->makePublic();

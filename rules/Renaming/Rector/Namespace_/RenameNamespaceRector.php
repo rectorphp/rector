@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\ValueObject\RenamedNamespace;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220202\Webmozart\Assert\Assert;
+use RectorPrefix20220203\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
  */
@@ -102,8 +102,8 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
     public function configure(array $configuration) : void
     {
         $oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? $configuration;
-        \RectorPrefix20220202\Webmozart\Assert\Assert::allString(\array_keys($oldToNewNamespaces));
-        \RectorPrefix20220202\Webmozart\Assert\Assert::allString($oldToNewNamespaces);
+        \RectorPrefix20220203\Webmozart\Assert\Assert::allString(\array_keys($oldToNewNamespaces));
+        \RectorPrefix20220203\Webmozart\Assert\Assert::allString($oldToNewNamespaces);
         /** @var array<string, string> $oldToNewNamespaces */
         $this->oldToNewNamespaces = $oldToNewNamespaces;
     }
