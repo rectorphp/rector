@@ -38,7 +38,6 @@ use Webmozart\Assert\Assert;
 final class DoctrineAnnotationClassToAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @deprecated
      * @var string
      */
     public const REMOVE_ANNOTATIONS = 'remove_annotations';
