@@ -6,10 +6,10 @@ namespace Rector\Core\DependencyInjection\Collector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use ReflectionClass;
 use ReflectionClassConstant;
-use RectorPrefix20220203\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220203\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220203\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix20220203\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix20220204\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220204\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220204\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix20220204\Symplify\PackageBuilder\Yaml\ParametersMerger;
 final class ConfigureCallValuesCollector
 {
     /**
@@ -28,8 +28,8 @@ final class ConfigureCallValuesCollector
     private $symfonyStyle;
     public function __construct()
     {
-        $this->parametersMerger = new \RectorPrefix20220203\Symplify\PackageBuilder\Yaml\ParametersMerger();
-        $symfonyStyleFactory = new \RectorPrefix20220203\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory();
+        $this->parametersMerger = new \RectorPrefix20220204\Symplify\PackageBuilder\Yaml\ParametersMerger();
+        $symfonyStyleFactory = new \RectorPrefix20220204\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory();
         $this->symfonyStyle = $symfonyStyleFactory->create();
     }
     /**
@@ -42,7 +42,7 @@ final class ConfigureCallValuesCollector
     /**
      * @param class-string<ConfigurableRectorInterface> $className
      */
-    public function collectFromServiceAndClassName(string $className, \RectorPrefix20220203\Symfony\Component\DependencyInjection\Definition $definition) : void
+    public function collectFromServiceAndClassName(string $className, \RectorPrefix20220204\Symfony\Component\DependencyInjection\Definition $definition) : void
     {
         foreach ($definition->getMethodCalls() as $methodCall) {
             if ($methodCall[0] !== 'configure') {

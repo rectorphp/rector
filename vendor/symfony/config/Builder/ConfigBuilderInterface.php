@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220203\Symfony\Component\Config\Builder;
+namespace RectorPrefix20220204\Symfony\Component\Config\Builder;
 
 /**
  * A ConfigBuilder provides helper methods to build a large complex array.

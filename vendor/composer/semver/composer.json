@@ -35,16 +35,16 @@
     },
     "require-dev": {
         "symfony\/phpunit-bridge": "^4.2 || ^5",
-        "phpstan\/phpstan": "^0.12.54"
+        "phpstan\/phpstan": "^1.4"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220203\\Composer\\Semver\\": "src"
+            "RectorPrefix20220204\\Composer\\Semver\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220203\\Composer\\Semver\\": "tests"
+            "RectorPrefix20220204\\Composer\\Semver\\": "tests"
         }
     },
     "extra": {
@@ -54,6 +54,6 @@
     },
     "scripts": {
         "test": "SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 vendor\/bin\/simple-phpunit",
-        "phpstan": "phpstan analyse"
+        "phpstan": "@php vendor\/bin\/phpstan analyse"
     }
 }

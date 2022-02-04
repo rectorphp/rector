@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220203\Symplify\SymplifyKernel\Contract\Config;
+namespace RectorPrefix20220204\Symplify\SymplifyKernel\Contract\Config;
 
-use RectorPrefix20220203\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix20220203\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220204\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix20220204\Symfony\Component\DependencyInjection\ContainerBuilder;
 interface LoaderFactoryInterface
 {
-    public function create(\RectorPrefix20220203\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, string $currentWorkingDirectory) : \RectorPrefix20220203\Symfony\Component\Config\Loader\LoaderInterface;
+    public function create(\RectorPrefix20220204\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, string $currentWorkingDirectory) : \RectorPrefix20220204\Symfony\Component\Config\Loader\LoaderInterface;
 }

@@ -9,7 +9,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220203\Webmozart\Assert\Assert;
+use RectorPrefix20220204\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector\MethodCallToPropertyFetchRectorTest
  */
@@ -73,8 +73,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodCallToPropertyFetchCollection = $configuration[self::METHOD_CALL_TO_PROPERTY_FETCHES] ?? $configuration;
-        \RectorPrefix20220203\Webmozart\Assert\Assert::allString(\array_keys($methodCallToPropertyFetchCollection));
-        \RectorPrefix20220203\Webmozart\Assert\Assert::allString($methodCallToPropertyFetchCollection);
+        \RectorPrefix20220204\Webmozart\Assert\Assert::allString(\array_keys($methodCallToPropertyFetchCollection));
+        \RectorPrefix20220204\Webmozart\Assert\Assert::allString($methodCallToPropertyFetchCollection);
         /** @var array<string, string> $methodCallToPropertyFetchCollection */
         $this->methodCallToPropertyFetchCollection = $methodCallToPropertyFetchCollection;
     }
