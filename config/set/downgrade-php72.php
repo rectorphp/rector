@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
+use Rector\DowngradePhp72\Rector\ConstFetch\DowngradePhp72JsonConstRector;
 use Rector\DowngradePhp72\Rector\FuncCall\DowngradeJsonDecodeNullAssociativeArgRector;
 use Rector\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector;
 use Rector\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector;
@@ -21,4 +22,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradePregUnmatchedAsNullConstantRector::class);
     $services->set(DowngradeStreamIsattyRector::class);
     $services->set(DowngradeJsonDecodeNullAssociativeArgRector::class);
+    $services->set(DowngradePhp72JsonConstRector::class);
 };
