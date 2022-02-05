@@ -182,18 +182,35 @@ CODE_SAMPLE
             return null;
         }
 
-        $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
-        if ($scope instanceof Scope) {
-            $methodReflection = $propertyCallerType->getMethod($setterMethodName, $scope);
-
-            if ($methodReflection instanceof ResolvedMethodReflection) {
-                $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-                if (count($parametersAcceptor->getParameters()) > 1) {
-                    return null;
-                }
-            }
+        if ($this->hasNoParamOrVariadic($propertyCallerType, $propertyFetch, $setterMethodName)) {
+            return null;
         }
 
         return $this->nodeFactory->createMethodCall($propertyFetch->var, $setterMethodName, [$expr]);
+    }
+
+    private function hasNoParamOrVariadic(
+        ObjectType $objectType,
+        PropertyFetch $propertyFetch,
+        string $setterMethodName
+    ): bool {
+        $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        $methodReflection = $objectType->getMethod($setterMethodName, $scope);
+
+        if (! $methodReflection instanceof ResolvedMethodReflection) {
+            return false;
+        }
+
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        $parameters = $parametersAcceptor->getParameters();
+        if (count($parameters) !== 1) {
+            return true;
+        }
+
+        return $parameters[0]->isVariadic();
     }
 }
