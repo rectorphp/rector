@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
@@ -10,11 +11,11 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
+use Rector\PhpAttribute\AttributeArrayNameInliner;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Exception\InvalidNestedAttributeException;
-use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
 use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
-use RectorPrefix20220204\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220205\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<DoctrineAnnotationTagValueNode>
  */
@@ -31,19 +32,19 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
     private $phpVersionProvider;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\NamedArgsFactory
-     */
-    private $namedArgsFactory;
-    /**
-     * @readonly
      * @var \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer
      */
     private $unwrapableAnnotationAnalyzer;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\PhpAttribute\AttributeArrayNameInliner
+     */
+    private $attributeArrayNameInliner;
+    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer, \Rector\PhpAttribute\AttributeArrayNameInliner $attributeArrayNameInliner)
     {
         $this->phpVersionProvider = $phpVersionProvider;
-        $this->namedArgsFactory = $namedArgsFactory;
         $this->unwrapableAnnotationAnalyzer = $unwrapableAnnotationAnalyzer;
+        $this->attributeArrayNameInliner = $attributeArrayNameInliner;
     }
     /**
      * Avoid circular reference
@@ -66,7 +67,7 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
     /**
      * @param DoctrineAnnotationTagValueNode $value
      */
-    public function map($value) : \PhpParser\Node\Expr\New_
+    public function map($value) : \PhpParser\Node\Expr
     {
         // if PHP 8.0- throw exception
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS)) {
@@ -76,10 +77,12 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
         $values = $value->getValues();
         if ($values !== []) {
             $argValues = $this->annotationToAttributeMapper->map($value->getValuesWithExplicitSilentAndWithoutQuotes());
-            if (!\is_array($argValues)) {
+            if ($argValues instanceof \PhpParser\Node\Expr\Array_) {
+                // create named args
+                $args = $this->attributeArrayNameInliner->inlineArrayToArgs($argValues);
+            } else {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            $args = $this->namedArgsFactory->createFromValues($argValues);
         } else {
             $args = [];
         }

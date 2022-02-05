@@ -4,10 +4,13 @@ declare (strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
-use RectorPrefix20220204\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220205\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220205\Webmozart\Assert\Assert;
 /**
  * @implements AnnotationToAttributeMapperInterface<mixed[]>
  */
@@ -34,24 +37,32 @@ final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Con
     }
     /**
      * @param mixed[] $value
-     * @return mixed[]|\PhpParser\Node\Expr
      */
-    public function map($value)
+    public function map($value) : \PhpParser\Node\Expr
     {
-        $values = \array_map(function ($item) {
-            return $this->annotationToAttributeMapper->map($item);
-        }, $value);
-        foreach ($values as $key => $value) {
-            // remove the key and value? useful in case of unwrapping nested attributes
-            if (!$this->isRemoveArrayPlaceholder($value)) {
+        $arrayItems = [];
+        foreach ($value as $key => $singleValue) {
+            $valueExpr = $this->annotationToAttributeMapper->map($singleValue);
+            // remove node
+            if ($valueExpr === \Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY) {
                 continue;
             }
-            unset($values[$key]);
+            \RectorPrefix20220205\Webmozart\Assert\Assert::isInstanceOf($valueExpr, \PhpParser\Node\Expr::class);
+            // remove value
+            if ($this->isRemoveArrayPlaceholder($singleValue)) {
+                continue;
+            }
+            $keyExpr = null;
+            if (!\is_int($key)) {
+                $keyExpr = $this->annotationToAttributeMapper->map($key);
+                \RectorPrefix20220205\Webmozart\Assert\Assert::isInstanceOf($keyExpr, \PhpParser\Node\Expr::class);
+            }
+            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($valueExpr, $keyExpr);
         }
-        return $values;
+        return new \PhpParser\Node\Expr\Array_($arrayItems);
     }
     /**
-     * @param mixed[]|\PhpParser\Node\Expr $value
+     * @param mixed $value
      */
     private function isRemoveArrayPlaceholder($value) : bool
     {

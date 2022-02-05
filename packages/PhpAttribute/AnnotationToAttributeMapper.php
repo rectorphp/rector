@@ -3,7 +3,9 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute;
 
+use PhpParser\BuilderHelpers;
 use PhpParser\Node\Expr;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
 /**
@@ -24,7 +26,7 @@ final class AnnotationToAttributeMapper
         $this->annotationToAttributeMappers = $annotationToAttributeMappers;
     }
     /**
-     * @return mixed[]|\PhpParser\Node\Expr|string
+     * @return \PhpParser\Node\Expr|string
      * @param mixed $value
      */
     public function map($value)
@@ -37,6 +39,11 @@ final class AnnotationToAttributeMapper
         if ($value instanceof \PhpParser\Node\Expr) {
             return $value;
         }
-        return \Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY;
+        // remove node, as handled elsewhere
+        if ($value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+            return \Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY;
+        }
+        // fallback
+        return \PhpParser\BuilderHelpers::normalizeValue($value);
     }
 }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PhpAttribute\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ParameterReflection;
@@ -41,8 +42,11 @@ final class ExprParameterReflectionTypeCorrector
      * @param array<string|int, Expr|mixed> $items
      * @return array<string|int, Expr|mixed>
      */
-    public function correctItemsByAttributeClass(array $items, string $attributeClass) : array
+    public function correctItemsByAttributeClass($items, string $attributeClass) : array
     {
+        if ($items instanceof \PhpParser\Node\Expr\Array_) {
+            $items = $items->items;
+        }
         if (!$this->reflectionProvider->hasClass($attributeClass)) {
             return $items;
         }

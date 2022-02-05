@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220204\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20220205\Idiosyncratic\EditorConfig\Declaration;
 
-use RectorPrefix20220204\Idiosyncratic\EditorConfig\Exception\InvalidValue;
-use RectorPrefix20220204\PHPUnit\Framework\TestCase;
+use RectorPrefix20220205\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20220205\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class CharsetTest extends \RectorPrefix20220204\PHPUnit\Framework\TestCase
+class CharsetTest extends \RectorPrefix20220205\PHPUnit\Framework\TestCase
 {
     public function testValidValues()
     {
-        foreach (\RectorPrefix20220204\Idiosyncratic\EditorConfig\Declaration\Charset::CHARSETS as $charset) {
-            $declaration = new \RectorPrefix20220204\Idiosyncratic\EditorConfig\Declaration\Charset($charset);
+        foreach (\RectorPrefix20220205\Idiosyncratic\EditorConfig\Declaration\Charset::CHARSETS as $charset) {
+            $declaration = new \RectorPrefix20220205\Idiosyncratic\EditorConfig\Declaration\Charset($charset);
             $this->assertEquals(\sprintf('charset=%s', $charset), (string) $declaration);
         }
     }
     public function testInvalidValue()
     {
-        $this->expectException(\RectorPrefix20220204\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20220204\Idiosyncratic\EditorConfig\Declaration\Charset('true');
-        $this->expectException(\RectorPrefix20220204\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20220204\Idiosyncratic\EditorConfig\Declaration\Charset('spaces');
+        $this->expectException(\RectorPrefix20220205\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20220205\Idiosyncratic\EditorConfig\Declaration\Charset('true');
+        $this->expectException(\RectorPrefix20220205\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20220205\Idiosyncratic\EditorConfig\Declaration\Charset('spaces');
     }
 }

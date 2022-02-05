@@ -25,6 +25,8 @@ final class ShouldNotHappenException extends \Exception
         $function = $debugBacktrace[2]['function'];
         $line = $debugBacktrace[1]['line'] ?? 0;
         $method = $class !== null ? $class . '::' . $function : $function;
+        /** @var string $method */
+        /** @var int $line */
         return \sprintf('Look at "%s()" on line %d', $method, $line);
     }
 }

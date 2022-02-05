@@ -15,7 +15,6 @@ interface AnnotationToAttributeMapperInterface
     public function isCandidate($value) : bool;
     /**
      * @param T $value
-     * @return mixed[]|\PhpParser\Node\Expr
      */
-    public function map($value);
+    public function map($value) : \PhpParser\Node\Expr;
 }
