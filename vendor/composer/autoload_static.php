@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit97206735baafd9ea9e5f49ff5efc1a13
+class ComposerStaticInitf39785332fd75ed91a3d1878ff255707
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3321,7 +3321,6 @@ class ComposerStaticInit97206735baafd9ea9e5f49ff5efc1a13
         'Rector\\Symfony\\Rector\\Class_\\MakeCommandLazyRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/MakeCommandLazyRector.php',
         'Rector\\Symfony\\Rector\\ConstFetch\\ConstraintUrlOptionRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ConstFetch/ConstraintUrlOptionRector.php',
         'Rector\\Symfony\\Rector\\FuncCall\\ReplaceServiceArgumentRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/FuncCall/ReplaceServiceArgumentRector.php',
-        'Rector\\Symfony\\Rector\\MethodCall\\AddFlashRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/AddFlashRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\CascadeValidationFormBuilderRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/CascadeValidationFormBuilderRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\ChangeStringCollectionOptionToConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ChangeStringCollectionOptionToConstantRector.php',
@@ -3865,9 +3864,9 @@ class ComposerStaticInit97206735baafd9ea9e5f49ff5efc1a13
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit97206735baafd9ea9e5f49ff5efc1a13::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit97206735baafd9ea9e5f49ff5efc1a13::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit97206735baafd9ea9e5f49ff5efc1a13::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf39785332fd75ed91a3d1878ff255707::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf39785332fd75ed91a3d1878ff255707::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf39785332fd75ed91a3d1878ff255707::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -157,16 +157,26 @@ CODE_SAMPLE
         if (!$propertyCallerType->hasMethod($setterMethodName)->yes()) {
             return null;
         }
-        $scope = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if ($scope instanceof \PHPStan\Analyser\Scope) {
-            $methodReflection = $propertyCallerType->getMethod($setterMethodName, $scope);
-            if ($methodReflection instanceof \PHPStan\Reflection\ResolvedMethodReflection) {
-                $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-                if (\count($parametersAcceptor->getParameters()) > 1) {
-                    return null;
-                }
-            }
+        if ($this->hasNoParamOrVariadic($propertyCallerType, $propertyFetch, $setterMethodName)) {
+            return null;
         }
         return $this->nodeFactory->createMethodCall($propertyFetch->var, $setterMethodName, [$expr]);
+    }
+    private function hasNoParamOrVariadic(\PHPStan\Type\ObjectType $objectType, \PhpParser\Node\Expr\PropertyFetch $propertyFetch, string $setterMethodName) : bool
+    {
+        $scope = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return \false;
+        }
+        $methodReflection = $objectType->getMethod($setterMethodName, $scope);
+        if (!$methodReflection instanceof \PHPStan\Reflection\ResolvedMethodReflection) {
+            return \false;
+        }
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        $parameters = $parametersAcceptor->getParameters();
+        if (\count($parameters) !== 1) {
+            return \true;
+        }
+        return $parameters[0]->isVariadic();
     }
 }

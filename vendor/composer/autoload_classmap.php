@@ -2931,7 +2931,6 @@ return array(
     'Rector\\Symfony\\Rector\\Class_\\MakeCommandLazyRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/MakeCommandLazyRector.php',
     'Rector\\Symfony\\Rector\\ConstFetch\\ConstraintUrlOptionRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ConstFetch/ConstraintUrlOptionRector.php',
     'Rector\\Symfony\\Rector\\FuncCall\\ReplaceServiceArgumentRector' => $vendorDir . '/rector/rector-symfony/src/Rector/FuncCall/ReplaceServiceArgumentRector.php',
-    'Rector\\Symfony\\Rector\\MethodCall\\AddFlashRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/AddFlashRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\CascadeValidationFormBuilderRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/CascadeValidationFormBuilderRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\ChangeStringCollectionOptionToConstantRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ChangeStringCollectionOptionToConstantRector.php',
