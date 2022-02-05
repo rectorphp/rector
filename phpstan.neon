@@ -506,10 +506,6 @@ parameters:
         - '#Rector\\BetterPhpDocParser\\ValueObject\\Parser\\BetterTokenIterator\:\:__construct\(\) does not call parent constructor from PHPStan\\PhpDocParser\\Parser\\TokenIterator#'
         - '#Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser\:\:__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
 
-        # always Expr or mixed nested array
-        - '#Method Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface\:\:map\(\) return type has no value type specified in iterable type array#'
-        - '#Method Rector\\PhpAttribute\\AnnotationToAttributeMapper\\(.*?)AnnotationToAttributeMapper\:\:map\(\) return type has no value type specified in iterable type array#'
-
         # confused generics
         - '#Return type \(array<class\-string<PhpParser\\Node\>\>\) of method Rector\\NodeTypeResolver\\NodeTypeResolver\\(.*?)TypeResolver\:\:getNodeClasses\(\) should be covariant with return type \(array<class\-string<PhpParser\\Node\\(.*?)\>\>\) of method Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface<PhpParser\\Node\\(.*?)\>\:\:getNodeClasses\(\)#'
 
@@ -599,21 +595,10 @@ parameters:
         # mapper re-use
         - '#Parameter \#1 \$type of method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectWithoutClassTypeMapper\:\:mapToPhpParserNode\(\) expects PHPStan\\Type\\ObjectWithoutClassType, PHPStan\\Type\\Accessory\\Has(Property|Method)Type given#'
 
-        # false positive
-        - '#Method Rector\\VersionBonding\\PhpVersionedFilter\:\:filter\(\) should return array<T of Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<int, \(Rector\\VersionBonding\\Contract\\MinPhpVersionInterface&T of Rector\\Core\\Contract\\Rector\\RectorInterface\)\|T of Rector\\Core\\Contract\\Rector\\RectorInterface\>#'
-
-        # fix later
-        - '#Parameter \#1 \$value of class PhpParser\\Node\\Expr\\ArrayItem constructor expects PhpParser\\Node\\Expr, array<PhpParser\\Node\\Expr\>\|PhpParser\\Node\\Expr\|string given#'
-        - '#Parameter \#2 \$key of class PhpParser\\Node\\Expr\\ArrayItem constructor expects PhpParser\\Node\\Expr\|null, array<PhpParser\\Node\\Expr\>\|PhpParser\\Node\\Expr\|string\|null given#'
-
         # broken on CI
         -
             message: '#Anonymous variables in a method call can lead to false dead methods\. Make sure the variable type is known#'
             path: packages/NodeNestingScope/FlowOfControlLocator.php
-
-        -
-            message: '#This property type might be inlined to PHP\. Do you have confidence it is correct\? Put it here#'
-            path: packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php
 
         -
             message: '#Array with keys is not allowed\. Use value object to pass data instead#'
