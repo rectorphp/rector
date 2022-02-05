@@ -128,7 +128,7 @@ CODE_SAMPLE
 
         $callNodeClass = $callNode::class;
 
-        while ($parentNode) {
+        while ($parentNode instanceof Node) {
             $usedNodes = $this->betterNodeFinder->find($parentNode, function (Node $node) use (
                 $callNodeClass,
                 $callNode

@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeCollector\BinaryOpConditionsCollector;
@@ -90,6 +92,10 @@ CODE_SAMPLE
     private function createVariable(Instanceof_ $instanceof): Variable
     {
         $currentStmt = $instanceof->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (! $currentStmt instanceof Stmt) {
+            throw new ShouldNotHappenException();
+        }
+
         $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
 
         return new Variable($this->variableNaming->createCountedValueName('throwable', $scope));

@@ -192,6 +192,9 @@ CODE_SAMPLE
     private function refactorUsedVariable(Assign $assign): ?Assign
     {
         $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Node) {
+            return null;
+        }
 
         $if = $parentNode->getAttribute(AttributeKey::NEXT_NODE);
 

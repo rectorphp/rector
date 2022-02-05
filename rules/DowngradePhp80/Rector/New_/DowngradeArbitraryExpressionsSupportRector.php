@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -93,6 +94,10 @@ CODE_SAMPLE
             $variable = $assign->var;
         } else {
             $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+            if (! $currentStmt instanceof Node) {
+                throw new ShouldNotHappenException();
+            }
+
             $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
             $variable = new Variable($this->variableNaming->createCountedValueName('className', $scope));
             $assign = new Assign($variable, $node->class);

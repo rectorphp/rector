@@ -8,6 +8,7 @@ use Nette\Utils\Json;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Parallel\ValueObject\Bridge;
 
@@ -69,7 +70,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     }
 
     /**
-     * @param mixed[] $errors
+     * @param SystemError[] $errors
      * @return mixed[]
      */
     private function createErrorsData(array $errors): array
@@ -82,7 +83,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'file' => $error->getRelativeFilePath(),
             ];
 
-            if ($error->getRectorClass()) {
+            if ($error->getRectorClass() !== null) {
                 $errorDataJson['caused_by'] = $error->getRectorClass();
             }
 

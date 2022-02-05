@@ -143,6 +143,7 @@ CODE_SAMPLE
 
         $comments = $param->getAttribute(AttributeKey::COMMENTS);
         if (is_array($comments)) {
+            /** @var Comment[] $comments */
             foreach ($comments as $comment) {
                 $attrGroupsPrint = str_replace($comment->getText(), '', $attrGroupsPrint);
             }

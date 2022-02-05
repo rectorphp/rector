@@ -91,7 +91,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
         }
 
         $currentScope = $scopeNode->getAttribute(AttributeKey::SCOPE);
-        if (! $currentScope instanceof Scope) {
+        if (! $currentScope instanceof MutatingScope) {
             return null;
         }
 
@@ -105,6 +105,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
             $current = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
             $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+
             $this->nodesToAddCollector->addNodeBeforeNode(
                 $replacements->getAssign(),
                 $current instanceof Return_ ? $current : $currentStatement
@@ -166,7 +167,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
 
     private function getReplacementsFor(
         Expr $expr,
-        Scope $scope,
+        MutatingScope $scope,
         Closure|Class_|ClassMethod|Function_|Namespace_ $scopeNode
     ): VariableAssignPair {
         if ($this->isAssign($expr)) {
@@ -181,10 +182,8 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
         $variable = new Variable($variableName);
 
         // add a new scope with this variable
-        if ($scope instanceof MutatingScope) {
-            $mutatingScope = $scope->assignExpression($variable, new MixedType());
-            $scopeNode->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        }
+        $mutatingScope = $scope->assignExpression($variable, new MixedType());
+        $scopeNode->setAttribute(AttributeKey::SCOPE, $mutatingScope);
 
         return new VariableAssignPair($variable, new Assign($variable, $expr));
     }

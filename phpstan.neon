@@ -607,8 +607,9 @@ parameters:
         - '#Parameter \#2 \$key of class PhpParser\\Node\\Expr\\ArrayItem constructor expects PhpParser\\Node\\Expr\|null, array<PhpParser\\Node\\Expr\>\|PhpParser\\Node\\Expr\|string\|null given#'
 
         # broken on CI
-        - '#Anonymous variables in a method call can lead to false dead methods\. Make sure the variable type is known#'
-        - '#Anonymous variables in a property fetch can lead to false dead property\. Make sure the variable type is known#'
+        -
+            message: '#Anonymous variables in a method call can lead to false dead methods\. Make sure the variable type is known#'
+            path: packages/NodeNestingScope/FlowOfControlLocator.php
 
         -
             message: '#This property type might be inlined to PHP\. Do you have confidence it is correct\? Put it here#'

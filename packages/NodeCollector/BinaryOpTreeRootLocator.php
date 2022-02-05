@@ -25,7 +25,7 @@ final class BinaryOpTreeRootLocator
     public function findOperationRoot(Expr $expr, string $binaryOpClass): Expr
     {
         $parentNode = $expr->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode === null) {
+        if (! $parentNode instanceof Node) {
             // No more parents so the Expr node must be root.
             return $expr;
         }
@@ -36,6 +36,7 @@ final class BinaryOpTreeRootLocator
             return $expr;
         }
 
+        /** @var BinaryOp $parentNode */
         $isParentARightAssociativeTree = $parentNode->right === $expr && $expr::class === $binaryOpClass;
         if ($isParentARightAssociativeTree) {
             // The Expr node is the right child of its parent but it is the desired operation (BinaryOp b c).

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Printer;
 
 use Nette\Utils\Strings;
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -458,6 +459,7 @@ final class BetterStandardPrinter extends Standard
             return $content;
         }
 
+        /** @var Comment[] $comments */
         $comments = $expr->getAttribute(AttributeKey::COMMENTS) ?? [];
 
         if ($comments === []) {

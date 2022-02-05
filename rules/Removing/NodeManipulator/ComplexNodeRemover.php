@@ -134,7 +134,7 @@ final class ComplexNodeRemover
     {
         $assign = $expr->getAttribute(AttributeKey::PARENT_NODE);
 
-        while ($assign !== null && ! $assign instanceof Assign) {
+        while ($assign instanceof Node && ! $assign instanceof Assign) {
             $assign = $assign->getAttribute(AttributeKey::PARENT_NODE);
         }
 

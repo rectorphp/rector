@@ -20,6 +20,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\While_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -128,6 +129,10 @@ CODE_SAMPLE
     private function refactorForVariableLevels(FuncCall $funcCall): FuncCall
     {
         $currentStmt = $funcCall->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (! $currentStmt instanceof Node) {
+            throw new ShouldNotHappenException();
+        }
+
         $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
 
         $funcVariable = new Variable($this->variableNaming->createCountedValueName('dirnameFunc', $scope));

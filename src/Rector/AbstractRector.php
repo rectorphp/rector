@@ -230,6 +230,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->printDebugApplying();
 
         $originalAttributes = $node->getAttributes();
+
         $originalNode ??= clone $node;
 
         $node = $this->refactor($node);
@@ -239,6 +240,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
+        /** @var Node $originalNode */
         if (is_array($node)) {
             $this->createdByRule($node, $originalNode);
 

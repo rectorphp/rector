@@ -12,7 +12,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -87,6 +89,10 @@ CODE_SAMPLE
     private function createVariable(Node $node): Variable
     {
         $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (! $currentStmt instanceof Stmt) {
+            throw new ShouldNotHappenException();
+        }
+
         $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
 
         return new Variable($this->variableNaming->createCountedValueName('object', $scope));

@@ -18,6 +18,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
@@ -94,6 +95,10 @@ CODE_SAMPLE
         $anonymousFunction->stmts[1] = new Return_($ternary);
 
         $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (! $currentStatement instanceof Node) {
+            throw new ShouldNotHappenException();
+        }
+
         $scope = $currentStatement->getAttribute(AttributeKey::SCOPE);
 
         $variableAssignName = $this->variableNaming->createCountedValueName('battleShipcompare', $scope);

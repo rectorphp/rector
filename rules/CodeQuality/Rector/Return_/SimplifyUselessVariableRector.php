@@ -111,6 +111,10 @@ CODE_SAMPLE
             if ($node instanceof FunctionLike) {
                 return $node->returnsByRef();
             }
+
+            if (! $node instanceof Node) {
+                break;
+            }
         }
 
         return false;

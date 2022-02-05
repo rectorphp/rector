@@ -111,6 +111,7 @@ final class IfManipulator
         while ($this->isIfWithOnlyStmtIf($currentIf)) {
             $ifs[] = $currentIf;
 
+            /** @var If_ $currentIf */
             $currentIf = $currentIf->stmts[0];
         }
 
@@ -198,6 +199,7 @@ final class IfManipulator
         while ($this->isIfWithOnlyStmtIf($currentIf)) {
             $ifs[] = $currentIf;
 
+            /** @var If_ $currentIf */
             $currentIf = $currentIf->stmts[0];
         }
 

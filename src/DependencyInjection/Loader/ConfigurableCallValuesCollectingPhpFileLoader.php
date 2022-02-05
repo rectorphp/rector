@@ -10,6 +10,9 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
+/**
+ * @property-read ContainerBuilder $container
+ */
 final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
 {
     public function __construct(
@@ -51,10 +54,6 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
     private function collectConfigureCallsFromJustImportedConfigurableRectorDefinitions(): void
     {
         foreach ($this->container->getDefinitions() as $class => $definition) {
-            if (! is_string($class)) {
-                continue;
-            }
-
             if (! is_a($class, ConfigurableRectorInterface::class, true)) {
                 continue;
             }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\FileFormatter\EditorConfig;
 
+use Idiosyncratic\EditorConfig\Declaration\Declaration;
 use Idiosyncratic\EditorConfig\EditorConfig;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
@@ -25,6 +26,8 @@ final class EditorConfigParser
         EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder
     ): EditorConfigConfiguration {
         $smartFileInfo = $file->getSmartFileInfo();
+
+        /** @var Declaration[] $configuration */
         $configuration = $this->editorConfig->getConfigForPath($smartFileInfo->getRealPath());
 
         if (array_key_exists(EditorConfigOption::INDENT_STYLE, $configuration)) {

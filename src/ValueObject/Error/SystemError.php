@@ -37,6 +37,11 @@ final class SystemError implements SerializableInterface
         return $this->relativeFilePath . ':' . $this->line;
     }
 
+    public function getRelativeFilePath(): ?string
+    {
+        return $this->relativeFilePath;
+    }
+
     /**
      * @return array{message: string, relative_file_path: string|null, line: int|null, rector_class: string|null}
      */

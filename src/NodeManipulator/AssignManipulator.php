@@ -97,7 +97,7 @@ final class AssignManipulator
         $previousNode = $node;
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        while ($parentNode !== null && ! $parentNode instanceof Expression) {
+        while ($parentNode instanceof Node && ! $parentNode instanceof Expression) {
             if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual(
                 $parentNode->var,
                 $previousNode

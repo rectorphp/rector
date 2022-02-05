@@ -9,12 +9,8 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 /**
  * Utils for chain of MethodCall Node:
@@ -24,7 +20,6 @@ final class FluentChainMethodCallNodeAnalyzer
 {
     public function __construct(
         private readonly NodeNameResolver $nodeNameResolver,
-        private readonly NodeTypeResolver $nodeTypeResolver,
     ) {
     }
 
@@ -72,47 +67,6 @@ final class FluentChainMethodCallNodeAnalyzer
         }
 
         return $chainMethodCalls;
-    }
-
-    /**
-     * Checks "$this->someMethod()->anotherMethod()"
-     *
-     * @param string[] $methods
-     */
-    public function isTypeAndChainCalls(Node $node, Type $type, array $methods): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        $rootMethodCall = $this->resolveRootMethodCall($node);
-        if (! $rootMethodCall instanceof MethodCall) {
-            return false;
-        }
-
-        $rootMethodCallVarType = $this->nodeTypeResolver->getType($rootMethodCall->var);
-        if (! $rootMethodCallVarType instanceof FullyQualifiedObjectType) {
-            return false;
-        }
-
-        // node chaining is in reverse order than code
-        $methods = array_reverse($methods);
-
-        foreach ($methods as $method) {
-            if (! $this->nodeNameResolver->isName($node->name, $method)) {
-                return false;
-            }
-
-            $node = $node->var;
-        }
-
-        $variableType = $this->nodeTypeResolver->getType($node);
-        if ($variableType instanceof MixedType) {
-            return false;
-        }
-
-        return $variableType->isSuperTypeOf($type)
-            ->yes();
     }
 
     public function resolveRootExpr(MethodCall $methodCall): Expr | Name

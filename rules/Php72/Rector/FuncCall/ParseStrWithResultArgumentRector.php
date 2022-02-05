@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -72,7 +73,7 @@ CODE_SAMPLE
         $node->args[1] = new Arg($resultVariable);
 
         $expression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if ($expression === null) {
+        if (! $expression instanceof Stmt) {
             return null;
         }
 
