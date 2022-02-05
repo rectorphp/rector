@@ -19,6 +19,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\While_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -108,6 +109,9 @@ CODE_SAMPLE
     private function refactorForVariableLevels(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
     {
         $currentStmt = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        if (!$currentStmt instanceof \PhpParser\Node) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         $scope = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $funcVariable = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('dirnameFunc', $scope));
         $closure = $this->createClosure();

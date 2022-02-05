@@ -129,6 +129,7 @@ CODE_SAMPLE
         $attrGroupsPrint = $this->betterStandardPrinter->print($param->attrGroups);
         $comments = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS);
         if (\is_array($comments)) {
+            /** @var Comment[] $comments */
             foreach ($comments as $comment) {
                 $attrGroupsPrint = \str_replace($comment->getText(), '', $attrGroupsPrint);
             }

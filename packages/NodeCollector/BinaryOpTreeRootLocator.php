@@ -23,7 +23,7 @@ final class BinaryOpTreeRootLocator
     public function findOperationRoot(\PhpParser\Node\Expr $expr, string $binaryOpClass) : \PhpParser\Node\Expr
     {
         $parentNode = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode === null) {
+        if (!$parentNode instanceof \PhpParser\Node) {
             // No more parents so the Expr node must be root.
             return $expr;
         }
@@ -32,6 +32,7 @@ final class BinaryOpTreeRootLocator
             // it must already be the root of the operation tree.
             return $expr;
         }
+        /** @var BinaryOp $parentNode */
         $isParentARightAssociativeTree = $parentNode->right === $expr && \get_class($expr) === $binaryOpClass;
         if ($isParentARightAssociativeTree) {
             // The Expr node is the right child of its parent but it is the desired operation (BinaryOp b c).

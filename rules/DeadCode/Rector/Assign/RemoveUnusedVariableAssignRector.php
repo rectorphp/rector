@@ -182,6 +182,9 @@ CODE_SAMPLE
     private function refactorUsedVariable(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Expr\Assign
     {
         $parentNode = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node) {
+            return null;
+        }
         $if = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         // check if next node is if
         if (!$if instanceof \PhpParser\Node\Stmt\If_) {

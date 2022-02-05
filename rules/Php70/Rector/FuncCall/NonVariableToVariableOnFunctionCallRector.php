@@ -100,7 +100,7 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
             return null;
         }
         $currentScope = $scopeNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$currentScope instanceof \PHPStan\Analyser\Scope) {
+        if (!$currentScope instanceof \PHPStan\Analyser\MutatingScope) {
             return null;
         }
         foreach ($arguments as $key => $argument) {
@@ -153,7 +153,7 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
     /**
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Namespace_ $scopeNode
      */
-    private function getReplacementsFor(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\Scope $scope, $scopeNode) : \Rector\Php70\ValueObject\VariableAssignPair
+    private function getReplacementsFor(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\MutatingScope $scope, $scopeNode) : \Rector\Php70\ValueObject\VariableAssignPair
     {
         if ($this->isAssign($expr)) {
             /** @var Assign|AssignRef|AssignOp $expr */
@@ -164,10 +164,8 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($expr, $scope, 'tmp');
         $variable = new \PhpParser\Node\Expr\Variable($variableName);
         // add a new scope with this variable
-        if ($scope instanceof \PHPStan\Analyser\MutatingScope) {
-            $mutatingScope = $scope->assignExpression($variable, new \PHPStan\Type\MixedType());
-            $scopeNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
-        }
+        $mutatingScope = $scope->assignExpression($variable, new \PHPStan\Type\MixedType());
+        $scopeNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
         return new \Rector\Php70\ValueObject\VariableAssignPair($variable, new \PhpParser\Node\Expr\Assign($variable, $expr));
     }
     private function isVariableLikeNode(\PhpParser\Node\Expr $expr) : bool

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -57,7 +58,7 @@ CODE_SAMPLE
         $resultVariable = new \PhpParser\Node\Expr\Variable('result');
         $node->args[1] = new \PhpParser\Node\Arg($resultVariable);
         $expression = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if ($expression === null) {
+        if (!$expression instanceof \PhpParser\Node\Stmt) {
             return null;
         }
         $nextExpression = $expression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);

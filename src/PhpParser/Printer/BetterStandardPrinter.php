@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\PhpParser\Printer;
 
 use RectorPrefix20220205\Nette\Utils\Strings;
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -377,6 +378,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
         if (!$parentNode->hasAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENT_CLOSURE_RETURN_MIRRORED)) {
             return $content;
         }
+        /** @var Comment[] $comments */
         $comments = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS) ?? [];
         if ($comments === []) {
             return $content;

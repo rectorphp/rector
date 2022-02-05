@@ -61,6 +61,10 @@ final class SystemError implements \RectorPrefix20220205\Symplify\EasyParallel\C
     {
         return $this->relativeFilePath . ':' . $this->line;
     }
+    public function getRelativeFilePath() : ?string
+    {
+        return $this->relativeFilePath;
+    }
     /**
      * @return array{message: string, relative_file_path: string|null, line: int|null, rector_class: string|null}
      */

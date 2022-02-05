@@ -107,6 +107,9 @@ CODE_SAMPLE
             if ($node instanceof \PhpParser\Node\FunctionLike) {
                 return $node->returnsByRef();
             }
+            if (!$node instanceof \PhpParser\Node) {
+                break;
+            }
         }
         return \false;
     }

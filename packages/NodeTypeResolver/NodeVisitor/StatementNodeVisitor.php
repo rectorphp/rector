@@ -36,6 +36,7 @@ final class StatementNodeVisitor extends \PhpParser\NodeVisitorAbstract
         if (\property_exists($node, 'stmts')) {
             $previous = $node;
             foreach ((array) $node->stmts as $stmt) {
+                /** @var Stmt $stmt */
                 $stmt->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT, $previous);
                 $stmt->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT, $stmt);
                 $previous = $stmt;

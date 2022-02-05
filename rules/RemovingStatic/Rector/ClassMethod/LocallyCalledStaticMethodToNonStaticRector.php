@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -93,6 +94,9 @@ CODE_SAMPLE
             return null;
         }
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return null;
+        }
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;

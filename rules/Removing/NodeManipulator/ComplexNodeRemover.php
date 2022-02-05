@@ -151,7 +151,7 @@ final class ComplexNodeRemover
     private function resolveAssign($expr) : ?\PhpParser\Node\Expr\Assign
     {
         $assign = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        while ($assign !== null && !$assign instanceof \PhpParser\Node\Expr\Assign) {
+        while ($assign instanceof \PhpParser\Node && !$assign instanceof \PhpParser\Node\Expr\Assign) {
             $assign = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         }
         if (!$assign instanceof \PhpParser\Node\Expr\Assign) {

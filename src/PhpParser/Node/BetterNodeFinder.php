@@ -293,21 +293,21 @@ final class BetterNodeFinder
     public function findFirstPrevious(\PhpParser\Node $node, callable $filter) : ?\PhpParser\Node
     {
         $node = $node instanceof \PhpParser\Node\Stmt\Expression ? $node : $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if ($node === null) {
+        if (!$node instanceof \PhpParser\Node) {
             return null;
         }
         $foundNode = $this->findFirst([$node], $filter);
         // we found what we need
-        if ($foundNode !== null) {
+        if ($foundNode instanceof \PhpParser\Node) {
             return $foundNode;
         }
         // move to previous expression
         $previousStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT);
-        if ($previousStatement !== null) {
+        if ($previousStatement instanceof \PhpParser\Node) {
             return $this->findFirstPrevious($previousStatement, $filter);
         }
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent === null) {
+        if (!$parent instanceof \PhpParser\Node) {
             return null;
         }
         return $this->findFirstPrevious($parent, $filter);

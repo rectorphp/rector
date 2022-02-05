@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\EditorConfig;
 
+use RectorPrefix20220205\Idiosyncratic\EditorConfig\Declaration\Declaration;
 use RectorPrefix20220205\Idiosyncratic\EditorConfig\EditorConfig;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
@@ -25,6 +26,7 @@ final class EditorConfigParser
     public function extractConfigurationForFile(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : \Rector\FileFormatter\ValueObject\EditorConfigConfiguration
     {
         $smartFileInfo = $file->getSmartFileInfo();
+        /** @var Declaration[] $configuration */
         $configuration = $this->editorConfig->getConfigForPath($smartFileInfo->getRealPath());
         if (\array_key_exists(\Rector\FileFormatter\ValueObject\EditorConfigOption::INDENT_STYLE, $configuration)) {
             $indentStyle = (string) $configuration[\Rector\FileFormatter\ValueObject\EditorConfigOption::INDENT_STYLE]->getValue();

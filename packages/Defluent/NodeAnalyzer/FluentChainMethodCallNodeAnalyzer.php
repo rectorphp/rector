@@ -8,12 +8,8 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 /**
  * Utils for chain of MethodCall Node:
  * "$this->methodCall()->chainedMethodCall()"
@@ -25,15 +21,9 @@ final class FluentChainMethodCallNodeAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
      * @return string[]
@@ -72,38 +62,6 @@ final class FluentChainMethodCallNodeAnalyzer
             }
         }
         return $chainMethodCalls;
-    }
-    /**
-     * Checks "$this->someMethod()->anotherMethod()"
-     *
-     * @param string[] $methods
-     */
-    public function isTypeAndChainCalls(\PhpParser\Node $node, \PHPStan\Type\Type $type, array $methods) : bool
-    {
-        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
-            return \false;
-        }
-        $rootMethodCall = $this->resolveRootMethodCall($node);
-        if (!$rootMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
-            return \false;
-        }
-        $rootMethodCallVarType = $this->nodeTypeResolver->getType($rootMethodCall->var);
-        if (!$rootMethodCallVarType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
-            return \false;
-        }
-        // node chaining is in reverse order than code
-        $methods = \array_reverse($methods);
-        foreach ($methods as $method) {
-            if (!$this->nodeNameResolver->isName($node->name, $method)) {
-                return \false;
-            }
-            $node = $node->var;
-        }
-        $variableType = $this->nodeTypeResolver->getType($node);
-        if ($variableType instanceof \PHPStan\Type\MixedType) {
-            return \false;
-        }
-        return $variableType->isSuperTypeOf($type)->yes();
     }
     /**
      * @return \PhpParser\Node\Expr|\PhpParser\Node\Name

@@ -17,6 +17,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
@@ -85,6 +86,9 @@ CODE_SAMPLE
         $ternary = new \PhpParser\Node\Expr\Ternary($smaller, $ternaryIf, $ternaryElse);
         $anonymousFunction->stmts[1] = new \PhpParser\Node\Stmt\Return_($ternary);
         $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        if (!$currentStatement instanceof \PhpParser\Node) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         $scope = $currentStatement->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $variableAssignName = $this->variableNaming->createCountedValueName('battleShipcompare', $scope);
         $variableAssign = new \PhpParser\Node\Expr\Variable($variableAssignName);

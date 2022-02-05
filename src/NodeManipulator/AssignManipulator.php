@@ -103,7 +103,7 @@ final class AssignManipulator
     {
         $previousNode = $node;
         $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        while ($parentNode !== null && !$parentNode instanceof \PhpParser\Node\Stmt\Expression) {
+        while ($parentNode instanceof \PhpParser\Node && !$parentNode instanceof \PhpParser\Node\Stmt\Expression) {
             if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($parentNode->var, $previousNode)) {
                 return \true;
             }

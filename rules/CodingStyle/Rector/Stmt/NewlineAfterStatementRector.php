@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Stmt;
 
-use PhpParser\Comment\Doc;
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Catch_;
@@ -94,6 +94,9 @@ CODE_SAMPLE
             return null;
         }
         $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof \PhpParser\Node) {
+            return null;
+        }
         if ($this->shouldSkip($nextNode)) {
             return null;
         }
@@ -101,6 +104,7 @@ CODE_SAMPLE
         $line = $nextNode->getLine();
         $rangeLine = $line - $endLine;
         if ($rangeLine > 1) {
+            /** @var Comment[]|null $comments */
             $comments = $nextNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS);
             if ($this->hasNoComment($comments)) {
                 return null;
@@ -109,6 +113,7 @@ CODE_SAMPLE
             if ($phpDocInfo->hasChanged()) {
                 return null;
             }
+            /** @var Comment[] $comments */
             $line = $comments[0]->getLine();
             $rangeLine = $line - $endLine;
             if ($rangeLine > 1) {
@@ -125,7 +130,7 @@ CODE_SAMPLE
         return $currentStatement instanceof \PhpParser\Node\Stmt ? $currentStatement : $stmt;
     }
     /**
-     * @param null|Doc[] $comments
+     * @param Comment[]|null $comments
      */
     private function hasNoComment(?array $comments) : bool
     {

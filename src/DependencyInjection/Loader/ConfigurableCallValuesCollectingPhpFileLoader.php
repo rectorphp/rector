@@ -8,6 +8,9 @@ use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use RectorPrefix20220205\Symfony\Component\Config\FileLocatorInterface;
 use RectorPrefix20220205\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20220205\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+/**
+ * @property-read ContainerBuilder $container
+ */
 final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix20220205\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
 {
     /**
@@ -45,9 +48,6 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix2
     private function collectConfigureCallsFromJustImportedConfigurableRectorDefinitions() : void
     {
         foreach ($this->container->getDefinitions() as $class => $definition) {
-            if (!\is_string($class)) {
-                continue;
-            }
             if (!\is_a($class, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class, \true)) {
                 continue;
             }

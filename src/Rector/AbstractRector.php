@@ -246,6 +246,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         if ($node === null) {
             return null;
         }
+        /** @var Node $originalNode */
         if (\is_array($node)) {
             $this->createdByRule($node, $originalNode);
             $originalNodeHash = \spl_object_hash($originalNode);

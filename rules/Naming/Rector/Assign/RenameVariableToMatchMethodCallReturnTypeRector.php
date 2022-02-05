@@ -158,7 +158,7 @@ CODE_SAMPLE
     {
         $parentNode = $callNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         $callNodeClass = \get_class($callNode);
-        while ($parentNode) {
+        while ($parentNode instanceof \PhpParser\Node) {
             $usedNodes = $this->betterNodeFinder->find($parentNode, function (\PhpParser\Node $node) use($callNodeClass, $callNode) : bool {
                 $nodeClass = \get_class($node);
                 if ($callNodeClass !== $nodeClass) {

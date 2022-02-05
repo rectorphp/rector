@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -69,6 +70,9 @@ CODE_SAMPLE
     private function createVariable(\PhpParser\Node\Stmt\Foreach_ $foreach) : \PhpParser\Node\Expr\Variable
     {
         $currentStmt = $foreach->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        if (!$currentStmt instanceof \PhpParser\Node) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         $scope = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         return new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('arrayItem', $scope));
     }

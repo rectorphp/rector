@@ -11,7 +11,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -80,6 +82,9 @@ CODE_SAMPLE
     private function createVariable(\PhpParser\Node $node) : \PhpParser\Node\Expr\Variable
     {
         $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         $scope = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         return new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('object', $scope));
     }

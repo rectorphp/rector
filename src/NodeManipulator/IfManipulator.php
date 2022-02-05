@@ -125,6 +125,7 @@ final class IfManipulator
         $currentIf = $if;
         while ($this->isIfWithOnlyStmtIf($currentIf)) {
             $ifs[] = $currentIf;
+            /** @var If_ $currentIf */
             $currentIf = $currentIf->stmts[0];
         }
         if ($ifs === []) {
@@ -193,6 +194,7 @@ final class IfManipulator
         $currentIf = $onlyForeachStmt;
         while ($this->isIfWithOnlyStmtIf($currentIf)) {
             $ifs[] = $currentIf;
+            /** @var If_ $currentIf */
             $currentIf = $currentIf->stmts[0];
         }
         // IfManipulator is not build to handle elseif and else
