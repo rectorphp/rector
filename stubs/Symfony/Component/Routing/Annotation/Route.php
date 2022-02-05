@@ -10,5 +10,8 @@ if (class_exists('Symfony\Component\Routing\Annotation\Route')) {
 
 class Route
 {
+    public function __construct($path, $name = '')
+    {
+    }
 
 }

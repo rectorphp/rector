@@ -16,5 +16,5 @@ interface AnnotationToAttributeMapperInterface
     /**
      * @param T $value
      */
-    public function map($value): array|Expr;
+    public function map($value): Expr;
 }

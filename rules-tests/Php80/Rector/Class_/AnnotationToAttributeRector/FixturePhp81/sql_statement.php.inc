@@ -6,7 +6,7 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericA
 
 /**
  * @GenericAnnotation(filters={
- *      @GenericAnnotation(sql="
+ *      @GenericAnnotation(some="
  *          $this.id IN(
  *              SELECT id
  *              FROM foo
@@ -27,7 +27,7 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixturePh
 
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation;
 
-#[GenericAnnotation(filters: [new GenericAnnotation(sql: '
+#[GenericAnnotation(filters: [new GenericAnnotation(some: '
          $this.id IN(
              SELECT id
              FROM foo

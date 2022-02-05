@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class SkipUnwrapSymfonyNestedValidators
 {
     /**
-     * @GenericAnnotation("hey")
+     * @GenericAnnotation(some = "hey")
      *
      * @var array
      * @Assert\All(

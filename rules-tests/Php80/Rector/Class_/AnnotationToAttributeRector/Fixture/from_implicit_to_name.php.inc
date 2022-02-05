@@ -2,10 +2,10 @@
 
 namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
-use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericSingleImplicitAnnotation;
 
 /**
- * @GenericAnnotation("/")
+ * @GenericSingleImplicitAnnotation("/")
  */
 final class FromImplicitToName
 {
@@ -17,9 +17,9 @@ final class FromImplicitToName
 
 namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
-use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericSingleImplicitAnnotation;
 
-#[GenericAnnotation(some: '/')]
+#[GenericSingleImplicitAnnotation('/')]
 final class FromImplicitToName
 {
 }

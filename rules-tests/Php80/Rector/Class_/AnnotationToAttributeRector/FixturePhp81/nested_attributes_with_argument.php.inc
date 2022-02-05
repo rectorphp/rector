@@ -24,7 +24,7 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81 as 
 
 final class NestedAttributesWithArgument
 {
-    #[Assert\All(nestedAsserts: [new Assert\NotNumber(1000)])]
+    #[Assert\All([new Assert\NotNumber(1000)])]
     public $value;
 }
 

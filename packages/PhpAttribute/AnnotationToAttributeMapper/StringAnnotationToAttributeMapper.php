@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 
 /**
@@ -20,8 +25,33 @@ final class StringAnnotationToAttributeMapper implements AnnotationToAttributeMa
     /**
      * @param string $value
      */
-    public function map($value): String_
+    public function map($value): Expr
     {
-        return new String_($value);
+        if (strtolower($value) === 'true') {
+            return new ConstFetch(new Name('true'));
+        }
+
+        if (strtolower($value) === 'false') {
+            return new ConstFetch(new Name('false'));
+        }
+
+        if (strtolower($value) === 'null') {
+            return new ConstFetch(new Name('null'));
+        }
+
+        // number as string to number
+        if (is_numeric($value) && strlen((string) (int) $value) === strlen($value)) {
+            return LNumber::fromString($value);
+        }
+
+        if (str_contains($value, "'") && ! str_contains($value, "\n")) {
+            $kind = String_::KIND_DOUBLE_QUOTED;
+        } else {
+            $kind = String_::KIND_SINGLE_QUOTED;
+        }
+
+        return new String_($value, [
+            AttributeKey::KIND => $kind,
+        ]);
     }
 }

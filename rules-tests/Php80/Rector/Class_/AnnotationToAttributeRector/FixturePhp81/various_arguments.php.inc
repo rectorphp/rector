@@ -25,7 +25,7 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81 as 
 
 final class VariousArguments
 {
-    #[Assert\All(nestedAsserts: [new Assert\Length(1000), new Assert\NotNumber(hey: 10, hi: 'hello')])]
+    #[Assert\All([new Assert\Length(1000), new Assert\NotNumber(hey: 10, hi: 'hello')])]
     public $value;
 }
 

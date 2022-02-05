@@ -7,6 +7,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericSingleImplicitAnnotation;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -19,6 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->configure([
             // use always this annotation to test inner part of annotation - arguments, arrays, calls...
             new AnnotationToAttribute(GenericAnnotation::class),
+            new AnnotationToAttribute(GenericSingleImplicitAnnotation::class),
 
             new AnnotationToAttribute('inject', 'Nette\DI\Attributes\Inject'),
             new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route'),

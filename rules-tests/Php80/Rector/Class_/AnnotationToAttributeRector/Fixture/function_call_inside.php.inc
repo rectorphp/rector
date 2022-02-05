@@ -24,7 +24,7 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericA
 
 final class FunctionCallInside
 {
-    #[GenericAnnotation(some: "is_granted('ROLE_USER')")]
+    #[GenericAnnotation("is_granted('ROLE_USER')")]
     public function action()
     {
     }

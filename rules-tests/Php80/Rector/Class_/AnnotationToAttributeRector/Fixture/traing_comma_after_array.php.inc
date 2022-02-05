@@ -8,8 +8,8 @@ final class TrailingCommadAfterArray
 {
     /**
      * @GenericAnnotation(
-     *     "first" = "item",
-     *     "next" = "item",
+     *     "some" = "item",
+     *     "summary" = "item",
      * )
      */
     public function action()
@@ -27,7 +27,7 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericA
 
 final class TrailingCommadAfterArray
 {
-    #[GenericAnnotation(first: 'item', next: 'item')]
+    #[GenericAnnotation(some: 'item', summary: 'item')]
     public function action()
     {
     }

@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
 use Symfony\Contracts\Service\Attribute\Required;
+use Webmozart\Assert\Assert;
 
 /**
  * @implements AnnotationToAttributeMapperInterface<mixed[]>
@@ -34,23 +37,41 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
     /**
      * @param mixed[] $value
      */
-    public function map($value): array|Expr
+    public function map($value): Expr
     {
-        $values = array_map(fn ($item): Expr|array => $this->annotationToAttributeMapper->map($item), $value);
+        $arrayItems = [];
 
-        foreach ($values as $key => $value) {
-            // remove the key and value? useful in case of unwrapping nested attributes
-            if (! $this->isRemoveArrayPlaceholder($value)) {
+        foreach ($value as $key => $singleValue) {
+            $valueExpr = $this->annotationToAttributeMapper->map($singleValue);
+
+            // remove node
+            if ($valueExpr === DocTagNodeState::REMOVE_ARRAY) {
                 continue;
             }
 
-            unset($values[$key]);
+            Assert::isInstanceOf($valueExpr, Expr::class);
+
+            // remove value
+            if ($this->isRemoveArrayPlaceholder($singleValue)) {
+                continue;
+            }
+
+            $keyExpr = null;
+            if (! is_int($key)) {
+                $keyExpr = $this->annotationToAttributeMapper->map($key);
+                Assert::isInstanceOf($keyExpr, Expr::class);
+            }
+
+            $arrayItems[] = new ArrayItem($valueExpr, $keyExpr);
         }
 
-        return $values;
+        return new Array_($arrayItems);
     }
 
-    private function isRemoveArrayPlaceholder(Expr|array $value): bool
+    /**
+     * @param mixed $value
+     */
+    private function isRemoveArrayPlaceholder($value): bool
     {
         if (! is_array($value)) {
             return false;

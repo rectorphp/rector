@@ -25,7 +25,7 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81 as 
 
 final class MultipleNestedAttribute
 {
-    #[Assert\All(nestedAsserts: [new Assert\NotNull(), new Assert\NotNumber()])]
+    #[Assert\All([new Assert\NotNull(), new Assert\NotNumber()])]
     public $value;
 }
 

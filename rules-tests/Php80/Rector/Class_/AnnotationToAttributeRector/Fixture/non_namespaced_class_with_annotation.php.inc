@@ -2,7 +2,7 @@
 
 /**
  * @Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation(
- *     routePrefix="/demo/"
+ *     some="/demo/"
  * )
  */
 final class NonNamespacedClassWithAnnotation
@@ -12,7 +12,7 @@ final class NonNamespacedClassWithAnnotation
 -----
 <?php
 
-#[Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation(routePrefix: '/demo/')]
+#[Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation(some: '/demo/')]
 final class NonNamespacedClassWithAnnotation
 {
 }

@@ -24,7 +24,7 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81 as 
 
 final class NestedAttribute
 {
-    #[Assert\All(nestedAsserts: [new Assert\NotNull()])]
+    #[Assert\All([new Assert\NotNull()])]
     public $value;
 }
 

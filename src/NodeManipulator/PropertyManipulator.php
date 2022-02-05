@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\NodeManipulator;
 
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\Table;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -40,7 +42,7 @@ use Symplify\PackageBuilder\Php\TypeChecker;
 final class PropertyManipulator
 {
     /**
-     * @var string[]
+     * @var string[]|class-string<Table>[]
      */
     private const ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES = [
         'Doctrine\ORM\Mapping\Entity',
@@ -48,7 +50,7 @@ final class PropertyManipulator
     ];
 
     /**
-     * @var string[]
+     * @var string[]|class-string<ManyToMany>[]
      */
     private const ALLOWED_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES = [
         'Doctrine\ORM\Mapping\Id',
