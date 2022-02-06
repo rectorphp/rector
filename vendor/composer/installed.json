@@ -1012,17 +1012,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.4.5",
-            "version_normalized": "1.4.5.0",
+            "version": "1.4.6",
+            "version_normalized": "1.4.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "150d1fbd82fb71ff76b3bd7f6ea6006d89c5f0c3"
+                "reference": "8a7761f1c520e0dad6e04d862fdc697445457cfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/150d1fbd82fb71ff76b3bd7f6ea6006d89c5f0c3",
-                "reference": "150d1fbd82fb71ff76b3bd7f6ea6006d89c5f0c3",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/8a7761f1c520e0dad6e04d862fdc697445457cfe",
+                "reference": "8a7761f1c520e0dad6e04d862fdc697445457cfe",
                 "shasum": ""
             },
             "require": {
@@ -1031,7 +1031,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-02-02T19:35:10+00:00",
+            "time": "2022-02-06T12:56:13+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -1055,7 +1055,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.4.5"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.4.6"
             },
             "funding": [
                 {
@@ -1805,12 +1805,12 @@
             "type": "library",
             "installation-source": "dist",
             "autoload": {
-                "psr-4": {
-                    "RectorPrefix20220206\\React\\Promise\\Timer\\": "src\/"
-                },
                 "files": [
                     "src\/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "RectorPrefix20220206\\React\\Promise\\Timer\\": "src\/"
+                }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
             "license": [

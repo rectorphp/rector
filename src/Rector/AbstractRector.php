@@ -241,7 +241,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $this->printDebugApplying();
         $originalAttributes = $node->getAttributes();
         $originalNode = $originalNode ?? clone $node;
-        if (!$this->infiniteLoopValidator->isValid($node, $originalNode, static::class)) {
+        if (!$this->infiniteLoopValidator->isValid($originalNode, static::class)) {
             return null;
         }
         $node = $this->refactor($node);
@@ -249,12 +249,9 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         if ($this->isNothingToChange($node)) {
             return null;
         }
-        /** @var Node|array<Node> $node */
-        if (!$this->infiniteLoopValidator->isValid($node, $originalNode, static::class)) {
-            return null;
-        }
         /** @var Node $originalNode */
         if (\is_array($node)) {
+            /** @var array<Node> $node */
             $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
             $originalNodeHash = \spl_object_hash($originalNode);
             $this->nodesToReturn[$originalNodeHash] = $node;
@@ -265,6 +262,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
             return $originalNode;
         }
         // not changed, return node early
+        /** @var Node $node */
         if (!$this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
             return $node;
         }
