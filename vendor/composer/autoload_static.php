@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit64804f93e5880c50981fdc91e7f4e7fe
+class ComposerStaticInit4b50c3212c6733f12dc6b0c0cacd8625
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2052,7 +2052,6 @@ class ComposerStaticInit64804f93e5880c50981fdc91e7f4e7fe
         'Rector\\Core\\Error\\ExceptionCorrector' => __DIR__ . '/../..' . '/src/Error/ExceptionCorrector.php',
         'Rector\\Core\\Exception\\Cache\\CachingException' => __DIR__ . '/../..' . '/src/Exception/Cache/CachingException.php',
         'Rector\\Core\\Exception\\Configuration\\InvalidConfigurationException' => __DIR__ . '/../..' . '/src/Exception/Configuration/InvalidConfigurationException.php',
-        'Rector\\Core\\Exception\\NodeTraverser\\InfiniteLoopTraversingException' => __DIR__ . '/../..' . '/src/Exception/NodeTraverser/InfiniteLoopTraversingException.php',
         'Rector\\Core\\Exception\\NotImplementedYetException' => __DIR__ . '/../..' . '/src/Exception/NotImplementedYetException.php',
         'Rector\\Core\\Exception\\ShouldNotHappenException' => __DIR__ . '/../..' . '/src/Exception/ShouldNotHappenException.php',
         'Rector\\Core\\Exception\\Template\\TemplateTypeNotFoundException' => __DIR__ . '/../..' . '/src/Exception/Template/TemplateTypeNotFoundException.php',
@@ -2121,7 +2120,6 @@ class ComposerStaticInit64804f93e5880c50981fdc91e7f4e7fe
         'Rector\\Core\\PhpParser\\NodeFinder\\PropertyFetchFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
         'Rector\\Core\\PhpParser\\NodeTransformer' => __DIR__ . '/../..' . '/src/PhpParser/NodeTransformer.php',
         'Rector\\Core\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
-        'Rector\\Core\\PhpParser\\NodeVisitor\\CreatedByRuleNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/CreatedByRuleNodeVisitor.php',
         'Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap' => __DIR__ . '/../..' . '/src/PhpParser/Node/AssignAndBinaryMap.php',
         'Rector\\Core\\PhpParser\\Node\\BetterNodeFinder' => __DIR__ . '/../..' . '/src/PhpParser/Node/BetterNodeFinder.php',
         'Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace' => __DIR__ . '/../..' . '/src/PhpParser/Node/CustomNode/FileWithoutNamespace.php',
@@ -3864,9 +3862,9 @@ class ComposerStaticInit64804f93e5880c50981fdc91e7f4e7fe
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit64804f93e5880c50981fdc91e7f4e7fe::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit64804f93e5880c50981fdc91e7f4e7fe::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit64804f93e5880c50981fdc91e7f4e7fe::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4b50c3212c6733f12dc6b0c0cacd8625::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4b50c3212c6733f12dc6b0c0cacd8625::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4b50c3212c6733f12dc6b0c0cacd8625::$classMap;
 
         }, null, ClassLoader::class);
     }

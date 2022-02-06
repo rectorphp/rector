@@ -39,10 +39,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CountOnNullRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
-     * @var string
-     */
-    private const ALREADY_CHANGED_ON_COUNT = 'already_changed_on_count';
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer
      */
@@ -117,10 +113,7 @@ CODE_SAMPLE
         }
         if ($this->nodeTypeResolver->isNullableType($countedNode) || $countedType instanceof \PHPStan\Type\NullType) {
             $identical = new \PhpParser\Node\Expr\BinaryOp\Identical($countedNode, $this->nodeFactory->createNull());
-            $ternary = new \PhpParser\Node\Expr\Ternary($identical, new \PhpParser\Node\Scalar\LNumber(0), $node);
-            // prevent infinity loop re-resolution
-            $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, \true);
-            return $ternary;
+            return new \PhpParser\Node\Expr\Ternary($identical, new \PhpParser\Node\Scalar\LNumber(0), $node);
         }
         if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::IS_COUNTABLE)) {
             $conditionNode = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_countable'), [new \PhpParser\Node\Arg($countedNode)]);
@@ -128,8 +121,6 @@ CODE_SAMPLE
             $instanceof = new \PhpParser\Node\Expr\Instanceof_($countedNode, new \PhpParser\Node\Name\FullyQualified('Countable'));
             $conditionNode = new \PhpParser\Node\Expr\BinaryOp\BooleanOr($this->nodeFactory->createFuncCall('is_array', [new \PhpParser\Node\Arg($countedNode)]), $instanceof);
         }
-        // prevent infinity loop re-resolution
-        $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, \true);
         return new \PhpParser\Node\Expr\Ternary($conditionNode, $node, new \PhpParser\Node\Scalar\LNumber(0));
     }
     private function isAlwaysIterableType(\PHPStan\Type\Type $possibleUnionType) : bool
@@ -160,11 +151,6 @@ CODE_SAMPLE
             return \true;
         }
         if ($funcCall->args[0]->value instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-            return \true;
-        }
-        $alreadyChangedOnCount = (bool) $funcCall->getAttribute(self::ALREADY_CHANGED_ON_COUNT, \false);
-        // check if it has some condition before already, if so, probably it's already handled
-        if ($alreadyChangedOnCount) {
             return \true;
         }
         $parentNode = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);

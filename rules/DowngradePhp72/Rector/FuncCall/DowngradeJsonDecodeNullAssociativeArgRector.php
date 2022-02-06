@@ -88,10 +88,6 @@ CODE_SAMPLE
         if (!$this->isName($node, 'json_decode')) {
             return null;
         }
-        $createdByRule = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE) ?? [];
-        if (\in_array(self::class, $createdByRule, \true)) {
-            return null;
-        }
         $args = $node->getArgs();
         if ($this->argsAnalyzer->hasNamedArg($args)) {
             return null;

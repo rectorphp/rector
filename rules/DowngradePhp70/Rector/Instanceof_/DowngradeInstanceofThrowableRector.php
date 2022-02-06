@@ -72,10 +72,6 @@ CODE_SAMPLE
         if (!($node->class instanceof \PhpParser\Node\Name && $this->nodeNameResolver->isName($node->class, 'Throwable'))) {
             return null;
         }
-        $createdByRule = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE) ?? [];
-        if (\in_array(self::class, $createdByRule, \true)) {
-            return null;
-        }
         // Ensure the refactoring is idempotent.
         if ($this->isAlreadyTransformed($node)) {
             return null;

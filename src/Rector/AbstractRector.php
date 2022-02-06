@@ -241,21 +241,26 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $this->printDebugApplying();
         $originalAttributes = $node->getAttributes();
         $originalNode = $originalNode ?? clone $node;
+        if (!$this->infiniteLoopValidator->isValid($node, $originalNode, static::class)) {
+            return null;
+        }
         $node = $this->refactor($node);
         // nothing to change → continue
-        if ($node === null) {
+        if ($this->isNothingToChange($node)) {
+            return null;
+        }
+        /** @var Node|array<Node> $node */
+        if (!$this->infiniteLoopValidator->isValid($node, $originalNode, static::class)) {
             return null;
         }
         /** @var Node $originalNode */
         if (\is_array($node)) {
-            $this->createdByRule($node, $originalNode);
+            $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
             $originalNodeHash = \spl_object_hash($originalNode);
             $this->nodesToReturn[$originalNodeHash] = $node;
-            if ($node !== []) {
-                \reset($node);
-                $firstNodeKey = \key($node);
-                $this->mirrorComments($node[$firstNodeKey], $originalNode);
-            }
+            \reset($node);
+            $firstNodeKey = \key($node);
+            $this->mirrorComments($node[$firstNodeKey], $originalNode);
             // will be replaced in leaveNode() the original node must be passed
             return $originalNode;
         }
@@ -268,14 +273,11 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         // update parents relations - must run before connectParentNodes()
         $this->mirrorAttributes($originalAttributes, $node);
         $this->connectParentNodes($node);
+        $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
         // is equals node type? return node early
         if (\get_class($originalNode) === \get_class($node)) {
-            $this->createdByRule($node, $originalNode);
             return $node;
         }
-        // is different node type? do not traverse children to avoid looping
-        $this->infiniteLoopValidator->process($node, $originalNode, static::class);
-        $this->createdByRuleDecorator->decorate($node, static::class);
         // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
         $originalNodeHash = \spl_object_hash($originalNode);
         if ($originalNode instanceof \PhpParser\Node\Stmt && $node instanceof \PhpParser\Node\Expr) {
@@ -410,17 +412,14 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $this->nodeRemover->removeNodes($nodes);
     }
     /**
-     * @param mixed[]|\PhpParser\Node $node
+     * @param mixed[]|\PhpParser\Node|null $node
      */
-    private function createdByRule($node, \PhpParser\Node $originalNode) : void
+    private function isNothingToChange($node) : bool
     {
-        if ($node instanceof \PhpParser\Node) {
-            $node = [$node];
+        if ($node === null) {
+            return \true;
         }
-        foreach ($node as $singleNode) {
-            $this->createdByRuleDecorator->decorate($singleNode, static::class);
-        }
-        $this->createdByRuleDecorator->decorate($originalNode, static::class);
+        return $node === [];
     }
     /**
      * @param class-string<Node> $nodeClass
