@@ -233,24 +233,31 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         $originalNode ??= clone $node;
 
+        if (! $this->infiniteLoopValidator->isValid($node, $originalNode, static::class)) {
+            return null;
+        }
+
         $node = $this->refactor($node);
 
         // nothing to change → continue
-        if ($node === null) {
+        if ($this->isNothingToChange($node)) {
+            return null;
+        }
+
+        /** @var Node|array<Node> $node */
+        if (! $this->infiniteLoopValidator->isValid($node, $originalNode, static::class)) {
             return null;
         }
 
         /** @var Node $originalNode */
         if (is_array($node)) {
-            $this->createdByRule($node, $originalNode);
+            $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
 
             $originalNodeHash = spl_object_hash($originalNode);
             $this->nodesToReturn[$originalNodeHash] = $node;
 
-            if ($node !== []) {
-                $firstNodeKey = array_key_first($node);
-                $this->mirrorComments($node[$firstNodeKey], $originalNode);
-            }
+            $firstNodeKey = array_key_first($node);
+            $this->mirrorComments($node[$firstNodeKey], $originalNode);
 
             // will be replaced in leaveNode() the original node must be passed
             return $originalNode;
@@ -268,15 +275,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->mirrorAttributes($originalAttributes, $node);
         $this->connectParentNodes($node);
 
+        $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
+
         // is equals node type? return node early
         if ($originalNode::class === $node::class) {
-            $this->createdByRule($node, $originalNode);
             return $node;
         }
-
-        // is different node type? do not traverse children to avoid looping
-        $this->infiniteLoopValidator->process($node, $originalNode, static::class);
-        $this->createdByRuleDecorator->decorate($node, static::class);
 
         // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
         $originalNodeHash = spl_object_hash($originalNode);
@@ -433,19 +437,15 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @param array<Node>|Node $node
+     * @param Node|array<Node>|null $node
      */
-    private function createdByRule(array | Node $node, Node $originalNode): void
+    private function isNothingToChange(array|Node|null $node): bool
     {
-        if ($node instanceof Node) {
-            $node = [$node];
+        if ($node === null) {
+            return true;
         }
 
-        foreach ($node as $singleNode) {
-            $this->createdByRuleDecorator->decorate($singleNode, static::class);
-        }
-
-        $this->createdByRuleDecorator->decorate($originalNode, static::class);
+        return $node === [];
     }
 
     /**

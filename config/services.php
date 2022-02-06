@@ -72,7 +72,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/PhpParser/ValueObject',
             __DIR__ . '/../src/functions',
             __DIR__ . '/../src/constants.php',
-            __DIR__ . '/../src/PhpParser/NodeVisitor/CreatedByRuleNodeVisitor.php',
         ]);
 
     $services->alias(Application::class, ConsoleApplication::class);

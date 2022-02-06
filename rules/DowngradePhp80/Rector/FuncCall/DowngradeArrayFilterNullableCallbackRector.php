@@ -27,7 +27,6 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\StringType;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -98,11 +97,6 @@ CODE_SAMPLE
         }
 
         if (! isset($args[1])) {
-            return null;
-        }
-
-        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
-        if (in_array(self::class, $createdByRule, true)) {
             return null;
         }
 

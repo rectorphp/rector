@@ -40,11 +40,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CountOnNullRector extends AbstractRector implements MinPhpVersionInterface
 {
-    /**
-     * @var string
-     */
-    private const ALREADY_CHANGED_ON_COUNT = 'already_changed_on_count';
-
     public function __construct(
         private readonly CountableTypeAnalyzer $countableTypeAnalyzer,
         private readonly CountableAnalyzer $countableAnalyzer,
@@ -121,10 +116,8 @@ CODE_SAMPLE
 
         if ($this->nodeTypeResolver->isNullableType($countedNode) || $countedType instanceof NullType) {
             $identical = new Identical($countedNode, $this->nodeFactory->createNull());
-            $ternary = new Ternary($identical, new LNumber(0), $node);
-            // prevent infinity loop re-resolution
-            $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);
-            return $ternary;
+
+            return new Ternary($identical, new LNumber(0), $node);
         }
 
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
@@ -136,9 +129,6 @@ CODE_SAMPLE
                 [new Arg($countedNode)]
             ), $instanceof);
         }
-
-        // prevent infinity loop re-resolution
-        $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);
 
         return new Ternary($conditionNode, $node, new LNumber(0));
     }
@@ -179,13 +169,6 @@ CODE_SAMPLE
         }
 
         if ($funcCall->args[0]->value instanceof ClassConstFetch) {
-            return true;
-        }
-
-        $alreadyChangedOnCount = (bool) $funcCall->getAttribute(self::ALREADY_CHANGED_ON_COUNT, false);
-
-        // check if it has some condition before already, if so, probably it's already handled
-        if ($alreadyChangedOnCount) {
             return true;
         }
 

@@ -70,11 +70,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
-        if (in_array(self::class, $createdByRule, true)) {
-            return null;
-        }
-
         // Ensure the refactoring is idempotent.
         if ($this->isAlreadyTransformed($node)) {
             return null;

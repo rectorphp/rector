@@ -89,11 +89,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
-        if (in_array(self::class, $createdByRule, true)) {
-            return null;
-        }
-
         $args = $node->getArgs();
         if ($this->argsAnalyzer->hasNamedArg($args)) {
             return null;
