@@ -233,7 +233,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         $originalNode ??= clone $node;
 
-        if (! $this->infiniteLoopValidator->isValid($node, $originalNode, static::class)) {
+        if (! $this->infiniteLoopValidator->isValid($originalNode, static::class)) {
             return null;
         }
 
@@ -244,13 +244,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
-        /** @var Node|array<Node> $node */
-        if (! $this->infiniteLoopValidator->isValid($node, $originalNode, static::class)) {
-            return null;
-        }
-
         /** @var Node $originalNode */
         if (is_array($node)) {
+            /** @var array<Node> $node */
             $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
 
             $originalNodeHash = spl_object_hash($originalNode);
@@ -264,6 +260,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         // not changed, return node early
+        /** @var Node $node */
         if (! $this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
             return $node;
         }
