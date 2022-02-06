@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220205\Symplify\VendorPatches\Console;
+namespace RectorPrefix20220206\Symplify\VendorPatches\Console;
 
-use RectorPrefix20220205\Symfony\Component\Console\Application;
-use RectorPrefix20220205\Symfony\Component\Console\Command\Command;
-final class VendorPatchesApplication extends \RectorPrefix20220205\Symfony\Component\Console\Application
+use RectorPrefix20220206\Symfony\Component\Console\Application;
+use RectorPrefix20220206\Symfony\Component\Console\Command\Command;
+final class VendorPatchesApplication extends \RectorPrefix20220206\Symfony\Component\Console\Application
 {
     /**
      * @param Command[] $commands

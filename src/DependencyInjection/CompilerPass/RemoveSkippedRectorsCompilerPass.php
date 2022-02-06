@@ -5,15 +5,15 @@ namespace Rector\Core\DependencyInjection\CompilerPass;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix20220205\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20220205\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220206\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20220206\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * This compiler pass removed Rectors skipped in `SKIP` parameters.
  * It uses Skipper from Symplify - https://github.com/symplify/skipper
  */
-final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20220205\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20220206\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
-    public function process(\RectorPrefix20220205\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    public function process(\RectorPrefix20220206\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
     {
         $skippedRectorClasses = $this->resolveSkippedRectorClasses($containerBuilder);
         foreach ($containerBuilder->getDefinitions() as $id => $definition) {
@@ -29,7 +29,7 @@ final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20220205\Sy
     /**
      * @return string[]
      */
-    private function resolveSkippedRectorClasses(\RectorPrefix20220205\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : array
+    private function resolveSkippedRectorClasses(\RectorPrefix20220206\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : array
     {
         $skipParameters = (array) $containerBuilder->getParameter(\Rector\Core\Configuration\Option::SKIP);
         return \array_filter($skipParameters, function ($element) : bool {

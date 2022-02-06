@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220205\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20220206\Idiosyncratic\EditorConfig\Declaration;
 
-use RectorPrefix20220205\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20220206\Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use function is_bool;
-abstract class BooleanDeclaration extends \RectorPrefix20220205\Idiosyncratic\EditorConfig\Declaration\Declaration
+abstract class BooleanDeclaration extends \RectorPrefix20220206\Idiosyncratic\EditorConfig\Declaration\Declaration
 {
     /**
      * @inheritdoc
@@ -13,7 +13,7 @@ abstract class BooleanDeclaration extends \RectorPrefix20220205\Idiosyncratic\Ed
     public function validateValue($value) : void
     {
         if (\is_bool($value) === \false) {
-            throw new \RectorPrefix20220205\Idiosyncratic\EditorConfig\Exception\InvalidValue($this->getStringValue(), $this->getName());
+            throw new \RectorPrefix20220206\Idiosyncratic\EditorConfig\Exception\InvalidValue($this->getStringValue(), $this->getName());
         }
     }
 }

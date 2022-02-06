@@ -1,4 +1,4 @@
-# 521 Rules Overview
+# 522 Rules Overview
 
 <br>
 
@@ -32,7 +32,7 @@
 
 - [DowngradePhp71](#downgradephp71) (10)
 
-- [DowngradePhp72](#downgradephp72) (5)
+- [DowngradePhp72](#downgradephp72) (6)
 
 - [DowngradePhp73](#downgradephp73) (6)
 
@@ -4807,6 +4807,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      {
      }
  }
+```
+
+<br>
+
+### DowngradePhp72JsonConstRector
+
+Change Json constant that available only in php 7.2 to 0
+
+- class: [`Rector\DowngradePhp72\Rector\ConstFetch\DowngradePhp72JsonConstRector`](../rules/DowngradePhp72/Rector/ConstFetch/DowngradePhp72JsonConstRector.php)
+
+```diff
+-$inDecoder = new Decoder($connection, true, 512, \JSON_INVALID_UTF8_IGNORE);
++$inDecoder = new Decoder($connection, true, 512, 0);
 ```
 
 <br>

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Kdyby\Rector\ClassMethod;
 
-use RectorPrefix20220205\Nette\Utils\Strings;
+use RectorPrefix20220206\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -164,7 +164,7 @@ CODE_SAMPLE
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         if (\strpos($kdybyEventName, '::') !== \false) {
-            return (string) \RectorPrefix20220205\Nette\Utils\Strings::after($kdybyEventName, '::', -1);
+            return (string) \RectorPrefix20220206\Nette\Utils\Strings::after($kdybyEventName, '::', -1);
         }
         throw new \Rector\Core\Exception\NotImplementedYetException($kdybyEventName);
     }

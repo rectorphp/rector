@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220205\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
+namespace RectorPrefix20220206\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
 
 /**
  * Preprocessor that combines multiple preprocessors
  *
  * @package Helmich\TypoScriptParser\Tokenizer\Preprocessing
  */
-class ProcessorChain implements \RectorPrefix20220205\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
+class ProcessorChain implements \RectorPrefix20220206\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
 {
     /** @var Preprocessor[] */
     protected $processors = [];
@@ -16,7 +16,7 @@ class ProcessorChain implements \RectorPrefix20220205\Helmich\TypoScriptParser\T
      * @param Preprocessor $next
      * @return self
      */
-    public function with(\RectorPrefix20220205\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor $next) : self
+    public function with(\RectorPrefix20220206\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor $next) : self
     {
         $new = new self();
         $new->processors = \array_merge($this->processors, [$next]);
