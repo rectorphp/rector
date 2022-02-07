@@ -110,6 +110,9 @@ CODE_SAMPLE
         if (!$node->isPublic()) {
             return \true;
         }
+        if ($node->isAbstract()) {
+            return \true;
+        }
         $methodName = $this->getName($node->name);
         if (null === $methodName) {
             return \true;

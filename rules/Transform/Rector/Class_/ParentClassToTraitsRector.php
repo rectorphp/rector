@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Transform\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
@@ -12,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ParentClassToTraits;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220206\Webmozart\Assert\Assert;
+use RectorPrefix20220207\Webmozart\Assert\Assert;
 /**
  * Can handle cases like:
  * - https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
@@ -73,14 +74,15 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->extends === null) {
+        $parentExtends = $node->extends;
+        if (!$parentExtends instanceof \PhpParser\Node\Name) {
             return null;
         }
         if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
         foreach ($this->parentClassToTraits as $parentClassToTrait) {
-            if (!$this->isObjectType($node, $parentClassToTrait->getParentObjectType())) {
+            if (!$this->isName($parentExtends, $parentClassToTrait->getParentType())) {
                 continue;
             }
             foreach ($parentClassToTrait->getTraitNames() as $traitName) {
@@ -97,7 +99,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? $configuration;
-        \RectorPrefix20220206\Webmozart\Assert\Assert::allIsAOf($parentClassToTraits, \Rector\Transform\ValueObject\ParentClassToTraits::class);
+        \RectorPrefix20220207\Webmozart\Assert\Assert::allIsAOf($parentClassToTraits, \Rector\Transform\ValueObject\ParentClassToTraits::class);
         $this->parentClassToTraits = $parentClassToTraits;
     }
     private function removeParentClass(\PhpParser\Node\Stmt\Class_ $class) : void

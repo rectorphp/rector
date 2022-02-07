@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220206\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper;
+namespace RectorPrefix20220207\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper;
 
-use RectorPrefix20220206\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220207\Symfony\Component\DependencyInjection\Definition;
 /**
  * Null dumper, negates any proxy code generation for any given service definition.
  *
@@ -18,26 +18,26 @@ use RectorPrefix20220206\Symfony\Component\DependencyInjection\Definition;
  *
  * @final
  */
-class NullDumper implements \RectorPrefix20220206\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\DumperInterface
+class NullDumper implements \RectorPrefix20220207\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\DumperInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function isProxyCandidate(\RectorPrefix20220206\Symfony\Component\DependencyInjection\Definition $definition) : bool
+    public function isProxyCandidate(\RectorPrefix20220207\Symfony\Component\DependencyInjection\Definition $definition) : bool
     {
         return \false;
     }
     /**
      * {@inheritdoc}
      */
-    public function getProxyFactoryCode(\RectorPrefix20220206\Symfony\Component\DependencyInjection\Definition $definition, string $id, string $factoryCode) : string
+    public function getProxyFactoryCode(\RectorPrefix20220207\Symfony\Component\DependencyInjection\Definition $definition, string $id, string $factoryCode) : string
     {
         return '';
     }
     /**
      * {@inheritdoc}
      */
-    public function getProxyCode(\RectorPrefix20220206\Symfony\Component\DependencyInjection\Definition $definition) : string
+    public function getProxyCode(\RectorPrefix20220207\Symfony\Component\DependencyInjection\Definition $definition) : string
     {
         return '';
     }
