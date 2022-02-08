@@ -2000,6 +2000,7 @@ return array(
     'Rector\\DowngradePhp72\\NodeAnalyzer\\RegexFuncAnalyzer' => $baseDir . '/rules/DowngradePhp72/NodeAnalyzer/RegexFuncAnalyzer.php',
     'Rector\\DowngradePhp72\\NodeAnalyzer\\SealedClassAnalyzer' => $baseDir . '/rules/DowngradePhp72/NodeAnalyzer/SealedClassAnalyzer.php',
     'Rector\\DowngradePhp72\\NodeManipulator\\BitwiseFlagCleaner' => $baseDir . '/rules/DowngradePhp72/NodeManipulator/BitwiseFlagCleaner.php',
+    'Rector\\DowngradePhp72\\NodeManipulator\\JsonConstCleaner' => $baseDir . '/rules/DowngradePhp72/NodeManipulator/JsonConstCleaner.php',
     'Rector\\DowngradePhp72\\PhpDoc\\NativeParamToPhpDocDecorator' => $baseDir . '/rules/DowngradePhp72/PhpDoc/NativeParamToPhpDocDecorator.php',
     'Rector\\DowngradePhp72\\Rector\\ClassMethod\\DowngradeParameterTypeWideningRector' => $baseDir . '/rules/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php',
     'Rector\\DowngradePhp72\\Rector\\ConstFetch\\DowngradePhp72JsonConstRector' => $baseDir . '/rules/DowngradePhp72/Rector/ConstFetch/DowngradePhp72JsonConstRector.php',
