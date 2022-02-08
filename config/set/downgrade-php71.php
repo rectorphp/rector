@@ -7,6 +7,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector;
 use Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector;
+use Rector\DowngradePhp71\Rector\ConstFetch\DowngradePhp71JsonConstRector;
 use Rector\DowngradePhp71\Rector\FuncCall\DowngradeIsIterableRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclarationRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector;
@@ -30,4 +31,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp71\Rector\FuncCall\DowngradeIsIterableRector::class);
     $services->set(\Rector\DowngradePhp71\Rector\StaticCall\DowngradeClosureFromCallableRector::class);
+    $services->set(\Rector\DowngradePhp71\Rector\ConstFetch\DowngradePhp71JsonConstRector::class);
 };
