@@ -30,7 +30,7 @@ class Encoder extends \RectorPrefix20220208\Evenement\EventEmitter implements \R
             throw new \BadMethodCallException('Depth parameter is only supported on PHP 5.5+');
         }
         if (\defined('JSON_THROW_ON_ERROR')) {
-            $options = $options & ~0;
+            $options = $options & ~\JSON_THROW_ON_ERROR;
         }
         // @codeCoverageIgnoreEnd
         $this->output = $output;

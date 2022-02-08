@@ -3,10 +3,14 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp72\NodeManipulator;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class JsonConstCleaner
@@ -16,9 +20,15 @@ final class JsonConstCleaner
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @param string[] $constants
@@ -27,6 +37,25 @@ final class JsonConstCleaner
      */
     public function clean($node, array $constants)
     {
+        $defined = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $subNode) use($constants) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Expr\FuncCall) {
+                return \false;
+            }
+            if (!$this->nodeNameResolver->isName($subNode, 'defined')) {
+                return \false;
+            }
+            $args = $subNode->getArgs();
+            if (!isset($args[0])) {
+                return \false;
+            }
+            if (!$args[0]->value instanceof \PhpParser\Node\Scalar\String_) {
+                return \false;
+            }
+            return \in_array($args[0]->value->value, $constants, \true);
+        });
+        if ($defined) {
+            return null;
+        }
         if ($node instanceof \PhpParser\Node\Expr\ConstFetch) {
             return $this->cleanByConstFetch($node, $constants);
         }
