@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
@@ -18,6 +19,8 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -27,6 +30,15 @@ use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 
 final class PhpDocTypeChanger
 {
+    /**
+     * @var array<class-string<Node>>
+     */
+    public const ALLOWED_TYPES = [
+        GenericTypeNode::class,
+        SpacingAwareArrayTypeNode::class,
+        SpacingAwareCallableTypeNode::class,
+    ];
+
     public function __construct(
         private readonly StaticTypeMapper $staticTypeMapper,
         private readonly TypeComparator $typeComparator,
@@ -165,7 +177,7 @@ final class PhpDocTypeChanger
             return;
         }
 
-        if (! $varTag->type instanceof GenericTypeNode) {
+        if (! in_array($varTag->type::class, self::ALLOWED_TYPES, true)) {
             return;
         }
 
@@ -177,6 +189,7 @@ final class PhpDocTypeChanger
         $paramType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTag, $property);
 
         $this->changeParamType($phpDocInfo, $paramType, $param, $paramVarName);
+        $this->processKeepComments($property, $param);
     }
 
     public function changeVarTypeNode(PhpDocInfo $phpDocInfo, TypeNode $typeNode): void

@@ -8,11 +8,10 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -46,10 +45,7 @@ final class DeadReturnTagValueNodeAnalyzer
             return false;
         }
 
-        if (in_array($returnTagValueNode->type::class, [
-            GenericTypeNode::class,
-            SpacingAwareCallableTypeNode::class,
-        ], true)) {
+        if (in_array($returnTagValueNode->type::class, PhpDocTypeChanger::ALLOWED_TYPES, true)) {
             return false;
         }
 
