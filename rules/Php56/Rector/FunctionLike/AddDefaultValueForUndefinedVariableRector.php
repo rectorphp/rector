@@ -30,11 +30,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddDefaultValueForUndefinedVariableRector extends AbstractRector implements MinPhpVersionInterface
 {
-    /**
-     * @var string
-     */
-    private const ALREADY_ADDED_VARIABLE_NAMES = 'already_added_variable_names';
-
     public function __construct(
         private readonly UndefinedVariableResolver $undefinedVariableResolver,
         private readonly InlineHTMLAnalyzer $inlineHTMLAnalyzer
@@ -99,10 +94,6 @@ CODE_SAMPLE
 
         $undefinedVariableNames = $this->undefinedVariableResolver->resolve($node);
 
-        // avoids adding same variable multiple tiemes
-        $alreadyAddedVariableNames = (array) $node->getAttribute(self::ALREADY_ADDED_VARIABLE_NAMES);
-        $undefinedVariableNames = array_diff($undefinedVariableNames, $alreadyAddedVariableNames);
-
         if ($undefinedVariableNames === []) {
             return null;
         }
@@ -116,8 +107,6 @@ CODE_SAMPLE
             $assign = new Assign(new Variable($undefinedVariableName), $value);
             $variablesInitiation[] = new Expression($assign);
         }
-
-        $node->setAttribute(self::ALREADY_ADDED_VARIABLE_NAMES, $undefinedVariableNames);
 
         $node->stmts = array_merge($variablesInitiation, (array) $node->stmts);
 
