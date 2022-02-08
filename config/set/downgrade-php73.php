@@ -5,6 +5,7 @@ namespace RectorPrefix20220208;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\DowngradePhp73\Rector\ConstFetch\DowngradePhp73JsonConstRector;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeIsCountableRector;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector;
@@ -22,4 +23,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector::class);
     $services->set(\Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector::class);
     $services->set(\Rector\DowngradePhp73\Rector\FuncCall\DowngradeIsCountableRector::class);
+    $services->set(\Rector\DowngradePhp73\Rector\ConstFetch\DowngradePhp73JsonConstRector::class);
 };

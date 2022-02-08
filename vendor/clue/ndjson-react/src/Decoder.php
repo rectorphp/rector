@@ -34,7 +34,7 @@ class Decoder extends \RectorPrefix20220208\Evenement\EventEmitter implements \R
             throw new \BadMethodCallException('Options parameter is only supported on PHP 5.4+');
         }
         if (\defined('JSON_THROW_ON_ERROR')) {
-            $options = $options & ~\JSON_THROW_ON_ERROR;
+            $options = $options & ~0;
         }
         // @codeCoverageIgnoreEnd
         $this->input = $input;

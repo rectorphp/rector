@@ -2008,6 +2008,7 @@ return array(
     'Rector\\DowngradePhp72\\Rector\\FuncCall\\DowngradePregUnmatchedAsNullConstantRector' => $baseDir . '/rules/DowngradePhp72/Rector/FuncCall/DowngradePregUnmatchedAsNullConstantRector.php',
     'Rector\\DowngradePhp72\\Rector\\FuncCall\\DowngradeStreamIsattyRector' => $baseDir . '/rules/DowngradePhp72/Rector/FuncCall/DowngradeStreamIsattyRector.php',
     'Rector\\DowngradePhp72\\Rector\\FunctionLike\\DowngradeObjectTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp72/Rector/FunctionLike/DowngradeObjectTypeDeclarationRector.php',
+    'Rector\\DowngradePhp73\\Rector\\ConstFetch\\DowngradePhp73JsonConstRector' => $baseDir . '/rules/DowngradePhp73/Rector/ConstFetch/DowngradePhp73JsonConstRector.php',
     'Rector\\DowngradePhp73\\Rector\\FuncCall\\DowngradeArrayKeyFirstLastRector' => $baseDir . '/rules/DowngradePhp73/Rector/FuncCall/DowngradeArrayKeyFirstLastRector.php',
     'Rector\\DowngradePhp73\\Rector\\FuncCall\\DowngradeIsCountableRector' => $baseDir . '/rules/DowngradePhp73/Rector/FuncCall/DowngradeIsCountableRector.php',
     'Rector\\DowngradePhp73\\Rector\\FuncCall\\DowngradeTrailingCommasInFunctionCallsRector' => $baseDir . '/rules/DowngradePhp73/Rector/FuncCall/DowngradeTrailingCommasInFunctionCallsRector.php',
