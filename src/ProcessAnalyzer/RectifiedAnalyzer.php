@@ -8,8 +8,6 @@ use PhpParser\Node;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\RectifiedNode;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * This service verify if the Node already rectified with same Rector rule before current Rector rule with condition
@@ -23,12 +21,7 @@ final class RectifiedAnalyzer
      */
     private array $previousFileWithNodes = [];
 
-    public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver
-    ) {
-    }
-
-    public function verify(RectorInterface $rector, Node $node, ?Node $originalNode, File $currentFile): ?RectifiedNode
+    public function verify(RectorInterface $rector, Node $node, File $currentFile): ?RectifiedNode
     {
         $smartFileInfo = $currentFile->getSmartFileInfo();
         $realPath = $smartFileInfo->getRealPath();
@@ -45,20 +38,6 @@ final class RectifiedAnalyzer
         }
 
         if ($rectifiedNode->getNode() !== $node) {
-            return null;
-        }
-
-        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
-        $nodeName = $this->nodeNameResolver->getName($node);
-        $originalNodeName = $originalNode instanceof Node
-            ? $this->nodeNameResolver->getName($originalNode)
-            : null;
-
-        if (is_string($nodeName) && $nodeName === $originalNodeName && $createdByRule !== [] && ! in_array(
-            $rector::class,
-            $createdByRule,
-            true
-        )) {
             return null;
         }
 
