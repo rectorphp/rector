@@ -161,7 +161,7 @@ CODE_SAMPLE
 
     public function configure(array $configuration): void
     {
-        $this->delimiter = $configuration[self::DELIMITER] ?? '#';
+        $this->delimiter = $configuration[self::DELIMITER] ?? (string) current($configuration);
     }
 
     private function refactorFuncCall(FuncCall $funcCall): ?FuncCall
