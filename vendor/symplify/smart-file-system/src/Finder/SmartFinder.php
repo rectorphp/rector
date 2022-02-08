@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220207\Symplify\SmartFileSystem\Finder;
+namespace RectorPrefix20220208\Symplify\SmartFileSystem\Finder;
 
-use RectorPrefix20220207\Symfony\Component\Finder\Finder;
-use RectorPrefix20220207\Symplify\SmartFileSystem\FileSystemFilter;
+use RectorPrefix20220208\Symfony\Component\Finder\Finder;
+use RectorPrefix20220208\Symplify\SmartFileSystem\FileSystemFilter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @api
@@ -20,7 +20,7 @@ final class SmartFinder
      * @var \Symplify\SmartFileSystem\FileSystemFilter
      */
     private $fileSystemFilter;
-    public function __construct(\RectorPrefix20220207\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20220207\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter)
+    public function __construct(\RectorPrefix20220208\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20220208\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter)
     {
         $this->finderSanitizer = $finderSanitizer;
         $this->fileSystemFilter = $fileSystemFilter;
@@ -34,7 +34,7 @@ final class SmartFinder
         $directories = $this->fileSystemFilter->filterDirectories($directoriesOrFiles);
         $fileInfos = [];
         if ($directories !== []) {
-            $finder = new \RectorPrefix20220207\Symfony\Component\Finder\Finder();
+            $finder = new \RectorPrefix20220208\Symfony\Component\Finder\Finder();
             $finder->name('*')->in($directories)->path($path)->files()->sortByName();
             $fileInfos = $this->finderSanitizer->sanitize($finder);
         }
@@ -50,7 +50,7 @@ final class SmartFinder
         $directories = $this->fileSystemFilter->filterDirectories($directoriesOrFiles);
         $fileInfos = [];
         if ($directories !== []) {
-            $finder = new \RectorPrefix20220207\Symfony\Component\Finder\Finder();
+            $finder = new \RectorPrefix20220208\Symfony\Component\Finder\Finder();
             $finder->name($name)->in($directories)->files()->sortByName();
             if ($excludedDirectories !== []) {
                 $finder->exclude($excludedDirectories);

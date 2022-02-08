@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
-use RectorPrefix20220207\Helmich\TypoScriptParser\Parser\AST\NestedAssignment;
-use RectorPrefix20220207\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
+use RectorPrefix20220208\Helmich\TypoScriptParser\Parser\AST\NestedAssignment;
+use RectorPrefix20220208\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -16,7 +16,7 @@ final class LibFluidContentToLibContentElementRector extends \Ssch\TYPO3Rector\F
 {
     public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!\is_a($statement, \RectorPrefix20220207\Helmich\TypoScriptParser\Parser\AST\NestedAssignment::class) && !\is_a($statement, \RectorPrefix20220207\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment::class)) {
+        if (!\is_a($statement, \RectorPrefix20220208\Helmich\TypoScriptParser\Parser\AST\NestedAssignment::class) && !\is_a($statement, \RectorPrefix20220208\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment::class)) {
             return;
         }
         if ('lib.fluidContent' === $statement->object->relativeName) {

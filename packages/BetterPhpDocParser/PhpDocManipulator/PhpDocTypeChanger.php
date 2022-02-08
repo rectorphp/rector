@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
@@ -17,6 +18,8 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -25,6 +28,10 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 final class PhpDocTypeChanger
 {
+    /**
+     * @var array<class-string<Node>>
+     */
+    public const ALLOWED_TYPES = [\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode::class, \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode::class, \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode::class];
     /**
      * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
@@ -159,7 +166,7 @@ final class PhpDocTypeChanger
         if (!$functionLike instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
-        if (!$varTag->type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
+        if (!\in_array(\get_class($varTag->type), self::ALLOWED_TYPES, \true)) {
             return;
         }
         if (!\is_string($paramVarName)) {
@@ -168,6 +175,7 @@ final class PhpDocTypeChanger
         $phpDocInfo = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO);
         $paramType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTag, $property);
         $this->changeParamType($phpDocInfo, $paramType, $param, $paramVarName);
+        $this->processKeepComments($property, $param);
     }
     public function changeVarTypeNode(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode) : void
     {

@@ -5,7 +5,7 @@ namespace Rector\Core\Validation;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
-use RectorPrefix20220207\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220208\Symfony\Component\Console\Style\SymfonyStyle;
 final class EmptyConfigurableRectorChecker
 {
     /**
@@ -18,7 +18,7 @@ final class EmptyConfigurableRectorChecker
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector $emptyConfigurableRectorCollector, \RectorPrefix20220207\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(\Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector $emptyConfigurableRectorCollector, \RectorPrefix20220208\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->emptyConfigurableRectorCollector = $emptyConfigurableRectorCollector;
         $this->symfonyStyle = $symfonyStyle;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220207;
+namespace RectorPrefix20220208;
 
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
