@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\NodeManipulator;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class JsonConstCleaner
 {
     public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -23,6 +28,34 @@ final class JsonConstCleaner
      */
     public function clean(ConstFetch|BitwiseOr $node, array $constants): ConstFetch|Expr|null
     {
+        $defined = (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
+            $node,
+            function (Node $subNode) use ($constants): bool {
+                if (! $subNode instanceof FuncCall) {
+                    return false;
+                }
+
+                if (! $this->nodeNameResolver->isName($subNode, 'defined')) {
+                    return false;
+                }
+
+                $args = $subNode->getArgs();
+                if (! isset($args[0])) {
+                    return false;
+                }
+
+                if (! $args[0]->value instanceof String_) {
+                    return false;
+                }
+
+                return in_array($args[0]->value->value, $constants, true);
+            }
+        );
+
+        if ($defined) {
+            return null;
+        }
+
         if ($node instanceof ConstFetch) {
             return $this->cleanByConstFetch($node, $constants);
         }
