@@ -30,11 +30,6 @@ use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
  */
 final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRector
 {
-    /**
-     * @var string
-     */
-    private const ALREADY_RENAMED_TO_TEST = 'already_renamed_to_test';
-
     public function __construct(
         private readonly ClassInsertManipulator $classInsertManipulator,
         private readonly LetManipulator $letManipulator,
@@ -60,17 +55,11 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
             return null;
         }
 
-        $isAlreadyRenamedToTest = (bool) $node->getAttribute(self::ALREADY_RENAMED_TO_TEST, false);
-        if ($isAlreadyRenamedToTest) {
-            return null;
-        }
-
         // 1. change namespace name to PHPUnit-like
         $this->phpSpecRenaming->renameNamespace($node);
 
         $propertyName = $this->phpSpecRenaming->resolveObjectPropertyName($node);
 
-        $node->setAttribute(self::ALREADY_RENAMED_TO_TEST, true);
         $this->phpSpecRenaming->renameClass($node);
         $this->phpSpecRenaming->renameExtends($node);
 
