@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Core\Configuration\Option;
 
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\DowngradePhp73\Rector\ConstFetch\DowngradePhp73JsonConstRector;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeIsCountableRector;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector;
@@ -24,4 +25,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeArrayKeyFirstLastRector::class);
     $services->set(SetCookieOptionsArrayToArgumentsRector::class);
     $services->set(DowngradeIsCountableRector::class);
+    $services->set(DowngradePhp73JsonConstRector::class);
 };
