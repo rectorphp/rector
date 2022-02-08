@@ -59,14 +59,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         }
 
         // 2. change nodes with Rectors
-        $loopCounter = 0;
         do {
-            ++$loopCounter;
-
-            if ($loopCounter === 10) { // ensure no infinite loop
-                break;
-            }
-
             $file->changeHasChanged(false);
             $this->refactorNodesWithRectors($file, $configuration);
 
