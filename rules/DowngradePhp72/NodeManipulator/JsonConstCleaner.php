@@ -37,7 +37,18 @@ final class JsonConstCleaner
      */
     public function clean($node, array $constants)
     {
-        $defined = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $subNode) use($constants) : bool {
+        if ($node instanceof \PhpParser\Node\Expr\ConstFetch) {
+            return $this->cleanByConstFetch($node, $constants);
+        }
+        return $this->cleanByBitwiseOr($node, $constants);
+    }
+    /**
+     * @param string[] $constants
+     * @param \PhpParser\Node\Expr\BinaryOp\BitwiseOr|\PhpParser\Node\Expr\ConstFetch $node
+     */
+    private function hasDefinedCheck($node, array $constants) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $subNode) use($constants) : bool {
             if (!$subNode instanceof \PhpParser\Node\Expr\FuncCall) {
                 return \false;
             }
@@ -53,13 +64,6 @@ final class JsonConstCleaner
             }
             return \in_array($args[0]->value->value, $constants, \true);
         });
-        if ($defined) {
-            return null;
-        }
-        if ($node instanceof \PhpParser\Node\Expr\ConstFetch) {
-            return $this->cleanByConstFetch($node, $constants);
-        }
-        return $this->cleanByBitwiseOr($node, $constants);
     }
     /**
      * @param string[] $constants
@@ -70,10 +74,13 @@ final class JsonConstCleaner
             return null;
         }
         $parent = $constFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
-            return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('0'));
+        if ($parent instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
+            return null;
         }
-        return null;
+        if ($this->hasDefinedCheck($constFetch, $constants)) {
+            return null;
+        }
+        return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('0'));
     }
     /**
      * @param string[] $constants
@@ -83,6 +90,9 @@ final class JsonConstCleaner
         $isLeftTransformed = $this->isTransformed($bitwiseOr->left, $constants);
         $isRightTransformed = $this->isTransformed($bitwiseOr->right, $constants);
         if (!$isLeftTransformed && !$isRightTransformed) {
+            return null;
+        }
+        if ($this->hasDefinedCheck($bitwiseOr, $constants)) {
             return null;
         }
         if (!$isLeftTransformed) {

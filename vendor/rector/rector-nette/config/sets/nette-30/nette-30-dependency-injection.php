@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220208;
+namespace RectorPrefix20220209;
 
 use Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
 use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;

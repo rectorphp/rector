@@ -17,7 +17,7 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220208\Webmozart\Assert\Assert;
+use RectorPrefix20220209\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/empty_isset_exprs
  *
@@ -107,7 +107,7 @@ CODE_SAMPLE
             }
             $currentExpr->vars[] = $var;
         }
-        \RectorPrefix20220208\Webmozart\Assert\Assert::minCount($exprs, 1);
+        \RectorPrefix20220209\Webmozart\Assert\Assert::minCount($exprs, 1);
         return $this->joinWithBooleanAnd($exprs);
     }
     /**

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220208;
+namespace RectorPrefix20220209;
 
 use Rector\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector;
 use Rector\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector;

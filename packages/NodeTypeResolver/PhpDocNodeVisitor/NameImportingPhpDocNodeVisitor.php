@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
-use RectorPrefix20220208\Nette\Utils\Strings;
+use RectorPrefix20220209\Nette\Utils\Strings;
 use PhpParser\Node as PhpParserNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
@@ -20,10 +20,10 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20220208\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20220208\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
-use RectorPrefix20220208\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20220208\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+use RectorPrefix20220209\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix20220209\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20220209\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var PhpParserNode|null
@@ -59,7 +59,7 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20220208\Symplif
      * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20220208\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \RectorPrefix20220208\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20220209\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \RectorPrefix20220209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
@@ -147,7 +147,7 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20220208\Symplif
         if (!$this->classLikeExistenceChecker->doesClassLikeInsensitiveExists($className)) {
             return \false;
         }
-        $firstPath = \RectorPrefix20220208\Nette\Utils\Strings::before($identifierTypeNode->name, '\\' . $newNode->name);
+        $firstPath = \RectorPrefix20220209\Nette\Utils\Strings::before($identifierTypeNode->name, '\\' . $newNode->name);
         if ($firstPath === null) {
             return \true;
         }

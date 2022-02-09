@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220208;
+namespace RectorPrefix20220209;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220208\Symplify\MonorepoBuilder\Release\ReleaseWorker\PushTagReleaseWorker;
-use RectorPrefix20220208\Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersionReleaseWorker;
+use RectorPrefix20220209\Symplify\MonorepoBuilder\Release\ReleaseWorker\PushTagReleaseWorker;
+use RectorPrefix20220209\Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersionReleaseWorker;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->autowire();
     // @see https://github.com/symplify/monorepo-builder#6-release-flow
-    $services->set(\RectorPrefix20220208\Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersionReleaseWorker::class);
-    $services->set(\RectorPrefix20220208\Symplify\MonorepoBuilder\Release\ReleaseWorker\PushTagReleaseWorker::class);
+    $services->set(\RectorPrefix20220209\Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersionReleaseWorker::class);
+    $services->set(\RectorPrefix20220209\Symplify\MonorepoBuilder\Release\ReleaseWorker\PushTagReleaseWorker::class);
 };
