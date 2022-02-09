@@ -28,7 +28,19 @@ final class JsonConstCleaner
      */
     public function clean(ConstFetch|BitwiseOr $node, array $constants): ConstFetch|Expr|null
     {
-        $defined = (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
+        if ($node instanceof ConstFetch) {
+            return $this->cleanByConstFetch($node, $constants);
+        }
+
+        return $this->cleanByBitwiseOr($node, $constants);
+    }
+
+    /**
+     * @param string[] $constants
+     */
+    private function hasDefinedCheck(ConstFetch|BitwiseOr $node, array $constants): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
             $node,
             function (Node $subNode) use ($constants): bool {
                 if (! $subNode instanceof FuncCall) {
@@ -51,16 +63,6 @@ final class JsonConstCleaner
                 return in_array($args[0]->value->value, $constants, true);
             }
         );
-
-        if ($defined) {
-            return null;
-        }
-
-        if ($node instanceof ConstFetch) {
-            return $this->cleanByConstFetch($node, $constants);
-        }
-
-        return $this->cleanByBitwiseOr($node, $constants);
     }
 
     /**
@@ -73,11 +75,15 @@ final class JsonConstCleaner
         }
 
         $parent = $constFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof BitwiseOr) {
-            return new ConstFetch(new Name('0'));
+        if ($parent instanceof BitwiseOr) {
+            return null;
         }
 
-        return null;
+        if ($this->hasDefinedCheck($constFetch, $constants)) {
+            return null;
+        }
+
+        return new ConstFetch(new Name('0'));
     }
 
     /**
@@ -89,6 +95,10 @@ final class JsonConstCleaner
         $isRightTransformed = $this->isTransformed($bitwiseOr->right, $constants);
 
         if (! $isLeftTransformed && ! $isRightTransformed) {
+            return null;
+        }
+
+        if ($this->hasDefinedCheck($bitwiseOr, $constants)) {
             return null;
         }
 
