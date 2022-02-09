@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfaa289d171494fcbe951a1c8822ba5e6
+class ComposerStaticInit1521fe0f43dbd96f39968e86641e8a83
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -87,6 +87,7 @@ class ComposerStaticInitfaa289d171494fcbe951a1c8822ba5e6
             'RectorPrefix20220209\\Psr\\EventDispatcher\\' => 41,
             'RectorPrefix20220209\\Psr\\Container\\' => 35,
             'RectorPrefix20220209\\Psr\\Cache\\' => 31,
+            'RectorPrefix20220209\\OndraM\\CiDetector\\' => 39,
             'RectorPrefix20220209\\MyCLabs\\Enum\\' => 34,
             'RectorPrefix20220209\\Idiosyncratic\\EditorConfig\\' => 48,
             'RectorPrefix20220209\\Helmich\\TypoScriptParser\\' => 46,
@@ -340,6 +341,10 @@ class ComposerStaticInitfaa289d171494fcbe951a1c8822ba5e6
         'RectorPrefix20220209\\Psr\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
+        ),
+        'RectorPrefix20220209\\OndraM\\CiDetector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ondram/ci-detector/src',
         ),
         'RectorPrefix20220209\\MyCLabs\\Enum\\' => 
         array (
@@ -925,6 +930,30 @@ class ComposerStaticInitfaa289d171494fcbe951a1c8822ba5e6
         'RectorPrefix20220209\\Nette\\Utils\\Type' => __DIR__ . '/..' . '/nette/utils/src/Utils/Type.php',
         'RectorPrefix20220209\\Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix20220209\\Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\CiDetector' => __DIR__ . '/..' . '/ondram/ci-detector/src/CiDetector.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\CiDetectorInterface' => __DIR__ . '/..' . '/ondram/ci-detector/src/CiDetectorInterface.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\AbstractCi' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/AbstractCi.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\AppVeyor' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/AppVeyor.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\AwsCodeBuild' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/AwsCodeBuild.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\AzurePipelines' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/AzurePipelines.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\Bamboo' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/Bamboo.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\BitbucketPipelines' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/BitbucketPipelines.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\Buddy' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/Buddy.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\CiInterface' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/CiInterface.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\Circle' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/Circle.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\Codeship' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/Codeship.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\Continuousphp' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/Continuousphp.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\Drone' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/Drone.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\GitHubActions' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/GitHubActions.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\GitLab' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/GitLab.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\Jenkins' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/Jenkins.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\SourceHut' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/SourceHut.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\TeamCity' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/TeamCity.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\Travis' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/Travis.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Ci\\Wercker' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/Wercker.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Env' => __DIR__ . '/..' . '/ondram/ci-detector/src/Env.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\Exception\\CiNotDetectedException' => __DIR__ . '/..' . '/ondram/ci-detector/src/Exception/CiNotDetectedException.php',
+        'RectorPrefix20220209\\OndraM\\CiDetector\\TrinaryLogic' => __DIR__ . '/..' . '/ondram/ci-detector/src/TrinaryLogic.php',
         'RectorPrefix20220209\\Psr\\Cache\\CacheException' => __DIR__ . '/..' . '/psr/cache/src/CacheException.php',
         'RectorPrefix20220209\\Psr\\Cache\\CacheItemInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemInterface.php',
         'RectorPrefix20220209\\Psr\\Cache\\CacheItemPoolInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemPoolInterface.php',
@@ -2027,7 +2056,8 @@ class ComposerStaticInitfaa289d171494fcbe951a1c8822ba5e6
         'Rector\\Core\\Console\\ConsoleApplication' => __DIR__ . '/../..' . '/src/Console/ConsoleApplication.php',
         'Rector\\Core\\Console\\Output\\OutputFormatterCollector' => __DIR__ . '/../..' . '/src/Console/Output/OutputFormatterCollector.php',
         'Rector\\Core\\Console\\Output\\RectorOutputStyle' => __DIR__ . '/../..' . '/src/Console/Output/RectorOutputStyle.php',
-        'Rector\\Core\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/SymfonyStyleFactory.php',
+        'Rector\\Core\\Console\\Style\\RectorConsoleOutputStyle' => __DIR__ . '/../..' . '/src/Console/Style/RectorConsoleOutputStyle.php',
+        'Rector\\Core\\Console\\Style\\RectorConsoleOutputStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/RectorConsoleOutputStyleFactory.php',
         'Rector\\Core\\Contract\\Application\\FileDecoratorInterface' => __DIR__ . '/../..' . '/src/Contract/Application/FileDecoratorInterface.php',
         'Rector\\Core\\Contract\\Console\\OutputStyleInterface' => __DIR__ . '/../..' . '/src/Contract/Console/OutputStyleInterface.php',
         'Rector\\Core\\Contract\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\TypeToCallReflectionResolverInterface' => __DIR__ . '/../..' . '/src/Contract/PHPStan/Reflection/TypeToCallReflectionResolver/TypeToCallReflectionResolverInterface.php',
@@ -3865,9 +3895,9 @@ class ComposerStaticInitfaa289d171494fcbe951a1c8822ba5e6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfaa289d171494fcbe951a1c8822ba5e6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfaa289d171494fcbe951a1c8822ba5e6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfaa289d171494fcbe951a1c8822ba5e6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1521fe0f43dbd96f39968e86641e8a83::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1521fe0f43dbd96f39968e86641e8a83::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1521fe0f43dbd96f39968e86641e8a83::$classMap;
 
         }, null, ClassLoader::class);
     }

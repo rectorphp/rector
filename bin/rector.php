@@ -8,7 +8,7 @@ use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\ConsoleApplication;
-use Rector\Core\Console\Style\SymfonyStyleFactory;
+use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\Kernel\RectorKernel;
 use RectorPrefix20220209\Symfony\Component\Console\Command\Command;
@@ -46,9 +46,9 @@ try {
         echo \RectorPrefix20220209\Nette\Utils\Json::encode(['fatal_errors' => [$throwable->getMessage()]]);
     } else {
         // report fatal errors in console format
-        $symfonyStyleFactory = new \Rector\Core\Console\Style\SymfonyStyleFactory(new \RectorPrefix20220209\Symplify\PackageBuilder\Reflection\PrivatesCaller());
-        $symfonyStyle = $symfonyStyleFactory->create();
-        $symfonyStyle->error($throwable->getMessage());
+        $rectorConsoleOutputStyleFactory = new \Rector\Core\Console\Style\RectorConsoleOutputStyleFactory(new \RectorPrefix20220209\Symplify\PackageBuilder\Reflection\PrivatesCaller());
+        $rectorConsoleOutputStyle = $rectorConsoleOutputStyleFactory->create();
+        $rectorConsoleOutputStyle->error($throwable->getMessage());
     }
     exit(\RectorPrefix20220209\Symfony\Component\Console\Command\Command::FAILURE);
 }

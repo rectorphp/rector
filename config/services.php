@@ -29,6 +29,7 @@ use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache;
 use Rector\Caching\CacheFactory;
 use Rector\Core\Console\ConsoleApplication;
+use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
@@ -39,7 +40,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use function RectorPrefix20220209\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use RectorPrefix20220209\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix20220209\Symplify\PackageBuilder\Console\Command\CommandNaming;
-use RectorPrefix20220209\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use RectorPrefix20220209\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20220209\Symplify\PackageBuilder\Php\TypeChecker;
 use RectorPrefix20220209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -53,7 +53,7 @@ use RectorPrefix20220209\Symplify\SmartFileSystem\SmartFileSystem;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->load('Rector\\Core\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/Exception', __DIR__ . '/../src/DependencyInjection/CompilerPass', __DIR__ . '/../src/DependencyInjection/Loader', __DIR__ . '/../src/Kernel', __DIR__ . '/../src/ValueObject', __DIR__ . '/../src/Bootstrap', __DIR__ . '/../src/Enum', __DIR__ . '/../src/PhpParser/Node/CustomNode', __DIR__ . '/../src/PhpParser/ValueObject', __DIR__ . '/../src/functions', __DIR__ . '/../src/constants.php']);
+    $services->load('Rector\\Core\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/Console/Style/RectorConsoleOutputStyle.php', __DIR__ . '/../src/Exception', __DIR__ . '/../src/DependencyInjection/CompilerPass', __DIR__ . '/../src/DependencyInjection/Loader', __DIR__ . '/../src/Kernel', __DIR__ . '/../src/ValueObject', __DIR__ . '/../src/Bootstrap', __DIR__ . '/../src/Enum', __DIR__ . '/../src/PhpParser/Node/CustomNode', __DIR__ . '/../src/PhpParser/ValueObject', __DIR__ . '/../src/functions', __DIR__ . '/../src/constants.php']);
     $services->alias(\RectorPrefix20220209\Symfony\Component\Console\Application::class, \Rector\Core\Console\ConsoleApplication::class);
     $services->set(\RectorPrefix20220209\Symplify\SmartFileSystem\FileSystemGuard::class);
     $services->set(\Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector::class)->arg('$containerBuilder', \RectorPrefix20220209\Symfony\Component\DependencyInjection\Loader\Configurator\service('service_container'));
@@ -62,6 +62,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\PhpParser\BuilderFactory::class);
     $services->set(\PhpParser\NodeVisitor\CloningVisitor::class);
     $services->set(\PhpParser\NodeFinder::class);
+    $services->set(\RectorPrefix20220209\Symfony\Component\Console\Style\SymfonyStyle::class)->factory([\RectorPrefix20220209\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\Core\Console\Style\RectorConsoleOutputStyleFactory::class), 'create']);
     $services->set(\PHPStan\Parser\Parser::class)->factory([\RectorPrefix20220209\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createPHPStanParser']);
     $services->set(\PhpParser\Lexer::class)->factory([\RectorPrefix20220209\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createEmulativeLexer']);
     // symplify/package-builder
@@ -73,8 +74,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\RectorPrefix20220209\Symplify\PackageBuilder\Console\Command\CommandNaming::class);
     $services->set(\RectorPrefix20220209\Symplify\SmartFileSystem\SmartFileSystem::class);
     $services->set(\RectorPrefix20220209\Symplify\PackageBuilder\Strings\StringFormatConverter::class);
-    $services->set(\RectorPrefix20220209\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class);
-    $services->set(\RectorPrefix20220209\Symfony\Component\Console\Style\SymfonyStyle::class)->factory([\RectorPrefix20220209\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20220209\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class), 'create']);
     $services->set(\RectorPrefix20220209\Symplify\SmartFileSystem\Json\JsonFileSystem::class);
     $services->set(\PhpParser\NodeVisitor\NodeConnectingVisitor::class);
     $services->set(\RectorPrefix20220209\Doctrine\Inflector\Rules\English\InflectorFactory::class);

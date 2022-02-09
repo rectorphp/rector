@@ -7,9 +7,8 @@ use RectorPrefix20220209\Symfony\Component\Console\Application;
 use RectorPrefix20220209\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix20220209\Symfony\Component\Console\Output\ConsoleOutput;
 use RectorPrefix20220209\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220209\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20220209\Symplify\PackageBuilder\Reflection\PrivatesCaller;
-final class SymfonyStyleFactory
+final class RectorConsoleOutputStyleFactory
 {
     /**
      * @readonly
@@ -20,7 +19,7 @@ final class SymfonyStyleFactory
     {
         $this->privatesCaller = $privatesCaller;
     }
-    public function create() : \RectorPrefix20220209\Symfony\Component\Console\Style\SymfonyStyle
+    public function create() : \Rector\Core\Console\Style\RectorConsoleOutputStyle
     {
         $argvInput = new \RectorPrefix20220209\Symfony\Component\Console\Input\ArgvInput();
         $consoleOutput = new \RectorPrefix20220209\Symfony\Component\Console\Output\ConsoleOutput();
@@ -31,6 +30,6 @@ final class SymfonyStyleFactory
         if ($debugArgvInputParameterOption === null) {
             $consoleOutput->setVerbosity(\RectorPrefix20220209\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG);
         }
-        return new \RectorPrefix20220209\Symfony\Component\Console\Style\SymfonyStyle($argvInput, $consoleOutput);
+        return new \Rector\Core\Console\Style\RectorConsoleOutputStyle($argvInput, $consoleOutput);
     }
 }

@@ -64,6 +64,7 @@ return array(
     'RectorPrefix20220209\\Psr\\EventDispatcher\\' => array($vendorDir . '/psr/event-dispatcher/src'),
     'RectorPrefix20220209\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'RectorPrefix20220209\\Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
+    'RectorPrefix20220209\\OndraM\\CiDetector\\' => array($vendorDir . '/ondram/ci-detector/src'),
     'RectorPrefix20220209\\MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
     'RectorPrefix20220209\\Idiosyncratic\\EditorConfig\\' => array($vendorDir . '/idiosyncratic/editorconfig/src'),
     'RectorPrefix20220209\\Helmich\\TypoScriptParser\\' => array($vendorDir . '/helmich/typo3-typoscript-parser/src'),
