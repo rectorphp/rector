@@ -603,6 +603,3 @@ parameters:
         -
             message: '#Array with keys is not allowed\. Use value object to pass data instead#'
             path: packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php
-
-        # on purpose to fix tests + old PHP version parsing code and keep compatbility
-        - '#Extending PHPStan\\Parser\\PathRoutingParser is not covered by backward compatibility promise\. The class might change in a minor PHPStan version#'

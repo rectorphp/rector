@@ -1,0 +1,11 @@
+{
+    "require": {
+        "php": "7.4.*",
+        "api-platform/core": "^2.6",
+        "symfony/framework-bundle": "^5.4",
+        "symfony/http-client": "^5.4"
+    },
+    "require-dev": {
+        "rector/rector": "dev-main"
+    }
+}

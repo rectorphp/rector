@@ -10,27 +10,15 @@ services:
         arguments:
             originalParser: @rectorParser
             cachedNodesByStringCountMax: %cache.nodesByStringCountMax%
-        autowired: no
-
-    cachedRectorSimpleParser:
-        class: PHPStan\Parser\CachedParser
-        arguments:
-            originalParser: @rectorSimpleParser
-            cachedNodesByStringCountMax: %cache.nodesByStringCountMax%
-
-    rectorSimpleParser:
-        class: PHPStan\Parser\CleaningParser
-        arguments:
-            wrappedParser: @currentPhpVersionSimpleDirectParser
-        autowired: no
+        autowired: false
 
     pathRoutingParser:
-        class: Rector\Core\PhpParser\Parser\RectorPathRoutingParser
+        class: PHPStan\Parser\PathRoutingParser
         arguments:
             currentPhpVersionRichParser: @cachedRectorParser
-            currentPhpVersionSimpleParser: @cachedRectorSimpleParser
+            currentPhpVersionSimpleParser: @cachedRectorParser
             php8Parser: @php8Parser
-        autowired: no
+        autowired: false
 
     rectorParser:
         class: PHPStan\Parser\RichParser

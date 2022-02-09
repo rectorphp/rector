@@ -1,0 +1,44 @@
+# This workflow runs system tests: Use the Rector application from the source
+# checkout to process "fixture" projects in e2e/ directory
+# to see if those can be processed successfully
+name: End to End tests on PHP 7.4
+
+on:
+    pull_request:
+        branches:
+            - main
+    push:
+        branches:
+            - main
+
+env:
+    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+    COMPOSER_ROOT_VERSION: "dev-main"
+
+jobs:
+    end_to_end:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                directory:
+                    - 'e2e/php74-parse-static'
+
+        name: End to end test - ${{ matrix.directory }}
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.4
+                    coverage: none
+
+            # run in e2e subdir
+            -
+                run: composer install --ansi
+                working-directory: ${{ matrix.directory }}
+
+            # run e2e test - there should be no reports
+            -   run: vendor/bin/rector --ansi --dry-run
+                working-directory: ${{ matrix.directory }}

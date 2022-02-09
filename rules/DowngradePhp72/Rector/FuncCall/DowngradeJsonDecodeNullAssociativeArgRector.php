@@ -5,31 +5,25 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Expr\Ternary;
 use PHPStan\Type\BooleanType;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradeJsonDecodeNullAssociativeArgRector\DowngradeJsonDecodeNullAssociativeArgRectorTest
+ *
+ * @changelog https://3v4l.org/b1mA6
  */
 final class DowngradeJsonDecodeNullAssociativeArgRector extends AbstractRector
 {
     public function __construct(
         private readonly ArgsAnalyzer $argsAnalyzer,
-        private readonly IfManipulator $ifManipulator
     ) {
     }
 
@@ -38,8 +32,6 @@ final class DowngradeJsonDecodeNullAssociativeArgRector extends AbstractRector
         return new RuleDefinition('Downgrade json_decode() with null associative argument function', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-declare(strict_types=1);
-
 function exactlyNull(string $json)
 {
     $value = json_decode($json, null);
@@ -53,8 +45,6 @@ CODE_SAMPLE
 
                 ,
                 <<<'CODE_SAMPLE'
-declare(strict_types=1);
-
 function exactlyNull(string $json)
 {
     $value = json_decode($json, true);
@@ -62,10 +52,7 @@ function exactlyNull(string $json)
 
 function possiblyNull(string $json, ?bool $associative)
 {
-    if ($associative === null) {
-        $associative = true;
-    }
-    $value = json_decode($json, $associative);
+    $value = json_decode($json, $associative === null ?: $associative);
 }
 CODE_SAMPLE
             ),
@@ -100,35 +87,25 @@ CODE_SAMPLE
 
         $associativeValue = $args[1]->value;
 
-        if ($associativeValue instanceof Bool_) {
+        // already converted
+        if ($associativeValue instanceof Ternary && $associativeValue->if === null) {
             return null;
         }
 
-        $type = $this->nodeTypeResolver->getType($associativeValue);
-
-        if ($type instanceof BooleanType) {
+        $associativeValueType = $this->nodeTypeResolver->getType($associativeValue);
+        if ($associativeValueType instanceof BooleanType) {
             return null;
         }
 
         if ($associativeValue instanceof ConstFetch && $this->valueResolver->isNull($associativeValue)) {
-            $node->args[1]->value = $this->nodeFactory->createTrue();
+            $args[1]->value = $this->nodeFactory->createTrue();
             return $node;
         }
 
-        if (! in_array(
-            $associativeValue::class,
-            [Variable::class, PropertyFetch::class, StaticPropertyFetch::class],
-            true
-        )) {
-            return null;
-        }
-
-        $currentExpression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $if = $this->ifManipulator->createIfExpr(
-            new Identical($associativeValue, $this->nodeFactory->createNull()),
-            new Expression(new Assign($associativeValue, $this->nodeFactory->createTrue()))
-        );
-        $this->nodesToAddCollector->addNodeBeforeNode($if, $currentExpression);
+        // add conditional ternary
+        $nullIdentical = new Identical($associativeValue, $this->nodeFactory->createNull());
+        $ternary = new Ternary($nullIdentical, null, $associativeValue);
+        $args[1]->value = $ternary;
 
         return $node;
     }

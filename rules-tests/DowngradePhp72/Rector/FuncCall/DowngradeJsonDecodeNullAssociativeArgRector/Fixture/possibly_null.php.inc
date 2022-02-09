@@ -24,10 +24,7 @@ class PossiblyNull
 {
     function run(string $json, ?bool $associative)
     {
-        if ($associative === null) {
-            $associative = true;
-        }
-        $value = json_decode($json, $associative);
+        $value = json_decode($json, $associative === null ?: $associative);
     }
 }
 
