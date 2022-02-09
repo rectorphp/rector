@@ -17,7 +17,7 @@ $autoloadFile = $projectRoot . '/vendor/autoload.php';
 // so we can use helper classes here
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$e2eCommand = 'php '. $rectorBin .' process --dry-run --no-ansi --no-progress-bar -a '. $autoloadFile . ' --clear-cache';
+$e2eCommand = 'php '. $rectorBin .' process --dry-run --no-ansi -a '. $autoloadFile . ' --clear-cache';
 
 if (isset($argv[1]) && $argv[1] === '-c') {
     $e2eCommand .= ' -c ' . $argv[2];

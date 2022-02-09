@@ -28,6 +28,7 @@ use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache;
 use Rector\Caching\CacheFactory;
 use Rector\Core\Console\ConsoleApplication;
+use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
@@ -38,7 +39,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
-use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -61,6 +61,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->load('Rector\Core\\', __DIR__ . '/../src')
         ->exclude([
             __DIR__ . '/../src/Rector',
+            __DIR__ . '/../src/Console/Style/RectorConsoleOutputStyle.php',
             __DIR__ . '/../src/Exception',
             __DIR__ . '/../src/DependencyInjection/CompilerPass',
             __DIR__ . '/../src/DependencyInjection/Loader',
@@ -89,6 +90,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CloningVisitor::class);
     $services->set(NodeFinder::class);
 
+    $services->set(SymfonyStyle::class)
+        ->factory([service(RectorConsoleOutputStyleFactory::class), 'create']);
+
     $services->set(Parser::class)
         ->factory([service(PHPStanServicesFactory::class), 'createPHPStanParser']);
 
@@ -108,10 +112,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SmartFileSystem::class);
 
     $services->set(StringFormatConverter::class);
-
-    $services->set(SymfonyStyleFactory::class);
-    $services->set(SymfonyStyle::class)
-        ->factory([service(SymfonyStyleFactory::class), 'create']);
 
     $services->set(JsonFileSystem::class);
     $services->set(NodeConnectingVisitor::class);

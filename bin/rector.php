@@ -7,7 +7,7 @@ use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\ConsoleApplication;
-use Rector\Core\Console\Style\SymfonyStyleFactory;
+use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\Kernel\RectorKernel;
 use Symfony\Component\Console\Command\Command;
@@ -59,9 +59,9 @@ try {
         ]);
     } else {
         // report fatal errors in console format
-        $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
-        $symfonyStyle = $symfonyStyleFactory->create();
-        $symfonyStyle->error($throwable->getMessage());
+        $rectorConsoleOutputStyleFactory = new RectorConsoleOutputStyleFactory(new PrivatesCaller());
+        $rectorConsoleOutputStyle = $rectorConsoleOutputStyleFactory->create();
+        $rectorConsoleOutputStyle->error($throwable->getMessage());
     }
 
     exit(Command::FAILURE);

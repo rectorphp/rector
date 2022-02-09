@@ -8,17 +8,16 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
-final class SymfonyStyleFactory
+final class RectorConsoleOutputStyleFactory
 {
     public function __construct(
         private readonly PrivatesCaller $privatesCaller
     ) {
     }
 
-    public function create(): SymfonyStyle
+    public function create(): RectorConsoleOutputStyle
     {
         $argvInput = new ArgvInput();
         $consoleOutput = new ConsoleOutput();
@@ -32,6 +31,6 @@ final class SymfonyStyleFactory
             $consoleOutput->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
         }
 
-        return new SymfonyStyle($argvInput, $consoleOutput);
+        return new RectorConsoleOutputStyle($argvInput, $consoleOutput);
     }
 }

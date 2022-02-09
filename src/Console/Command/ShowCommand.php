@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Rector\Core\Contract\Console\OutputStyleInterface;
+use Rector\Core\Console\Output\RectorOutputStyle;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
@@ -19,7 +19,7 @@ final class ShowCommand extends Command
      * @param RectorInterface[] $rectors
      */
     public function __construct(
-        private readonly OutputStyleInterface $outputStyle,
+        private readonly RectorOutputStyle $rectorOutputStyle,
         private readonly array $rectors
     ) {
         parent::__construct();
@@ -33,7 +33,7 @@ final class ShowCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->outputStyle->title('Loaded Rector rules');
+        $this->rectorOutputStyle->title('Loaded Rector rules');
 
         $rectors = array_filter(
             $this->rectors,
@@ -54,20 +54,20 @@ final class ShowCommand extends Command
                 PHP_EOL . PHP_EOL,
                 PHP_EOL
             );
-            $this->outputStyle->warning($warningMessage);
+            $this->rectorOutputStyle->warning($warningMessage);
 
             return self::FAILURE;
         }
 
         $rectorCount = count($rectors);
         foreach ($rectors as $rector) {
-            $this->outputStyle->writeln(' * ' . $rector::class);
+            $this->rectorOutputStyle->writeln(' * ' . $rector::class);
         }
 
         $message = sprintf('%d loaded Rectors', $rectorCount);
-        $this->outputStyle->success($message);
+        $this->rectorOutputStyle->success($message);
 
-        $this->outputStyle->error(
+        $this->rectorOutputStyle->error(
             'The "show" command is deprecated and will be removed, as it was used only for more output on Rector run. Use the "--debug" option and process command for debugging output instead.'
         );
         // to spot the error message
