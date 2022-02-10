@@ -23,6 +23,10 @@ final class ObjectTypeAnalyzer
             : [$varType];
 
         foreach ($types as $type) {
+            if ($type instanceof \PHPStan\Type\MixedType) {
+                // mixed does not exists in PHP 7.4
+                return true;
+            }            
             if (! $type instanceof FullyQualifiedObjectType) {
                 continue;
             }
