@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\EditorConfig;
 
-use RectorPrefix20220209\Idiosyncratic\EditorConfig\Declaration\Declaration;
-use RectorPrefix20220209\Idiosyncratic\EditorConfig\EditorConfig;
+use RectorPrefix20220210\Idiosyncratic\EditorConfig\Declaration\Declaration;
+use RectorPrefix20220210\Idiosyncratic\EditorConfig\EditorConfig;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
 use Rector\FileFormatter\ValueObject\EditorConfigOption;
@@ -19,7 +19,7 @@ final class EditorConfigParser
      * @var \Idiosyncratic\EditorConfig\EditorConfig
      */
     private $editorConfig;
-    public function __construct(\RectorPrefix20220209\Idiosyncratic\EditorConfig\EditorConfig $editorConfig)
+    public function __construct(\RectorPrefix20220210\Idiosyncratic\EditorConfig\EditorConfig $editorConfig)
     {
         $this->editorConfig = $editorConfig;
     }
