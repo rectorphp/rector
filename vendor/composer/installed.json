@@ -2810,12 +2810,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "f23d5df8f92c62da6de2a0dfcac3e17c3e8a46fc"
+                "reference": "3eae0c32a6bfe51fc6279328026da521134ff3e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/f23d5df8f92c62da6de2a0dfcac3e17c3e8a46fc",
-                "reference": "f23d5df8f92c62da6de2a0dfcac3e17c3e8a46fc",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/3eae0c32a6bfe51fc6279328026da521134ff3e4",
+                "reference": "3eae0c32a6bfe51fc6279328026da521134ff3e4",
                 "shasum": ""
             },
             "require": {
@@ -2845,7 +2845,7 @@
                 "symplify\/vendor-patches": "^10.0",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-02-06T21:10:28+00:00",
+            "time": "2022-02-10T14:40:36+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2879,7 +2879,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.41"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/main"
             },
             "funding": [
                 {

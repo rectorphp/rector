@@ -25,7 +25,7 @@ Also have a look at the class [Typo3SetList](https://github.com/sabbelasichon/ty
 There you can find all the available sets you can configure in the configuration file.
 
 To mitigate one of the most boring but also most tedious tasks, the TCA configuration, we offer dedicated sets for it.
-Let´s say you want to migrate the TCA from a TYPO3 7 project to a TYPO3 9 project add the following sets to your configuration file:
+Let´s say you want to migrate the TCA from a TYPO3 7 project to the latest TYPO3 version 11 add the following sets to your configuration file:
 
 ```php
 <?php
