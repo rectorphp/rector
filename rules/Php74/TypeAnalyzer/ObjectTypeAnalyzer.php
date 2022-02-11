@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php74\TypeAnalyzer;
 
-use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -18,10 +17,6 @@ final class ObjectTypeAnalyzer
         }
         $types = $varType instanceof \PHPStan\Type\UnionType ? $varType->getTypes() : [$varType];
         foreach ($types as $type) {
-            if ($type instanceof \PHPStan\Type\MixedType) {
-                // mixed does not exists in PHP 7.4
-                return \true;
-            }
             if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
                 continue;
             }

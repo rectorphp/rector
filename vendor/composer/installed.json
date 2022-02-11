@@ -3150,12 +3150,12 @@
             },
             "installation-source": "dist",
             "autoload": {
-                "psr-4": {
-                    "RectorPrefix20220211\\Symfony\\Contracts\\": ""
-                },
                 "files": [
                     "Deprecation\/function.php"
                 ],
+                "psr-4": {
+                    "RectorPrefix20220211\\Symfony\\Contracts\\": ""
+                },
                 "exclude-from-classmap": [
                     "**\/Tests\/"
                 ]
