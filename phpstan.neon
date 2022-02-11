@@ -603,6 +603,3 @@ parameters:
         -
             message: '#Array with keys is not allowed\. Use value object to pass data instead#'
             path: packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php
-
-        # false positive
-        - '#Property Rector\\Core\\Tests\\Issues\\PhpTagsAddedToBlade\\PhpTagsAddedToBladeTest\:\:\$applicationFileProcessor \(Rector\\Core\\Application\\ApplicationFileProcessor\) does not accept T#'

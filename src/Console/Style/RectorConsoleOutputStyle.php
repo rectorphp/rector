@@ -49,6 +49,11 @@ final class RectorConsoleOutputStyle extends SymfonyStyle
 
     public function progressAdvance(int $step = 1): void
     {
+        // hide progress bar in tests
+        if (defined('PHPUNIT_COMPOSER_INSTALL')) {
+            return;
+        }
+
         $progressBar = $this->getProgressBar();
         $progressBar->advance($step);
     }
