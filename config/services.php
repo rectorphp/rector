@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Composer\Semver\VersionParser;
+
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
 use Ergebnis\Json\Printer\Printer;
@@ -28,13 +29,13 @@ use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache;
 use Rector\Caching\CacheFactory;
 use Rector\Core\Console\ConsoleApplication;
+use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -90,7 +91,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CloningVisitor::class);
     $services->set(NodeFinder::class);
 
-    $services->set(SymfonyStyle::class)
+    $services->set(RectorConsoleOutputStyle::class)
         ->factory([service(RectorConsoleOutputStyleFactory::class), 'create']);
 
     $services->set(Parser::class)

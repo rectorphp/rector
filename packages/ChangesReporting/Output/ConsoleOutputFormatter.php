@@ -27,7 +27,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private const ON_LINE_REGEX = '# on line #';
 
     public function __construct(
-        private readonly OutputStyleInterface $outputStyle,
+        private readonly OutputStyleInterface $rectorOutputStyle,
         private readonly RectorsChangelogResolver $rectorsChangelogResolver
     ) {
     }
@@ -47,11 +47,11 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
         // to keep space between progress bar and success message
         if ($configuration->shouldShowProgressBar() && $processResult->getFileDiffs() === []) {
-            $this->outputStyle->newline();
+            $this->rectorOutputStyle->newLine();
         }
 
         $message = $this->createSuccessMessage($processResult, $configuration);
-        $this->outputStyle->success($message);
+        $this->rectorOutputStyle->success($message);
     }
 
     public function getName(): string
@@ -72,7 +72,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         ksort($fileDiffs);
         $message = sprintf('%d file%s with changes', count($fileDiffs), count($fileDiffs) === 1 ? '' : 's');
 
-        $this->outputStyle->title($message);
+        $this->rectorOutputStyle->title($message);
 
         $i = 0;
         foreach ($fileDiffs as $fileDiff) {
@@ -86,16 +86,16 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
             $message = sprintf('<options=bold>%d) %s</>', ++$i, $relativeFilePath);
 
-            $this->outputStyle->writeln($message);
-            $this->outputStyle->newline();
-            $this->outputStyle->writeln($fileDiff->getDiffConsoleFormatted());
+            $this->rectorOutputStyle->writeln($message);
+            $this->rectorOutputStyle->newLine();
+            $this->rectorOutputStyle->writeln($fileDiff->getDiffConsoleFormatted());
 
             $rectorsChangelogsLines = $this->createRectorChangelogLines($fileDiff);
 
             if ($fileDiff->getRectorChanges() !== []) {
-                $this->outputStyle->writeln('<options=underscore>Applied rules:</>');
-                $this->outputStyle->listing($rectorsChangelogsLines);
-                $this->outputStyle->newline();
+                $this->rectorOutputStyle->writeln('<options=underscore>Applied rules:</>');
+                $this->rectorOutputStyle->listing($rectorsChangelogsLines);
+                $this->rectorOutputStyle->newLine();
             }
         }
     }
@@ -121,7 +121,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
                 $message .= ' On line: ' . $error->getLine();
             }
 
-            $this->outputStyle->error($message);
+            $this->rectorOutputStyle->error($message);
         }
     }
 
@@ -129,12 +129,12 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     {
         if ($processResult->getAddedFilesCount() !== 0) {
             $message = sprintf('%d files were added', $processResult->getAddedFilesCount());
-            $this->outputStyle->note($message);
+            $this->rectorOutputStyle->note($message);
         }
 
         if ($processResult->getRemovedFilesCount() !== 0) {
             $message = sprintf('%d files were removed', $processResult->getRemovedFilesCount());
-            $this->outputStyle->note($message);
+            $this->rectorOutputStyle->note($message);
         }
 
         $this->reportRemovedNodes($processResult);
@@ -154,7 +154,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         }
 
         $message = sprintf('%d nodes were removed', $processResult->getRemovedNodeCount());
-        $this->outputStyle->warning($message);
+        $this->rectorOutputStyle->warning($message);
     }
 
     private function createSuccessMessage(ProcessResult $processResult, Configuration $configuration): string

@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Rector\Core\Configuration;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\ValueObject\Configuration;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ConfigurationFactory
 {
     public function __construct(
         private readonly ParameterProvider $parameterProvider,
-        private readonly SymfonyStyle $symfonyStyle
+        private readonly OutputStyleInterface $rectorOutputStyle
     ) {
     }
 
@@ -74,7 +74,7 @@ final class ConfigurationFactory
             return false;
         }
 
-        if ($this->symfonyStyle->isVerbose()) {
+        if ($this->rectorOutputStyle->isVerbose()) {
             return false;
         }
 

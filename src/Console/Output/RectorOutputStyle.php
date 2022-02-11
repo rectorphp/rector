@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Output;
 
+use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Contract\Console\OutputStyleInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * This services helps to abstract from Symfony, and allow custom output formatters to use this Rector internal class.
@@ -14,43 +14,53 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorOutputStyle implements OutputStyleInterface
 {
     public function __construct(
-        private readonly SymfonyStyle $symfonyStyle
+        private readonly RectorConsoleOutputStyle $rectorConsoleOutputStyle
     ) {
+    }
+
+    public function progressStart(int $fileCount): void
+    {
+        $this->rectorConsoleOutputStyle->createProgressBar($fileCount);
+    }
+
+    public function progressAdvance(int $step = 1): void
+    {
+        $this->rectorConsoleOutputStyle->progressAdvance($step);
     }
 
     public function error(string $message): void
     {
-        $this->symfonyStyle->error($message);
+        $this->rectorConsoleOutputStyle->error($message);
     }
 
     public function warning(string $message): void
     {
-        $this->symfonyStyle->warning($message);
+        $this->rectorConsoleOutputStyle->warning($message);
     }
 
     public function success(string $message): void
     {
-        $this->symfonyStyle->success($message);
+        $this->rectorConsoleOutputStyle->success($message);
     }
 
     public function note(string $message): void
     {
-        $this->symfonyStyle->note($message);
+        $this->rectorConsoleOutputStyle->note($message);
     }
 
     public function title(string $message): void
     {
-        $this->symfonyStyle->title($message);
+        $this->rectorConsoleOutputStyle->title($message);
     }
 
     public function writeln(string $message): void
     {
-        $this->symfonyStyle->writeln($message);
+        $this->rectorConsoleOutputStyle->writeln($message);
     }
 
-    public function newline(int $count = 1): void
+    public function newLine(int $count = 1): void
     {
-        $this->symfonyStyle->newLine($count);
+        $this->rectorConsoleOutputStyle->newLine($count);
     }
 
     /**
@@ -58,6 +68,21 @@ final class RectorOutputStyle implements OutputStyleInterface
      */
     public function listing(array $elements): void
     {
-        $this->symfonyStyle->listing($elements);
+        $this->rectorConsoleOutputStyle->listing($elements);
+    }
+
+    public function isVerbose(): bool
+    {
+        return $this->rectorConsoleOutputStyle->isVerbose();
+    }
+
+    public function isDebug(): bool
+    {
+        return $this->rectorConsoleOutputStyle->isDebug();
+    }
+
+    public function setVerbosity(int $level): void
+    {
+        $this->rectorConsoleOutputStyle->setVerbosity($level);
     }
 }

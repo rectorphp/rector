@@ -22,6 +22,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
@@ -46,7 +47,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -103,7 +103,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
 
-    private SymfonyStyle $symfonyStyle;
+    private OutputStyleInterface $rectorOutputStyle;
 
     private ExclusionManager $exclusionManager;
 
@@ -142,7 +142,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeFactory $nodeFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        SymfonyStyle $symfonyStyle,
+        OutputStyleInterface $rectorOutputStyle,
         PhpVersionProvider $phpVersionProvider,
         ExclusionManager $exclusionManager,
         StaticTypeMapper $staticTypeMapper,
@@ -169,7 +169,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeFactory = $nodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorOutputStyle = $rectorOutputStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->exclusionManager = $exclusionManager;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -479,7 +479,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private function printDebugApplying(): void
     {
-        if (! $this->symfonyStyle->isDebug()) {
+        if (! $this->rectorOutputStyle->isDebug()) {
             return;
         }
 
@@ -489,7 +489,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // prevent spamming with the same class over and over
         // indented on purpose to improve log nesting under [refactoring]
-        $this->symfonyStyle->writeln('    [applying] ' . static::class);
+        $this->rectorOutputStyle->writeln('    [applying] ' . static::class);
         $this->previousAppliedClass = static::class;
     }
 

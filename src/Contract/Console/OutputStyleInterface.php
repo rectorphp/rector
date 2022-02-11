@@ -18,10 +18,20 @@ interface OutputStyleInterface
 
     public function writeln(string $message): void;
 
-    public function newline(int $count = 1): void;
+    public function newLine(int $count = 1): void;
 
     /**
      * @param string[] $elements
      */
     public function listing(array $elements): void;
+
+    public function isVerbose(): bool;
+
+    public function isDebug(): bool;
+
+    public function setVerbosity(int $level): void;
+
+    public function progressStart(int $fileCount): void;
+
+    public function progressAdvance(int $step = 1): void;
 }

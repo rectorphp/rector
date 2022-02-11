@@ -6,6 +6,7 @@ namespace Rector\Core\Console\Command;
 
 use Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Template\TemplateResolverInterface;
 use Rector\Core\Exception\Template\TemplateTypeNotFoundException;
 use Rector\Core\Php\PhpVersionProvider;
@@ -15,7 +16,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\FileSystemGuard;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -27,7 +27,7 @@ final class InitCommand extends Command
     public function __construct(
         private readonly FileSystemGuard $fileSystemGuard,
         private readonly SmartFileSystem $smartFileSystem,
-        private readonly SymfonyStyle $symfonyStyle,
+        private readonly OutputStyleInterface $rectorOutputStyle,
         private readonly array $templateResolvers,
         private readonly PhpVersionProvider $phpVersionProvider
     ) {
@@ -59,7 +59,7 @@ final class InitCommand extends Command
 
         $doesFileExist = $this->smartFileSystem->exists($rectorRootFilePath);
         if ($doesFileExist) {
-            $this->symfonyStyle->warning('Config file "rector.php" already exists');
+            $this->rectorOutputStyle->warning('Config file "rector.php" already exists');
         } else {
             $this->smartFileSystem->copy($rectorTemplateFilePath, $rectorRootFilePath);
 
@@ -74,7 +74,7 @@ final class InitCommand extends Command
             );
             $this->smartFileSystem->dumpFile($rectorRootFilePath, $fileContent);
 
-            $this->symfonyStyle->success('"rector.php" config file was added');
+            $this->rectorOutputStyle->success('"rector.php" config file was added');
         }
 
         return Command::SUCCESS;

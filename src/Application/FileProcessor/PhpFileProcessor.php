@@ -9,6 +9,7 @@ use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Enum\ApplicationPhase;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -21,7 +22,6 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
 final class PhpFileProcessor implements FileProcessorInterface
@@ -30,7 +30,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         private readonly FormatPerservingPrinter $formatPerservingPrinter,
         private readonly FileProcessor $fileProcessor,
         private readonly RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        private readonly SymfonyStyle $symfonyStyle,
+        private readonly OutputStyleInterface $rectorOutputStyle,
         private readonly FileDiffFileDecorator $fileDiffFileDecorator,
         private readonly CurrentFileProvider $currentFileProvider,
         private readonly PostFileProcessor $postFileProcessor,
@@ -133,7 +133,7 @@ final class PhpFileProcessor implements FileProcessorInterface
             );
             return [$autoloadSystemError];
         } catch (Throwable $throwable) {
-            if ($this->symfonyStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            if ($this->rectorOutputStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
 
@@ -167,13 +167,13 @@ final class PhpFileProcessor implements FileProcessorInterface
 
     private function notifyPhase(File $file, ApplicationPhase $applicationPhase): void
     {
-        if (! $this->symfonyStyle->isVerbose()) {
+        if (! $this->rectorOutputStyle->isVerbose()) {
             return;
         }
 
         $smartFileInfo = $file->getSmartFileInfo();
         $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
         $message = sprintf('[%s] %s', $applicationPhase, $relativeFilePath);
-        $this->symfonyStyle->writeln($message);
+        $this->rectorOutputStyle->writeln($message);
     }
 }
