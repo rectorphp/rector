@@ -26,15 +26,15 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
      * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
-    private $outputStyle;
+    private $rectorOutputStyle;
     /**
      * @readonly
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
-    public function __construct(\Rector\Core\Contract\Console\OutputStyleInterface $outputStyle, \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
+    public function __construct(\Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
     {
-        $this->outputStyle = $outputStyle;
+        $this->rectorOutputStyle = $rectorOutputStyle;
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
     public function report(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : void
@@ -49,10 +49,10 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
         }
         // to keep space between progress bar and success message
         if ($configuration->shouldShowProgressBar() && $processResult->getFileDiffs() === []) {
-            $this->outputStyle->newline();
+            $this->rectorOutputStyle->newLine();
         }
         $message = $this->createSuccessMessage($processResult, $configuration);
-        $this->outputStyle->success($message);
+        $this->rectorOutputStyle->success($message);
     }
     public function getName() : string
     {
@@ -69,7 +69,7 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
         // normalize
         \ksort($fileDiffs);
         $message = \sprintf('%d file%s with changes', \count($fileDiffs), \count($fileDiffs) === 1 ? '' : 's');
-        $this->outputStyle->title($message);
+        $this->rectorOutputStyle->title($message);
         $i = 0;
         foreach ($fileDiffs as $fileDiff) {
             $relativeFilePath = $fileDiff->getRelativeFilePath();
@@ -79,14 +79,14 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
                 $relativeFilePath .= ':' . $firstLineNumber;
             }
             $message = \sprintf('<options=bold>%d) %s</>', ++$i, $relativeFilePath);
-            $this->outputStyle->writeln($message);
-            $this->outputStyle->newline();
-            $this->outputStyle->writeln($fileDiff->getDiffConsoleFormatted());
+            $this->rectorOutputStyle->writeln($message);
+            $this->rectorOutputStyle->newLine();
+            $this->rectorOutputStyle->writeln($fileDiff->getDiffConsoleFormatted());
             $rectorsChangelogsLines = $this->createRectorChangelogLines($fileDiff);
             if ($fileDiff->getRectorChanges() !== []) {
-                $this->outputStyle->writeln('<options=underscore>Applied rules:</>');
-                $this->outputStyle->listing($rectorsChangelogsLines);
-                $this->outputStyle->newline();
+                $this->rectorOutputStyle->writeln('<options=underscore>Applied rules:</>');
+                $this->rectorOutputStyle->listing($rectorsChangelogsLines);
+                $this->rectorOutputStyle->newLine();
             }
         }
     }
@@ -102,18 +102,18 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
             if ($error->getLine() !== null) {
                 $message .= ' On line: ' . $error->getLine();
             }
-            $this->outputStyle->error($message);
+            $this->rectorOutputStyle->error($message);
         }
     }
     private function reportRemovedFilesAndNodes(\Rector\Core\ValueObject\ProcessResult $processResult) : void
     {
         if ($processResult->getAddedFilesCount() !== 0) {
             $message = \sprintf('%d files were added', $processResult->getAddedFilesCount());
-            $this->outputStyle->note($message);
+            $this->rectorOutputStyle->note($message);
         }
         if ($processResult->getRemovedFilesCount() !== 0) {
             $message = \sprintf('%d files were removed', $processResult->getRemovedFilesCount());
-            $this->outputStyle->note($message);
+            $this->rectorOutputStyle->note($message);
         }
         $this->reportRemovedNodes($processResult);
     }
@@ -129,7 +129,7 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
             return;
         }
         $message = \sprintf('%d nodes were removed', $processResult->getRemovedNodeCount());
-        $this->outputStyle->warning($message);
+        $this->rectorOutputStyle->warning($message);
     }
     private function createSuccessMessage(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : string
     {

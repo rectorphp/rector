@@ -5,10 +5,10 @@ namespace Rector\VersionBonding\Application;
 
 use RectorPrefix20220211\Nette\Utils\Strings;
 use PHPStan\Php\PhpVersion;
+use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle;
 final class MissedRectorDueVersionChecker
 {
     /**
@@ -18,13 +18,13 @@ final class MissedRectorDueVersionChecker
     private $phpVersionProvider;
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
-    private $symfonyStyle;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    private $rectorOutputStyle;
+    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle)
     {
         $this->phpVersionProvider = $phpVersionProvider;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorOutputStyle = $rectorOutputStyle;
     }
     /**
      * @param RectorInterface[] $rectors
@@ -39,7 +39,7 @@ final class MissedRectorDueVersionChecker
         $this->reportWarningMessage($minProjectPhpVersion, $missedRectors);
         $this->reportMissedRectors($missedRectors);
         $solutionMessage = \sprintf('Do you want to run them? Make "require" > "php" in `composer.json` higher,%sor add "Option::PHP_VERSION_FEATURES" parameter to your `rector.php`.', \PHP_EOL);
-        $this->symfonyStyle->note($solutionMessage);
+        $this->rectorOutputStyle->note($solutionMessage);
     }
     /**
      * @param RectorInterface[] $rectors
@@ -65,14 +65,14 @@ final class MissedRectorDueVersionChecker
      */
     private function reportMissedRectors(array $minPhpVersions) : void
     {
-        if (!$this->symfonyStyle->isVerbose()) {
+        if (!$this->rectorOutputStyle->isVerbose()) {
             return;
         }
         foreach ($minPhpVersions as $minPhpVersion) {
             $phpVersion = new \PHPStan\Php\PhpVersion($minPhpVersion->provideMinPhpVersion());
             $shortRectorClass = \RectorPrefix20220211\Nette\Utils\Strings::after(\get_class($minPhpVersion), '\\', -1);
             $rectorMessage = \sprintf(' * [%s] %s', $phpVersion->getVersionString(), $shortRectorClass);
-            $this->symfonyStyle->writeln($rectorMessage);
+            $this->rectorOutputStyle->writeln($rectorMessage);
         }
     }
     /**
@@ -82,6 +82,6 @@ final class MissedRectorDueVersionChecker
     {
         $phpVersion = new \PHPStan\Php\PhpVersion($minProjectPhpVersion);
         $warningMessage = \sprintf('Your project requires min PHP version "%s". %s%d Rector rules defined in your configuration require higher PHP version and will not run,%sto avoid breaking your codebase, use -vvv for detailed info.', $phpVersion->getVersionString(), \PHP_EOL . \PHP_EOL, \count($missedRectors), \PHP_EOL);
-        $this->symfonyStyle->warning($warningMessage);
+        $this->rectorOutputStyle->warning($warningMessage);
     }
 }

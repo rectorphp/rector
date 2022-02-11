@@ -5,6 +5,7 @@ namespace Rector\Core\Console\Command;
 
 use RectorPrefix20220211\Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Template\TemplateResolverInterface;
 use Rector\Core\Exception\Template\TemplateTypeNotFoundException;
 use Rector\Core\Php\PhpVersionProvider;
@@ -14,7 +15,6 @@ use RectorPrefix20220211\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220211\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220211\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20220211\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20220211\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix20220211\Symplify\SmartFileSystem\SmartFileSystem;
 final class InitCommand extends \RectorPrefix20220211\Symfony\Component\Console\Command\Command
@@ -31,9 +31,9 @@ final class InitCommand extends \RectorPrefix20220211\Symfony\Component\Console\
     private $smartFileSystem;
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
-    private $symfonyStyle;
+    private $rectorOutputStyle;
     /**
      * @var TemplateResolverInterface[]
      * @readonly
@@ -47,11 +47,11 @@ final class InitCommand extends \RectorPrefix20220211\Symfony\Component\Console\
     /**
      * @param TemplateResolverInterface[] $templateResolvers
      */
-    public function __construct(\RectorPrefix20220211\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20220211\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $templateResolvers, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(\RectorPrefix20220211\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20220211\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, array $templateResolvers, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->fileSystemGuard = $fileSystemGuard;
         $this->smartFileSystem = $smartFileSystem;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorOutputStyle = $rectorOutputStyle;
         $this->templateResolvers = $templateResolvers;
         $this->phpVersionProvider = $phpVersionProvider;
         parent::__construct();
@@ -69,7 +69,7 @@ final class InitCommand extends \RectorPrefix20220211\Symfony\Component\Console\
         $rectorRootFilePath = \getcwd() . '/rector.php';
         $doesFileExist = $this->smartFileSystem->exists($rectorRootFilePath);
         if ($doesFileExist) {
-            $this->symfonyStyle->warning('Config file "rector.php" already exists');
+            $this->rectorOutputStyle->warning('Config file "rector.php" already exists');
         } else {
             $this->smartFileSystem->copy($rectorTemplateFilePath, $rectorRootFilePath);
             $fullPHPVersion = (string) $this->phpVersionProvider->provide();
@@ -77,7 +77,7 @@ final class InitCommand extends \RectorPrefix20220211\Symfony\Component\Console\
             $fileContent = $this->smartFileSystem->readFile($rectorRootFilePath);
             $fileContent = \str_replace('LevelSetList::UP_TO_PHP_XY', \sprintf('LevelSetList::UP_TO_PHP_%d', $phpVersion), $fileContent);
             $this->smartFileSystem->dumpFile($rectorRootFilePath, $fileContent);
-            $this->symfonyStyle->success('"rector.php" config file was added');
+            $this->rectorOutputStyle->success('"rector.php" config file was added');
         }
         return \RectorPrefix20220211\Symfony\Component\Console\Command\Command::SUCCESS;
     }

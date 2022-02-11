@@ -4,10 +4,15 @@ declare (strict_types=1);
 namespace Rector\Core\Console\Style;
 
 use RectorPrefix20220211\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220211\Symfony\Component\Console\Exception\RuntimeException;
 use RectorPrefix20220211\Symfony\Component\Console\Helper\ProgressBar;
 use RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorConsoleOutputStyle extends \RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle
 {
+    /**
+     * @var mixed|ProgressBar
+     */
+    public $progressBar;
     /**
      * @var bool|null
      */
@@ -25,13 +30,21 @@ final class RectorConsoleOutputStyle extends \RectorPrefix20220211\Symfony\Compo
             $progressBar->minSecondsBetweenRedraws(15);
             $progressBar->maxSecondsBetweenRedraws(30);
         } elseif (\DIRECTORY_SEPARATOR === '\\') {
+            // windows
             $progressBar->minSecondsBetweenRedraws(0.5);
             $progressBar->maxSecondsBetweenRedraws(2);
         } else {
+            // *nix
             $progressBar->minSecondsBetweenRedraws(0.1);
             $progressBar->maxSecondsBetweenRedraws(0.5);
         }
+        $this->progressBar = $progressBar;
         return $progressBar;
+    }
+    public function progressAdvance(int $step = 1) : void
+    {
+        $progressBar = $this->getProgressBar();
+        $progressBar->advance($step);
     }
     private function isCiDetected() : bool
     {
@@ -40,5 +53,12 @@ final class RectorConsoleOutputStyle extends \RectorPrefix20220211\Symfony\Compo
             $this->isCiDetected = $ciDetector->isCiDetected();
         }
         return $this->isCiDetected;
+    }
+    private function getProgressBar() : \RectorPrefix20220211\Symfony\Component\Console\Helper\ProgressBar
+    {
+        if (!isset($this->progressBar)) {
+            throw new \RectorPrefix20220211\Symfony\Component\Console\Exception\RuntimeException('The ProgressBar is not started.');
+        }
+        return $this->progressBar;
     }
 }

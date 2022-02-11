@@ -7,6 +7,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
@@ -17,7 +18,6 @@ use Rector\FileFormatter\FileFormatter;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Parallel\ValueObject\Bridge;
 use RectorPrefix20220211\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20220211\Symplify\EasyParallel\CpuCoreCountProvider;
 use RectorPrefix20220211\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use RectorPrefix20220211\Symplify\EasyParallel\FileSystem\FilePathNormalizer;
@@ -59,9 +59,9 @@ final class ApplicationFileProcessor
     private $removedAndAddedFilesProcessor;
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
-    private $symfonyStyle;
+    private $rectorOutputStyle;
     /**
      * @readonly
      * @var \Rector\Core\ValueObjectFactory\Application\FileFactory
@@ -110,13 +110,13 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\RectorPrefix20220211\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \RectorPrefix20220211\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, \Rector\Parallel\Application\ParallelFileProcessor $parallelFileProcessor, \RectorPrefix20220211\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220211\Symplify\EasyParallel\ScheduleFactory $scheduleFactory, \RectorPrefix20220211\Symplify\EasyParallel\FileSystem\FilePathNormalizer $filePathNormalizer, \RectorPrefix20220211\Symplify\EasyParallel\CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
+    public function __construct(\RectorPrefix20220211\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \RectorPrefix20220211\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, \Rector\Parallel\Application\ParallelFileProcessor $parallelFileProcessor, \RectorPrefix20220211\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220211\Symplify\EasyParallel\ScheduleFactory $scheduleFactory, \RectorPrefix20220211\Symplify\EasyParallel\FileSystem\FilePathNormalizer $filePathNormalizer, \RectorPrefix20220211\Symplify\EasyParallel\CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->fileFormatter = $fileFormatter;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorOutputStyle = $rectorOutputStyle;
         $this->fileFactory = $fileFactory;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->parametersMerger = $parametersMerger;
@@ -164,7 +164,7 @@ final class ApplicationFileProcessor
     {
         if ($configuration->shouldShowProgressBar()) {
             $fileCount = \count($files);
-            $this->symfonyStyle->progressStart($fileCount);
+            $this->rectorOutputStyle->progressStart($fileCount);
         }
         $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
         foreach ($files as $file) {
@@ -177,7 +177,7 @@ final class ApplicationFileProcessor
             }
             // progress bar +1
             if ($configuration->shouldShowProgressBar()) {
-                $this->symfonyStyle->progressAdvance();
+                $this->rectorOutputStyle->progressAdvance();
             }
         }
         $this->removedAndAddedFilesProcessor->run($configuration);
@@ -244,10 +244,10 @@ final class ApplicationFileProcessor
             }
             if (!$isProgressBarStarted) {
                 $fileCount = \count($filePaths);
-                $this->symfonyStyle->progressStart($fileCount);
+                $this->rectorOutputStyle->progressStart($fileCount);
                 $isProgressBarStarted = \true;
             }
-            $this->symfonyStyle->progressAdvance($stepCount);
+            $this->rectorOutputStyle->progressAdvance($stepCount);
             // running in parallel here → nothing else to do
         };
         $mainScript = $this->resolveCalledRectorBinary();

@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\ValueObject\Configuration;
 use RectorPrefix20220211\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20220211\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ConfigurationFactory
 {
@@ -17,13 +17,13 @@ final class ConfigurationFactory
     private $parameterProvider;
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
-    private $symfonyStyle;
-    public function __construct(\RectorPrefix20220211\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    private $rectorOutputStyle;
+    public function __construct(\RectorPrefix20220211\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle)
     {
         $this->parameterProvider = $parameterProvider;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorOutputStyle = $rectorOutputStyle;
     }
     /**
      * @param string[] $paths
@@ -58,7 +58,7 @@ final class ConfigurationFactory
         if ($noProgressBar) {
             return \false;
         }
-        if ($this->symfonyStyle->isVerbose()) {
+        if ($this->rectorOutputStyle->isVerbose()) {
             return \false;
         }
         return $outputFormat === \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;

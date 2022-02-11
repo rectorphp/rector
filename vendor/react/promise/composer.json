@@ -5,14 +5,30 @@
     "authors": [
         {
             "name": "Jan Sorgalla",
+            "homepage": "https:\/\/sorgalla.com\/",
             "email": "jsorgalla@gmail.com"
+        },
+        {
+            "name": "Christian L\u00fcck",
+            "homepage": "https:\/\/clue.engineering\/",
+            "email": "christian@clue.engineering"
+        },
+        {
+            "name": "Cees-Jan Kiewiet",
+            "homepage": "https:\/\/wyrihaximus.net\/",
+            "email": "reactphp@ceesjankiewiet.nl"
+        },
+        {
+            "name": "Chris Boden",
+            "homepage": "https:\/\/cboden.dev\/",
+            "email": "cboden@gmail.com"
         }
     ],
     "require": {
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "phpunit\/phpunit": "^7.0 || ^6.5 || ^5.7 || ^4.8.36"
+        "phpunit\/phpunit": "^9.3 || ^5.7 || ^4.8.36"
     },
     "autoload": {
         "psr-4": {

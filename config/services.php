@@ -29,13 +29,13 @@ use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache;
 use Rector\Caching\CacheFactory;
 use Rector\Core\Console\ConsoleApplication;
+use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use RectorPrefix20220211\Symfony\Component\Console\Application;
-use RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function RectorPrefix20220211\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use RectorPrefix20220211\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -62,7 +62,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\PhpParser\BuilderFactory::class);
     $services->set(\PhpParser\NodeVisitor\CloningVisitor::class);
     $services->set(\PhpParser\NodeFinder::class);
-    $services->set(\RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle::class)->factory([\RectorPrefix20220211\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\Core\Console\Style\RectorConsoleOutputStyleFactory::class), 'create']);
+    $services->set(\Rector\Core\Console\Style\RectorConsoleOutputStyle::class)->factory([\RectorPrefix20220211\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\Core\Console\Style\RectorConsoleOutputStyleFactory::class), 'create']);
     $services->set(\PHPStan\Parser\Parser::class)->factory([\RectorPrefix20220211\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createPHPStanParser']);
     $services->set(\PhpParser\Lexer::class)->factory([\RectorPrefix20220211\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createEmulativeLexer']);
     // symplify/package-builder

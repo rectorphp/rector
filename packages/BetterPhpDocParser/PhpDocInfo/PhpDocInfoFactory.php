@@ -134,8 +134,8 @@ final class PhpDocInfoFactory
             return;
         }
         $phpDocChildNodes = $phpDocNode->children;
-        $lastChildNode = \array_pop($phpDocChildNodes);
-        $startAndEnd = $lastChildNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
+        $phpDocChildNode = \array_pop($phpDocChildNodes);
+        $startAndEnd = $phpDocChildNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
         if ($startAndEnd instanceof \Rector\BetterPhpDocParser\ValueObject\StartAndEnd) {
             $phpDocNode->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION, $startAndEnd->getEnd());
         }

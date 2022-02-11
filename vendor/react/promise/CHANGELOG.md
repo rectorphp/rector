@@ -1,6 +1,30 @@
 CHANGELOG for 2.x
 =================
 
+* 2.9.0 (2022-02-11)
+
+    *   Feature: Support union types and address deprecation of `ReflectionType::getClass()` (PHP 8+).
+        (#198 by @cdosoftei and @SimonFrings)
+
+        ```php
+        $promise->otherwise(function (OverflowException|UnderflowException $e) {
+            echo 'Error: ' . $e->getMessage() . PHP_EOL;
+        });
+        ```
+
+    *   Feature: Support intersection types (PHP 8.1+).
+        (#195 by @bzikarsky)
+
+        ```php
+        $promise->otherwise(function (OverflowException&CacheException $e) {
+            echo 'Error: ' . $e->getMessage() . PHP_EOL;
+        });
+        ```
+
+    *   Improve test suite, use GitHub actions for continuous integration (CI),
+        update to PHPUnit 9, and add full core team to the license.
+        (#174, #183, #186, and #201 by @SimonFrings and #211 by @clue)
+
 * 2.8.0 (2020-05-12)
 
     *   Mark `FulfilledPromise`, `RejectedPromise` and `LazyPromise` as deprecated for Promise v2 (and remove for Promise v3).

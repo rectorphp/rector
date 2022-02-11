@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Core\Reporting;
 
+use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix20220211\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle;
 final class MissingRectorRulesReporter
 {
     /**
@@ -17,16 +17,16 @@ final class MissingRectorRulesReporter
     private $rectors;
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
-    private $symfonyStyle;
+    private $rectorOutputStyle;
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, \RectorPrefix20220211\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(array $rectors, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle)
     {
         $this->rectors = $rectors;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorOutputStyle = $rectorOutputStyle;
     }
     public function reportIfMissing() : ?int
     {
@@ -44,16 +44,16 @@ final class MissingRectorRulesReporter
     }
     public function report() : void
     {
-        $this->symfonyStyle->warning('We could not find any Rector rules to run. You have 2 options to add them:');
-        $this->symfonyStyle->title('1. Add single rule to "rector.php"');
-        $this->symfonyStyle->writeln('  $services = $containerConfigurator->services();');
-        $this->symfonyStyle->writeln('  $services->set(...);');
-        $this->symfonyStyle->newLine(1);
-        $this->symfonyStyle->title('2. Add set of rules to "rector.php"');
-        $this->symfonyStyle->writeln('  $containerConfigurator->import(SetList::...);');
-        $this->symfonyStyle->newLine(1);
-        $this->symfonyStyle->title('Missing "rector.php" in your project? Let Rector create it for you');
-        $this->symfonyStyle->writeln('  vendor/bin/rector init');
-        $this->symfonyStyle->newLine();
+        $this->rectorOutputStyle->warning('We could not find any Rector rules to run. You have 2 options to add them:');
+        $this->rectorOutputStyle->title('1. Add single rule to "rector.php"');
+        $this->rectorOutputStyle->writeln('  $services = $containerConfigurator->services();');
+        $this->rectorOutputStyle->writeln('  $services->set(...);');
+        $this->rectorOutputStyle->newLine(1);
+        $this->rectorOutputStyle->title('2. Add set of rules to "rector.php"');
+        $this->rectorOutputStyle->writeln('  $containerConfigurator->import(SetList::...);');
+        $this->rectorOutputStyle->newLine(1);
+        $this->rectorOutputStyle->title('Missing "rector.php" in your project? Let Rector create it for you');
+        $this->rectorOutputStyle->writeln('  vendor/bin/rector init');
+        $this->rectorOutputStyle->newLine();
     }
 }
