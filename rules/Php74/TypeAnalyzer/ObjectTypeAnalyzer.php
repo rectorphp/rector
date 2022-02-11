@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php74\TypeAnalyzer;
 
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;

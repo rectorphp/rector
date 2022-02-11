@@ -34,7 +34,7 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-use RectorPrefix20220210\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220211\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<UnionType>
  */
@@ -248,14 +248,22 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
             if ($unionedType instanceof \PHPStan\Type\VoidType) {
                 return null;
             }
-            /** @var Identifier|Name|null $phpParserNode */
-            $phpParserNode = $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionedType, $typeKind);
+            /**
+             * NullType inside UnionType is allowed
+             * make it on TypeKind property as changing other type, eg: return type may conflict with parent child implementation
+             *
+             * @var Identifier|Name|null $phpParserNode
+             */
+            $phpParserNode = $unionedType instanceof \PHPStan\Type\NullType && $typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY()) ? new \PhpParser\Node\Name('null') : $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionedType, $typeKind);
             if ($phpParserNode === null) {
                 return null;
             }
             $phpParserUnionedTypes[] = $phpParserNode;
         }
         $phpParserUnionedTypes = \array_unique($phpParserUnionedTypes);
+        if (\count($phpParserUnionedTypes) < 2) {
+            return null;
+        }
         return new \PhpParser\Node\UnionType($phpParserUnionedTypes);
     }
     /**
