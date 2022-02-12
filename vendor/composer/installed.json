@@ -3723,12 +3723,12 @@
             },
             "installation-source": "dist",
             "autoload": {
-                "psr-4": {
-                    "RectorPrefix20220212\\Symfony\\Polyfill\\Mbstring\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "RectorPrefix20220212\\Symfony\\Polyfill\\Mbstring\\": ""
+                }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
             "license": [

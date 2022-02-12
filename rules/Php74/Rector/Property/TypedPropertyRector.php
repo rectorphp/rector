@@ -121,19 +121,23 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes property `@var` annotations from annotation to type.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes property type by `@var` annotations or default value.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
      * @var int
      */
     private $count;
+
+    private $isDone = false;
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private int $count;
+
+    private bool $isDone = false;
 }
 CODE_SAMPLE
 , [self::INLINE_PUBLIC => \false])]);
