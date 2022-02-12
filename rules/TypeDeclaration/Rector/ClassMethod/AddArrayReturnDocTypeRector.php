@@ -210,7 +210,7 @@ CODE_SAMPLE
         if ($classMethod->returnType === null) {
             return \false;
         }
-        return !$this->isNames($classMethod->returnType, ['array', 'iterable', 'Iterator']);
+        return !$this->isNames($classMethod->returnType, ['array', 'iterable', 'Iterator', 'Generator']);
     }
     private function hasArrayShapeNode(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {

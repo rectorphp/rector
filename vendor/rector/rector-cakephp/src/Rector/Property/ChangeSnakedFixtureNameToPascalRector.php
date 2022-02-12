@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220211\Symfony\Component\String\UnicodeString;
+use RectorPrefix20220212\Symfony\Component\String\UnicodeString;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -89,7 +89,7 @@ CODE_SAMPLE
         [$prefix, $table] = \explode('.', $string->value);
         $tableParts = \explode('/', $table);
         $pascalCaseTableParts = \array_map(function (string $token) : string {
-            $tokenUnicodeString = new \RectorPrefix20220211\Symfony\Component\String\UnicodeString($token);
+            $tokenUnicodeString = new \RectorPrefix20220212\Symfony\Component\String\UnicodeString($token);
             return \ucfirst($tokenUnicodeString->camel()->toString());
         }, $tableParts);
         $table = \implode('/', $pascalCaseTableParts);

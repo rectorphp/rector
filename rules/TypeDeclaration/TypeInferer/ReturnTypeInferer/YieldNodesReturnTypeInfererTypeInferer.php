@@ -8,15 +8,17 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Name;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use RectorPrefix20220211\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220212\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class YieldNodesReturnTypeInfererTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
 {
     /**
@@ -34,11 +36,17 @@ final class YieldNodesReturnTypeInfererTypeInferer implements \Rector\TypeDeclar
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \RectorPrefix20220211\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    /**
+     * @readonly
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \RectorPrefix20220212\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
@@ -58,11 +66,16 @@ final class YieldNodesReturnTypeInfererTypeInferer implements \Rector\TypeDeclar
             }
             $types[] = $resolvedType;
         }
+        $returnType = $functionLike->getReturnType();
+        $className = 'Generator';
+        if ($returnType instanceof \PhpParser\Node\Name && !$this->nodeNameResolver->isName($returnType, 'Generator')) {
+            $className = $this->nodeNameResolver->getName($returnType);
+        }
         if ($types === []) {
-            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType('Iterator');
+            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
         }
         $types = $this->typeFactory->createMixedPassedOrUnionType($types);
-        return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType('Iterator', [$types]);
+        return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType($className, [$types]);
     }
     public function getPriority() : int
     {

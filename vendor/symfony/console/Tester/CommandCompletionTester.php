@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220211\Symfony\Component\Console\Tester;
+namespace RectorPrefix20220212\Symfony\Component\Console\Tester;
 
-use RectorPrefix20220211\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220211\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix20220211\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix20220212\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220212\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix20220212\Symfony\Component\Console\Completion\CompletionSuggestions;
 /**
  * Eases the testing of command completion.
  *
@@ -21,7 +21,7 @@ use RectorPrefix20220211\Symfony\Component\Console\Completion\CompletionSuggesti
 class CommandCompletionTester
 {
     private $command;
-    public function __construct(\RectorPrefix20220211\Symfony\Component\Console\Command\Command $command)
+    public function __construct(\RectorPrefix20220212\Symfony\Component\Console\Command\Command $command)
     {
         $this->command = $command;
     }
@@ -35,9 +35,9 @@ class CommandCompletionTester
             \array_pop($input);
         }
         \array_unshift($input, $this->command->getName());
-        $completionInput = \RectorPrefix20220211\Symfony\Component\Console\Completion\CompletionInput::fromTokens($input, $currentIndex);
+        $completionInput = \RectorPrefix20220212\Symfony\Component\Console\Completion\CompletionInput::fromTokens($input, $currentIndex);
         $completionInput->bind($this->command->getDefinition());
-        $suggestions = new \RectorPrefix20220211\Symfony\Component\Console\Completion\CompletionSuggestions();
+        $suggestions = new \RectorPrefix20220212\Symfony\Component\Console\Completion\CompletionSuggestions();
         $this->command->complete($completionInput, $suggestions);
         $options = [];
         foreach ($suggestions->getOptionSuggestions() as $option) {
