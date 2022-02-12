@@ -214,7 +214,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return ! $this->isNames($classMethod->returnType, ['array', 'iterable', 'Iterator']);
+        return ! $this->isNames($classMethod->returnType, ['array', 'iterable', 'Iterator', 'Generator']);
     }
 
     private function hasArrayShapeNode(ClassMethod $classMethod): bool

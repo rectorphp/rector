@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-final class ReturnYieldIterator
+final class ReturnYieldGenerator
 {
     public function someMethod()
     {
@@ -16,10 +16,10 @@ final class ReturnYieldIterator
 
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-final class ReturnYieldIterator
+final class ReturnYieldGenerator
 {
     /**
-     * @return \Iterator<string[]>
+     * @return \Generator<string[]>
      */
     public function someMethod()
     {

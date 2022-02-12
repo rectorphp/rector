@@ -14,7 +14,7 @@ function iterableFunction($value)
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\IterableFunction;
 
-function iterableFunction($value): \Iterator
+function iterableFunction($value): \Generator
 {
     yield 1;
     yield 2;
