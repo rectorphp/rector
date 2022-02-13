@@ -20,7 +20,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeR
 class YieldStrings
 {
     /**
-     * @return \Generator<string>
+     * @return \Iterator<string>
      */
     public function getValues(): iterable
     {
