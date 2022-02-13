@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -18,6 +19,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -31,7 +33,7 @@ final class PhpDocTypeChanger
     /**
      * @var array<class-string<Node>>
      */
-    public const ALLOWED_TYPES = [\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode::class, \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode::class, \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode::class];
+    public const ALLOWED_TYPES = [\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode::class, \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode::class, \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode::class, \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode::class];
     /**
      * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
@@ -145,6 +147,17 @@ final class PhpDocTypeChanger
             $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
     }
+    public function isAllowed(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode) : bool
+    {
+        if ($typeNode instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
+            foreach ($typeNode->types as $type) {
+                if ($this->isAllowed($type)) {
+                    return \true;
+                }
+            }
+        }
+        return \in_array(\get_class($typeNode), self::ALLOWED_TYPES, \true);
+    }
     public function copyPropertyDocToParam(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Param $param) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
@@ -159,19 +172,19 @@ final class PhpDocTypeChanger
         if ($varTag->description !== '') {
             return;
         }
-        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
-        $param->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $phpDocInfo);
         $functionLike = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         $paramVarName = $this->nodeNameResolver->getName($param->var);
         if (!$functionLike instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
-        if (!\in_array(\get_class($varTag->type), self::ALLOWED_TYPES, \true)) {
+        if (!$this->isAllowed($varTag->type)) {
             return;
         }
         if (!\is_string($paramVarName)) {
             return;
         }
+        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
+        $param->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $phpDocInfo);
         $phpDocInfo = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO);
         $paramType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTag, $property);
         $this->changeParamType($phpDocInfo, $paramType, $param, $paramVarName);
