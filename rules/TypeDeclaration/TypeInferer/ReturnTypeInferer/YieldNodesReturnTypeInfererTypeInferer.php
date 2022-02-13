@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
@@ -68,6 +69,9 @@ final class YieldNodesReturnTypeInfererTypeInferer implements \Rector\TypeDeclar
         }
         $returnType = $functionLike->getReturnType();
         $className = 'Generator';
+        if ($returnType instanceof \PhpParser\Node\Identifier && $returnType->name === 'iterable') {
+            $className = 'Iterator';
+        }
         if ($returnType instanceof \PhpParser\Node\Name && !$this->nodeNameResolver->isName($returnType, 'Generator')) {
             $className = $this->nodeNameResolver->getName($returnType);
         }
