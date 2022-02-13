@@ -18,6 +18,9 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 final class DefaultValuesForNullableArray
 {
+    /**
+     * @var mixed[]|null
+     */
     private ?array $rooms = null;
 }
 
