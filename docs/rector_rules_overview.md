@@ -1,4 +1,4 @@
-# 522 Rules Overview
+# 524 Rules Overview
 
 <br>
 
@@ -30,11 +30,11 @@
 
 - [DowngradePhp70](#downgradephp70) (19)
 
-- [DowngradePhp71](#downgradephp71) (10)
+- [DowngradePhp71](#downgradephp71) (11)
 
 - [DowngradePhp72](#downgradephp72) (6)
 
-- [DowngradePhp73](#downgradephp73) (6)
+- [DowngradePhp73](#downgradephp73) (7)
 
 - [DowngradePhp74](#downgradephp74) (12)
 
@@ -4663,6 +4663,19 @@ Remove the nullable type params, add `@param` tags instead
 
 <br>
 
+### DowngradePhp71JsonConstRector
+
+Remove Json constant that available only in php 7.1
+
+- class: [`Rector\DowngradePhp71\Rector\ConstFetch\DowngradePhp71JsonConstRector`](../rules/DowngradePhp71/Rector/ConstFetch/DowngradePhp71JsonConstRector.php)
+
+```diff
+-json_encode($content, JSON_UNESCAPED_LINE_TERMINATORS);
++json_encode($content, 0);
+```
+
+<br>
+
 ### DowngradePipeToMultiCatchExceptionRector
 
 Downgrade single one | separated to multi catch exception
@@ -4725,8 +4738,6 @@ Downgrade `json_decode()` with null associative argument function
 - class: [`Rector\DowngradePhp72\Rector\FuncCall\DowngradeJsonDecodeNullAssociativeArgRector`](../rules/DowngradePhp72/Rector/FuncCall/DowngradeJsonDecodeNullAssociativeArgRector.php)
 
 ```diff
- declare(strict_types=1);
-
  function exactlyNull(string $json)
  {
 -    $value = json_decode($json, null);
@@ -4735,10 +4746,8 @@ Downgrade `json_decode()` with null associative argument function
 
  function possiblyNull(string $json, ?bool $associative)
  {
-+    if ($associative === null) {
-+        $associative = true;
-+    }
-     $value = json_decode($json, $associative);
+-    $value = json_decode($json, $associative);
++    $value = json_decode($json, $associative === null ?: $associative);
  }
 ```
 
@@ -4813,12 +4822,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### DowngradePhp72JsonConstRector
 
-Change Json constant that available only in php 7.2 to 0
+Remove Json constant that available only in php 7.2
 
 - class: [`Rector\DowngradePhp72\Rector\ConstFetch\DowngradePhp72JsonConstRector`](../rules/DowngradePhp72/Rector/ConstFetch/DowngradePhp72JsonConstRector.php)
 
 ```diff
 -$inDecoder = new Decoder($connection, true, 512, \JSON_INVALID_UTF8_IGNORE);
+-$inDecoder = new Decoder($connection, true, 512, \JSON_INVALID_UTF8_SUBSTITUTE);
++$inDecoder = new Decoder($connection, true, 512, 0);
 +$inDecoder = new Decoder($connection, true, 512, 0);
 ```
 
@@ -4968,6 +4979,19 @@ Convert the list reference assignment to its equivalent PHP 7.2 code
 +        $b =& $array[1];
      }
  }
+```
+
+<br>
+
+### DowngradePhp73JsonConstRector
+
+Remove Json constant that available only in php 7.3
+
+- class: [`Rector\DowngradePhp73\Rector\ConstFetch\DowngradePhp73JsonConstRector`](../rules/DowngradePhp73/Rector/ConstFetch/DowngradePhp73JsonConstRector.php)
+
+```diff
+-json_encode($content, JSON_THROW_ON_ERROR);
++json_encode($content, 0);
 ```
 
 <br>
@@ -8078,7 +8102,7 @@ Add null default to properties with PHP 7.4 property nullable type
 
 ### TypedPropertyRector
 
-Changes property `@var` annotations from annotation to type.
+Changes property type by `@var` annotations or default value.
 
 :wrench: **configure it!**
 
@@ -8108,6 +8132,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -     */
 -    private $count;
 +    private int $count;
+
+-    private $isDone = false;
++    private bool $isDone = false;
  }
 ```
 

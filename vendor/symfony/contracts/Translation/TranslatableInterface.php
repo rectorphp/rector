@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220212\Symfony\Contracts\Translation;
+namespace RectorPrefix20220213\Symfony\Contracts\Translation;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
 interface TranslatableInterface
 {
-    public function trans(\RectorPrefix20220212\Symfony\Contracts\Translation\TranslatorInterface $translator, string $locale = null) : string;
+    public function trans(\RectorPrefix20220213\Symfony\Contracts\Translation\TranslatorInterface $translator, string $locale = null) : string;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220212\Psr\Http\Message;
+namespace RectorPrefix20220213\Psr\Http\Message;
 
 /**
  * Describes a data stream.

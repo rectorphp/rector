@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\NewArgToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220212\Webmozart\Assert\Assert;
+use RectorPrefix20220213\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/symfony/symfony/pull/35308
  *
@@ -89,8 +89,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $newArgsToMethodCalls = $configuration[self::NEW_ARGS_TO_METHOD_CALLS] ?? $configuration;
-        \RectorPrefix20220212\Webmozart\Assert\Assert::isArray($newArgsToMethodCalls);
-        \RectorPrefix20220212\Webmozart\Assert\Assert::allIsAOf($newArgsToMethodCalls, \Rector\Transform\ValueObject\NewArgToMethodCall::class);
+        \RectorPrefix20220213\Webmozart\Assert\Assert::isArray($newArgsToMethodCalls);
+        \RectorPrefix20220213\Webmozart\Assert\Assert::allIsAOf($newArgsToMethodCalls, \Rector\Transform\ValueObject\NewArgToMethodCall::class);
         $this->newArgsToMethodCalls = $newArgsToMethodCalls;
     }
 }

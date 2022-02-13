@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220212\Symfony\Component\Config\Definition;
+namespace RectorPrefix20220213\Symfony\Component\Config\Definition;
 
-use RectorPrefix20220212\Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\TreeBuilder;
 /**
  * Configuration interface.
  *
