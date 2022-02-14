@@ -8,16 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Argument;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Argument;
 
-use RectorPrefix20220213\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220213\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\Reference;
 /**
  * @author Titouan Galopin <galopintitouan@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
 trait ReferenceSetArgumentTrait
 {
+    /**
+     * @var mixed[]
+     */
     private $values;
     /**
      * @param Reference[] $values
@@ -29,7 +32,7 @@ trait ReferenceSetArgumentTrait
     /**
      * @return Reference[]
      */
-    public function getValues()
+    public function getValues() : array
     {
         return $this->values;
     }
@@ -39,8 +42,8 @@ trait ReferenceSetArgumentTrait
     public function setValues(array $values)
     {
         foreach ($values as $k => $v) {
-            if (null !== $v && !$v instanceof \RectorPrefix20220213\Symfony\Component\DependencyInjection\Reference) {
-                throw new \RectorPrefix20220213\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('A "%s" must hold only Reference instances, "%s" given.', __CLASS__, \get_debug_type($v)));
+            if (null !== $v && !$v instanceof \RectorPrefix20220214\Symfony\Component\DependencyInjection\Reference) {
+                throw new \RectorPrefix20220214\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('A "%s" must hold only Reference instances, "%s" given.', __CLASS__, \get_debug_type($v)));
             }
         }
         $this->values = $values;

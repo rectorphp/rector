@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Attribute;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Attribute;
 
-use RectorPrefix20220213\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 /**
  * An attribute to tell how a dependency is used and hint named autowiring aliases.
  *
@@ -29,7 +29,7 @@ final class Target
     }
     public static function parseName(\ReflectionParameter $parameter) : string
     {
-        if (80000 > \PHP_VERSION_ID || !($target = (\method_exists($parameter, 'getAttributes') ? $parameter->getAttributes(self::class) : [])[0] ?? null)) {
+        if (!($target = (\method_exists($parameter, 'getAttributes') ? $parameter->getAttributes(self::class) : [])[0] ?? null)) {
             return $parameter->name;
         }
         $name = $target->newInstance()->name;
@@ -39,7 +39,7 @@ final class Target
             } else {
                 $function = $function->name;
             }
-            throw new \RectorPrefix20220213\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid #[Target] name "%s" on parameter "$%s" of "%s()": the first character must be a letter.', $name, $parameter->name, $function));
+            throw new \RectorPrefix20220214\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid #[Target] name "%s" on parameter "$%s" of "%s()": the first character must be a letter.', $name, $parameter->name, $function));
         }
         return $name;
     }

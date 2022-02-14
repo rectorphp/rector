@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220213\Psr\Http\Message;
+namespace RectorPrefix20220214\Psr\Http\Message;
 
 /**
  * Value object representing a URI.

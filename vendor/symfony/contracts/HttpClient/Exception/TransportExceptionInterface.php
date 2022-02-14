@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Contracts\HttpClient\Exception;
+namespace RectorPrefix20220214\Symfony\Contracts\HttpClient\Exception;
 
 /**
  * When any error happens at the transport level.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface TransportExceptionInterface extends \RectorPrefix20220213\Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+interface TransportExceptionInterface extends \RectorPrefix20220214\Symfony\Contracts\HttpClient\Exception\ExceptionInterface
 {
 }

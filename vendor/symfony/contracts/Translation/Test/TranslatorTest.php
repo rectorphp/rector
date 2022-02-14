@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Contracts\Translation\Test;
+namespace RectorPrefix20220214\Symfony\Contracts\Translation\Test;
 
-use RectorPrefix20220213\PHPUnit\Framework\TestCase;
-use RectorPrefix20220213\Symfony\Contracts\Translation\TranslatorInterface;
-use RectorPrefix20220213\Symfony\Contracts\Translation\TranslatorTrait;
+use RectorPrefix20220214\PHPUnit\Framework\TestCase;
+use RectorPrefix20220214\Symfony\Contracts\Translation\TranslatorInterface;
+use RectorPrefix20220214\Symfony\Contracts\Translation\TranslatorTrait;
 /**
  * Test should cover all languages mentioned on http://translate.sourceforge.net/wiki/l10n/pluralforms
  * and Plural forms mentioned on http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms.
@@ -26,7 +26,7 @@ use RectorPrefix20220213\Symfony\Contracts\Translation\TranslatorTrait;
  *
  * @author Clemens Tolboom clemens@build2be.nl
  */
-class TranslatorTest extends \RectorPrefix20220213\PHPUnit\Framework\TestCase
+class TranslatorTest extends \RectorPrefix20220214\PHPUnit\Framework\TestCase
 {
     private $defaultLocale;
     protected function setUp() : void
@@ -38,12 +38,9 @@ class TranslatorTest extends \RectorPrefix20220213\PHPUnit\Framework\TestCase
     {
         \Locale::setDefault($this->defaultLocale);
     }
-    /**
-     * @return TranslatorInterface
-     */
-    public function getTranslator()
+    public function getTranslator() : \RectorPrefix20220214\Symfony\Contracts\Translation\TranslatorInterface
     {
-        return new class implements \RectorPrefix20220213\Symfony\Contracts\Translation\TranslatorInterface
+        return new class implements \RectorPrefix20220214\Symfony\Contracts\Translation\TranslatorInterface
         {
             use TranslatorTrait;
         };
@@ -255,10 +252,8 @@ class TranslatorTest extends \RectorPrefix20220213\PHPUnit\Framework\TestCase
      * This array should contain all currently known langcodes.
      *
      * As it is impossible to have this ever complete we should try as hard as possible to have it almost complete.
-     *
-     * @return array
      */
-    public function successLangcodes()
+    public function successLangcodes() : array
     {
         return [['1', ['ay', 'bo', 'cgg', 'dz', 'id', 'ja', 'jbo', 'ka', 'kk', 'km', 'ko', 'ky']], ['2', ['nl', 'fr', 'en', 'de', 'de_GE', 'hy', 'hy_AM', 'en_US_POSIX']], ['3', ['be', 'bs', 'cs', 'hr']], ['4', ['cy', 'mt', 'sl']], ['6', ['ar']]];
     }
@@ -270,18 +265,17 @@ class TranslatorTest extends \RectorPrefix20220213\PHPUnit\Framework\TestCase
      *
      * @return array with nplural together with langcodes
      */
-    public function failingLangcodes()
+    public function failingLangcodes() : array
     {
         return [['1', ['fa']], ['2', ['jbo']], ['3', ['cbs']], ['4', ['gd', 'kw']], ['5', ['ga']]];
     }
     /**
      * We validate only on the plural coverage. Thus the real rules is not tested.
      *
-     * @param string $nplural       Plural expected
-     * @param array  $matrix        Containing langcodes and their plural index values
-     * @param bool   $expectSuccess
+     * @param string $nplural Plural expected
+     * @param array  $matrix  Containing langcodes and their plural index values
      */
-    protected function validateMatrix($nplural, $matrix, $expectSuccess = \true)
+    protected function validateMatrix(string $nplural, array $matrix, bool $expectSuccess = \true)
     {
         foreach ($matrix as $langCode => $data) {
             $indexes = \array_flip($data);

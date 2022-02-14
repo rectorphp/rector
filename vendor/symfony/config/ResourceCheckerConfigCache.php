@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Config;
+namespace RectorPrefix20220214\Symfony\Component\Config;
 
-use RectorPrefix20220213\Symfony\Component\Config\Resource\ResourceInterface;
-use RectorPrefix20220213\Symfony\Component\Filesystem\Exception\IOException;
-use RectorPrefix20220213\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix20220214\Symfony\Component\Config\Resource\ResourceInterface;
+use RectorPrefix20220214\Symfony\Component\Filesystem\Exception\IOException;
+use RectorPrefix20220214\Symfony\Component\Filesystem\Filesystem;
 /**
  * ResourceCheckerConfigCache uses instances of ResourceCheckerInterface
  * to check whether cached data is still fresh.
  *
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-class ResourceCheckerConfigCache implements \RectorPrefix20220213\Symfony\Component\Config\ConfigCacheInterface
+class ResourceCheckerConfigCache implements \RectorPrefix20220214\Symfony\Component\Config\ConfigCacheInterface
 {
     /**
      * @var string
@@ -41,7 +41,7 @@ class ResourceCheckerConfigCache implements \RectorPrefix20220213\Symfony\Compon
     /**
      * {@inheritdoc}
      */
-    public function getPath()
+    public function getPath() : string
     {
         return $this->file;
     }
@@ -53,10 +53,8 @@ class ResourceCheckerConfigCache implements \RectorPrefix20220213\Symfony\Compon
      *
      * The first ResourceChecker that supports a given resource is considered authoritative.
      * Resources with no matching ResourceChecker will silently be ignored and considered fresh.
-     *
-     * @return bool
      */
-    public function isFresh()
+    public function isFresh() : bool
     {
         if (!\is_file($this->file)) {
             return \false;
@@ -106,18 +104,18 @@ class ResourceCheckerConfigCache implements \RectorPrefix20220213\Symfony\Compon
     {
         $mode = 0666;
         $umask = \umask();
-        $filesystem = new \RectorPrefix20220213\Symfony\Component\Filesystem\Filesystem();
+        $filesystem = new \RectorPrefix20220214\Symfony\Component\Filesystem\Filesystem();
         $filesystem->dumpFile($this->file, $content);
         try {
             $filesystem->chmod($this->file, $mode, $umask);
-        } catch (\RectorPrefix20220213\Symfony\Component\Filesystem\Exception\IOException $e) {
+        } catch (\RectorPrefix20220214\Symfony\Component\Filesystem\Exception\IOException $e) {
             // discard chmod failure (some filesystem may not support it)
         }
         if (null !== $metadata) {
             $filesystem->dumpFile($this->getMetaFile(), \serialize($metadata));
             try {
                 $filesystem->chmod($this->getMetaFile(), $mode, $umask);
-            } catch (\RectorPrefix20220213\Symfony\Component\Filesystem\Exception\IOException $e) {
+            } catch (\RectorPrefix20220214\Symfony\Component\Filesystem\Exception\IOException $e) {
                 // discard chmod failure (some filesystem may not support it)
             }
         }

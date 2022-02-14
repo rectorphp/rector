@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220213\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\Definition;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ServiceConfigurator extends \RectorPrefix20220213\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractServiceConfigurator
+class ServiceConfigurator extends \RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractServiceConfigurator
 {
     use Traits\AbstractTrait;
     use Traits\ArgumentTrait;
@@ -38,11 +38,23 @@ class ServiceConfigurator extends \RectorPrefix20220213\Symfony\Component\Depend
     use Traits\TagTrait;
     public const FACTORY = 'services';
     private $container;
+    /**
+     * @var mixed[]
+     */
     private $instanceof;
+    /**
+     * @var bool
+     */
     private $allowParent;
+    /**
+     * @var string|null
+     */
     private $path;
+    /**
+     * @var bool
+     */
     private $destructed = \false;
-    public function __construct(\RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $instanceof, bool $allowParent, \RectorPrefix20220213\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $parent, \RectorPrefix20220213\Symfony\Component\DependencyInjection\Definition $definition, ?string $id, array $defaultTags, string $path = null)
+    public function __construct(\RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $instanceof, bool $allowParent, \RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $parent, \RectorPrefix20220214\Symfony\Component\DependencyInjection\Definition $definition, ?string $id, array $defaultTags, string $path = null)
     {
         $this->container = $container;
         $this->instanceof = $instanceof;

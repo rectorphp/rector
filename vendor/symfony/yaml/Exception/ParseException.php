@@ -8,18 +8,30 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Yaml\Exception;
+namespace RectorPrefix20220214\Symfony\Component\Yaml\Exception;
 
 /**
  * Exception class thrown when an error occurs during parsing.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParseException extends \RectorPrefix20220213\Symfony\Component\Yaml\Exception\RuntimeException
+class ParseException extends \RectorPrefix20220214\Symfony\Component\Yaml\Exception\RuntimeException
 {
+    /**
+     * @var string|null
+     */
     private $parsedFile;
+    /**
+     * @var int
+     */
     private $parsedLine;
+    /**
+     * @var string|null
+     */
     private $snippet;
+    /**
+     * @var string
+     */
     private $rawMessage;
     /**
      * @param string      $message    The error message
@@ -38,10 +50,8 @@ class ParseException extends \RectorPrefix20220213\Symfony\Component\Yaml\Except
     }
     /**
      * Gets the snippet of code near the error.
-     *
-     * @return string
      */
-    public function getSnippet()
+    public function getSnippet() : string
     {
         return $this->snippet;
     }
@@ -57,10 +67,8 @@ class ParseException extends \RectorPrefix20220213\Symfony\Component\Yaml\Except
      * Gets the filename where the error occurred.
      *
      * This method returns null if a string is parsed.
-     *
-     * @return string
      */
-    public function getParsedFile()
+    public function getParsedFile() : string
     {
         return $this->parsedFile;
     }
@@ -74,10 +82,8 @@ class ParseException extends \RectorPrefix20220213\Symfony\Component\Yaml\Except
     }
     /**
      * Gets the line where the error occurred.
-     *
-     * @return int
      */
-    public function getParsedLine()
+    public function getParsedLine() : int
     {
         return $this->parsedLine;
     }

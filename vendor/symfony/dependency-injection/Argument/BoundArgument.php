@@ -8,22 +8,43 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Argument;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Argument;
 
 /**
  * @author Guilhem Niot <guilhem.niot@gmail.com>
  */
-final class BoundArgument implements \RectorPrefix20220213\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
+final class BoundArgument implements \RectorPrefix20220214\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
 {
     public const SERVICE_BINDING = 0;
     public const DEFAULTS_BINDING = 1;
     public const INSTANCEOF_BINDING = 2;
+    /**
+     * @var int
+     */
     private static $sequence = 0;
+    /**
+     * @var mixed
+     */
     private $value;
+    /**
+     * @var int|null
+     */
     private $identifier;
+    /**
+     * @var bool|null
+     */
     private $used;
+    /**
+     * @var int
+     */
     private $type;
+    /**
+     * @var string|null
+     */
     private $file;
+    /**
+     * @param mixed $value
+     */
     public function __construct($value, bool $trackUsage = \true, int $type = 0, string $file = null)
     {
         $this->value = $value;

@@ -23,20 +23,20 @@
         }
     ],
     "require": {
-        "php": ">=7.2.5"
+        "php": ">=8.0.2"
     },
     "suggest": {
         "symfony\/http-client-implementation": ""
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220213\\Symfony\\Contracts\\HttpClient\\": ""
+            "RectorPrefix20220214\\Symfony\\Contracts\\HttpClient\\": ""
         }
     },
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-main": "2.5-dev"
+            "dev-main": "3.0-dev"
         },
         "thanks": {
             "name": "symfony\/contracts",

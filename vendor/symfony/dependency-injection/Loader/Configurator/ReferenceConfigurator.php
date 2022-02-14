@@ -8,18 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ReferenceConfigurator extends \RectorPrefix20220213\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
+class ReferenceConfigurator extends \RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
-    /** @internal */
+    /** @internal
+     * @var string */
     protected $id;
-    /** @internal */
-    protected $invalidBehavior = \RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
+    /** @internal
+     * @var int */
+    protected $invalidBehavior = \RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
     public function __construct(string $id)
     {
         $this->id = $id;
@@ -27,31 +29,28 @@ class ReferenceConfigurator extends \RectorPrefix20220213\Symfony\Component\Depe
     /**
      * @return $this
      */
-    public final function ignoreOnInvalid() : self
+    public final function ignoreOnInvalid()
     {
-        $this->invalidBehavior = \RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
+        $this->invalidBehavior = \RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
         return $this;
     }
     /**
      * @return $this
      */
-    public final function nullOnInvalid() : self
+    public final function nullOnInvalid()
     {
-        $this->invalidBehavior = \RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE;
+        $this->invalidBehavior = \RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE;
         return $this;
     }
     /**
      * @return $this
      */
-    public final function ignoreOnUninitialized() : self
+    public final function ignoreOnUninitialized()
     {
-        $this->invalidBehavior = \RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE;
+        $this->invalidBehavior = \RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE;
         return $this;
     }
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->id;
     }

@@ -8,17 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20220214\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220213\Symfony\Component\Config\Definition\ArrayNode;
-use RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
-use RectorPrefix20220213\Symfony\Component\Config\Definition\PrototypedArrayNode;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\ArrayNode;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\NodeInterface;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\PrototypedArrayNode;
 /**
  * This class provides a fluent interface for defining an array node.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ArrayNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\NodeDefinition implements \RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface
+class ArrayNodeDefinition extends \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeDefinition implements \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface
 {
     protected $performDeepMerging = \true;
     protected $ignoreExtraKeys = \false;
@@ -36,7 +37,7 @@ class ArrayNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config
     /**
      * {@inheritdoc}
      */
-    public function __construct(?string $name, \RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\NodeParentInterface $parent = null)
+    public function __construct(?string $name, \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeParentInterface $parent = null)
     {
         parent::__construct($name, $parent);
         $this->nullEquivalent = [];
@@ -45,72 +46,49 @@ class ArrayNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config
     /**
      * {@inheritdoc}
      */
-    public function setBuilder(\RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\NodeBuilder $builder)
+    public function setBuilder(\RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeBuilder $builder)
     {
         $this->nodeBuilder = $builder;
     }
     /**
      * {@inheritdoc}
      */
-    public function children()
+    public function children() : \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeBuilder
     {
         return $this->getNodeBuilder();
     }
     /**
      * Sets a prototype for child nodes.
-     *
-     * @return NodeDefinition
      */
-    public function prototype(string $type)
+    public function prototype(string $type) : \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeDefinition
     {
         return $this->prototype = $this->getNodeBuilder()->node(null, $type)->setParent($this);
     }
-    /**
-     * @return VariableNodeDefinition
-     */
-    public function variablePrototype()
+    public function variablePrototype() : \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\VariableNodeDefinition
     {
         return $this->prototype('variable');
     }
-    /**
-     * @return ScalarNodeDefinition
-     */
-    public function scalarPrototype()
+    public function scalarPrototype() : \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
     {
         return $this->prototype('scalar');
     }
-    /**
-     * @return BooleanNodeDefinition
-     */
-    public function booleanPrototype()
+    public function booleanPrototype() : \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\BooleanNodeDefinition
     {
         return $this->prototype('boolean');
     }
-    /**
-     * @return IntegerNodeDefinition
-     */
-    public function integerPrototype()
+    public function integerPrototype() : \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\IntegerNodeDefinition
     {
         return $this->prototype('integer');
     }
-    /**
-     * @return FloatNodeDefinition
-     */
-    public function floatPrototype()
+    public function floatPrototype() : \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\FloatNodeDefinition
     {
         return $this->prototype('float');
     }
-    /**
-     * @return ArrayNodeDefinition
-     */
-    public function arrayPrototype()
+    public function arrayPrototype() : self
     {
         return $this->prototype('array');
     }
-    /**
-     * @return EnumNodeDefinition
-     */
-    public function enumPrototype()
+    public function enumPrototype() : \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\EnumNodeDefinition
     {
         return $this->prototype('enum');
     }
@@ -133,7 +111,7 @@ class ArrayNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config
      *
      * This method is applicable to prototype nodes only.
      *
-     * @param int|string|array|null $children The number of children|The child name|The children names to be added
+     * @param mixed[]|int|string $children The number of children|The child name|The children names to be added
      *
      * @return $this
      */
@@ -299,31 +277,30 @@ class ArrayNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config
     }
     /**
      * {@inheritdoc}
+     * @return $this
      */
-    public function append(\RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
+    public function append(\RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
     {
         $this->children[$node->name] = $node->setParent($this);
         return $this;
     }
     /**
      * Returns a node builder to be used to add children and prototype.
-     *
-     * @return NodeBuilder
      */
-    protected function getNodeBuilder()
+    protected function getNodeBuilder() : \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeBuilder
     {
         if (null === $this->nodeBuilder) {
-            $this->nodeBuilder = new \RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\NodeBuilder();
+            $this->nodeBuilder = new \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeBuilder();
         }
         return $this->nodeBuilder->setParent($this);
     }
     /**
      * {@inheritdoc}
      */
-    protected function createNode()
+    protected function createNode() : \RectorPrefix20220214\Symfony\Component\Config\Definition\NodeInterface
     {
         if (null === $this->prototype) {
-            $node = new \RectorPrefix20220213\Symfony\Component\Config\Definition\ArrayNode($this->name, $this->parent, $this->pathSeparator);
+            $node = new \RectorPrefix20220214\Symfony\Component\Config\Definition\ArrayNode($this->name, $this->parent, $this->pathSeparator);
             $this->validateConcreteNode($node);
             $node->setAddIfNotSet($this->addDefaults);
             foreach ($this->children as $child) {
@@ -331,7 +308,7 @@ class ArrayNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config
                 $node->addChild($child->getNode());
             }
         } else {
-            $node = new \RectorPrefix20220213\Symfony\Component\Config\Definition\PrototypedArrayNode($this->name, $this->parent, $this->pathSeparator);
+            $node = new \RectorPrefix20220214\Symfony\Component\Config\Definition\PrototypedArrayNode($this->name, $this->parent, $this->pathSeparator);
             $this->validatePrototypeNode($node);
             if (null !== $this->key) {
                 $node->setKeyAttribute($this->key, $this->removeKeyItem);
@@ -383,23 +360,23 @@ class ArrayNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config
      *
      * @throws InvalidDefinitionException
      */
-    protected function validateConcreteNode(\RectorPrefix20220213\Symfony\Component\Config\Definition\ArrayNode $node)
+    protected function validateConcreteNode(\RectorPrefix20220214\Symfony\Component\Config\Definition\ArrayNode $node)
     {
         $path = $node->getPath();
         if (null !== $this->key) {
-            throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->useAttributeAsKey() is not applicable to concrete nodes at path "%s".', $path));
+            throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->useAttributeAsKey() is not applicable to concrete nodes at path "%s".', $path));
         }
         if (\false === $this->allowEmptyValue) {
-            throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->cannotBeEmpty() is not applicable to concrete nodes at path "%s".', $path));
+            throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->cannotBeEmpty() is not applicable to concrete nodes at path "%s".', $path));
         }
         if (\true === $this->atLeastOne) {
-            throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->requiresAtLeastOneElement() is not applicable to concrete nodes at path "%s".', $path));
+            throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->requiresAtLeastOneElement() is not applicable to concrete nodes at path "%s".', $path));
         }
         if ($this->default) {
-            throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->defaultValue() is not applicable to concrete nodes at path "%s".', $path));
+            throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->defaultValue() is not applicable to concrete nodes at path "%s".', $path));
         }
         if (\false !== $this->addDefaultChildren) {
-            throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->addDefaultChildrenIfNoneSet() is not applicable to concrete nodes at path "%s".', $path));
+            throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->addDefaultChildrenIfNoneSet() is not applicable to concrete nodes at path "%s".', $path));
         }
     }
     /**
@@ -407,28 +384,28 @@ class ArrayNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config
      *
      * @throws InvalidDefinitionException
      */
-    protected function validatePrototypeNode(\RectorPrefix20220213\Symfony\Component\Config\Definition\PrototypedArrayNode $node)
+    protected function validatePrototypeNode(\RectorPrefix20220214\Symfony\Component\Config\Definition\PrototypedArrayNode $node)
     {
         $path = $node->getPath();
         if ($this->addDefaults) {
-            throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->addDefaultsIfNotSet() is not applicable to prototype nodes at path "%s".', $path));
+            throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->addDefaultsIfNotSet() is not applicable to prototype nodes at path "%s".', $path));
         }
         if (\false !== $this->addDefaultChildren) {
             if ($this->default) {
-                throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('A default value and default children might not be used together at path "%s".', $path));
+                throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('A default value and default children might not be used together at path "%s".', $path));
             }
             if (null !== $this->key && (null === $this->addDefaultChildren || \is_int($this->addDefaultChildren) && $this->addDefaultChildren > 0)) {
-                throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->addDefaultChildrenIfNoneSet() should set default children names as ->useAttributeAsKey() is used at path "%s".', $path));
+                throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->addDefaultChildrenIfNoneSet() should set default children names as ->useAttributeAsKey() is used at path "%s".', $path));
             }
             if (null === $this->key && (\is_string($this->addDefaultChildren) || \is_array($this->addDefaultChildren))) {
-                throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->addDefaultChildrenIfNoneSet() might not set default children names as ->useAttributeAsKey() is not used at path "%s".', $path));
+                throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException(\sprintf('->addDefaultChildrenIfNoneSet() might not set default children names as ->useAttributeAsKey() is not used at path "%s".', $path));
             }
         }
     }
     /**
      * @return NodeDefinition[]
      */
-    public function getChildNodeDefinitions()
+    public function getChildNodeDefinitions() : array
     {
         return $this->children;
     }
@@ -437,7 +414,7 @@ class ArrayNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config
      *
      * @param string $nodePath The path of the node to find. e.g "doctrine.orm.mappings"
      */
-    public function find(string $nodePath) : \RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\NodeDefinition
+    public function find(string $nodePath) : \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeDefinition
     {
         $firstPathSegment = \false === ($pathSeparatorPos = \strpos($nodePath, $this->pathSeparator)) ? $nodePath : \substr($nodePath, 0, $pathSeparatorPos);
         if (null === ($node = $this->children[$firstPathSegment] ?? null)) {

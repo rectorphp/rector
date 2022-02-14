@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Config;
+namespace RectorPrefix20220214\Symfony\Component\Config;
 
 /**
  * Basic implementation of ConfigCacheFactoryInterface that
@@ -19,8 +19,11 @@ namespace RectorPrefix20220213\Symfony\Component\Config;
  *
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-class ConfigCacheFactory implements \RectorPrefix20220213\Symfony\Component\Config\ConfigCacheFactoryInterface
+class ConfigCacheFactory implements \RectorPrefix20220214\Symfony\Component\Config\ConfigCacheFactoryInterface
 {
+    /**
+     * @var bool
+     */
     private $debug;
     /**
      * @param bool $debug The debug flag to pass to ConfigCache
@@ -32,9 +35,9 @@ class ConfigCacheFactory implements \RectorPrefix20220213\Symfony\Component\Conf
     /**
      * {@inheritdoc}
      */
-    public function cache(string $file, callable $callback)
+    public function cache(string $file, callable $callback) : \RectorPrefix20220214\Symfony\Component\Config\ConfigCacheInterface
     {
-        $cache = new \RectorPrefix20220213\Symfony\Component\Config\ConfigCache($file, $this->debug);
+        $cache = new \RectorPrefix20220214\Symfony\Component\Config\ConfigCache($file, $this->debug);
         if (!$cache->isFresh()) {
             $callback($cache);
         }

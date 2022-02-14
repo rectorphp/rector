@@ -8,16 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20220214\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220213\Symfony\Component\Config\Definition\EnumNode;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\EnumNode;
 /**
  * Enum Node Definition.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class EnumNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
+class EnumNodeDefinition extends \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
 {
+    /**
+     * @var mixed[]
+     */
     private $values;
     /**
      * @return $this
@@ -34,15 +37,13 @@ class EnumNodeDefinition extends \RectorPrefix20220213\Symfony\Component\Config\
     /**
      * Instantiate a Node.
      *
-     * @return EnumNode
-     *
      * @throws \RuntimeException
      */
-    protected function instantiateNode()
+    protected function instantiateNode() : \RectorPrefix20220214\Symfony\Component\Config\Definition\ScalarNode
     {
-        if (null === $this->values) {
+        if (!isset($this->values)) {
             throw new \RuntimeException('You must call ->values() on enum nodes.');
         }
-        return new \RectorPrefix20220213\Symfony\Component\Config\Definition\EnumNode($this->name, $this->parent, $this->values, $this->pathSeparator);
+        return new \RectorPrefix20220214\Symfony\Component\Config\Definition\EnumNode($this->name, $this->parent, $this->values, $this->pathSeparator);
     }
 }

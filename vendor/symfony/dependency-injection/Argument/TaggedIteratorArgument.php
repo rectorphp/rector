@@ -8,20 +8,35 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Argument;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Argument;
 
 /**
  * Represents a collection of services found by tag name to lazily iterate over.
  *
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-class TaggedIteratorArgument extends \RectorPrefix20220213\Symfony\Component\DependencyInjection\Argument\IteratorArgument
+class TaggedIteratorArgument extends \RectorPrefix20220214\Symfony\Component\DependencyInjection\Argument\IteratorArgument
 {
+    /**
+     * @var string
+     */
     private $tag;
+    /**
+     * @var mixed
+     */
     private $indexAttribute;
+    /**
+     * @var string|null
+     */
     private $defaultIndexMethod;
+    /**
+     * @var string|null
+     */
     private $defaultPriorityMethod;
-    private $needsIndexes = \false;
+    /**
+     * @var bool
+     */
+    private $needsIndexes;
     /**
      * @param string      $tag                   The name of the tag identifying the target services
      * @param string|null $indexAttribute        The name of the attribute that defines the key referencing each service in the tagged collection

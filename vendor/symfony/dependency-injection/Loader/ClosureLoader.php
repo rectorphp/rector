@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Loader;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader;
 
-use RectorPrefix20220213\Symfony\Component\Config\Loader\Loader;
-use RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220214\Symfony\Component\Config\Loader\Loader;
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * ClosureLoader loads service definitions from a PHP closure.
  *
@@ -19,16 +19,18 @@ use RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ClosureLoader extends \RectorPrefix20220213\Symfony\Component\Config\Loader\Loader
+class ClosureLoader extends \RectorPrefix20220214\Symfony\Component\Config\Loader\Loader
 {
     private $container;
-    public function __construct(\RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $env = null)
+    public function __construct(\RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $env = null)
     {
         $this->container = $container;
         parent::__construct($env);
     }
     /**
      * {@inheritdoc}
+     * @param mixed $resource
+     * @return mixed
      * @param string|null $type
      */
     public function load($resource, $type = null)
@@ -37,8 +39,9 @@ class ClosureLoader extends \RectorPrefix20220213\Symfony\Component\Config\Loade
     }
     /**
      * {@inheritdoc}
+     * @param mixed $resource
      */
-    public function supports($resource, string $type = null)
+    public function supports($resource, string $type = null) : bool
     {
         return $resource instanceof \Closure;
     }

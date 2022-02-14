@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection;
 
-use RectorPrefix20220213\Psr\Container\ContainerInterface;
+use RectorPrefix20220214\Psr\Container\ContainerInterface;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Kernel\RectorKernel;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 final class RectorContainerFactory
 {
-    public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20220213\Psr\Container\ContainerInterface
+    public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20220214\Psr\Container\ContainerInterface
     {
         $container = $this->createFromConfigs($bootstrapConfigs->getConfigFiles());
         $mainConfigFile = $bootstrapConfigs->getMainConfigFile();
@@ -25,7 +25,7 @@ final class RectorContainerFactory
      * @param string[] $configFiles
      * @api
      */
-    private function createFromConfigs(array $configFiles) : \RectorPrefix20220213\Psr\Container\ContainerInterface
+    private function createFromConfigs(array $configFiles) : \RectorPrefix20220214\Psr\Container\ContainerInterface
     {
         $phpStanStubLoader = new \Rector\Core\Stubs\PHPStanStubLoader();
         $phpStanStubLoader->loadStubs();

@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
-use RectorPrefix20220213\Webmozart\Assert\Assert;
+use RectorPrefix20220214\Webmozart\Assert\Assert;
 final class AttributeArrayNameInliner
 {
     /**
@@ -47,7 +47,7 @@ final class AttributeArrayNameInliner
      */
     private function inlineArray(array $args) : array
     {
-        \RectorPrefix20220213\Webmozart\Assert\Assert::allIsAOf($args, \PhpParser\Node\Arg::class);
+        \RectorPrefix20220214\Webmozart\Assert\Assert::allIsAOf($args, \PhpParser\Node\Arg::class);
         $newArgs = [];
         foreach ($args as $arg) {
             // matching top root array key

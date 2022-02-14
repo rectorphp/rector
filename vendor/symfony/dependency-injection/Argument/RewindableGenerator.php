@@ -8,22 +8,28 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Argument;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Argument;
 
 /**
  * @internal
  */
 class RewindableGenerator implements \IteratorAggregate, \Countable
 {
+    /**
+     * @var \Closure
+     */
     private $generator;
+    /**
+     * @var \Closure|int
+     */
     private $count;
     /**
-     * @param int|callable $count
+     * @param callable|int $count
      */
     public function __construct(callable $generator, $count)
     {
-        $this->generator = $generator;
-        $this->count = $count;
+        $this->generator = $generator instanceof \Closure ? $generator : \Closure::fromCallable($generator);
+        $this->count = \is_callable($count) && !$count instanceof \Closure ? \Closure::fromCallable($count) : $count;
     }
     public function getIterator() : \Traversable
     {

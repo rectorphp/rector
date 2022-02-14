@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
 
 trait LazyTrait
 {
@@ -19,7 +19,7 @@ trait LazyTrait
      *
      * @return $this
      */
-    public final function lazy($lazy = \true) : self
+    public final function lazy($lazy = \true)
     {
         $this->definition->setLazy((bool) $lazy);
         if (\is_string($lazy)) {

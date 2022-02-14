@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Config\Exception;
+namespace RectorPrefix20220214\Symfony\Component\Config\Exception;
 
 /**
  * File locator exception if a file does not exist.
@@ -17,6 +17,9 @@ namespace RectorPrefix20220213\Symfony\Component\Config\Exception;
  */
 class FileLocatorFileNotFoundException extends \InvalidArgumentException
 {
+    /**
+     * @var mixed[]
+     */
     private $paths;
     public function __construct(string $message = '', int $code = 0, \Throwable $previous = null, array $paths = [])
     {

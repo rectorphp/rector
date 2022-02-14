@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Config;
+namespace RectorPrefix20220214\Symfony\Component\Config;
 
 /**
  * Interface for a ConfigCache factory. This factory creates
@@ -24,8 +24,6 @@ interface ConfigCacheFactoryInterface
      *
      * @param string   $file     The absolute cache file path
      * @param callable $callable The callable to be executed when the cache needs to be filled (i. e. is not fresh). The cache will be passed as the only parameter to this callback
-     *
-     * @return ConfigCacheInterface
      */
-    public function cache(string $file, callable $callable);
+    public function cache(string $file, callable $callable) : \RectorPrefix20220214\Symfony\Component\Config\ConfigCacheInterface;
 }

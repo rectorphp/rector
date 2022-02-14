@@ -8,17 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Loader;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader;
 
 /**
  * DirectoryLoader is a recursive loader to go through directories.
  *
  * @author Sebastien Lavoie <seb@wemakecustom.com>
  */
-class DirectoryLoader extends \RectorPrefix20220213\Symfony\Component\DependencyInjection\Loader\FileLoader
+class DirectoryLoader extends \RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader\FileLoader
 {
     /**
      * {@inheritdoc}
+     * @param mixed $file
+     * @return mixed
      * @param string|null $type
      */
     public function load($file, $type = null)
@@ -40,8 +42,9 @@ class DirectoryLoader extends \RectorPrefix20220213\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
+     * @param mixed $resource
      */
-    public function supports($resource, string $type = null)
+    public function supports($resource, string $type = null) : bool
     {
         if ('directory' === $type) {
             return \true;

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Contracts\Translation;
+namespace RectorPrefix20220214\Symfony\Contracts\Translation;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @method string getLocale() Returns the default locale
  */
 interface TranslatorInterface
 {
@@ -58,9 +56,11 @@ interface TranslatorInterface
      * @param string|null $domain     The domain for the message or null to use the default
      * @param string|null $locale     The locale or null to use the default
      *
-     * @return string
-     *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */
-    public function trans(string $id, array $parameters = [], string $domain = null, string $locale = null);
+    public function trans(string $id, array $parameters = [], string $domain = null, string $locale = null) : string;
+    /**
+     * Returns the default locale.
+     */
+    public function getLocale() : string;
 }

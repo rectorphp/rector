@@ -8,22 +8,28 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220213\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220213\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 /**
  * Resolves all parameter placeholders "%somevalue%" to their real values.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220213\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220214\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     private $bag;
-    private $resolveArrays;
-    private $throwOnResolveException;
-    public function __construct($resolveArrays = \true, $throwOnResolveException = \true)
+    /**
+     * @var bool
+     */
+    private $resolveArrays = \true;
+    /**
+     * @var bool
+     */
+    private $throwOnResolveException = \true;
+    public function __construct(bool $resolveArrays = \true, bool $throwOnResolveException = \true)
     {
         $this->resolveArrays = $resolveArrays;
         $this->throwOnResolveException = $throwOnResolveException;
@@ -33,7 +39,7 @@ class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220213\Symfony\Com
      *
      * @throws ParameterNotFoundException
      */
-    public function process(\RectorPrefix20220213\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(\RectorPrefix20220214\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->bag = $container->getParameterBag();
         try {
@@ -44,19 +50,23 @@ class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220213\Symfony\Com
                 $aliases[$this->bag->resolveValue($name)] = $target;
             }
             $container->setAliases($aliases);
-        } catch (\RectorPrefix20220213\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
+        } catch (\RectorPrefix20220214\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
             $e->setSourceId($this->currentId);
             throw $e;
         }
         $this->bag->resolve();
-        $this->bag = null;
+        unset($this->bag);
     }
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
     protected function processValue($value, bool $isRoot = \false)
     {
         if (\is_string($value)) {
             try {
                 $v = $this->bag->resolveValue($value);
-            } catch (\RectorPrefix20220213\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
+            } catch (\RectorPrefix20220214\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
                 if ($this->throwOnResolveException) {
                     throw $e;
                 }
@@ -65,7 +75,7 @@ class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220213\Symfony\Com
             }
             return $this->resolveArrays || !$v || !\is_array($v) ? $v : $value;
         }
-        if ($value instanceof \RectorPrefix20220213\Symfony\Component\DependencyInjection\Definition) {
+        if ($value instanceof \RectorPrefix20220214\Symfony\Component\DependencyInjection\Definition) {
             $value->setBindings($this->processValue($value->getBindings()));
             $changes = $value->getChanges();
             if (isset($changes['class'])) {

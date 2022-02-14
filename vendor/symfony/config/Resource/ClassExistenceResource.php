@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Config\Resource;
+namespace RectorPrefix20220214\Symfony\Component\Config\Resource;
 
 /**
  * ClassExistenceResource represents a class existence.
@@ -20,12 +20,27 @@ namespace RectorPrefix20220213\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class ClassExistenceResource implements \RectorPrefix20220213\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class ClassExistenceResource implements \RectorPrefix20220214\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
+    /**
+     * @var string
+     */
     private $resource;
+    /**
+     * @var mixed[]|null
+     */
     private $exists;
+    /**
+     * @var int
+     */
     private static $autoloadLevel = 0;
+    /**
+     * @var string|null
+     */
     private static $autoloadedClass;
+    /**
+     * @var mixed[]
+     */
     private static $existsCache = [];
     /**
      * @param string    $resource The fully-qualified class name
@@ -155,7 +170,7 @@ class ClassExistenceResource implements \RectorPrefix20220213\Symfony\Component\
         }
         $trace = \debug_backtrace();
         $autoloadFrame = ['function' => 'spl_autoload_call', 'args' => [$class]];
-        if (\PHP_VERSION_ID >= 80000 && isset($trace[1])) {
+        if (isset($trace[1])) {
             $callerFrame = $trace[1];
             $i = 2;
         } elseif (\false !== ($i = \array_search($autoloadFrame, $trace, \true))) {

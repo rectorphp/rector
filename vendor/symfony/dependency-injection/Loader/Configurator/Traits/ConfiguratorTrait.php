@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
 
+use RectorPrefix20220214\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 trait ConfiguratorTrait
 {
     /**
      * Sets a configurator to call after the service is fully initialized.
      *
-     * @param string|array $configurator A PHP callable reference
-     *
      * @return $this
+     * @param mixed[]|string|\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator $configurator
      */
-    public final function configurator($configurator) : self
+    public final function configurator($configurator)
     {
         $this->definition->setConfigurator(static::processValue($configurator, \true));
         return $this;

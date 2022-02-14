@@ -8,16 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\DependencyInjection\Exception;
+namespace RectorPrefix20220214\Symfony\Component\DependencyInjection\Exception;
 
 /**
  * This exception is thrown when a circular reference is detected.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ServiceCircularReferenceException extends \RectorPrefix20220213\Symfony\Component\DependencyInjection\Exception\RuntimeException
+class ServiceCircularReferenceException extends \RectorPrefix20220214\Symfony\Component\DependencyInjection\Exception\RuntimeException
 {
+    /**
+     * @var string
+     */
     private $serviceId;
+    /**
+     * @var mixed[]
+     */
     private $path;
     public function __construct(string $serviceId, array $path, \Throwable $previous = null)
     {

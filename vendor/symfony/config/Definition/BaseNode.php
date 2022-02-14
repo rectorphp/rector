@@ -8,22 +8,28 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Config\Definition;
+namespace RectorPrefix20220214\Symfony\Component\Config\Definition;
 
-use RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\Exception;
-use RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException;
-use RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
-use RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\Exception;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
 /**
  * The base node class.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Config\Definition\NodeInterface
+abstract class BaseNode implements \RectorPrefix20220214\Symfony\Component\Config\Definition\NodeInterface
 {
     public const DEFAULT_PATH_SEPARATOR = '.';
+    /**
+     * @var mixed[]
+     */
     private static $placeholderUniquePrefixes = [];
+    /**
+     * @var mixed[]
+     */
     private static $placeholders = [];
     protected $name;
     protected $parent;
@@ -35,11 +41,14 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     protected $equivalentValues = [];
     protected $attributes = [];
     protected $pathSeparator;
-    private $handlingPlaceholder;
+    /**
+     * @var mixed
+     */
+    private $handlingPlaceholder = null;
     /**
      * @throws \InvalidArgumentException if the name contains a period
      */
-    public function __construct(?string $name, \RectorPrefix20220213\Symfony\Component\Config\Definition\NodeInterface $parent = null, string $pathSeparator = self::DEFAULT_PATH_SEPARATOR)
+    public function __construct(?string $name, \RectorPrefix20220214\Symfony\Component\Config\Definition\NodeInterface $parent = null, string $pathSeparator = self::DEFAULT_PATH_SEPARATOR)
     {
         if (\strpos($name = (string) $name, $pathSeparator) !== \false) {
             throw new \InvalidArgumentException('The name must not contain ".' . $pathSeparator . '".');
@@ -85,28 +94,26 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
         self::$placeholderUniquePrefixes = [];
         self::$placeholders = [];
     }
+    /**
+     * @param mixed $value
+     */
     public function setAttribute(string $key, $value)
     {
         $this->attributes[$key] = $value;
     }
     /**
+     * @param mixed $default
      * @return mixed
      */
     public function getAttribute(string $key, $default = null)
     {
         return $this->attributes[$key] ?? $default;
     }
-    /**
-     * @return bool
-     */
-    public function hasAttribute(string $key)
+    public function hasAttribute(string $key) : bool
     {
         return isset($this->attributes[$key]);
     }
-    /**
-     * @return array
-     */
-    public function getAttributes()
+    public function getAttributes() : array
     {
         return $this->attributes;
     }
@@ -127,17 +134,14 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     }
     /**
      * Returns info message.
-     *
-     * @return string|null
      */
-    public function getInfo()
+    public function getInfo() : ?string
     {
         return $this->getAttribute('info');
     }
     /**
      * Sets the example configuration for this node.
-     *
-     * @param string|array $example
+     * @param mixed[]|string $example
      */
     public function setExample($example)
     {
@@ -145,8 +149,7 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     }
     /**
      * Retrieves the example configuration for this node.
-     *
-     * @return string|array|null
+     * @return mixed[]|string|null
      */
     public function getExample()
     {
@@ -154,7 +157,6 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     }
     /**
      * Adds an equivalent value.
-     *
      * @param mixed $originalValue
      * @param mixed $equivalentValue
      */
@@ -179,23 +181,8 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
      * You can use %node% and %path% placeholders in your message to display,
      * respectively, the node name and its complete path
      */
-    public function setDeprecated(?string $package)
+    public function setDeprecated(string $package, string $version, string $message = 'The child node "%node%" at path "%path%" is deprecated.')
     {
-        $args = \func_get_args();
-        if (\func_num_args() < 2) {
-            trigger_deprecation('symfony/config', '5.1', 'The signature of method "%s()" requires 3 arguments: "string $package, string $version, string $message", not defining them is deprecated.', __METHOD__);
-            if (!isset($args[0])) {
-                trigger_deprecation('symfony/config', '5.1', 'Passing a null message to un-deprecate a node is deprecated.');
-                $this->deprecation = [];
-                return;
-            }
-            $message = (string) $args[0];
-            $package = $version = '';
-        } else {
-            $package = (string) $args[0];
-            $version = (string) $args[1];
-            $message = (string) ($args[2] ?? 'The child node "%node%" at path "%path%" is deprecated.');
-        }
         $this->deprecation = ['package' => $package, 'version' => $version, 'message' => $message];
     }
     /**
@@ -226,33 +213,16 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     /**
      * {@inheritdoc}
      */
-    public function isRequired()
+    public function isRequired() : bool
     {
         return $this->required;
     }
     /**
      * Checks if this node is deprecated.
-     *
-     * @return bool
      */
-    public function isDeprecated()
+    public function isDeprecated() : bool
     {
         return (bool) $this->deprecation;
-    }
-    /**
-     * Returns the deprecated message.
-     *
-     * @param string $node the configuration node name
-     * @param string $path the path of the node
-     *
-     * @return string
-     *
-     * @deprecated since Symfony 5.1, use "getDeprecation()" instead.
-     */
-    public function getDeprecationMessage(string $node, string $path)
-    {
-        trigger_deprecation('symfony/config', '5.1', 'The "%s()" method is deprecated, use "getDeprecation()" instead.', __METHOD__);
-        return $this->getDeprecation($node, $path)['message'];
     }
     /**
      * @param string $node The configuration node name
@@ -260,19 +230,19 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
      */
     public function getDeprecation(string $node, string $path) : array
     {
-        return ['package' => $this->deprecation['package'] ?? '', 'version' => $this->deprecation['version'] ?? '', 'message' => \strtr($this->deprecation['message'] ?? '', ['%node%' => $node, '%path%' => $path])];
+        return ['package' => $this->deprecation['package'], 'version' => $this->deprecation['version'], 'message' => \strtr($this->deprecation['message'], ['%node%' => $node, '%path%' => $path])];
     }
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
     /**
      * {@inheritdoc}
      */
-    public function getPath()
+    public function getPath() : string
     {
         if (null !== $this->parent) {
             return $this->parent->getPath() . $this->pathSeparator . $this->name;
@@ -281,11 +251,14 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     }
     /**
      * {@inheritdoc}
+     * @param mixed $leftSide
+     * @param mixed $rightSide
+     * @return mixed
      */
     public final function merge($leftSide, $rightSide)
     {
         if (!$this->allowOverwrite) {
-            throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException(\sprintf('Configuration path "%s" cannot be overwritten. You have to define all options for this path, and any of its sub-paths in one configuration section.', $this->getPath()));
+            throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException(\sprintf('Configuration path "%s" cannot be overwritten. You have to define all options for this path, and any of its sub-paths in one configuration section.', $this->getPath()));
         }
         if ($leftSide !== ($leftPlaceholders = self::resolvePlaceholderValue($leftSide))) {
             foreach ($leftPlaceholders as $leftPlaceholder) {
@@ -315,6 +288,8 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     }
     /**
      * {@inheritdoc}
+     * @param mixed $value
+     * @return mixed
      */
     public final function normalize($value)
     {
@@ -348,9 +323,7 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     }
     /**
      * Normalizes the value before any other normalization is applied.
-     *
      * @param mixed $value
-     *
      * @return mixed
      */
     protected function preNormalize($value)
@@ -359,15 +332,15 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     }
     /**
      * Returns parent node for this node.
-     *
-     * @return NodeInterface|null
      */
-    public function getParent()
+    public function getParent() : ?\RectorPrefix20220214\Symfony\Component\Config\Definition\NodeInterface
     {
         return $this->parent;
     }
     /**
      * {@inheritdoc}
+     * @param mixed $value
+     * @return mixed
      */
     public final function finalize($value)
     {
@@ -389,13 +362,13 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
         foreach ($this->finalValidationClosures as $closure) {
             try {
                 $value = $closure($value);
-            } catch (\RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\Exception $e) {
-                if ($e instanceof \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\UnsetKeyException && null !== $this->handlingPlaceholder) {
+            } catch (\RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\Exception $e) {
+                if ($e instanceof \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\UnsetKeyException && null !== $this->handlingPlaceholder) {
                     continue;
                 }
                 throw $e;
             } catch (\Exception $e) {
-                throw new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(\sprintf('Invalid configuration for path "%s": ', $this->getPath()) . $e->getMessage(), $e->getCode(), $e);
+                throw new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(\sprintf('Invalid configuration for path "%s": ', $this->getPath()) . $e->getMessage(), $e->getCode(), $e);
             }
         }
         return $value;
@@ -403,33 +376,26 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     /**
      * Validates the type of a Node.
      *
-     * @param mixed $value The value to validate
-     *
      * @throws InvalidTypeException when the value is invalid
+     * @param mixed $value
      */
     protected abstract function validateType($value);
     /**
      * Normalizes the value.
-     *
-     * @param mixed $value The value to normalize
-     *
+     * @param mixed $value
      * @return mixed
      */
     protected abstract function normalizeValue($value);
     /**
      * Merges two values together.
-     *
      * @param mixed $leftSide
      * @param mixed $rightSide
-     *
      * @return mixed
      */
     protected abstract function mergeValues($leftSide, $rightSide);
     /**
      * Finalizes a value.
-     *
-     * @param mixed $value The value to finalize
-     *
+     * @param mixed $value
      * @return mixed
      */
     protected abstract function finalizeValue($value);
@@ -454,6 +420,10 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
     {
         return [];
     }
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
     private static function resolvePlaceholderValue($value)
     {
         if (\is_string($value)) {
@@ -468,10 +438,13 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
         }
         return $value;
     }
+    /**
+     * @param mixed $value
+     */
     private function doValidateType($value) : void
     {
         if (null !== $this->handlingPlaceholder && !$this->allowPlaceholders()) {
-            $e = new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('A dynamic value is not compatible with a "%s" node type at path "%s".', static::class, $this->getPath()));
+            $e = new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('A dynamic value is not compatible with a "%s" node type at path "%s".', static::class, $this->getPath()));
             $e->setPath($this->getPath());
             throw $e;
         }
@@ -482,7 +455,7 @@ abstract class BaseNode implements \RectorPrefix20220213\Symfony\Component\Confi
         $knownTypes = \array_keys(self::$placeholders[$this->handlingPlaceholder]);
         $validTypes = $this->getValidPlaceholderTypes();
         if ($validTypes && \array_diff($knownTypes, $validTypes)) {
-            $e = new \RectorPrefix20220213\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('Invalid type for path "%s". Expected %s, but got %s.', $this->getPath(), 1 === \count($validTypes) ? '"' . \reset($validTypes) . '"' : 'one of "' . \implode('", "', $validTypes) . '"', 1 === \count($knownTypes) ? '"' . \reset($knownTypes) . '"' : 'one of "' . \implode('", "', $knownTypes) . '"'));
+            $e = new \RectorPrefix20220214\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('Invalid type for path "%s". Expected %s, but got %s.', $this->getPath(), 1 === \count($validTypes) ? '"' . \reset($validTypes) . '"' : 'one of "' . \implode('", "', $validTypes) . '"', 1 === \count($knownTypes) ? '"' . \reset($knownTypes) . '"' : 'one of "' . \implode('", "', $knownTypes) . '"'));
             if ($hint = $this->getInfo()) {
                 $e->addHint($hint);
             }

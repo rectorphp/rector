@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Contracts\Cache;
+namespace RectorPrefix20220214\Symfony\Contracts\Cache;
 
-use RectorPrefix20220213\Psr\Cache\CacheException;
-use RectorPrefix20220213\Psr\Cache\CacheItemInterface;
-use RectorPrefix20220213\Psr\Cache\InvalidArgumentException;
+use RectorPrefix20220214\Psr\Cache\CacheException;
+use RectorPrefix20220214\Psr\Cache\CacheItemInterface;
+use RectorPrefix20220214\Psr\Cache\InvalidArgumentException;
 /**
  * Augments PSR-6's CacheItemInterface with support for tags and metadata.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface ItemInterface extends \RectorPrefix20220213\Psr\Cache\CacheItemInterface
+interface ItemInterface extends \RectorPrefix20220214\Psr\Cache\CacheItemInterface
 {
     /**
      * References the Unix timestamp stating when the item will expire.
@@ -48,7 +48,7 @@ interface ItemInterface extends \RectorPrefix20220213\Psr\Cache\CacheItemInterfa
      * @throws InvalidArgumentException When $tag is not valid
      * @throws CacheException           When the item comes from a pool that is not tag-aware
      */
-    public function tag($tags) : self;
+    public function tag(string|iterable $tags) : static;
     /**
      * Returns a list of metadata info that were saved alongside with the cached value.
      *

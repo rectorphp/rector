@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220213\Symplify\EasyTesting\ValueObject;
+namespace RectorPrefix20220214\Symplify\EasyTesting\ValueObject;
 
 /**
  * @api

@@ -8,38 +8,36 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20220214\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220213\Symfony\Component\Config\Definition\NodeInterface;
+use RectorPrefix20220214\Symfony\Component\Config\Definition\NodeInterface;
 /**
  * This is the entry class for building a config tree.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class TreeBuilder implements \RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\NodeParentInterface
+class TreeBuilder implements \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeParentInterface
 {
     protected $tree;
     protected $root;
-    public function __construct(string $name, string $type = 'array', \RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\NodeBuilder $builder = null)
+    public function __construct(string $name, string $type = 'array', \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeBuilder $builder = null)
     {
-        $builder = $builder ?? new \RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\NodeBuilder();
+        $builder = $builder ?? new \RectorPrefix20220214\Symfony\Component\Config\Definition\Builder\NodeBuilder();
         $this->root = $builder->node($name, $type)->setParent($this);
     }
     /**
      * @return NodeDefinition|ArrayNodeDefinition The root node (as an ArrayNodeDefinition when the type is 'array')
      */
-    public function getRootNode() : \RectorPrefix20220213\Symfony\Component\Config\Definition\Builder\NodeDefinition
+    public function getRootNode()
     {
         return $this->root;
     }
     /**
      * Builds the tree.
      *
-     * @return NodeInterface
-     *
      * @throws \RuntimeException
      */
-    public function buildTree()
+    public function buildTree() : \RectorPrefix20220214\Symfony\Component\Config\Definition\NodeInterface
     {
         if (null !== $this->tree) {
             return $this->tree;

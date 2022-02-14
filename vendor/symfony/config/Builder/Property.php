@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220213\Symfony\Component\Config\Builder;
+namespace RectorPrefix20220214\Symfony\Component\Config\Builder;
 
 /**
  * Represents a property when building classes.
@@ -19,10 +19,25 @@ namespace RectorPrefix20220213\Symfony\Component\Config\Builder;
  */
 class Property
 {
+    /**
+     * @var string
+     */
     private $name;
+    /**
+     * @var string
+     */
     private $originalName;
+    /**
+     * @var bool
+     */
     private $array = \false;
-    private $type = null;
+    /**
+     * @var string|null
+     */
+    private $type;
+    /**
+     * @var string|null
+     */
     private $content;
     public function __construct(string $originalName, string $name)
     {
