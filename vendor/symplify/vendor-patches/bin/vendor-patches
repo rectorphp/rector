@@ -1,5 +1,5 @@
 #!/usr/bin/env php
 <?php 
-namespace RectorPrefix20220214;
+namespace RectorPrefix20220215;
 
 require __DIR__ . '/vendor-patches.php';

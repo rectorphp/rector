@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220214\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20220215\Helmich\TypoScriptParser\Parser\AST\Operator;
 
-use RectorPrefix20220214\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
-use RectorPrefix20220214\Helmich\TypoScriptParser\Parser\AST\Scalar;
+use RectorPrefix20220215\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
+use RectorPrefix20220215\Helmich\TypoScriptParser\Parser\AST\Scalar;
 /**
  * An assignment statement.
  *
@@ -15,7 +15,7 @@ use RectorPrefix20220214\Helmich\TypoScriptParser\Parser\AST\Scalar;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-class Assignment extends \RectorPrefix20220214\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryOperator
+class Assignment extends \RectorPrefix20220215\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryOperator
 {
     /**
      * The value to be assigned. Should be a scalar value, which MAY contain
@@ -31,7 +31,7 @@ class Assignment extends \RectorPrefix20220214\Helmich\TypoScriptParser\Parser\A
      * @param Scalar     $value      The value to be assigned.
      * @param int        $sourceLine The source line.
      */
-    public function __construct(\RectorPrefix20220214\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, \RectorPrefix20220214\Helmich\TypoScriptParser\Parser\AST\Scalar $value, int $sourceLine)
+    public function __construct(\RectorPrefix20220215\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, \RectorPrefix20220215\Helmich\TypoScriptParser\Parser\AST\Scalar $value, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;

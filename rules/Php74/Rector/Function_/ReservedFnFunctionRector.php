@@ -81,6 +81,9 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall && !$node->name instanceof \PhpParser\Node\Name) {
+            return null;
+        }
         if (!$this->isName($node->name, 'fn')) {
             return null;
         }
