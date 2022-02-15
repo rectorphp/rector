@@ -17,13 +17,13 @@ if (!$showEnvironment) {
 
 $constants = get_defined_constants(true)['user'] ?? [];
 ?>
-<section class="section">
-	<h2 class="section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Environment</a></h2>
+<section class="tracy-section">
+	<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Environment</a></h2>
 
-	<div class="section-panel tracy-collapsed">
+	<div class="tracy-section-panel tracy-collapsed">
 
 	<div class="tracy-tabs">
-		<ul class="tabs-bar">
+		<ul class="tracy-tab-bar">
 			<li class="tracy-tab-label tracy-active"><a href="#">$_SERVER</a></li>
 <?php if ($_SESSION ?? null): ?>
 			<li class="tracy-tab-label"><a href="#">$_SESSION</a></li>
@@ -40,7 +40,7 @@ $constants = get_defined_constants(true)['user'] ?? [];
 
 
 		<div>
-			<div class="tracy-tab-panel pane tracy-active">
+			<div class="tracy-tab-panel tracy-pane tracy-active">
 				<table class="tracy-sortable">
 <?php foreach ($_SERVER as $k => $v): ?>
 				<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $dump($v, $k) ?></td></tr>
@@ -50,8 +50,8 @@ $constants = get_defined_constants(true)['user'] ?? [];
 
 
 <?php if ($_SESSION ?? null): ?>
-			<div class="tracy-tab-panel tabs-panel">
-				<div class="pane">
+			<div class="tracy-tab-panel">
+				<div class="tracy-pane">
 					<table class="tracy-sortable">
 <?php	foreach ($_SESSION as $k => $v): ?>
 						<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $k === '__NF' ? '<i>Nette Session</i>' : $dump($v, $k) ?></td></tr>
@@ -62,7 +62,7 @@ $constants = get_defined_constants(true)['user'] ?? [];
 
 <?php if (!empty($_SESSION['__NF']['DATA'])):?>
 				<h3>Nette Session</h3>
-				<div class="pane">
+				<div class="tracy-pane">
 					<table class="tracy-sortable">
 <?php	foreach ($_SESSION['__NF']['DATA'] as $k => $v): ?>
 						<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $dump($v, $k) ?></td></tr>
@@ -76,7 +76,7 @@ $constants = get_defined_constants(true)['user'] ?? [];
 
 
 <?php if ($constants): ?>
-			<div class="tracy-tab-panel pane">
+			<div class="tracy-tab-panel tracy-pane">
 				<table class="tracy-sortable">
 <?php	foreach ($constants as $k => $v): ?>
 					<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $dump($v, $k) ?></td></tr>
@@ -86,14 +86,14 @@ $constants = get_defined_constants(true)['user'] ?? [];
 <?php endif ?>
 
 
-			<div class="tracy-tab-panel tabs-panel">
+			<div class="tracy-tab-panel">
 				<?php $this->renderPhpInfo() ?>
 
 			</div>
 
 
 <?php if ($obStatus): ?>
-			<div class="tracy-tab-panel pane">
+			<div class="tracy-tab-panel tracy-pane">
 				<?= Dumper::toHtml($obStatus, [Dumper::COLLAPSE_COUNT => 10]) ?>
 			</div>
 <?php endif ?>

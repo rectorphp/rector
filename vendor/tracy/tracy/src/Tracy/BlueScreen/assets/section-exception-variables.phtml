@@ -13,11 +13,11 @@ if (!$ex instanceof \ErrorException || empty($ex->context) || !is_array($ex->con
 	return;
 }
 ?>
-<section class="section">
-	<h2 class="section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Variables</a></h2>
+<section class="tracy-section">
+	<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Variables</a></h2>
 
-	<div class="section-panel tracy-collapsed">
-		<div class="pane">
+	<div class="tracy-section-panel tracy-collapsed">
+		<div class="tracy-pane">
 			<table class="tracy-sortable">
 <?php foreach ($ex->context as $k => $v): ?>
 				<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $dump($v, $k) ?></td></tr>

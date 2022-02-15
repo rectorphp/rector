@@ -216,7 +216,8 @@ final class Renderer
         if ($this->classLocation && $object->editor) {
             $editorAttributes = \RectorPrefix20220215\Tracy\Helpers::formatHtml(' title="Declared in file % on line %%%" data-tracy-href="%"', $object->editor->file, $object->editor->line, $object->editor->url ? "\nCtrl-Click to open in editor" : '', "\nAlt-Click to expand/collapse all child nodes", $object->editor->url);
         }
-        $out = '<span class="tracy-dump-object"' . $editorAttributes . '>' . \RectorPrefix20220215\Tracy\Helpers::escapeHtml($object->value) . '</span>' . ($object->id && $this->hash ? ' <span class="tracy-dump-hash">#' . $object->id . '</span>' : '');
+        $pos = \strrpos($object->value, '\\');
+        $out = '<span class="tracy-dump-object"' . $editorAttributes . '>' . ($pos ? \RectorPrefix20220215\Tracy\Helpers::escapeHtml(\substr($object->value, 0, $pos + 1)) . '<b>' . \RectorPrefix20220215\Tracy\Helpers::escapeHtml(\substr($object->value, $pos + 1)) . '</b>' : \RectorPrefix20220215\Tracy\Helpers::escapeHtml($object->value)) . '</span>' . ($object->id && $this->hash ? ' <span class="tracy-dump-hash">#' . $object->id . '</span>' : '');
         if ($object->items === null) {
             return $out . ' …';
         } elseif (!$object->items) {

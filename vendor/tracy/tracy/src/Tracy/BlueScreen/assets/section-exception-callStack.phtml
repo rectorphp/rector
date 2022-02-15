@@ -15,15 +15,15 @@ if (!$stack) {
 	return;
 }
 ?>
-<section class="section">
-	<h2 class="section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle">Call stack</a></h2>
+<section class="tracy-section">
+	<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle">Call stack</a></h2>
 
-	<div class="section-panel">
-	<div class="callstack">
+	<div class="tracy-section-panel">
+	<div class="tracy-callstack">
 <?php foreach ($stack as $key => $row): ?>
 <?php	$clickable = !empty($row['args']) || (isset($row['file']) && is_file($row['file'])) ?>
 
-		<div class="callstack-file">
+		<div class="tracy-callstack-file">
 <?php	if (isset($row['file']) && is_file($row['file'])): ?>
 			<?= Helpers::editorLink($row['file'], $row['line']) ?>
 <?php	else: ?>
@@ -32,7 +32,7 @@ if (!$stack) {
 
 		</div>
 
-		<div class="callstack-callee">
+		<div class="tracy-callstack-callee">
 <?php if ($clickable): ?>
 			<a href="#" data-tracy-ref="^div + div" class="tracy-toggle<?php if ($expanded !== $key) echo ' tracy-collapsed' ?>"><?php endif ?>
 <?php if (isset($row['class'])) echo Helpers::escapeHtml($row['class']), '::' ?><b><?= Helpers::escapeHtml($row['function']) ?></b> <?= empty($row['args']) ? '()' : '(...)' ?>
@@ -41,12 +41,12 @@ if (!$stack) {
 		</div>
 
 <?php	if ($clickable): ?>
-		<div class="callstack-additional<?php if ($expanded !== $key) echo ' tracy-collapsed' ?>">
+		<div class="tracy-callstack-additional<?php if ($expanded !== $key) echo ' tracy-collapsed' ?>">
 <?php $sourceOriginal = isset($row['file']) && is_file($row['file']) ? [$row['file'], $row['line']] : null ?>
 <?php $sourceMapped = $sourceOriginal ? Debugger::mapSource(...$sourceOriginal) : null ?>
 <?php if ($sourceOriginal && $sourceMapped): ?>
 			<div class="tracy-tabs">
-				<ul class="tabs-bar">
+				<ul class="tracy-tab-bar">
 					<li class="tracy-tab-label<?= $sourceMapped['active'] ? '' : ' tracy-active' ?>"><a href="#">PHP</a></li>
 					<li class="tracy-tab-label<?= $sourceMapped['active'] ? ' tracy-active' : '' ?>"><a href="#"><?= Helpers::escapeHtml($sourceMapped['label']) ?></a></li>
 				</ul>
@@ -67,7 +67,7 @@ if (!$stack) {
 
 
 <?php		if (!empty($row['args'])): ?>
-			<table class="args">
+			<table class="tracy-callstack-args">
 <?php
 			try {
 				$r = isset($row['class']) ? new \ReflectionMethod($row['class'], $row['function']) : new \ReflectionFunction($row['function']);

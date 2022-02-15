@@ -380,7 +380,7 @@ class Debug
 	static init(content) {
 		Debug.bar = new Bar;
 		Debug.panels = {};
-		Debug.layer = document.createElement('div');
+		Debug.layer = document.createElement('tracy-div');
 		Debug.layer.setAttribute('id', 'tracy-debug');
 		Debug.layer.innerHTML = addNonces(content);
 		(document.body || document.documentElement).appendChild(Debug.layer);

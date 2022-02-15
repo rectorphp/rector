@@ -21,7 +21,7 @@ namespace Tracy;
  * @var ?array $obStatus
  */
 ?>
-<div id="tracy-bs" itemscope>
+<tracy-div id="tracy-bs" itemscope>
 	<a id="tracy-bs-toggle" href="#" class="tracy-toggle"></a>
 	<div class="tracy-bs-main">
 <?php $ex = $exception; $exceptions = []; ?>
@@ -33,10 +33,10 @@ namespace Tracy;
 <?php foreach ($this->renderPanels(null) as $panel): ?>
 <?php if (!empty($panel->bottom)) { $bottomPanels[] = $panel; continue; } ?>
 <?php $collapsedClass = !isset($panel->collapsed) || $panel->collapsed ? ' tracy-collapsed' : ''; ?>
-		<section class="section">
-			<h2 class="section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle<?= $collapsedClass ?>"><?= Helpers::escapeHtml($panel->tab) ?></a></h2>
+		<section class="tracy-section">
+			<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle<?= $collapsedClass ?>"><?= Helpers::escapeHtml($panel->tab) ?></a></h2>
 
-			<div class="section-panel<?= $collapsedClass ?>">
+			<div class="tracy-section-panel<?= $collapsedClass ?>">
 			<?= $panel->panel ?>
 			</div>
 		</section>
@@ -49,10 +49,10 @@ namespace Tracy;
 <?php require __DIR__ . '/section-http.phtml' ?>
 
 <?php foreach ($bottomPanels as $panel): ?>
-		<section class="section">
-			<h2 class="section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle"><?= Helpers::escapeHtml($panel->tab) ?></a></h2>
+		<section class="tracy-section">
+			<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle"><?= Helpers::escapeHtml($panel->tab) ?></a></h2>
 
-			<div class="section-panel">
+			<div class="tracy-section-panel">
 			<?= $panel->panel ?>
 			</div>
 		</section>
@@ -64,8 +64,8 @@ namespace Tracy;
 				<li>Report generated at <?= date('Y/m/d H:i:s') ?></li>
 				<?php foreach ($info as $item): ?><li><?= Helpers::escapeHtml($item) ?></li><?php endforeach ?>
 			</ul>
-			<div class="footer-logo"><a href="https://tracy.nette.org" rel="noreferrer"></a></div>
+			<div class="tracy-footer-logo"><a href="https://tracy.nette.org" rel="noreferrer"></a></div>
 		</footer>
 	</div>
 	<meta itemprop=tracy-snapshot content=<?= Dumper::formatSnapshotAttribute($snapshot) ?>>
-</div>
+</tracy-div>

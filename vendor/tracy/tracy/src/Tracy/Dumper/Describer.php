@@ -19,7 +19,7 @@ final class Describer
     // Number.MAX_SAFE_INTEGER
     private const JS_SAFE_INTEGER = 1 << 53 - 1;
     /** @var int */
-    public $maxDepth = 7;
+    public $maxDepth = 15;
     /** @var int */
     public $maxLength = 150;
     /** @var int */

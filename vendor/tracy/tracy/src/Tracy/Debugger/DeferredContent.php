@@ -84,7 +84,7 @@ final class DeferredContent
     }
     private function sendJsCss() : void
     {
-        $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/../Bar/assets/bar.css', __DIR__ . '/../assets/toggle.css', __DIR__ . '/../assets/table-sort.css', __DIR__ . '/../assets/tabs.css', __DIR__ . '/../Dumper/assets/dumper-light.css', __DIR__ . '/../Dumper/assets/dumper-dark.css', __DIR__ . '/../BlueScreen/assets/bluescreen.css'], \RectorPrefix20220215\Tracy\Debugger::$customCssFiles));
+        $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/../assets/reset.css', __DIR__ . '/../Bar/assets/bar.css', __DIR__ . '/../assets/toggle.css', __DIR__ . '/../assets/table-sort.css', __DIR__ . '/../assets/tabs.css', __DIR__ . '/../Dumper/assets/dumper-light.css', __DIR__ . '/../Dumper/assets/dumper-dark.css', __DIR__ . '/../BlueScreen/assets/bluescreen.css'], \RectorPrefix20220215\Tracy\Debugger::$customCssFiles));
         echo "'use strict';\n(function(){\n\tvar el = document.createElement('style');\n\tel.setAttribute('nonce', document.currentScript.getAttribute('nonce') || document.currentScript.nonce);\n\tel.className='tracy-debug';\n\tel.textContent=" . \json_encode(\RectorPrefix20220215\Tracy\Helpers::minifyCss(\implode('', $css))) . ";\n\tdocument.head.appendChild(el);})\n();\n";
         \array_map(function ($file) {
             echo '(function() {', \file_get_contents($file), '})();';

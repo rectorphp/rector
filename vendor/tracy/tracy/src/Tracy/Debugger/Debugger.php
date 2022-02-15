@@ -13,7 +13,7 @@ use ErrorException;
  */
 class Debugger
 {
-    public const VERSION = '2.9.0';
+    public const VERSION = '2.9.1';
     /** server modes for Debugger::enable() */
     public const DEVELOPMENT = \false, PRODUCTION = \true, DETECT = null;
     public const COOKIE_SECRET = 'tracy-debug';
@@ -42,9 +42,11 @@ class Debugger
     public static $onFatalError = [];
     /********************* Debugger::dump() ****************d*g**/
     /** @var int  how many nested levels of array/object properties display by dump() */
-    public static $maxDepth = 7;
+    public static $maxDepth = 15;
     /** @var int  how long strings display by dump() */
     public static $maxLength = 150;
+    /** @var int  how many items in array/object display by dump() */
+    public static $maxItems = 100;
     /** @var bool display location by dump()? */
     public static $showLocation;
     /** @var string[] sensitive keys not displayed by dump() */
@@ -143,6 +145,7 @@ class Debugger
         \error_reporting(\E_ALL);
         $strategy = self::getStrategy();
         $strategy->initialize();
+        self::dispatch();
         if (self::$enabled) {
             return;
         }
@@ -155,7 +158,6 @@ class Debugger
         foreach (['Bar/Bar', 'Bar/DefaultBarPanel', 'BlueScreen/BlueScreen', 'Dumper/Describer', 'Dumper/Dumper', 'Dumper/Exposer', 'Dumper/Renderer', 'Dumper/Value', 'Logger/FireLogger', 'Logger/Logger', 'Session/SessionStorage', 'Session/FileSession', 'Session/NativeSession', 'Helpers'] as $path) {
             require_once \dirname(__DIR__) . "/{$path}.php";
         }
-        self::dispatch();
         self::$enabled = \true;
     }
     public static function dispatch() : void
@@ -334,7 +336,7 @@ class Debugger
     public static function getSessionStorage() : \RectorPrefix20220215\Tracy\SessionStorage
     {
         if (!self::$sessionStorage) {
-            self::$sessionStorage = \is_dir($dir = \session_save_path()) || \is_dir($dir = \ini_get('upload_tmp_dir')) || \is_dir($dir = \sys_get_temp_dir()) || ($dir = self::$logDirectory) ? new \RectorPrefix20220215\Tracy\FileSession($dir) : new \RectorPrefix20220215\Tracy\NativeSession();
+            self::$sessionStorage = @\is_dir($dir = \session_save_path()) || @\is_dir($dir = \ini_get('upload_tmp_dir')) || @\is_dir($dir = \sys_get_temp_dir()) || ($dir = self::$logDirectory) ? new \RectorPrefix20220215\Tracy\FileSession($dir) : new \RectorPrefix20220215\Tracy\NativeSession();
         }
         return self::$sessionStorage;
     }
@@ -349,12 +351,15 @@ class Debugger
     public static function dump($var, bool $return = \false)
     {
         if ($return) {
-            $options = [\RectorPrefix20220215\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20220215\Tracy\Dumper::TRUNCATE => self::$maxLength];
+            $options = [\RectorPrefix20220215\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20220215\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20220215\Tracy\Dumper::ITEMS => self::$maxItems];
             return \RectorPrefix20220215\Tracy\Helpers::isCli() ? \RectorPrefix20220215\Tracy\Dumper::toText($var) : \RectorPrefix20220215\Tracy\Helpers::capture(function () use($var, $options) {
                 \RectorPrefix20220215\Tracy\Dumper::dump($var, $options);
             });
         } elseif (!self::$productionMode) {
-            \RectorPrefix20220215\Tracy\Dumper::dump($var, [\RectorPrefix20220215\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20220215\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20220215\Tracy\Dumper::LOCATION => self::$showLocation, \RectorPrefix20220215\Tracy\Dumper::THEME => self::$dumpTheme, \RectorPrefix20220215\Tracy\Dumper::KEYS_TO_HIDE => self::$keysToHide]);
+            $html = \RectorPrefix20220215\Tracy\Helpers::isHtmlMode();
+            echo $html ? '<tracy-div>' : '';
+            \RectorPrefix20220215\Tracy\Dumper::dump($var, [\RectorPrefix20220215\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20220215\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20220215\Tracy\Dumper::ITEMS => self::$maxItems, \RectorPrefix20220215\Tracy\Dumper::LOCATION => self::$showLocation, \RectorPrefix20220215\Tracy\Dumper::THEME => self::$dumpTheme, \RectorPrefix20220215\Tracy\Dumper::KEYS_TO_HIDE => self::$keysToHide]);
+            echo $html ? '</tracy-div>' : '';
         }
         return $var;
     }

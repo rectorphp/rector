@@ -1,0 +1,290 @@
+/**
+ * This file is part of the Tracy (https://tracy.nette.org)
+ */
+
+tracy-div,
+tracy-div * {
+	font: inherit;
+	line-height: inherit;
+	color: inherit;
+	background: transparent;
+	margin: 0;
+	padding: 0;
+	border: none;
+	text-align: inherit;
+	list-style: inherit;
+	opacity: 1;
+	border-radius: 0;
+	box-shadow: none;
+	text-shadow: none;
+	box-sizing: border-box;
+	text-decoration: none;
+	text-transform: inherit;
+	white-space: inherit;
+	float: none;
+	clear: none;
+	max-width: initial;
+	min-width: initial;
+	max-height: initial;
+	min-height: initial;
+}
+
+tracy-div *:not(svg):not(img):not(table) {
+	width: initial;
+	height: initial;
+}
+
+tracy-div:before,
+tracy-div:after,
+tracy-div *:before,
+tracy-div *:after {
+	all: unset;
+}
+
+tracy-div b,
+tracy-div strong {
+	font-weight: bold;
+}
+
+tracy-div small {
+	font-size: smaller;
+}
+
+tracy-div i,
+tracy-div em {
+	font-style: italic;
+}
+
+tracy-div big {
+	font-size: larger;
+}
+
+tracy-div small,
+tracy-div sub,
+tracy-div sup {
+	font-size: smaller;
+}
+
+tracy-div ins {
+	text-decoration: underline;
+}
+
+tracy-div del {
+	text-decoration: line-through;
+}
+
+tracy-div table {
+	border-collapse: collapse;
+}
+
+tracy-div pre {
+	font-family: monospace;
+	white-space: pre;
+}
+
+tracy-div code,
+tracy-div kbd,
+tracy-div samp {
+	font-family: monospace;
+}
+
+tracy-div input {
+	background-color: white;
+	padding: 1px;
+	border: 1px solid;
+}
+
+tracy-div textarea {
+	background-color: white;
+	border: 1px solid;
+	padding: 2px;
+	white-space: pre-wrap;
+}
+
+tracy-div select {
+	border: 1px solid;
+	white-space: pre;
+}
+
+
+
+
+/* TableSort */
+tracy-div .tracy-sortable > :first-child > tr:first-child > * {
+	position: relative;
+}
+
+tracy-div .tracy-sortable > :first-child > tr:first-child > *:hover:before {
+	position: absolute;
+	right: .3em;
+	content: "\21C5";
+	opacity: .4;
+	font-weight: normal;
+}
+
+
+/* dump */
+tracy-div .tracy-dump div {
+	padding-left: 3ex;
+}
+
+tracy-div .tracy-dump div div {
+	border-left: 1px solid rgba(0, 0, 0, .1);
+	margin-left: .5ex;
+}
+
+tracy-div .tracy-dump div div:hover {
+	border-left-color: rgba(0, 0, 0, .25);
+}
+
+tracy-div .tracy-dump {
+	background: #FDF5CE;
+	padding: .4em .7em;
+	border: 1px dotted silver;
+	overflow: auto;
+}
+
+tracy-div table .tracy-dump {
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+
+tracy-div .tracy-dump-location {
+	color: gray;
+	font-size: 80%;
+	text-decoration: none;
+	background: none;
+	opacity: .5;
+	float: right;
+	cursor: pointer;
+}
+
+tracy-div .tracy-dump-location:hover,
+tracy-div .tracy-dump-location:focus {
+	color: gray;
+	background: none;
+	opacity: 1;
+}
+
+tracy-div .tracy-dump-array,
+tracy-div .tracy-dump-object {
+	color: #C22;
+}
+
+tracy-div .tracy-dump-string {
+	color: #35D;
+	white-space: break-spaces;
+}
+
+tracy-div div.tracy-dump-string {
+	position: relative;
+	padding-left: 3.5ex;
+}
+
+tracy-div .tracy-dump-lq {
+	margin-left: calc(-1ex - 1px);
+}
+
+tracy-div div.tracy-dump-string:before {
+	content: '';
+	position: absolute;
+	left: calc(3ex - 1px);
+	top: 1.5em;
+	bottom: 0;
+	border-left: 1px solid rgba(0, 0, 0, .1);
+}
+
+tracy-div .tracy-dump-virtual span,
+tracy-div .tracy-dump-dynamic span,
+tracy-div .tracy-dump-string span {
+	color: rgba(0, 0, 0, 0.5);
+}
+
+tracy-div .tracy-dump-virtual i,
+tracy-div .tracy-dump-dynamic i,
+tracy-div .tracy-dump-string i {
+	font-size: 80%;
+	font-style: normal;
+	color: rgba(0, 0, 0, 0.5);
+	user-select: none;
+}
+
+tracy-div .tracy-dump-number {
+	color: #090;
+}
+
+tracy-div .tracy-dump-null,
+tracy-div .tracy-dump-bool {
+	color: #850;
+}
+
+tracy-div .tracy-dump-virtual {
+	font-style: italic;
+}
+
+tracy-div .tracy-dump-public::after {
+	content: ' pub';
+}
+
+tracy-div .tracy-dump-protected::after {
+	content: ' pro';
+}
+
+tracy-div .tracy-dump-private::after {
+	content: ' pri';
+}
+
+tracy-div .tracy-dump-public::after,
+tracy-div .tracy-dump-protected::after,
+tracy-div .tracy-dump-private::after,
+tracy-div .tracy-dump-hash {
+	font-size: 85%;
+	color: rgba(0, 0, 0, 0.5);
+}
+
+tracy-div .tracy-dump-indent {
+	display: none;
+}
+
+tracy-div .tracy-dump-highlight {
+	background: #C22;
+	color: white;
+	border-radius: 2px;
+	padding: 0 2px;
+	margin: 0 -2px;
+}
+
+tracy-div span[data-tracy-href] {
+	border-bottom: 1px dotted rgba(0, 0, 0, .2);
+}
+
+
+/* toggle */
+tracy-div .tracy-toggle:after {
+	content: '';
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 0;
+	border-top: .6ex solid;
+	border-right: .6ex solid transparent;
+	border-left: .6ex solid transparent;
+	transform: scale(1, 1.5);
+	margin: 0 .2ex 0 .7ex;
+	transition: .1s transform;
+	opacity: .5;
+}
+
+tracy-div .tracy-toggle.tracy-collapsed:after {
+	transform: rotate(-90deg) scale(1, 1.5) translate(.1ex, 0);
+}
+
+
+/* tabs */
+tracy-div .tracy-tab-label {
+	user-select: none;
+}
+
+tracy-div .tracy-tab-panel:not(.tracy-active) {
+	display: none;
+}

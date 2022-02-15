@@ -5319,17 +5319,17 @@
         },
         {
             "name": "tracy\/tracy",
-            "version": "v2.9.0",
-            "version_normalized": "2.9.0.0",
+            "version": "v2.9.1",
+            "version_normalized": "2.9.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/tracy.git",
-                "reference": "551a7d936dfbd7075ced9a604b9527d1f7bfa8b4"
+                "reference": "4180b3221ff852fe10d5eab30d80be6f6ab7221e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/551a7d936dfbd7075ced9a604b9527d1f7bfa8b4",
-                "reference": "551a7d936dfbd7075ced9a604b9527d1f7bfa8b4",
+                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/4180b3221ff852fe10d5eab30d80be6f6ab7221e",
+                "reference": "4180b3221ff852fe10d5eab30d80be6f6ab7221e",
                 "shasum": ""
             },
             "require": {
@@ -5349,7 +5349,7 @@
                 "phpstan\/phpstan": "^1.0",
                 "psr\/log": "^1.0 || ^2.0 || ^3.0"
             },
-            "time": "2021-12-20T18:19:46+00:00",
+            "time": "2022-02-15T16:38:30+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -5390,7 +5390,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/tracy\/issues",
-                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.9.0"
+                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.9.1"
             },
             "install-path": "..\/tracy\/tracy"
         },

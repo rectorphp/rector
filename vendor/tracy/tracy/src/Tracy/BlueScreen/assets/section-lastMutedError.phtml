@@ -12,9 +12,9 @@ if (!$lastError) {
 	return;
 }
 ?>
-<section class="section">
-	<h2 class="section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Last muted error</a></h2>
-	<div class="section-panel tracy-collapsed">
+<section class="tracy-section">
+	<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Last muted error</a></h2>
+	<div class="tracy-section-panel tracy-collapsed">
 
 	<h3><?= Helpers::errorTypeToString($lastError['type']) ?>: <?= Helpers::escapeHtml($lastError['message']) ?></h3>
 	<p><i>Note: the last muted error may have nothing to do with the thrown exception.</i></p>

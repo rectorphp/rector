@@ -21,6 +21,8 @@ class BlueScreen
     public $maxDepth = 5;
     /** @var int  */
     public $maxLength = 150;
+    /** @var int */
+    public $maxItems = 100;
     /** @var callable|null  a callable returning true for sensitive data; fn(string $key, mixed $val): bool */
     public $scrubber;
     /** @var string[] */
@@ -128,7 +130,7 @@ class BlueScreen
         $snapshot =& $this->snapshot;
         $snapshot = [];
         $dump = $this->getDumper();
-        $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/assets/bluescreen.css', __DIR__ . '/../assets/toggle.css', __DIR__ . '/../assets/table-sort.css', __DIR__ . '/../assets/tabs.css', __DIR__ . '/../Dumper/assets/dumper-light.css'], \RectorPrefix20220215\Tracy\Debugger::$customCssFiles));
+        $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/../assets/reset.css', __DIR__ . '/assets/bluescreen.css', __DIR__ . '/../assets/toggle.css', __DIR__ . '/../assets/table-sort.css', __DIR__ . '/../assets/tabs.css', __DIR__ . '/../Dumper/assets/dumper-light.css'], \RectorPrefix20220215\Tracy\Debugger::$customCssFiles));
         $css = \RectorPrefix20220215\Tracy\Helpers::minifyCss(\implode('', $css));
         $nonce = $toScreen ? \RectorPrefix20220215\Tracy\Helpers::getNonce() : null;
         $actions = $toScreen ? $this->renderActions($exception) : [];
@@ -211,7 +213,7 @@ class BlueScreen
         if ($source === \false) {
             return null;
         }
-        $source = $php ? static::highlightPhp($source, $line, $lines) : '<pre class=code><div>' . static::highlightLine(\htmlspecialchars($source, \ENT_IGNORE, 'UTF-8'), $line, $lines) . '</div></pre>';
+        $source = $php ? static::highlightPhp($source, $line, $lines) : '<pre class=tracy-code><div>' . static::highlightLine(\htmlspecialchars($source, \ENT_IGNORE, 'UTF-8'), $line, $lines) . '</div></pre>';
         if ($editor = \RectorPrefix20220215\Tracy\Helpers::editorUri($file, $line)) {
             $source = \substr_replace($source, ' title="Ctrl-Click to open in editor" data-tracy-href="' . \RectorPrefix20220215\Tracy\Helpers::escapeHtml($editor) . '"', 4, 0);
         }
@@ -237,7 +239,7 @@ class BlueScreen
         $source = \str_replace('<br />', "\n", $source[1]);
         $out .= static::highlightLine($source, $line, $lines);
         $out = \str_replace('&nbsp;', ' ', $out);
-        return "<pre class='code'><div>{$out}</div></pre>";
+        return "<pre class='tracy-code'><div>{$out}</div></pre>";
     }
     /**
      * Returns highlighted line in HTML code.
@@ -266,9 +268,9 @@ class BlueScreen
             $s = \str_replace(["\r", "\n"], ['', ''], $s);
             \preg_match_all('#<[^>]+>#', $s, $tags);
             if ($n == $line) {
-                $out .= \sprintf("<span class='highlight'>%{$numWidth}s:    %s\n</span>%s", $n, \strip_tags($s), \implode('', $tags[0]));
+                $out .= \sprintf("<span class='tracy-line-highlight'>%{$numWidth}s:    %s\n</span>%s", $n, \strip_tags($s), \implode('', $tags[0]));
             } else {
-                $out .= \sprintf("<span class='line'>%{$numWidth}s:</span>    %s\n", $n, $s);
+                $out .= \sprintf("<span class='tracy-line'>%{$numWidth}s:</span>    %s\n", $n, $s);
             }
         }
         $out .= \str_repeat('</span>', $spans) . '</code>';
@@ -317,7 +319,7 @@ class BlueScreen
     public function getDumper() : \Closure
     {
         return function ($v, $k = null) : string {
-            return \RectorPrefix20220215\Tracy\Dumper::toHtml($v, [\RectorPrefix20220215\Tracy\Dumper::DEPTH => $this->maxDepth, \RectorPrefix20220215\Tracy\Dumper::TRUNCATE => $this->maxLength, \RectorPrefix20220215\Tracy\Dumper::SNAPSHOT => &$this->snapshot, \RectorPrefix20220215\Tracy\Dumper::LOCATION => \RectorPrefix20220215\Tracy\Dumper::LOCATION_CLASS, \RectorPrefix20220215\Tracy\Dumper::SCRUBBER => $this->scrubber, \RectorPrefix20220215\Tracy\Dumper::KEYS_TO_HIDE => $this->keysToHide], $k);
+            return \RectorPrefix20220215\Tracy\Dumper::toHtml($v, [\RectorPrefix20220215\Tracy\Dumper::DEPTH => $this->maxDepth, \RectorPrefix20220215\Tracy\Dumper::TRUNCATE => $this->maxLength, \RectorPrefix20220215\Tracy\Dumper::ITEMS => $this->maxItems, \RectorPrefix20220215\Tracy\Dumper::SNAPSHOT => &$this->snapshot, \RectorPrefix20220215\Tracy\Dumper::LOCATION => \RectorPrefix20220215\Tracy\Dumper::LOCATION_CLASS, \RectorPrefix20220215\Tracy\Dumper::SCRUBBER => $this->scrubber, \RectorPrefix20220215\Tracy\Dumper::KEYS_TO_HIDE => $this->keysToHide], $k);
         };
     }
     public function formatMessage(\Throwable $exception) : string
