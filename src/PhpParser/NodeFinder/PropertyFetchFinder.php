@@ -10,7 +10,9 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\AstResolver;
@@ -41,7 +43,11 @@ final class PropertyFetchFinder
     public function findPrivatePropertyFetches(Property | Param $propertyOrPromotedParam): array
     {
         $classLike = $this->betterNodeFinder->findParentType($propertyOrPromotedParam, ClassLike::class);
-        if (! $classLike instanceof Class_) {
+        if (! $classLike instanceof ClassLike) {
+            return [];
+        }
+
+        if ($classLike instanceof Interface_) {
             return [];
         }
 
@@ -57,6 +63,7 @@ final class PropertyFetchFinder
         $hasTrait = $nodesTrait !== [];
         $nodes = array_merge($nodes, $nodesTrait);
 
+        /** @var Class_|Trait_ $classLike */
         return $this->findPropertyFetchesInClassLike($classLike, $nodes, $propertyName, $hasTrait);
     }
 
@@ -103,7 +110,7 @@ final class PropertyFetchFinder
      * @return PropertyFetch[]|StaticPropertyFetch[]
      */
     private function findPropertyFetchesInClassLike(
-        Class_ $class,
+        Class_|Trait_ $class,
         array $stmts,
         string $propertyName,
         bool $hasTrait
@@ -139,7 +146,7 @@ final class PropertyFetchFinder
         return array_merge($matchingPropertyFetches, $matchingStaticPropertyFetches);
     }
 
-    private function isInAnonymous(PropertyFetch $propertyFetch, Class_ $class, bool $hasTrait): bool
+    private function isInAnonymous(PropertyFetch $propertyFetch, Class_|Trait_ $class, bool $hasTrait): bool
     {
         $parent = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
         if (! $parent instanceof Class_) {
@@ -149,8 +156,11 @@ final class PropertyFetchFinder
         return $parent !== $class && ! $hasTrait;
     }
 
-    private function isNamePropertyNameEquals(PropertyFetch $propertyFetch, string $propertyName, Class_ $class): bool
-    {
+    private function isNamePropertyNameEquals(
+        PropertyFetch $propertyFetch,
+        string $propertyName,
+        Class_|Trait_ $class
+    ): bool {
         // early check if property fetch name is not equals with property name
         // so next check is check var name and var type only
         if (! $this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
