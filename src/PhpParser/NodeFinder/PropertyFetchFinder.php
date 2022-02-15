@@ -9,7 +9,9 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\AstResolver;
@@ -63,7 +65,10 @@ final class PropertyFetchFinder
     public function findPrivatePropertyFetches($propertyOrPromotedParam) : array
     {
         $classLike = $this->betterNodeFinder->findParentType($propertyOrPromotedParam, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+            return [];
+        }
+        if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
             return [];
         }
         $propertyName = $this->resolvePropertyName($propertyOrPromotedParam);
@@ -75,6 +80,7 @@ final class PropertyFetchFinder
         $nodesTrait = $this->astResolver->parseClassReflectionTraits($classReflection);
         $hasTrait = $nodesTrait !== [];
         $nodes = \array_merge($nodes, $nodesTrait);
+        /** @var Class_|Trait_ $classLike */
         return $this->findPropertyFetchesInClassLike($classLike, $nodes, $propertyName, $hasTrait);
     }
     /**
@@ -102,8 +108,9 @@ final class PropertyFetchFinder
     /**
      * @param Stmt[] $stmts
      * @return PropertyFetch[]|StaticPropertyFetch[]
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class
      */
-    private function findPropertyFetchesInClassLike(\PhpParser\Node\Stmt\Class_ $class, array $stmts, string $propertyName, bool $hasTrait) : array
+    private function findPropertyFetchesInClassLike($class, array $stmts, string $propertyName, bool $hasTrait) : array
     {
         /** @var PropertyFetch[] $propertyFetches */
         $propertyFetches = $this->betterNodeFinder->findInstanceOf($stmts, \PhpParser\Node\Expr\PropertyFetch::class);
@@ -122,7 +129,10 @@ final class PropertyFetchFinder
         });
         return \array_merge($matchingPropertyFetches, $matchingStaticPropertyFetches);
     }
-    private function isInAnonymous(\PhpParser\Node\Expr\PropertyFetch $propertyFetch, \PhpParser\Node\Stmt\Class_ $class, bool $hasTrait) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class
+     */
+    private function isInAnonymous(\PhpParser\Node\Expr\PropertyFetch $propertyFetch, $class, bool $hasTrait) : bool
     {
         $parent = $this->betterNodeFinder->findParentType($propertyFetch, \PhpParser\Node\Stmt\Class_::class);
         if (!$parent instanceof \PhpParser\Node\Stmt\Class_) {
@@ -130,7 +140,10 @@ final class PropertyFetchFinder
         }
         return $parent !== $class && !$hasTrait;
     }
-    private function isNamePropertyNameEquals(\PhpParser\Node\Expr\PropertyFetch $propertyFetch, string $propertyName, \PhpParser\Node\Stmt\Class_ $class) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class
+     */
+    private function isNamePropertyNameEquals(\PhpParser\Node\Expr\PropertyFetch $propertyFetch, string $propertyName, $class) : bool
     {
         // early check if property fetch name is not equals with property name
         // so next check is check var name and var type only

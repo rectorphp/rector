@@ -17,9 +17,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -148,15 +148,21 @@ final class PropertyManipulator
      */
     public function isPropertyChangeableExceptConstructor($propertyOrParam) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($propertyOrParam, \PhpParser\Node\Stmt\Class_::class);
-        if ($class instanceof \PhpParser\Node\Stmt\Class_) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-            if ($phpDocInfo->hasByAnnotationClasses(self::ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES)) {
-                return \true;
-            }
-            if ($this->phpAttributeAnalyzer->hasPhpAttributes($class, self::ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES)) {
-                return \true;
-            }
+        $classLike = $this->betterNodeFinder->findParentType($propertyOrParam, \PhpParser\Node\Stmt\ClassLike::class);
+        // does not has parent type ClassLike? Possibly parent is changed by other rule
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+            return \true;
+        }
+        // Property or Param in interface? return true early as no property in interface
+        if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
+            return \true;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classLike);
+        if ($phpDocInfo->hasByAnnotationClasses(self::ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES)) {
+            return \true;
+        }
+        if ($this->phpAttributeAnalyzer->hasPhpAttributes($classLike, self::ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES)) {
+            return \true;
         }
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrParam);
         foreach ($propertyFetches as $propertyFetch) {
