@@ -87,6 +87,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof FuncCall && ! $node->name instanceof Name) {
+            return null;
+        }
+
         if (! $this->isName($node->name, 'fn')) {
             return null;
         }
