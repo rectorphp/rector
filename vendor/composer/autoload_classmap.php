@@ -1477,6 +1477,7 @@ return array(
     'Rector\\CodeQuality\\NodeAnalyzer\\ForAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ForAnalyzer.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\ForeachAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ForeachAnalyzer.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\LocalPropertyAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/LocalPropertyAnalyzer.php',
+    'Rector\\CodeQuality\\NodeFactory\\ArrayFilterFactory' => $baseDir . '/rules/CodeQuality/NodeFactory/ArrayFilterFactory.php',
     'Rector\\CodeQuality\\NodeFactory\\ForeachFactory' => $baseDir . '/rules/CodeQuality/NodeFactory/ForeachFactory.php',
     'Rector\\CodeQuality\\NodeFactory\\MissingPropertiesFactory' => $baseDir . '/rules/CodeQuality/NodeFactory/MissingPropertiesFactory.php',
     'Rector\\CodeQuality\\NodeFactory\\PropertyTypeDecorator' => $baseDir . '/rules/CodeQuality/NodeFactory/PropertyTypeDecorator.php',
