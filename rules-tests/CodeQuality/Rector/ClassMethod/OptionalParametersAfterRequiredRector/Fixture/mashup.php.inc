@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Fixture;
 
 class Mashup
 {
@@ -13,7 +13,7 @@ class Mashup
 -----
 <?php
 
-namespace Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Fixture;
 
 class Mashup
 {

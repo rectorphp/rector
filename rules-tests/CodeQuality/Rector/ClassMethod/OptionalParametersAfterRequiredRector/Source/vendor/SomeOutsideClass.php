@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Source\vendor;
+namespace Rector\Tests\CodeQuality\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Source\vendor;
 
 final class SomeOutsideClass
 {

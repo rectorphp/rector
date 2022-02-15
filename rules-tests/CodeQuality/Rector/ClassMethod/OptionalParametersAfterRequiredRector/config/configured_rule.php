@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
+use Rector\CodeQuality\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

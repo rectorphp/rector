@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Rector\ClassMethod;
+namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -16,16 +16,15 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @changelog https://php.watch/versions/8.0#deprecate-required-param-after-optional
  *
- * @see \Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector\OptionalParametersAfterRequiredRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\OptionalParametersAfterRequiredRector\OptionalParametersAfterRequiredRectorTest
  */
-final class OptionalParametersAfterRequiredRector extends AbstractRector implements MinPhpVersionInterface
+final class OptionalParametersAfterRequiredRector extends AbstractRector
 {
     /**
      * @var string
@@ -38,11 +37,6 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector impleme
         private readonly ReflectionResolver $reflectionResolver,
         private readonly VendorLocationDetector $vendorLocationDetector
     ) {
-    }
-
-    public function provideMinPhpVersion(): int
-    {
-        return PhpVersionFeature::DEPRECATE_REQUIRED_PARAMETER_AFTER_OPTIONAL;
     }
 
     public function getRuleDefinition(): RuleDefinition

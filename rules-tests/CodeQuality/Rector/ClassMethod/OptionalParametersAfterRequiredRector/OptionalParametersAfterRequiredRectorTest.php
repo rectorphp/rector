@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
+namespace Rector\Tests\CodeQuality\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
