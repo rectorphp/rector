@@ -224,6 +224,11 @@ CODE_SAMPLE
     }
     private function refactorAttribute(\PhpParser\Node\Expr $targetEntity, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
     {
+        $phpDocVarTagValueNode = $phpDocInfo->getVarTagValueNode();
+        $phpDocCollectionVarTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
+        if ($phpDocVarTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode && !$phpDocCollectionVarTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+            return null;
+        }
         $targetEntityClassName = $this->targetEntityResolver->resolveFromExpr($targetEntity);
         if ($targetEntityClassName === null) {
             return null;
