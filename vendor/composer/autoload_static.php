@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit94e603ff37b4f42de2dd41e489cddf66
+class ComposerStaticInit65cd69f55c342a0269910718ad2dfe0d
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3206,12 +3206,7 @@ class ComposerStaticInit94e603ff37b4f42de2dd41e489cddf66
         'Rector\\RectorInstaller\\LocalFilesystem' => __DIR__ . '/..' . '/rector/extension-installer/src/LocalFilesystem.php',
         'Rector\\RectorInstaller\\Plugin' => __DIR__ . '/..' . '/rector/extension-installer/src/Plugin.php',
         'Rector\\RectorInstaller\\PluginInstaller' => __DIR__ . '/..' . '/rector/extension-installer/src/PluginInstaller.php',
-        'Rector\\RemovingStatic\\NodeAnalyzer\\StaticCallPresenceAnalyzer' => __DIR__ . '/../..' . '/rules/RemovingStatic/NodeAnalyzer/StaticCallPresenceAnalyzer.php',
         'Rector\\RemovingStatic\\Rector\\ClassMethod\\LocallyCalledStaticMethodToNonStaticRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php',
-        'Rector\\RemovingStatic\\Rector\\Class_\\DesiredClassTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Class_/DesiredClassTypeToDynamicRector.php',
-        'Rector\\RemovingStatic\\Rector\\Property\\DesiredPropertyClassMethodTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector.php',
-        'Rector\\RemovingStatic\\Rector\\StaticCall\\DesiredStaticCallTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/StaticCall/DesiredStaticCallTypeToDynamicRector.php',
-        'Rector\\RemovingStatic\\Rector\\StaticPropertyFetch\\DesiredStaticPropertyFetchTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/StaticPropertyFetch/DesiredStaticPropertyFetchTypeToDynamicRector.php',
         'Rector\\Removing\\NodeAnalyzer\\ForbiddenPropertyRemovalAnalyzer' => __DIR__ . '/../..' . '/rules/Removing/NodeAnalyzer/ForbiddenPropertyRemovalAnalyzer.php',
         'Rector\\Removing\\NodeManipulator\\ComplexNodeRemover' => __DIR__ . '/../..' . '/rules/Removing/NodeManipulator/ComplexNodeRemover.php',
         'Rector\\Removing\\Rector\\ClassMethod\\ArgumentRemoverRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/ClassMethod/ArgumentRemoverRector.php',
@@ -3881,9 +3876,9 @@ class ComposerStaticInit94e603ff37b4f42de2dd41e489cddf66
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit94e603ff37b4f42de2dd41e489cddf66::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit94e603ff37b4f42de2dd41e489cddf66::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit94e603ff37b4f42de2dd41e489cddf66::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit65cd69f55c342a0269910718ad2dfe0d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit65cd69f55c342a0269910718ad2dfe0d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit65cd69f55c342a0269910718ad2dfe0d::$classMap;
 
         }, null, ClassLoader::class);
     }

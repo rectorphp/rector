@@ -1,4 +1,4 @@
-# 524 Rules Overview
+# 520 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [Autodiscovery](#autodiscovery) (4)
 
-- [CodeQuality](#codequality) (70)
+- [CodeQuality](#codequality) (71)
 
 - [CodingStyle](#codingstyle) (35)
 
@@ -76,7 +76,7 @@
 
 - [Php74](#php74) (15)
 
-- [Php80](#php80) (18)
+- [Php80](#php80) (17)
 
 - [Php81](#php81) (9)
 
@@ -88,7 +88,7 @@
 
 - [Removing](#removing) (6)
 
-- [RemovingStatic](#removingstatic) (5)
+- [RemovingStatic](#removingstatic) (1)
 
 - [Renaming](#renaming) (11)
 
@@ -1121,6 +1121,24 @@ Change unsafe new `static()` to new `self()`
      {
 -        return new static();
 +        return new self();
+     }
+ }
+```
+
+<br>
+
+### OptionalParametersAfterRequiredRector
+
+Move required parameters after optional ones
+
+- class: [`Rector\CodeQuality\Rector\ClassMethod\OptionalParametersAfterRequiredRector`](../rules/CodeQuality/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php)
+
+```diff
+ class SomeObject
+ {
+-    public function run($optional = 1, $required)
++    public function run($required, $optional = 1)
+     {
      }
  }
 ```
@@ -8350,24 +8368,6 @@ Change ternary type resolve to `get_debug_type()`
 
 <br>
 
-### OptionalParametersAfterRequiredRector
-
-Move required parameters after optional ones
-
-- class: [`Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector`](../rules/Php80/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php)
-
-```diff
- class SomeObject
- {
--    public function run($optional = 1, $required)
-+    public function run($required, $optional = 1)
-     {
-     }
- }
-```
-
-<br>
-
 ### Php8ResourceReturnToObjectRector
 
 Change `is_resource()` to instanceof Object
@@ -9565,108 +9565,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ## RemovingStatic
-
-### DesiredClassTypeToDynamicRector
-
-Change full static service, to dynamic one
-
-- class: [`Rector\RemovingStatic\Rector\Class_\DesiredClassTypeToDynamicRector`](../rules/RemovingStatic/Rector/Class_/DesiredClassTypeToDynamicRector.php)
-
-```diff
- class AnotherClass
- {
-+    /**
-+     * @var SomeClass
-+     */
-+    private $someClass;
-+
-+    public fuction __construct(SomeClass $someClass)
-+    {
-+        $this->someClass = $someClass;
-+    }
-+
-     public function run()
-     {
-         SomeClass::someStatic();
-     }
- }
-
- class SomeClass
- {
--    public static function run()
-+    public function run()
-     {
--        self::someStatic();
-+        $this->someStatic();
-     }
-
--    private static function someStatic()
-+    private function someStatic()
-     {
-     }
- }
-```
-
-<br>
-
-### DesiredPropertyClassMethodTypeToDynamicRector
-
-Change defined static properties and methods to dynamic
-
-- class: [`Rector\RemovingStatic\Rector\Property\DesiredPropertyClassMethodTypeToDynamicRector`](../rules/RemovingStatic/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector.php)
-
-```diff
- final class SomeClass
- {
--    public static $name;
-+    public $name;
-
--    public static function go()
-+    public function go()
-     {
-     }
- }
-```
-
-<br>
-
-### DesiredStaticCallTypeToDynamicRector
-
-Change defined static service to dynamic one
-
-- class: [`Rector\RemovingStatic\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector`](../rules/RemovingStatic/Rector/StaticCall/DesiredStaticCallTypeToDynamicRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        SomeStaticMethod::someStatic();
-+        $this->someStaticMethod->someStatic();
-     }
- }
-```
-
-<br>
-
-### DesiredStaticPropertyFetchTypeToDynamicRector
-
-Change defined static service to dynamic one
-
-- class: [`Rector\RemovingStatic\Rector\StaticPropertyFetch\DesiredStaticPropertyFetchTypeToDynamicRector`](../rules/RemovingStatic/Rector/StaticPropertyFetch/DesiredStaticPropertyFetchTypeToDynamicRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        SomeStaticMethod::$someStatic;
-+        $this->someStaticMethod->someStatic;
-     }
- }
-```
-
-<br>
 
 ### LocallyCalledStaticMethodToNonStaticRector
 
