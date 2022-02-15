@@ -19,7 +19,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_MAX_NUMBER_OF_PROCESSES, 16);
     $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_JOB_SIZE, 20);
     $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_TIMEOUT_IN_SECONDS, 120);
-    $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_SYSTEM_ERROR_COUNT_LIMIT, 20);
     // FQN class importing
     $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \false);
     $parameters->set(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES, \true);

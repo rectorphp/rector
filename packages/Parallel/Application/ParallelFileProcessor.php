@@ -38,6 +38,10 @@ use Throwable;
 final class ParallelFileProcessor
 {
     /**
+     * @var int
+     */
+    private const SYSTEM_ERROR_LIMIT = 50;
+    /**
      * @var \Symplify\EasyParallel\ValueObject\ProcessPool|null
      */
     private $processPool = null;
@@ -104,7 +108,6 @@ final class ParallelFileProcessor
             $this->processPool->quitAll();
         };
         $timeoutInSeconds = $this->parameterProvider->provideIntParameter(\Rector\Core\Configuration\Option::PARALLEL_TIMEOUT_IN_SECONDS);
-        $systemErrorCountLimit = $this->parameterProvider->provideIntParameter(\Rector\Core\Configuration\Option::PARALLEL_SYSTEM_ERROR_COUNT_LIMIT);
         for ($i = 0; $i < $numberOfProcesses; ++$i) {
             // nothing else to process, stop now
             if ($jobs === []) {
@@ -115,7 +118,7 @@ final class ParallelFileProcessor
             $parallelProcess = new \RectorPrefix20220215\Symplify\EasyParallel\ValueObject\ParallelProcess($workerCommandLine, $streamSelectLoop, $timeoutInSeconds);
             $parallelProcess->start(
                 // 1. callable on data
-                function (array $json) use($parallelProcess, &$systemErrors, &$fileDiffs, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $processIdentifier, $systemErrorCountLimit) : void {
+                function (array $json) use($parallelProcess, &$systemErrors, &$fileDiffs, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $processIdentifier) : void {
                     // decode arrays to objects
                     foreach ($json[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS] as $jsonError) {
                         if (\is_string($jsonError)) {
@@ -129,7 +132,7 @@ final class ParallelFileProcessor
                     }
                     $postFileCallback($json[\Rector\Parallel\ValueObject\Bridge::FILES_COUNT]);
                     $systemErrorsCount += $json[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS_COUNT];
-                    if ($systemErrorsCount >= $systemErrorCountLimit) {
+                    if ($systemErrorsCount >= self::SYSTEM_ERROR_LIMIT) {
                         $reachedInternalErrorsCountLimit = \true;
                         $this->processPool->quitAll();
                     }
@@ -158,7 +161,7 @@ final class ParallelFileProcessor
         }
         $streamSelectLoop->run();
         if ($reachedSystemErrorsCountLimit) {
-            $systemErrors[] = new \Rector\Core\ValueObject\Error\SystemError(\sprintf('Reached system errors count limit of %d, exiting...', $systemErrorCountLimit));
+            $systemErrors[] = new \Rector\Core\ValueObject\Error\SystemError(\sprintf('Reached system errors count limit of %d, exiting...', self::SYSTEM_ERROR_LIMIT));
         }
         return [\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => $fileDiffs, \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => $systemErrors, \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS_COUNT => \count($systemErrors)];
     }
