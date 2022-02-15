@@ -12,5 +12,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SimplifyForeachToArrayFilterRector::class);
 
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersionFeature::ARROW_FUNCTION);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersionFeature::ARROW_FUNCTION - 1);
 };

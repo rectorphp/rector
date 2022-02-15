@@ -1,0 +1,72 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\CodeQuality\NodeFactory;
+
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
+
+final class ArrayFilterFactory
+{
+    public function __construct(
+        private readonly PhpVersionProvider $phpVersionProvider
+    ) {
+    }
+
+    public function createSimpleFuncCallAssign(
+        Foreach_ $foreach,
+        string $funcName,
+        ArrayDimFetch $arrayDimFetch
+    ): Assign {
+        $string = new String_($funcName);
+
+        $args = [new Arg($foreach->expr), new Arg($string)];
+        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), $args);
+
+        return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
+    }
+
+    public function createWithClosure(
+        ArrayDimFetch $arrayDimFetch,
+        Variable $valueVariable,
+        Expr $condExpr,
+        Foreach_ $foreach
+    ): Assign {
+        $filterFunction = $this->createClosure($valueVariable, $condExpr);
+        $args = [new Arg($foreach->expr), new Arg($filterFunction)];
+
+        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), $args);
+        return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
+    }
+
+    private function createClosure(Variable $valueVariable, Expr $condExpr): ArrowFunction|Closure
+    {
+        $params = [new Param($valueVariable)];
+
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ARROW_FUNCTION)) {
+            return new ArrowFunction([
+                'params' => $params,
+                'expr' => $condExpr,
+            ]);
+        }
+
+        return new Closure([
+            'params' => $params,
+            'stmts' => [new Return_($condExpr)],
+        ]);
+    }
+}
