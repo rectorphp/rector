@@ -228,7 +228,6 @@ parameters:
         # PHP 7_4 literal syntax
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\|int\) does not accept string#'
 
-        # mimics original doctrine/annotations parser, improve later when finished
         -
             message: '#Array destruct is not allowed\. Use value object to pass data instead#'
             paths:

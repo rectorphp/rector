@@ -41,12 +41,12 @@
         "sebastian/diff": "^4.0.4",
         "ssch/typo3-rector": "dev-main",
         "symfony/console": "^6.0",
-        "symfony/contracts": "^2.5|^3.0",
-        "symfony/dependency-injection": "^5.4|^6.0",
+        "symfony/contracts": "^3.0",
+        "symfony/dependency-injection": "^6.0",
         "symfony/finder": "^6.0",
         "symfony/process": "^6.0",
         "symfony/string": "^6.0",
-        "symfony/yaml": "^5.4|^6.0",
+        "symfony/yaml": "^6.0",
         "symplify/astral": "^10.0.16",
         "symplify/autowire-array-parameter": "^10.0.16",
         "symplify/composer-json-manipulator": "^10.0.16",
@@ -141,8 +141,7 @@
         ],
         "fix-cs": [
             "vendor/bin/ecs check --fix --ansi",
-            "vendor/bin/ecs check-markdown README.md --fix --ansi",
-            "php bin/clean-phpstan.php"
+            "vendor/bin/ecs check-markdown README.md --fix --ansi"
         ],
         "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
         "phpstan-config": "vendor/bin/phpstan analyse config --ansi --error-format symplify",
