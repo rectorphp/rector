@@ -51,6 +51,7 @@ final class Option
      */
     public const IMPORT_SHORT_CLASSES = 'import_short_classes';
     /**
+     * @deprecated Narrow too complex import settings to more practical use.
      * @var string
      */
     public const IMPORT_DOC_BLOCKS = 'import_doc_blocks';
@@ -66,11 +67,6 @@ final class Option
      * @var string
      */
     public const PARALLEL = 'parallel';
-    /**
-     * @deprecated Cache is enabled by default
-     * @var string
-     */
-    public const ENABLE_CACHE = 'enable_cache';
     /**
      * @var string
      */

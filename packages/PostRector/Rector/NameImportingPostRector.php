@@ -86,9 +86,6 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if ($node instanceof \PhpParser\Node\Name) {
             return $this->processNodeName($node, $file);
         }
-        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::IMPORT_DOC_BLOCKS)) {
-            return null;
-        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->docBlockNameImporter->importNames($phpDocInfo->getPhpDocNode(), $node);
         return $node;
