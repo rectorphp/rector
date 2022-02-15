@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit83db5bd6d896453efa69bea8e035c20f
+class ComposerStaticInit02ff6876a9b929fb2ff2b6d16ddf038f
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1882,6 +1882,7 @@ class ComposerStaticInit83db5bd6d896453efa69bea8e035c20f
         'Rector\\CodeQuality\\Rector\\Catch_\\ThrowWithPreviousExceptionRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Catch_/ThrowWithPreviousExceptionRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\DateTimeToDateTimeInterfaceRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/DateTimeToDateTimeInterfaceRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\NarrowUnionTypeDocRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/NarrowUnionTypeDocRector.php',
+        'Rector\\CodeQuality\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/CompleteDynamicPropertiesRector.php',
         'Rector\\CodeQuality\\Rector\\Concat\\JoinStringConcatRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Concat/JoinStringConcatRector.php',
         'Rector\\CodeQuality\\Rector\\Do_\\DoWhileBreakFalseToIfElseRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Do_/DoWhileBreakFalseToIfElseRector.php',
@@ -3063,7 +3064,6 @@ class ComposerStaticInit83db5bd6d896453efa69bea8e035c20f
         'Rector\\Php80\\Rector\\Catch_\\RemoveUnusedVariableInCatchRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Catch_/RemoveUnusedVariableInCatchRector.php',
         'Rector\\Php80\\Rector\\ClassMethod\\AddParamBasedOnParentClassMethodRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/AddParamBasedOnParentClassMethodRector.php',
         'Rector\\Php80\\Rector\\ClassMethod\\FinalPrivateToPrivateVisibilityRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/FinalPrivateToPrivateVisibilityRector.php',
-        'Rector\\Php80\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
         'Rector\\Php80\\Rector\\ClassMethod\\SetStateToStaticRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/SetStateToStaticRector.php',
         'Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/AnnotationToAttributeRector.php',
         'Rector\\Php80\\Rector\\Class_\\ClassPropertyAssignToConstructorPromotionRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php',
@@ -3881,9 +3881,9 @@ class ComposerStaticInit83db5bd6d896453efa69bea8e035c20f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit83db5bd6d896453efa69bea8e035c20f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit83db5bd6d896453efa69bea8e035c20f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit83db5bd6d896453efa69bea8e035c20f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit02ff6876a9b929fb2ff2b6d16ddf038f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit02ff6876a9b929fb2ff2b6d16ddf038f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit02ff6876a9b929fb2ff2b6d16ddf038f::$classMap;
 
         }, null, ClassLoader::class);
     }

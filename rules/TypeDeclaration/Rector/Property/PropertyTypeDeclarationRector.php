@@ -92,6 +92,9 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if ($phpDocInfo->hasInheritDoc() && !$node->isPrivate()) {
+            return null;
+        }
         if ($this->isVarDocAlreadySet($phpDocInfo)) {
             return null;
         }
