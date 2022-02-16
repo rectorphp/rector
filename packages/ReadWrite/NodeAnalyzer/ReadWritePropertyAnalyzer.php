@@ -7,6 +7,7 @@ namespace Rector\ReadWrite\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
@@ -18,6 +19,7 @@ use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\DeadCode\SideEffect\PureFunctionDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 
@@ -28,6 +30,7 @@ final class ReadWritePropertyAnalyzer
         private readonly AssignManipulator $assignManipulator,
         private readonly ReadExprAnalyzer $readExprAnalyzer,
         private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly PureFunctionDetector $pureFunctionDetector
     ) {
     }
 
@@ -51,7 +54,32 @@ final class ReadWritePropertyAnalyzer
             return $this->isArrayDimFetchRead($parent);
         }
 
-        return ! $this->assignManipulator->isLeftPartOfAssign($node);
+        if (! $parent instanceof ArrayDimFetch) {
+            return ! $this->assignManipulator->isLeftPartOfAssign($node);
+        }
+
+        if (! $this->isArrayDimFetchInImpureFunction($parent, $node)) {
+            return ! $this->assignManipulator->isLeftPartOfAssign($node);
+        }
+
+        return false;
+    }
+
+    private function isArrayDimFetchInImpureFunction(ArrayDimFetch $arrayDimFetch, Node $node): bool
+    {
+        if ($arrayDimFetch->var === $node) {
+            $arg = $this->betterNodeFinder->findParentType($arrayDimFetch, Arg::class);
+            if ($arg instanceof Arg) {
+                $parentArg = $arg->getAttribute(AttributeKey::PARENT_NODE);
+                if (! $parentArg instanceof FuncCall) {
+                    return false;
+                }
+
+                return ! $this->pureFunctionDetector->detect($parentArg);
+            }
+        }
+
+        return false;
     }
 
     private function unwrapPostPreIncDec(Node $node): Node

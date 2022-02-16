@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\Table;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
@@ -210,6 +211,10 @@ final class PropertyManipulator
             if ($caller instanceof MethodCall || $caller instanceof StaticCall) {
                 return $this->isFoundByRefParam($caller);
             }
+        }
+
+        if ($parent instanceof ArrayDimFetch) {
+            return ! $this->readWritePropertyAnalyzer->isRead($propertyFetch);
         }
 
         return false;

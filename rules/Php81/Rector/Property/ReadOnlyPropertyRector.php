@@ -85,29 +85,7 @@ CODE_SAMPLE
             return $this->refactorParam($node);
         }
 
-        // 1. is property read-only?
-        if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($node)) {
-            return null;
-        }
-
-        if ($node->isReadonly()) {
-            return null;
-        }
-
-        if ($node->props[0]->default instanceof Expr) {
-            return null;
-        }
-
-        if ($node->type === null) {
-            return null;
-        }
-
-        if ($node->flags !== Visibility::PRIVATE) {
-            return null;
-        }
-
-        $this->visibilityManipulator->makeReadonly($node);
-        return $node;
+        return $this->refactorProperty($node);
     }
 
     public function provideMinPhpVersion(): int
@@ -115,9 +93,36 @@ CODE_SAMPLE
         return PhpVersionFeature::READONLY_PROPERTY;
     }
 
+    private function refactorProperty(Property $property): ?Property
+    {
+        // 1. is property read-only?
+        if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($property)) {
+            return null;
+        }
+
+        if ($property->isReadonly()) {
+            return null;
+        }
+
+        if ($property->props[0]->default instanceof Expr) {
+            return null;
+        }
+
+        if ($property->type === null) {
+            return null;
+        }
+
+        if (! $this->visibilityManipulator->hasVisibility($property, Visibility::PRIVATE)) {
+            return null;
+        }
+
+        $this->visibilityManipulator->makeReadonly($property);
+        return $property;
+    }
+
     private function refactorParam(Param $param): Param | null
     {
-        if ($param->flags !== Visibility::PRIVATE) {
+        if (! $this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
             return null;
         }
 
