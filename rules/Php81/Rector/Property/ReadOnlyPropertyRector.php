@@ -84,35 +84,39 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Param) {
             return $this->refactorParam($node);
         }
-        // 1. is property read-only?
-        if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($node)) {
-            return null;
-        }
-        if ($node->isReadonly()) {
-            return null;
-        }
-        if ($node->props[0]->default instanceof \PhpParser\Node\Expr) {
-            return null;
-        }
-        if ($node->type === null) {
-            return null;
-        }
-        if ($node->flags !== \Rector\Core\ValueObject\Visibility::PRIVATE) {
-            return null;
-        }
-        $this->visibilityManipulator->makeReadonly($node);
-        return $node;
+        return $this->refactorProperty($node);
     }
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::READONLY_PROPERTY;
+    }
+    private function refactorProperty(\PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
+    {
+        // 1. is property read-only?
+        if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($property)) {
+            return null;
+        }
+        if ($property->isReadonly()) {
+            return null;
+        }
+        if ($property->props[0]->default instanceof \PhpParser\Node\Expr) {
+            return null;
+        }
+        if ($property->type === null) {
+            return null;
+        }
+        if (!$this->visibilityManipulator->hasVisibility($property, \Rector\Core\ValueObject\Visibility::PRIVATE)) {
+            return null;
+        }
+        $this->visibilityManipulator->makeReadonly($property);
+        return $property;
     }
     /**
      * @return \PhpParser\Node\Param|null
      */
     private function refactorParam(\PhpParser\Node\Param $param)
     {
-        if ($param->flags !== \Rector\Core\ValueObject\Visibility::PRIVATE) {
+        if (!$this->visibilityManipulator->hasVisibility($param, \Rector\Core\ValueObject\Visibility::PRIVATE)) {
             return null;
         }
         if ($param->type === null) {
