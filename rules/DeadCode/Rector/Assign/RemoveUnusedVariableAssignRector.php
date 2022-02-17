@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -115,12 +116,18 @@ CODE_SAMPLE
         if (!$parentNode instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        if ($this->sideEffectNodeDetector->detectCallExpr($node->expr)) {
+        if ($this->hasCallLikeInAssignExpr($node->expr)) {
             // keep the expr, can have side effect
             return $node->expr;
         }
         $this->removeNode($node);
         return $node;
+    }
+    private function hasCallLikeInAssignExpr(\PhpParser\Node\Expr $expr) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($expr, function (\PhpParser\Node $subNode) : bool {
+            return $this->sideEffectNodeDetector->detectCallExpr($subNode);
+        });
     }
     private function shouldSkip(\PhpParser\Node\Expr\Assign $assign) : bool
     {
