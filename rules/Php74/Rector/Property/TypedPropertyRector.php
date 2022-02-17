@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -139,21 +138,6 @@ CODE_SAMPLE
         $varType = $this->varDocPropertyTypeInferer->inferProperty($node);
         if ($varType instanceof MixedType) {
             return null;
-        }
-
-        if ($varType instanceof UnionType) {
-            $types = $varType->getTypes();
-
-            if (count($types) === 2 && $types[1] instanceof TemplateType) {
-                $templateType = $types[1];
-
-                $node->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
-                    $templateType->getBound(),
-                    TypeKind::PROPERTY()
-                );
-
-                return $node;
-            }
         }
 
         if ($this->objectTypeAnalyzer->isSpecial($varType)) {
