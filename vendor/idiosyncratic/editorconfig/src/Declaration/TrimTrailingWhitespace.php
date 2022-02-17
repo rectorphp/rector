@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220216\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20220217\Idiosyncratic\EditorConfig\Declaration;
 
-final class TrimTrailingWhitespace extends \RectorPrefix20220216\Idiosyncratic\EditorConfig\Declaration\BooleanDeclaration
+final class TrimTrailingWhitespace extends \RectorPrefix20220217\Idiosyncratic\EditorConfig\Declaration\BooleanDeclaration
 {
     public function getName() : string
     {
