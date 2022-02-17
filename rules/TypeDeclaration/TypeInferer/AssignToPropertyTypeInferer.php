@@ -13,6 +13,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
@@ -31,6 +32,7 @@ final class AssignToPropertyTypeInferer
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private readonly TypeFactory $typeFactory,
         private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly ExprAnalyzer $exprAnalyzer
     ) {
     }
 
@@ -48,6 +50,10 @@ final class AssignToPropertyTypeInferer
 
             $expr = $this->propertyAssignMatcher->matchPropertyAssignExpr($node, $propertyName);
             if (! $expr instanceof Expr) {
+                return null;
+            }
+
+            if ($this->exprAnalyzer->isNonTypedFromParam($node->expr)) {
                 return null;
             }
 
