@@ -1,4 +1,4 @@
-# 519 Rules Overview
+# 518 Rules Overview
 
 <br>
 
@@ -94,7 +94,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (37)
+- [Transform](#transform) (36)
 
 - [TypeDeclaration](#typedeclaration) (22)
 
@@ -11367,46 +11367,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -         return $this->anotherService;
 +        $anotherService = $this->anotherService;
 +        $anotherService->run();
-     }
- }
-```
-
-<br>
-
-### SingleToManyMethodRector
-
-Change method that returns single value to multiple values
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\ClassMethod\SingleToManyMethodRector`](../rules/Transform/Rector/ClassMethod/SingleToManyMethodRector.php)
-
-```php
-use Rector\Transform\Rector\ClassMethod\SingleToManyMethodRector;
-use Rector\Transform\ValueObject\SingleToManyMethod;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(SingleToManyMethodRector::class)
-        ->configure([new SingleToManyMethod('SomeClass', 'getNode', 'getNodes')]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
--    public function getNode(): string
-+    /**
-+     * @return string[]
-+     */
-+    public function getNodes(): array
-     {
--        return 'Echo_';
-+        return ['Echo_'];
      }
  }
 ```
