@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3d41aaead61a4e9379fe1a73755481ac
+class ComposerStaticInit453b3766006e61b34a51164510e3ae3a
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1762,9 +1762,7 @@ class ComposerStaticInit3d41aaead61a4e9379fe1a73755481ac
         'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\SwapFuncCallArguments' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/SwapFuncCallArguments.php',
         'Rector\\Autodiscovery\\Configuration\\CategoryNamespaceProvider' => __DIR__ . '/../..' . '/rules/Autodiscovery/Configuration/CategoryNamespaceProvider.php',
-        'Rector\\Autodiscovery\\NodeAnalyzer\\NetteComponentFactoryInterfaceAnalyzer' => __DIR__ . '/../..' . '/rules/Autodiscovery/NodeAnalyzer/NetteComponentFactoryInterfaceAnalyzer.php',
         'Rector\\Autodiscovery\\Rector\\Class_\\MoveEntitiesToEntityDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Class_/MoveEntitiesToEntityDirectoryRector.php',
-        'Rector\\Autodiscovery\\Rector\\Interface_\\MoveInterfacesToContractNamespaceDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Interface_/MoveInterfacesToContractNamespaceDirectoryRector.php',
         'Rector\\BetterPhpDocParser\\Annotation\\AnnotationNaming' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Annotation/AnnotationNaming.php',
         'Rector\\BetterPhpDocParser\\Attributes\\AttributeMirrorer' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Attributes/AttributeMirrorer.php',
         'Rector\\BetterPhpDocParser\\Comment\\CommentsMerger' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Comment/CommentsMerger.php',
@@ -3869,9 +3867,9 @@ class ComposerStaticInit3d41aaead61a4e9379fe1a73755481ac
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3d41aaead61a4e9379fe1a73755481ac::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3d41aaead61a4e9379fe1a73755481ac::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3d41aaead61a4e9379fe1a73755481ac::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit453b3766006e61b34a51164510e3ae3a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit453b3766006e61b34a51164510e3ae3a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit453b3766006e61b34a51164510e3ae3a::$classMap;
 
         }, null, ClassLoader::class);
     }
