@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0df88c7745440821c3aae20346ab83d6
+class ComposerStaticInit6803c5aa61198f26a2560abb9252e1ec
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1761,13 +1761,11 @@ class ComposerStaticInit0df88c7745440821c3aae20346ab83d6
         'Rector\\Arguments\\ValueObject\\ReplaceArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\SwapFuncCallArguments' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/SwapFuncCallArguments.php',
-        'Rector\\Autodiscovery\\Analyzer\\ValueObjectClassAnalyzer' => __DIR__ . '/../..' . '/rules/Autodiscovery/Analyzer/ValueObjectClassAnalyzer.php',
         'Rector\\Autodiscovery\\Configuration\\CategoryNamespaceProvider' => __DIR__ . '/../..' . '/rules/Autodiscovery/Configuration/CategoryNamespaceProvider.php',
         'Rector\\Autodiscovery\\FileLocation\\ExpectedFileLocationResolver' => __DIR__ . '/../..' . '/rules/Autodiscovery/FileLocation/ExpectedFileLocationResolver.php',
         'Rector\\Autodiscovery\\NodeAnalyzer\\NetteComponentFactoryInterfaceAnalyzer' => __DIR__ . '/../..' . '/rules/Autodiscovery/NodeAnalyzer/NetteComponentFactoryInterfaceAnalyzer.php',
         'Rector\\Autodiscovery\\Rector\\Class_\\MoveEntitiesToEntityDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Class_/MoveEntitiesToEntityDirectoryRector.php',
         'Rector\\Autodiscovery\\Rector\\Class_\\MoveServicesBySuffixToDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Class_/MoveServicesBySuffixToDirectoryRector.php',
-        'Rector\\Autodiscovery\\Rector\\Class_\\MoveValueObjectsToValueObjectDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Class_/MoveValueObjectsToValueObjectDirectoryRector.php',
         'Rector\\Autodiscovery\\Rector\\Interface_\\MoveInterfacesToContractNamespaceDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Interface_/MoveInterfacesToContractNamespaceDirectoryRector.php',
         'Rector\\BetterPhpDocParser\\Annotation\\AnnotationNaming' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Annotation/AnnotationNaming.php',
         'Rector\\BetterPhpDocParser\\Attributes\\AttributeMirrorer' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Attributes/AttributeMirrorer.php',
@@ -3873,9 +3871,9 @@ class ComposerStaticInit0df88c7745440821c3aae20346ab83d6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0df88c7745440821c3aae20346ab83d6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0df88c7745440821c3aae20346ab83d6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0df88c7745440821c3aae20346ab83d6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6803c5aa61198f26a2560abb9252e1ec::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6803c5aa61198f26a2560abb9252e1ec::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6803c5aa61198f26a2560abb9252e1ec::$classMap;
 
         }, null, ClassLoader::class);
     }

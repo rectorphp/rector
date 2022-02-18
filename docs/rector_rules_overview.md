@@ -1,4 +1,4 @@
-# 518 Rules Overview
+# 517 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (4)
 
-- [Autodiscovery](#autodiscovery) (4)
+- [Autodiscovery](#autodiscovery) (3)
 
 - [CodeQuality](#codequality) (71)
 
@@ -321,53 +321,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
  class ProductRepository
  {
- }
-```
-
-<br>
-
-### MoveValueObjectsToValueObjectDirectoryRector
-
-Move value object to ValueObject namespace/directory
-
-:wrench: **configure it!**
-
-- class: [`Rector\Autodiscovery\Rector\Class_\MoveValueObjectsToValueObjectDirectoryRector`](../rules/Autodiscovery/Rector/Class_/MoveValueObjectsToValueObjectDirectoryRector.php)
-
-```php
-use Rector\Autodiscovery\Rector\Class_\MoveValueObjectsToValueObjectDirectoryRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
-        ->configure([
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
-            MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
-        ]);
-};
-```
-
-↓
-
-```diff
--// app/Exception/Name.php
-+// app/ValueObject/Name.php
- class Name
- {
-     private $name;
-
-     public function __construct(string $name)
-     {
-         $this->name = $name;
-     }
-
-     public function getName()
-     {
-         return $this->name;
-     }
  }
 ```
 
