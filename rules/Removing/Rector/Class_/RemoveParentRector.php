@@ -19,12 +19,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RemoveParentRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const PARENT_TYPES_TO_REMOVE = 'parents_types_to_remove';
-    /**
      * @var string[]
      */
     private $parentClassesToRemove = [];
@@ -83,9 +77,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $parentTypesToRemove = $configuration[self::PARENT_TYPES_TO_REMOVE] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($parentTypesToRemove);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($parentTypesToRemove);
-        $this->parentClassesToRemove = $parentTypesToRemove;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->parentClassesToRemove = $configuration;
     }
 }

@@ -18,11 +18,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RemoveTraitUseRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const TRAITS_TO_REMOVE = 'traits_to_remove';
-    /**
      * @var bool
      */
     private $classHasChanged = \false;
@@ -79,9 +74,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $traitsToRemove = $configuration[self::TRAITS_TO_REMOVE] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($traitsToRemove);
-        /** @var string[] $traitsToRemove */
-        $this->traitsToRemove = $traitsToRemove;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->traitsToRemove = $configuration;
     }
 }

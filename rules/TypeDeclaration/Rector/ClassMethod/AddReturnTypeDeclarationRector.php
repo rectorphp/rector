@@ -23,11 +23,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class AddReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_RETURN_TYPES = 'method_return_types';
-    /**
      * @var AddReturnTypeDeclaration[]
      */
     private $methodReturnTypes = [];
@@ -90,10 +85,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodReturnTypes = $configuration[self::METHOD_RETURN_TYPES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($methodReturnTypes);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($methodReturnTypes, \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration::class);
-        $this->methodReturnTypes = $methodReturnTypes;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration::class);
+        $this->methodReturnTypes = $configuration;
     }
     private function processClassMethodNodeWithTypehints(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $newType) : void
     {

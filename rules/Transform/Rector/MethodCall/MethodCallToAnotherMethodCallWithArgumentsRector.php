@@ -18,11 +18,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class MethodCallToAnotherMethodCallWithArgumentsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS = 'method_call_renames_with_added_arguments';
-    /**
      * @var MethodCallToAnotherMethodCallWithArguments[]
      */
     private $methodCallRenamesWithAddedArguments = [];
@@ -68,9 +63,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodCallRenamesWithAddedArguments = $configuration[self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($methodCallRenamesWithAddedArguments);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($methodCallRenamesWithAddedArguments, \Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments::class);
-        $this->methodCallRenamesWithAddedArguments = $methodCallRenamesWithAddedArguments;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments::class);
+        $this->methodCallRenamesWithAddedArguments = $configuration;
     }
 }

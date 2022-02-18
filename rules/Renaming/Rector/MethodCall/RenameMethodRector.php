@@ -27,11 +27,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RenameMethodRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_CALL_RENAMES = 'method_call_renames';
-    /**
      * @var MethodCallRenameInterface[]
      */
     private $methodCallRenames = [];
@@ -101,10 +96,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($methodCallRenames, \Rector\Renaming\Contract\MethodCallRenameInterface::class);
-        $this->methodCallRenames = $methodCallRenames;
-        $this->methodCallRenameCollector->addMethodCallRenames($methodCallRenames);
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\Contract\MethodCallRenameInterface::class);
+        $this->methodCallRenames = $configuration;
+        $this->methodCallRenameCollector->addMethodCallRenames($configuration);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node

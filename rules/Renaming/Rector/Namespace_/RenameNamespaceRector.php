@@ -24,11 +24,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const OLD_TO_NEW_NAMESPACES = 'old_to_new_namespaces';
-    /**
      * @var array<string, string>
      */
     private $oldToNewNamespaces = [];
@@ -101,11 +96,10 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
      */
     public function configure(array $configuration) : void
     {
-        $oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($oldToNewNamespaces));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($oldToNewNamespaces);
-        /** @var array<string, string> $oldToNewNamespaces */
-        $this->oldToNewNamespaces = $oldToNewNamespaces;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        /** @var array<string, string> $configuration */
+        $this->oldToNewNamespaces = $configuration;
     }
     private function processFullyQualified(\PhpParser\Node\Name $name, \Rector\Renaming\ValueObject\RenamedNamespace $renamedNamespace) : ?\PhpParser\Node\Name\FullyQualified
     {

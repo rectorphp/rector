@@ -20,11 +20,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class AddInterfaceByTraitRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const INTERFACE_BY_TRAIT = 'interface_by_trait';
-    /**
      * @var array<string, string>
      */
     private $interfaceByTrait = [];
@@ -81,10 +76,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $interfaceByTrait = $configuration[self::INTERFACE_BY_TRAIT] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($interfaceByTrait);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($interfaceByTrait));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($interfaceByTrait);
-        $this->interfaceByTrait = $interfaceByTrait;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->interfaceByTrait = $configuration;
     }
 }

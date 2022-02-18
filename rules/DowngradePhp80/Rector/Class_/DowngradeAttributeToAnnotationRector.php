@@ -28,11 +28,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class DowngradeAttributeToAnnotationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ATTRIBUTE_TO_ANNOTATION = 'attribute_to_annotation';
-    /**
      * @var DowngradeAttributeToAnnotation[]
      */
     private $attributesToAnnotations = [];
@@ -110,9 +105,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($attributesToAnnotations, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
-        $this->attributesToAnnotations = $attributesToAnnotations;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
+        $this->attributesToAnnotations = $configuration;
     }
     /**
      * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Property $node

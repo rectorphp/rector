@@ -20,11 +20,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class FuncCallToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const FUNC_CALL_TO_CLASS_METHOD_CALL = 'function_to_class_to_method_call';
-    /**
      * @var FuncCallToMethodCall[]
      */
     private $funcNameToMethodCallNames = [];
@@ -106,9 +101,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $funcCallsToClassMethodCalls = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($funcCallsToClassMethodCalls);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($funcCallsToClassMethodCalls, \Rector\Transform\ValueObject\FuncCallToMethodCall::class);
-        $this->funcNameToMethodCallNames = $funcCallsToClassMethodCalls;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\FuncCallToMethodCall::class);
+        $this->funcNameToMethodCallNames = $configuration;
     }
 }

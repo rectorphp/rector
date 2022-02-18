@@ -19,11 +19,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class UnsetAndIssetToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ISSET_UNSET_TO_METHOD_CALL = 'isset_unset_to_method_call';
-    /**
      * @var UnsetAndIssetToMethodCall[]
      */
     private $issetUnsetToMethodCalls = [];
@@ -74,10 +69,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $issetUnsetToMethodCalls = $configuration[self::ISSET_UNSET_TO_METHOD_CALL] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($issetUnsetToMethodCalls);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($issetUnsetToMethodCalls, \Rector\Transform\ValueObject\UnsetAndIssetToMethodCall::class);
-        $this->issetUnsetToMethodCalls = $issetUnsetToMethodCalls;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\UnsetAndIssetToMethodCall::class);
+        $this->issetUnsetToMethodCalls = $configuration;
     }
     private function processArrayDimFetchNode(\PhpParser\Node $node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, \Rector\Transform\ValueObject\UnsetAndIssetToMethodCall $unsetAndIssetToMethodCall) : ?\PhpParser\Node
     {

@@ -25,11 +25,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class NewToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const NEWS_TO_METHOD_CALLS = 'news_to_method_calls';
-    /**
      * @var NewToMethodCall[]
      */
     private $newsToMethodCalls = [];
@@ -119,10 +114,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $newsToMethodCalls = $configuration[self::NEWS_TO_METHOD_CALLS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($newsToMethodCalls);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($newsToMethodCalls, \Rector\Transform\ValueObject\NewToMethodCall::class);
-        $this->newsToMethodCalls = $newsToMethodCalls;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\NewToMethodCall::class);
+        $this->newsToMethodCalls = $configuration;
     }
     private function getExistingFactoryPropertyName(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\ObjectType $factoryObjectType) : ?string
     {

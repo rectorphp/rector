@@ -17,11 +17,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class NewToStaticCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const TYPE_TO_STATIC_CALLS = 'type_to_static_calls';
-    /**
      * @var NewToStaticCall[]
      */
     private $typeToStaticCalls = [];
@@ -72,9 +67,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($typeToStaticCalls);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($typeToStaticCalls, \Rector\Transform\ValueObject\NewToStaticCall::class);
-        $this->typeToStaticCalls = $typeToStaticCalls;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\NewToStaticCall::class);
+        $this->typeToStaticCalls = $configuration;
     }
 }

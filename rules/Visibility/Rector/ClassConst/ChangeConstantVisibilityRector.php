@@ -19,11 +19,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class ChangeConstantVisibilityRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const CLASS_CONSTANT_VISIBILITY_CHANGES = 'class_constant_visibility_changes';
-    /**
      * @var ChangeConstantVisibility[]
      */
     private $classConstantVisibilityChanges = [];
@@ -91,9 +86,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($classConstantVisibilityChanges);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($classConstantVisibilityChanges, \Rector\Visibility\ValueObject\ChangeConstantVisibility::class);
-        $this->classConstantVisibilityChanges = $classConstantVisibilityChanges;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Visibility\ValueObject\ChangeConstantVisibility::class);
+        $this->classConstantVisibilityChanges = $configuration;
     }
 }

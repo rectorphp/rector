@@ -18,11 +18,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RemoveFuncCallArgRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const REMOVED_FUNCTION_ARGUMENTS = 'removed_function_arguments';
-    /**
      * @var RemoveFuncCallArg[]
      */
     private $removedFunctionArguments = [];
@@ -69,8 +64,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $removedFunctionArguments = $configuration[self::REMOVED_FUNCTION_ARGUMENTS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($removedFunctionArguments, \Rector\Removing\ValueObject\RemoveFuncCallArg::class);
-        $this->removedFunctionArguments = $removedFunctionArguments;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Removing\ValueObject\RemoveFuncCallArg::class);
+        $this->removedFunctionArguments = $configuration;
     }
 }

@@ -16,11 +16,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RemoveInterfacesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const INTERFACES_TO_REMOVE = 'interfaces_to_remove';
-    /**
      * @var string[]
      */
     private $interfacesToRemove = [];
@@ -65,9 +60,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $interfacesToRemove = $configuration[self::INTERFACES_TO_REMOVE] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($interfacesToRemove);
-        /** @var string[] $interfacesToRemove */
-        $this->interfacesToRemove = $interfacesToRemove;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        /** @var string[] $configuration */
+        $this->interfacesToRemove = $configuration;
     }
 }

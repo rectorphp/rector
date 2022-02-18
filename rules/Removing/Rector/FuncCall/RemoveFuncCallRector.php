@@ -19,12 +19,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RemoveFuncCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const REMOVE_FUNC_CALLS = 'remove_func_calls';
-    /**
      * @var RemoveFuncCall[]
      */
     private $removeFuncCalls = [];
@@ -77,9 +71,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $removeFuncCalls = $configuration[self::REMOVE_FUNC_CALLS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($removeFuncCalls, \Rector\Removing\ValueObject\RemoveFuncCall::class);
-        $this->removeFuncCalls = $removeFuncCalls;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Removing\ValueObject\RemoveFuncCall::class);
+        $this->removeFuncCalls = $configuration;
     }
     private function refactorFuncCallsWithPositions(\PhpParser\Node\Expr\FuncCall $funcCall, \Rector\Removing\ValueObject\RemoveFuncCall $removeFuncCall) : void
     {

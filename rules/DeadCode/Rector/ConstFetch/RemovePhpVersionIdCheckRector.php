@@ -24,11 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemovePhpVersionIdCheckRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PHP_VERSION_CONSTRAINT = 'phpVersionConstraint';
-    /**
      * @var int|string|null
      */
     private $phpVersionConstraint;
@@ -46,11 +41,10 @@ final class RemovePhpVersionIdCheckRector extends \Rector\Core\Rector\AbstractRe
      */
     public function configure(array $configuration) : void
     {
-        $this->phpVersionConstraint = $configuration[self::PHP_VERSION_CONSTRAINT] ?? null;
+        $this->phpVersionConstraint = \array_pop($configuration);
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        $exampleConfiguration = [self::PHP_VERSION_CONSTRAINT => \Rector\Core\ValueObject\PhpVersion::PHP_80];
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unneeded PHP_VERSION_ID check', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -72,7 +66,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, $exampleConfiguration)]);
+, [\Rector\Core\ValueObject\PhpVersion::PHP_80])]);
     }
     /**
      * @return array<class-string<Node>>

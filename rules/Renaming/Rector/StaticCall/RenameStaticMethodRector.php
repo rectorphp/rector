@@ -19,11 +19,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RenameStaticMethodRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const OLD_TO_NEW_METHODS_BY_CLASSES = 'old_to_new_method_by_classes';
-    /**
      * @var RenameStaticMethod[]
      */
     private $staticMethodRenames = [];
@@ -59,9 +54,8 @@ final class RenameStaticMethodRector extends \Rector\Core\Rector\AbstractRector 
      */
     public function configure(array $configuration) : void
     {
-        $oldToNewMethodsByClasses = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($oldToNewMethodsByClasses, \Rector\Renaming\ValueObject\RenameStaticMethod::class);
-        $this->staticMethodRenames = $oldToNewMethodsByClasses;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\ValueObject\RenameStaticMethod::class);
+        $this->staticMethodRenames = $configuration;
     }
     private function rename(\PhpParser\Node\Expr\StaticCall $staticCall, \Rector\Renaming\ValueObject\RenameStaticMethod $renameStaticMethod) : \PhpParser\Node\Expr\StaticCall
     {

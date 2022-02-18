@@ -19,11 +19,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const OLD_FUNCTION_TO_NEW_FUNCTION = 'old_function_to_new_function';
-    /**
      * @var array<string, string>
      */
     private $oldFunctionToNewFunction = [];
@@ -62,11 +57,9 @@ final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector impl
      */
     public function configure(array $configuration) : void
     {
-        $oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($oldFunctionToNewFunction);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_values($oldFunctionToNewFunction));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($oldFunctionToNewFunction);
-        $this->oldFunctionToNewFunction = $oldFunctionToNewFunction;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_values($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->oldFunctionToNewFunction = $configuration;
     }
     private function createName(string $newFunction) : \PhpParser\Node\Name
     {

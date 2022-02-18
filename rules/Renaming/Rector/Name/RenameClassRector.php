@@ -27,11 +27,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RenameClassRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const OLD_TO_NEW_CLASSES = 'old_to_new_classes';
-    /**
      * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
@@ -100,10 +95,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($oldToNewClasses);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($oldToNewClasses);
-        $this->addOldToNewClasses($oldToNewClasses);
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->addOldToNewClasses($configuration);
     }
     /**
      * @param array<string, string> $oldToNewClasses

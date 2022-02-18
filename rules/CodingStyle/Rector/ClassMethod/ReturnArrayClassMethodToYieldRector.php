@@ -28,11 +28,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class ReturnArrayClassMethodToYieldRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHODS_TO_YIELDS = 'methods_to_yields';
-    /**
      * @var ReturnArrayClassMethodToyield[]
      */
     private $methodsToYields = [];
@@ -115,9 +110,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodsToYields = $configuration[self::METHODS_TO_YIELDS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($methodsToYields, \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield::class);
-        $this->methodsToYields = $methodsToYields;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield::class);
+        $this->methodsToYields = $configuration;
     }
     private function collectReturnArrayNodesFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr\Array_
     {

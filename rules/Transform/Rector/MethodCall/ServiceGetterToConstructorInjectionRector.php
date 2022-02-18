@@ -26,11 +26,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class ServiceGetterToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_CALL_TO_SERVICES = 'method_call_to_services';
-    /**
      * @var ServiceGetterToConstructorInjection[]
      */
     private $methodCallToServices = [];
@@ -162,9 +157,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($methodCallToServices);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($methodCallToServices, \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection::class);
-        $this->methodCallToServices = $methodCallToServices;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection::class);
+        $this->methodCallToServices = $configuration;
     }
 }

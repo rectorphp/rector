@@ -21,11 +21,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class StaticCallToNewRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const STATIC_CALLS_TO_NEWS = 'static_calls_to_news';
-    /**
      * @var StaticCallToNew[]
      */
     private $staticCallsToNews = [];
@@ -83,8 +78,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($staticCallsToNews, \Rector\Transform\ValueObject\StaticCallToNew::class);
-        $this->staticCallsToNews = $staticCallsToNews;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\StaticCallToNew::class);
+        $this->staticCallsToNews = $configuration;
     }
 }

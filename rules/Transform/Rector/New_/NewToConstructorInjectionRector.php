@@ -27,11 +27,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class NewToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const TYPES_TO_CONSTRUCTOR_INJECTION = 'types_to_constructor_injection';
-    /**
      * @var ObjectType[]
      */
     private $constructorInjectionObjectTypes = [];
@@ -123,8 +118,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $typesToConstructorInjections = $configuration[self::TYPES_TO_CONSTRUCTOR_INJECTION] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($typesToConstructorInjections);
+        $typesToConstructorInjections = $configuration;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($typesToConstructorInjections);
         foreach ($typesToConstructorInjections as $typeToConstructorInjection) {
             $this->constructorInjectionObjectTypes[] = new \PHPStan\Type\ObjectType($typeToConstructorInjection);
         }

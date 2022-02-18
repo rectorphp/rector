@@ -15,11 +15,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RenameClassNonPhpRector implements \Rector\Core\Contract\Rector\NonPhpRectorInterface, \Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface, \Rector\PostRector\Contract\Rector\ComplementaryRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const RENAME_CLASSES = 'rename_classes';
-    /**
      * @see https://regex101.com/r/HKUFJD/7
      * for "?<!" @see https://stackoverflow.com/a/3735908/1348344
      * @var string
@@ -66,8 +61,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $renameClasses = $configuration[self::RENAME_CLASSES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($renameClasses);
+        $renameClasses = $configuration;
         \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($renameClasses));
         \RectorPrefix20220218\Webmozart\Assert\Assert::allString($renameClasses);
         $this->renameClasses = $renameClasses;

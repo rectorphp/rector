@@ -23,11 +23,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class ReservedObjectRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const RESERVED_KEYWORDS_TO_REPLACEMENTS = 'reserved_keywords_to_replacements';
-    /**
      * @var array<string, string>
      */
     private $reservedKeywordsToReplacements = [];
@@ -71,11 +66,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($reservedKeywordsToReplacements);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($reservedKeywordsToReplacements));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($reservedKeywordsToReplacements);
-        $this->reservedKeywordsToReplacements = $reservedKeywordsToReplacements;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->reservedKeywordsToReplacements = $configuration;
     }
     private function processIdentifier(\PhpParser\Node\Identifier $identifier) : \PhpParser\Node\Identifier
     {

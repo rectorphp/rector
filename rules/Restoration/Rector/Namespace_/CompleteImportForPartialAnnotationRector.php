@@ -22,12 +22,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class CompleteImportForPartialAnnotationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const USE_IMPORTS_TO_RESTORE = '$useImportsToRestore';
-    /**
      * @var CompleteImportForPartialAnnotation[]
      */
     private $useImportsToRestore = [];
@@ -86,10 +80,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $useImportsToRestore = $configuration[self::USE_IMPORTS_TO_RESTORE] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($useImportsToRestore, \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation::class);
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation::class);
         $default = [new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('Doctrine\\ORM\\Mapping', 'ORM'), new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('Symfony\\Component\\Validator\\Constraints', 'Assert'), new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('JMS\\Serializer\\Annotation', 'Serializer')];
-        $this->useImportsToRestore = \array_merge($useImportsToRestore, $default);
+        $this->useImportsToRestore = \array_merge($configuration, $default);
     }
     private function addImportToNamespaceIfMissing(\PhpParser\Node\Stmt\Namespace_ $namespace, \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : \PhpParser\Node\Stmt\Namespace_
     {

@@ -17,11 +17,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RenameConstantRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const OLD_TO_NEW_CONSTANTS = 'old_to_new_constants';
-    /**
      * @var array<string, string>
      */
     private $oldToNewConstants = [];
@@ -73,10 +68,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $oldToNewConstants = $configuration[self::OLD_TO_NEW_CONSTANTS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($oldToNewConstants));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($oldToNewConstants);
-        /** @var array<string, string> $oldToNewConstants */
-        $this->oldToNewConstants = $oldToNewConstants;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        /** @var array<string, string> $configuration */
+        $this->oldToNewConstants = $configuration;
     }
 }

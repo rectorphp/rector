@@ -23,11 +23,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class OrderAttributesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ATTRIBUTES_ORDER = 'attributes_order';
-    /**
      * @var array<string, int>
      */
     private $attributesOrderByName = [];
@@ -82,10 +77,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($attributesOrder);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($attributesOrder);
-        $this->attributesOrderByName = \array_flip($attributesOrder);
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->attributesOrderByName = \array_flip($configuration);
     }
     private function resolveAttributeGroupPosition(\PhpParser\Node\AttributeGroup $attributeGroup) : int
     {

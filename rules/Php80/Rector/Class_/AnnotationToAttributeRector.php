@@ -41,11 +41,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ANNOTATION_TO_ATTRIBUTE = 'annotations_to_attributes';
-    /**
      * @var AnnotationToAttribute[]
      */
     private $annotationsToAttributes = [];
@@ -148,11 +143,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($annotationsToAttributes, \Rector\Php80\ValueObject\AnnotationToAttribute::class);
-        $this->annotationsToAttributes = $annotationsToAttributes;
-        $this->unwrapableAnnotationAnalyzer->configure($annotationsToAttributes);
-        $this->removableAnnotationAnalyzer->configure($annotationsToAttributes);
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Php80\ValueObject\AnnotationToAttribute::class);
+        $this->annotationsToAttributes = $configuration;
+        $this->unwrapableAnnotationAnalyzer->configure($configuration);
+        $this->removableAnnotationAnalyzer->configure($configuration);
     }
     public function provideMinPhpVersion() : int
     {

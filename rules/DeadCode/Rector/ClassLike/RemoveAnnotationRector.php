@@ -22,11 +22,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RemoveAnnotationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ANNOTATIONS_TO_REMOVE = 'annotations_to_remove';
-    /**
      * @var string[]
      */
     private $annotationsToRemove = [];
@@ -90,9 +85,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $annotationsToRemove = $configuration[self::ANNOTATIONS_TO_REMOVE] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($annotationsToRemove);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($annotationsToRemove);
-        $this->annotationsToRemove = $annotationsToRemove;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->annotationsToRemove = $configuration;
     }
 }

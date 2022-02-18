@@ -20,11 +20,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class AddInterfaceByParentRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const INTERFACE_BY_PARENT = 'interface_by_parent';
-    /**
      * @var array<string, string>
      */
     private $interfaceByParent = [];
@@ -84,10 +79,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $interfaceByParent = $configuration[self::INTERFACE_BY_PARENT] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($interfaceByParent);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($interfaceByParent));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($interfaceByParent);
-        $this->interfaceByParent = $interfaceByParent;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->interfaceByParent = $configuration;
     }
 }

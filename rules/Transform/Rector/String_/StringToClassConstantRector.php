@@ -17,11 +17,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class StringToClassConstantRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const STRINGS_TO_CLASS_CONSTANTS = 'strings_to_class_constants';
-    /**
      * @var StringToClassConstant[]
      */
     private $stringsToClassConstants = [];
@@ -72,9 +67,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $stringToClassConstants = $configuration[self::STRINGS_TO_CLASS_CONSTANTS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($stringToClassConstants);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($stringToClassConstants, \Rector\Transform\ValueObject\StringToClassConstant::class);
-        $this->stringsToClassConstants = $stringToClassConstants;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\StringToClassConstant::class);
+        $this->stringsToClassConstants = $configuration;
     }
 }

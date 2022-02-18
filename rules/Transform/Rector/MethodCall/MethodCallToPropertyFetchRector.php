@@ -16,12 +16,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class MethodCallToPropertyFetchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_CALL_TO_PROPERTY_FETCHES = 'method_call_to_property_fetch_collection';
-    /**
      * @var array<string, string>
      */
     private $methodCallToPropertyFetchCollection = [];
@@ -72,10 +66,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodCallToPropertyFetchCollection = $configuration[self::METHOD_CALL_TO_PROPERTY_FETCHES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($methodCallToPropertyFetchCollection));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($methodCallToPropertyFetchCollection);
-        /** @var array<string, string> $methodCallToPropertyFetchCollection */
-        $this->methodCallToPropertyFetchCollection = $methodCallToPropertyFetchCollection;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        /** @var array<string, string> $configuration */
+        $this->methodCallToPropertyFetchCollection = $configuration;
     }
 }

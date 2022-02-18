@@ -18,11 +18,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class FuncCallToConstFetchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const FUNCTIONS_TO_CONSTANTS = 'functions_to_constants';
-    /**
      * @var string[]
      */
     private $functionsToConstants = [];
@@ -74,11 +69,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $functionsToConstants = $configuration[self::FUNCTIONS_TO_CONSTANTS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($functionsToConstants);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($functionsToConstants);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($functionsToConstants));
-        /** @var array<string, string> $functionsToConstants */
-        $this->functionsToConstants = $functionsToConstants;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        /** @var array<string, string> $configuration */
+        $this->functionsToConstants = $configuration;
     }
 }

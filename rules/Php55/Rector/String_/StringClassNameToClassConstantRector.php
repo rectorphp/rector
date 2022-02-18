@@ -27,12 +27,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class StringClassNameToClassConstantRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const CLASSES_TO_SKIP = 'classes_to_skip';
-    /**
      * @var string[]
      */
     private $classesToSkip = [
@@ -108,10 +102,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $classesToSkip = $configuration[self::CLASSES_TO_SKIP] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($classesToSkip);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($classesToSkip);
-        $this->classesToSkip = $classesToSkip;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->classesToSkip = $configuration;
     }
     public function provideMinPhpVersion() : int
     {

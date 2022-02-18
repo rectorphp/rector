@@ -24,12 +24,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class StaticCallToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const STATIC_CALLS_TO_METHOD_CALLS = 'static_calls_to_method_calls';
-    /**
      * @var StaticCallToMethodCall[]
      */
     private $staticCallsToMethodCalls = [];
@@ -123,10 +117,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($staticCallsToMethodCalls);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($staticCallsToMethodCalls, \Rector\Transform\ValueObject\StaticCallToMethodCall::class);
-        $this->staticCallsToMethodCalls = $staticCallsToMethodCalls;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\StaticCallToMethodCall::class);
+        $this->staticCallsToMethodCalls = $configuration;
     }
     private function refactorToInstanceCall(\PhpParser\Node\Expr\StaticCall $staticCall, \Rector\Transform\ValueObject\StaticCallToMethodCall $staticCallToMethodCall) : \PhpParser\Node\Expr\MethodCall
     {

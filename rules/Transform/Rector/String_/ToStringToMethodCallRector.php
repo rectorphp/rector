@@ -19,12 +19,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class ToStringToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_NAMES_BY_TYPE = 'method_names_by_type';
-    /**
      * @var array<string, string>
      */
     private $methodNamesByType = [];
@@ -64,11 +58,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($methodNamesByType));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($methodNamesByType);
-        /** @var array<string, string> $methodNamesByType */
-        $this->methodNamesByType = $methodNamesByType;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        /** @var array<string, string> $configuration */
+        $this->methodNamesByType = $configuration;
     }
     private function processStringNode(\PhpParser\Node\Expr\Cast\String_ $string) : ?\PhpParser\Node
     {

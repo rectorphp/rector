@@ -21,11 +21,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class ArgumentRemoverRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const REMOVED_ARGUMENTS = 'removed_arguments';
-    /**
      * @var ArgumentRemover[]
      */
     private $removedArguments = [];
@@ -70,9 +65,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($removedArguments, \Rector\Removing\ValueObject\ArgumentRemover::class);
-        $this->removedArguments = $removedArguments;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Removing\ValueObject\ArgumentRemover::class);
+        $this->removedArguments = $configuration;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node

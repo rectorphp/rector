@@ -24,11 +24,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class MoveServicesBySuffixToDirectoryRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const GROUP_NAMES_BY_SUFFIX = 'group_names_by_suffix';
-    /**
      * @var string[]
      */
     private $groupNamesBySuffix = [];
@@ -89,10 +84,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($groupNamesBySuffix);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($groupNamesBySuffix);
-        $this->groupNamesBySuffix = $groupNamesBySuffix;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->groupNamesBySuffix = $configuration;
     }
     /**
      * A. Match classes by suffix and move them to group namespace

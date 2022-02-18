@@ -15,11 +15,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RenamePackageComposerRector implements \Rector\Composer\Contract\Rector\ComposerRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const RENAME_PACKAGES = 'rename_packages';
-    /**
      * @var RenamePackage[]
      */
     private $renamePackages = [];
@@ -59,8 +54,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $renamePackages = $configuration[self::RENAME_PACKAGES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($renamePackages, \Rector\Composer\ValueObject\RenamePackage::class);
-        $this->renamePackages = $renamePackages;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Composer\ValueObject\RenamePackage::class);
+        $this->renamePackages = $configuration;
     }
 }

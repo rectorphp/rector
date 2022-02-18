@@ -20,11 +20,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class PropertyFetchToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PROPERTIES_TO_METHOD_CALLS = 'properties_to_method_calls';
-    /**
      * @var PropertyFetchToMethodCall[]
      */
     private $propertiesToMethodCalls = [];
@@ -69,9 +64,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $propertiesToMethodCalls = $configuration[self::PROPERTIES_TO_METHOD_CALLS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($propertiesToMethodCalls, \Rector\Transform\ValueObject\PropertyFetchToMethodCall::class);
-        $this->propertiesToMethodCalls = $propertiesToMethodCalls;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\PropertyFetchToMethodCall::class);
+        $this->propertiesToMethodCalls = $configuration;
     }
     private function processSetter(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node
     {

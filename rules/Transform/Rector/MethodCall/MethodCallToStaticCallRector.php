@@ -17,11 +17,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class MethodCallToStaticCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_CALLS_TO_STATIC_CALLS = 'method_calls_to_static_calls';
-    /**
      * @var MethodCallToStaticCall[]
      */
     private $methodCallsToStaticCalls = [];
@@ -89,9 +84,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodCallsToStaticCalls = $configuration[self::METHOD_CALLS_TO_STATIC_CALLS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($methodCallsToStaticCalls);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($methodCallsToStaticCalls, \Rector\Transform\ValueObject\MethodCallToStaticCall::class);
-        $this->methodCallsToStaticCalls = $methodCallsToStaticCalls;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\MethodCallToStaticCall::class);
+        $this->methodCallsToStaticCalls = $configuration;
     }
 }

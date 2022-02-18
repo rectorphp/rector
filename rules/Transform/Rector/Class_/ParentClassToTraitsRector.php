@@ -24,11 +24,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class ParentClassToTraitsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PARENT_CLASS_TO_TRAITS = 'parent_class_to_traits';
-    /**
      * @var ParentClassToTraits[]
      */
     private $parentClassToTraits = [];
@@ -98,9 +93,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($parentClassToTraits, \Rector\Transform\ValueObject\ParentClassToTraits::class);
-        $this->parentClassToTraits = $parentClassToTraits;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\ParentClassToTraits::class);
+        $this->parentClassToTraits = $configuration;
     }
     private function removeParentClass(\PhpParser\Node\Stmt\Class_ $class) : void
     {

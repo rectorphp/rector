@@ -20,11 +20,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class WrapReturnRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const TYPE_METHOD_WRAPS = 'type_method_wraps';
-    /**
      * @var WrapReturn[]
      */
     private $typeMethodWraps = [];
@@ -81,9 +76,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($typeMethodWraps, \Rector\Transform\ValueObject\WrapReturn::class);
-        $this->typeMethodWraps = $typeMethodWraps;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\WrapReturn::class);
+        $this->typeMethodWraps = $configuration;
     }
     private function wrap(\PhpParser\Node\Stmt\ClassMethod $classMethod, bool $isArrayWrap) : ?\PhpParser\Node\Stmt\ClassMethod
     {

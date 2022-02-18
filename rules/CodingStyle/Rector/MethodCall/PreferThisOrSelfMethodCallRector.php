@@ -22,12 +22,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class PreferThisOrSelfMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const TYPE_TO_PREFERENCE = 'type_to_preference';
-    /**
      * @var string
      */
     private const THIS = 'this';
@@ -99,11 +93,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($typeToPreference);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($typeToPreference));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($typeToPreference, \Rector\CodingStyle\Enum\PreferenceSelfThis::class);
-        $this->typeToPreference = $typeToPreference;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\CodingStyle\Enum\PreferenceSelfThis::class);
+        $this->typeToPreference = $configuration;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node

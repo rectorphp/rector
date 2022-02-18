@@ -21,12 +21,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class MergeInterfacesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const OLD_TO_NEW_INTERFACES = 'old_to_new_interfaces';
-    /**
      * @var array<string, string>
      */
     private $oldToNewInterfaces = [];
@@ -75,11 +69,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($oldToNewInterfaces);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($oldToNewInterfaces));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($oldToNewInterfaces);
-        $this->oldToNewInterfaces = $oldToNewInterfaces;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->oldToNewInterfaces = $configuration;
     }
     private function makeImplementsUnique(\PhpParser\Node\Stmt\Class_ $class) : void
     {

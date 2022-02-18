@@ -16,11 +16,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class ReplacePackageAndVersionComposerRector implements \Rector\Composer\Contract\Rector\ComposerRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const REPLACE_PACKAGES_AND_VERSIONS = 'replace_packages_and_versions';
-    /**
      * @var ReplacePackageAndVersion[]
      */
     private $replacePackagesAndVersions = [];
@@ -62,9 +57,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $replacePackagesAndVersions = $configuration[self::REPLACE_PACKAGES_AND_VERSIONS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($replacePackagesAndVersions, \Rector\Composer\ValueObject\ReplacePackageAndVersion::class);
-        $this->versionGuard->validate($replacePackagesAndVersions);
-        $this->replacePackagesAndVersions = $replacePackagesAndVersions;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Composer\ValueObject\ReplacePackageAndVersion::class);
+        $this->versionGuard->validate($configuration);
+        $this->replacePackagesAndVersions = $configuration;
     }
 }

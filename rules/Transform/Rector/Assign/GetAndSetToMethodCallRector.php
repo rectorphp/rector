@@ -25,11 +25,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class GetAndSetToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const TYPE_TO_METHOD_CALLS = 'type_to_method_calls';
-    /**
      * @var GetAndSetToMethodCall[]
      */
     private $getAndSetToMethodCalls = [];
@@ -85,9 +80,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($getAndSetToMethodCalls, \Rector\Transform\ValueObject\GetAndSetToMethodCall::class);
-        $this->getAndSetToMethodCalls = $getAndSetToMethodCalls;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\GetAndSetToMethodCall::class);
+        $this->getAndSetToMethodCalls = $configuration;
     }
     private function processMagicSet(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
     {

@@ -13,16 +13,12 @@ use Rector\Privatization\NodeFactory\ClassConstantFetchValueFactory;
 use Rector\Privatization\ValueObject\ReplaceStringWithClassConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220218\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\ReplaceStringWithClassConstantRectorTest
  */
 final class ReplaceStringWithClassConstantRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
-    /**
-     * @deprecated
-     * @var string
-     */
-    public const REPLACE_STRING_WITH_CLASS_CONSTANT = 'replace_string_with_class_constant';
     /**
      * @var ReplaceStringWithClassConstant[]
      */
@@ -96,7 +92,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $this->replaceStringWithClassConstants = $configuration[self::REPLACE_STRING_WITH_CLASS_CONSTANT] ?? $configuration;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Privatization\ValueObject\ReplaceStringWithClassConstant::class);
+        $this->replaceStringWithClassConstants = $configuration;
     }
     private function matchArg(\PhpParser\Node\Expr\MethodCall $methodCall, \Rector\Privatization\ValueObject\ReplaceStringWithClassConstant $replaceStringWithClassConstant) : ?\PhpParser\Node\Arg
     {

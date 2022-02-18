@@ -32,11 +32,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class ArgumentAdderRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ADDED_ARGUMENTS = 'added_arguments';
-    /**
      * @var ArgumentAdder[]
      */
     private $addedArguments = [];
@@ -118,9 +113,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($addedArguments, \Rector\Arguments\ValueObject\ArgumentAdder::class);
-        $this->addedArguments = $addedArguments;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ArgumentAdder::class);
+        $this->addedArguments = $configuration;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node

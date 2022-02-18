@@ -18,11 +18,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class RenameStringRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const STRING_CHANGES = 'string_changes';
-    /**
      * @var array<string, string>
      */
     private $stringChanges = [];
@@ -73,10 +68,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $stringChanges = $configuration[self::STRING_CHANGES] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($stringChanges);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($stringChanges));
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($stringChanges);
-        $this->stringChanges = $stringChanges;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allString($configuration);
+        $this->stringChanges = $configuration;
     }
 }

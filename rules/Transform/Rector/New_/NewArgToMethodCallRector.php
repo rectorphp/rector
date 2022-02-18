@@ -21,11 +21,6 @@ use RectorPrefix20220218\Webmozart\Assert\Assert;
 final class NewArgToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const NEW_ARGS_TO_METHOD_CALLS = 'new_args_to_method_calls';
-    /**
      * @var NewArgToMethodCall[]
      */
     private $newArgsToMethodCalls = [];
@@ -88,9 +83,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $newArgsToMethodCalls = $configuration[self::NEW_ARGS_TO_METHOD_CALLS] ?? $configuration;
-        \RectorPrefix20220218\Webmozart\Assert\Assert::isArray($newArgsToMethodCalls);
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($newArgsToMethodCalls, \Rector\Transform\ValueObject\NewArgToMethodCall::class);
-        $this->newArgsToMethodCalls = $newArgsToMethodCalls;
+        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\NewArgToMethodCall::class);
+        $this->newArgsToMethodCalls = $configuration;
     }
 }
