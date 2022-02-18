@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220217;
+namespace RectorPrefix20220218;
 
 use Rector\Nette\Rector\Property\NetteInjectToConstructorInjectionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

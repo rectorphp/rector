@@ -1,4 +1,4 @@
-# 520 Rules Overview
+# 519 Rules Overview
 
 <br>
 
@@ -43,8 +43,6 @@
 - [DowngradePhp81](#downgradephp81) (8)
 
 - [EarlyReturn](#earlyreturn) (11)
-
-- [Generics](#generics) (1)
 
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 
@@ -1367,6 +1365,7 @@ Simplify foreach with function filtering to array filter
 
 ```diff
 -$directories = [];
+-
  $possibleDirectories = [];
 -foreach ($possibleDirectories as $possibleDirectory) {
 -    if (file_exists($possibleDirectory)) {
@@ -6366,46 +6365,6 @@ Changes Single return of || to early returns
 +            return true;
 +        }
 +        return (bool) $this->somethingElse();
-     }
- }
-```
-
-<br>
-
-## Generics
-
-### GenericClassMethodParamRector
-
-Make class methods generic based on implemented interface
-
-:wrench: **configure it!**
-
-- class: [`Rector\Generics\Rector\ClassMethod\GenericClassMethodParamRector`](../rules/Generics/Rector/ClassMethod/GenericClassMethodParamRector.php)
-
-```php
-use Rector\Generics\Rector\ClassMethod\GenericClassMethodParamRector;
-use Rector\Generics\ValueObject\GenericClassMethodParam;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(GenericClassMethodParamRector::class)
-        ->configure([new GenericClassMethodParam('SomeInterface', 'getParams', 0, 'ParamInterface')]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass implements SomeInterface
- {
--    private method getParams(SomeSpecificType $someParam)
-+    /**
-+     * @param SomeSpecificType $someParam
-+     */
-+    public method getParams(ParamInterface $someParam)
-     {
      }
  }
 ```

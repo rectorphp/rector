@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220217\Symplify\PackageBuilder\Yaml;
+namespace RectorPrefix20220218\Symplify\PackageBuilder\Yaml;
 
 final class ParametersMerger
 {
