@@ -299,7 +299,10 @@ final class PhpDocInfo
         $phpDocNodeTraverser = new \RectorPrefix20220218\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use($typeToRemove) : ?int {
             if ($node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode && \is_a($node->value, $typeToRemove, \true)) {
-                if (\strncmp($node->name, '@psalm-', \strlen('@psalm-')) === 0 || \strncmp($node->name, '@phpstan-', \strlen('@phpstan-')) === 0) {
+                if (\strncmp($node->name, '@psalm-', \strlen('@psalm-')) === 0) {
+                    return null;
+                }
+                if (\strncmp($node->name, '@phpstan-', \strlen('@phpstan-')) === 0) {
                     return null;
                 }
                 $this->markAsChanged();
