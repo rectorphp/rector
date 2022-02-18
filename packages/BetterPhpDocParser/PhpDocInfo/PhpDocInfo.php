@@ -305,7 +305,11 @@ final class PhpDocInfo
             $typeToRemove
         ): ?int {
             if ($node instanceof PhpDocTagNode && is_a($node->value, $typeToRemove, true)) {
-                if (str_starts_with($node->name, '@psalm-') || str_starts_with($node->name, '@phpstan-')) {
+                if (str_starts_with($node->name, '@psalm-')) {
+                    return null;
+                }
+
+                if (str_starts_with($node->name, '@phpstan-')) {
                     return null;
                 }
 
