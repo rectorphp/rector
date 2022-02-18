@@ -18,13 +18,6 @@ use Webmozart\Assert\Assert;
 final class MethodCallToPropertyFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_CALL_TO_PROPERTY_FETCHES = 'method_call_to_property_fetch_collection';
-
-    /**
      * @var array<string, string>
      */
     private array $methodCallToPropertyFetchCollection = [];
@@ -89,12 +82,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodCallToPropertyFetchCollection = $configuration[self::METHOD_CALL_TO_PROPERTY_FETCHES] ?? $configuration;
+        Assert::allString(array_keys($configuration));
+        Assert::allString($configuration);
 
-        Assert::allString(array_keys($methodCallToPropertyFetchCollection));
-        Assert::allString($methodCallToPropertyFetchCollection);
-
-        /** @var array<string, string> $methodCallToPropertyFetchCollection */
-        $this->methodCallToPropertyFetchCollection = $methodCallToPropertyFetchCollection;
+        /** @var array<string, string> $configuration */
+        $this->methodCallToPropertyFetchCollection = $configuration;
     }
 }

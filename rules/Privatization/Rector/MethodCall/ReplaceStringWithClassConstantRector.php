@@ -14,18 +14,13 @@ use Rector\Privatization\NodeFactory\ClassConstantFetchValueFactory;
 use Rector\Privatization\ValueObject\ReplaceStringWithClassConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\ReplaceStringWithClassConstantRectorTest
  */
 final class ReplaceStringWithClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
-    /**
-     * @deprecated
-     * @var string
-     */
-    public const REPLACE_STRING_WITH_CLASS_CONSTANT = 'replace_string_with_class_constant';
-
     /**
      * @var ReplaceStringWithClassConstant[]
      */
@@ -116,7 +111,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->replaceStringWithClassConstants = $configuration[self::REPLACE_STRING_WITH_CLASS_CONSTANT] ?? $configuration;
+        Assert::allIsAOf($configuration, ReplaceStringWithClassConstant::class);
+        $this->replaceStringWithClassConstants = $configuration;
     }
 
     private function matchArg(

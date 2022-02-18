@@ -23,13 +23,6 @@ use Webmozart\Assert\Assert;
 final class MergeInterfacesRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const OLD_TO_NEW_INTERFACES = 'old_to_new_interfaces';
-
-    /**
      * @var array<string, string>
      */
     private array $oldToNewInterfaces = [];
@@ -94,13 +87,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? $configuration;
+        Assert::allString(array_keys($configuration));
+        Assert::allString($configuration);
 
-        Assert::isArray($oldToNewInterfaces);
-        Assert::allString(array_keys($oldToNewInterfaces));
-        Assert::allString($oldToNewInterfaces);
-
-        $this->oldToNewInterfaces = $oldToNewInterfaces;
+        $this->oldToNewInterfaces = $configuration;
     }
 
     private function makeImplementsUnique(Class_ $class): void

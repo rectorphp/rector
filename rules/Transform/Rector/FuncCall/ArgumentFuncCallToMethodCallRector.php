@@ -33,12 +33,6 @@ use Webmozart\Assert\Assert;
 final class ArgumentFuncCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const FUNCTIONS_TO_METHOD_CALLS = 'functions_to_method_calls';
-
-    /**
      * @var ArgumentFuncCallToMethodCallInterface[]
      */
     private array $argumentFuncCallToMethodCalls = [];
@@ -133,11 +127,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $functionToMethodCalls = $configuration[self::FUNCTIONS_TO_METHOD_CALLS] ?? $configuration;
-        Assert::isArray($functionToMethodCalls);
-        Assert::allIsAOf($functionToMethodCalls, ArgumentFuncCallToMethodCallInterface::class);
+        Assert::allIsAOf($configuration, ArgumentFuncCallToMethodCallInterface::class);
 
-        $this->argumentFuncCallToMethodCalls = $functionToMethodCalls;
+        $this->argumentFuncCallToMethodCalls = $configuration;
     }
 
     private function shouldSkipFuncCall(FuncCall $funcCall): bool

@@ -24,12 +24,6 @@ use Webmozart\Assert\Assert;
 final class RenameAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const RENAMED_ANNOTATIONS = 'renamed_annotations';
-
-    /**
      * @var RenameAnnotationInterface[]
      */
     private array $renameAnnotations = [];
@@ -122,11 +116,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $renamedAnnotations = $configuration[self::RENAMED_ANNOTATIONS] ?? $configuration;
+        Assert::allIsAOf($configuration, RenameAnnotationInterface::class);
 
-        Assert::isArray($renamedAnnotations);
-        Assert::allIsAOf($renamedAnnotations, RenameAnnotationInterface::class);
-
-        $this->renameAnnotations = $renamedAnnotations;
+        $this->renameAnnotations = $configuration;
     }
 }

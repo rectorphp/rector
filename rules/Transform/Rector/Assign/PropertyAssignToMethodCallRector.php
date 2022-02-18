@@ -21,12 +21,6 @@ use Webmozart\Assert\Assert;
 final class PropertyAssignToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PROPERTY_ASSIGNS_TO_METHODS_CALLS = 'property_assigns_to_methods_calls';
-
-    /**
      * @var PropertyAssignToMethodCall[]
      */
     private array $propertyAssignsToMethodCalls = [];
@@ -96,8 +90,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $propertyAssignsToMethodCalls = $configuration[self::PROPERTY_ASSIGNS_TO_METHODS_CALLS] ?? $configuration;
-        Assert::allIsAOf($propertyAssignsToMethodCalls, PropertyAssignToMethodCall::class);
-        $this->propertyAssignsToMethodCalls = $propertyAssignsToMethodCalls;
+        Assert::allIsAOf($configuration, PropertyAssignToMethodCall::class);
+        $this->propertyAssignsToMethodCalls = $configuration;
     }
 }

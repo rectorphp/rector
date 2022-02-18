@@ -29,12 +29,6 @@ use Webmozart\Assert\Assert;
 final class NewToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const TYPES_TO_CONSTRUCTOR_INJECTION = 'types_to_constructor_injection';
-
-    /**
      * @var ObjectType[]
      */
     private array $constructorInjectionObjectTypes = [];
@@ -120,8 +114,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $typesToConstructorInjections = $configuration[self::TYPES_TO_CONSTRUCTOR_INJECTION] ?? $configuration;
-        Assert::isArray($typesToConstructorInjections);
+        $typesToConstructorInjections = $configuration;
+        Assert::allString($typesToConstructorInjections);
 
         foreach ($typesToConstructorInjections as $typeToConstructorInjection) {
             $this->constructorInjectionObjectTypes[] = new ObjectType($typeToConstructorInjection);

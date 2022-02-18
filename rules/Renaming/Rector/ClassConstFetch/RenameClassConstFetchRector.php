@@ -23,12 +23,6 @@ use Webmozart\Assert\Assert;
 final class RenameClassConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const CLASS_CONSTANT_RENAME = 'constant_rename';
-
-    /**
      * @var RenameClassConstFetchInterface[]
      */
     private array $renameClassConstFetches = [];
@@ -102,10 +96,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $renameClassConstFetches = $configuration[self::CLASS_CONSTANT_RENAME] ?? $configuration;
-        Assert::allIsAOf($renameClassConstFetches, RenameClassConstFetchInterface::class);
+        Assert::allIsAOf($configuration, RenameClassConstFetchInterface::class);
 
-        $this->renameClassConstFetches = $renameClassConstFetches;
+        $this->renameClassConstFetches = $configuration;
     }
 
     private function createClassAndConstFetch(RenameClassAndConstFetch $renameClassAndConstFetch): ClassConstFetch

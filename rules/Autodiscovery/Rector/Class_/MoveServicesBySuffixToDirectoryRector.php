@@ -26,12 +26,6 @@ use Webmozart\Assert\Assert;
 final class MoveServicesBySuffixToDirectoryRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const GROUP_NAMES_BY_SUFFIX = 'group_names_by_suffix';
-
-    /**
      * @var string[]
      */
     private array $groupNamesBySuffix = [];
@@ -94,11 +88,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? $configuration;
-        Assert::isArray($groupNamesBySuffix);
-        Assert::allString($groupNamesBySuffix);
+        Assert::allString($configuration);
 
-        $this->groupNamesBySuffix = $groupNamesBySuffix;
+        $this->groupNamesBySuffix = $configuration;
     }
 
     /**

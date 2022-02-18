@@ -21,12 +21,6 @@ use Webmozart\Assert\Assert;
 final class ChangeConstantVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const CLASS_CONSTANT_VISIBILITY_CHANGES = 'class_constant_visibility_changes';
-
-    /**
      * @var ChangeConstantVisibility[]
      */
     private array $classConstantVisibilityChanges = [];
@@ -107,10 +101,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? $configuration;
-        Assert::isArray($classConstantVisibilityChanges);
-        Assert::allIsAOf($classConstantVisibilityChanges, ChangeConstantVisibility::class);
+        Assert::allIsAOf($configuration, ChangeConstantVisibility::class);
 
-        $this->classConstantVisibilityChanges = $classConstantVisibilityChanges;
+        $this->classConstantVisibilityChanges = $configuration;
     }
 }

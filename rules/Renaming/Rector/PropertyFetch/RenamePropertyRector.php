@@ -26,12 +26,6 @@ use Webmozart\Assert\Assert;
 final class RenamePropertyRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const RENAMED_PROPERTIES = 'old_to_new_property_by_types';
-
-    /**
      * @var RenameProperty[]
      */
     private array $renamedProperties = [];
@@ -72,9 +66,8 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
      */
     public function configure(array $configuration): void
     {
-        $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? $configuration;
-        Assert::allIsAOf($renamedProperties, RenameProperty::class);
-        $this->renamedProperties = $renamedProperties;
+        Assert::allIsAOf($configuration, RenameProperty::class);
+        $this->renamedProperties = $configuration;
     }
 
     private function processFromClassLike(ClassLike $classLike): ClassLike

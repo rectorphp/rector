@@ -23,12 +23,6 @@ use Webmozart\Assert\Assert;
 final class StaticCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const STATIC_CALLS_TO_NEWS = 'static_calls_to_news';
-
-    /**
      * @var StaticCallToNew[]
      */
     private array $staticCallsToNews = [];
@@ -100,9 +94,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? $configuration;
-        Assert::allIsAOf($staticCallsToNews, StaticCallToNew::class);
+        Assert::allIsAOf($configuration, StaticCallToNew::class);
 
-        $this->staticCallsToNews = $staticCallsToNews;
+        $this->staticCallsToNews = $configuration;
     }
 }

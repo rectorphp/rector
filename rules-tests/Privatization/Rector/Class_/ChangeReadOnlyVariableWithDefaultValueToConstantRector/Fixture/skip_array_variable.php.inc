@@ -14,7 +14,7 @@ class SkipArrayVariable
         $data = [
             'services' => [
                 RenameClassRector::class => [
-                    RenameClassRector::OLD_TO_NEW_CLASSES => $oldToNewClasses,
+                    $oldToNewClasses,
                 ],
             ],
         ];

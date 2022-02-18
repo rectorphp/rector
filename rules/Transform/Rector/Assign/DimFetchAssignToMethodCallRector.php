@@ -23,12 +23,6 @@ use Webmozart\Assert\Assert;
 final class DimFetchAssignToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const DIM_FETCH_ASSIGN_TO_METHOD_CALL = 'dim_fetch_assign_to_method_call';
-
-    /**
      * @var DimFetchAssignToMethodCall[]
      */
     private array $dimFetchAssignToMethodCalls = [];
@@ -117,9 +111,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $dimFetchAssignToMethodCalls = $configuration[self::DIM_FETCH_ASSIGN_TO_METHOD_CALL] ?? $configuration;
-        Assert::allIsAOf($dimFetchAssignToMethodCalls, DimFetchAssignToMethodCall::class);
-        $this->dimFetchAssignToMethodCalls = $dimFetchAssignToMethodCalls;
+        Assert::allIsAOf($configuration, DimFetchAssignToMethodCall::class);
+        $this->dimFetchAssignToMethodCalls = $configuration;
     }
 
     private function findDimFetchAssignToMethodCall(Assign $assign): ?DimFetchAssignToMethodCall

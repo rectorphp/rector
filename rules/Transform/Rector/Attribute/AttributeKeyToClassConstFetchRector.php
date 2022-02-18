@@ -22,12 +22,6 @@ use Webmozart\Assert\Assert;
 final class AttributeKeyToClassConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES = 'attribute_keys_to_class_const_fetches';
-
-    /**
      * @var AttributeKeyToClassConstFetch[]
      */
     private array $attributeKeysToClassConstFetches = [];
@@ -118,9 +112,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $attributeKeysToClassConstFetches = $configuration[self::ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES] ?? $configuration;
-        Assert::allIsAOf($attributeKeysToClassConstFetches, AttributeKeyToClassConstFetch::class);
+        Assert::allIsAOf($configuration, AttributeKeyToClassConstFetch::class);
 
-        $this->attributeKeysToClassConstFetches = $attributeKeysToClassConstFetches;
+        $this->attributeKeysToClassConstFetches = $configuration;
     }
 }

@@ -19,12 +19,6 @@ use Webmozart\Assert\Assert;
  */
 final class RemoveTraitUseRector extends AbstractRector implements ConfigurableRectorInterface
 {
-    /**
-     * @deprecated
-     * @var string
-     */
-    public const TRAITS_TO_REMOVE = 'traits_to_remove';
-
     private bool $classHasChanged = false;
 
     /**
@@ -94,10 +88,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $traitsToRemove = $configuration[self::TRAITS_TO_REMOVE] ?? $configuration;
-        Assert::allString($traitsToRemove);
+        Assert::allString($configuration);
 
-        /** @var string[] $traitsToRemove */
-        $this->traitsToRemove = $traitsToRemove;
+        $this->traitsToRemove = $configuration;
     }
 }

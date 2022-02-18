@@ -21,12 +21,6 @@ use Webmozart\Assert\Assert;
 final class StaticCallToFuncCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const STATIC_CALLS_TO_FUNCTIONS = 'static_calls_to_functions';
-
-    /**
      * @param StaticCallToFuncCall[] $staticCallsToFunctions
      */
     public function __construct(
@@ -78,10 +72,8 @@ final class StaticCallToFuncCallRector extends AbstractRector implements Configu
      */
     public function configure(array $configuration): void
     {
-        $staticCallsToFunctions = $configuration[self::STATIC_CALLS_TO_FUNCTIONS] ?? $configuration;
-        Assert::isArray($staticCallsToFunctions);
-        Assert::allIsAOf($staticCallsToFunctions, StaticCallToFuncCall::class);
+        Assert::allIsAOf($configuration, StaticCallToFuncCall::class);
 
-        $this->staticCallsToFunctions = $staticCallsToFunctions;
+        $this->staticCallsToFunctions = $configuration;
     }
 }

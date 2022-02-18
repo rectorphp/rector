@@ -28,12 +28,6 @@ use Webmozart\Assert\Assert;
  */
 final class RenameClassRector extends AbstractRector implements ConfigurableRectorInterface
 {
-    /**
-     * @deprecated
-     * @var string
-     */
-    public const OLD_TO_NEW_CLASSES = 'old_to_new_classes';
-
     public function __construct(
         private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
         private readonly ClassRenamer $classRenamer
@@ -117,12 +111,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? $configuration;
+        Assert::allString($configuration);
 
-        Assert::isArray($oldToNewClasses);
-        Assert::allString($oldToNewClasses);
-
-        $this->addOldToNewClasses($oldToNewClasses);
+        $this->addOldToNewClasses($configuration);
     }
 
     /**

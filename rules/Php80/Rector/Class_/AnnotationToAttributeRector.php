@@ -43,12 +43,6 @@ use Webmozart\Assert\Assert;
 final class AnnotationToAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ANNOTATION_TO_ATTRIBUTE = 'annotations_to_attributes';
-
-    /**
      * @var AnnotationToAttribute[]
      */
     private array $annotationsToAttributes = [];
@@ -145,12 +139,11 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? $configuration;
-        Assert::allIsAOf($annotationsToAttributes, AnnotationToAttribute::class);
-        $this->annotationsToAttributes = $annotationsToAttributes;
+        Assert::allIsAOf($configuration, AnnotationToAttribute::class);
+        $this->annotationsToAttributes = $configuration;
 
-        $this->unwrapableAnnotationAnalyzer->configure($annotationsToAttributes);
-        $this->removableAnnotationAnalyzer->configure($annotationsToAttributes);
+        $this->unwrapableAnnotationAnalyzer->configure($configuration);
+        $this->removableAnnotationAnalyzer->configure($configuration);
     }
 
     public function provideMinPhpVersion(): int

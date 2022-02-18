@@ -20,12 +20,6 @@ use Webmozart\Assert\Assert;
 final class RenameStringRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const STRING_CHANGES = 'string_changes';
-
-    /**
      * @var array<string, string>
      */
     private array $stringChanges = [];
@@ -90,12 +84,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $stringChanges = $configuration[self::STRING_CHANGES] ?? $configuration;
+        Assert::allString(array_keys($configuration));
+        Assert::allString($configuration);
 
-        Assert::isArray($stringChanges);
-        Assert::allString(array_keys($stringChanges));
-        Assert::allString($stringChanges);
-
-        $this->stringChanges = $stringChanges;
+        $this->stringChanges = $configuration;
     }
 }

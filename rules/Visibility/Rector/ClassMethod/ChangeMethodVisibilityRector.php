@@ -24,12 +24,6 @@ use Webmozart\Assert\Assert;
 final class ChangeMethodVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_VISIBILITIES = 'method_visibilities';
-
-    /**
      * @var ChangeMethodVisibility[]
      */
     private array $methodVisibilities = [];
@@ -129,11 +123,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodVisibilities = $configuration[self::METHOD_VISIBILITIES] ?? $configuration;
+        Assert::allIsAOf($configuration, ChangeMethodVisibility::class);
 
-        Assert::isArray($methodVisibilities);
-        Assert::allIsAOf($methodVisibilities, ChangeMethodVisibility::class);
-
-        $this->methodVisibilities = $methodVisibilities;
+        $this->methodVisibilities = $configuration;
     }
 }

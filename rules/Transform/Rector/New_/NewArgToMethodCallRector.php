@@ -23,12 +23,6 @@ use Webmozart\Assert\Assert;
 final class NewArgToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const NEW_ARGS_TO_METHOD_CALLS = 'new_args_to_method_calls';
-
-    /**
      * @var NewArgToMethodCall[]
      */
     private array $newArgsToMethodCalls = [];
@@ -107,10 +101,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $newArgsToMethodCalls = $configuration[self::NEW_ARGS_TO_METHOD_CALLS] ?? $configuration;
-        Assert::isArray($newArgsToMethodCalls);
-        Assert::allIsAOf($newArgsToMethodCalls, NewArgToMethodCall::class);
+        Assert::allIsAOf($configuration, NewArgToMethodCall::class);
 
-        $this->newArgsToMethodCalls = $newArgsToMethodCalls;
+        $this->newArgsToMethodCalls = $configuration;
     }
 }

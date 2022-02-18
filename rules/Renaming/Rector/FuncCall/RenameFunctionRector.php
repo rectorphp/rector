@@ -21,12 +21,6 @@ use Webmozart\Assert\Assert;
 final class RenameFunctionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const OLD_FUNCTION_TO_NEW_FUNCTION = 'old_function_to_new_function';
-
-    /**
      * @var array<string, string>
      */
     private array $oldFunctionToNewFunction = [];
@@ -80,13 +74,10 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
      */
     public function configure(array $configuration): void
     {
-        $oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? $configuration;
+        Assert::allString(array_values($configuration));
+        Assert::allString($configuration);
 
-        Assert::isArray($oldFunctionToNewFunction);
-        Assert::allString(array_values($oldFunctionToNewFunction));
-        Assert::allString($oldFunctionToNewFunction);
-
-        $this->oldFunctionToNewFunction = $oldFunctionToNewFunction;
+        $this->oldFunctionToNewFunction = $configuration;
     }
 
     private function createName(string $newFunction): Name

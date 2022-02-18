@@ -21,12 +21,6 @@ use Webmozart\Assert\Assert;
 final class UnsetAndIssetToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ISSET_UNSET_TO_METHOD_CALL = 'isset_unset_to_method_call';
-
-    /**
      * @var UnsetAndIssetToMethodCall[]
      */
     private array $issetUnsetToMethodCalls = [];
@@ -90,11 +84,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $issetUnsetToMethodCalls = $configuration[self::ISSET_UNSET_TO_METHOD_CALL] ?? $configuration;
-        Assert::isArray($issetUnsetToMethodCalls);
-        Assert::allIsAOf($issetUnsetToMethodCalls, UnsetAndIssetToMethodCall::class);
+        Assert::allIsAOf($configuration, UnsetAndIssetToMethodCall::class);
 
-        $this->issetUnsetToMethodCalls = $issetUnsetToMethodCalls;
+        $this->issetUnsetToMethodCalls = $configuration;
     }
 
     private function processArrayDimFetchNode(

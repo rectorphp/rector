@@ -9,9 +9,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            RenameClassRector::OLD_TO_NEW_CLASSES => [
-                'old_2' => 'new_2',
-            ],
+            'old_2' => 'new_2',
         ],
         ]);
 };

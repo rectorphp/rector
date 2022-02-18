@@ -21,12 +21,6 @@ use Webmozart\Assert\Assert;
 final class RenameStaticMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const OLD_TO_NEW_METHODS_BY_CLASSES = 'old_to_new_method_by_classes';
-
-    /**
      * @var RenameStaticMethod[]
      */
     private array $staticMethodRenames = [];
@@ -75,9 +69,8 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
      */
     public function configure(array $configuration): void
     {
-        $oldToNewMethodsByClasses = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES] ?? $configuration;
-        Assert::allIsAOf($oldToNewMethodsByClasses, RenameStaticMethod::class);
-        $this->staticMethodRenames = $oldToNewMethodsByClasses;
+        Assert::allIsAOf($configuration, RenameStaticMethod::class);
+        $this->staticMethodRenames = $configuration;
     }
 
     private function rename(StaticCall $staticCall, RenameStaticMethod $renameStaticMethod): StaticCall

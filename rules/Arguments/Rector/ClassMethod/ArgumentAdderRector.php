@@ -34,12 +34,6 @@ use Webmozart\Assert\Assert;
 final class ArgumentAdderRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ADDED_ARGUMENTS = 'added_arguments';
-
-    /**
      * @var ArgumentAdder[]
      */
     private array $addedArguments = [];
@@ -131,9 +125,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? $configuration;
-        Assert::allIsAOf($addedArguments, ArgumentAdder::class);
-        $this->addedArguments = $addedArguments;
+        Assert::allIsAOf($configuration, ArgumentAdder::class);
+        $this->addedArguments = $configuration;
     }
 
     private function isObjectTypeMatch(MethodCall | StaticCall | ClassMethod $node, ObjectType $objectType): bool

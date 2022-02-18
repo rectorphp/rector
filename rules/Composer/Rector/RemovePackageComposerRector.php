@@ -16,12 +16,6 @@ use Webmozart\Assert\Assert;
 final class RemovePackageComposerRector implements ComposerRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PACKAGE_NAMES = 'package_names';
-
-    /**
      * @var string[]
      */
     private array $packageNames = [];
@@ -60,11 +54,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $packagesNames = $configuration[self::PACKAGE_NAMES] ?? $configuration;
+        Assert::allString($configuration);
 
-        Assert::isArray($packagesNames);
-        Assert::allString($packagesNames);
-
-        $this->packageNames = $packagesNames;
+        $this->packageNames = $configuration;
     }
 }

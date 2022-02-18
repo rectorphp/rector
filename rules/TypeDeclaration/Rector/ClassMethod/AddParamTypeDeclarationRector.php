@@ -29,12 +29,6 @@ use Webmozart\Assert\Assert;
 final class AddParamTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PARAMETER_TYPEHINTS = 'parameter_typehints';
-
-    /**
      * @var AddParamTypeDeclaration[]
      */
     private array $addParamTypeDeclarations = [];
@@ -111,11 +105,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? $configuration;
-        Assert::isArray($parameterTypehints);
-        Assert::allIsAOf($parameterTypehints, AddParamTypeDeclaration::class);
+        Assert::allIsAOf($configuration, AddParamTypeDeclaration::class);
 
-        $this->addParamTypeDeclarations = $parameterTypehints;
+        $this->addParamTypeDeclarations = $configuration;
     }
 
     private function shouldSkip(ClassMethod $classMethod): bool

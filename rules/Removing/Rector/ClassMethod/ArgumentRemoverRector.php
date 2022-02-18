@@ -23,12 +23,6 @@ use Webmozart\Assert\Assert;
 final class ArgumentRemoverRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const REMOVED_ARGUMENTS = 'removed_arguments';
-
-    /**
      * @var ArgumentRemover[]
      */
     private array $removedArguments = [];
@@ -91,9 +85,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? $configuration;
-        Assert::allIsAOf($removedArguments, ArgumentRemover::class);
-        $this->removedArguments = $removedArguments;
+        Assert::allIsAOf($configuration, ArgumentRemover::class);
+        $this->removedArguments = $configuration;
     }
 
     private function processPosition(

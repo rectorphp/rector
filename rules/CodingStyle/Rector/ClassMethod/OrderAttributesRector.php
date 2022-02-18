@@ -25,12 +25,6 @@ use Webmozart\Assert\Assert;
 final class OrderAttributesRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ATTRIBUTES_ORDER = 'attributes_order';
-
-    /**
      * @var array<string, int>
      */
     private array $attributesOrderByName = [];
@@ -111,11 +105,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? $configuration;
-        Assert::isArray($attributesOrder);
-        Assert::allString($attributesOrder);
+        Assert::allString($configuration);
 
-        $this->attributesOrderByName = array_flip($attributesOrder);
+        $this->attributesOrderByName = array_flip($configuration);
     }
 
     private function resolveAttributeGroupPosition(AttributeGroup $attributeGroup): int

@@ -27,12 +27,6 @@ use Webmozart\Assert\Assert;
 final class MethodCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_CALLS_TO_METHOD_CALLS = 'method_calls_to_method_calls';
-
-    /**
      * @var MethodCallToMethodCall[]
      */
     private array $methodCallsToMethodsCalls = [];
@@ -139,10 +133,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodCallsToMethodsCalls = $configuration[self::METHOD_CALLS_TO_METHOD_CALLS] ?? $configuration;
-        Assert::allIsAOf($methodCallsToMethodsCalls, MethodCallToMethodCall::class);
+        Assert::allIsAOf($configuration, MethodCallToMethodCall::class);
 
-        $this->methodCallsToMethodsCalls = $methodCallsToMethodsCalls;
+        $this->methodCallsToMethodsCalls = $configuration;
     }
 
     private function isMatch(MethodCall $methodCall, MethodCallToMethodCall $methodCallToMethodCall): bool

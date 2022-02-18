@@ -25,12 +25,6 @@ use Webmozart\Assert\Assert;
 final class AddReturnTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_RETURN_TYPES = 'method_return_types';
-
-    /**
      * @var AddReturnTypeDeclaration[]
      */
     private array $methodReturnTypes = [];
@@ -104,11 +98,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodReturnTypes = $configuration[self::METHOD_RETURN_TYPES] ?? $configuration;
-        Assert::isArray($methodReturnTypes);
-        Assert::allIsAOf($methodReturnTypes, AddReturnTypeDeclaration::class);
+        Assert::allIsAOf($configuration, AddReturnTypeDeclaration::class);
 
-        $this->methodReturnTypes = $methodReturnTypes;
+        $this->methodReturnTypes = $configuration;
     }
 
     private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, Type $newType): void

@@ -17,12 +17,6 @@ use Webmozart\Assert\Assert;
 final class RenamePackageComposerRector implements ComposerRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const RENAME_PACKAGES = 'rename_packages';
-
-    /**
      * @var RenamePackage[]
      */
     private array $renamePackages = [];
@@ -79,8 +73,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $renamePackages = $configuration[self::RENAME_PACKAGES] ?? $configuration;
-        Assert::allIsAOf($renamePackages, RenamePackage::class);
-        $this->renamePackages = $renamePackages;
+        Assert::allIsAOf($configuration, RenamePackage::class);
+        $this->renamePackages = $configuration;
     }
 }

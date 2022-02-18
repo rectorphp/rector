@@ -21,13 +21,6 @@ use Webmozart\Assert\Assert;
 final class RemoveFuncCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const REMOVE_FUNC_CALLS = 'remove_func_calls';
-
-    /**
      * @var RemoveFuncCall[]
      */
     private array $removeFuncCalls = [];
@@ -95,9 +88,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $removeFuncCalls = $configuration[self::REMOVE_FUNC_CALLS] ?? $configuration;
-        Assert::allIsAOf($removeFuncCalls, RemoveFuncCall::class);
-        $this->removeFuncCalls = $removeFuncCalls;
+        Assert::allIsAOf($configuration, RemoveFuncCall::class);
+        $this->removeFuncCalls = $configuration;
     }
 
     private function refactorFuncCallsWithPositions(FuncCall $funcCall, RemoveFuncCall $removeFuncCall): void

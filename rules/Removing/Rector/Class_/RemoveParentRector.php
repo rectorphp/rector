@@ -21,13 +21,6 @@ use Webmozart\Assert\Assert;
 final class RemoveParentRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const PARENT_TYPES_TO_REMOVE = 'parents_types_to_remove';
-
-    /**
      * @var string[]
      */
     private array $parentClassesToRemove = [];
@@ -97,11 +90,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $parentTypesToRemove = $configuration[self::PARENT_TYPES_TO_REMOVE] ?? $configuration;
+        Assert::allString($configuration);
 
-        Assert::isArray($parentTypesToRemove);
-        Assert::allString($parentTypesToRemove);
-
-        $this->parentClassesToRemove = $parentTypesToRemove;
+        $this->parentClassesToRemove = $configuration;
     }
 }

@@ -24,12 +24,6 @@ use Webmozart\Assert\Assert;
 final class AddMethodParentCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHODS_BY_PARENT_TYPES = 'methods_by_parent_type';
-
-    /**
      * @var array<string, string>
      */
     private array $methodByParentTypes = [];
@@ -117,12 +111,11 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodsByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? $configuration;
-        Assert::allString(array_keys($methodsByParentTypes));
-        Assert::allString($methodsByParentTypes);
+        Assert::allString(array_keys($configuration));
+        Assert::allString($configuration);
 
-        /** @var array<string, string> $methodsByParentTypes */
-        $this->methodByParentTypes = $methodsByParentTypes;
+        /** @var array<string, string> $configuration */
+        $this->methodByParentTypes = $configuration;
     }
 
     private function shouldSkipMethod(ClassMethod $classMethod, string $method): bool

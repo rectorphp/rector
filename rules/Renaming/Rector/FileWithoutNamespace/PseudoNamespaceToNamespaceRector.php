@@ -30,12 +30,6 @@ use Webmozart\Assert\Assert;
 final class PseudoNamespaceToNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES = 'namespace_prefixed_with_excluded_classes';
-
-    /**
      * @see https://regex101.com/r/chvLgs/1/
      * @var string
      */
@@ -116,10 +110,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? $configuration;
-        Assert::allIsAOf($namespacePrefixesWithExcludedClasses, PseudoNamespaceToNamespace::class);
+        Assert::allIsAOf($configuration, PseudoNamespaceToNamespace::class);
 
-        $this->pseudoNamespacesToNamespaces = $namespacePrefixesWithExcludedClasses;
+        $this->pseudoNamespacesToNamespaces = $configuration;
     }
 
     /**

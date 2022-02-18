@@ -24,13 +24,6 @@ use Webmozart\Assert\Assert;
 final class CompleteImportForPartialAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const USE_IMPORTS_TO_RESTORE = '$useImportsToRestore';
-
-    /**
      * @var CompleteImportForPartialAnnotation[]
      */
     private array $useImportsToRestore = [];
@@ -107,8 +100,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $useImportsToRestore = $configuration[self::USE_IMPORTS_TO_RESTORE] ?? $configuration;
-        Assert::allIsAOf($useImportsToRestore, CompleteImportForPartialAnnotation::class);
+        Assert::allIsAOf($configuration, CompleteImportForPartialAnnotation::class);
 
         $default = [
             new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM'),
@@ -116,7 +108,7 @@ CODE_SAMPLE
             new CompleteImportForPartialAnnotation('JMS\Serializer\Annotation', 'Serializer'),
         ];
 
-        $this->useImportsToRestore = array_merge($useImportsToRestore, $default);
+        $this->useImportsToRestore = array_merge($configuration, $default);
     }
 
     private function addImportToNamespaceIfMissing(

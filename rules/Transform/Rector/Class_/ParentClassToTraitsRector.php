@@ -26,12 +26,6 @@ use Webmozart\Assert\Assert;
 final class ParentClassToTraitsRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PARENT_CLASS_TO_TRAITS = 'parent_class_to_traits';
-
-    /**
      * @var ParentClassToTraits[]
      */
     private array $parentClassToTraits = [];
@@ -108,9 +102,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? $configuration;
-        Assert::allIsAOf($parentClassToTraits, ParentClassToTraits::class);
-        $this->parentClassToTraits = $parentClassToTraits;
+        Assert::allIsAOf($configuration, ParentClassToTraits::class);
+        $this->parentClassToTraits = $configuration;
     }
 
     private function removeParentClass(Class_ $class): void

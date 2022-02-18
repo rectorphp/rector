@@ -22,12 +22,6 @@ use Webmozart\Assert\Assert;
 final class PropertyFetchToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PROPERTIES_TO_METHOD_CALLS = 'properties_to_method_calls';
-
-    /**
      * @var PropertyFetchToMethodCall[]
      */
     private array $propertiesToMethodCalls = [];
@@ -87,9 +81,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $propertiesToMethodCalls = $configuration[self::PROPERTIES_TO_METHOD_CALLS] ?? $configuration;
-        Assert::allIsAOf($propertiesToMethodCalls, PropertyFetchToMethodCall::class);
-        $this->propertiesToMethodCalls = $propertiesToMethodCalls;
+        Assert::allIsAOf($configuration, PropertyFetchToMethodCall::class);
+        $this->propertiesToMethodCalls = $configuration;
     }
 
     private function processSetter(Assign $assign): ?Node

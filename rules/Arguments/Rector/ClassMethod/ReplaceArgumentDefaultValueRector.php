@@ -22,12 +22,6 @@ use Webmozart\Assert\Assert;
 final class ReplaceArgumentDefaultValueRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const REPLACED_ARGUMENTS = 'replaced_arguments';
-
-    /**
      * @var ReplaceArgumentDefaultValue[]
      */
     private array $replacedArguments = [];
@@ -112,10 +106,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? $configuration;
-        Assert::isArray($replacedArguments);
-        Assert::allIsAOf($replacedArguments, ReplaceArgumentDefaultValue::class);
+        Assert::allIsAOf($configuration, ReplaceArgumentDefaultValue::class);
 
-        $this->replacedArguments = $replacedArguments;
+        $this->replacedArguments = $configuration;
     }
 }

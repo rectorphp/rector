@@ -9,7 +9,5 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(RemovePhpVersionIdCheckRector::class)
-        ->configure([
-            RemovePhpVersionIdCheckRector::PHP_VERSION_CONSTRAINT => PhpVersion::PHP_80,
-        ]);
+        ->configure([PhpVersion::PHP_80]);
 };

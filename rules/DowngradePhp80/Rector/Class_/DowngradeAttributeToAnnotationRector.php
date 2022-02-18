@@ -30,12 +30,6 @@ use Webmozart\Assert\Assert;
 final class DowngradeAttributeToAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ATTRIBUTE_TO_ANNOTATION = 'attribute_to_annotation';
-
-    /**
      * @var DowngradeAttributeToAnnotation[]
      */
     private array $attributesToAnnotations = [];
@@ -129,10 +123,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? $configuration;
-        Assert::allIsAOf($attributesToAnnotations, DowngradeAttributeToAnnotation::class);
+        Assert::allIsAOf($configuration, DowngradeAttributeToAnnotation::class);
 
-        $this->attributesToAnnotations = $attributesToAnnotations;
+        $this->attributesToAnnotations = $configuration;
     }
 
     private function cleanupEmptyAttrGroups(

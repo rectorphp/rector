@@ -35,7 +35,7 @@ use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
 final class ConfigurationWithStringStringArray
 {
     /**
-     * @return array<class-string<\Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector>, array<string, \Rector\Transform\ValueObject\DimFetchAssignToMethodCall[]>>
+     * @return array<class-string<\Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector>, array<int|string, \Rector\Transform\ValueObject\DimFetchAssignToMethodCall[]>>
      */
     public function getSome(): array
     {

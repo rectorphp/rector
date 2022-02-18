@@ -18,12 +18,6 @@ use Webmozart\Assert\Assert;
 final class AddPackageToRequireComposerRector implements ComposerRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PACKAGES_AND_VERSIONS = 'packages_and_versions';
-
-    /**
      * @var PackageAndVersion[]
      */
     private array $packagesAndVersions = [];
@@ -66,10 +60,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? $configuration;
-        Assert::allIsAOf($packagesAndVersions, PackageAndVersion::class);
+        Assert::allIsAOf($configuration, PackageAndVersion::class);
 
-        $this->versionGuard->validate($packagesAndVersions);
-        $this->packagesAndVersions = $packagesAndVersions;
+        $this->versionGuard->validate($configuration);
+        $this->packagesAndVersions = $configuration;
     }
 }

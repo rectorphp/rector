@@ -20,12 +20,6 @@ use Webmozart\Assert\Assert;
 final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS = 'method_call_renames_with_added_arguments';
-
-    /**
      * @var MethodCallToAnotherMethodCallWithArguments[]
      */
     private array $methodCallRenamesWithAddedArguments = [];
@@ -92,11 +86,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodCallRenamesWithAddedArguments = $configuration[self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS] ?? $configuration;
+        Assert::allIsAOf($configuration, MethodCallToAnotherMethodCallWithArguments::class);
 
-        Assert::isArray($methodCallRenamesWithAddedArguments);
-        Assert::allIsAOf($methodCallRenamesWithAddedArguments, MethodCallToAnotherMethodCallWithArguments::class);
-
-        $this->methodCallRenamesWithAddedArguments = $methodCallRenamesWithAddedArguments;
+        $this->methodCallRenamesWithAddedArguments = $configuration;
     }
 }

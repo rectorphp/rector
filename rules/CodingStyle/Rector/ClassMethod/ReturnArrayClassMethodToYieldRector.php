@@ -30,12 +30,6 @@ use Webmozart\Assert\Assert;
 final class ReturnArrayClassMethodToYieldRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHODS_TO_YIELDS = 'methods_to_yields';
-
-    /**
      * @var ReturnArrayClassMethodToyield[]
      */
     private array $methodsToYields = [];
@@ -125,9 +119,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodsToYields = $configuration[self::METHODS_TO_YIELDS] ?? $configuration;
-        Assert::allIsAOf($methodsToYields, ReturnArrayClassMethodToYield::class);
-        $this->methodsToYields = $methodsToYields;
+        Assert::allIsAOf($configuration, ReturnArrayClassMethodToYield::class);
+        $this->methodsToYields = $configuration;
     }
 
     private function collectReturnArrayNodesFromClassMethod(ClassMethod $classMethod): ?Array_

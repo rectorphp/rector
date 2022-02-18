@@ -24,13 +24,6 @@ use Webmozart\Assert\Assert;
 final class PreferThisOrSelfMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @deprecated
-     * @var string
-     */
-    public const TYPE_TO_PREFERENCE = 'type_to_preference';
-
-    /**
      * @var string
      */
     private const THIS = 'this';
@@ -114,12 +107,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? $configuration;
-        Assert::isArray($typeToPreference);
-        Assert::allString(array_keys($typeToPreference));
-        Assert::allIsAOf($typeToPreference, PreferenceSelfThis::class);
+        Assert::allString(array_keys($configuration));
+        Assert::allIsAOf($configuration, PreferenceSelfThis::class);
 
-        $this->typeToPreference = $typeToPreference;
+        $this->typeToPreference = $configuration;
     }
 
     private function processToSelf(MethodCall | StaticCall $node): ?StaticCall

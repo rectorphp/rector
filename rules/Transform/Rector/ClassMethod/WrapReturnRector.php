@@ -22,12 +22,6 @@ use Webmozart\Assert\Assert;
 final class WrapReturnRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const TYPE_METHOD_WRAPS = 'type_method_wraps';
-
-    /**
      * @var WrapReturn[]
      */
     private array $typeMethodWraps = [];
@@ -98,9 +92,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? $configuration;
-        Assert::allIsAOf($typeMethodWraps, WrapReturn::class);
-        $this->typeMethodWraps = $typeMethodWraps;
+        Assert::allIsAOf($configuration, WrapReturn::class);
+        $this->typeMethodWraps = $configuration;
     }
 
     private function wrap(ClassMethod $classMethod, bool $isArrayWrap): ?ClassMethod

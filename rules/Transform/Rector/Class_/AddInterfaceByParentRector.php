@@ -22,12 +22,6 @@ use Webmozart\Assert\Assert;
 final class AddInterfaceByParentRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const INTERFACE_BY_PARENT = 'interface_by_parent';
-
-    /**
      * @var array<string, string>
      */
     private array $interfaceByParent = [];
@@ -105,12 +99,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $interfaceByParent = $configuration[self::INTERFACE_BY_PARENT] ?? $configuration;
+        Assert::allString(array_keys($configuration));
+        Assert::allString($configuration);
 
-        Assert::isArray($interfaceByParent);
-        Assert::allString(array_keys($interfaceByParent));
-        Assert::allString($interfaceByParent);
-
-        $this->interfaceByParent = $interfaceByParent;
+        $this->interfaceByParent = $configuration;
     }
 }

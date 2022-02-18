@@ -20,12 +20,6 @@ use Webmozart\Assert\Assert;
 final class FuncCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const FUNCTIONS_TO_NEWS = 'functions_to_news';
-
-    /**
      * @var string[]
      */
     private array $functionToNew = [];
@@ -90,11 +84,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $functionsToNews = $configuration[self::FUNCTIONS_TO_NEWS] ?? $configuration;
+        Assert::allString($configuration);
 
-        Assert::isArray($functionsToNews);
-        Assert::allString($functionsToNews);
-
-        $this->functionToNew = $functionsToNews;
+        $this->functionToNew = $configuration;
     }
 }

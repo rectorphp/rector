@@ -28,12 +28,6 @@ use Webmozart\Assert\Assert;
 final class ServiceGetterToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_CALL_TO_SERVICES = 'method_call_to_services';
-
-    /**
      * @var ServiceGetterToConstructorInjection[]
      */
     private array $methodCallToServices = [];
@@ -169,10 +163,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? $configuration;
-        Assert::isArray($methodCallToServices);
-        Assert::allIsAOf($methodCallToServices, ServiceGetterToConstructorInjection::class);
+        Assert::allIsAOf($configuration, ServiceGetterToConstructorInjection::class);
 
-        $this->methodCallToServices = $methodCallToServices;
+        $this->methodCallToServices = $configuration;
     }
 }

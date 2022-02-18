@@ -19,12 +19,6 @@ use Webmozart\Assert\Assert;
 final class ReplaceParentCallByPropertyCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PARENT_CALLS_TO_PROPERTIES = 'parent_calls_to_properties';
-
-    /**
      * @var ReplaceParentCallByPropertyCall[]
      */
     private array $parentCallToProperties = [];
@@ -95,9 +89,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? $configuration;
-        Assert::allIsAOf($parentCallToProperties, ReplaceParentCallByPropertyCall::class);
+        Assert::allIsAOf($configuration, ReplaceParentCallByPropertyCall::class);
 
-        $this->parentCallToProperties = $parentCallToProperties;
+        $this->parentCallToProperties = $configuration;
     }
 }

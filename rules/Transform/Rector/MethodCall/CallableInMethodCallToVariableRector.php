@@ -25,12 +25,6 @@ use Webmozart\Assert\Assert;
 final class CallableInMethodCallToVariableRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const CALLABLE_IN_METHOD_CALL_TO_VARIABLE = 'callable_in_method_call_to_variable';
-
-    /**
      * @var CallableInMethodCallToVariable[]
      */
     private array $callableInMethodCallToVariable = [];
@@ -125,10 +119,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $callableInMethodCallToVariable = $configuration[self::CALLABLE_IN_METHOD_CALL_TO_VARIABLE] ?? $configuration;
-        Assert::isArray($callableInMethodCallToVariable);
-        Assert::allIsAOf($callableInMethodCallToVariable, CallableInMethodCallToVariable::class);
+        Assert::allIsAOf($configuration, CallableInMethodCallToVariable::class);
 
-        $this->callableInMethodCallToVariable = $callableInMethodCallToVariable;
+        $this->callableInMethodCallToVariable = $configuration;
     }
 }

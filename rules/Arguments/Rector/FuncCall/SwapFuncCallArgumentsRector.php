@@ -20,12 +20,6 @@ use Webmozart\Assert\Assert;
 final class SwapFuncCallArgumentsRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const FUNCTION_ARGUMENT_SWAPS = 'new_argument_positions_by_function_name';
-
-    /**
      * @var string
      */
     private const JUST_SWAPPED = 'just_swapped';
@@ -109,9 +103,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? $configuration;
-        Assert::allIsAOf($functionArgumentSwaps, SwapFuncCallArguments::class);
-        $this->functionArgumentSwaps = $functionArgumentSwaps;
+        Assert::allIsAOf($configuration, SwapFuncCallArguments::class);
+        $this->functionArgumentSwaps = $configuration;
     }
 
     /**

@@ -29,12 +29,6 @@ use Webmozart\Assert\Assert;
 final class RenameMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const METHOD_CALL_RENAMES = 'method_call_renames';
-
-    /**
      * @var MethodCallRenameInterface[]
      */
     private array $methodCallRenames = [];
@@ -119,11 +113,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? $configuration;
-        Assert::allIsAOf($methodCallRenames, MethodCallRenameInterface::class);
+        Assert::allIsAOf($configuration, MethodCallRenameInterface::class);
 
-        $this->methodCallRenames = $methodCallRenames;
-        $this->methodCallRenameCollector->addMethodCallRenames($methodCallRenames);
+        $this->methodCallRenames = $configuration;
+        $this->methodCallRenameCollector->addMethodCallRenames($configuration);
     }
 
     private function shouldSkipClassMethod(

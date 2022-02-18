@@ -25,12 +25,6 @@ use Webmozart\Assert\Assert;
 final class ReservedObjectRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const RESERVED_KEYWORDS_TO_REPLACEMENTS = 'reserved_keywords_to_replacements';
-
-    /**
      * @var array<string, string>
      */
     private array $reservedKeywordsToReplacements = [];
@@ -92,13 +86,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? $configuration;
+        Assert::allString(array_keys($configuration));
+        Assert::allString($configuration);
 
-        Assert::isArray($reservedKeywordsToReplacements);
-        Assert::allString(array_keys($reservedKeywordsToReplacements));
-        Assert::allString($reservedKeywordsToReplacements);
-
-        $this->reservedKeywordsToReplacements = $reservedKeywordsToReplacements;
+        $this->reservedKeywordsToReplacements = $configuration;
     }
 
     private function processIdentifier(Identifier $identifier): Identifier

@@ -26,12 +26,6 @@ use Webmozart\Assert\Assert;
 final class RenameNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const OLD_TO_NEW_NAMESPACES = 'old_to_new_namespaces';
-
-    /**
      * @var array<string, string>
      */
     private array $oldToNewNamespaces = [];
@@ -123,12 +117,11 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
      */
     public function configure(array $configuration): void
     {
-        $oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? $configuration;
-        Assert::allString(array_keys($oldToNewNamespaces));
-        Assert::allString($oldToNewNamespaces);
+        Assert::allString(array_keys($configuration));
+        Assert::allString($configuration);
 
-        /** @var array<string, string> $oldToNewNamespaces */
-        $this->oldToNewNamespaces = $oldToNewNamespaces;
+        /** @var array<string, string> $configuration */
+        $this->oldToNewNamespaces = $configuration;
     }
 
     private function processFullyQualified(Name $name, RenamedNamespace $renamedNamespace): ?FullyQualified

@@ -27,12 +27,6 @@ use Webmozart\Assert\Assert;
 final class GetAndSetToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const TYPE_TO_METHOD_CALLS = 'type_to_method_calls';
-
-    /**
      * @var GetAndSetToMethodCall[]
      */
     private array $getAndSetToMethodCalls = [];
@@ -91,10 +85,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? $configuration;
-        Assert::allIsAOf($getAndSetToMethodCalls, GetAndSetToMethodCall::class);
+        Assert::allIsAOf($configuration, GetAndSetToMethodCall::class);
 
-        $this->getAndSetToMethodCalls = $getAndSetToMethodCalls;
+        $this->getAndSetToMethodCalls = $configuration;
     }
 
     private function processMagicSet(Expr $expr, PropertyFetch $propertyFetch): ?Node

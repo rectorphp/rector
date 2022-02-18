@@ -27,12 +27,6 @@ use Webmozart\Assert\Assert;
 final class NewToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated
-     * @var string
-     */
-    public const NEWS_TO_METHOD_CALLS = 'news_to_method_calls';
-
-    /**
      * @var NewToMethodCall[]
      */
     private array $newsToMethodCalls = [];
@@ -139,11 +133,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $newsToMethodCalls = $configuration[self::NEWS_TO_METHOD_CALLS] ?? $configuration;
-        Assert::isArray($newsToMethodCalls);
-        Assert::allIsAOf($newsToMethodCalls, NewToMethodCall::class);
+        Assert::allIsAOf($configuration, NewToMethodCall::class);
 
-        $this->newsToMethodCalls = $newsToMethodCalls;
+        $this->newsToMethodCalls = $configuration;
     }
 
     private function getExistingFactoryPropertyName(Class_ $class, ObjectType $factoryObjectType): ?string
