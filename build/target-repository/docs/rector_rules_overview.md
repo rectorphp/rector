@@ -3349,9 +3349,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RemovePhpVersionIdCheckRector::class)
-        ->configure([
-            RemovePhpVersionIdCheckRector::PHP_VERSION_CONSTRAINT => 80000,
-        ]);
+        ->configure([80000]);
 };
 ```
 
