@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit453b3766006e61b34a51164510e3ae3a
+class ComposerStaticInit09698027caf761f0dccda5a22a2e3155
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1761,8 +1761,6 @@ class ComposerStaticInit453b3766006e61b34a51164510e3ae3a
         'Rector\\Arguments\\ValueObject\\ReplaceArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\SwapFuncCallArguments' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/SwapFuncCallArguments.php',
-        'Rector\\Autodiscovery\\Configuration\\CategoryNamespaceProvider' => __DIR__ . '/../..' . '/rules/Autodiscovery/Configuration/CategoryNamespaceProvider.php',
-        'Rector\\Autodiscovery\\Rector\\Class_\\MoveEntitiesToEntityDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Class_/MoveEntitiesToEntityDirectoryRector.php',
         'Rector\\BetterPhpDocParser\\Annotation\\AnnotationNaming' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Annotation/AnnotationNaming.php',
         'Rector\\BetterPhpDocParser\\Attributes\\AttributeMirrorer' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Attributes/AttributeMirrorer.php',
         'Rector\\BetterPhpDocParser\\Comment\\CommentsMerger' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Comment/CommentsMerger.php',
@@ -2510,7 +2508,6 @@ class ComposerStaticInit453b3766006e61b34a51164510e3ae3a
         'Rector\\FileSystemRector\\Contract\\AddedFileInterface' => __DIR__ . '/../..' . '/packages/FileSystemRector/Contract/AddedFileInterface.php',
         'Rector\\FileSystemRector\\Contract\\FileWithNodesInterface' => __DIR__ . '/../..' . '/packages/FileSystemRector/Contract/FileWithNodesInterface.php',
         'Rector\\FileSystemRector\\Parser\\FileInfoParser' => __DIR__ . '/../..' . '/packages/FileSystemRector/Parser/FileInfoParser.php',
-        'Rector\\FileSystemRector\\ValueObjectFactory\\AddedFileWithNodesFactory' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObjectFactory/AddedFileWithNodesFactory.php',
         'Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithContent.php',
         'Rector\\FileSystemRector\\ValueObject\\AddedFileWithNodes' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithNodes.php',
         'Rector\\Laravel\\NodeFactory\\AppAssignFactory' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/AppAssignFactory.php',
@@ -2934,7 +2931,6 @@ class ComposerStaticInit453b3766006e61b34a51164510e3ae3a
         'Rector\\PSR4\\Composer\\PSR4NamespaceMatcher' => __DIR__ . '/../..' . '/rules/PSR4/Composer/PSR4NamespaceMatcher.php',
         'Rector\\PSR4\\Contract\\PSR4AutoloadNamespaceMatcherInterface' => __DIR__ . '/../..' . '/rules/PSR4/Contract/PSR4AutoloadNamespaceMatcherInterface.php',
         'Rector\\PSR4\\FileInfoAnalyzer\\FileInfoDeletionAnalyzer' => __DIR__ . '/../..' . '/rules/PSR4/FileInfoAnalyzer/FileInfoDeletionAnalyzer.php',
-        'Rector\\PSR4\\FileRelocationResolver' => __DIR__ . '/../..' . '/rules/PSR4/FileRelocationResolver.php',
         'Rector\\PSR4\\NodeManipulator\\FullyQualifyStmtsAnalyzer' => __DIR__ . '/../..' . '/rules/PSR4/NodeManipulator/FullyQualifyStmtsAnalyzer.php',
         'Rector\\PSR4\\NodeManipulator\\NamespaceManipulator' => __DIR__ . '/../..' . '/rules/PSR4/NodeManipulator/NamespaceManipulator.php',
         'Rector\\PSR4\\Rector\\FileWithoutNamespace\\NormalizeNamespaceByPSR4ComposerAutoloadRector' => __DIR__ . '/../..' . '/rules/PSR4/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector.php',
@@ -3867,9 +3863,9 @@ class ComposerStaticInit453b3766006e61b34a51164510e3ae3a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit453b3766006e61b34a51164510e3ae3a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit453b3766006e61b34a51164510e3ae3a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit453b3766006e61b34a51164510e3ae3a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit09698027caf761f0dccda5a22a2e3155::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit09698027caf761f0dccda5a22a2e3155::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit09698027caf761f0dccda5a22a2e3155::$classMap;
 
         }, null, ClassLoader::class);
     }
