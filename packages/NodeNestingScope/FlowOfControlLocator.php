@@ -20,7 +20,7 @@ final class FlowOfControlLocator
                 continue;
             }
             if (!$currentNode instanceof \PhpParser\Node) {
-                continue;
+                break;
             }
             if ($functionLike === $currentNode) {
                 // to high

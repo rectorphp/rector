@@ -66,11 +66,12 @@ final class CommentsMerger
     private function collectChildrenComments(\PhpParser\Node $node) : array
     {
         $childrenComments = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (\PhpParser\Node $node) use(&$childrenComments) : void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (\PhpParser\Node $node) use(&$childrenComments) {
             $comments = $node->getComments();
             if ($comments !== []) {
                 $childrenComments = \array_merge($childrenComments, $comments);
             }
+            return null;
         });
         return $childrenComments;
     }

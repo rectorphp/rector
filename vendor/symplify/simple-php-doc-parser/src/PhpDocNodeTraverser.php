@@ -76,6 +76,9 @@ final class PhpDocNodeTraverser
             $phpDocNodeVisitor->afterTraverse($node);
         }
     }
+    /**
+     * @param callable(Node $node): (int|null|Node) $callable
+     */
     public function traverseWithCallable(\PHPStan\PhpDocParser\Ast\Node $node, string $docContent, callable $callable) : \PHPStan\PhpDocParser\Ast\Node
     {
         $callablePhpDocNodeVisitor = new \RectorPrefix20220219\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor($callable, $docContent);

@@ -150,14 +150,11 @@ final class RegexPatternArgumentManipulator
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }
-        return $this->betterNodeFinder->find([$classMethod], function (\PhpParser\Node $node) use($variable) : ?Assign {
+        return $this->betterNodeFinder->find([$classMethod], function (\PhpParser\Node $node) use($variable) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
-                return null;
+                return \false;
             }
-            if (!$this->nodeComparator->areNodesEqual($node->var, $variable)) {
-                return null;
-            }
-            return $node;
+            return $this->nodeComparator->areNodesEqual($node->var, $variable);
         });
     }
     /**

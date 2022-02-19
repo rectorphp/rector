@@ -101,14 +101,15 @@ CODE_SAMPLE
     }
     private function renameVariableInStmts(\PhpParser\Node\Stmt\Catch_ $catch, string $oldVariableName, string $newVariableName) : void
     {
-        $this->traverseNodesWithCallable($catch->stmts, function (\PhpParser\Node $node) use($oldVariableName, $newVariableName) : void {
+        $this->traverseNodesWithCallable($catch->stmts, function (\PhpParser\Node $node) use($oldVariableName, $newVariableName) {
             if (!$node instanceof \PhpParser\Node\Expr\Variable) {
-                return;
+                return null;
             }
             if (!$this->nodeNameResolver->isName($node, $oldVariableName)) {
-                return;
+                return null;
             }
             $node->name = $newVariableName;
+            return null;
         });
         /** @var TryCatch $tryCatch */
         $tryCatch = $catch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);

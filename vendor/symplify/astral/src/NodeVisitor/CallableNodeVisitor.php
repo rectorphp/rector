@@ -11,9 +11,12 @@ use PhpParser\NodeVisitorAbstract;
 final class CallableNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
     /**
-     * @var callable
+     * @var callable(Node): (int|Node|null)
      */
     private $callable;
+    /**
+     * @param callable(Node $node): (int|Node|null) $callable
+     */
     public function __construct(callable $callable)
     {
         $this->callable = $callable;

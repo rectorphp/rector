@@ -125,20 +125,21 @@ CODE_SAMPLE
         $key = $closure->params[1]->var;
         $foreach = new \PhpParser\Node\Stmt\Foreach_($arrayValue, $value, ['keyVar' => $key]);
         $stmts = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (\PhpParser\Node $subNode) use($variable, $key, $value, &$stmts) : void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (\PhpParser\Node $subNode) use($variable, $key, $value, &$stmts) {
             if (!$subNode instanceof \PhpParser\Node\Stmt) {
-                return;
+                return null;
             }
             if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
                 $stmts[] = $subNode;
-                return;
+                return null;
             }
             if (!$subNode->expr instanceof \PhpParser\Node\Expr) {
                 $stmts[] = $subNode;
-                return;
+                return null;
             }
             $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\ArrayDimFetch($variable, $key), $value);
             $stmts[] = new \PhpParser\Node\Stmt\If_($subNode->expr, ['stmts' => [new \PhpParser\Node\Stmt\Expression($assign)]]);
+            return null;
         });
         $foreach->stmts = $stmts;
         return $foreach;
@@ -153,20 +154,21 @@ CODE_SAMPLE
         $key = $closure->params[0]->var;
         $foreach = new \PhpParser\Node\Stmt\Foreach_($funcCall, $key);
         $stmts = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (\PhpParser\Node $subNode) use($variable, $key, $arrayValue, &$stmts) : void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (\PhpParser\Node $subNode) use($variable, $key, $arrayValue, &$stmts) {
             if (!$subNode instanceof \PhpParser\Node\Stmt) {
-                return;
+                return null;
             }
             if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
                 $stmts[] = $subNode;
-                return;
+                return null;
             }
             if (!$subNode->expr instanceof \PhpParser\Node\Expr) {
                 $stmts[] = $subNode;
-                return;
+                return null;
             }
             $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\ArrayDimFetch($variable, $key), new \PhpParser\Node\Expr\ArrayDimFetch($arrayValue, $key));
             $stmts[] = new \PhpParser\Node\Stmt\If_($subNode->expr, ['stmts' => [new \PhpParser\Node\Stmt\Expression($assign)]]);
+            return null;
         });
         $foreach->stmts = $stmts;
         return $foreach;

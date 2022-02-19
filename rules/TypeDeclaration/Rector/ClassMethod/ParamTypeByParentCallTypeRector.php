@@ -104,8 +104,9 @@ CODE_SAMPLE
             // mimic type
             $paramType = $parentParam->type;
             // original attributes have to removed to avoid tokens crashing from origin positions
-            $this->traverseNodesWithCallable($paramType, function (\PhpParser\Node $node) : void {
+            $this->traverseNodesWithCallable($paramType, function (\PhpParser\Node $node) {
                 $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+                return null;
             });
             $param->type = $paramType;
             $hasChanged = \true;

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20220219\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class UseImportsTraverser
@@ -28,19 +29,22 @@ final class UseImportsTraverser
     }
     /**
      * @param Stmt[] $stmts
-     */
-    public function traverserStmtsForFunctions(array $stmts, callable $callable) : void
-    {
-        $this->traverseForType($stmts, $callable, \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION);
-    }
-    /**
-     * @param Stmt[] $stmts
+     * @param callable(UseUse $useUse, string $name): void $callable
      */
     public function traverserStmts(array $stmts, callable $callable) : void
     {
         $this->traverseForType($stmts, $callable, \PhpParser\Node\Stmt\Use_::TYPE_NORMAL);
     }
     /**
+     * @param Stmt[] $stmts
+     * @param callable(UseUse $useUse, string $name): void $callable
+     */
+    public function traverserStmtsForFunctions(array $stmts, callable $callable) : void
+    {
+        $this->traverseForType($stmts, $callable, \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION);
+    }
+    /**
+     * @param callable(UseUse $useUse, string $name): void $callable
      * @param Stmt[] $stmts
      */
     private function traverseForType(array $stmts, callable $callable, int $desiredType) : void
@@ -53,6 +57,9 @@ final class UseImportsTraverser
                 }
                 foreach ($node->uses as $useUse) {
                     $name = $this->nodeNameResolver->getName($useUse);
+                    if ($name === null) {
+                        continue;
+                    }
                     $callable($useUse, $name);
                 }
             }
@@ -62,6 +69,9 @@ final class UseImportsTraverser
             return null;
         });
     }
+    /**
+     * @param callable(UseUse $useUse, string $name): void $callable
+     */
     private function processGroupUse(\PhpParser\Node\Stmt\GroupUse $groupUse, int $desiredType, callable $callable) : void
     {
         if ($groupUse->type !== \PhpParser\Node\Stmt\Use_::TYPE_UNKNOWN) {

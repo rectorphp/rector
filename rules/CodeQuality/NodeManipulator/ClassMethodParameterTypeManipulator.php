@@ -122,11 +122,12 @@ final class ClassMethodParameterTypeManipulator
         if ($classMethod->stmts === null) {
             return;
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (\PhpParser\Node $node) use($param, $methodsReturningClassInstance) : void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (\PhpParser\Node $node) use($param, $methodsReturningClassInstance) {
             if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
-                return;
+                return null;
             }
             $this->refactorMethodCall($param, $node, $methodsReturningClassInstance);
+            return null;
         });
     }
     /**

@@ -200,6 +200,7 @@ final class BetterNodeFinder
     }
     /**
      * @param mixed[]|\PhpParser\Node $nodes
+     * @param callable(Node $node): bool $filter
      * @return Node[]
      */
     public function find($nodes, callable $filter) : array
@@ -439,6 +440,7 @@ final class BetterNodeFinder
         return $foundNodes;
     }
     /**
+     * @param callable(Node $node): bool $filter
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function findFirstInFunctionLikeScoped($functionLike, callable $filter) : ?\PhpParser\Node

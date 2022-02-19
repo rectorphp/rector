@@ -105,8 +105,9 @@ final class DependencyClassMethodDecorator
     {
         $cleanParams = $this->promotedPropertyParamCleaner->cleanFromFlags($params);
         // remove deep attributes to avoid bugs with nested tokens re-print
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($cleanParams, function (\PhpParser\Node $node) : void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($cleanParams, function (\PhpParser\Node $node) {
             $node->setAttributes([]);
+            return null;
         });
         return $cleanParams;
     }

@@ -321,6 +321,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     }
     /**
      * @param mixed[]|\PhpParser\Node $nodes
+     * @param callable(Node $node): (Node|null|int) $callable
      */
     protected function traverseNodesWithCallable($nodes, callable $callable) : void
     {

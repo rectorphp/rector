@@ -160,9 +160,10 @@ CODE_SAMPLE
     {
         // mimic type
         $newParamType = $paramType;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($newParamType, function (\PhpParser\Node $node) : void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($newParamType, function (\PhpParser\Node $node) {
             // original attributes have to removed to avoid tokens crashing from origin positions
             $node->setAttributes([]);
+            return null;
         });
         $decoratedParam->type = $newParamType;
     }

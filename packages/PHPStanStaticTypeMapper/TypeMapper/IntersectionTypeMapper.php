@@ -6,6 +6,7 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
@@ -21,6 +22,10 @@ use RectorPrefix20220219\Symfony\Contracts\Service\Attribute\Required;
  */
 final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
+    /**
+     * @var string
+     */
+    private const STRING = 'string';
     /**
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
@@ -74,11 +79,15 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
         $intersectionedTypeNodes = [];
         foreach ($type->getTypes() as $intersectionedType) {
             $resolvedType = $this->phpStanStaticTypeMapper->mapToPhpParserNode($intersectionedType, $typeKind);
-            if (!$resolvedType instanceof \PhpParser\Node\Name) {
+            if ($intersectionedType instanceof \PHPStan\Type\Generic\GenericClassStringType) {
+                $resolvedTypeName = self::STRING;
+                $resolvedType = new \PhpParser\Node\Name(self::STRING);
+            } elseif (!$resolvedType instanceof \PhpParser\Node\Name) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
+            } else {
+                $resolvedTypeName = (string) $resolvedType;
             }
-            $resolvedTypeName = (string) $resolvedType;
-            if (\in_array($resolvedTypeName, ['string', 'object'], \true)) {
+            if (\in_array($resolvedTypeName, [self::STRING, 'object'], \true)) {
                 return $resolvedType;
             }
             $intersectionedTypeNodes[] = $resolvedType;

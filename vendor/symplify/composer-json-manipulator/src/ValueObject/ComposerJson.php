@@ -41,7 +41,7 @@ final class ComposerJson
     /**
      * @var string|string[]|null
      */
-    private $license;
+    private $license = null;
     /**
      * @var string|null
      */

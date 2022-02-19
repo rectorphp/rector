@@ -121,19 +121,20 @@ CODE_SAMPLE
             $toStringClassMethod->stmts[$lastKey] = new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Scalar\String_(''));
             return;
         }
-        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (\PhpParser\Node $subNode) : void {
+        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (\PhpParser\Node $subNode) {
             if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
-                return;
+                return null;
             }
             if (!$subNode->expr instanceof \PhpParser\Node\Expr) {
                 $subNode->expr = new \PhpParser\Node\Scalar\String_('');
-                return;
+                return null;
             }
             $type = $this->nodeTypeResolver->getType($subNode->expr);
             if ($type instanceof \PHPStan\Type\StringType) {
-                return;
+                return null;
             }
             $subNode->expr = new \PhpParser\Node\Expr\Cast\String_($subNode->expr);
+            return null;
         });
     }
 }

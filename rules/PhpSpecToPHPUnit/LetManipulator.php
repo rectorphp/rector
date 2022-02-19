@@ -32,9 +32,9 @@ final class LetManipulator
             if ($this->nodeNameResolver->isName($classMethod, 'test*')) {
                 continue;
             }
-            $hasBeConstructedThrough = (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (\PhpParser\Node $node) : ?bool {
+            $hasBeConstructedThrough = (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
                 if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
-                    return null;
+                    return \false;
                 }
                 return $this->nodeNameResolver->isName($node->name, 'beConstructedThrough');
             });
