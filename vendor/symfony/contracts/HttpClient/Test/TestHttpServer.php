@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220218\Symfony\Contracts\HttpClient\Test;
+namespace RectorPrefix20220219\Symfony\Contracts\HttpClient\Test;
 
-use RectorPrefix20220218\Symfony\Component\Process\PhpExecutableFinder;
-use RectorPrefix20220218\Symfony\Component\Process\Process;
+use RectorPrefix20220219\Symfony\Component\Process\PhpExecutableFinder;
+use RectorPrefix20220219\Symfony\Component\Process\Process;
 class TestHttpServer
 {
     private static $process = [];
-    public static function start(int $port = 8057) : \RectorPrefix20220218\Symfony\Component\Process\Process
+    public static function start(int $port = 8057) : \RectorPrefix20220219\Symfony\Component\Process\Process
     {
         if (isset(self::$process[$port])) {
             self::$process[$port]->stop();
@@ -24,8 +24,8 @@ class TestHttpServer
                 self::$process[$port]->stop();
             });
         }
-        $finder = new \RectorPrefix20220218\Symfony\Component\Process\PhpExecutableFinder();
-        $process = new \RectorPrefix20220218\Symfony\Component\Process\Process(\array_merge([$finder->find(\false)], $finder->findArguments(), ['-dopcache.enable=0', '-dvariables_order=EGPCS', '-S', '127.0.0.1:' . $port]));
+        $finder = new \RectorPrefix20220219\Symfony\Component\Process\PhpExecutableFinder();
+        $process = new \RectorPrefix20220219\Symfony\Component\Process\Process(\array_merge([$finder->find(\false)], $finder->findArguments(), ['-dopcache.enable=0', '-dvariables_order=EGPCS', '-S', '127.0.0.1:' . $port]));
         $process->setWorkingDirectory(__DIR__ . '/Fixtures/web');
         $process->start();
         self::$process[$port] = $process;

@@ -1,17 +1,17 @@
 <?php
 
-namespace RectorPrefix20220218\React\Dns\Protocol;
+namespace RectorPrefix20220219\React\Dns\Protocol;
 
-use RectorPrefix20220218\React\Dns\Model\Message;
-use RectorPrefix20220218\React\Dns\Model\Record;
-use RectorPrefix20220218\React\Dns\Query\Query;
+use RectorPrefix20220219\React\Dns\Model\Message;
+use RectorPrefix20220219\React\Dns\Model\Record;
+use RectorPrefix20220219\React\Dns\Query\Query;
 final class BinaryDumper
 {
     /**
      * @param Message $message
      * @return string
      */
-    public function toBinary(\RectorPrefix20220218\React\Dns\Model\Message $message)
+    public function toBinary(\RectorPrefix20220219\React\Dns\Model\Message $message)
     {
         $data = '';
         $data .= $this->headerToBinary($message);
@@ -25,7 +25,7 @@ final class BinaryDumper
      * @param Message $message
      * @return string
      */
-    private function headerToBinary(\RectorPrefix20220218\React\Dns\Model\Message $message)
+    private function headerToBinary(\RectorPrefix20220219\React\Dns\Model\Message $message)
     {
         $data = '';
         $data .= \pack('n', $message->id);
@@ -69,44 +69,44 @@ final class BinaryDumper
         foreach ($records as $record) {
             /* @var $record Record */
             switch ($record->type) {
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_A:
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_AAAA:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_A:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_AAAA:
                     $binary = \inet_pton($record->data);
                     break;
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_CNAME:
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_NS:
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_PTR:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_CNAME:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_NS:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_PTR:
                     $binary = $this->domainNameToBinary($record->data);
                     break;
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_TXT:
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_SPF:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_TXT:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_SPF:
                     $binary = $this->textsToBinary($record->data);
                     break;
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_MX:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_MX:
                     $binary = \pack('n', $record->data['priority']);
                     $binary .= $this->domainNameToBinary($record->data['target']);
                     break;
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_SRV:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_SRV:
                     $binary = \pack('n*', $record->data['priority'], $record->data['weight'], $record->data['port']);
                     $binary .= $this->domainNameToBinary($record->data['target']);
                     break;
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_SOA:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_SOA:
                     $binary = $this->domainNameToBinary($record->data['mname']);
                     $binary .= $this->domainNameToBinary($record->data['rname']);
                     $binary .= \pack('N*', $record->data['serial'], $record->data['refresh'], $record->data['retry'], $record->data['expire'], $record->data['minimum']);
                     break;
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_CAA:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_CAA:
                     $binary = \pack('C*', $record->data['flag'], \strlen($record->data['tag']));
                     $binary .= $record->data['tag'];
                     $binary .= $record->data['value'];
                     break;
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_SSHFP:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_SSHFP:
                     $binary = \pack('CCH*', $record->data['algorithm'], $record->data['type'], $record->data['fingerprint']);
                     break;
-                case \RectorPrefix20220218\React\Dns\Model\Message::TYPE_OPT:
+                case \RectorPrefix20220219\React\Dns\Model\Message::TYPE_OPT:
                     $binary = '';
                     foreach ($record->data as $opt => $value) {
-                        if ($opt === \RectorPrefix20220218\React\Dns\Model\Message::OPT_TCP_KEEPALIVE && $value !== null) {
+                        if ($opt === \RectorPrefix20220219\React\Dns\Model\Message::OPT_TCP_KEEPALIVE && $value !== null) {
                             $value = \pack('n', \round($value * 10));
                         }
                         $binary .= \pack('n*', $opt, \strlen((string) $value)) . $value;

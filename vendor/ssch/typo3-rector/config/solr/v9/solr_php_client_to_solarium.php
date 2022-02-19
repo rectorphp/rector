@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220218;
+namespace RectorPrefix20220219;
 
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Ssch\TYPO3Rector\Rector\Extensions\solr\v9\ApacheSolrDocumentToSolariumDocumentRector;

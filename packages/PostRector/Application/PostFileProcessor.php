@@ -10,7 +10,7 @@ use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix20220218\Symplify\Skipper\Skipper\Skipper;
+use RectorPrefix20220219\Symplify\Skipper\Skipper\Skipper;
 final class PostFileProcessor
 {
     /**
@@ -35,7 +35,7 @@ final class PostFileProcessor
     /**
      * @param PostRectorInterface[] $postRectors
      */
-    public function __construct(\RectorPrefix20220218\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, array $postRectors)
+    public function __construct(\RectorPrefix20220219\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, array $postRectors)
     {
         $this->skipper = $skipper;
         $this->currentFileProvider = $currentFileProvider;

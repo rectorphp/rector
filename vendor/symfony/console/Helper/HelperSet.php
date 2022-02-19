@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220218\Symfony\Component\Console\Helper;
+namespace RectorPrefix20220219\Symfony\Component\Console\Helper;
 
-use RectorPrefix20220218\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20220219\Symfony\Component\Console\Exception\InvalidArgumentException;
 /**
  * HelperSet represents a set of helpers to be used with a command.
  *
@@ -31,7 +31,7 @@ class HelperSet implements \IteratorAggregate
             $this->set($helper, \is_int($alias) ? null : $alias);
         }
     }
-    public function set(\RectorPrefix20220218\Symfony\Component\Console\Helper\HelperInterface $helper, string $alias = null)
+    public function set(\RectorPrefix20220219\Symfony\Component\Console\Helper\HelperInterface $helper, string $alias = null)
     {
         $this->helpers[$helper->getName()] = $helper;
         if (null !== $alias) {
@@ -51,10 +51,10 @@ class HelperSet implements \IteratorAggregate
      *
      * @throws InvalidArgumentException if the helper is not defined
      */
-    public function get(string $name) : \RectorPrefix20220218\Symfony\Component\Console\Helper\HelperInterface
+    public function get(string $name) : \RectorPrefix20220219\Symfony\Component\Console\Helper\HelperInterface
     {
         if (!$this->has($name)) {
-            throw new \RectorPrefix20220218\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The helper "%s" is not defined.', $name));
+            throw new \RectorPrefix20220219\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The helper "%s" is not defined.', $name));
         }
         return $this->helpers[$name];
     }

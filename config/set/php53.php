@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220218;
+namespace RectorPrefix20220219;
 
 use Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
 use Rector\Php53\Rector\Ternary\TernaryToElvisRector;

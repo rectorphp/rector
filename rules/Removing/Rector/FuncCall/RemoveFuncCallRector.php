@@ -12,7 +12,7 @@ use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\Removing\ValueObject\RemoveFuncCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220218\Webmozart\Assert\Assert;
+use RectorPrefix20220219\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Removing\Rector\FuncCall\RemoveFuncCallRector\RemoveFuncCallRectorTest
  */
@@ -71,7 +71,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220218\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Removing\ValueObject\RemoveFuncCall::class);
+        \RectorPrefix20220219\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Removing\ValueObject\RemoveFuncCall::class);
         $this->removeFuncCalls = $configuration;
     }
     private function refactorFuncCallsWithPositions(\PhpParser\Node\Expr\FuncCall $funcCall, \Rector\Removing\ValueObject\RemoveFuncCall $removeFuncCall) : void

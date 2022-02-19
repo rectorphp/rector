@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220218\Nette\Neon\Node;
+namespace RectorPrefix20220219\Nette\Neon\Node;
 
 /** @internal */
-final class InlineArrayNode extends \RectorPrefix20220218\Nette\Neon\Node\ArrayNode
+final class InlineArrayNode extends \RectorPrefix20220219\Nette\Neon\Node\ArrayNode
 {
     /** @var string */
     public $bracket;
@@ -19,6 +19,6 @@ final class InlineArrayNode extends \RectorPrefix20220218\Nette\Neon\Node\ArrayN
     }
     public function toString() : string
     {
-        return $this->bracket . \RectorPrefix20220218\Nette\Neon\Node\ArrayItemNode::itemsToInlineString($this->items) . ['[' => ']', '{' => '}', '(' => ')'][$this->bracket];
+        return $this->bracket . \RectorPrefix20220219\Nette\Neon\Node\ArrayItemNode::itemsToInlineString($this->items) . ['[' => ']', '{' => '}', '(' => ')'][$this->bracket];
     }
 }

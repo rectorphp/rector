@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220218\Symfony\Component\DependencyInjection\Argument;
+namespace RectorPrefix20220219\Symfony\Component\DependencyInjection\Argument;
 
 /**
  * Represents a complex argument containing nested values.

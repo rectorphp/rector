@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220218;
+namespace RectorPrefix20220219;
 
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
