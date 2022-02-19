@@ -50,18 +50,20 @@ final class PhpSpecMockCollector
             return $this->mocks[$className];
         }
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use ($class): void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use ($class) {
             if (! $node instanceof ClassMethod) {
-                return;
+                return null;
             }
 
             if (! $node->isPublic()) {
-                return;
+                return null;
             }
 
             foreach ($node->params as $param) {
                 $this->addMockFromParam($class, $param);
             }
+
+            return null;
         });
 
         // set default value if none was found

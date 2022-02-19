@@ -200,6 +200,7 @@ final class BetterNodeFinder
 
     /**
      * @param Node|Node[] $nodes
+     * @param callable(Node $node): bool $filter
      * @return Node[]
      */
     public function find(Node | array $nodes, callable $filter): array
@@ -499,6 +500,9 @@ final class BetterNodeFinder
         return $foundNodes;
     }
 
+    /**
+     * @param callable(Node $node): bool $filter
+     */
     public function findFirstInFunctionLikeScoped(
         ClassMethod | Function_ | Closure $functionLike,
         callable $filter

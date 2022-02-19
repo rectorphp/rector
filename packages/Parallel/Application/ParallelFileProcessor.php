@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Parallel\Application;
 
-use Closure;
 use Clue\React\NDJson\Decoder;
 use Clue\React\NDJson\Encoder;
 use Nette\Utils\Random;
@@ -53,13 +52,13 @@ final class ParallelFileProcessor
     }
 
     /**
-     * @param Closure(int): void|null $postFileCallback Used for progress bar jump
+     * @param callable(int $stepCount): void $postFileCallback Used for progress bar jump
      * @return mixed[]
      */
     public function process(
         Schedule $schedule,
         string $mainScript,
-        Closure $postFileCallback,
+        callable $postFileCallback,
         InputInterface $input
     ): array {
         $jobs = array_reverse($schedule->getJobs());

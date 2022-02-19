@@ -163,16 +163,12 @@ final class RegexPatternArgumentManipulator
             return [];
         }
 
-        return $this->betterNodeFinder->find([$classMethod], function (Node $node) use ($variable): ?Assign {
+        return $this->betterNodeFinder->find([$classMethod], function (Node $node) use ($variable): bool {
             if (! $node instanceof Assign) {
-                return null;
+                return false;
             }
 
-            if (! $this->nodeComparator->areNodesEqual($node->var, $variable)) {
-                return null;
-            }
-
-            return $node;
+            return $this->nodeComparator->areNodesEqual($node->var, $variable);
         });
     }
 

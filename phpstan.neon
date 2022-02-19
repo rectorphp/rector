@@ -15,6 +15,9 @@ includes:
 parameters:
     level: 8
 
+    # requires exact closure types
+    checkMissingCallableSignature: true
+
     parallel:
         # to prevent full thread lagging pc
         maximumNumberOfProcesses: 15
@@ -597,3 +600,9 @@ parameters:
         -
             message: '#Array with keys is not allowed\. Use value object to pass data instead#'
             path: packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php
+
+        # resolve matcher later
+        - '#Callable callable\(PhpParser\\Node\)\: bool invoked with 2 parameters, 1 required#'
+
+        # Scope vs MutatingScope interchangable false positive
+        - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, callable\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'

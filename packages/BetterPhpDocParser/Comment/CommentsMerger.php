@@ -80,12 +80,14 @@ final class CommentsMerger
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
             &$childrenComments
-        ): void {
+        ) {
             $comments = $node->getComments();
 
             if ($comments !== []) {
                 $childrenComments = array_merge($childrenComments, $comments);
             }
+
+            return null;
         });
 
         return $childrenComments;

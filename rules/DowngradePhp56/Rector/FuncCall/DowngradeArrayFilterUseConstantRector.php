@@ -148,19 +148,19 @@ CODE_SAMPLE
             $key,
             $value,
             &$stmts
-        ): void {
+        ) {
             if (! $subNode instanceof Stmt) {
-                return;
+                return null;
             }
 
             if (! $subNode instanceof Return_) {
                 $stmts[] = $subNode;
-                return;
+                return null;
             }
 
             if (! $subNode->expr instanceof Expr) {
                 $stmts[] = $subNode;
-                return;
+                return null;
             }
 
             $assign = new Assign(new ArrayDimFetch($variable, $key), $value);
@@ -168,6 +168,8 @@ CODE_SAMPLE
             $stmts[] = new If_($subNode->expr, [
                 'stmts' => [new Expression($assign)],
             ]);
+
+            return null;
         });
 
         $foreach->stmts = $stmts;
@@ -191,19 +193,19 @@ CODE_SAMPLE
             $key,
             $arrayValue,
             &$stmts
-        ): void {
+        ) {
             if (! $subNode instanceof Stmt) {
-                return;
+                return null;
             }
 
             if (! $subNode instanceof Return_) {
                 $stmts[] = $subNode;
-                return;
+                return null;
             }
 
             if (! $subNode->expr instanceof Expr) {
                 $stmts[] = $subNode;
-                return;
+                return null;
             }
 
             $assign = new Assign(new ArrayDimFetch($variable, $key), new ArrayDimFetch($arrayValue, $key));
@@ -211,6 +213,7 @@ CODE_SAMPLE
             $stmts[] = new If_($subNode->expr, [
                 'stmts' => [new Expression($assign)],
             ]);
+            return null;
         });
 
         $foreach->stmts = $stmts;

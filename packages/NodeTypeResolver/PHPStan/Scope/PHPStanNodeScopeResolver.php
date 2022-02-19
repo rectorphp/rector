@@ -130,6 +130,7 @@ final class PHPStanNodeScopeResolver
 
     /**
      * @param Stmt[] $stmts
+     * @param callable(Node $node, MutatingScope $scope): void $nodeCallback
      * @return Stmt[]
      */
     private function processNodesWithDependentFiles(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFinder;
 
+use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
@@ -26,7 +27,7 @@ final class PhpDocNodeByTypeFinder
         $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use (
             &$foundNodes,
             $desiredType
-        ) {
+        ): Node {
             if (! is_a($node, $desiredType, true)) {
                 return $node;
             }

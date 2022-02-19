@@ -25,8 +25,8 @@ final class BinaryOpManipulator
      * Tries to match left or right parts (xor),
      * returns null or match on first condition and then second condition. No matter what the origin order is.
      *
-     * @param callable|class-string<Node> $firstCondition
-     * @param callable|class-string<Node> $secondCondition
+     * @param callable(Node $firstNode, Node $secondNode=): bool|class-string<Node> $firstCondition
+     * @param callable(Node $firstNode, Node $secondNode=): bool|class-string<Node> $secondCondition
      */
     public function matchFirstAndSecondConditionNode(
         BinaryOp $binaryOp,
@@ -112,7 +112,7 @@ final class BinaryOpManipulator
     }
 
     /**
-     * @param callable|class-string<Node> $firstCondition
+     * @param callable(Node $firstNode, Node $secondNode=): bool|class-string<Node> $firstCondition
      */
     private function validateCondition($firstCondition): void
     {
@@ -128,7 +128,8 @@ final class BinaryOpManipulator
     }
 
     /**
-     * @param callable|class-string<Node> $condition
+     * @param callable(Node $firstNode, Node $secondNode=): bool|class-string<Node> $condition
+     * @return callable(Node $firstNode, Node $secondNode=): bool
      */
     private function normalizeCondition($condition): callable
     {

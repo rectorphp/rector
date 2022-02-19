@@ -133,16 +133,17 @@ CODE_SAMPLE
         $this->traverseNodesWithCallable($catch->stmts, function (Node $node) use (
             $oldVariableName,
             $newVariableName
-        ): void {
+        ) {
             if (! $node instanceof Variable) {
-                return;
+                return null;
             }
 
             if (! $this->nodeNameResolver->isName($node, $oldVariableName)) {
-                return;
+                return null;
             }
 
             $node->name = $newVariableName;
+            return null;
         });
 
         /** @var TryCatch $tryCatch */

@@ -112,34 +112,36 @@ final class ShortNameResolver
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (
             &$shortNamesToFullyQualifiedNames
-        ): void {
+        ) {
             // class name is used!
             if ($node instanceof ClassLike && $node->name instanceof Identifier) {
                 $fullyQualifiedName = $this->nodeNameResolver->getName($node);
                 if ($fullyQualifiedName === null) {
-                    return;
+                    return null;
                 }
 
                 $shortNamesToFullyQualifiedNames[$node->name->toString()] = $fullyQualifiedName;
-                return;
+                return null;
             }
 
             if (! $node instanceof Name) {
-                return;
+                return null;
             }
 
             $originalName = $node->getAttribute(AttributeKey::ORIGINAL_NAME);
             if (! $originalName instanceof Name) {
-                return;
+                return null;
             }
 
             // already short
             if (\str_contains($originalName->toString(), '\\')) {
-                return;
+                return null;
             }
 
             $fullyQualifiedName = $this->nodeNameResolver->getName($node);
             $shortNamesToFullyQualifiedNames[$originalName->toString()] = $fullyQualifiedName;
+
+            return null;
         });
 
         $docBlockShortNamesToFullyQualifiedNames = $this->resolveFromStmtsDocBlocks($stmts);
@@ -159,11 +161,11 @@ final class ShortNameResolver
         $shortNames = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (
             &$shortNames
-        ): void {
+        ) {
             // speed up for nodes that are
             $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
             if (! $phpDocInfo instanceof PhpDocInfo) {
-                return;
+                return null;
             }
 
             $phpDocNodeTraverser = new PhpDocNodeTraverser();
@@ -187,6 +189,8 @@ final class ShortNameResolver
                     return null;
                 }
             );
+
+            return null;
         });
 
         return $this->fqnizeShortNames($shortNames, $reflectionClass, $stmts);

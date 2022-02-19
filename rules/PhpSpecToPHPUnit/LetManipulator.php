@@ -28,9 +28,9 @@ final class LetManipulator
 
             $hasBeConstructedThrough = (bool) $this->betterNodeFinder->find(
                 (array) $classMethod->stmts,
-                function (Node $node): ?bool {
+                function (Node $node): bool {
                     if (! $node instanceof MethodCall) {
-                        return null;
+                        return false;
                     }
 
                     return $this->nodeNameResolver->isName($node->name, 'beConstructedThrough');

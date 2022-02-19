@@ -24,7 +24,7 @@ final class FlowOfControlLocator
             }
 
             if (! $currentNode instanceof Node) {
-                continue;
+                break;
             }
 
             if ($functionLike === $currentNode) {
@@ -33,7 +33,6 @@ final class FlowOfControlLocator
             }
 
             $nestingHash .= $this->resolveBinaryOpNestingHash($currentNode, $previous);
-
             $nestingHash .= spl_object_hash($currentNode);
 
             $previous = $currentNode;

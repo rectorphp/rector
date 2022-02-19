@@ -138,22 +138,23 @@ CODE_SAMPLE
             return;
         }
 
-        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (Node $subNode): void {
+        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (Node $subNode) {
             if (! $subNode instanceof Return_) {
-                return;
+                return null;
             }
 
             if (! $subNode->expr instanceof Expr) {
                 $subNode->expr = new String_('');
-                return;
+                return null;
             }
 
             $type = $this->nodeTypeResolver->getType($subNode->expr);
             if ($type instanceof StringType) {
-                return;
+                return null;
             }
 
             $subNode->expr = new CastString_($subNode->expr);
+            return null;
         });
     }
 }
