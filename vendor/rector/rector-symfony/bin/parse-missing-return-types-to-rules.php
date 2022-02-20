@@ -1,14 +1,14 @@
 <?php
 
-namespace RectorPrefix20220219;
+namespace RectorPrefix20220220;
 
 // parses diff with expected missing types to Rector Return upgrade rule configuration
 // https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
-use RectorPrefix20220219\Nette\Utils\FileSystem;
-use RectorPrefix20220219\Nette\Utils\Strings;
+use RectorPrefix20220220\Nette\Utils\FileSystem;
+use RectorPrefix20220220\Nette\Utils\Strings;
 use Rector\Symfony\Utils\ValueObject\ReturnTypeChange;
-use RectorPrefix20220219\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220219\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix20220220\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220220\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 require __DIR__ . '/../vendor/autoload.php';
 final class MissingReturnTypeParser
 {
@@ -27,7 +27,7 @@ final class MissingReturnTypeParser
     private $symfonyStyle;
     public function __construct()
     {
-        $symfonyStyleFactory = new \RectorPrefix20220219\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory();
+        $symfonyStyleFactory = new \RectorPrefix20220220\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory();
         $this->symfonyStyle = $symfonyStyleFactory->create();
     }
     public function run() : void
@@ -46,16 +46,16 @@ final class MissingReturnTypeParser
      */
     private function resolveDiffFileToReturnTypeChanges(string $fileDiffPath) : array
     {
-        $diffFileContent = \RectorPrefix20220219\Nette\Utils\FileSystem::read($fileDiffPath);
+        $diffFileContent = \RectorPrefix20220220\Nette\Utils\FileSystem::read($fileDiffPath);
         $fileDiffs = \explode('diff --git', $diffFileContent);
         $returnTypeChanges = [];
         foreach ($fileDiffs as $fileDiff) {
-            $matches = \RectorPrefix20220219\Nette\Utils\Strings::matchAll($fileDiff, self::DIFF_LINES_REGEX);
+            $matches = \RectorPrefix20220220\Nette\Utils\Strings::matchAll($fileDiff, self::DIFF_LINES_REGEX);
             if ($matches === []) {
                 continue;
             }
             // match file name
-            $filenameMatch = \RectorPrefix20220219\Nette\Utils\Strings::match($matches[0]['before'], '# a/src/(?<filename>.*?).php$#');
+            $filenameMatch = \RectorPrefix20220220\Nette\Utils\Strings::match($matches[0]['before'], '# a/src/(?<filename>.*?).php$#');
             if ($filenameMatch === null) {
                 continue;
             }
@@ -63,8 +63,8 @@ final class MissingReturnTypeParser
             unset($matches[0]);
             foreach ($matches as $match) {
                 // match method name
-                $methodNameMatch = \RectorPrefix20220219\Nette\Utils\Strings::match($match['before'], '#(?<method_name>\\w+)\\(#');
-                $newTypeMatch = \RectorPrefix20220219\Nette\Utils\Strings::match($match['after'], '#\\): (?<return_type>.*?);?$#');
+                $methodNameMatch = \RectorPrefix20220220\Nette\Utils\Strings::match($match['before'], '#(?<method_name>\\w+)\\(#');
+                $newTypeMatch = \RectorPrefix20220220\Nette\Utils\Strings::match($match['after'], '#\\): (?<return_type>.*?);?$#');
                 $returnTypeChanges[] = new \Rector\Symfony\Utils\ValueObject\ReturnTypeChange($className, $methodNameMatch['method_name'], $newTypeMatch['return_type']);
             }
         }
@@ -72,5 +72,5 @@ final class MissingReturnTypeParser
     }
 }
 \class_alias('MissingReturnTypeParser', 'MissingReturnTypeParser', \false);
-$missingReturnTypeParser = new \RectorPrefix20220219\MissingReturnTypeParser();
+$missingReturnTypeParser = new \RectorPrefix20220220\MissingReturnTypeParser();
 $missingReturnTypeParser->run();

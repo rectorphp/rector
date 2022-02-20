@@ -1,14 +1,14 @@
 <?php
 
-namespace RectorPrefix20220219\React\Stream;
+namespace RectorPrefix20220220\React\Stream;
 
-use RectorPrefix20220219\Evenement\EventEmitter;
-final class CompositeStream extends \RectorPrefix20220219\Evenement\EventEmitter implements \RectorPrefix20220219\React\Stream\DuplexStreamInterface
+use RectorPrefix20220220\Evenement\EventEmitter;
+final class CompositeStream extends \RectorPrefix20220220\Evenement\EventEmitter implements \RectorPrefix20220220\React\Stream\DuplexStreamInterface
 {
     private $readable;
     private $writable;
     private $closed = \false;
-    public function __construct(\RectorPrefix20220219\React\Stream\ReadableStreamInterface $readable, \RectorPrefix20220219\React\Stream\WritableStreamInterface $writable)
+    public function __construct(\RectorPrefix20220220\React\Stream\ReadableStreamInterface $readable, \RectorPrefix20220220\React\Stream\WritableStreamInterface $writable)
     {
         $this->readable = $readable;
         $this->writable = $writable;
@@ -16,8 +16,8 @@ final class CompositeStream extends \RectorPrefix20220219\Evenement\EventEmitter
             $this->close();
             return;
         }
-        \RectorPrefix20220219\React\Stream\Util::forwardEvents($this->readable, $this, array('data', 'end', 'error'));
-        \RectorPrefix20220219\React\Stream\Util::forwardEvents($this->writable, $this, array('drain', 'error', 'pipe'));
+        \RectorPrefix20220220\React\Stream\Util::forwardEvents($this->readable, $this, array('data', 'end', 'error'));
+        \RectorPrefix20220220\React\Stream\Util::forwardEvents($this->writable, $this, array('drain', 'error', 'pipe'));
         $this->readable->on('close', array($this, 'close'));
         $this->writable->on('close', array($this, 'close'));
     }
@@ -36,9 +36,9 @@ final class CompositeStream extends \RectorPrefix20220219\Evenement\EventEmitter
         }
         $this->readable->resume();
     }
-    public function pipe(\RectorPrefix20220219\React\Stream\WritableStreamInterface $dest, array $options = array())
+    public function pipe(\RectorPrefix20220220\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
-        return \RectorPrefix20220219\React\Stream\Util::pipe($this, $dest, $options);
+        return \RectorPrefix20220220\React\Stream\Util::pipe($this, $dest, $options);
     }
     public function isWritable()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220219;
+namespace RectorPrefix20220220;
 
 return [
     // Base classes removed in TYPO3 v9

@@ -10,7 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220219\Webmozart\Assert\Assert;
+use RectorPrefix20220220\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\ConstFetch\RenameConstantRector\RenameConstantRectorTest
  */
@@ -68,8 +68,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220219\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220219\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220220\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220220\Webmozart\Assert\Assert::allString($configuration);
         /** @var array<string, string> $configuration */
         $this->oldToNewConstants = $configuration;
     }
