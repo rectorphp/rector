@@ -75,9 +75,6 @@ CODE_SAMPLE
         if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node)) {
             return null;
         }
-        if ($this->nodesToAddCollector->isActive()) {
-            return null;
-        }
         if ($this->hasDynamicMethodCallOnFetchThis($node)) {
             return null;
         }

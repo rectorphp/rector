@@ -59,8 +59,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
+     * @return Node[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if ($this->doesLastStatementBreakFlow($node)) {
             return null;
@@ -69,27 +70,23 @@ CODE_SAMPLE
             $originalNode = clone $node;
             $if = new \PhpParser\Node\Stmt\If_($node->cond);
             $if->stmts = $node->stmts;
-            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
             $this->mirrorComments($if, $node);
             /** @var ElseIf_ $firstElseIf */
             $firstElseIf = \array_shift($node->elseifs);
             $node->cond = $firstElseIf->cond;
             $node->stmts = $firstElseIf->stmts;
             $this->mirrorComments($node, $firstElseIf);
-            $statements = $this->getStatementsElseIfs($node);
-            if ($statements !== []) {
-                $this->nodesToAddCollector->addNodesAfterNode($statements, $node);
-            }
+            $nodesToReturnAfterNode = $this->getStatementsElseIfs($node);
             if ($originalNode->else instanceof \PhpParser\Node\Stmt\Else_) {
                 $node->else = null;
-                $this->nodesToAddCollector->addNodeAfterNode($originalNode->else, $node);
+                $nodesToReturnAfterNode = \array_merge($nodesToReturnAfterNode, [$originalNode->else]);
             }
-            return $node;
+            return \array_merge([$if, $node], $nodesToReturnAfterNode);
         }
         if ($node->else !== null) {
-            $this->nodesToAddCollector->addNodesAfterNode($node->else->stmts, $node);
+            $stmts = $node->else->stmts;
             $node->else = null;
-            return $node;
+            return \array_merge([$node], $stmts);
         }
         return null;
     }
