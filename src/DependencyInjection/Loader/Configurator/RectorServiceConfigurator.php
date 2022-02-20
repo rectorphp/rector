@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Core\DependencyInjection\Loader\Configurator;
 
+use Rector\Core\Configuration\ValueObjectInliner;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 /**
  * @api

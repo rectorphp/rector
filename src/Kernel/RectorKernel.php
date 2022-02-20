@@ -17,8 +17,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symplify\Astral\ValueObject\AstralConfig;
 use Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig;
-use Symplify\ConsoleColorDiff\ValueObject\ConsoleColorDiffConfig;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
+use Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig;
 use Symplify\SimplePhpDocParser\ValueObject\SimplePhpDocParserConfig;
 use Symplify\Skipper\ValueObject\SkipperConfig;
 use Symplify\SymplifyKernel\ContainerBuilderFactory;
@@ -105,9 +105,9 @@ final class RectorKernel implements LightKernelInterface
         $configFiles[] = __DIR__ . '/../../config/config.php';
         $configFiles[] = AstralConfig::FILE_PATH;
         $configFiles[] = ComposerJsonManipulatorConfig::FILE_PATH;
-        $configFiles[] = ConsoleColorDiffConfig::FILE_PATH;
         $configFiles[] = SimplePhpDocParserConfig::FILE_PATH;
         $configFiles[] = SkipperConfig::FILE_PATH;
+        $configFiles[] = ConsoleColorDiffConfig::FILE_PATH;
 
         return $configFiles;
     }

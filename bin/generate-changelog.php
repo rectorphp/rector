@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Httpful\Request;
 use Nette\Utils\Strings;
 use Symfony\Component\Console\Application;
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

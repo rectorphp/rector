@@ -46,6 +46,7 @@ parameters:
     excludePaths:
         # too modern code for PHPStan 0.12.2
         - bin/validate-phpstan-version.php
+        - bin/detect-rules-not-used-in-any-set.php
 
         # temp rule
         - src/Rector/ConfigureRector.php
@@ -385,6 +386,7 @@ parameters:
                 - packages/FileFormatter/ValueObject/NewLine.php #15
                 - src/Application/VersionResolver.php #16
                 - utils/compiler/src/Unprefixer.php #9
+                - src/Configuration/ValueObjectInliner.php
 
         # waits for phpstan upgrade to php-parser 4.13
         - '#Access to an undefined property PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\:\:\$value#'
@@ -606,3 +608,6 @@ parameters:
 
         # Scope vs MutatingScope interchangable false positive
         - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, callable\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'
+
+        # internal reflection
+        - '#Instead of "new ClassReflection\(\)" use ReflectionProvider service or "\(new PHPStan\\Reflection\\ClassReflection\(<desired_type>\)\)" for static reflection to work#'
