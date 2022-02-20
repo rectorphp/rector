@@ -19,12 +19,10 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Global_;
-use PhpParser\Node\Stmt\Static_;
-use PhpParser\Node\Stmt\StaticVar;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
+use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -52,12 +50,18 @@ final class UndefinedVariableResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20220220\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
+     */
+    private $variableAnalyzer;
+    public function __construct(\RectorPrefix20220220\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeAnalyzer\VariableAnalyzer $variableAnalyzer)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeComparator = $nodeComparator;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->variableAnalyzer = $variableAnalyzer;
     }
     /**
      * @return string[]
@@ -104,12 +108,9 @@ final class UndefinedVariableResolver
     {
         return $parentNode instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce && $parentNode->left === $variable;
     }
-    private function isAssignOrStaticVariableParent(\PhpParser\Node $parentNode) : bool
+    private function isAssign(\PhpParser\Node $parentNode) : bool
     {
-        if (\in_array(\get_class($parentNode), [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Expr\AssignRef::class], \true)) {
-            return \true;
-        }
-        return $this->isStaticVariable($parentNode);
+        return \in_array(\get_class($parentNode), [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Expr\AssignRef::class], \true);
     }
     private function shouldSkipVariable(\PhpParser\Node\Expr\Variable $variable) : bool
     {
@@ -117,10 +118,10 @@ final class UndefinedVariableResolver
         if (!$parentNode instanceof \PhpParser\Node) {
             return \true;
         }
-        if ($parentNode instanceof \PhpParser\Node\Stmt\Global_) {
+        if ($this->variableAnalyzer->isStaticOrGlobal($variable)) {
             return \true;
         }
-        if ($this->isAssignOrStaticVariableParent($parentNode)) {
+        if ($this->isAssign($parentNode)) {
             return \true;
         }
         if ($this->issetOrUnsetOrEmptyParent($parentNode)) {
@@ -182,15 +183,6 @@ final class UndefinedVariableResolver
             $subNodeExpr = $subNode->expr;
             return $this->nodeComparator->areNodesEqual($subNodeExpr, $variable);
         });
-    }
-    private function isStaticVariable(\PhpParser\Node $parentNode) : bool
-    {
-        if (!$parentNode instanceof \PhpParser\Node\Stmt\StaticVar) {
-            return \false;
-        }
-        // definition of static variable
-        $parentParentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        return $parentParentNode instanceof \PhpParser\Node\Stmt\Static_;
     }
     private function isListAssign(\PhpParser\Node $node) : bool
     {
