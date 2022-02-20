@@ -2332,6 +2332,7 @@ return array(
     'Rector\\NodeCollector\\BinaryOpConditionsCollector' => $baseDir . '/packages/NodeCollector/BinaryOpConditionsCollector.php',
     'Rector\\NodeCollector\\BinaryOpTreeRootLocator' => $baseDir . '/packages/NodeCollector/BinaryOpTreeRootLocator.php',
     'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => $baseDir . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
+    'Rector\\NodeCollector\\NodeResolver\\CurrentStmtResolver' => $baseDir . '/packages/NodeCollector/NodeResolver/CurrentStmtResolver.php',
     'Rector\\NodeCollector\\ScopeResolver\\ParentClassScopeResolver' => $baseDir . '/packages/NodeCollector/ScopeResolver/ParentClassScopeResolver.php',
     'Rector\\NodeCollector\\StaticAnalyzer' => $baseDir . '/packages/NodeCollector/StaticAnalyzer.php',
     'Rector\\NodeCollector\\ValueObject\\ArrayCallable' => $baseDir . '/packages/NodeCollector/ValueObject/ArrayCallable.php',

@@ -17,6 +17,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Provider\CurrentFileProvider;
+use Rector\NodeCollector\NodeResolver\CurrentStmtResolver;
 use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
@@ -52,13 +53,19 @@ final class NodesToRemoveCollector implements \Rector\PostRector\Contract\Collec
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(\Rector\ChangesReporting\Collector\AffectedFilesCollector $affectedFilesCollector, \Rector\NodeRemoval\BreakingRemovalGuard $breakingRemovalGuard, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
+    /**
+     * @readonly
+     * @var \Rector\NodeCollector\NodeResolver\CurrentStmtResolver
+     */
+    private $currentStmtResolver;
+    public function __construct(\Rector\ChangesReporting\Collector\AffectedFilesCollector $affectedFilesCollector, \Rector\NodeRemoval\BreakingRemovalGuard $breakingRemovalGuard, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\NodeCollector\NodeResolver\CurrentStmtResolver $currentStmtResolver)
     {
         $this->affectedFilesCollector = $affectedFilesCollector;
         $this->breakingRemovalGuard = $breakingRemovalGuard;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
         $this->currentFileProvider = $currentFileProvider;
+        $this->currentStmtResolver = $currentStmtResolver;
     }
     public function addNodeToRemove(\PhpParser\Node $node) : void
     {
@@ -85,7 +92,14 @@ final class NodesToRemoveCollector implements \Rector\PostRector\Contract\Collec
     }
     public function isNodeRemoved(\PhpParser\Node $node) : bool
     {
-        return \in_array($node, $this->nodesToRemove, \true);
+        if (\in_array($node, $this->nodesToRemove, \true)) {
+            return \true;
+        }
+        if ($node instanceof \PhpParser\Node\Stmt) {
+            $currentStatement = $this->currentStmtResolver->resolve($node);
+            return \in_array($currentStatement, $this->nodesToRemove, \true);
+        }
+        return \false;
     }
     public function isActive() : bool
     {
