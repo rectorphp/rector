@@ -2835,16 +2835,16 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "b28000245a286b80de4a35344eaf3394bf0d1564"
+                "reference": "85a72f9716d0af78597767008f10c1bd175755f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/b28000245a286b80de4a35344eaf3394bf0d1564",
-                "reference": "b28000245a286b80de4a35344eaf3394bf0d1564",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/85a72f9716d0af78597767008f10c1bd175755f4",
+                "reference": "85a72f9716d0af78597767008f10c1bd175755f4",
                 "shasum": ""
             },
             "require": {
-                "helmich\/typo3-typoscript-parser": "2.4.1 as dev-master",
+                "helmich\/typo3-typoscript-parser": "^2.4.1",
                 "php": ">=8.1",
                 "symfony\/string": "^6.0"
             },
@@ -2870,7 +2870,7 @@
                 "symplify\/vendor-patches": "^10.0",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-02-20T11:42:21+00:00",
+            "time": "2022-02-20T12:09:43+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
