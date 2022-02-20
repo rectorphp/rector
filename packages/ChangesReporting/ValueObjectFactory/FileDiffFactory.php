@@ -6,7 +6,7 @@ namespace Rector\ChangesReporting\ValueObjectFactory;
 use Rector\Core\Differ\DefaultDiffer;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix20220220\Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
+use RectorPrefix20220220\Symplify\PackageBuilder\Console\Output\ConsoleDiffer;
 final class FileDiffFactory
 {
     /**
@@ -16,10 +16,10 @@ final class FileDiffFactory
     private $defaultDiffer;
     /**
      * @readonly
-     * @var \Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer
+     * @var \Symplify\PackageBuilder\Console\Output\ConsoleDiffer
      */
     private $consoleDiffer;
-    public function __construct(\Rector\Core\Differ\DefaultDiffer $defaultDiffer, \RectorPrefix20220220\Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer $consoleDiffer)
+    public function __construct(\Rector\Core\Differ\DefaultDiffer $defaultDiffer, \RectorPrefix20220220\Symplify\PackageBuilder\Console\Output\ConsoleDiffer $consoleDiffer)
     {
         $this->defaultDiffer = $defaultDiffer;
         $this->consoleDiffer = $consoleDiffer;

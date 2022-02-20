@@ -1,35 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220220\Symplify\SymfonyPhpConfig;
+namespace Rector\Core\Configuration;
 
 use ReflectionClass;
 use ReflectionMethod;
 use RectorPrefix20220220\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix20220220\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
-use RectorPrefix20220220\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
-use RectorPrefix20220220\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
-use RectorPrefix20220220\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory;
-/**
- * @api
- */
 final class ValueObjectInliner
 {
-    /**
-     * @param object $object
-     */
-    public static function inlineArgumentObject($object, \RectorPrefix20220220\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $servicesConfigurator) : \RectorPrefix20220220\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator
-    {
-        $reflectionClass = new \ReflectionClass($object);
-        $className = $reflectionClass->getName();
-        $propertyValues = self::resolvePropertyValues($reflectionClass, $object);
-        // create fake factory with private accessor, as properties are different
-        // @see https://symfony.com/doc/current/service_container/factories.html#passing-arguments-to-the-factory-method
-        $servicesConfigurator->set(\RectorPrefix20220220\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class);
-        $argumentValues = self::resolveArgumentValues($reflectionClass, $object);
-        $servicesConfigurator->set($className)->factory([new \RectorPrefix20220220\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator(\RectorPrefix20220220\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class), 'create'])->args([$className, $argumentValues, $propertyValues]);
-        return new \RectorPrefix20220220\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator($className);
-    }
     /**
      * @param object|object[] $object
      * @return mixed[]|\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
@@ -76,20 +55,6 @@ final class ValueObjectInliner
             $inlineServices[] = self::inlineSingle($object);
         }
         return $inlineServices;
-    }
-    /**
-     * @return array<string, mixed>
-     * @param object $object
-     */
-    private static function resolvePropertyValues(\ReflectionClass $reflectionClass, $object) : array
-    {
-        $propertyValues = [];
-        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
-            $parameterName = $reflectionProperty->getName();
-            $reflectionProperty->setAccessible(\true);
-            $propertyValues[$parameterName] = $reflectionProperty->getValue($object);
-        }
-        return $propertyValues;
     }
     /**
      * @param object $object

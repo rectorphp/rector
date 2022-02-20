@@ -18,6 +18,7 @@ use RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\Operator\Delete;
 use RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\Operator\Modification;
 use RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\Operator\Reference;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20220220\Helmich\TypoScriptParser\Tokenizer\Preprocessing\NoOpPreprocessor;
 use RectorPrefix20220220\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Printer class that generates TypoScript code from an AST
@@ -48,6 +49,14 @@ class PrettyPrinter implements \RectorPrefix20220220\Helmich\TypoScriptParser\Pa
     {
         $this->printStatementList($statements, $output, 0);
     }
+    private function trimTrailingNoops(array $statements) : array
+    {
+        $out = $statements;
+        while ($out[\count($out) - 1] instanceof \RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\NopStatement) {
+            \array_pop($out);
+        }
+        return $out;
+    }
     /**
      * @param Statement[]     $statements
      * @param OutputInterface $output
@@ -56,6 +65,9 @@ class PrettyPrinter implements \RectorPrefix20220220\Helmich\TypoScriptParser\Pa
      */
     private function printStatementList(array $statements, \RectorPrefix20220220\Symfony\Component\Console\Output\OutputInterface $output, int $nesting = 0) : void
     {
+        if ($nesting === 0) {
+            $statements = $this->trimTrailingNoops($statements);
+        }
         $indent = $this->getIndent($nesting);
         $count = \count($statements);
         for ($i = 0; $i < $count; $i++) {
@@ -73,7 +85,7 @@ class PrettyPrinter implements \RectorPrefix20220220\Helmich\TypoScriptParser\Pa
             } elseif ($statement instanceof \RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
                 $next = $i + 1 < $count ? $statements[$i + 1] : null;
                 $previous = $i - 1 >= 0 ? $statements[$i - 1] : null;
-                $this->printConditionalStatement($output, $nesting, $statement, $next instanceof \RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement, $previous instanceof \RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement);
+                $this->printConditionalStatement($output, $nesting, $statement, $next instanceof \RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement);
             } elseif ($statement instanceof \RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\IncludeStatement) {
                 $this->printIncludeStatement($output, $statement);
             } elseif ($statement instanceof \RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\Comment) {
@@ -146,13 +158,9 @@ class PrettyPrinter implements \RectorPrefix20220220\Helmich\TypoScriptParser\Pa
      * @param int                  $nesting
      * @param ConditionalStatement $statement
      * @param bool                 $hasNext
-     * @param bool                 $hasPrevious
      */
-    private function printConditionalStatement(\RectorPrefix20220220\Symfony\Component\Console\Output\OutputInterface $output, int $nesting, \RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement $statement, bool $hasNext = \false, bool $hasPrevious = \false) : void
+    private function printConditionalStatement(\RectorPrefix20220220\Symfony\Component\Console\Output\OutputInterface $output, int $nesting, \RectorPrefix20220220\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement $statement, bool $hasNext = \false) : void
     {
-        if (!$hasPrevious) {
-            $output->writeln('');
-        }
         $output->writeln($statement->condition);
         $this->printStatementList($statement->ifStatements, $output, $nesting);
         if (\count($statement->elseStatements) > 0) {

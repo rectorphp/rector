@@ -7,6 +7,7 @@ use RectorPrefix20220220\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Prepro
 use RectorPrefix20220220\Helmich\TypoScriptParser\Tokenizer\Preprocessing\StandardPreprocessor;
 class Tokenizer implements \RectorPrefix20220220\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface
 {
+    const OBJECT_ACCESSOR = '((?:\\.)|(?:[a-zA-Z0-9_\\-\\\\:\\$\\{\\}]+(?:\\.[a-zA-Z0-9_\\-\\\\:\\$\\{\\}]*)*))';
     const TOKEN_WHITESPACE = ',^[ \\t\\n]+,s';
     const TOKEN_COMMENT_ONELINE = ',^(#|/)[^\\n]*,';
     const TOKEN_COMMENT_MULTILINE_BEGIN = ',^/\\*,';
@@ -15,7 +16,7 @@ class Tokenizer implements \RectorPrefix20220220\Helmich\TypoScriptParser\Tokeni
     const TOKEN_CONDITION_ELSE = ',^\\[else\\],i';
     const TOKEN_CONDITION_END = ',^\\[(global|end)\\],i';
     const TOKEN_OBJECT_NAME = ',^(CASE|CLEARGIF|COA(?:_INT)?|COBJ_ARRAY|COLUMNS|CTABLE|EDITPANEL|FILES?|FLUIDTEMPLATE|FORM|HMENU|HRULER|TEXT|IMAGE|IMG_RESOURCE|IMGTEXT|LOAD_REGISTER|MEDIA|MULTIMEDIA|OTABLE|QTOBJECT|RECORDS|RESTORE_REGISTER|SEARCHRESULT|SVG|SWFOBJECT|TEMPLATE|USER(?:_INT)?|GIFBUILDER|[GT]MENU(?:_LAYERS)?|(?:G|T|JS|IMG)MENUITEM)$,';
-    const TOKEN_OBJECT_ACCESSOR = ',^([a-zA-Z0-9_\\-\\\\:\\$\\{\\}]+(?:\\.[a-zA-Z0-9_\\-\\\\:\\$\\{\\}]+)*)$,';
+    const TOKEN_OBJECT_ACCESSOR = ',' . self::OBJECT_ACCESSOR . '$';
     const TOKEN_OBJECT_REFERENCE = ',^\\.?([a-zA-Z0-9_\\-\\\\:\\$\\{\\}]+(?:\\.[a-zA-Z0-9_\\-\\\\:\\$\\{\\}]+)*)$,';
     const TOKEN_NESTING_START = ',^\\{$,';
     const TOKEN_NESTING_END = ',^\\}$,';
@@ -27,11 +28,11 @@ class Tokenizer implements \RectorPrefix20220220\Helmich\TypoScriptParser\Tokeni
         \\)
     $,x';
     const TOKEN_OPERATOR_LINE = ',^
-        ([a-zA-Z0-9_\\-\\\\:\\$\\{\\}]+(?:\\.[a-zA-Z0-9_\\-\\\\:\\$\\{\\}]+)*)  # Left value (object accessor)
-        (\\s*)                                                          # Whitespace
-        (=<|=|:=|<|>|\\{|\\()                                            # Operator
-        (\\s*)                                                          # More whitespace
-        (.*?)                                                          # Right value
+        ' . self::OBJECT_ACCESSOR . ' # Left value (object accessor)
+        (\\s*)                               # Whitespace
+        (=<|=|:=|<|>|\\{|\\()                 # Operator
+        (\\s*)                               # More whitespace
+        (.*?)                               # Right value
     $,x';
     const TOKEN_INCLUDE_STATEMENT = ',^
         <INCLUDE_TYPOSCRIPT:\\s*
@@ -201,7 +202,7 @@ class Tokenizer implements \RectorPrefix20220220\Helmich\TypoScriptParser\Tokeni
     private function tokenizeMultilineComment(\RectorPrefix20220220\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20220220\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20220220\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : void
     {
         if ($matches = $line->scan(self::TOKEN_WHITESPACE)) {
-            $state->appendToToken($matches[0]);
+            $state->appendToToken(\trim($matches[0]));
         }
         if ($matches = $line->peek(self::TOKEN_COMMENT_MULTILINE_END)) {
             $token = $state->endMultilineToken("\n" . $matches[0]);

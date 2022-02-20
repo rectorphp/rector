@@ -214,7 +214,7 @@ CODE_SAMPLE
      */
     private function findCommandMethods(\PhpParser\Node\Stmt\Class_ $node) : array
     {
-        return $this->betterNodeFinder->find($node->stmts, function (\PhpParser\Node $node) {
+        return $this->betterNodeFinder->find($node->stmts, function (\PhpParser\Node $node) : bool {
             if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 return \false;
             }
@@ -223,7 +223,7 @@ CODE_SAMPLE
             }
             $methodName = $this->getName($node->name);
             if (null === $methodName) {
-                return null;
+                return \false;
             }
             return \substr_compare($methodName, 'Command', -\strlen('Command')) === 0;
         });

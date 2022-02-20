@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220220\Symplify\ConsoleColorDiff\Diff\Output;
+namespace RectorPrefix20220220\Symplify\PackageBuilder\Diff\Output;
 
 use RectorPrefix20220220\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 use RectorPrefix20220220\Symplify\PackageBuilder\Reflection\PrivatesAccessor;

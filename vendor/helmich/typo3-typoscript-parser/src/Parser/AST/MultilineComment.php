@@ -12,6 +12,6 @@ final class MultilineComment extends \Helmich\TypoScriptParser\Parser\AST\Statem
     public function __construct(string $comment, int $sourceLine)
     {
         parent::__construct($sourceLine);
-        $this->comment = \preg_replace('/[ \\0\\r\\x0B\\t]/', '', $comment);
+        $this->comment = \preg_replace('/[\\0\\r\\x0B\\t]/', '', $comment);
     }
 }

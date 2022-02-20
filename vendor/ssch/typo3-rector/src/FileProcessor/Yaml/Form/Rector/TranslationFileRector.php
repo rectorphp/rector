@@ -76,12 +76,8 @@ CODE_SAMPLE
      */
     private function buildNewTranslations(array $oldTranslations) : array
     {
-        $newTranslations = [];
-        foreach ($oldTranslations as $oldTranslationFileKey => $oldTranslationFile) {
-            if (\strncmp($oldTranslationFile, 'EXT:form', \strlen('EXT:form')) !== 0) {
-                $newTranslations[$oldTranslationFileKey] = $oldTranslationFile;
-            }
-        }
-        return $newTranslations;
+        return \array_filter($oldTranslations, function ($oldTranslationFile) {
+            return \strncmp($oldTranslationFile, 'EXT:form', \strlen('EXT:form')) !== 0;
+        });
     }
 }
