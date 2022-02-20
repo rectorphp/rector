@@ -5,7 +5,7 @@ namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -81,7 +82,7 @@ CODE_SAMPLE
         if (!$node->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return null;
         }
-        if ($this->isInstanceofCondOnlyOrHasBooleanAnd($node->cond)) {
+        if ($this->isInstanceofCondOnly($node->cond)) {
             return null;
         }
         // maybe used along with Php8ResourceReturnToObjectRector rule
@@ -90,6 +91,11 @@ CODE_SAMPLE
         }
         /** @var Return_ $return */
         $return = $node->stmts[0];
+        // same return? skip
+        $next = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if ($next instanceof \PhpParser\Node\Stmt\Return_ && $this->nodeComparator->areNodesEqual($return, $next)) {
+            return null;
+        }
         $ifs = $this->createMultipleIfs($node->cond, $return, []);
         // ensure ifs not removed by other rules
         if ($ifs === []) {
@@ -143,21 +149,17 @@ CODE_SAMPLE
     {
         return new \PhpParser\Node\Stmt\If_($expr, ['stmts' => [$return]]);
     }
-    private function isInstanceofCondOnlyOrHasBooleanAnd(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr) : bool
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp|\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr
+     */
+    private function isInstanceofCondOnly($booleanOr) : bool
     {
-        $currentNode = $booleanOr;
-        if ($currentNode->left instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd || $currentNode->right instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
-            return \true;
+        if ($booleanOr->left instanceof \PhpParser\Node\Expr\BinaryOp) {
+            return $this->isInstanceofCondOnly($booleanOr->left);
         }
-        if ($currentNode->left instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
-            return $this->isInstanceofCondOnlyOrHasBooleanAnd($currentNode->left);
+        if ($booleanOr->right instanceof \PhpParser\Node\Expr\BinaryOp) {
+            return $this->isInstanceofCondOnly($booleanOr->right);
         }
-        if ($currentNode->right instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
-            return $this->isInstanceofCondOnlyOrHasBooleanAnd($currentNode->right);
-        }
-        if (!$currentNode->right instanceof \PhpParser\Node\Expr\Instanceof_) {
-            return \false;
-        }
-        return $currentNode->left instanceof \PhpParser\Node\Expr\Instanceof_;
+        return $booleanOr->right instanceof \PhpParser\Node\Expr\Instanceof_;
     }
 }
