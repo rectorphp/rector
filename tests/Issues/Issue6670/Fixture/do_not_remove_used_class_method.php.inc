@@ -9,6 +9,7 @@ final class DoNotRemoveUsedClassMethod
         if (true === false) {
             return -1;
         } else {
+            echo 'a statement';
             return $this->notUnused();
         }
     }
@@ -31,6 +32,7 @@ final class DoNotRemoveUsedClassMethod
         if (true === false) {
             return -1;
         }
+        echo 'a statement';
         return $this->notUnused();
     }
 

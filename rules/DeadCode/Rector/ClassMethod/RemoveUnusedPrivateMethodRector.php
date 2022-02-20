@@ -81,10 +81,6 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->nodesToAddCollector->isActive()) {
-            return null;
-        }
-
         if ($this->hasDynamicMethodCallOnFetchThis($node)) {
             return null;
         }
