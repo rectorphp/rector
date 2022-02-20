@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\StaticVar;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class VariableAnalyzer
 {
@@ -22,14 +23,21 @@ final class VariableAnalyzer
 
     public function isStaticOrGlobal(Variable $variable): bool
     {
+        if ($this->isParentStaticOrGlobal($variable)) {
+            return true;
+        }
+
         return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $n) use (
             $variable
         ): bool {
-            if (! $n instanceof Static_ && ! $n instanceof Global_) {
+            if (! in_array($n::class, [Static_::class, Global_::class], true)) {
                 return false;
             }
 
-            /** @var StaticVar[]|Variable[] $vars */
+            /**
+             * @var Static_|Global_ $n
+             * @var StaticVar[]|Variable[] $vars
+             */
             $vars = $n->vars;
             foreach ($vars as $var) {
                 $staticVarVariable = $var instanceof StaticVar
@@ -43,5 +51,25 @@ final class VariableAnalyzer
 
             return false;
         });
+    }
+
+    private function isParentStaticOrGlobal(Variable $variable): bool
+    {
+        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
+
+        if (! $parentNode instanceof Node) {
+            return false;
+        }
+
+        if ($parentNode instanceof Global_) {
+            return true;
+        }
+
+        if (! $parentNode instanceof StaticVar) {
+            return false;
+        }
+
+        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        return $parentParentNode instanceof Static_;
     }
 }

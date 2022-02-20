@@ -20,12 +20,10 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Global_;
-use PhpParser\Node\Stmt\Static_;
-use PhpParser\Node\Stmt\StaticVar;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
+use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -38,7 +36,8 @@ final class UndefinedVariableResolver
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly NodeComparator $nodeComparator,
-        private readonly BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly VariableAnalyzer $variableAnalyzer
     ) {
     }
 
@@ -100,13 +99,9 @@ final class UndefinedVariableResolver
         return $parentNode instanceof Coalesce && $parentNode->left === $variable;
     }
 
-    private function isAssignOrStaticVariableParent(Node $parentNode): bool
+    private function isAssign(Node $parentNode): bool
     {
-        if (in_array($parentNode::class, [Assign::class, AssignRef::class], true)) {
-            return true;
-        }
-
-        return $this->isStaticVariable($parentNode);
+        return in_array($parentNode::class, [Assign::class, AssignRef::class], true);
     }
 
     private function shouldSkipVariable(Variable $variable): bool
@@ -116,11 +111,11 @@ final class UndefinedVariableResolver
             return true;
         }
 
-        if ($parentNode instanceof Global_) {
+        if ($this->variableAnalyzer->isStaticOrGlobal($variable)) {
             return true;
         }
 
-        if ($this->isAssignOrStaticVariableParent($parentNode)) {
+        if ($this->isAssign($parentNode)) {
             return true;
         }
 
@@ -202,17 +197,6 @@ final class UndefinedVariableResolver
             $subNodeExpr = $subNode->expr;
             return $this->nodeComparator->areNodesEqual($subNodeExpr, $variable);
         });
-    }
-
-    private function isStaticVariable(Node $parentNode): bool
-    {
-        if (! $parentNode instanceof StaticVar) {
-            return false;
-        }
-
-        // definition of static variable
-        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentParentNode instanceof Static_;
     }
 
     private function isListAssign(Node $node): bool
