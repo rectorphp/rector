@@ -24,7 +24,6 @@ use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
-use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
@@ -112,7 +111,7 @@ CODE_SAMPLE
             return null;
         }
         $conditionStaticType = $this->getType($conditionNode);
-        if ($conditionStaticType instanceof \PHPStan\Type\BooleanType || $conditionStaticType instanceof \PHPStan\Type\Constant\ConstantIntegerType) {
+        if ($conditionStaticType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }
         $newConditionNode = $this->resolveNewConditionNode($conditionNode, $isNegated);
