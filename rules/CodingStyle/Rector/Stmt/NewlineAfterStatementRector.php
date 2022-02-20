@@ -28,6 +28,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeCollector\NodeResolver\CurrentStmtResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -62,6 +63,11 @@ final class NewlineAfterStatementRector extends AbstractRector
      * @var array<string, true>
      */
     private array $stmtsHashed = [];
+
+    public function __construct(
+        private readonly CurrentStmtResolver $currentStmtResolver
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -111,11 +117,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->nodesToRemoveCollector->isActive()) {
-            return null;
-        }
-
-        $node = $this->resolveCurrentStatement($node);
+        $node = $this->currentStmtResolver->resolve($node);
 
         if (! in_array($node::class, self::STMTS_TO_HAVE_NEXT_NEWLINE, true)) {
             return null;
@@ -165,15 +167,6 @@ CODE_SAMPLE
         $this->nodesToAddCollector->addNodeAfterNode(new Nop(), $node);
 
         return $node;
-    }
-
-    private function resolveCurrentStatement(Stmt $stmt): Stmt
-    {
-        $currentStatement = $stmt->getAttribute(AttributeKey::CURRENT_STATEMENT);
-
-        return $currentStatement instanceof Stmt
-            ? $currentStatement
-            : $stmt;
     }
 
     /**
