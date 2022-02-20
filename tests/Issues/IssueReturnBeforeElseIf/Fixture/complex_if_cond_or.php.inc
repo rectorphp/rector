@@ -29,7 +29,10 @@ class ComplexIfCondOr
 {
     public function run($a, $b, $c, $d, $e)
     {
-        if (($a && false === $b) || ! $c) {
+        if ($a && false === $b) {
+            return '';
+        }
+        if (! $c) {
             return '';
         }
         if ($d) {

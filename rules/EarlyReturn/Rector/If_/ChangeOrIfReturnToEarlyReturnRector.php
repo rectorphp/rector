@@ -6,7 +6,7 @@ namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -88,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isInstanceofCondOnlyOrHasBooleanAnd($node->cond)) {
+        if ($this->isInstanceofCondOnly($node->cond)) {
             return null;
         }
 
@@ -99,6 +100,13 @@ CODE_SAMPLE
 
         /** @var Return_ $return */
         $return = $node->stmts[0];
+
+        // same return? skip
+        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if ($next instanceof Return_ && $this->nodeComparator->areNodesEqual($return, $next)) {
+            return null;
+        }
+
         $ifs = $this->createMultipleIfs($node->cond, $return, []);
 
         // ensure ifs not removed by other rules
@@ -171,26 +179,16 @@ CODE_SAMPLE
         );
     }
 
-    private function isInstanceofCondOnlyOrHasBooleanAnd(BooleanOr $booleanOr): bool
+    private function isInstanceofCondOnly(BooleanOr|BinaryOp $booleanOr): bool
     {
-        $currentNode = $booleanOr;
-
-        if ($currentNode->left instanceof BooleanAnd || $currentNode->right instanceof BooleanAnd) {
-            return true;
+        if ($booleanOr->left instanceof BinaryOp) {
+            return $this->isInstanceofCondOnly($booleanOr->left);
         }
 
-        if ($currentNode->left instanceof BooleanOr) {
-            return $this->isInstanceofCondOnlyOrHasBooleanAnd($currentNode->left);
+        if ($booleanOr->right instanceof BinaryOp) {
+            return $this->isInstanceofCondOnly($booleanOr->right);
         }
 
-        if ($currentNode->right instanceof BooleanOr) {
-            return $this->isInstanceofCondOnlyOrHasBooleanAnd($currentNode->right);
-        }
-
-        if (! $currentNode->right instanceof Instanceof_) {
-            return false;
-        }
-
-        return $currentNode->left instanceof Instanceof_;
+        return $booleanOr->right instanceof Instanceof_;
     }
 }
