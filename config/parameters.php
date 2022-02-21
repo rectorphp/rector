@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use OndraM\CiDetector\CiDetector;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -39,8 +40,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // use faster in-memory cache in CI.
     // CI always starts from scratch, therefore IO intensive caching is not worth it
-    $runsInGithubAction = getenv('GITHUB_ACTION');
-    if ($runsInGithubAction !== false) {
+    $ciDetector = new CiDetector();
+    if ($ciDetector->isCiDetected() !== false) {
         $parameters->set(Option::CACHE_CLASS, MemoryCacheStorage::class);
     }
 };
