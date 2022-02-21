@@ -19,6 +19,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
@@ -154,9 +155,9 @@ final class PropertyManipulator
 
             // skip for constructor? it is allowed to set value in constructor method
             $classMethod = $this->betterNodeFinder->findParentType($propertyFetch, ClassMethod::class);
-            if ($classMethod instanceof ClassMethod && $this->nodeNameResolver->isName(
-                $classMethod->name,
-                MethodName::CONSTRUCT
+            if ($classMethod instanceof ClassMethod && $this->isInlineStmtWithConstructMethod(
+                $propertyFetch,
+                $classMethod
             )) {
                 continue;
             }
@@ -184,6 +185,23 @@ final class PropertyManipulator
         }
 
         return false;
+    }
+
+    private function isInlineStmtWithConstructMethod(
+        PropertyFetch|StaticPropertyFetch $propertyFetch,
+        ClassMethod $classMethod
+    ): bool {
+        if (! $this->nodeNameResolver->isName($classMethod->name, MethodName::CONSTRUCT)) {
+            return false;
+        }
+
+        $currentStmt = $propertyFetch->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (! $currentStmt instanceof Stmt) {
+            return false;
+        }
+
+        $parent = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
+        return $parent === $classMethod;
     }
 
     private function isChangeableContext(PropertyFetch | StaticPropertyFetch $propertyFetch): bool
