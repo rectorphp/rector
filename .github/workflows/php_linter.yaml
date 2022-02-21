@@ -21,6 +21,6 @@ jobs:
                     php-version: 8.1
                     coverage: none
 
-            -   run: composer create-project php-parallel-lint/php-parallel-lint php-parallel-lint
+            -   run: composer create-project php-parallel-lint/php-parallel-lint:1.3.1 php-parallel-lint
 
             -   run: php-parallel-lint/parallel-lint src bin/rector config tests packages rules --colors --exclude rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source --exclude packages/node-type-resolver/tests/PerNodeTypeResolver/PropertyFetchTypeResolver/Source --exclude rules/nette-kdyby/tests/Rector/MethodCall/ReplaceEventManagerWithEventSubscriberRector/Source/ExpectedSomeClassCopyEvent.php --exclude rules/nette-kdyby/tests/Rector/MethodCall/ReplaceMagicPropertyEventWithEventClassRector/Source --exclude rules/type-declaration/tests/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector/Source
