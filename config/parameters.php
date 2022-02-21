@@ -31,8 +31,8 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $parameters->set(\Rector\Core\Configuration\Option::CACHE_DIR, \sys_get_temp_dir() . '/rector_cached_files');
     // use faster in-memory cache in CI.
     // CI always starts from scratch, therefore IO intensive caching is not worth it
-    $runsInGithubAction = \getenv('GITHUB_ACTION');
-    if ($runsInGithubAction !== \false) {
+    $runsInCI = \getenv('GITHUB_ACTION') || \getenv('GITLAB_CI');
+    if ($runsInCI !== \false) {
         $parameters->set(\Rector\Core\Configuration\Option::CACHE_CLASS, \Rector\Caching\ValueObject\Storage\MemoryCacheStorage::class);
     }
 };
