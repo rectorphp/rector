@@ -1,0 +1,47 @@
+2 files with changes
+====================
+
+1) src/RemoveAlwaysElse.php:5
+
+    ---------- begin diff ----------
+@@ @@
+     {
+         if ($value) {
+             throw new \InvalidStateException;
+-        } else {
+-            return 10;
+         }
++        return 10;
+     }
+ }
+    ----------- end diff -----------
+
+Applied rules:
+ * RemoveAlwaysElseRector
+
+
+2) src/MultiRules.php:5
+
+    ---------- begin diff ----------
+@@ @@
+     {
+         if (true === false) {
+             return -1;
+-        } else {
+-            echo 'a statement';
+         }
+-    }
+-
+-    private function notUsed()
+-    {
++        echo 'a statement';
+     }
+ }
+    ----------- end diff -----------
+
+Applied rules:
+ * RemoveUnusedPrivateMethodRector
+ * RemoveAlwaysElseRector
+
+
+ [OK] 2 files would have changed (dry-run) by Rector

@@ -6,8 +6,8 @@
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Console\Command\Command;
-use Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter;
-use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
+use Symplify\PackageBuilder\Console\Formatter\ColorConsoleDiffFormatter;
+use Symplify\PackageBuilder\Console\Output\ConsoleDiffer;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
 $projectRoot = __DIR__ .'/..';

@@ -245,6 +245,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         /** @var Node $originalNode */
         if (is_array($node)) {
+            $rectorWithLineChange = new RectorWithLineChange($this::class, $originalNode->getLine());
+            $this->file->addRectorClassWithLine($rectorWithLineChange);
+
             /** @var array<Node> $node */
             $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
 
