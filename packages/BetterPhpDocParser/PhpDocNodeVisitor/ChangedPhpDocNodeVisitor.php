@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+use Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class ChangedPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {

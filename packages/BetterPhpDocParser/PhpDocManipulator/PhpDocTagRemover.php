@@ -8,7 +8,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 
 final class PhpDocTagRemover
 {

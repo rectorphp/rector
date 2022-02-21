@@ -9,7 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
-use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+use Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class ParamPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {

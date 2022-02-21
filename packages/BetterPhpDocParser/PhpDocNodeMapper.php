@@ -8,9 +8,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
-use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
-use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
+use Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
+use Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocNodeMapperTest

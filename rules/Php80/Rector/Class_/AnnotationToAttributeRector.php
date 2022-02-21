@@ -30,9 +30,9 @@ use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Rector\PhpAttribute\RemovableAnnotationAnalyzer;
 use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 use Webmozart\Assert\Assert;
 
 /**

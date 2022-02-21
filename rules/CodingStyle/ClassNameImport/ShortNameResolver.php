@@ -25,7 +25,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 
 /**
  * @see \Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\ShortNameResolverTest

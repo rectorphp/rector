@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+use Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {

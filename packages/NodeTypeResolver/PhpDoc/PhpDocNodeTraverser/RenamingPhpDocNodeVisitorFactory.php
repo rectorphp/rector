@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser;
 
 use Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor;
-use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 
 final class RenamingPhpDocNodeVisitorFactory
 {

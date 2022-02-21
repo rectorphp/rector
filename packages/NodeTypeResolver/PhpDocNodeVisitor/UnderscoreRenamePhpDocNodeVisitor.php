@@ -11,7 +11,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+use Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {

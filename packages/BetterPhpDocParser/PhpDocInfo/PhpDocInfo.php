@@ -28,7 +28,7 @@ use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node

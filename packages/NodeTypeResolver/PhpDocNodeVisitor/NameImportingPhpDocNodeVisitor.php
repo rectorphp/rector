@@ -21,9 +21,9 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
-use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
