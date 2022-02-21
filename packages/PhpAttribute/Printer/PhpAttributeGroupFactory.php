@@ -29,10 +29,7 @@ final class PhpAttributeGroupFactory
     /**
      * @var array<string, string[]>>
      */
-    private array $unwrappedAnnotations = [
-        'Doctrine\ORM\Mapping\Table' => ['uniqueConstraints'],
-        'Doctrine\ORM\Mapping\Entity' => ['uniqueConstraints'],
-    ];
+    private array $unwrappedAnnotations = [];
 
     public function __construct(
         private readonly AnnotationToAttributeMapper $annotationToAttributeMapper,
@@ -44,7 +41,8 @@ final class PhpAttributeGroupFactory
     ) {
         // nested indexes supported only since PHP 8.1
         if (! $phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NEW_INITIALIZERS)) {
-            $this->unwrappedAnnotations['Doctrine\ORM\Mapping\Table'][] = 'indexes';
+            $this->unwrappedAnnotations['Doctrine\ORM\Mapping\Table'] = ['indexes', 'uniqueConstraints'];
+            $this->unwrappedAnnotations['Doctrine\ORM\Mapping\Entity'][] = 'uniqueConstraints';
         }
     }
 

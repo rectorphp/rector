@@ -26,5 +26,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AnnotationToAttribute(NotNull::class),
             new AnnotationToAttribute(NotNumber::class),
             new AnnotationToAttribute(GenericAnnotation::class),
+            new AnnotationToAttribute('Doctrine\ORM\Mapping\Table'),
+            new AnnotationToAttribute('Doctrine\ORM\Mapping\Index'),
+            new AnnotationToAttribute('Doctrine\ORM\Mapping\UniqueConstraint'),
         ]);
 };
