@@ -7,7 +7,6 @@ namespace Rector\Core\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -502,10 +501,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     private function mirrorAttributes(array $originalAttributes, Node $newNode): void
     {
-        if ($newNode instanceof Name) {
-            $newNode->setAttribute(AttributeKey::RESOLVED_NAME, $newNode->toString());
-        }
-
         foreach ($originalAttributes as $attributeName => $oldAttributeValue) {
             if (! in_array($attributeName, self::ATTRIBUTES_TO_MIRROR, true)) {
                 continue;
