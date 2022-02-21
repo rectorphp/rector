@@ -27,7 +27,7 @@ final class PhpAttributeGroupFactory
     /**
      * @var array<string, string[]>>
      */
-    private $unwrappedAnnotations = ['Doctrine\\ORM\\Mapping\\Table' => ['uniqueConstraints'], 'Doctrine\\ORM\\Mapping\\Entity' => ['uniqueConstraints']];
+    private $unwrappedAnnotations = [];
     /**
      * @readonly
      * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
@@ -62,7 +62,8 @@ final class PhpAttributeGroupFactory
         $this->attributeArrayNameInliner = $attributeArrayNameInliner;
         // nested indexes supported only since PHP 8.1
         if (!$phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS)) {
-            $this->unwrappedAnnotations['Doctrine\\ORM\\Mapping\\Table'][] = 'indexes';
+            $this->unwrappedAnnotations['Doctrine\\ORM\\Mapping\\Table'] = ['indexes', 'uniqueConstraints'];
+            $this->unwrappedAnnotations['Doctrine\\ORM\\Mapping\\Entity'][] = 'uniqueConstraints';
         }
     }
     public function createFromSimpleTag(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
