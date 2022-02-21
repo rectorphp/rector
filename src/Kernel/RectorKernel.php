@@ -18,7 +18,6 @@ use RectorPrefix20220221\Symplify\AutowireArrayParameter\DependencyInjection\Com
 use RectorPrefix20220221\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig;
 use RectorPrefix20220221\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use RectorPrefix20220221\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig;
-use RectorPrefix20220221\Symplify\SimplePhpDocParser\ValueObject\SimplePhpDocParserConfig;
 use RectorPrefix20220221\Symplify\Skipper\ValueObject\SkipperConfig;
 use RectorPrefix20220221\Symplify\SymplifyKernel\ContainerBuilderFactory;
 use RectorPrefix20220221\Symplify\SymplifyKernel\Contract\LightKernelInterface;
@@ -89,7 +88,6 @@ final class RectorKernel implements \RectorPrefix20220221\Symplify\SymplifyKerne
         $configFiles[] = __DIR__ . '/../../config/config.php';
         $configFiles[] = \RectorPrefix20220221\Symplify\Astral\ValueObject\AstralConfig::FILE_PATH;
         $configFiles[] = \RectorPrefix20220221\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig::FILE_PATH;
-        $configFiles[] = \RectorPrefix20220221\Symplify\SimplePhpDocParser\ValueObject\SimplePhpDocParserConfig::FILE_PATH;
         $configFiles[] = \RectorPrefix20220221\Symplify\Skipper\ValueObject\SkipperConfig::FILE_PATH;
         $configFiles[] = \RectorPrefix20220221\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig::FILE_PATH;
         return $configFiles;

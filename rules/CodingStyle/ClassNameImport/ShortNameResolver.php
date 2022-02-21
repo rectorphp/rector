@@ -24,7 +24,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 use RectorPrefix20220221\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20220221\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix20220221\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220221\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 /**
  * @see \Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\ShortNameResolverTest
  */
@@ -167,7 +167,7 @@ final class ShortNameResolver
             if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
                 return null;
             }
-            $phpDocNodeTraverser = new \RectorPrefix20220221\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+            $phpDocNodeTraverser = new \RectorPrefix20220221\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
             $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$shortNames) {
                 if ($node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
                     $shortName = \trim($node->name, '@');

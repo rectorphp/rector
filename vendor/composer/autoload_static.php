@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite84eb9ae4861bb7dc618f8b0420b718b
+class ComposerStaticInitc5acab459690c772aad3f151ec2bc973
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -49,7 +49,6 @@ class ComposerStaticInite84eb9ae4861bb7dc618f8b0420b718b
             'RectorPrefix20220221\\Symplify\\SymplifyKernel\\' => 45,
             'RectorPrefix20220221\\Symplify\\SmartFileSystem\\' => 46,
             'RectorPrefix20220221\\Symplify\\Skipper\\' => 38,
-            'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\' => 49,
             'RectorPrefix20220221\\Symplify\\PackageBuilder\\' => 45,
             'RectorPrefix20220221\\Symplify\\EasyTesting\\' => 42,
             'RectorPrefix20220221\\Symplify\\EasyParallel\\' => 43,
@@ -189,10 +188,6 @@ class ComposerStaticInite84eb9ae4861bb7dc618f8b0420b718b
         'RectorPrefix20220221\\Symplify\\Skipper\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/skipper/src',
-        ),
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src',
         ),
         'RectorPrefix20220221\\Symplify\\PackageBuilder\\' => 
         array (
@@ -1657,18 +1652,6 @@ class ComposerStaticInite84eb9ae4861bb7dc618f8b0420b718b
         'RectorPrefix20220221\\Symplify\\PackageBuilder\\ValueObject\\MethodName' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/MethodName.php',
         'RectorPrefix20220221\\Symplify\\PackageBuilder\\ValueObject\\Option' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/Option.php',
         'RectorPrefix20220221\\Symplify\\PackageBuilder\\Yaml\\ParametersMerger' => __DIR__ . '/..' . '/symplify/package-builder/src/Yaml/ParametersMerger.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\Contract\\PhpDocNodeVisitorInterface' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/Contract/PhpDocNodeVisitorInterface.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\Exception\\InvalidTraverseException' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/Exception/InvalidTraverseException.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\PhpDocNodeTraverser' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/PhpDocNodeTraverser.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\PhpDocNodeVisitor\\AbstractPhpDocNodeVisitor' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/PhpDocNodeVisitor/AbstractPhpDocNodeVisitor.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\PhpDocNodeVisitor\\CallablePhpDocNodeVisitor' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\PhpDocNodeVisitor\\CloningPhpDocNodeVisitor' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/PhpDocNodeVisitor/CloningPhpDocNodeVisitor.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\PhpDocNodeVisitor\\ParentConnectingPhpDocNodeVisitor' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/PhpDocNodeVisitor/ParentConnectingPhpDocNodeVisitor.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\SimplePhpDocParser' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/SimplePhpDocParser.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\StaticFactory\\SimplePhpDocParserStaticFactory' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/StaticFactory/SimplePhpDocParserStaticFactory.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\ValueObject\\Ast\\PhpDoc\\SimplePhpDocNode' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/ValueObject/Ast/PhpDoc/SimplePhpDocNode.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\ValueObject\\PhpDocAttributeKey' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/ValueObject/PhpDocAttributeKey.php',
-        'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\ValueObject\\SimplePhpDocParserConfig' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/ValueObject/SimplePhpDocParserConfig.php',
         'RectorPrefix20220221\\Symplify\\Skipper\\Contract\\SkipVoterInterface' => __DIR__ . '/..' . '/symplify/skipper/src/Contract/SkipVoterInterface.php',
         'RectorPrefix20220221\\Symplify\\Skipper\\FileSystem\\FnMatchPathNormalizer' => __DIR__ . '/..' . '/symplify/skipper/src/FileSystem/FnMatchPathNormalizer.php',
         'RectorPrefix20220221\\Symplify\\Skipper\\Matcher\\FileInfoMatcher' => __DIR__ . '/..' . '/symplify/skipper/src/Matcher/FileInfoMatcher.php',
@@ -3864,9 +3847,9 @@ class ComposerStaticInite84eb9ae4861bb7dc618f8b0420b718b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite84eb9ae4861bb7dc618f8b0420b718b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite84eb9ae4861bb7dc618f8b0420b718b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite84eb9ae4861bb7dc618f8b0420b718b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc5acab459690c772aad3f151ec2bc973::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc5acab459690c772aad3f151ec2bc973::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc5acab459690c772aad3f151ec2bc973::$classMap;
 
         }, null, ClassLoader::class);
     }

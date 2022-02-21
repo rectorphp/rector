@@ -22,7 +22,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StringUtils;
-use RectorPrefix20220221\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220221\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
  */
@@ -75,7 +75,7 @@ final class PhpDocInfoPrinter
     private $phpDocInfo;
     /**
      * @readonly
-     * @var \Symplify\SimplePhpDocParser\PhpDocNodeTraverser
+     * @var \Symplify\Astral\PhpDocParser\PhpDocNodeTraverser
      */
     private $changedPhpDocNodeTraverser;
     /**

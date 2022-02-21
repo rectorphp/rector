@@ -27,7 +27,6 @@ return array(
     'RectorPrefix20220221\\Symplify\\SymplifyKernel\\' => array($vendorDir . '/symplify/symplify-kernel/src'),
     'RectorPrefix20220221\\Symplify\\SmartFileSystem\\' => array($vendorDir . '/symplify/smart-file-system/src'),
     'RectorPrefix20220221\\Symplify\\Skipper\\' => array($vendorDir . '/symplify/skipper/src'),
-    'RectorPrefix20220221\\Symplify\\SimplePhpDocParser\\' => array($vendorDir . '/symplify/simple-php-doc-parser/src'),
     'RectorPrefix20220221\\Symplify\\PackageBuilder\\' => array($vendorDir . '/symplify/package-builder/src'),
     'RectorPrefix20220221\\Symplify\\EasyTesting\\' => array($vendorDir . '/symplify/easy-testing/src'),
     'RectorPrefix20220221\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
