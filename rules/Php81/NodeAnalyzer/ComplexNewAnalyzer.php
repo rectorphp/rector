@@ -6,7 +6,11 @@ namespace Rector\Php81\NodeAnalyzer;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
@@ -38,9 +42,22 @@ final class ComplexNewAnalyzer
             if ($value instanceof \PhpParser\Node\Scalar) {
                 continue;
             }
+            if ($this->isAllowedConstFetchOrClassConstFeth($value)) {
+                continue;
+            }
             return \true;
         }
         return \false;
+    }
+    private function isAllowedConstFetchOrClassConstFeth(\PhpParser\Node\Expr $expr) : bool
+    {
+        if (!\in_array(\get_class($expr), [\PhpParser\Node\Expr\ConstFetch::class, \PhpParser\Node\Expr\ClassConstFetch::class], \true)) {
+            return \false;
+        }
+        if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+            return $expr->class instanceof \PhpParser\Node\Name && $expr->name instanceof \PhpParser\Node\Identifier;
+        }
+        return \true;
     }
     private function isAllowedNew(\PhpParser\Node\Expr $expr) : bool
     {
