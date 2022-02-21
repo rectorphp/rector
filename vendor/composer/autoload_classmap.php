@@ -2494,6 +2494,7 @@ return array(
     'Rector\\PHPUnit\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\ExceptionAnnotationRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/ExceptionAnnotationRector.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\RemoveEmptyTestMethodRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/RemoveEmptyTestMethodRector.php',
+    'Rector\\PHPUnit\\Rector\\ClassMethod\\ReplaceTestAnnotationWithPrefixedFunctionRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\TryCatchToExpectExceptionRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php',
     'Rector\\PHPUnit\\Rector\\Class_\\AddProphecyTraitRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/Class_/AddProphecyTraitRector.php',
     'Rector\\PHPUnit\\Rector\\Class_\\AddSeeTestAnnotationRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/Class_/AddSeeTestAnnotationRector.php',
