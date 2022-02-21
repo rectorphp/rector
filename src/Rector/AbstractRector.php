@@ -250,6 +250,8 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         }
         /** @var Node $originalNode */
         if (\is_array($node)) {
+            $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($this), $originalNode->getLine());
+            $this->file->addRectorClassWithLine($rectorWithLineChange);
             /** @var array<Node> $node */
             $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
             $originalNodeHash = \spl_object_hash($originalNode);
