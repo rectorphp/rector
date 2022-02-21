@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220220\Symfony\Component\Config\Resource;
+namespace RectorPrefix20220221\Symfony\Component\Config\Resource;
 
-use RectorPrefix20220220\Symfony\Component\Config\ResourceCheckerInterface;
+use RectorPrefix20220221\Symfony\Component\Config\ResourceCheckerInterface;
 /**
  * Resource checker for instances of SelfCheckingResourceInterface.
  *
@@ -19,7 +19,7 @@ use RectorPrefix20220220\Symfony\Component\Config\ResourceCheckerInterface;
  *
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-class SelfCheckingResourceChecker implements \RectorPrefix20220220\Symfony\Component\Config\ResourceCheckerInterface
+class SelfCheckingResourceChecker implements \RectorPrefix20220221\Symfony\Component\Config\ResourceCheckerInterface
 {
     // Common shared cache, because this checker can be used in different
     // situations. For example, when using the full stack framework, the router
@@ -29,14 +29,14 @@ class SelfCheckingResourceChecker implements \RectorPrefix20220220\Symfony\Compo
      * @var mixed[]
      */
     private static $cache = [];
-    public function supports(\RectorPrefix20220220\Symfony\Component\Config\Resource\ResourceInterface $metadata) : bool
+    public function supports(\RectorPrefix20220221\Symfony\Component\Config\Resource\ResourceInterface $metadata) : bool
     {
-        return $metadata instanceof \RectorPrefix20220220\Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
+        return $metadata instanceof \RectorPrefix20220221\Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
     }
     /**
      * @param SelfCheckingResourceInterface $resource
      */
-    public function isFresh(\RectorPrefix20220220\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp) : bool
+    public function isFresh(\RectorPrefix20220221\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp) : bool
     {
         $key = "{$resource}:{$timestamp}";
         return self::$cache[$key] ?? (self::$cache[$key] = $resource->isFresh($timestamp));

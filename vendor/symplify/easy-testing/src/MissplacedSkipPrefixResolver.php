@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220220\Symplify\EasyTesting;
+namespace RectorPrefix20220221\Symplify\EasyTesting;
 
-use RectorPrefix20220220\Nette\Utils\Strings;
-use RectorPrefix20220220\Symplify\EasyTesting\ValueObject\Prefix;
-use RectorPrefix20220220\Symplify\EasyTesting\ValueObject\SplitLine;
+use RectorPrefix20220221\Nette\Utils\Strings;
+use RectorPrefix20220221\Symplify\EasyTesting\ValueObject\Prefix;
+use RectorPrefix20220221\Symplify\EasyTesting\ValueObject\SplitLine;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\EasyTesting\Tests\MissingSkipPrefixResolver\MissingSkipPrefixResolverTest
@@ -22,7 +22,7 @@ final class MissplacedSkipPrefixResolver
         foreach ($fixtureFileInfos as $fixtureFileInfo) {
             $hasNameSkipStart = $this->hasNameSkipStart($fixtureFileInfo);
             $fileContents = $fixtureFileInfo->getContents();
-            $hasSplitLine = (bool) \RectorPrefix20220220\Nette\Utils\Strings::match($fileContents, \RectorPrefix20220220\Symplify\EasyTesting\ValueObject\SplitLine::SPLIT_LINE_REGEX);
+            $hasSplitLine = (bool) \RectorPrefix20220221\Nette\Utils\Strings::match($fileContents, \RectorPrefix20220221\Symplify\EasyTesting\ValueObject\SplitLine::SPLIT_LINE_REGEX);
             if ($hasNameSkipStart && $hasSplitLine) {
                 $invalidFileInfos['incorrect_skips'][] = $fixtureFileInfo;
                 continue;
@@ -36,6 +36,6 @@ final class MissplacedSkipPrefixResolver
     }
     private function hasNameSkipStart(\Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo) : bool
     {
-        return (bool) \RectorPrefix20220220\Nette\Utils\Strings::match($fixtureFileInfo->getBasenameWithoutSuffix(), \RectorPrefix20220220\Symplify\EasyTesting\ValueObject\Prefix::SKIP_PREFIX_REGEX);
+        return (bool) \RectorPrefix20220221\Nette\Utils\Strings::match($fixtureFileInfo->getBasenameWithoutSuffix(), \RectorPrefix20220221\Symplify\EasyTesting\ValueObject\Prefix::SKIP_PREFIX_REGEX);
     }
 }

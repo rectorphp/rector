@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix20220220\React\Socket;
+namespace RectorPrefix20220221\React\Socket;
 
-use RectorPrefix20220220\Evenement\EventEmitter;
-use RectorPrefix20220220\React\EventLoop\LoopInterface;
-use RectorPrefix20220220\React\Stream\DuplexResourceStream;
-use RectorPrefix20220220\React\Stream\Util;
-use RectorPrefix20220220\React\Stream\WritableResourceStream;
-use RectorPrefix20220220\React\Stream\WritableStreamInterface;
+use RectorPrefix20220221\Evenement\EventEmitter;
+use RectorPrefix20220221\React\EventLoop\LoopInterface;
+use RectorPrefix20220221\React\Stream\DuplexResourceStream;
+use RectorPrefix20220221\React\Stream\Util;
+use RectorPrefix20220221\React\Stream\WritableResourceStream;
+use RectorPrefix20220221\React\Stream\WritableStreamInterface;
 /**
  * The actual connection implementation for ConnectionInterface
  *
@@ -16,7 +16,7 @@ use RectorPrefix20220220\React\Stream\WritableStreamInterface;
  * @see ConnectionInterface
  * @internal
  */
-class Connection extends \RectorPrefix20220220\Evenement\EventEmitter implements \RectorPrefix20220220\React\Socket\ConnectionInterface
+class Connection extends \RectorPrefix20220221\Evenement\EventEmitter implements \RectorPrefix20220221\React\Socket\ConnectionInterface
 {
     /**
      * Internal flag whether this is a Unix domain socket (UDS) connection
@@ -36,7 +36,7 @@ class Connection extends \RectorPrefix20220220\Evenement\EventEmitter implements
     /** @internal */
     public $stream;
     private $input;
-    public function __construct($resource, \RectorPrefix20220220\React\EventLoop\LoopInterface $loop)
+    public function __construct($resource, \RectorPrefix20220221\React\EventLoop\LoopInterface $loop)
     {
         // PHP < 7.3.3 (and PHP < 7.2.15) suffers from a bug where feof() might
         // block with 100% CPU usage on fragmented TLS records.
@@ -57,9 +57,9 @@ class Connection extends \RectorPrefix20220220\Evenement\EventEmitter implements
         // This applies to all streams because TLS may be enabled later on.
         // See https://github.com/reactphp/socket/issues/105
         $limitWriteChunks = \PHP_VERSION_ID < 70018 || \PHP_VERSION_ID >= 70100 && \PHP_VERSION_ID < 70104;
-        $this->input = new \RectorPrefix20220220\React\Stream\DuplexResourceStream($resource, $loop, $clearCompleteBuffer ? -1 : null, new \RectorPrefix20220220\React\Stream\WritableResourceStream($resource, $loop, null, $limitWriteChunks ? 8192 : null));
+        $this->input = new \RectorPrefix20220221\React\Stream\DuplexResourceStream($resource, $loop, $clearCompleteBuffer ? -1 : null, new \RectorPrefix20220221\React\Stream\WritableResourceStream($resource, $loop, null, $limitWriteChunks ? 8192 : null));
         $this->stream = $resource;
-        \RectorPrefix20220220\React\Stream\Util::forwardEvents($this->input, $this, array('data', 'end', 'error', 'close', 'pipe', 'drain'));
+        \RectorPrefix20220221\React\Stream\Util::forwardEvents($this->input, $this, array('data', 'end', 'error', 'close', 'pipe', 'drain'));
         $this->input->on('close', array($this, 'close'));
     }
     public function isReadable()
@@ -78,7 +78,7 @@ class Connection extends \RectorPrefix20220220\Evenement\EventEmitter implements
     {
         $this->input->resume();
     }
-    public function pipe(\RectorPrefix20220220\React\Stream\WritableStreamInterface $dest, array $options = array())
+    public function pipe(\RectorPrefix20220221\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
         return $this->input->pipe($dest, $options);
     }
