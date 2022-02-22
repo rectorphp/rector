@@ -136,6 +136,19 @@ return [
             'PHPUnit\Framework\Constraint\IsEqual'
         ),
 
+        // fixes https://github.com/rectorphp/rector/issues/7017
+        function (string $filePath, string $prefix, string $content): string {
+            if (!str_ends_with($filePath, 'vendor/symfony/string/ByteString.php')) {
+                return $content;
+            }
+
+            return Strings::replace(
+                $content,
+                '#' . $prefix . '\\\\_1\\\\_2',
+                '\1_\2_'
+            );
+        },
+
         // unprefixed ContainerConfigurator
         function (string $filePath, string $prefix, string $content): string {
             // keep vendor prefixed the prefixed file loading; not part of public API
