@@ -41,7 +41,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // use faster in-memory cache in CI.
     // CI always starts from scratch, therefore IO intensive caching is not worth it
     $ciDetector = new CiDetector();
-    if ($ciDetector->isCiDetected() !== false) {
+    if ($ciDetector->isCiDetected()) {
         $parameters->set(Option::CACHE_CLASS, MemoryCacheStorage::class);
     }
 };
