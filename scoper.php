@@ -144,7 +144,7 @@ return [
 
             return Strings::replace(
                 $content,
-                '#' . $prefix . '\\\\1_\\\\2#',
+                '#' . $prefix . '\\\\\\\\1_\\\\\\\\2#',
                 '\\\\1_\\\\2'
             );
         },
