@@ -42,12 +42,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220221\\React\\ChildProcess\\": "src"
+            "RectorPrefix20220222\\React\\ChildProcess\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220221\\React\\Tests\\ChildProcess\\": "tests"
+            "RectorPrefix20220222\\React\\Tests\\ChildProcess\\": "tests"
         }
     }
 }

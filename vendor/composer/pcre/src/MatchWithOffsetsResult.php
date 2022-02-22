@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20220221\Composer\Pcre;
+namespace RectorPrefix20220222\Composer\Pcre;
 
 final class MatchWithOffsetsResult
 {

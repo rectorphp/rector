@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220221\Symfony\Component\Config\Resource;
+namespace RectorPrefix20220222\Symfony\Component\Config\Resource;
 
 /**
  * FileExistenceResource represents a resource stored on the filesystem.
@@ -20,7 +20,7 @@ namespace RectorPrefix20220221\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class FileExistenceResource implements \RectorPrefix20220221\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class FileExistenceResource implements \RectorPrefix20220222\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     /**
      * @var string
