@@ -1085,7 +1085,6 @@ return array(
     'RectorPrefix20220222\\Symfony\\Component\\Process\\ProcessUtils' => $vendorDir . '/symfony/process/ProcessUtils.php',
     'RectorPrefix20220222\\Symfony\\Component\\String\\AbstractString' => $vendorDir . '/symfony/string/AbstractString.php',
     'RectorPrefix20220222\\Symfony\\Component\\String\\AbstractUnicodeString' => $vendorDir . '/symfony/string/AbstractUnicodeString.php',
-    'RectorPrefix20220222\\Symfony\\Component\\String\\ByteString' => $vendorDir . '/symfony/string/ByteString.php',
     'RectorPrefix20220222\\Symfony\\Component\\String\\CodePointString' => $vendorDir . '/symfony/string/CodePointString.php',
     'RectorPrefix20220222\\Symfony\\Component\\String\\Exception\\ExceptionInterface' => $vendorDir . '/symfony/string/Exception/ExceptionInterface.php',
     'RectorPrefix20220222\\Symfony\\Component\\String\\Exception\\InvalidArgumentException' => $vendorDir . '/symfony/string/Exception/InvalidArgumentException.php',
