@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
-use RectorPrefix20220222\Nette\Utils\Strings;
+use RectorPrefix20220223\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -68,7 +68,7 @@ CODE_SAMPLE
         if (!\Rector\Core\Util\StringUtils::isMatch($methodName, self::DOUBLE_UNDERSCORE_START_REGEX)) {
             return null;
         }
-        $newName = \RectorPrefix20220222\Nette\Utils\Strings::substring($methodName, 2);
+        $newName = \RectorPrefix20220223\Nette\Utils\Strings::substring($methodName, 2);
         if (\is_numeric($newName[0])) {
             return null;
         }
