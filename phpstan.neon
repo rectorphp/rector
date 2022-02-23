@@ -48,9 +48,6 @@ parameters:
         - bin/validate-phpstan-version.php
         - bin/detect-rules-not-used-in-any-set.php
 
-        # temp rule
-        - src/Rector/ConfigureRector.php
-
         # temporary stinrgable migration from template type provider
         - src/Console/Command/InitCommand.php
         - bin/generate-changelog.php
@@ -120,11 +117,6 @@ parameters:
         -
             message: '#Use value object over return of values#'
             path: rules/Php70/EregToPcreTransformer.php
-
-        -
-            message: '#Nested foreach with empty statement is not allowed#'
-            paths:
-                - rules/Transform/Rector/ClassMethod/ReturnTypeWillChangeRector.php
 
         # symplify 9
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
@@ -317,8 +309,6 @@ parameters:
         # weird generics
         - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:getByType\(\) should return array<TNode of PHPStan\\PhpDocParser\\Ast\\Node\> but returns array<PHPStan\\PhpDocParser\\Ast\\Node\>#'
 
-        - '#Callable callable\(PHPStan\\Type\\Type\)\: PHPStan\\Type\\Type invoked with 2 parameters, 1 required#'
-
         # array_index on generic types
         - '#Method Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:uniquateTypes\(\) should return array<TType of PHPStan\\Type\\Type\> but returns array<int, PHPStan\\Type\\Type\>#'
 
@@ -459,12 +449,6 @@ parameters:
             message: '#Cannot call method (.*?)\(\) on (.*?)\\ProcessPool\|null#'
             path: packages/Parallel/Application/ParallelFileProcessor.php
 
-        # messed closure PHP vs php-parser type
-        -
-            message: '#Instead of "Closure" class/interface use "PhpParser\\Node\\Expr\\Closure"#'
-            path:  packages/Parallel/Application/ParallelFileProcessor.php
-        - '#PHPDoc tag @param for parameter \$postFileCallback with type \(Closure\)\|null is not subtype of native type Closure#'
-
         # parallel complexity
         - '#Cognitive complexity for "Rector\\Parallel\\Application\\ParallelFileProcessor\:\:process\(\)" is \d+, keep it under 10#'
 
@@ -599,15 +583,10 @@ parameters:
             message: '#Anonymous variables in a method call can lead to false dead methods\. Make sure the variable type is known#'
             path: packages/NodeNestingScope/FlowOfControlLocator.php
 
-        -
-            message: '#Array with keys is not allowed\. Use value object to pass data instead#'
-            path: packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php
-
-        # resolve matcher later
-        - '#Callable callable\(PhpParser\\Node\)\: bool invoked with 2 parameters, 1 required#'
-
         # Scope vs MutatingScope interchangable false positive
         - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, callable\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'
 
         # internal reflection
         - '#Instead of "new ClassReflection\(\)" use ReflectionProvider service or "\(new PHPStan\\Reflection\\ClassReflection\(<desired_type>\)\)" for static reflection to work#'
+
+        - '#Callable callable\(PHPStan\\Type\\Type\)\: PHPStan\\Type\\Type invoked with 2 parameters, 1 required#'
