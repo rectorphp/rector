@@ -25,7 +25,6 @@ class Fixture
 {
     public function run()
     {
-
     }
 }
 

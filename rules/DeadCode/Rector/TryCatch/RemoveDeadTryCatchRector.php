@@ -6,7 +6,8 @@ namespace Rector\DeadCode\Rector\TryCatch;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\Finally_;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Rector\AbstractRector;
@@ -42,7 +43,6 @@ class SomeClass
 {
     public function run()
     {
-        // some code
     }
 }
 CODE_SAMPLE
@@ -60,21 +60,28 @@ CODE_SAMPLE
 
     /**
      * @param TryCatch $node
-     * @return Stmt[]|null
+     * @return Stmt[]|null|TryCatch
      */
-    public function refactor(Node $node): ?array
+    public function refactor(Node $node): array|null|TryCatch
     {
+        $isEmptyFinallyStmts = ! $node->finally instanceof Finally_ || $this->isEmpty($node->finally->stmts);
+
+        // not empty stmts on finally always executed
+        if (! $isEmptyFinallyStmts) {
+            return null;
+        }
+
+        if ($this->isEmpty($node->stmts)) {
+            $this->removeNode($node);
+            return $node;
+        }
+
         if (count($node->catches) !== 1) {
             return null;
         }
 
-        /** @var Catch_ $onlyCatch */
         $onlyCatch = $node->catches[0];
-        if (count($onlyCatch->stmts) !== 1) {
-            return null;
-        }
-
-        if ($node->finally !== null && $node->finally->stmts !== []) {
+        if ($this->isEmpty($onlyCatch->stmts)) {
             return null;
         }
 
@@ -88,5 +95,21 @@ CODE_SAMPLE
         }
 
         return $node->stmts;
+    }
+
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function isEmpty(array $stmts): bool
+    {
+        if ($stmts === []) {
+            return true;
+        }
+
+        if (count($stmts) > 1) {
+            return false;
+        }
+
+        return $stmts[0] instanceof Nop;
     }
 }
