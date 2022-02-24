@@ -136,7 +136,7 @@ CODE_SAMPLE
         );
     }
 
-    private function refactorClassConst(ClassConst $classConst): ClassConst
+    private function refactorClassConst(ClassConst $classConst): ?ClassConst
     {
         foreach ($classConst->consts as $key => $singleClassConst) {
             if (! $singleClassConst->value instanceof ConstFetch) {
@@ -151,7 +151,7 @@ CODE_SAMPLE
             return $classConst;
         }
 
-        return $classConst;
+        return null;
     }
 
     private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall

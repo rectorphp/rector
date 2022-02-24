@@ -87,6 +87,10 @@ CODE_SAMPLE
             $node->value .= '.0';
         }
 
+        if (! str_contains($node->value, '_')) {
+            return null;
+        }
+
         return $node;
     }
 

@@ -242,7 +242,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
-        $this->applyRectorWithLineChange($originalNode);
+        /** @var Node $originalNode */
+        $rectorWithLineChange = new RectorWithLineChange($this::class, $originalNode->getLine());
+        $this->file->addRectorClassWithLine($rectorWithLineChange);
 
         /** @var Node $originalNode */
         if (is_array($node)) {
@@ -429,12 +431,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected function removeNodes(array $nodes): void
     {
         $this->nodeRemover->removeNodes($nodes);
-    }
-
-    private function applyRectorWithLineChange(Node $originalNode): void
-    {
-        $rectorWithLineChange = new RectorWithLineChange($this::class, $originalNode->getLine());
-        $this->file->addRectorClassWithLine($rectorWithLineChange);
     }
 
     /**
