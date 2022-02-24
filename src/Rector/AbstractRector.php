@@ -247,10 +247,9 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         if ($this->isNothingToChange($node)) {
             return null;
         }
+        $this->applyRectorWithLineChange($originalNode);
         /** @var Node $originalNode */
         if (\is_array($node)) {
-            $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($this), $originalNode->getLine());
-            $this->file->addRectorClassWithLine($rectorWithLineChange);
             /** @var array<Node> $node */
             $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
             $originalNodeHash = \spl_object_hash($originalNode);
@@ -266,8 +265,6 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         if (!$this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
             return $node;
         }
-        $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($this), $originalNode->getLine());
-        $this->file->addRectorClassWithLine($rectorWithLineChange);
         // update parents relations - must run before connectParentNodes()
         $this->mirrorAttributes($originalAttributes, $node);
         $this->connectParentNodes($node);
@@ -409,6 +406,11 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     protected function removeNodes(array $nodes) : void
     {
         $this->nodeRemover->removeNodes($nodes);
+    }
+    private function applyRectorWithLineChange(\PhpParser\Node $originalNode) : void
+    {
+        $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($this), $originalNode->getLine());
+        $this->file->addRectorClassWithLine($rectorWithLineChange);
     }
     /**
      * @param mixed[]|\PhpParser\Node|null $node
