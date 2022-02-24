@@ -22,7 +22,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20220223\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220224\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ObjectType>
  */
@@ -57,6 +57,9 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
             // possibly generic type
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getClassName());
         }
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && \strncmp($type->getClassName(), '\\', \strlen('\\')) === 0) {
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getClassName());
+        }
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('\\' . $type->getClassName());
     }
     /**
@@ -74,7 +77,12 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
             return new \PhpParser\Node\Name($type->getClassName());
         }
         if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
-            return new \PhpParser\Node\Name\FullyQualified($type->getClassName());
+            $className = $type->getClassName();
+            if (\strncmp($className, '\\', \strlen('\\')) === 0) {
+                // skip leading \
+                return new \PhpParser\Node\Name\FullyQualified(\substr($className, 1));
+            }
+            return new \PhpParser\Node\Name\FullyQualified($className);
         }
         if (!$type instanceof \PHPStan\Type\Generic\GenericObjectType) {
             // fallback

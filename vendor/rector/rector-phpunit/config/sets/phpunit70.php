@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220223;
+namespace RectorPrefix20220224;
 
 use Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector;
 use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;

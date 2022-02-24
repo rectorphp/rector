@@ -1,17 +1,17 @@
 <?php
 
-namespace RectorPrefix20220223\React\Socket;
+namespace RectorPrefix20220224\React\Socket;
 
-use RectorPrefix20220223\React\Dns\Resolver\ResolverInterface;
-use RectorPrefix20220223\React\EventLoop\Loop;
-use RectorPrefix20220223\React\EventLoop\LoopInterface;
-use RectorPrefix20220223\React\Promise;
-final class HappyEyeBallsConnector implements \RectorPrefix20220223\React\Socket\ConnectorInterface
+use RectorPrefix20220224\React\Dns\Resolver\ResolverInterface;
+use RectorPrefix20220224\React\EventLoop\Loop;
+use RectorPrefix20220224\React\EventLoop\LoopInterface;
+use RectorPrefix20220224\React\Promise;
+final class HappyEyeBallsConnector implements \RectorPrefix20220224\React\Socket\ConnectorInterface
 {
     private $loop;
     private $connector;
     private $resolver;
-    public function __construct(\RectorPrefix20220223\React\EventLoop\LoopInterface $loop = null, \RectorPrefix20220223\React\Socket\ConnectorInterface $connector = null, \RectorPrefix20220223\React\Dns\Resolver\ResolverInterface $resolver = null)
+    public function __construct(\RectorPrefix20220224\React\EventLoop\LoopInterface $loop = null, \RectorPrefix20220224\React\Socket\ConnectorInterface $connector = null, \RectorPrefix20220224\React\Dns\Resolver\ResolverInterface $resolver = null)
     {
         // $connector and $resolver arguments are actually required, marked
         // optional for technical reasons only. Nullable $loop without default
@@ -21,7 +21,7 @@ final class HappyEyeBallsConnector implements \RectorPrefix20220223\React\Socket
         if ($connector === null || $resolver === null) {
             throw new \InvalidArgumentException('Missing required $connector or $resolver argument');
         }
-        $this->loop = $loop ?: \RectorPrefix20220223\React\EventLoop\Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20220224\React\EventLoop\Loop::get();
         $this->connector = $connector;
         $this->resolver = $resolver;
     }
@@ -38,14 +38,14 @@ final class HappyEyeBallsConnector implements \RectorPrefix20220223\React\Socket
             $parts = \parse_url($uri);
         }
         if (!$parts || !isset($parts['host'])) {
-            return \RectorPrefix20220223\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $original . '" is invalid (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
+            return \RectorPrefix20220224\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $original . '" is invalid (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
         }
         $host = \trim($parts['host'], '[]');
         // skip DNS lookup / URI manipulation if this URI already contains an IP
         if (@\inet_pton($host) !== \false) {
             return $this->connector->connect($original);
         }
-        $builder = new \RectorPrefix20220223\React\Socket\HappyEyeBallsConnectionBuilder($this->loop, $this->connector, $this->resolver, $uri, $host, $parts);
+        $builder = new \RectorPrefix20220224\React\Socket\HappyEyeBallsConnectionBuilder($this->loop, $this->connector, $this->resolver, $uri, $host, $parts);
         return $builder->connect();
     }
 }

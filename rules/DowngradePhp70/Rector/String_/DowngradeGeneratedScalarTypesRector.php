@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp70\Rector\String_;
 
-use RectorPrefix20220223\Nette\Utils\Strings;
+use RectorPrefix20220224\Nette\Utils\Strings;
 use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;

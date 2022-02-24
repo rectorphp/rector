@@ -13,12 +13,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220223\\Symplify\\AutowireArrayParameter\\": "src"
+            "RectorPrefix20220224\\Symplify\\AutowireArrayParameter\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220223\\Symplify\\AutowireArrayParameter\\Tests\\": "tests"
+            "RectorPrefix20220224\\Symplify\\AutowireArrayParameter\\Tests\\": "tests"
         }
     },
     "extra": {

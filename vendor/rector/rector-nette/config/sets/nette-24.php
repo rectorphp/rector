@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220223;
+namespace RectorPrefix20220224;
 
 use Rector\Transform\Rector\Class_\ParentClassToTraitsRector;
 use Rector\Transform\ValueObject\ParentClassToTraits;

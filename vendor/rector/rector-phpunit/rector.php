@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220223;
+namespace RectorPrefix20220224;
 
 use Rector\Core\Configuration\Option;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
@@ -27,4 +27,11 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::CODE_QUALITY);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::CODING_STYLE);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::EARLY_RETURN);
+    $services = $containerConfigurator->services();
+    $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->configure([
+        // keep unprefixed to protected from downgrade
+        'PHPUnit\\Framework\\MockObject\\MockBuilder',
+        'PHPUnit\\Framework\\MockObject\\MockObject',
+        'Prophecy\\Prophet',
+    ]);
 };

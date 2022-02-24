@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220223;
+namespace RectorPrefix20220224;
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;

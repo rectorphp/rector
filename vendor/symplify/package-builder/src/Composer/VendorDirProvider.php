@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220223\Symplify\PackageBuilder\Composer;
+namespace RectorPrefix20220224\Symplify\PackageBuilder\Composer;
 
-use RectorPrefix20220223\Composer\Autoload\ClassLoader;
+use RectorPrefix20220224\Composer\Autoload\ClassLoader;
 use ReflectionClass;
 /**
  * @api
@@ -25,7 +25,7 @@ final class VendorDirProvider
     }
     private function reflectionFallback() : string
     {
-        $reflectionClass = new \ReflectionClass(\RectorPrefix20220223\Composer\Autoload\ClassLoader::class);
+        $reflectionClass = new \ReflectionClass(\RectorPrefix20220224\Composer\Autoload\ClassLoader::class);
         return \dirname($reflectionClass->getFileName(), 2);
     }
 }

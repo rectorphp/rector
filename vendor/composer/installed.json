@@ -28,7 +28,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Clue\\React\\NDJson\\": "src\/"
+                    "RectorPrefix20220224\\Clue\\React\\NDJson\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -100,7 +100,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Composer\\Pcre\\": "src"
+                    "RectorPrefix20220224\\Composer\\Pcre\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -173,7 +173,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Composer\\Semver\\": "src"
+                    "RectorPrefix20220224\\Composer\\Semver\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -255,7 +255,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Composer\\XdebugHandler\\": "src"
+                    "RectorPrefix20220224\\Composer\\XdebugHandler\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -325,7 +325,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\cweagans\\Composer\\": "src"
+                    "RectorPrefix20220224\\cweagans\\Composer\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -376,7 +376,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Doctrine\\Inflector\\": "lib\/Doctrine\/Inflector"
+                    "RectorPrefix20220224\\Doctrine\\Inflector\\": "lib\/Doctrine\/Inflector"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -473,7 +473,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Ergebnis\\Json\\Printer\\": "src\/"
+                    "RectorPrefix20220224\\Ergebnis\\Json\\Printer\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -531,7 +531,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Evenement\\": "src\/Evenement\/"
+                    "RectorPrefix20220224\\Evenement\\": "src\/Evenement\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -588,7 +588,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Helmich\\TypoScriptParser\\": "src\/"
+                    "RectorPrefix20220224\\Helmich\\TypoScriptParser\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -652,7 +652,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Idiosyncratic\\EditorConfig\\": "src"
+                    "RectorPrefix20220224\\Idiosyncratic\\EditorConfig\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -701,7 +701,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\MyCLabs\\Enum\\": "src\/"
+                    "RectorPrefix20220224\\MyCLabs\\Enum\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -985,7 +985,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\OndraM\\CiDetector\\": "src\/"
+                    "RectorPrefix20220224\\OndraM\\CiDetector\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1239,7 +1239,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Psr\\Cache\\": "src\/"
+                    "RectorPrefix20220224\\Psr\\Cache\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1291,7 +1291,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Psr\\Container\\": "src\/"
+                    "RectorPrefix20220224\\Psr\\Container\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1347,7 +1347,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Psr\\EventDispatcher\\": "src\/"
+                    "RectorPrefix20220224\\Psr\\EventDispatcher\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1400,7 +1400,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Psr\\Http\\Message\\": "src\/"
+                    "RectorPrefix20220224\\Psr\\Http\\Message\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1456,7 +1456,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Psr\\Log\\": "src"
+                    "RectorPrefix20220224\\Psr\\Log\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1508,7 +1508,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\React\\Cache\\": "src\/"
+                    "RectorPrefix20220224\\React\\Cache\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1591,7 +1591,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\React\\ChildProcess\\": "src"
+                    "RectorPrefix20220224\\React\\ChildProcess\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1673,7 +1673,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\React\\Dns\\": "src"
+                    "RectorPrefix20220224\\React\\Dns\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1756,7 +1756,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\React\\EventLoop\\": "src"
+                    "RectorPrefix20220224\\React\\EventLoop\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1835,7 +1835,7 @@
                     "src\/functions_include.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix20220223\\React\\Promise\\": "src\/"
+                    "RectorPrefix20220224\\React\\Promise\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1916,7 +1916,7 @@
                     "src\/functions_include.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix20220223\\React\\Promise\\Timer\\": "src\/"
+                    "RectorPrefix20220224\\React\\Promise\\Timer\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2005,7 +2005,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\React\\Socket\\": "src"
+                    "RectorPrefix20220224\\React\\Socket\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2087,7 +2087,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\React\\Stream\\": "src"
+                    "RectorPrefix20220224\\React\\Stream\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2628,12 +2628,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "8d5363d0797b19956df60877c4f7cfa15aa5179a"
+                "reference": "139b5da303844c08bc3f6cc395136a9d8dcc0803"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/8d5363d0797b19956df60877c4f7cfa15aa5179a",
-                "reference": "8d5363d0797b19956df60877c4f7cfa15aa5179a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/139b5da303844c08bc3f6cc395136a9d8dcc0803",
+                "reference": "139b5da303844c08bc3f6cc395136a9d8dcc0803",
                 "shasum": ""
             },
             "require": {
@@ -2648,7 +2648,7 @@
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
-                "rector\/phpstan-rules": "^0.4.8",
+                "rector\/phpstan-rules": "^0.4.21",
                 "rector\/rector-src": "dev-main",
                 "symplify\/easy-coding-standard": "^10.0",
                 "symplify\/monorepo-builder": "^10.0",
@@ -2657,7 +2657,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-02-21T12:15:20+00:00",
+            "time": "2022-02-23T22:10:38+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2958,7 +2958,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Component\\Config\\": ""
+                    "RectorPrefix20220224\\Symfony\\Component\\Config\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -3050,7 +3050,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Component\\Console\\": ""
+                    "RectorPrefix20220224\\Symfony\\Component\\Console\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -3152,7 +3152,7 @@
                     "Deprecation\/function.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Contracts\\": ""
+                    "RectorPrefix20220224\\Symfony\\Contracts\\": ""
                 },
                 "exclude-from-classmap": [
                     "**\/Tests\/"
@@ -3256,7 +3256,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Component\\DependencyInjection\\": ""
+                    "RectorPrefix20220224\\Symfony\\Component\\DependencyInjection\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -3322,7 +3322,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Component\\Filesystem\\": ""
+                    "RectorPrefix20220224\\Symfony\\Component\\Filesystem\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -3386,7 +3386,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Component\\Finder\\": ""
+                    "RectorPrefix20220224\\Symfony\\Component\\Finder\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -3465,7 +3465,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Polyfill\\Ctype\\": ""
+                    "RectorPrefix20220224\\Symfony\\Polyfill\\Ctype\\": ""
                 },
                 "files": [
                     "bootstrap.php"
@@ -3550,7 +3550,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Polyfill\\Intl\\Grapheme\\": ""
+                    "RectorPrefix20220224\\Symfony\\Polyfill\\Intl\\Grapheme\\": ""
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -3634,7 +3634,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Polyfill\\Intl\\Normalizer\\": ""
+                    "RectorPrefix20220224\\Symfony\\Polyfill\\Intl\\Normalizer\\": ""
                 },
                 "classmap": [
                     "Resources\/stubs"
@@ -3724,7 +3724,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Polyfill\\Mbstring\\": ""
+                    "RectorPrefix20220224\\Symfony\\Polyfill\\Mbstring\\": ""
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -3804,7 +3804,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Polyfill\\Php81\\": ""
+                    "RectorPrefix20220224\\Symfony\\Polyfill\\Php81\\": ""
                 },
                 "classmap": [
                     "Resources\/stubs"
@@ -3874,7 +3874,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Component\\Process\\": ""
+                    "RectorPrefix20220224\\Symfony\\Component\\Process\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -3951,7 +3951,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Component\\String\\": ""
+                    "RectorPrefix20220224\\Symfony\\Component\\String\\": ""
                 },
                 "files": [
                     "Resources\/functions.php"
@@ -4039,7 +4039,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symfony\\Component\\Yaml\\": ""
+                    "RectorPrefix20220224\\Symfony\\Component\\Yaml\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -4154,7 +4154,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symplify\\Astral\\": "src"
+                    "RectorPrefix20220224\\Symplify\\Astral\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -4239,7 +4239,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symplify\\AutowireArrayParameter\\": "src"
+                    "RectorPrefix20220224\\Symplify\\AutowireArrayParameter\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -4327,7 +4327,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symplify\\ComposerJsonManipulator\\": "src"
+                    "RectorPrefix20220224\\Symplify\\ComposerJsonManipulator\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -4415,7 +4415,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symplify\\EasyParallel\\": "src"
+                    "RectorPrefix20220224\\Symplify\\EasyParallel\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -4496,7 +4496,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symplify\\EasyTesting\\": "src"
+                    "RectorPrefix20220224\\Symplify\\EasyTesting\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -4586,7 +4586,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symplify\\PackageBuilder\\": "src"
+                    "RectorPrefix20220224\\Symplify\\PackageBuilder\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -4755,7 +4755,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symplify\\Skipper\\": "src"
+                    "RectorPrefix20220224\\Symplify\\Skipper\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -4842,7 +4842,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symplify\\SmartFileSystem\\": "src"
+                    "RectorPrefix20220224\\Symplify\\SmartFileSystem\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -4928,7 +4928,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symplify\\SymplifyKernel\\": "src"
+                    "RectorPrefix20220224\\Symplify\\SymplifyKernel\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -5009,7 +5009,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Symplify\\VendorPatches\\": "src"
+                    "RectorPrefix20220224\\Symplify\\VendorPatches\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -5135,7 +5135,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix20220223\\Webmozart\\Assert\\": "src\/"
+                    "RectorPrefix20220224\\Webmozart\\Assert\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",

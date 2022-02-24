@@ -1,12 +1,12 @@
 <?php
 
-namespace RectorPrefix20220223\React\Stream;
+namespace RectorPrefix20220224\React\Stream;
 
-use RectorPrefix20220223\Evenement\EventEmitter;
-use RectorPrefix20220223\React\EventLoop\Loop;
-use RectorPrefix20220223\React\EventLoop\LoopInterface;
+use RectorPrefix20220224\Evenement\EventEmitter;
+use RectorPrefix20220224\React\EventLoop\Loop;
+use RectorPrefix20220224\React\EventLoop\LoopInterface;
 use InvalidArgumentException;
-final class ReadableResourceStream extends \RectorPrefix20220223\Evenement\EventEmitter implements \RectorPrefix20220223\React\Stream\ReadableStreamInterface
+final class ReadableResourceStream extends \RectorPrefix20220224\Evenement\EventEmitter implements \RectorPrefix20220224\React\Stream\ReadableStreamInterface
 {
     /**
      * @var resource
@@ -35,7 +35,7 @@ final class ReadableResourceStream extends \RectorPrefix20220223\Evenement\Event
     private $bufferSize;
     private $closed = \false;
     private $listening = \false;
-    public function __construct($stream, \RectorPrefix20220223\React\EventLoop\LoopInterface $loop = null, $readChunkSize = null)
+    public function __construct($stream, \RectorPrefix20220224\React\EventLoop\LoopInterface $loop = null, $readChunkSize = null)
     {
         if (!\is_resource($stream) || \get_resource_type($stream) !== "stream") {
             throw new \InvalidArgumentException('First parameter must be a valid stream resource');
@@ -62,7 +62,7 @@ final class ReadableResourceStream extends \RectorPrefix20220223\Evenement\Event
             \stream_set_read_buffer($stream, 0);
         }
         $this->stream = $stream;
-        $this->loop = $loop ?: \RectorPrefix20220223\React\EventLoop\Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20220224\React\EventLoop\Loop::get();
         $this->bufferSize = $readChunkSize === null ? 65536 : (int) $readChunkSize;
         $this->resume();
     }
@@ -84,9 +84,9 @@ final class ReadableResourceStream extends \RectorPrefix20220223\Evenement\Event
             $this->listening = \true;
         }
     }
-    public function pipe(\RectorPrefix20220223\React\Stream\WritableStreamInterface $dest, array $options = array())
+    public function pipe(\RectorPrefix20220224\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
-        return \RectorPrefix20220223\React\Stream\Util::pipe($this, $dest, $options);
+        return \RectorPrefix20220224\React\Stream\Util::pipe($this, $dest, $options);
     }
     public function close()
     {
