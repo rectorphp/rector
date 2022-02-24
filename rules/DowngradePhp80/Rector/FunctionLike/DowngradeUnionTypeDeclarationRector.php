@@ -74,15 +74,21 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $paramDecorated = false;
         foreach ($node->getParams() as $param) {
             if (! $param->type instanceof UnionType) {
                 continue;
             }
 
             $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node, [\PHPStan\Type\UnionType::class]);
+            $paramDecorated = true;
         }
 
         if (! $node->returnType instanceof UnionType) {
+            if ($paramDecorated) {
+                return $node;
+            }
+
             return null;
         }
 
