@@ -67,13 +67,18 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $paramDecorated = \false;
         foreach ($node->getParams() as $param) {
             if (!$param->type instanceof \PhpParser\Node\UnionType) {
                 continue;
             }
             $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node, [\PHPStan\Type\UnionType::class]);
+            $paramDecorated = \true;
         }
         if (!$node->returnType instanceof \PhpParser\Node\UnionType) {
+            if ($paramDecorated) {
+                return $node;
+            }
             return null;
         }
         $this->phpDocFromTypeDeclarationDecorator->decorate($node);
