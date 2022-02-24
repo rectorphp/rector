@@ -247,7 +247,9 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         if ($this->isNothingToChange($node)) {
             return null;
         }
-        $this->applyRectorWithLineChange($originalNode);
+        /** @var Node $originalNode */
+        $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($this), $originalNode->getLine());
+        $this->file->addRectorClassWithLine($rectorWithLineChange);
         /** @var Node $originalNode */
         if (\is_array($node)) {
             /** @var array<Node> $node */
@@ -406,11 +408,6 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     protected function removeNodes(array $nodes) : void
     {
         $this->nodeRemover->removeNodes($nodes);
-    }
-    private function applyRectorWithLineChange(\PhpParser\Node $originalNode) : void
-    {
-        $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($this), $originalNode->getLine());
-        $this->file->addRectorClassWithLine($rectorWithLineChange);
     }
     /**
      * @param mixed[]|\PhpParser\Node|null $node

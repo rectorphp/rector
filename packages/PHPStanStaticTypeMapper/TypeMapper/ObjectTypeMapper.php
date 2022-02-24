@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
+use RectorPrefix20220224\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -80,7 +81,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
             $className = $type->getClassName();
             if (\strncmp($className, '\\', \strlen('\\')) === 0) {
                 // skip leading \
-                return new \PhpParser\Node\Name\FullyQualified(\substr($className, 1));
+                return new \PhpParser\Node\Name\FullyQualified(\RectorPrefix20220224\Nette\Utils\Strings::substring($className, 1));
             }
             return new \PhpParser\Node\Name\FullyQualified($className);
         }

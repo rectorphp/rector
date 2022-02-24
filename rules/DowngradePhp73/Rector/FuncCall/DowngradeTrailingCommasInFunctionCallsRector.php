@@ -77,7 +77,8 @@ CODE_SAMPLE
             // remove comma
             $last->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::FUNC_ARGS_TRAILING_COMMA, \false);
             $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            return $node;
         }
-        return $node;
+        return null;
     }
 }

@@ -72,6 +72,9 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Scalar\DNumber && \strpos($node->value, '.') === \false) {
             $node->value .= '.0';
         }
+        if (\strpos($node->value, '_') === \false) {
+            return null;
+        }
         return $node;
     }
     /**

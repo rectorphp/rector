@@ -127,7 +127,7 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    private function refactorClassConst(\PhpParser\Node\Stmt\ClassConst $classConst) : \PhpParser\Node\Stmt\ClassConst
+    private function refactorClassConst(\PhpParser\Node\Stmt\ClassConst $classConst) : ?\PhpParser\Node\Stmt\ClassConst
     {
         foreach ($classConst->consts as $key => $singleClassConst) {
             if (!$singleClassConst->value instanceof \PhpParser\Node\Expr\ConstFetch) {
@@ -139,7 +139,7 @@ CODE_SAMPLE
             $classConst->consts[$key]->value = new \PhpParser\Node\Scalar\LNumber(512);
             return $classConst;
         }
-        return $classConst;
+        return null;
     }
     private function handleEmptyStringToNullMatch(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Expr\FuncCall
     {

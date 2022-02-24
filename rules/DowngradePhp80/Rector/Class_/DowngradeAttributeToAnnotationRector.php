@@ -32,6 +32,10 @@ final class DowngradeAttributeToAnnotationRector extends \Rector\Core\Rector\Abs
      */
     private $attributesToAnnotations = [];
     /**
+     * @var bool
+     */
+    private $isDowngraded = \false;
+    /**
      * @readonly
      * @var \Rector\PhpAttribute\Printer\DoctrineAnnotationFactory
      */
@@ -80,6 +84,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $this->isDowngraded = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $key => $attribute) {
@@ -94,10 +99,14 @@ CODE_SAMPLE
                     $doctrineAnnotation = $this->doctrineAnnotationFactory->createFromAttribute($attribute, $attributeToAnnotation->getTag());
                     $phpDocInfo->addTagValueNode($doctrineAnnotation);
                 }
+                $this->isDowngraded = \true;
             }
         }
         // cleanup empty attr groups
         $this->cleanupEmptyAttrGroups($node);
+        if (!$this->isDowngraded) {
+            return null;
+        }
         return $node;
     }
     /**
@@ -118,6 +127,7 @@ CODE_SAMPLE
                 continue;
             }
             unset($node->attrGroups[$key]);
+            $this->isDowngraded = \true;
         }
     }
     /**

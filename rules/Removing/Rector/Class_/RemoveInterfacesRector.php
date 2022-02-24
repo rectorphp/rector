@@ -48,10 +48,15 @@ CODE_SAMPLE
         if ($node->implements === []) {
             return null;
         }
+        $isInterfacesRemoved = \false;
         foreach ($node->implements as $key => $implement) {
             if ($this->isNames($implement, $this->interfacesToRemove)) {
                 unset($node->implements[$key]);
+                $isInterfacesRemoved = \true;
             }
+        }
+        if (!$isInterfacesRemoved) {
+            return null;
         }
         return $node;
     }
