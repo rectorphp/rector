@@ -20,7 +20,7 @@ final class FollowedByCommaAnalyzer
                 continue;
             }
             // without comma
-            if (\in_array($currentToken, [')', '('], \true)) {
+            if (\in_array($currentToken, ['(', ')', ';'], \true)) {
                 return \false;
             }
             break;
