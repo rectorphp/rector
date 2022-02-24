@@ -25,7 +25,7 @@ final class FollowedByCommaAnalyzer
             }
 
             // without comma
-            if (in_array($currentToken, [')', '('], true)) {
+            if (in_array($currentToken, ['(', ')', ';'], true)) {
                 return false;
             }
 
