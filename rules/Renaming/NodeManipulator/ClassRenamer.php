@@ -80,6 +80,11 @@ final class ClassRenamer
             return $this->refactorClassLike($node, $oldToNewClasses);
         }
 
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if ($phpDocInfo->hasChanged()) {
+            return $node;
+        }
+
         return null;
     }
 

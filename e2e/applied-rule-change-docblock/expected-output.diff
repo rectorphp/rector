@@ -1,0 +1,22 @@
+1 file with changes
+===================
+
+1) src/RenameDocblock.php:0
+
+    ---------- begin diff ----------
+@@ @@
+ <?php
+
+ /**
+- * @param DateTime $someOldClass
++ * @param \DateTimeInterface $someOldClass
+  */
+ function someFunction($someOldClass)
+ {
+    ----------- end diff -----------
+
+Applied rules:
+ * RenameClassRector
+
+
+ [OK] 1 file would have changed (dry-run) by Rector

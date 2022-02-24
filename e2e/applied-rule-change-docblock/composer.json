@@ -1,0 +1,7 @@
+{
+    "require": {
+        "php": "^8.1"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

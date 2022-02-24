@@ -29,6 +29,7 @@ jobs:
                     - 'e2e/parallel-reflection-resolver'
                     - 'e2e/no-parallel-reflection-resolver'
                     - 'e2e/applied-rule-return-array-nodes'
+                    - 'e2e/applied-rule-change-docblock'
 
         name: End to end test - ${{ matrix.directory }}
 
