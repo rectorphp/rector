@@ -62,6 +62,10 @@ final class ObjectTypeMapper implements TypeMapperInterface
             return new IdentifierTypeNode($type->getClassName());
         }
 
+        if ($type instanceof FullyQualifiedObjectType && str_starts_with($type->getClassName(), '\\')) {
+            return new IdentifierTypeNode($type->getClassName());
+        }
+
         return new IdentifierTypeNode('\\' . $type->getClassName());
     }
 
@@ -83,7 +87,13 @@ final class ObjectTypeMapper implements TypeMapperInterface
         }
 
         if ($type instanceof FullyQualifiedObjectType) {
-            return new FullyQualified($type->getClassName());
+            $className = $type->getClassName();
+
+            if(str_starts_with($className, '\\')) {
+                // skip leading \
+                return new FullyQualified(substr($className, 1));
+            }
+            return new FullyQualified($className);
         }
 
         if (! $type instanceof GenericObjectType) {
