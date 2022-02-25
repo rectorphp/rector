@@ -20,7 +20,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
 use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
@@ -143,7 +142,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
         $hasChanged = $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
         if ($hasChanged) {
             return $node;

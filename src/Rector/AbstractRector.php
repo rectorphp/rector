@@ -26,7 +26,6 @@ use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
-use Rector\Core\NodeAnalyzer\ChangedNodeAnalyzer;
 use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -116,8 +115,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private CurrentFileProvider $currentFileProvider;
 
-    private ChangedNodeAnalyzer $changedNodeAnalyzer;
-
     /**
      * @var array<string, Node[]|Node>
      */
@@ -153,7 +150,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         BetterNodeFinder $betterNodeFinder,
         NodeComparator $nodeComparator,
         CurrentFileProvider $currentFileProvider,
-        ChangedNodeAnalyzer $changedNodeAnalyzer,
         InfiniteLoopValidator $infiniteLoopValidator,
         RectifiedAnalyzer $rectifiedAnalyzer,
         CreatedByRuleDecorator $createdByRuleDecorator
@@ -180,7 +176,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
         $this->currentFileProvider = $currentFileProvider;
-        $this->changedNodeAnalyzer = $changedNodeAnalyzer;
         $this->infiniteLoopValidator = $infiniteLoopValidator;
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
@@ -261,13 +256,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return $originalNode;
         }
 
-        // not changed, return node early
-        /** @var Node $node */
-        if (! $this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
-            return $node;
-        }
-
         // update parents relations - must run before connectParentNodes()
+        /** @var Node $node */
         $this->mirrorAttributes($originalAttributes, $node);
         $this->connectParentNodes($node);
 
