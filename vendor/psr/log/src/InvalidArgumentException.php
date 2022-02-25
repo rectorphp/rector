@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220224\Psr\Log;
+namespace RectorPrefix20220225\Psr\Log;
 
 class InvalidArgumentException extends \InvalidArgumentException
 {

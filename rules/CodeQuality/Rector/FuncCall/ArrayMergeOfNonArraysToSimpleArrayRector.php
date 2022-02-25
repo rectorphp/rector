@@ -64,6 +64,7 @@ CODE_SAMPLE
             return null;
         }
         $array = new \PhpParser\Node\Expr\Array_();
+        $isAssigned = \false;
         foreach ($node->args as $arg) {
             // found non Arg? return early
             if (!$arg instanceof \PhpParser\Node\Arg) {
@@ -78,7 +79,11 @@ CODE_SAMPLE
                     continue;
                 }
                 $array->items[] = new \PhpParser\Node\Expr\ArrayItem($nestedArrayItemItem->value, $nestedArrayItemItem->key);
+                $isAssigned = \true;
             }
+        }
+        if (!$isAssigned) {
+            return null;
         }
         return $array;
     }

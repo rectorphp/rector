@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220224\React\Dns\Model;
+namespace RectorPrefix20220225\React\Dns\Model;
 
 /**
  * This class represents a single resulting record in a response message

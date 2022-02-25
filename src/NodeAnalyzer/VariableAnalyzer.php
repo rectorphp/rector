@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Global_;
 use PhpParser\Node\Stmt\Static_;
@@ -49,6 +50,22 @@ final class VariableAnalyzer
                 }
             }
             return \false;
+        });
+    }
+    public function isUsedByReference(\PhpParser\Node\Expr\Variable $variable) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $subNode) use($variable) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Expr\Variable) {
+                return \false;
+            }
+            if (!$this->nodeComparator->areNodesEqual($subNode, $variable)) {
+                return \false;
+            }
+            $parent = $subNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if (!$parent instanceof \PhpParser\Node\Expr\ClosureUse) {
+                return \false;
+            }
+            return $parent->byRef;
         });
     }
     private function isParentStaticOrGlobal(\PhpParser\Node\Expr\Variable $variable) : bool

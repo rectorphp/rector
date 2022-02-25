@@ -142,7 +142,10 @@ CODE_SAMPLE
         if ($this->variableAnalyzer->isStaticOrGlobal($variableNode)) {
             return \true;
         }
-        return $this->callAnalyzer->isNewInstance($previousNode->var);
+        if ($this->callAnalyzer->isNewInstance($previousNode->var)) {
+            return \true;
+        }
+        return $this->variableAnalyzer->isUsedByReference($variableNode);
     }
     private function hasSomeComment(\PhpParser\Node\Expr $expr) : bool
     {

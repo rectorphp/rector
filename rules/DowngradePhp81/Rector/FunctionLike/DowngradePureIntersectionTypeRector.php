@@ -58,13 +58,18 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $paramDecorated = \false;
         foreach ($node->getParams() as $param) {
             if (!$param->type instanceof \PhpParser\Node\IntersectionType) {
                 continue;
             }
             $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node, [\PHPStan\Type\IntersectionType::class]);
+            $paramDecorated = \true;
         }
         if (!$node->returnType instanceof \PhpParser\Node\IntersectionType) {
+            if ($paramDecorated) {
+                return $node;
+            }
             return null;
         }
         $this->phpDocFromTypeDeclarationDecorator->decorate($node);

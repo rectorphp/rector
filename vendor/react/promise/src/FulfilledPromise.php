@@ -1,16 +1,16 @@
 <?php
 
-namespace RectorPrefix20220224\React\Promise;
+namespace RectorPrefix20220225\React\Promise;
 
 /**
  * @deprecated 2.8.0 External usage of FulfilledPromise is deprecated, use `resolve()` instead.
  */
-class FulfilledPromise implements \RectorPrefix20220224\React\Promise\ExtendedPromiseInterface, \RectorPrefix20220224\React\Promise\CancellablePromiseInterface
+class FulfilledPromise implements \RectorPrefix20220225\React\Promise\ExtendedPromiseInterface, \RectorPrefix20220225\React\Promise\CancellablePromiseInterface
 {
     private $value;
     public function __construct($value = null)
     {
-        if ($value instanceof \RectorPrefix20220224\React\Promise\PromiseInterface) {
+        if ($value instanceof \RectorPrefix20220225\React\Promise\PromiseInterface) {
             throw new \InvalidArgumentException('You cannot create React\\Promise\\FulfilledPromise with a promise. Use React\\Promise\\resolve($promiseOrValue) instead.');
         }
         $this->value = $value;
@@ -23,9 +23,9 @@ class FulfilledPromise implements \RectorPrefix20220224\React\Promise\ExtendedPr
         try {
             return resolve($onFulfilled($this->value));
         } catch (\Throwable $exception) {
-            return new \RectorPrefix20220224\React\Promise\RejectedPromise($exception);
+            return new \RectorPrefix20220225\React\Promise\RejectedPromise($exception);
         } catch (\Exception $exception) {
-            return new \RectorPrefix20220224\React\Promise\RejectedPromise($exception);
+            return new \RectorPrefix20220225\React\Promise\RejectedPromise($exception);
         }
     }
     public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
@@ -34,7 +34,7 @@ class FulfilledPromise implements \RectorPrefix20220224\React\Promise\ExtendedPr
             return;
         }
         $result = $onFulfilled($this->value);
-        if ($result instanceof \RectorPrefix20220224\React\Promise\ExtendedPromiseInterface) {
+        if ($result instanceof \RectorPrefix20220225\React\Promise\ExtendedPromiseInterface) {
             $result->done();
         }
     }

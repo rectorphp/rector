@@ -87,12 +87,17 @@ CODE_SAMPLE
         if (!$caughtThrowableVariable instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
-        $this->traverseNodesWithCallable($node->stmts, function (\PhpParser\Node $node) use($caughtThrowableVariable) : ?int {
+        $isChanged = \false;
+        $this->traverseNodesWithCallable($node->stmts, function (\PhpParser\Node $node) use($caughtThrowableVariable, &$isChanged) : ?int {
             if (!$node instanceof \PhpParser\Node\Stmt\Throw_) {
                 return null;
             }
-            return $this->refactorThrow($node, $caughtThrowableVariable);
+            $isChanged = $this->refactorThrow($node, $caughtThrowableVariable);
+            return $isChanged;
         });
+        if (!(bool) $isChanged) {
+            return null;
+        }
         return $node;
     }
     private function refactorThrow(\PhpParser\Node\Stmt\Throw_ $throw, \PhpParser\Node\Expr\Variable $catchedThrowableVariable) : ?int
