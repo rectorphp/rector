@@ -3950,12 +3950,12 @@
             "type": "library",
             "installation-source": "dist",
             "autoload": {
-                "psr-4": {
-                    "RectorPrefix20220225\\Symfony\\Component\\String\\": ""
-                },
                 "files": [
                     "Resources\/functions.php"
                 ],
+                "psr-4": {
+                    "RectorPrefix20220225\\Symfony\\Component\\String\\": ""
+                },
                 "exclude-from-classmap": [
                     "\/Tests\/"
                 ]

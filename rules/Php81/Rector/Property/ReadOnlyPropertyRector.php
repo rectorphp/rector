@@ -11,6 +11,7 @@ use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Core\ValueObject\Visibility;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -109,6 +110,10 @@ CODE_SAMPLE
             return null;
         }
         $this->visibilityManipulator->makeReadonly($property);
+        $attributeGroups = $property->attrGroups;
+        if ($attributeGroups !== []) {
+            $property->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        }
         return $property;
     }
     /**
