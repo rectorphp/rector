@@ -169,11 +169,6 @@ final class AttributeKey
      */
     public const FILE = 'file';
     /**
-     * In case the php-doc info just changed, for reporting of changed nodes
-     * @var string
-     */
-    public const HAS_PHP_DOC_INFO_JUST_CHANGED = 'has_php_doc_info_just_changed';
-    /**
      * Helps with infinite loop detection
      * @var string
      */

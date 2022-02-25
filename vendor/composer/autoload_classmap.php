@@ -1686,7 +1686,6 @@ return array(
     'Rector\\Core\\Logging\\CurrentRectorProvider' => $baseDir . '/src/Logging/CurrentRectorProvider.php',
     'Rector\\Core\\NodeAnalyzer\\ArgsAnalyzer' => $baseDir . '/src/NodeAnalyzer/ArgsAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\CallAnalyzer' => $baseDir . '/src/NodeAnalyzer/CallAnalyzer.php',
-    'Rector\\Core\\NodeAnalyzer\\ChangedNodeAnalyzer' => $baseDir . '/src/NodeAnalyzer/ChangedNodeAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ClassAnalyzer' => $baseDir . '/src/NodeAnalyzer/ClassAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\CoalesceAnalyzer' => $baseDir . '/src/NodeAnalyzer/CoalesceAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\CompactFuncCallAnalyzer' => $baseDir . '/src/NodeAnalyzer/CompactFuncCallAnalyzer.php',
