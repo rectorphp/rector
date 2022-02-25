@@ -76,6 +76,7 @@ CODE_SAMPLE
         }
 
         $array = new Array_();
+        $isAssigned = false;
         foreach ($node->args as $arg) {
             // found non Arg? return early
             if (! $arg instanceof Arg) {
@@ -93,7 +94,12 @@ CODE_SAMPLE
                 }
 
                 $array->items[] = new ArrayItem($nestedArrayItemItem->value, $nestedArrayItemItem->key);
+                $isAssigned = true;
             }
+        }
+
+        if (! $isAssigned) {
+            return null;
         }
 
         return $array;

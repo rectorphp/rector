@@ -65,6 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $paramDecorated = false;
         foreach ($node->getParams() as $param) {
             if (! $param->type instanceof IntersectionType) {
                 continue;
@@ -75,9 +76,14 @@ CODE_SAMPLE
                 $node,
                 [\PHPStan\Type\IntersectionType::class]
             );
+            $paramDecorated = true;
         }
 
         if (! $node->returnType instanceof IntersectionType) {
+            if ($paramDecorated) {
+                return $node;
+            }
+
             return null;
         }
 
