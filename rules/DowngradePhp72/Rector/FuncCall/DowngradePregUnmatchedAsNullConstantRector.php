@@ -6,7 +6,6 @@ namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use Nette\NotImplementedException;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -14,7 +13,6 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
@@ -98,12 +96,8 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         }
 
         $node = $this->handleEmptyStringToNullMatch($node, $variable);
-
-        if ($node instanceof Ternary) {
-            return $node;
-        }
-
         unset($node->args[3]);
+
         return $node;
     }
 
@@ -160,7 +154,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall|Ternary
+    private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall
     {
         $closure = new Closure();
         $variablePass = new Variable('value');
@@ -183,7 +177,7 @@ CODE_SAMPLE
         return $this->processReplace($funcCall, $replaceEmptyStringToNull);
     }
 
-    private function processReplace(FuncCall $funcCall, FuncCall $replaceEmptystringToNull): FuncCall|Ternary
+    private function processReplace(FuncCall $funcCall, FuncCall $replaceEmptystringToNull): FuncCall
     {
         $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Expression) {
@@ -219,20 +213,12 @@ CODE_SAMPLE
         return $this->processInIf($if, $funcCall, $replaceEmptystringToNull);
     }
 
-    private function processInAssign(Assign $assign, FuncCall $funcCall, FuncCall $replaceEmptyStringToNull): Ternary
+    private function processInAssign(Assign $assign, FuncCall $funcCall, FuncCall $replaceEmptyStringToNull): FuncCall
     {
-        $matchesVariable = $funcCall->args[2]->value;
-
-        $identical = new Identical($matchesVariable, new Array_([]));
-        $lNumber = new LNumber(1);
-        $ternary = new Ternary($identical, $this->nodeFactory->createFalse(), $lNumber);
-
         $currentStatement = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $this->nodesToAddCollector->addNodeAfterNode(new Expression($replaceEmptyStringToNull), $currentStatement);
 
-        $expressions = [new Expression($funcCall), new Expression($replaceEmptyStringToNull)];
-        $this->nodesToAddCollector->addNodesBeforeNode($expressions, $currentStatement);
-
-        return $ternary;
+        return $funcCall;
     }
 
     private function processInIf(If_ $if, FuncCall $funcCall, FuncCall $replaceEmptyStringToNull): FuncCall
