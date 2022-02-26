@@ -1,0 +1,17 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Composer\\\\Pcre\\\\Preg\\:\\:matchAll\\(\\) should return int\\<0, max\\> but returns int\\.$#"
+			count: 1
+			path: src/Preg.php
+
+		-
+			message: "#^Method Composer\\\\Pcre\\\\Preg\\:\\:matchAllWithOffsets\\(\\) should return int\\<0, max\\> but returns int\\.$#"
+			count: 1
+			path: src/Preg.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between int and null will always evaluate to false\\.$#"
+			count: 2
+			path: src/Preg.php
+

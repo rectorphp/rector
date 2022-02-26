@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220225;
+namespace RectorPrefix20220226;
 
 use Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector;
 use Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector;

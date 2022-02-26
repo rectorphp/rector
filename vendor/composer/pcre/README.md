@@ -6,7 +6,11 @@ PCRE wrapping library that offers type-safe `preg_*` replacements.
 This library gives you a way to ensure `preg_*` functions do not fail silently, returning
 unexpected `null`s that may not be handled.
 
-It also makes it easier ot work with static analysis tools like PHPStan or Psalm as it
+As of 3.0 this library enforces [`PREG_UNMATCHED_AS_NULL`](#preg_unmatched_as_null) usage
+for all matching and replaceCallback functions, [read more below](#preg_unmatched_as_null)
+to understand the implications.
+
+It thus makes it easier to work with static analysis tools like PHPStan or Psalm as it
 simplifies and reduces the possible return values from all the `preg_*` functions which
 are quite packed with edge cases.
 
@@ -30,7 +34,9 @@ $ composer require composer/pcre
 Requirements
 ------------
 
-* PHP 5.3.2 is required but using the latest version of PHP is highly recommended.
+* PHP 7.4.0 is required for 3.x versions
+* PHP 7.2.0 is required for 2.x versions
+* PHP 5.3.2 is required for 1.x versions
 
 
 Basic usage
@@ -110,7 +116,7 @@ See the [MatchResult](src/MatchResult.php), [MatchWithOffsetsResult](src/MatchWi
 Restrictions / Limitations
 --------------------------
 
-Due to type safety requirements a few restrictions are in place.matchWithOffsets
+Due to type safety requirements a few restrictions are in place.
 
 - matching using `PREG_OFFSET_CAPTURE` is made available via `matchWithOffsets` and `matchAllWithOffsets`.
   You cannot pass the flag to `match`/`matchAll`.
@@ -122,11 +128,35 @@ Due to type safety requirements a few restrictions are in place.matchWithOffsets
   use `Preg::grep` in combination with some loop and `Preg::replace`.
 - `replace`, `replaceCallback` and `replaceCallbackArray` do not support an array `$subject`,
   only simple strings.
-- in 2.x, we plan to always implicitly use `PREG_UNMATCHED_AS_NULL` for matching, which offers much
-  saner/predictable results. This is currently not doable due to the PHP version requirement and to
-  keep things working the same across all PHP versions. If you use the library on a PHP 7.2+ project
-  however we highly recommend using `PREG_UNMATCHED_AS_NULL` with all `match*` and `replaceCallback*`
-  methods.
+- As of 2.0, the library always uses `PREG_UNMATCHED_AS_NULL` for matching, which offers [much
+  saner/more predictable results](#preg_unmatched_as_null). As of 3.0 the flag is also set for
+  `replaceCallback` and `replaceCallbackArray`.
+
+#### PREG_UNMATCHED_AS_NULL
+
+As of 2.0, this library always uses PREG_UNMATCHED_AS_NULL for all `match*` and `isMatch*`
+functions. As of 3.0 it is also done for `replaceCallback` and `replaceCallbackArray`.
+
+This means your matches will always contain all matching groups, either as null if unmatched
+or as string if it matched.
+
+The advantages in clarity and predictability are clearer if you compare the two outputs of
+running this with and without PREG_UNMATCHED_AS_NULL in $flags:
+
+```php
+preg_match('/(a)(b)*(c)(d)*/', 'ac', $matches, $flags);
+```
+
+| no flag | PREG_UNMATCHED_AS_NULL |
+| --- | --- |
+| array (size=4)              | array (size=5) |
+| 0 => string 'ac' (length=2) |   0 => string 'ac' (length=2) |
+| 1 => string 'a' (length=1)  |   1 => string 'a' (length=1) |
+| 2 => string '' (length=0)   |   2 => null |
+| 3 => string 'c' (length=1)  |   3 => string 'c' (length=1) |
+|                             |   4 => null |
+| group 2 (any unmatched group preceding one that matched) is set to `''`. You cannot tell if it matched an empty string or did not match at all | group 2 is `null` when unmatched and a string if it matched, easy to check for |
+| group 4 (any optional group without a matching one following) is missing altogether. So you have to check with `isset()`, but really you want `isset($m[4]) && $m[4] !== ''` for safety unless you are very careful to check that a non-optional group follows it | group 4 is always set, and null in this case as there was no match, easy to check for with `$m[4] !== null` |
 
 License
 -------

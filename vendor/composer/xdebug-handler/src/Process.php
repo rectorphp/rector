@@ -9,9 +9,9 @@
  * the LICENSE file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix20220225\Composer\XdebugHandler;
+namespace RectorPrefix20220226\Composer\XdebugHandler;
 
-use RectorPrefix20220225\Composer\Pcre\Preg;
+use RectorPrefix20220226\Composer\Pcre\Preg;
 /**
  * Process utility functions
  *
@@ -35,9 +35,9 @@ class Process
             return "'" . \str_replace("'", "'\\''", $arg) . "'";
         }
         $quote = \strpbrk($arg, " \t") !== \false || $arg === '';
-        $arg = \RectorPrefix20220225\Composer\Pcre\Preg::replace('/(\\\\*)"/', '$1$1\\"', $arg, -1, $dquotes);
+        $arg = \RectorPrefix20220226\Composer\Pcre\Preg::replace('/(\\\\*)"/', '$1$1\\"', $arg, -1, $dquotes);
         if ($meta) {
-            $meta = $dquotes || \RectorPrefix20220225\Composer\Pcre\Preg::isMatch('/%[^%]+%/', $arg);
+            $meta = $dquotes || \RectorPrefix20220226\Composer\Pcre\Preg::isMatch('/%[^%]+%/', $arg);
             if (!$meta) {
                 $quote = $quote || \strpbrk($arg, '^&|<>()') !== \false;
             } elseif ($module && !$dquotes && $quote) {
@@ -45,10 +45,10 @@ class Process
             }
         }
         if ($quote) {
-            $arg = '"' . \RectorPrefix20220225\Composer\Pcre\Preg::replace('/(\\\\*)$/', '$1$1', $arg) . '"';
+            $arg = '"' . \RectorPrefix20220226\Composer\Pcre\Preg::replace('/(\\\\*)$/', '$1$1', $arg) . '"';
         }
         if ($meta) {
-            $arg = \RectorPrefix20220225\Composer\Pcre\Preg::replace('/(["^&|<>()%])/', '^$1', $arg);
+            $arg = \RectorPrefix20220226\Composer\Pcre\Preg::replace('/(["^&|<>()%])/', '^$1', $arg);
         }
         return $arg;
     }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220225;
+namespace RectorPrefix20220226;
 
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.1.md
 use PHPStan\Type\ObjectType;
