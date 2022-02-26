@@ -27,13 +27,12 @@ class Preg
         if (($flags & \PREG_OFFSET_CAPTURE) !== 0) {
             throw new \InvalidArgumentException('PREG_OFFSET_CAPTURE is not supported as it changes the type of $matches, use matchWithOffsets() instead');
         }
-        \preg_match($pattern, $subject, $matches, $flags, $offset);
+        $result = \preg_match($pattern, $subject, $matches, $flags, $offset);
         \array_walk_recursive($matches, function (&$value) {
             if ($value === '') {
                 $value = null;
             }
         });
-        $result = $matches === [] ? \false : 1;
         if ($result === \false) {
             throw \RectorPrefix20220226\Composer\Pcre\PcreException::fromFunction('preg_match', $pattern);
         }
@@ -51,13 +50,12 @@ class Preg
      */
     public static function matchWithOffsets(string $pattern, string $subject, ?array &$matches, int $flags = 0, int $offset = 0) : int
     {
-        \preg_match($pattern, $subject, $matches, $flags | \PREG_OFFSET_CAPTURE, $offset);
+        $result = \preg_match($pattern, $subject, $matches, $flags | \PREG_OFFSET_CAPTURE, $offset);
         \array_walk_recursive($matches, function (&$value) {
             if ($value === '') {
                 $value = null;
             }
         });
-        $result = $matches === [] ? \false : 1;
         if ($result === \false) {
             throw \RectorPrefix20220226\Composer\Pcre\PcreException::fromFunction('preg_match', $pattern);
         }
@@ -77,13 +75,12 @@ class Preg
         if (($flags & \PREG_SET_ORDER) !== 0) {
             throw new \InvalidArgumentException('PREG_SET_ORDER is not supported as it changes the type of $matches');
         }
-        \preg_match_all($pattern, $subject, $matches, $flags, $offset);
+        $result = \preg_match_all($pattern, $subject, $matches, $flags, $offset);
         \array_walk_recursive($matches, function (&$value) {
             if ($value === '') {
                 $value = null;
             }
         });
-        $result = $matches === [] ? \false : 1;
         if ($result === \false || $result === null) {
             throw \RectorPrefix20220226\Composer\Pcre\PcreException::fromFunction('preg_match_all', $pattern);
         }
@@ -101,13 +98,12 @@ class Preg
      */
     public static function matchAllWithOffsets(string $pattern, string $subject, ?array &$matches, int $flags = 0, int $offset = 0) : int
     {
-        \preg_match_all($pattern, $subject, $matches, $flags | \PREG_OFFSET_CAPTURE, $offset);
+        $result = \preg_match_all($pattern, $subject, $matches, $flags | \PREG_OFFSET_CAPTURE, $offset);
         \array_walk_recursive($matches, function (&$value) {
             if ($value === '') {
                 $value = null;
             }
         });
-        $result = $matches === [] ? \false : 1;
         if ($result === \false || $result === null) {
             throw \RectorPrefix20220226\Composer\Pcre\PcreException::fromFunction('preg_match_all', $pattern);
         }

@@ -5,7 +5,6 @@ namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use RectorPrefix20220226\Nette\NotImplementedException;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -13,7 +12,6 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
@@ -99,9 +97,6 @@ final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rect
             return null;
         }
         $node = $this->handleEmptyStringToNullMatch($node, $variable);
-        if ($node instanceof \PhpParser\Node\Expr\Ternary) {
-            return $node;
-        }
         unset($node->args[3]);
         return $node;
     }
@@ -146,10 +141,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    /**
-     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\Ternary
-     */
-    private function handleEmptyStringToNullMatch(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Variable $variable)
+    private function handleEmptyStringToNullMatch(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Expr\FuncCall
     {
         $closure = new \PhpParser\Node\Expr\Closure();
         $variablePass = new \PhpParser\Node\Expr\Variable('value');
@@ -163,10 +155,7 @@ CODE_SAMPLE
         $replaceEmptyStringToNull = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);
         return $this->processReplace($funcCall, $replaceEmptyStringToNull);
     }
-    /**
-     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\Ternary
-     */
-    private function processReplace(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\FuncCall $replaceEmptystringToNull)
+    private function processReplace(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\FuncCall $replaceEmptystringToNull) : \PhpParser\Node\Expr\FuncCall
     {
         $parent = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parent instanceof \PhpParser\Node\Stmt\Expression) {
@@ -194,16 +183,11 @@ CODE_SAMPLE
         }
         return $this->processInIf($if, $funcCall, $replaceEmptystringToNull);
     }
-    private function processInAssign(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\FuncCall $replaceEmptyStringToNull) : \PhpParser\Node\Expr\Ternary
+    private function processInAssign(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\FuncCall $replaceEmptyStringToNull) : \PhpParser\Node\Expr\FuncCall
     {
-        $matchesVariable = $funcCall->args[2]->value;
-        $identical = new \PhpParser\Node\Expr\BinaryOp\Identical($matchesVariable, new \PhpParser\Node\Expr\Array_([]));
-        $lNumber = new \PhpParser\Node\Scalar\LNumber(1);
-        $ternary = new \PhpParser\Node\Expr\Ternary($identical, $this->nodeFactory->createFalse(), $lNumber);
         $currentStatement = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        $expressions = [new \PhpParser\Node\Stmt\Expression($funcCall), new \PhpParser\Node\Stmt\Expression($replaceEmptyStringToNull)];
-        $this->nodesToAddCollector->addNodesBeforeNode($expressions, $currentStatement);
-        return $ternary;
+        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Expression($replaceEmptyStringToNull), $currentStatement);
+        return $funcCall;
     }
     private function processInIf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\FuncCall $replaceEmptyStringToNull) : \PhpParser\Node\Expr\FuncCall
     {
