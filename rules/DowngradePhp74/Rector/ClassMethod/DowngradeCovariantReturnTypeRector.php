@@ -35,11 +35,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeCovariantReturnTypeRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const ALREADY_DOWNGRADED = 'already_downgraded';
-
     public function __construct(
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
         private readonly PrivatesCaller $privatesCaller,
@@ -112,11 +107,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $isAlreadyDowngraded = (bool) $node->getAttribute(self::ALREADY_DOWNGRADED, false);
-        if ($isAlreadyDowngraded) {
-            return null;
-        }
-
         $parentReturnType = $this->resolveDifferentAncestorReturnType($node, $node->returnType);
         if ($parentReturnType instanceof MixedType) {
             return null;
@@ -142,8 +132,6 @@ CODE_SAMPLE
         if ($this->nodeComparator->areNodesEqual($parentReturnTypeNode, $node->returnType)) {
             return null;
         }
-
-        $node->setAttribute(self::ALREADY_DOWNGRADED, true);
 
         if ($parentReturnType instanceof ThisType) {
             return null;
