@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use Nette\NotImplementedException;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -13,6 +14,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
@@ -96,8 +98,12 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         }
 
         $node = $this->handleEmptyStringToNullMatch($node, $variable);
-        unset($node->args[3]);
 
+        if ($node instanceof Ternary) {
+            return $node;
+        }
+
+        unset($node->args[3]);
         return $node;
     }
 
@@ -154,7 +160,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall
+    private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall|Ternary
     {
         $closure = new Closure();
         $variablePass = new Variable('value');
@@ -177,7 +183,7 @@ CODE_SAMPLE
         return $this->processReplace($funcCall, $replaceEmptyStringToNull);
     }
 
-    private function processReplace(FuncCall $funcCall, FuncCall $replaceEmptystringToNull): FuncCall
+    private function processReplace(FuncCall $funcCall, FuncCall $replaceEmptystringToNull): FuncCall|Ternary
     {
         $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Expression) {
@@ -198,6 +204,10 @@ CODE_SAMPLE
             return $this->processInIf($if, $funcCall, $replaceEmptystringToNull);
         }
 
+        if ($parent instanceof Assign && $parent->expr === $funcCall) {
+            return $this->processInAssign($parent, $funcCall, $replaceEmptystringToNull);
+        }
+
         if (! $parent instanceof Identical) {
             throw new NotImplementedYetException();
         }
@@ -207,6 +217,22 @@ CODE_SAMPLE
         }
 
         return $this->processInIf($if, $funcCall, $replaceEmptystringToNull);
+    }
+
+    private function processInAssign(Assign $assign, FuncCall $funcCall, FuncCall $replaceEmptyStringToNull): Ternary
+    {
+        $matchesVariable = $funcCall->args[2]->value;
+
+        $identical = new Identical($matchesVariable, new Array_([]));
+        $lNumber = new LNumber(1);
+        $ternary = new Ternary($identical, $this->nodeFactory->createFalse(), $lNumber);
+
+        $currentStatement = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
+
+        $expressions = [new Expression($funcCall), new Expression($replaceEmptyStringToNull)];
+        $this->nodesToAddCollector->addNodesBeforeNode($expressions, $currentStatement);
+
+        return $ternary;
     }
 
     private function processInIf(If_ $if, FuncCall $funcCall, FuncCall $replaceEmptyStringToNull): FuncCall
@@ -238,8 +264,10 @@ CODE_SAMPLE
         if ($if->stmts !== []) {
             $firstStmt = $if->stmts[0];
             $this->nodesToAddCollector->addNodeBeforeNode($funcCall, $firstStmt);
-        } else {
-            $if->stmts[0] = new Expression($funcCall);
+
+            return;
         }
+
+        $if->stmts[0] = new Expression($funcCall);
     }
 }
