@@ -1,5 +1,5 @@
 <?php
 
-namespace RectorPrefix20220226;
+namespace RectorPrefix20220227;
 
 return ['TYPO3\\CMS\\Sv\\Report\\ServicesListReport' => 'TYPO3\\CMS\\Reports\\Report\\ServicesListReport'];

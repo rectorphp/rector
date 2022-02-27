@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220226\Webmozart\Assert\Assert;
+use RectorPrefix20220227\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/object-typehint https://github.com/cebe/yii2/commit/9548a212ecf6e50fcdb0e5ba6daad88019cfc544
  *
@@ -66,8 +66,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220226\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220226\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220227\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220227\Webmozart\Assert\Assert::allString($configuration);
         $this->reservedKeywordsToReplacements = $configuration;
     }
     private function processIdentifier(\PhpParser\Node\Identifier $identifier) : \PhpParser\Node\Identifier

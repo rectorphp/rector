@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220226\Idiosyncratic\EditorConfig;
+namespace RectorPrefix20220227\Idiosyncratic\EditorConfig;
 
-use RectorPrefix20220226\Idiosyncratic\EditorConfig\Declaration\Factory;
-use RectorPrefix20220226\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20220227\Idiosyncratic\EditorConfig\Declaration\Factory;
+use RectorPrefix20220227\Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use RuntimeException;
 use function array_merge;
 use function dirname;
@@ -31,9 +31,9 @@ final class EditorConfigFile
     private $sections = [];
     /** @var Factory */
     private $declarationFactory;
-    public function __construct(string $path, ?\RectorPrefix20220226\Idiosyncratic\EditorConfig\Declaration\Factory $declarationFactory = null)
+    public function __construct(string $path, ?\RectorPrefix20220227\Idiosyncratic\EditorConfig\Declaration\Factory $declarationFactory = null)
     {
-        $this->declarationFactory = $declarationFactory ?? new \RectorPrefix20220226\Idiosyncratic\EditorConfig\Declaration\Factory();
+        $this->declarationFactory = $declarationFactory ?? new \RectorPrefix20220227\Idiosyncratic\EditorConfig\Declaration\Factory();
         if (\is_file($path) === \false || \is_readable($path) === \false) {
             throw new \RuntimeException(\sprintf('File %s does not exist or is not readable', $path));
         }
@@ -84,13 +84,13 @@ final class EditorConfigFile
             if (\is_array($declarations) === \false) {
                 continue;
             }
-            $this->sections[] = new \RectorPrefix20220226\Idiosyncratic\EditorConfig\Section($this->getGlobPrefix($glob), $glob, $declarations, $this->declarationFactory);
+            $this->sections[] = new \RectorPrefix20220227\Idiosyncratic\EditorConfig\Section($this->getGlobPrefix($glob), $glob, $declarations, $this->declarationFactory);
         }
     }
     private function setIsRoot(string $isRoot) : void
     {
         if (\in_array($isRoot, ['true', 'false']) === \false) {
-            throw new \RectorPrefix20220226\Idiosyncratic\EditorConfig\Exception\InvalidValue('root', $isRoot);
+            throw new \RectorPrefix20220227\Idiosyncratic\EditorConfig\Exception\InvalidValue('root', $isRoot);
         }
         $this->isRoot = $isRoot === 'true';
     }

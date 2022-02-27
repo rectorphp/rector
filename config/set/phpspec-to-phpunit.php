@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220226;
+namespace RectorPrefix20220227;
 
 use Rector\PhpSpecToPHPUnit\Rector\Class_\AddMockPropertiesRector;
 use Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector;

@@ -2967,7 +2967,6 @@ Remove dead try/catch
 -        catch (Throwable $throwable) {
 -            throw $throwable;
 -        }
-+        // some code
      }
  }
 ```

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220226\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
+namespace RectorPrefix20220227\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
-final class CallablePhpDocNodeVisitor extends \RectorPrefix20220226\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+final class CallablePhpDocNodeVisitor extends \RectorPrefix20220227\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var callable(Node, string|null): (int|null|Node)

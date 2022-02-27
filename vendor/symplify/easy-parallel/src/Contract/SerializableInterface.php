@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220226\Symplify\EasyParallel\Contract;
+namespace RectorPrefix20220227\Symplify\EasyParallel\Contract;
 
 use JsonSerializable;
 interface SerializableInterface extends \JsonSerializable
