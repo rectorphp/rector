@@ -7,6 +7,7 @@ use RectorPrefix20220227\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -145,6 +146,10 @@ final class ClassRenamer
     }
     private function shouldSkip(string $newName, \PhpParser\Node\Name $name, ?\PhpParser\Node $parentNode = null) : bool
     {
+        if ($parentNode instanceof \PhpParser\Node\Expr\StaticCall && $parentNode->class === $name && $this->reflectionProvider->hasClass($newName)) {
+            $classReflection = $this->reflectionProvider->getClass($newName);
+            return $classReflection->isInterface();
+        }
         // parent is not a Node, possibly removed by other rule
         // skip change it
         if (!$parentNode instanceof \PhpParser\Node) {
