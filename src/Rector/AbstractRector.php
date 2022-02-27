@@ -57,6 +57,23 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
      */
     private const ATTRIBUTES_TO_MIRROR = [\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES, \Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, \Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME, \Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, \Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT, \Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT];
     /**
+     * @var string
+     */
+    private const MESSAGE = <<<CODE_SAMPLE
+
+
+Array of nodes must not be empty, ensure %s->refactor() returns non-empty array for Nodes.
+
+You can also either return null for no change:
+
+    return null;
+
+or remove the Node if not needed via
+
+    \$this->removeNode(\$node);
+    return \$node;
+CODE_SAMPLE;
+    /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     protected $nodeNameResolver;
@@ -234,8 +251,11 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $originalAttributes = $node->getAttributes();
         $node = $this->refactor($node);
         // nothing to change → continue
-        if ($this->isNothingToChange($node)) {
+        if ($node === null) {
             return null;
+        }
+        if ($node === []) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf(self::MESSAGE, static::class));
         }
         /** @var Node[]|Node $node */
         $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
@@ -393,16 +413,6 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     protected function removeNodes(array $nodes) : void
     {
         $this->nodeRemover->removeNodes($nodes);
-    }
-    /**
-     * @param mixed[]|\PhpParser\Node|null $node
-     */
-    private function isNothingToChange($node) : bool
-    {
-        if ($node === null) {
-            return \true;
-        }
-        return $node === [];
     }
     /**
      * @param class-string<Node> $nodeClass
