@@ -5,8 +5,8 @@ namespace Rector\Core\Configuration;
 
 use ReflectionClass;
 use ReflectionMethod;
-use RectorPrefix20220227\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220227\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
+use RectorPrefix20220228\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220228\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
 final class ValueObjectInliner
 {
     /**
@@ -59,12 +59,12 @@ final class ValueObjectInliner
     /**
      * @param object $object
      */
-    private static function inlineSingle($object) : \RectorPrefix20220227\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
+    private static function inlineSingle($object) : \RectorPrefix20220228\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
     {
         $reflectionClass = new \ReflectionClass($object);
         $className = $reflectionClass->getName();
         $argumentValues = self::resolveArgumentValues($reflectionClass, $object);
-        $inlineServiceConfigurator = new \RectorPrefix20220227\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator(new \RectorPrefix20220227\Symfony\Component\DependencyInjection\Definition($className));
+        $inlineServiceConfigurator = new \RectorPrefix20220228\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator(new \RectorPrefix20220228\Symfony\Component\DependencyInjection\Definition($className));
         if ($argumentValues !== []) {
             $inlineServiceConfigurator->args($argumentValues);
         }

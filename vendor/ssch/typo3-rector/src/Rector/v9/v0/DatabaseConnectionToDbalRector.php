@@ -56,7 +56,7 @@ final class DatabaseConnectionToDbalRector extends \Rector\Core\Rector\AbstractR
             if ($databaseConnectionRefactoring->canHandle($methodName)) {
                 $nodes = $databaseConnectionRefactoring->refactor($node);
                 foreach ($nodes as $newNode) {
-                    $this->addNodeBeforeNode($newNode, $node);
+                    $this->nodesToAddCollector->addNodeBeforeNode($newNode, $node);
                 }
                 $this->removeNode($node);
             }

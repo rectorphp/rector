@@ -25,7 +25,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220227\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
+use RectorPrefix20220228\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80514-GraphicalFunctions-tempPathAndCreateTempSubDir.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRector\RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRectorTest
@@ -112,7 +112,7 @@ CODE_SAMPLE
         $anonymousFunction->stmts[] = $ifIsNotDir;
         $anonymousFunction->stmts[] = new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createFalse());
         $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CREATE_TEMP_SUB_DIR), $anonymousFunction)), $parentNode);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CREATE_TEMP_SUB_DIR), $anonymousFunction)), $parentNode);
         // Could not figure how to call the closure like that $function();
         return $this->nodeFactory->createFuncCall('call_user_func', [new \PhpParser\Node\Expr\Variable(self::CREATE_TEMP_SUB_DIR), new \PhpParser\Node\Scalar\String_('typo3temp'), $node->args[0]->value]);
     }

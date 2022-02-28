@@ -1,4 +1,4 @@
-# 232 Rules Overview
+# 233 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -1066,6 +1066,19 @@ Use fully qualified names
              'News' => 'searchForm,searchResult',
          ]
      );
+```
+
+<br>
+
+## GeneralUtilityGetHostNameToGetIndpEnvRector
+
+Migrating method call `GeneralUtility::getHostname()` to GeneralUtility::getIndpEnv('HTTP_HOST')
+
+- class: [`Ssch\TYPO3Rector\Rector\v9\v4\GeneralUtilityGetHostNameToGetIndpEnvRector`](../src/Rector/v9/v4/GeneralUtilityGetHostNameToGetIndpEnvRector.php)
+
+```diff
+-\TYPO3\CMS\Core\Utility\GeneralUtility::getHostname();
++\TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('HTTP_HOST')
 ```
 
 <br>

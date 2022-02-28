@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220227\Webmozart\Assert\Assert;
+use RectorPrefix20220228\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\Class_\AddInterfaceByTraitRector\AddInterfaceByTraitRectorTest
  */
@@ -57,6 +57,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
+        $hasChanged = \false;
         foreach ($this->interfaceByTrait as $traitName => $interfaceName) {
             if (!$classReflection->hasTraitUse($traitName)) {
                 continue;
@@ -67,6 +68,10 @@ CODE_SAMPLE
                 }
             }
             $node->implements[] = new \PhpParser\Node\Name\FullyQualified($interfaceName);
+            $hasChanged = \true;
+        }
+        if (!$hasChanged) {
+            return null;
         }
         return $node;
     }
@@ -76,8 +81,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220227\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220227\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220228\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220228\Webmozart\Assert\Assert::allString($configuration);
         $this->interfaceByTrait = $configuration;
     }
 }

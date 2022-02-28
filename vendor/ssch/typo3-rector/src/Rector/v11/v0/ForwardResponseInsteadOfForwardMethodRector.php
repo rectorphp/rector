@@ -82,7 +82,7 @@ CODE_SAMPLE
                 $forwardResponse = $this->nodeFactory->createMethodCall($forwardResponse, 'withArguments', [$forwardMethodCall->args[3]->value]);
             }
             $returnForwardResponse = new \PhpParser\Node\Stmt\Return_($forwardResponse);
-            $this->addNodeBeforeNode($returnForwardResponse, $forwardMethodCall);
+            $this->nodesToAddCollector->addNodeBeforeNode($returnForwardResponse, $forwardMethodCall);
             $this->removeNode($forwardMethodCall);
         }
         // Add returnType only if it is the only statement, otherwise it is not reliable

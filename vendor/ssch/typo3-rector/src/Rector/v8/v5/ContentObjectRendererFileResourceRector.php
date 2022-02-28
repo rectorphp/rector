@@ -95,19 +95,19 @@ CODE_SAMPLE
         $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parentNode->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             $initializeVariable = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($parentNode->var, new \PhpParser\Node\Scalar\String_('')));
-            $this->addNodeBeforeNode($initializeVariable, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($initializeVariable, $node);
         }
     }
     private function addTypoScriptFrontendControllerAssignmentNode(\PhpParser\Node\Expr\MethodCall $node) : void
     {
         $typoscriptFrontendControllerVariable = new \PhpParser\Node\Expr\Variable('typoscriptFrontendController');
         $typoscriptFrontendControllerNode = new \PhpParser\Node\Expr\Assign($typoscriptFrontendControllerVariable, new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)));
-        $this->addNodeBeforeNode($typoscriptFrontendControllerNode, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($typoscriptFrontendControllerNode, $node);
     }
     private function addFileNameNode(\PhpParser\Node\Expr\MethodCall $node) : void
     {
         $fileNameNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PATH), $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch(new \PhpParser\Node\Expr\Variable('typoscriptFrontendController'), 'tmpl'), 'getFileName', $node->args));
-        $this->addNodeBeforeNode($fileNameNode, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($fileNameNode, $node);
     }
     private function addIfNode(\PhpParser\Node\Expr\MethodCall $node) : void
     {
@@ -115,6 +115,6 @@ CODE_SAMPLE
         $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\BooleanAnd(new \PhpParser\Node\Expr\BinaryOp\NotIdentical(new \PhpParser\Node\Expr\Variable(self::PATH), $this->nodeFactory->createNull()), $this->nodeFactory->createFuncCall('file_exists', [new \PhpParser\Node\Expr\Variable(self::PATH)])));
         $templateAssignment = new \PhpParser\Node\Expr\Assign($parentNode->var, $this->nodeFactory->createFuncCall('file_get_contents', [new \PhpParser\Node\Expr\Variable(self::PATH)]));
         $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression($templateAssignment);
-        $this->addNodeBeforeNode($ifNode, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($ifNode, $node);
     }
 }

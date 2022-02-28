@@ -78,7 +78,7 @@ final class RefactorVariousGeneralUtilityMethodsRector extends \Rector\Core\Rect
         }
         if (self::CONVERT_MICROTIME === $nodeName) {
             $funcCall = $this->nodeFactory->createFuncCall('explode', [new \PhpParser\Node\Scalar\String_(' '), $node->args[0]->value]);
-            $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARTS), $funcCall)), $node);
+            $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARTS), $funcCall)), $node);
             return $this->nodeFactory->createFuncCall('round', [new \PhpParser\Node\Expr\BinaryOp\Mul(new \PhpParser\Node\Expr\BinaryOp\Plus(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::PARTS), new \PhpParser\Node\Scalar\LNumber(0)), new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::PARTS), new \PhpParser\Node\Scalar\LNumber(1))), new \PhpParser\Node\Scalar\LNumber(1000))]);
         }
         if (self::RAW_URL_ENCODE_JS === $nodeName) {

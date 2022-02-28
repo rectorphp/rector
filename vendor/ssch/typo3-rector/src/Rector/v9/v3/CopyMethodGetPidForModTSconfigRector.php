@@ -42,7 +42,7 @@ final class CopyMethodGetPidForModTSconfigRector extends \Rector\Core\Rector\Abs
         $tableVariableNode = $node->args[0]->value;
         if ($tableVariableNode instanceof \PhpParser\Node\Scalar\String_) {
             $tableVariableNode = new \PhpParser\Node\Expr\Variable('table');
-            $this->addNodeBeforeNode(new \PhpParser\Node\Expr\Assign($tableVariableNode, $node->args[0]->value), $node);
+            $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Expr\Assign($tableVariableNode, $node->args[0]->value), $node);
         }
         return new \PhpParser\Node\Expr\Ternary(new \PhpParser\Node\Expr\BinaryOp\BooleanAnd(new \PhpParser\Node\Expr\BinaryOp\Identical($tableVariableNode, new \PhpParser\Node\Scalar\String_('pages')), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\MathUtility', 'canBeInterpretedAsInteger', [$node->args[1]])), $node->args[1]->value, $node->args[2]->value);
     }

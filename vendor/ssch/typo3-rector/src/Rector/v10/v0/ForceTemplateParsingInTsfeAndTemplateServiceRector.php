@@ -56,7 +56,7 @@ final class ForceTemplateParsingInTsfeAndTemplateServiceRector extends \Rector\C
         if ($this->isPropertyForceTemplateParsing($node->var)) {
             //$node->var (left side is the target property, so its an assigment to it)
             $contextCall = $this->createCallForSettingProperty();
-            $this->addNodeAfterNode($contextCall, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($contextCall, $node);
             try {
                 $this->removeNode($node);
             } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {

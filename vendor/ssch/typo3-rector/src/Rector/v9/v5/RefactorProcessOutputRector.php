@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220227\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use RectorPrefix20220228\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.5/Deprecation-86486-TypoScriptFrontendController-processOutput.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v5\RefactorProcessOutputRector\RefactorProcessOutputRectorTest
@@ -82,6 +82,6 @@ CODE_SAMPLE
         $response = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('TYPO3\\CMS\\Core\\Http\\Response'));
         $node->args[0] = $this->nodeFactory->createArg($response);
         $newNode = $this->nodeFactory->createMethodCall($node->var, 'processContentForOutput');
-        $this->addNodeAfterNode($newNode, $node);
+        $this->nodesToAddCollector->addNodeAfterNode($newNode, $node);
     }
 }

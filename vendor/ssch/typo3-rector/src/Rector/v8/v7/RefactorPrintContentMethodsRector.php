@@ -47,7 +47,7 @@ final class RefactorPrintContentMethodsRector extends \Rector\Core\Rector\Abstra
             $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             $this->removeNode($parentNode);
         }
-        $this->addNodeBeforeNode($newNode, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($newNode, $node);
         return $node;
     }
     /**

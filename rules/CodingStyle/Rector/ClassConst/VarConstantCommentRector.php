@@ -94,6 +94,9 @@ CODE_SAMPLE
             return null;
         }
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $constType);
+        if (!$phpDocInfo->hasChanged()) {
+            return null;
+        }
         return $node;
     }
     private function hasTwoAndMoreGenericClassStringTypes(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : bool

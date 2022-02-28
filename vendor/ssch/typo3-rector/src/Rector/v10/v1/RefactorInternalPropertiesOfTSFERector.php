@@ -121,10 +121,10 @@ CODE_SAMPLE
     {
         $currentStmts = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
         $positionNode = $currentStmts ?? $node;
-        $this->addNodeBeforeNode($this->initializeEmptyArray(), $positionNode);
-        $this->addNodeBeforeNode($this->initializePageArguments(), $positionNode);
-        $this->addNodeBeforeNode($this->initializeQueryParams(), $positionNode);
-        $this->addNodeBeforeNode($this->getRelevantParametersFromCacheHashCalculator(), $positionNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($this->initializeEmptyArray(), $positionNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($this->initializePageArguments(), $positionNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($this->initializeQueryParams(), $positionNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($this->getRelevantParametersFromCacheHashCalculator(), $positionNode);
         return new \PhpParser\Node\Expr\Variable(self::RELEVANT_PARAMETERS_FOR_CACHING_FROM_PAGE_ARGUMENTS);
     }
     private function refactorCacheHash() : \PhpParser\Node

@@ -11,7 +11,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Removing\ValueObject\RemoveFuncCallArg;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220227\Webmozart\Assert\Assert;
+use RectorPrefix20220228\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Removing\Rector\FuncCall\RemoveFuncCallArgRector\RemoveFuncCallArgRectorTest
  */
@@ -46,6 +46,7 @@ CODE_SAMPLE
         if ($node->name instanceof \PhpParser\Node\Expr) {
             return null;
         }
+        $hasChanged = \false;
         foreach ($this->removedFunctionArguments as $removedFunctionArgument) {
             if (!$this->isName($node->name, $removedFunctionArgument->getFunction())) {
                 continue;
@@ -55,7 +56,11 @@ CODE_SAMPLE
                     continue;
                 }
                 $this->nodeRemover->removeArg($node, $position);
+                $hasChanged = \true;
             }
+        }
+        if (!$hasChanged) {
+            return null;
         }
         return $node;
     }
@@ -64,7 +69,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220227\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Removing\ValueObject\RemoveFuncCallArg::class);
+        \RectorPrefix20220228\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Removing\ValueObject\RemoveFuncCallArg::class);
         $this->removedFunctionArguments = $configuration;
     }
 }

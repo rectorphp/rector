@@ -147,7 +147,7 @@ CODE_SAMPLE
         $propertyTagsValuesNode = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($propertyTagsValuesVariable, new \PhpParser\Node\Expr\BinaryOp\Coalesce($this->createArrayDimFetchTags($node), $this->nodeFactory->createArray([]))));
         $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
         $positionNode = $currentStmt ?? $node;
-        $this->addNodeBeforeNode($propertyTagsValuesNode, $positionNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($propertyTagsValuesNode, $positionNode);
         return $propertyTagsValuesVariable;
     }
     private function refactorGetClassPropertyNamesMethod(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node
@@ -209,7 +209,7 @@ CODE_SAMPLE
         $propertyNode = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($propertyVariable, $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($node->var, 'getClassSchema', [$node->args[0]->value]), 'getProperty', [$node->args[1]->value])));
         $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
         $positionNode = $currentStmt ?? $node;
-        $this->addNodeBeforeNode($propertyNode, $positionNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($propertyNode, $positionNode);
         return new \PhpParser\Node\Expr\Ternary(new \PhpParser\Node\Expr\Empty_($propertyVariable), $this->nodeFactory->createFalse(), new \PhpParser\Node\Expr\Isset_([new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch($propertyVariable, new \PhpParser\Node\Scalar\String_(self::TAGS)), $node->args[2]->value)]));
     }
     private function refactorIsClassTaggedWith(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
@@ -221,7 +221,7 @@ CODE_SAMPLE
         $closureUse = $tagValue instanceof \PhpParser\Node\Expr\Variable ? $tagValue : new \PhpParser\Node\Expr\Variable('tag');
         if (!$tagValue instanceof \PhpParser\Node\Expr\Variable) {
             $tempVarNode = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($closureUse, $tagValue));
-            $this->addNodeBeforeNode($tempVarNode, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE));
+            $this->nodesToAddCollector->addNodeBeforeNode($tempVarNode, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE));
         }
         $anonymousFunction = new \PhpParser\Node\Expr\Closure();
         $anonymousFunction->uses[] = new \PhpParser\Node\Expr\ClosureUse($closureUse);

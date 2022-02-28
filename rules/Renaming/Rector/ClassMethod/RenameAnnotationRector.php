@@ -15,7 +15,7 @@ use Rector\Renaming\Contract\RenameAnnotationInterface;
 use Rector\Renaming\ValueObject\RenameAnnotationByType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220227\Webmozart\Assert\Assert;
+use RectorPrefix20220228\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\ClassMethod\RenameAnnotationRector\RenameAnnotationRectorTest
  */
@@ -81,11 +81,16 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $hasChanged = \false;
         foreach ($this->renameAnnotations as $renameAnnotation) {
             if ($renameAnnotation instanceof \Rector\Renaming\ValueObject\RenameAnnotationByType && !$this->isObjectType($classLike, $renameAnnotation->getObjectType())) {
                 continue;
             }
             $this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, $renameAnnotation->getOldAnnotation(), $renameAnnotation->getNewAnnotation());
+            $hasChanged = \true;
+        }
+        if (!$hasChanged) {
+            return null;
         }
         return $node;
     }
@@ -94,7 +99,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220227\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\Contract\RenameAnnotationInterface::class);
+        \RectorPrefix20220228\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\Contract\RenameAnnotationInterface::class);
         $this->renameAnnotations = $configuration;
     }
 }

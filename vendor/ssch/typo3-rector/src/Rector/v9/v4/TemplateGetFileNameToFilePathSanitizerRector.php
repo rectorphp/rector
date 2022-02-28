@@ -67,7 +67,7 @@ final class TemplateGetFileNameToFilePathSanitizerRector extends \Rector\Core\Re
         $assignmentNodeNull = $this->createNullAssignment($parentNode);
         $catches = [$this->createCatchBlockToIgnore($assignmentNodeNull), $this->createCatchBlockToLog([$assignmentNodeNull, $this->createIfLog()])];
         $tryCatchNode = new \PhpParser\Node\Stmt\TryCatch([$assignmentNode], $catches);
-        $this->addNodeBeforeNode($tryCatchNode, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($tryCatchNode, $node);
         return $node;
     }
     /**

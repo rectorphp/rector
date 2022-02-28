@@ -60,7 +60,7 @@ final class UseGetMenuInsteadOfGetFirstWebPageRector extends \Rector\Core\Rector
         $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Empty_($rootLevelPagesVariable)));
         $parentNode->expr = $resetRootLevelPagesNode;
         $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression($parentNode);
-        $this->addNodeBeforeNode($ifNode, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($ifNode, $node);
         try {
             $this->removeNode($node);
         } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
@@ -95,6 +95,6 @@ CODE_SAMPLE
     private function addRootLevelPagesAssignment(\PhpParser\Node\Expr\Variable $rootLevelPagesVariable, \PhpParser\Node\Expr\MethodCall $node) : void
     {
         $rootLevelPagesNode = new \PhpParser\Node\Expr\Assign($rootLevelPagesVariable, $this->nodeFactory->createMethodCall($node->var, 'getMenu', [$node->args[0], 'uid', 'sorting', '', \false]));
-        $this->addNodeBeforeNode($rootLevelPagesNode, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($rootLevelPagesNode, $node);
     }
 }

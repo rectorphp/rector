@@ -48,10 +48,10 @@ final class UseLogMethodInsteadOfNewLog2Rector extends \Rector\Core\Rector\Abstr
         }
         if (!isset($node->args[3]) || isset($node->args[3]) && $this->valueResolver->isNull($node->args[3]->value)) {
             $propArrayNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('propArr'), $this->nodeFactory->createMethodCall($node->var, 'getRecordProperties', [$node->args[1], $node->args[2]]));
-            $this->addNodeBeforeNode($propArrayNode, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($propArrayNode, $node);
             $pidNode = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PID), new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('propArr'), new \PhpParser\Node\Scalar\String_(self::PID))));
-            $this->addNodeBeforeNode($pidNode, $node);
-            $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Nop(), $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($pidNode, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Nop(), $node);
         }
         $node->name = new \PhpParser\Node\Identifier('log');
         $node->args = $this->nodeFactory->createArgs([$node->args[1], $node->args[2], new \PhpParser\Node\Scalar\LNumber(0), new \PhpParser\Node\Scalar\LNumber(0), $node->args[4] ?? new \PhpParser\Node\Scalar\LNumber(0), $node->args[0], new \PhpParser\Node\Scalar\LNumber(-1), new \PhpParser\Node\Expr\Array_(), $this->nodeFactory->createMethodCall($node->var, 'eventPid', [$node->args[1], $node->args[2], isset($node->args[3]) && !$this->valueResolver->isNull($node->args[3]->value) ? $node->args[3] : new \PhpParser\Node\Expr\Variable(self::PID)])]);

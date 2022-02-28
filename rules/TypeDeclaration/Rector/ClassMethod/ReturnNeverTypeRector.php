@@ -89,7 +89,10 @@ CODE_SAMPLE
         } else {
             // static anlysis based never type
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new \PHPStan\Type\NeverType());
+            $hasChanged = $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new \PHPStan\Type\NeverType());
+            if (!$hasChanged) {
+                return null;
+            }
         }
         return $node;
     }
