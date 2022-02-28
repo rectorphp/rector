@@ -71,6 +71,7 @@ CODE_SAMPLE
             return null;
         }
 
+        $hasChanged = false;
         foreach ($this->interfaceByTrait as $traitName => $interfaceName) {
             if (! $classReflection->hasTraitUse($traitName)) {
                 continue;
@@ -83,6 +84,11 @@ CODE_SAMPLE
             }
 
             $node->implements[] = new FullyQualified($interfaceName);
+            $hasChanged = true;
+        }
+
+        if (! $hasChanged) {
+            return null;
         }
 
         return $node;

@@ -82,7 +82,7 @@ CODE_SAMPLE
         }
 
         $printedClass = $this->print($class);
-
+        $hasChanged = false;
         foreach ($this->useImportsToRestore as $useImportToRestore) {
             $annotationToSeek = '#\*\s+\@' . $useImportToRestore->getAlias() . '#';
             if (! StringUtils::isMatch($printedClass, $annotationToSeek)) {
@@ -90,6 +90,11 @@ CODE_SAMPLE
             }
 
             $node = $this->addImportToNamespaceIfMissing($node, $useImportToRestore);
+            $hasChanged = true;
+        }
+
+        if (! $hasChanged) {
+            return null;
         }
 
         return $node;

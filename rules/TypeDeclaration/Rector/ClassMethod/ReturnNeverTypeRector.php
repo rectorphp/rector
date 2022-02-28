@@ -90,7 +90,11 @@ CODE_SAMPLE
         } else {
             // static anlysis based never type
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new NeverType());
+            $hasChanged = $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new NeverType());
+
+            if (! $hasChanged) {
+                return null;
+            }
         }
 
         return $node;

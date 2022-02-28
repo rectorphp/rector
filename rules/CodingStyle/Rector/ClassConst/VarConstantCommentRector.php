@@ -98,6 +98,10 @@ CODE_SAMPLE
 
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $constType);
 
+        if (! $phpDocInfo->hasChanged()) {
+            return null;
+        }
+
         return $node;
     }
 

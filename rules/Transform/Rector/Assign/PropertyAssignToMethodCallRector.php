@@ -82,7 +82,7 @@ CODE_SAMPLE
             );
         }
 
-        return $node;
+        return null;
     }
 
     /**

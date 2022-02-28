@@ -67,6 +67,7 @@ CODE_SAMPLE
             return null;
         }
 
+        $hasChanged = false;
         foreach ($node->implements as $key => $implement) {
             $oldInterfaces = array_keys($this->oldToNewInterfaces);
             if (! $this->isNames($implement, $oldInterfaces)) {
@@ -75,6 +76,11 @@ CODE_SAMPLE
 
             $interface = $this->getName($implement);
             $node->implements[$key] = new Name($this->oldToNewInterfaces[$interface]);
+            $hasChanged = true;
+        }
+
+        if (! $hasChanged) {
+            return null;
         }
 
         $this->makeImplementsUnique($node);

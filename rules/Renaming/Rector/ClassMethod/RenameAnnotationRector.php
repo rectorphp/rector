@@ -92,6 +92,7 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $hasChanged = false;
 
         foreach ($this->renameAnnotations as $renameAnnotation) {
             if ($renameAnnotation instanceof RenameAnnotationByType && ! $this->isObjectType(
@@ -106,6 +107,11 @@ CODE_SAMPLE
                 $renameAnnotation->getOldAnnotation(),
                 $renameAnnotation->getNewAnnotation()
             );
+            $hasChanged = true;
+        }
+
+        if (! $hasChanged) {
+            return null;
         }
 
         return $node;

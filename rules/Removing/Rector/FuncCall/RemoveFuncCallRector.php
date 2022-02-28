@@ -74,10 +74,13 @@ CODE_SAMPLE
 
             if ($removeFuncCall->getArgumentPositionAndValues() === []) {
                 $this->removeNode($node);
-                return null;
+                return $node;
             }
 
-            $this->refactorFuncCallsWithPositions($node, $removeFuncCall);
+            $removedFuncCall = $this->refactorFuncCallsWithPositions($node, $removeFuncCall);
+            if ($removedFuncCall instanceof FuncCall) {
+                return $node;
+            }
         }
 
         return null;
@@ -92,7 +95,7 @@ CODE_SAMPLE
         $this->removeFuncCalls = $configuration;
     }
 
-    private function refactorFuncCallsWithPositions(FuncCall $funcCall, RemoveFuncCall $removeFuncCall): void
+    private function refactorFuncCallsWithPositions(FuncCall $funcCall, RemoveFuncCall $removeFuncCall): ?FuncCall
     {
         foreach ($removeFuncCall->getArgumentPositionAndValues() as $argumentPosition => $values) {
             if (! $this->isArgumentPositionValueMatch($funcCall, $argumentPosition, $values)) {
@@ -101,8 +104,11 @@ CODE_SAMPLE
 
             if ($this->breakingRemovalGuard->isLegalNodeRemoval($funcCall)) {
                 $this->removeNode($funcCall);
+                return $funcCall;
             }
         }
+
+        return null;
     }
 
     /**

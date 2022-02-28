@@ -58,6 +58,7 @@ CODE_SAMPLE
             return null;
         }
 
+        $hasChanged = false;
         foreach ($this->removedFunctionArguments as $removedFunctionArgument) {
             if (! $this->isName($node->name, $removedFunctionArgument->getFunction())) {
                 continue;
@@ -69,7 +70,12 @@ CODE_SAMPLE
                 }
 
                 $this->nodeRemover->removeArg($node, $position);
+                $hasChanged = true;
             }
+        }
+
+        if (! $hasChanged) {
+            return null;
         }
 
         return $node;
