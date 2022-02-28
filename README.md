@@ -147,6 +147,13 @@ See [the contribution guide](/CONTRIBUTING.md) or go to development repository [
 
 <br>
 
+## Projects using Rector
+
+- [`codito/rector-money`](https://packagist.org/packages/codito/rector-money): set of rules related to `moneyphp/money`
+  library. It can help you with upgrading to v4.0 or make your codebase compatible for future upgrade.
+
+<br>
+
 ## Debugging
 
 You can use `--debug` option, that will print nested exceptions output:
