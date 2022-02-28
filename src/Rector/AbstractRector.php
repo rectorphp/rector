@@ -386,40 +386,6 @@ CODE_SAMPLE;
         return $stmt;
     }
 
-    /**
-     * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
-     * @param Node[] $newNodes
-     */
-    protected function addNodesAfterNode(array $newNodes, Node $positionNode): void
-    {
-        $this->nodesToAddCollector->addNodesAfterNode($newNodes, $positionNode);
-    }
-
-    /**
-     * @param Node[] $newNodes
-     * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
-     */
-    protected function addNodesBeforeNode(array $newNodes, Node $positionNode): void
-    {
-        $this->nodesToAddCollector->addNodesBeforeNode($newNodes, $positionNode);
-    }
-
-    /**
-     * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
-     */
-    protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
-    {
-        $this->nodesToAddCollector->addNodeAfterNode($newNode, $positionNode);
-    }
-
-    /**
-     * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
-     */
-    protected function addNodeBeforeNode(Node $newNode, Node $positionNode): void
-    {
-        $this->nodesToAddCollector->addNodeBeforeNode($newNode, $positionNode);
-    }
-
     protected function removeNode(Node $node): void
     {
         $this->nodeRemover->removeNode($node);

@@ -125,7 +125,7 @@ CODE_SAMPLE
             ? $this->applyArrayFilterUseKey($args, $closure, $variable)
             : $this->applyArrayFilterUseBoth($args, $closure, $variable);
 
-        $this->addNodeBeforeNode($foreach, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($foreach, $currentStatement);
 
         return $variable;
     }

@@ -141,12 +141,12 @@ CODE_SAMPLE
             $variableReflectionClassConstants,
             new MethodCall($methodCall->var, 'getReflectionConstants')
         );
-        $this->addNodeBeforeNode(new Expression($assign), $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $currentStmt);
 
         $result = $this->variableNaming->createCountedValueName('result', $scope);
         $variableResult = new Variable($result);
         $assignVariableResult = new Assign($variableResult, new Array_());
-        $this->addNodeBeforeNode(new Expression($assignVariableResult), $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assignVariableResult), $currentStmt);
 
         $ifs = [];
         $valueVariable = new Variable('value');
@@ -174,7 +174,7 @@ CODE_SAMPLE
             'array_walk',
             [$variableReflectionClassConstants, $closure]
         );
-        $this->addNodeBeforeNode(new Expression($funcCall), $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($funcCall), $currentStmt);
 
         return $variableResult;
     }
