@@ -47,7 +47,7 @@ class FrozenParameterBag extends \RectorPrefix20220228\Symfony\Component\Depende
     }
     /**
      * {@inheritdoc}
-     * @param mixed[]|bool|float|int|string|null $value
+     * @param mixed[]|bool|float|int|string|\UnitEnum|null $value
      */
     public function set(string $name, $value)
     {

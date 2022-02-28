@@ -101,7 +101,7 @@ class Container implements \RectorPrefix20220228\Symfony\Component\DependencyInj
     /**
      * Gets a parameter.
      *
-     * @return array|bool|string|int|float|null
+     * @return array|bool|string|int|float|\UnitEnum|null
      *
      * @throws InvalidArgumentException if the parameter is not defined
      */
@@ -114,7 +114,7 @@ class Container implements \RectorPrefix20220228\Symfony\Component\DependencyInj
         return $this->parameterBag->has($name);
     }
     /**
-     * @param mixed[]|bool|float|int|string|null $value
+     * @param mixed[]|bool|float|int|string|\UnitEnum|null $value
      */
     public function setParameter(string $name, $value)
     {

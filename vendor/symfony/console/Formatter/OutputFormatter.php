@@ -125,6 +125,9 @@ class OutputFormatter implements \RectorPrefix20220228\Symfony\Component\Console
      */
     public function formatAndWrap(?string $message, int $width)
     {
+        if (null === $message) {
+            return '';
+        }
         $offset = 0;
         $output = '';
         $openTagRegex = '[a-z](?:[^\\\\<>]*+ | \\\\.)*';

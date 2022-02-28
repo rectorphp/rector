@@ -71,9 +71,6 @@ class MergeExtensionConfigurationPass implements \RectorPrefix20220228\Symfony\C
                 if ($resolvingBag instanceof \RectorPrefix20220228\Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationParameterBag) {
                     $container->getParameterBag()->mergeEnvPlaceholders($resolvingBag);
                 }
-                if ($configAvailable) {
-                    \RectorPrefix20220228\Symfony\Component\Config\Definition\BaseNode::resetPlaceholders();
-                }
                 throw $e;
             }
             if ($resolvingBag instanceof \RectorPrefix20220228\Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationParameterBag) {
@@ -82,9 +79,6 @@ class MergeExtensionConfigurationPass implements \RectorPrefix20220228\Symfony\C
             }
             $container->merge($tmpContainer);
             $container->getParameterBag()->add($parameters);
-        }
-        if ($configAvailable) {
-            \RectorPrefix20220228\Symfony\Component\Config\Definition\BaseNode::resetPlaceholders();
         }
         $container->addDefinitions($definitions);
         $container->addAliases($aliases);

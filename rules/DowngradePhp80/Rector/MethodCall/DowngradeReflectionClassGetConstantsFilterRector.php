@@ -123,11 +123,11 @@ CODE_SAMPLE
         }
         $variableReflectionClassConstants = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName($reflectionClassConstants, $scope));
         $assign = new \PhpParser\Node\Expr\Assign($variableReflectionClassConstants, new \PhpParser\Node\Expr\MethodCall($methodCall->var, 'getReflectionConstants'));
-        $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assign), $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assign), $currentStmt);
         $result = $this->variableNaming->createCountedValueName('result', $scope);
         $variableResult = new \PhpParser\Node\Expr\Variable($result);
         $assignVariableResult = new \PhpParser\Node\Expr\Assign($variableResult, new \PhpParser\Node\Expr\Array_());
-        $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assignVariableResult), $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assignVariableResult), $currentStmt);
         $ifs = [];
         $valueVariable = new \PhpParser\Node\Expr\Variable('value');
         $key = new \PhpParser\Node\Expr\MethodCall($valueVariable, 'getName');
@@ -143,7 +143,7 @@ CODE_SAMPLE
         $closure->uses = [new \PhpParser\Node\Expr\ClosureUse($variableResult, \true)];
         $closure->stmts = $ifs;
         $funcCall = $this->nodeFactory->createFuncCall('array_walk', [$variableReflectionClassConstants, $closure]);
-        $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($funcCall), $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($funcCall), $currentStmt);
         return $variableResult;
     }
     private function resolveClassConstFetchName(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : ?string

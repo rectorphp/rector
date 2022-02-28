@@ -11,6 +11,8 @@
 namespace RectorPrefix20220228\Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use RectorPrefix20220228\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220228\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220228\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
@@ -28,6 +30,9 @@ class ParametersConfigurator extends \RectorPrefix20220228\Symfony\Component\Dep
      */
     public final function set(string $name, $value)
     {
+        if ($value instanceof \RectorPrefix20220228\Symfony\Component\ExpressionLanguage\Expression) {
+            throw new \RectorPrefix20220228\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Using an expression in parameter "%s" is not allowed.', $name));
+        }
         $this->container->setParameter($name, static::processValue($value, \true));
         return $this;
     }

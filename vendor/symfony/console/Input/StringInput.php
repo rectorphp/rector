@@ -22,7 +22,8 @@ use RectorPrefix20220228\Symfony\Component\Console\Exception\InvalidArgumentExce
  */
 class StringInput extends \RectorPrefix20220228\Symfony\Component\Console\Input\ArgvInput
 {
-    public const REGEX_STRING = '([^\\s\\\\]+?)';
+    public const REGEX_STRING = '([^\\s]+?)(?:\\s|(?<!\\\\)"|(?<!\\\\)\'|$)';
+    public const REGEX_UNQUOTED_STRING = '([^\\s\\\\]+?)';
     public const REGEX_QUOTED_STRING = '(?:"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\')';
     /**
      * @param string $input A string representing the parameters from the CLI
@@ -58,7 +59,7 @@ class StringInput extends \RectorPrefix20220228\Symfony\Component\Console\Input\
                 $token .= $match[1] . $match[2] . \stripcslashes(\str_replace(['"\'', '\'"', '\'\'', '""'], '', \substr($match[3], 1, -1)));
             } elseif (\preg_match('/' . self::REGEX_QUOTED_STRING . '/A', $input, $match, 0, $cursor)) {
                 $token .= \stripcslashes(\substr($match[0], 1, -1));
-            } elseif (\preg_match('/' . self::REGEX_STRING . '/A', $input, $match, 0, $cursor)) {
+            } elseif (\preg_match('/' . self::REGEX_UNQUOTED_STRING . '/A', $input, $match, 0, $cursor)) {
                 $token .= $match[1];
             } else {
                 // should never happen

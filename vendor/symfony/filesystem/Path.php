@@ -160,11 +160,11 @@ final class Path
      *  - UNIX
      *  - Windows8 and upper
      *
-     * If your operation system or environment isn't supported, an exception is thrown.
+     * If your operating system or environment isn't supported, an exception is thrown.
      *
      * The result is a canonical path.
      *
-     * @throws RuntimeException If your operation system or environment isn't supported
+     * @throws RuntimeException If your operating system or environment isn't supported
      */
     public static function getHomeDirectory() : string
     {
@@ -176,7 +176,7 @@ final class Path
         if (\getenv('HOMEDRIVE') && \getenv('HOMEPATH')) {
             return self::canonicalize(\getenv('HOMEDRIVE') . \getenv('HOMEPATH'));
         }
-        throw new \RectorPrefix20220228\Symfony\Component\Filesystem\Exception\RuntimeException("Cannot find the home directory path: Your environment or operation system isn't supported.");
+        throw new \RectorPrefix20220228\Symfony\Component\Filesystem\Exception\RuntimeException("Cannot find the home directory path: Your environment or operating system isn't supported.");
     }
     /**
      * Returns the root directory of a path.
@@ -505,20 +505,20 @@ final class Path
      * into forward slashes.
      *
      * ```php
-     * $basePath = Path::getLongestCommonBasePath([
+     * $basePath = Path::getLongestCommonBasePath(
      *     '/symfony/css/style.css',
      *     '/symfony/css/..'
-     * ]);
+     * );
      * // => /symfony
      * ```
      *
      * The root is returned if no common base path can be found:
      *
      * ```php
-     * $basePath = Path::getLongestCommonBasePath([
+     * $basePath = Path::getLongestCommonBasePath(
      *     '/symfony/css/style.css',
      *     '/puli/css/..'
-     * ]);
+     * );
      * // => /
      * ```
      *
@@ -526,10 +526,10 @@ final class Path
      * returned.
      *
      * ```php
-     * $basePath = Path::getLongestCommonBasePath([
+     * $basePath = Path::getLongestCommonBasePath(
      *     'C:/symfony/css/style.css',
      *     'D:/symfony/css/..'
-     * ]);
+     * );
      * // => null
      * ```
      */

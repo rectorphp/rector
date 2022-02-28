@@ -51,7 +51,7 @@ class ParameterBag implements \RectorPrefix20220228\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
-     * @return mixed[]|bool|float|int|string|null
+     * @return mixed[]|bool|float|int|string|\UnitEnum|null
      */
     public function get(string $name)
     {
@@ -86,7 +86,7 @@ class ParameterBag implements \RectorPrefix20220228\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
-     * @param mixed[]|bool|float|int|string|null $value
+     * @param mixed[]|bool|float|int|string|\UnitEnum|null $value
      */
     public function set(string $name, $value)
     {

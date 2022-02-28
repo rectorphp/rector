@@ -680,6 +680,9 @@ class YamlFileLoader extends \RectorPrefix20220228\Symfony\Component\DependencyI
                 $value[$k] = $this->resolveServices($v, $file, $isParameter);
             }
         } elseif (\is_string($value) && \strncmp($value, '@=', \strlen('@=')) === 0) {
+            if ($isParameter) {
+                throw new \RectorPrefix20220228\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Using expressions in parameters is not allowed in "%s".', $file));
+            }
             if (!\class_exists(\RectorPrefix20220228\Symfony\Component\ExpressionLanguage\Expression::class)) {
                 throw new \LogicException('The "@=" expression syntax cannot be used without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
             }

@@ -45,14 +45,14 @@ interface ContainerInterface extends \RectorPrefix20220228\Psr\Container\Contain
      */
     public function initialized(string $id) : bool;
     /**
-     * @return array|bool|string|int|float|null
+     * @return array|bool|string|int|float|\UnitEnum|null
      *
      * @throws InvalidArgumentException if the parameter is not defined
      */
     public function getParameter(string $name);
     public function hasParameter(string $name) : bool;
     /**
-     * @param mixed[]|bool|float|int|string|null $value
+     * @param mixed[]|bool|float|int|string|\UnitEnum|null $value
      */
     public function setParameter(string $name, $value);
 }

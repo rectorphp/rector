@@ -112,7 +112,7 @@ CODE_SAMPLE
         /** @var ConstFetch $constant */
         $constant = $args[2]->value;
         $foreach = $this->nodeNameResolver->isName($constant, 'ARRAY_FILTER_USE_KEY') ? $this->applyArrayFilterUseKey($args, $closure, $variable) : $this->applyArrayFilterUseBoth($args, $closure, $variable);
-        $this->addNodeBeforeNode($foreach, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($foreach, $currentStatement);
         return $variable;
     }
     /**

@@ -30,7 +30,7 @@ class ContainerBag extends \RectorPrefix20220228\Symfony\Component\DependencyInj
     }
     /**
      * {@inheritdoc}
-     * @return mixed[]|bool|float|int|string|null
+     * @return mixed[]|bool|float|int|string|\UnitEnum|null
      */
     public function get(string $name)
     {

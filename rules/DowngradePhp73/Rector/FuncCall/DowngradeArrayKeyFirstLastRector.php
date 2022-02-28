@@ -123,7 +123,7 @@ CODE_SAMPLE
      */
     private function addAssignNewVariable(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr, $variable) : void
     {
-        $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $expr)), $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $expr)), $funcCall);
     }
     /**
      * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable
