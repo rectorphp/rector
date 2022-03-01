@@ -5,6 +5,7 @@ namespace Rector\Doctrine\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
@@ -93,7 +94,7 @@ CODE_SAMPLE
             $propertyProperty->default = \boolval($defaultExpr->value) ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse();
             return $property;
         }
-        if ($defaultExpr instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if ($defaultExpr instanceof \PhpParser\Node\Expr\ConstFetch || $defaultExpr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             // already ok
             return null;
         }
