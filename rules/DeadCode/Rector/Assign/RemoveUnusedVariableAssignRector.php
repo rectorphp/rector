@@ -25,6 +25,7 @@ use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php74\Tokenizer\FollowedByCurlyBracketAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -38,7 +39,8 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
         private readonly ConditionSearcher $conditionSearcher,
         private readonly UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
         private readonly SideEffectNodeDetector $sideEffectNodeDetector,
-        private readonly ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer
+        private readonly ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer,
+        private readonly FollowedByCurlyBracketAnalyzer $followedByCurlyBracketAnalyzer
     ) {
     }
 
@@ -135,7 +137,7 @@ CODE_SAMPLE
         }
 
         if (! $variable->name instanceof Variable) {
-            return false;
+            return $this->followedByCurlyBracketAnalyzer->isFollowed($this->file, $variable);
         }
 
         return (bool) $this->betterNodeFinder->findFirstNext(
