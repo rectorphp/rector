@@ -4,15 +4,24 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\NodeManipulator\PropertyManipulator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer;
 final class VarDocPropertyTypeInferer
@@ -42,13 +51,43 @@ final class VarDocPropertyTypeInferer
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
+     */
+    private $constructorAssignDetector;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
+     */
+    private $propertyFetchFinder;
+    /**
+     * @readonly
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeManipulator\PropertyManipulator
+     */
+    private $propertyManipulator;
+    public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator)
     {
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->defaultValuePropertyTypeInferer = $defaultValuePropertyTypeInferer;
         $this->typeFactory = $typeFactory;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->constructorAssignDetector = $constructorAssignDetector;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->propertyFetchFinder = $propertyFetchFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->propertyManipulator = $propertyManipulator;
     }
     public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {
@@ -61,8 +100,39 @@ final class VarDocPropertyTypeInferer
         $propertyDefaultValue = $property->props[0]->default;
         if ($propertyDefaultValue instanceof \PhpParser\Node\Expr) {
             $resolvedType = $this->unionTypeWithDefaultExpr($property, $resolvedType);
+        } else {
+            $resolvedType = $this->makeNullableForAccessedBeforeInitialization($property, $resolvedType, $phpDocInfo);
         }
         return $this->genericClassStringTypeNormalizer->normalize($resolvedType);
+    }
+    private function makeNullableForAccessedBeforeInitialization(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $resolvedType, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : \PHPStan\Type\Type
+    {
+        $types = $resolvedType instanceof \PHPStan\Type\UnionType ? $resolvedType->getTypes() : [$resolvedType];
+        foreach ($types as $type) {
+            if ($type instanceof \PHPStan\Type\NullType) {
+                return $resolvedType;
+            }
+        }
+        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
+        // not has parent Class_? return early
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            return $resolvedType;
+        }
+        // is never accessed, return early
+        $propertyName = $this->nodeNameResolver->getName($property);
+        $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($classLike, $propertyName);
+        if ($propertyFetches === []) {
+            return $resolvedType;
+        }
+        // is filled by __construct() or setUp(), return early
+        if ($this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName)) {
+            return $resolvedType;
+        }
+        // has various Doctrine or JMS annotation, return early
+        if ($this->propertyManipulator->isAllowedReadOnly($property, $phpDocInfo)) {
+            return $resolvedType;
+        }
+        return new \PHPStan\Type\UnionType(\array_merge($types, [new \PHPStan\Type\NullType()]));
     }
     private function shouldUnionWithDefaultValue(\PHPStan\Type\Type $defaultValueType, \PHPStan\Type\Type $type) : bool
     {
