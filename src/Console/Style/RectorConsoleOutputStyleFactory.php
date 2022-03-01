@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Style;
 
-use RectorPrefix20220228\Symfony\Component\Console\Application;
-use RectorPrefix20220228\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix20220228\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix20220228\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220228\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20220301\Symfony\Component\Console\Application;
+use RectorPrefix20220301\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix20220301\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix20220301\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220301\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 final class RectorConsoleOutputStyleFactory
 {
     /**
@@ -15,20 +15,20 @@ final class RectorConsoleOutputStyleFactory
      * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
      */
     private $privatesCaller;
-    public function __construct(\RectorPrefix20220228\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller)
+    public function __construct(\RectorPrefix20220301\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller)
     {
         $this->privatesCaller = $privatesCaller;
     }
     public function create() : \Rector\Core\Console\Style\RectorConsoleOutputStyle
     {
-        $argvInput = new \RectorPrefix20220228\Symfony\Component\Console\Input\ArgvInput();
-        $consoleOutput = new \RectorPrefix20220228\Symfony\Component\Console\Output\ConsoleOutput();
+        $argvInput = new \RectorPrefix20220301\Symfony\Component\Console\Input\ArgvInput();
+        $consoleOutput = new \RectorPrefix20220301\Symfony\Component\Console\Output\ConsoleOutput();
         // to configure all -v, -vv, -vvv options without memory-lock to Application run() arguments
-        $this->privatesCaller->callPrivateMethod(new \RectorPrefix20220228\Symfony\Component\Console\Application(), 'configureIO', [$argvInput, $consoleOutput]);
+        $this->privatesCaller->callPrivateMethod(new \RectorPrefix20220301\Symfony\Component\Console\Application(), 'configureIO', [$argvInput, $consoleOutput]);
         $debugArgvInputParameterOption = $argvInput->getParameterOption('--debug');
         // --debug is called
         if ($debugArgvInputParameterOption === null) {
-            $consoleOutput->setVerbosity(\RectorPrefix20220228\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG);
+            $consoleOutput->setVerbosity(\RectorPrefix20220301\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG);
         }
         return new \Rector\Core\Console\Style\RectorConsoleOutputStyle($argvInput, $consoleOutput);
     }

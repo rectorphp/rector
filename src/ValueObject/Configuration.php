@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject;
 
-use RectorPrefix20220228\JetBrains\PhpStorm\Immutable;
+use RectorPrefix20220301\JetBrains\PhpStorm\Immutable;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 #[Immutable]
 final class Configuration

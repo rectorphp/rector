@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220228\React\Promise;
+namespace RectorPrefix20220301\React\Promise;
 
 interface PromisorInterface
 {

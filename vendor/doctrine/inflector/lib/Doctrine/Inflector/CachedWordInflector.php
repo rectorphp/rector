@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220228\Doctrine\Inflector;
+namespace RectorPrefix20220301\Doctrine\Inflector;
 
-class CachedWordInflector implements \RectorPrefix20220228\Doctrine\Inflector\WordInflector
+class CachedWordInflector implements \RectorPrefix20220301\Doctrine\Inflector\WordInflector
 {
     /** @var WordInflector */
     private $wordInflector;
     /** @var string[] */
     private $cache = [];
-    public function __construct(\RectorPrefix20220228\Doctrine\Inflector\WordInflector $wordInflector)
+    public function __construct(\RectorPrefix20220301\Doctrine\Inflector\WordInflector $wordInflector)
     {
         $this->wordInflector = $wordInflector;
     }

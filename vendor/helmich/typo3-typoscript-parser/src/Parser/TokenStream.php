@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220228\Helmich\TypoScriptParser\Parser;
+namespace RectorPrefix20220301\Helmich\TypoScriptParser\Parser;
 
 use BadMethodCallException;
-use RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\Token;
-use RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
+use RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\Token;
+use RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
 use Iterator;
 /**
  * Helper class that represents a token stream
@@ -27,7 +27,7 @@ class TokenStream implements \Iterator, \ArrayAccess
      * @param int $lookAhead
      * @return TokenInterface
      */
-    public function current(int $lookAhead = 0) : \RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+    public function current(int $lookAhead = 0) : \RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\TokenInterface
     {
         return $this[$this->index + $lookAhead];
     }
@@ -74,7 +74,7 @@ class TokenStream implements \Iterator, \ArrayAccess
      * @param int $offset
      * @return TokenInterface
      */
-    public function offsetGet($offset) : \RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+    public function offsetGet($offset) : \RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\TokenInterface
     {
         return $this->tokens[$offset];
     }
@@ -110,17 +110,17 @@ class TokenStream implements \Iterator, \ArrayAccess
      *
      * @return TokenStream
      */
-    public function normalized() : \RectorPrefix20220228\Helmich\TypoScriptParser\Parser\TokenStream
+    public function normalized() : \RectorPrefix20220301\Helmich\TypoScriptParser\Parser\TokenStream
     {
         $filteredTokens = [];
         $maxLine = 0;
         foreach ($this->tokens as $token) {
             $maxLine = (int) \max($token->getLine(), $maxLine);
             // Trim unnecessary whitespace, but leave line breaks! These are important!
-            if ($token->getType() === \RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE) {
+            if ($token->getType() === \RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE) {
                 $value = \trim($token->getValue(), "\t ");
                 if (\strlen($value) > 0) {
-                    $filteredTokens[] = new \RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\Token(\RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $value, $token->getLine(), $token->getColumn());
+                    $filteredTokens[] = new \RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\Token(\RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $value, $token->getLine(), $token->getColumn());
                 }
             } else {
                 $filteredTokens[] = $token;
@@ -129,8 +129,8 @@ class TokenStream implements \Iterator, \ArrayAccess
         // Add two linebreak tokens; during parsing, we usually do not look more than two
         // tokens ahead; this hack ensures that there will always be at least two more tokens
         // present and we do not have to check whether these tokens exists.
-        $filteredTokens[] = new \RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\Token(\RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, "\n", $maxLine + 1, 1);
-        $filteredTokens[] = new \RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\Token(\RectorPrefix20220228\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, "\n", $maxLine + 2, 1);
-        return new \RectorPrefix20220228\Helmich\TypoScriptParser\Parser\TokenStream($filteredTokens);
+        $filteredTokens[] = new \RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\Token(\RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, "\n", $maxLine + 1, 1);
+        $filteredTokens[] = new \RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\Token(\RectorPrefix20220301\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, "\n", $maxLine + 2, 1);
+        return new \RectorPrefix20220301\Helmich\TypoScriptParser\Parser\TokenStream($filteredTokens);
     }
 }
