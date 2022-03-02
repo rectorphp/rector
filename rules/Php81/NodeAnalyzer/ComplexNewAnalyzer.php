@@ -6,23 +6,25 @@ namespace Rector\Php81\NodeAnalyzer;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\Core\NodeManipulator\ArrayManipulator;
 final class ComplexNewAnalyzer
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeManipulator\ArrayManipulator
+     */
+    private $arrayManipulator;
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer)
+    public function __construct(\Rector\Core\NodeManipulator\ArrayManipulator $arrayManipulator, \Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer)
     {
+        $this->arrayManipulator = $arrayManipulator;
         $this->exprAnalyzer = $exprAnalyzer;
     }
     public function isDynamic(\PhpParser\Node\Expr\New_ $new) : bool
@@ -36,28 +38,16 @@ final class ComplexNewAnalyzer
             if ($this->isAllowedNew($value)) {
                 continue;
             }
+            // new inside array is allowed for New in initializer
             if ($value instanceof \PhpParser\Node\Expr\Array_ && $this->isAllowedArray($value)) {
                 continue;
             }
-            if ($value instanceof \PhpParser\Node\Scalar) {
-                continue;
-            }
-            if ($this->isAllowedConstFetchOrClassConstFeth($value)) {
+            if (!$this->exprAnalyzer->isDynamicValue($value)) {
                 continue;
             }
             return \true;
         }
         return \false;
-    }
-    private function isAllowedConstFetchOrClassConstFeth(\PhpParser\Node\Expr $expr) : bool
-    {
-        if (!\in_array(\get_class($expr), [\PhpParser\Node\Expr\ConstFetch::class, \PhpParser\Node\Expr\ClassConstFetch::class], \true)) {
-            return \false;
-        }
-        if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-            return $expr->class instanceof \PhpParser\Node\Name && $expr->name instanceof \PhpParser\Node\Identifier;
-        }
-        return \true;
     }
     private function isAllowedNew(\PhpParser\Node\Expr $expr) : bool
     {
@@ -68,7 +58,7 @@ final class ComplexNewAnalyzer
     }
     private function isAllowedArray(\PhpParser\Node\Expr\Array_ $array) : bool
     {
-        if (!$this->exprAnalyzer->isDynamicArray($array)) {
+        if (!$this->arrayManipulator->isDynamicArray($array)) {
             return \true;
         }
         $arrayItems = $array->items;

@@ -3,13 +3,20 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use RectorPrefix20220302\Symfony\Contracts\Service\Attribute\Required;
 final class ArrayManipulator
 {
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     */
+    private $exprAnalyzer;
     /**
      * @readonly
      * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
@@ -19,24 +26,29 @@ final class ArrayManipulator
     {
         $this->rectorChangeCollector = $rectorChangeCollector;
     }
-    public function isArrayOnlyScalarValues(\PhpParser\Node\Expr\Array_ $array) : bool
+    /**
+     * @required
+     */
+    public function autowire(\Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer) : void
     {
-        foreach ($array->items as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        $this->exprAnalyzer = $exprAnalyzer;
+    }
+    public function isDynamicArray(\PhpParser\Node\Expr\Array_ $array) : bool
+    {
+        foreach ($array->items as $item) {
+            if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
-            if ($arrayItem->value instanceof \PhpParser\Node\Expr\Array_) {
-                if (!$this->isArrayOnlyScalarValues($arrayItem->value)) {
-                    return \false;
-                }
-                continue;
+            $key = $item->key;
+            if (!$this->isAllowedArrayKey($key)) {
+                return \true;
             }
-            if ($arrayItem->value instanceof \PhpParser\Node\Scalar) {
-                continue;
+            $value = $item->value;
+            if (!$this->isAllowedArrayValue($value)) {
+                return \true;
             }
-            return \false;
         }
-        return \true;
+        return \false;
     }
     public function addItemToArrayUnderKey(\PhpParser\Node\Expr\Array_ $array, \PhpParser\Node\Expr\ArrayItem $newArrayItem, string $key) : void
     {
@@ -80,5 +92,19 @@ final class ArrayManipulator
             return \false;
         }
         return $arrayItem->key->value === $name;
+    }
+    private function isAllowedArrayKey(?\PhpParser\Node\Expr $expr) : bool
+    {
+        if (!$expr instanceof \PhpParser\Node\Expr) {
+            return \true;
+        }
+        return \in_array(\get_class($expr), [\PhpParser\Node\Scalar\String_::class, \PhpParser\Node\Scalar\LNumber::class], \true);
+    }
+    private function isAllowedArrayValue(\PhpParser\Node\Expr $expr) : bool
+    {
+        if ($expr instanceof \PhpParser\Node\Expr\Array_) {
+            return !$this->isDynamicArray($expr);
+        }
+        return !$this->exprAnalyzer->isDynamicValue($expr);
     }
 }

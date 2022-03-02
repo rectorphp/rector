@@ -74,8 +74,7 @@ final class ContextAnalyzer
     }
     public function isHasAssignWithIndirectReturn(\PhpParser\Node $node, \PhpParser\Node\Stmt\If_ $if) : bool
     {
-        $loopNodes = self::LOOP_NODES;
-        foreach ($loopNodes as $loopNode) {
+        foreach (self::LOOP_NODES as $loopNode) {
             $loopObjectType = new \PHPStan\Type\ObjectType($loopNode);
             $parentType = $this->nodeTypeResolver->getType($node);
             $superType = $parentType->isSuperTypeOf($loopObjectType);

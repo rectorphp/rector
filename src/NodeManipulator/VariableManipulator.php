@@ -6,14 +6,13 @@ namespace Rector\Core\NodeManipulator;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -22,11 +21,6 @@ use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use RectorPrefix20220302\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class VariableManipulator
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeManipulator\ArrayManipulator
-     */
-    private $arrayManipulator;
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\AssignManipulator
@@ -57,15 +51,20 @@ final class VariableManipulator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\NodeManipulator\ArrayManipulator $arrayManipulator, \Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20220302\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     */
+    private $exprAnalyzer;
+    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20220302\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer)
     {
-        $this->arrayManipulator = $arrayManipulator;
         $this->assignManipulator = $assignManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableToConstantGuard = $variableToConstantGuard;
         $this->nodeComparator = $nodeComparator;
+        $this->exprAnalyzer = $exprAnalyzer;
     }
     /**
      * @return Assign[]
@@ -80,13 +79,10 @@ final class VariableManipulator
             if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
                 return null;
             }
-            if (!$node->expr instanceof \PhpParser\Node\Expr\Array_ && !$node->expr instanceof \PhpParser\Node\Scalar) {
+            if ($this->exprAnalyzer->isDynamicValue($node->expr)) {
                 return null;
             }
             if ($this->hasEncapsedStringPart($node->expr)) {
-                return null;
-            }
-            if ($node->expr instanceof \PhpParser\Node\Expr\Array_ && !$this->arrayManipulator->isArrayOnlyScalarValues($node->expr)) {
                 return null;
             }
             if ($this->isTestCaseExpectedVariable($node->var)) {

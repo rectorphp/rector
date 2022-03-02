@@ -23,12 +23,15 @@ final class ConsoleApplication extends \RectorPrefix20220302\Symfony\Component\C
      */
     private const NAME = 'Rector';
     /**
+     * @var string
+     */
+    private const VERSION = \Rector\Core\Application\VersionResolver::PACKAGE_VERSION;
+    /**
      * @param Command[] $commands
      */
     public function __construct(\RectorPrefix20220302\Symplify\PackageBuilder\Console\Command\CommandNaming $commandNaming, array $commands = [])
     {
-        $version = \Rector\Core\Application\VersionResolver::PACKAGE_VERSION;
-        parent::__construct(self::NAME, $version);
+        parent::__construct(self::NAME, self::VERSION);
         foreach ($commands as $command) {
             $commandName = $commandNaming->resolveFromCommand($command);
             $command->setName($commandName);
