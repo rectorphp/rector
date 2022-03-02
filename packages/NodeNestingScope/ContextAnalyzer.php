@@ -77,9 +77,7 @@ final class ContextAnalyzer
 
     public function isHasAssignWithIndirectReturn(Node $node, If_ $if): bool
     {
-        $loopNodes = self::LOOP_NODES;
-
-        foreach ($loopNodes as $loopNode) {
+        foreach (self::LOOP_NODES as $loopNode) {
             $loopObjectType = new ObjectType($loopNode);
             $parentType = $this->nodeTypeResolver->getType($node);
             $superType = $parentType->isSuperTypeOf($loopObjectType);

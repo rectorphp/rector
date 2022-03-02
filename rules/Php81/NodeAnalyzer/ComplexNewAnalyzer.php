@@ -7,18 +7,15 @@ namespace Rector\Php81\NodeAnalyzer;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\Core\NodeManipulator\ArrayManipulator;
 
 final class ComplexNewAnalyzer
 {
     public function __construct(
+        private readonly ArrayManipulator $arrayManipulator,
         private readonly ExprAnalyzer $exprAnalyzer
     ) {
     }
@@ -38,15 +35,12 @@ final class ComplexNewAnalyzer
                 continue;
             }
 
+            // new inside array is allowed for New in initializer
             if ($value instanceof Array_ && $this->isAllowedArray($value)) {
                 continue;
             }
 
-            if ($value instanceof Scalar) {
-                continue;
-            }
-
-            if ($this->isAllowedConstFetchOrClassConstFeth($value)) {
+            if (! $this->exprAnalyzer->isDynamicValue($value)) {
                 continue;
             }
 
@@ -54,19 +48,6 @@ final class ComplexNewAnalyzer
         }
 
         return false;
-    }
-
-    private function isAllowedConstFetchOrClassConstFeth(Expr $expr): bool
-    {
-        if (! in_array($expr::class, [ConstFetch::class, ClassConstFetch::class], true)) {
-            return false;
-        }
-
-        if ($expr instanceof ClassConstFetch) {
-            return $expr->class instanceof Name && $expr->name instanceof Identifier;
-        }
-
-        return true;
     }
 
     private function isAllowedNew(Expr $expr): bool
@@ -80,7 +61,7 @@ final class ComplexNewAnalyzer
 
     private function isAllowedArray(Array_ $array): bool
     {
-        if (! $this->exprAnalyzer->isDynamicArray($array)) {
+        if (! $this->arrayManipulator->isDynamicArray($array)) {
             return true;
         }
 

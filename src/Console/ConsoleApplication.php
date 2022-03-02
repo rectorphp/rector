@@ -26,12 +26,16 @@ final class ConsoleApplication extends Application
     private const NAME = 'Rector';
 
     /**
+     * @var string
+     */
+    private const VERSION = VersionResolver::PACKAGE_VERSION;
+
+    /**
      * @param Command[] $commands
      */
     public function __construct(CommandNaming $commandNaming, array $commands = [])
     {
-        $version = VersionResolver::PACKAGE_VERSION;
-        parent::__construct(self::NAME, $version);
+        parent::__construct(self::NAME, self::VERSION);
 
         foreach ($commands as $command) {
             $commandName = $commandNaming->resolveFromCommand($command);

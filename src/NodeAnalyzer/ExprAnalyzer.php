@@ -6,14 +6,16 @@ namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\NodeManipulator\ArrayManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -24,7 +26,8 @@ final class ExprAnalyzer
         private readonly NodeComparator $nodeComparator,
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
-        private readonly NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ArrayManipulator $arrayManipulator
     ) {
     }
 
@@ -61,52 +64,29 @@ final class ExprAnalyzer
         return false;
     }
 
-    public function isDynamicArray(Array_ $array): bool
-    {
-        foreach ($array->items as $item) {
-            if (! $item instanceof ArrayItem) {
-                continue;
-            }
-
-            $key = $item->key;
-
-            if (! $this->isAllowedArrayKey($key)) {
-                return true;
-            }
-
-            $value = $item->value;
-            if (! $this->isAllowedArrayValue($value)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function isAllowedArrayKey(?Expr $expr): bool
-    {
-        if (! $expr instanceof Expr) {
-            return true;
-        }
-
-        return in_array($expr::class, [String_::class, LNumber::class], true);
-    }
-
-    private function isAllowedArrayValue(Expr $expr): bool
-    {
-        if ($expr instanceof Array_) {
-            return true;
-        }
-
-        return $this->isAllowedArrayOrScalar($expr);
-    }
-
-    private function isAllowedArrayOrScalar(Expr $expr): bool
+    public function isDynamicValue(Expr $expr): bool
     {
         if (! $expr instanceof Array_) {
-            return $expr instanceof Scalar;
+            if ($expr instanceof Scalar) {
+                return false;
+            }
+
+            return ! $this->isAllowedConstFetchOrClassConstFeth($expr);
         }
 
-        return ! $this->isDynamicArray($expr);
+        return $this->arrayManipulator->isDynamicArray($expr);
+    }
+
+    private function isAllowedConstFetchOrClassConstFeth(Expr $expr): bool
+    {
+        if (! in_array($expr::class, [ConstFetch::class, ClassConstFetch::class], true)) {
+            return false;
+        }
+
+        if ($expr instanceof ClassConstFetch) {
+            return $expr->class instanceof Name && $expr->name instanceof Identifier;
+        }
+
+        return true;
     }
 }

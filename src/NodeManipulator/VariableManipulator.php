@@ -7,14 +7,13 @@ namespace Rector\Core\NodeManipulator;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -25,13 +24,13 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class VariableManipulator
 {
     public function __construct(
-        private readonly ArrayManipulator $arrayManipulator,
         private readonly AssignManipulator $assignManipulator,
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly VariableToConstantGuard $variableToConstantGuard,
-        private readonly NodeComparator $nodeComparator
+        private readonly NodeComparator $nodeComparator,
+        private readonly ExprAnalyzer $exprAnalyzer
     ) {
     }
 
@@ -53,15 +52,11 @@ final class VariableManipulator
                     return null;
                 }
 
-                if (! $node->expr instanceof Array_ && ! $node->expr instanceof Scalar) {
+                if ($this->exprAnalyzer->isDynamicValue($node->expr)) {
                     return null;
                 }
 
                 if ($this->hasEncapsedStringPart($node->expr)) {
-                    return null;
-                }
-
-                if ($node->expr instanceof Array_ && ! $this->arrayManipulator->isArrayOnlyScalarValues($node->expr)) {
                     return null;
                 }
 

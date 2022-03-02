@@ -4,42 +4,50 @@ declare(strict_types=1);
 
 namespace Rector\Core\NodeManipulator;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class ArrayManipulator
 {
+    private ExprAnalyzer $exprAnalyzer;
+
     public function __construct(
         private readonly RectorChangeCollector $rectorChangeCollector
     ) {
     }
 
-    public function isArrayOnlyScalarValues(Array_ $array): bool
+    #[Required]
+    public function autowire(ExprAnalyzer $exprAnalyzer): void
     {
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        $this->exprAnalyzer = $exprAnalyzer;
+    }
+
+    public function isDynamicArray(Array_ $array): bool
+    {
+        foreach ($array->items as $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            if ($arrayItem->value instanceof Array_) {
-                if (! $this->isArrayOnlyScalarValues($arrayItem->value)) {
-                    return false;
-                }
+            $key = $item->key;
 
-                continue;
+            if (! $this->isAllowedArrayKey($key)) {
+                return true;
             }
 
-            if ($arrayItem->value instanceof Scalar) {
-                continue;
+            $value = $item->value;
+            if (! $this->isAllowedArrayValue($value)) {
+                return true;
             }
-
-            return false;
         }
 
-        return true;
+        return false;
     }
 
     public function addItemToArrayUnderKey(Array_ $array, ArrayItem $newArrayItem, string $key): void
@@ -96,5 +104,23 @@ final class ArrayManipulator
         }
 
         return $arrayItem->key->value === $name;
+    }
+
+    private function isAllowedArrayKey(?Expr $expr): bool
+    {
+        if (! $expr instanceof Expr) {
+            return true;
+        }
+
+        return in_array($expr::class, [String_::class, LNumber::class], true);
+    }
+
+    private function isAllowedArrayValue(Expr $expr): bool
+    {
+        if ($expr instanceof Array_) {
+            return ! $this->isDynamicArray($expr);
+        }
+
+        return ! $this->exprAnalyzer->isDynamicValue($expr);
     }
 }
