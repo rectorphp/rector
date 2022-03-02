@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -159,10 +159,7 @@ CODE_SAMPLE
 
     private function isUsed(Assign $assign, Variable $variable): bool
     {
-        $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
-            $variable,
-            fn (Node $node): bool => $this->usedVariableNameAnalyzer->isVariableNamed($node, $variable)
-        );
+        $isUsedPrev = $this->isUsedInPreviousNode($variable);
 
         if ($isUsedPrev) {
             return true;
@@ -181,37 +178,53 @@ CODE_SAMPLE
         return $this->isUsedInAssignExpr($expr, $assign);
     }
 
-    private function isUsedInAssignExpr(
-        FuncCall | MethodCall | New_ | NullsafeMethodCall | StaticCall $expr,
-        Assign $assign
-    ): bool {
-        foreach ($expr->args as $arg) {
-            if (! $arg instanceof Arg) {
-                continue;
-            }
+    private function isUsedInPreviousNode(Variable $variable): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
+            $variable,
+            fn (Node $node): bool => $this->usedVariableNameAnalyzer->isVariableNamed($node, $variable)
+        );
+    }
 
+    private function isUsedInAssignExpr(CallLike | Expr $expr, Assign $assign): bool
+    {
+        if (! $expr instanceof CallLike) {
+            return $this->isUsedInPreviousAssign($assign, $expr);
+        }
+
+        foreach ($expr->getArgs() as $arg) {
             $variable = $arg->value;
-            if (! $variable instanceof Variable) {
-                continue;
-            }
 
-            $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode(
-                $assign,
-                fn (Node $node): bool => $node instanceof Assign && $this->usedVariableNameAnalyzer->isVariableNamed(
-                    $node->var,
-                    $variable
-                )
-            );
-
-            if ($previousAssign instanceof Assign) {
-                return $this->isUsed($assign, $variable);
+            if ($this->isUsedInPreviousAssign($assign, $variable)) {
+                return true;
             }
         }
 
         return false;
     }
 
-    private function refactorUsedVariable(Assign $assign): ?Assign
+    private function isUsedInPreviousAssign(Assign $assign, Expr $expr): bool
+    {
+        if (! $expr instanceof Variable) {
+            return false;
+        }
+
+        $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode(
+            $assign,
+            fn (Node $node): bool => $node instanceof Assign && $this->usedVariableNameAnalyzer->isVariableNamed(
+                $node->var,
+                $expr
+            )
+        );
+
+        if ($previousAssign instanceof Assign) {
+            return $this->isUsed($assign, $expr);
+        }
+
+        return false;
+    }
+
+    private function refactorUsedVariable(Assign $assign): null|Expr
     {
         $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Node) {
@@ -222,6 +235,16 @@ CODE_SAMPLE
 
         // check if next node is if
         if (! $if instanceof If_) {
+            if (
+                $assign->var instanceof Variable &&
+                ! $this->isUsedInPreviousNode($assign->var) &&
+                ! $this->exprUsedInNextNodeAnalyzer->isUsed($assign->var) && $this->isUsedInAssignExpr(
+                    $assign->expr,
+                    $assign
+                )) {
+                return $this->cleanCastedExpr($assign->expr);
+            }
+
             return null;
         }
 

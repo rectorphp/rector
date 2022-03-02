@@ -68,7 +68,7 @@ final class PureFunctionDetector
 
         // well-known functions
         'libxml_use_internal_errors', 'libxml_disable_entity_loader', 'curl_exec',
-        'mt_srand', 'openssl_pkcs7_sign',
+        'mt_srand', 'openssl_pkcs7_sign', 'openssl_sign',
         'mt_rand', 'rand', 'random_int', 'random_bytes',
         'wincache_ucache_delete', 'wincache_ucache_set', 'wincache_ucache_inc',
         'class_alias',
