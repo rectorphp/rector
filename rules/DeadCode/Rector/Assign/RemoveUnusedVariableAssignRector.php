@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -109,11 +110,21 @@ CODE_SAMPLE
 
         if ($this->hasCallLikeInAssignExpr($node->expr)) {
             // keep the expr, can have side effect
-            return $node->expr;
+            return $this->cleanCastedExpr($node->expr);
         }
 
         $this->removeNode($node);
         return $node;
+    }
+
+    private function cleanCastedExpr(Expr $expr): Expr
+    {
+        if (! $expr instanceof Cast) {
+            return $expr;
+        }
+
+        $castedExpr = $expr->expr;
+        return $this->cleanCastedExpr($castedExpr);
     }
 
     private function hasCallLikeInAssignExpr(Expr $expr): bool
