@@ -19,8 +19,8 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20220301\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20220301\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix20220302\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20220302\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class InjectMethodFactory
 {
     /**
@@ -50,7 +50,7 @@ final class InjectMethodFactory
         $statements = [];
         /** @var string $variableName */
         $variableName = $this->nodeNameResolver->getName($property);
-        $paramBuilder = new \RectorPrefix20220301\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($variableName);
+        $paramBuilder = new \RectorPrefix20220302\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($variableName);
         $varType = $propertyPhpDocInfo->getVarType();
         if (!$varType instanceof \PHPStan\Type\ObjectType) {
             return $statements;
@@ -76,7 +76,7 @@ final class InjectMethodFactory
     private function createInjectClassMethod(string $variableName, \PhpParser\Node\Param $param, \PhpParser\Node\Expr\Assign $assign) : \PhpParser\Node\Stmt\ClassMethod
     {
         $injectMethodName = $this->createInjectMethodName($variableName);
-        $injectMethodBuilder = new \RectorPrefix20220301\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($injectMethodName);
+        $injectMethodBuilder = new \RectorPrefix20220302\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($injectMethodName);
         $injectMethodBuilder->makePublic();
         $injectMethodBuilder->addParam($param);
         $injectMethodBuilder->setReturnType('void');

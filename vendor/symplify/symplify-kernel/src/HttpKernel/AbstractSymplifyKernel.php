@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220301\Symplify\SymplifyKernel\HttpKernel;
+namespace RectorPrefix20220302\Symplify\SymplifyKernel\HttpKernel;
 
-use RectorPrefix20220301\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20220301\Symfony\Component\DependencyInjection\Container;
-use RectorPrefix20220301\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20220301\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix20220301\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-use RectorPrefix20220301\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory;
-use RectorPrefix20220301\Symplify\SymplifyKernel\ContainerBuilderFactory;
-use RectorPrefix20220301\Symplify\SymplifyKernel\Contract\LightKernelInterface;
-use RectorPrefix20220301\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
-use RectorPrefix20220301\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfig;
+use RectorPrefix20220302\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20220302\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix20220302\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20220302\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix20220302\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
+use RectorPrefix20220302\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory;
+use RectorPrefix20220302\Symplify\SymplifyKernel\ContainerBuilderFactory;
+use RectorPrefix20220302\Symplify\SymplifyKernel\Contract\LightKernelInterface;
+use RectorPrefix20220302\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
+use RectorPrefix20220302\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfig;
 /**
  * @api
  */
-abstract class AbstractSymplifyKernel implements \RectorPrefix20220301\Symplify\SymplifyKernel\Contract\LightKernelInterface
+abstract class AbstractSymplifyKernel implements \RectorPrefix20220302\Symplify\SymplifyKernel\Contract\LightKernelInterface
 {
     /**
      * @var \Symfony\Component\DependencyInjection\Container|null
@@ -27,20 +27,20 @@ abstract class AbstractSymplifyKernel implements \RectorPrefix20220301\Symplify\
      * @param CompilerPassInterface[] $compilerPasses
      * @param ExtensionInterface[] $extensions
      */
-    public function create(array $configFiles, array $compilerPasses = [], array $extensions = []) : \RectorPrefix20220301\Symfony\Component\DependencyInjection\ContainerInterface
+    public function create(array $configFiles, array $compilerPasses = [], array $extensions = []) : \RectorPrefix20220302\Symfony\Component\DependencyInjection\ContainerInterface
     {
-        $containerBuilderFactory = new \RectorPrefix20220301\Symplify\SymplifyKernel\ContainerBuilderFactory(new \RectorPrefix20220301\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory());
-        $compilerPasses[] = new \RectorPrefix20220301\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass();
-        $configFiles[] = \RectorPrefix20220301\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfig::FILE_PATH;
+        $containerBuilderFactory = new \RectorPrefix20220302\Symplify\SymplifyKernel\ContainerBuilderFactory(new \RectorPrefix20220302\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory());
+        $compilerPasses[] = new \RectorPrefix20220302\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass();
+        $configFiles[] = \RectorPrefix20220302\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfig::FILE_PATH;
         $containerBuilder = $containerBuilderFactory->create($configFiles, $compilerPasses, $extensions);
         $containerBuilder->compile();
         $this->container = $containerBuilder;
         return $containerBuilder;
     }
-    public function getContainer() : \RectorPrefix20220301\Psr\Container\ContainerInterface
+    public function getContainer() : \RectorPrefix20220302\Psr\Container\ContainerInterface
     {
-        if (!$this->container instanceof \RectorPrefix20220301\Symfony\Component\DependencyInjection\Container) {
-            throw new \RectorPrefix20220301\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
+        if (!$this->container instanceof \RectorPrefix20220302\Symfony\Component\DependencyInjection\Container) {
+            throw new \RectorPrefix20220302\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
         }
         return $this->container;
     }

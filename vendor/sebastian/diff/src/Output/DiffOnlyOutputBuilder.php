@@ -9,19 +9,19 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220301\SebastianBergmann\Diff\Output;
+namespace RectorPrefix20220302\SebastianBergmann\Diff\Output;
 
 use function fclose;
 use function fopen;
 use function fwrite;
 use function stream_get_contents;
 use function substr;
-use RectorPrefix20220301\SebastianBergmann\Diff\Differ;
+use RectorPrefix20220302\SebastianBergmann\Diff\Differ;
 /**
  * Builds a diff string representation in a loose unified diff format
  * listing only changes lines. Does not include line numbers.
  */
-final class DiffOnlyOutputBuilder implements \RectorPrefix20220301\SebastianBergmann\Diff\Output\DiffOutputBuilderInterface
+final class DiffOnlyOutputBuilder implements \RectorPrefix20220302\SebastianBergmann\Diff\Output\DiffOutputBuilderInterface
 {
     /**
      * @var string
@@ -41,11 +41,11 @@ final class DiffOnlyOutputBuilder implements \RectorPrefix20220301\SebastianBerg
             }
         }
         foreach ($diff as $diffEntry) {
-            if ($diffEntry[1] === \RectorPrefix20220301\SebastianBergmann\Diff\Differ::ADDED) {
+            if ($diffEntry[1] === \RectorPrefix20220302\SebastianBergmann\Diff\Differ::ADDED) {
                 \fwrite($buffer, '+' . $diffEntry[0]);
-            } elseif ($diffEntry[1] === \RectorPrefix20220301\SebastianBergmann\Diff\Differ::REMOVED) {
+            } elseif ($diffEntry[1] === \RectorPrefix20220302\SebastianBergmann\Diff\Differ::REMOVED) {
                 \fwrite($buffer, '-' . $diffEntry[0]);
-            } elseif ($diffEntry[1] === \RectorPrefix20220301\SebastianBergmann\Diff\Differ::DIFF_LINE_END_WARNING) {
+            } elseif ($diffEntry[1] === \RectorPrefix20220302\SebastianBergmann\Diff\Differ::DIFF_LINE_END_WARNING) {
                 \fwrite($buffer, ' ' . $diffEntry[0]);
                 continue;
                 // Warnings should not be tested for line break, it will always be there
