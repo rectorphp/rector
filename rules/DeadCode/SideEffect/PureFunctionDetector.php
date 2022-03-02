@@ -139,6 +139,7 @@ final class PureFunctionDetector
         'curl_exec',
         'mt_srand',
         'openssl_pkcs7_sign',
+        'openssl_sign',
         'mt_rand',
         'rand',
         'random_int',

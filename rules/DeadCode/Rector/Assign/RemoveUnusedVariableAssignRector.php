@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -164,9 +164,7 @@ CODE_SAMPLE
     }
     private function isUsed(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\Variable $variable) : bool
     {
-        $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $node) use($variable) : bool {
-            return $this->usedVariableNameAnalyzer->isVariableNamed($node, $variable);
-        });
+        $isUsedPrev = $this->isUsedInPreviousNode($variable);
         if ($isUsedPrev) {
             return \true;
         }
@@ -180,29 +178,45 @@ CODE_SAMPLE
         }
         return $this->isUsedInAssignExpr($expr, $assign);
     }
+    private function isUsedInPreviousNode(\PhpParser\Node\Expr\Variable $variable) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $node) use($variable) : bool {
+            return $this->usedVariableNameAnalyzer->isVariableNamed($node, $variable);
+        });
+    }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $expr
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\CallLike $expr
      */
     private function isUsedInAssignExpr($expr, \PhpParser\Node\Expr\Assign $assign) : bool
     {
-        foreach ($expr->args as $arg) {
-            if (!$arg instanceof \PhpParser\Node\Arg) {
-                continue;
-            }
+        if (!$expr instanceof \PhpParser\Node\Expr\CallLike) {
+            return $this->isUsedInPreviousAssign($assign, $expr);
+        }
+        foreach ($expr->getArgs() as $arg) {
             $variable = $arg->value;
-            if (!$variable instanceof \PhpParser\Node\Expr\Variable) {
-                continue;
-            }
-            $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (\PhpParser\Node $node) use($variable) : bool {
-                return $node instanceof \PhpParser\Node\Expr\Assign && $this->usedVariableNameAnalyzer->isVariableNamed($node->var, $variable);
-            });
-            if ($previousAssign instanceof \PhpParser\Node\Expr\Assign) {
-                return $this->isUsed($assign, $variable);
+            if ($this->isUsedInPreviousAssign($assign, $variable)) {
+                return \true;
             }
         }
         return \false;
     }
-    private function refactorUsedVariable(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Expr\Assign
+    private function isUsedInPreviousAssign(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr $expr) : bool
+    {
+        if (!$expr instanceof \PhpParser\Node\Expr\Variable) {
+            return \false;
+        }
+        $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (\PhpParser\Node $node) use($expr) : bool {
+            return $node instanceof \PhpParser\Node\Expr\Assign && $this->usedVariableNameAnalyzer->isVariableNamed($node->var, $expr);
+        });
+        if ($previousAssign instanceof \PhpParser\Node\Expr\Assign) {
+            return $this->isUsed($assign, $expr);
+        }
+        return \false;
+    }
+    /**
+     * @return \PhpParser\Node\Expr|null
+     */
+    private function refactorUsedVariable(\PhpParser\Node\Expr\Assign $assign)
     {
         $parentNode = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof \PhpParser\Node) {
@@ -211,6 +225,9 @@ CODE_SAMPLE
         $if = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         // check if next node is if
         if (!$if instanceof \PhpParser\Node\Stmt\If_) {
+            if ($assign->var instanceof \PhpParser\Node\Expr\Variable && !$this->isUsedInPreviousNode($assign->var) && !$this->exprUsedInNextNodeAnalyzer->isUsed($assign->var) && $this->isUsedInAssignExpr($assign->expr, $assign)) {
+                return $this->cleanCastedExpr($assign->expr);
+            }
             return null;
         }
         if ($this->conditionSearcher->hasIfAndElseForVariableRedeclaration($assign, $if)) {
