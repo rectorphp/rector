@@ -152,6 +152,9 @@ See [the contribution guide](/CONTRIBUTING.md) or go to development repository [
 - [`codito/rector-money`](https://packagist.org/packages/codito/rector-money): set of rules related to `moneyphp/money`
   library. It can help you with upgrading to v4.0 or make your codebase compatible for future upgrade.
 
+- [`laminas/laminas-servicemanager-migration`](https://packagist.org/packages/laminas/laminas-servicemanager-migration): set of rules related to `laminas-servicemanager`
+  library. It can help migrate your code to laminas-servicemanager 4.x compatibility.
+
 <br>
 
 ## Debugging
