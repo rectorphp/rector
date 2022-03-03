@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -24,6 +25,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Return_;
@@ -33,12 +35,15 @@ use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -86,7 +91,17 @@ final class AnonymousFunctionFactory
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20220303\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20220303\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -95,6 +110,8 @@ final class AnonymousFunctionFactory
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->simplePhpParser = $simplePhpParser;
         $this->nodeComparator = $nodeComparator;
+        $this->astResolver = $astResolver;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
     /**
      * @param Param[] $params
@@ -124,7 +141,7 @@ final class AnonymousFunctionFactory
         /** @var FunctionVariantWithPhpDocs $functionVariantWithPhpDoc */
         $functionVariantWithPhpDoc = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($phpMethodReflection->getVariants());
         $anonymousFunction = new \PhpParser\Node\Expr\Closure();
-        $newParams = $this->createParams($functionVariantWithPhpDoc->getParameters());
+        $newParams = $this->createParams($phpMethodReflection, $functionVariantWithPhpDoc->getParameters());
         $anonymousFunction->params = $newParams;
         $innerMethodCall = $this->createInnerMethodCall($phpMethodReflection, $expr, $newParams);
         if ($innerMethodCall === null) {
@@ -135,11 +152,7 @@ final class AnonymousFunctionFactory
             $anonymousFunction->returnType = $returnType;
         }
         // does method return something?
-        if (!$functionVariantWithPhpDoc->getReturnType() instanceof \PHPStan\Type\VoidType) {
-            $anonymousFunction->stmts[] = new \PhpParser\Node\Stmt\Return_($innerMethodCall);
-        } else {
-            $anonymousFunction->stmts[] = new \PhpParser\Node\Stmt\Expression($innerMethodCall);
-        }
+        $anonymousFunction->stmts[] = $functionVariantWithPhpDoc->getReturnType() instanceof \PHPStan\Type\VoidType ? new \PhpParser\Node\Stmt\Expression($innerMethodCall) : new \PhpParser\Node\Stmt\Return_($innerMethodCall);
         if ($expr instanceof \PhpParser\Node\Expr\Variable && !$this->nodeNameResolver->isName($expr, 'this')) {
             $anonymousFunction->uses[] = new \PhpParser\Node\Expr\ClosureUse($expr);
         }
@@ -232,16 +245,25 @@ final class AnonymousFunctionFactory
         return $uses;
     }
     /**
+     * @param Param[] $paramNodes
+     * @return string[]
+     */
+    private function collectParamNames(array $paramNodes) : array
+    {
+        $paramNames = [];
+        foreach ($paramNodes as $paramNode) {
+            $paramNames[] = $this->nodeNameResolver->getName($paramNode);
+        }
+        return $paramNames;
+    }
+    /**
      * @param Node[] $nodes
      * @param Param[] $paramNodes
      * @return Variable[]
      */
     private function createUseVariablesFromParams(array $nodes, array $paramNodes) : array
     {
-        $paramNames = [];
-        foreach ($paramNodes as $paramNode) {
-            $paramNames[] = $this->nodeNameResolver->getName($paramNode);
-        }
+        $paramNames = $this->collectParamNames($paramNodes);
         $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, \PhpParser\Node\Expr\Variable::class);
         /** @var Variable[] $filteredVariables */
         $filteredVariables = [];
@@ -259,13 +281,12 @@ final class AnonymousFunctionFactory
                 continue;
             }
             $parentNode = $variableNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof \PhpParser\Node\Expr\Assign || $parentNode instanceof \PhpParser\Node\Stmt\Foreach_ || $parentNode instanceof \PhpParser\Node\Param) {
+            if ($parentNode instanceof \PhpParser\Node && \in_array(\get_class($parentNode), [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Param::class], \true)) {
                 $alreadyAssignedVariables[] = $variableName;
             }
-            if ($this->nodeNameResolver->isNames($variableNode, $alreadyAssignedVariables)) {
-                continue;
+            if (!$this->nodeNameResolver->isNames($variableNode, $alreadyAssignedVariables)) {
+                $filteredVariables[$variableName] = $variableNode;
             }
-            $filteredVariables[$variableName] = $variableNode;
         }
         return $filteredVariables;
     }
@@ -273,17 +294,36 @@ final class AnonymousFunctionFactory
      * @param ParameterReflection[] $parameterReflections
      * @return Param[]
      */
-    private function createParams(array $parameterReflections) : array
+    private function createParams(\PHPStan\Reflection\Php\PhpMethodReflection $phpMethodReflection, array $parameterReflections) : array
     {
+        $classReflection = $phpMethodReflection->getDeclaringClass();
+        $className = $classReflection->getName();
+        $methodName = $phpMethodReflection->getName();
+        /** @var ClassMethod $classMethod */
+        $classMethod = $this->astResolver->resolveClassMethod($className, $methodName);
         $params = [];
-        foreach ($parameterReflections as $parameterReflection) {
+        foreach ($parameterReflections as $key => $parameterReflection) {
             $param = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($parameterReflection->getName()));
-            if (!$parameterReflection->getType() instanceof \PHPStan\Type\MixedType) {
-                $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
-            }
+            $this->applyParamType($param, $parameterReflection);
+            $this->applyParamDefaultValue($param, $parameterReflection, $key, $classMethod);
             $params[] = $param;
         }
         return $params;
+    }
+    private function applyParamType(\PhpParser\Node\Param $param, \PHPStan\Reflection\ParameterReflection $parameterReflection) : void
+    {
+        if ($parameterReflection->getType() instanceof \PHPStan\Type\MixedType) {
+            return;
+        }
+        $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+    }
+    private function applyParamDefaultValue(\PhpParser\Node\Param $param, \PHPStan\Reflection\ParameterReflection $parameterReflection, int $key, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    {
+        if (!$parameterReflection->getDefaultValue() instanceof \PHPStan\Type\Type) {
+            return;
+        }
+        $printDefaultValue = $this->betterStandardPrinter->print($classMethod->params[$key]->default);
+        $param->default = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($printDefaultValue));
     }
     /**
      * @param Param[] $params
@@ -324,10 +364,7 @@ final class AnonymousFunctionFactory
             return null;
         }
         $name = new \PhpParser\Node\Name($className);
-        if ($name->isSpecialClassName()) {
-            return $name;
-        }
-        return new \PhpParser\Node\Name\FullyQualified($className);
+        return $name->isSpecialClassName() ? $name : new \PhpParser\Node\Name\FullyQualified($className);
     }
     /**
      * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\New_|null
@@ -342,9 +379,6 @@ final class AnonymousFunctionFactory
         }
         // dynamic name, nothing we can do
         $className = $this->nodeNameResolver->getName($expr->class);
-        if ($className === null) {
-            return null;
-        }
-        return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($className));
+        return $className === null ? null : new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($className));
     }
 }
