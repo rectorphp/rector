@@ -6,7 +6,7 @@ use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\While_;
 
-class ConstantInsideArrayDefinedAsConstantAlready
+class ClassConstantInsideCurrentClassAlreadyDefined
 {
     private const LOOP_NODES = [
         Do_::class,
@@ -33,7 +33,7 @@ use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\While_;
 
-class ConstantInsideArrayDefinedAsConstantAlready
+class ClassConstantInsideCurrentClassAlreadyDefined
 {
     private const LOOP_NODES = [
         Do_::class,

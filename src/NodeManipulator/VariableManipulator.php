@@ -11,14 +11,15 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\EncapsedStringPart;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
@@ -33,8 +34,7 @@ final class VariableManipulator
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly VariableToConstantGuard $variableToConstantGuard,
         private readonly NodeComparator $nodeComparator,
-        private readonly ExprAnalyzer $exprAnalyzer,
-        private readonly ValueResolver $valueResolver
+        private readonly ExprAnalyzer $exprAnalyzer
     ) {
     }
 
@@ -43,11 +43,17 @@ final class VariableManipulator
      */
     public function collectScalarOrArrayAssignsOfVariable(ClassMethod $classMethod): array
     {
+        $currentClass = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        if (! $currentClass instanceof Class_) {
+            return [];
+        }
+
+        $currentClassName = (string) $this->nodeNameResolver->getName($currentClass);
         $assignsOfArrayToVariable = [];
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->getStmts(),
-            function (Node $node) use (&$assignsOfArrayToVariable) {
+            function (Node $node) use (&$assignsOfArrayToVariable, $currentClassName) {
                 if (! $node instanceof Assign) {
                     return null;
                 }
@@ -68,11 +74,12 @@ final class VariableManipulator
                     return null;
                 }
 
-                if ($node->expr instanceof ConstFetch || $node->expr instanceof ClassConstFetch) {
-                    $value = $this->valueResolver->getValue($node->expr);
-                    if (! is_array($value)) {
-                        return null;
-                    }
+                if ($node->expr instanceof ConstFetch) {
+                    return null;
+                }
+
+                if ($node->expr instanceof ClassConstFetch && $this->isOutsideClass($node->expr, $currentClassName)) {
+                    return null;
                 }
 
                 $assignsOfArrayToVariable[] = $node;
@@ -92,6 +99,20 @@ final class VariableManipulator
             $assignsOfArrayToVariable,
             fn (Assign $assign): bool => $this->isReadOnlyVariable($classMethod, $assign)
         );
+    }
+
+    private function isOutsideClass(ClassConstFetch $classConstFetch, string $currentClassName): bool
+    {
+        /**
+         * Dynamic class already checked on $this->exprAnalyzer->isDynamicValue() early
+         * @var Name $class
+         */
+        $class = $classConstFetch->class;
+        if ($class->isSpecialClassName()) {
+            return false;
+        }
+
+        return ! $this->nodeNameResolver->isName($class, $currentClassName);
     }
 
     private function hasEncapsedStringPart(Expr $expr): bool
