@@ -1,4 +1,4 @@
-# 514 Rules Overview
+# 512 Rules Overview
 
 <br>
 
@@ -41,8 +41,6 @@
 - [DowngradePhp81](#downgradephp81) (8)
 
 - [EarlyReturn](#earlyreturn) (11)
-
-- [MockeryToProphecy](#mockerytoprophecy) (2)
 
 - [MysqlToMysqli](#mysqltomysqli) (4)
 
@@ -6232,40 +6230,6 @@ Changes Single return of || to early returns
 +        return (bool) $this->somethingElse();
      }
  }
-```
-
-<br>
-
-## MockeryToProphecy
-
-### MockeryCloseRemoveRector
-
-Removes mockery close from test classes
-
-- class: [`Rector\MockeryToProphecy\Rector\StaticCall\MockeryCloseRemoveRector`](../rules/MockeryToProphecy/Rector/StaticCall/MockeryCloseRemoveRector.php)
-
-```diff
- public function tearDown() : void
- {
--    \Mockery::close();
- }
-```
-
-<br>
-
-### MockeryCreateMockToProphizeRector
-
-Changes mockery mock creation to Prophesize
-
-- class: [`Rector\MockeryToProphecy\Rector\ClassMethod\MockeryCreateMockToProphizeRector`](../rules/MockeryToProphecy/Rector/ClassMethod/MockeryCreateMockToProphizeRector.php)
-
-```diff
--$mock = \Mockery::mock('MyClass');
-+$mock = $this->prophesize('MyClass');
-+
- $service = new Service();
--$service->injectDependency($mock);
-+$service->injectDependency($mock->reveal());
 ```
 
 <br>
