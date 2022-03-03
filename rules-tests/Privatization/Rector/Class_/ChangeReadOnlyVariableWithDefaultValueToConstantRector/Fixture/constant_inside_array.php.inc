@@ -2,14 +2,15 @@
 
 namespace Rector\Tests\Privatization\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector\Fixture;
 
-class SomeConstant
+class ConstantInsideArray
 {
     public function run()
     {
-        $replacements = \PHPUnit\Framework\TestCase\Notice::class;
+        $replacements = [
+            \PHPUnit\Framework\TestCase\Notice::class
+        ];
 
-        if ($replacements === 'asdf') {
-        }
+        var_dump($replacements);
     }
 }
 
@@ -19,16 +20,17 @@ class SomeConstant
 
 namespace Rector\Tests\Privatization\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector\Fixture;
 
-class SomeConstant
+class ConstantInsideArray
 {
     /**
-     * @var string
+     * @var string[]
      */
-    private const REPLACEMENTS = \PHPUnit\Framework\TestCase\Notice::class;
+    private const REPLACEMENTS = [
+        \PHPUnit\Framework\TestCase\Notice::class
+    ];
     public function run()
     {
-        if (self::REPLACEMENTS === 'asdf') {
-        }
+        var_dump(self::REPLACEMENTS);
     }
 }
 

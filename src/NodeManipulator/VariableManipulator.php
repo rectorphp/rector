@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\EncapsedStringPart;
@@ -16,6 +18,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
@@ -30,7 +33,8 @@ final class VariableManipulator
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly VariableToConstantGuard $variableToConstantGuard,
         private readonly NodeComparator $nodeComparator,
-        private readonly ExprAnalyzer $exprAnalyzer
+        private readonly ExprAnalyzer $exprAnalyzer,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 
@@ -62,6 +66,13 @@ final class VariableManipulator
 
                 if ($this->isTestCaseExpectedVariable($node->var)) {
                     return null;
+                }
+
+                if ($node->expr instanceof ConstFetch || $node->expr instanceof ClassConstFetch) {
+                    $value = $this->valueResolver->getValue($node->expr);
+                    if (! is_array($value)) {
+                        return null;
+                    }
                 }
 
                 $assignsOfArrayToVariable[] = $node;
