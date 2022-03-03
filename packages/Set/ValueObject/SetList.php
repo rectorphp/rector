@@ -76,16 +76,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const PHPSPEC_30 = __DIR__ . '/../../../config/set/phpspec30.php';
-
-    /**
-     * @var string
-     */
-    public const PHPSPEC_40 = __DIR__ . '/../../../config/set/phpspec40.php';
-
-    /**
-     * @var string
-     */
     public const PHP_52 = __DIR__ . '/../../../config/set/php52.php';
 
     /**
