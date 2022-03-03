@@ -7,7 +7,6 @@ includes:
     - vendor/symplify/phpstan-rules/config/regex-rules.neon
     - vendor/symplify/phpstan-rules/config/services-rules.neon
     - vendor/symplify/phpstan-rules/config/static-rules.neon
-    - vendor/symplify/phpstan-rules/config/size-rules.neon
     - vendor/symplify/phpstan-rules/config/string-to-constant-rules.neon
     - vendor/symplify/phpstan-rules/config/symfony-rules.neon
     - vendor/symplify/phpstan-rules/config/test-rules.neon
@@ -85,10 +84,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is (.*?), keep it under 10#'
 
         -
-            message: "#^Cognitive complexity for \"Rector\\\\PhpSpecToPHPUnit\\\\Rector\\\\MethodCall\\\\PhpSpecPromisesToPHPUnitAssertRector\\:\\:refactor\\(\\)\" is (.*?), keep it under 10$#"
-            path: rules/PhpSpecToPHPUnit/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
-
-        -
             message: '#Class cognitive complexity is \d+, keep it under \d+#'
             paths:
                 - rules/Php70/EregToPcreTransformer.php
@@ -149,11 +144,6 @@ parameters:
                  - src/DependencyInjection/CompilerPass/VerifyRectorServiceExistsCompilerPass.php
                  # for config class reflection
                  - packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php
-
-        # known values from other methods
-        -
-            message: '#Negated boolean expression is always true#'
-            path: rules/PhpSpecToPHPUnit/NodeFactory/AssertMethodCallFactory.php
 
         - '#PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable given#'
 
@@ -341,7 +331,6 @@ parameters:
             paths:
                 - packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php
                 - packages/PostRector/Rector/AbstractPostRector.php
-                - rules/PhpSpecToPHPUnit/Rector/AbstractPhpSpecToPHPUnitRector.php
                 - src/Rector/AbstractRector.php
 
         -
@@ -601,3 +590,7 @@ parameters:
         -
             path: src/PhpParser/Node/BetterNodeFinder.php
             message: '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentByTypes\(\) should return T of PhpParser\\Node\|null but returns PhpParser\\Node#'
+
+        -
+            message: '#Make callable type explicit#'
+            path: src/NodeManipulator/BinaryOpManipulator.php

@@ -70,7 +70,7 @@
         "phpstan/phpstan-strict-rules": "^1.1",
         "phpstan/phpstan-webmozart-assert": "^1.0",
         "phpunit/phpunit": "^9.5",
-        "rector/phpstan-rules": "^0.4.20",
+        "rector/phpstan-rules": "^0.4.21",
         "spatie/enum": "^3.12",
         "symplify/coding-standard": "^10.1",
         "symplify/easy-ci": "^10.1",
