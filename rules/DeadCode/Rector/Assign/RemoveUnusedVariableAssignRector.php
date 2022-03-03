@@ -227,7 +227,7 @@ CODE_SAMPLE
     private function refactorUsedVariable(Assign $assign): null|Expr
     {
         $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Node) {
+        if (! $parentNode instanceof Expression) {
             return null;
         }
 
@@ -238,10 +238,7 @@ CODE_SAMPLE
             if (
                 $assign->var instanceof Variable &&
                 ! $this->isUsedInPreviousNode($assign->var) &&
-                ! $this->exprUsedInNextNodeAnalyzer->isUsed($assign->var) && $this->isUsedInAssignExpr(
-                    $assign->expr,
-                    $assign
-                )) {
+                ! $this->exprUsedInNextNodeAnalyzer->isUsed($assign->var)) {
                 return $this->cleanCastedExpr($assign->expr);
             }
 
