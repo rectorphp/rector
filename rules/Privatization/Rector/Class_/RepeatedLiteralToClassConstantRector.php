@@ -186,7 +186,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $this->nodeFactory->createSelfFetchConstant($constantName, $node);
+            return $this->nodeFactory->createSelfFetchConstant($constantName);
         });
     }
 

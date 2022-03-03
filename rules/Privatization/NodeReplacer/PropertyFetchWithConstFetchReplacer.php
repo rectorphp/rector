@@ -48,7 +48,7 @@ final class PropertyFetchWithConstFetchReplacer
             }
 
             // replace with constant fetch
-            return $this->nodeFactory->createSelfFetchConstant($constantName, $node);
+            return $this->nodeFactory->createSelfFetchConstant($constantName);
         });
     }
 }

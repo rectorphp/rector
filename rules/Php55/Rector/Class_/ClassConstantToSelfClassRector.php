@@ -60,7 +60,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ClassConstFetch
     {
-        return $this->nodeFactory->createSelfFetchConstant('class', $node);
+        return $this->nodeFactory->createSelfFetchConstant('class');
     }
 
     public function provideMinPhpVersion(): int

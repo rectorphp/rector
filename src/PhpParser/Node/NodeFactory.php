@@ -420,7 +420,7 @@ final class NodeFactory
         return new FuncCall(new Name($name), $arguments);
     }
 
-    public function createSelfFetchConstant(string $constantName, Node $node): ClassConstFetch
+    public function createSelfFetchConstant(string $constantName): ClassConstFetch
     {
         $name = new Name(ObjectReference::SELF()->getValue());
 
