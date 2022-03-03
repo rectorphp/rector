@@ -219,13 +219,13 @@ CODE_SAMPLE
     private function refactorUsedVariable(\PhpParser\Node\Expr\Assign $assign)
     {
         $parentNode = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node) {
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
         $if = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         // check if next node is if
         if (!$if instanceof \PhpParser\Node\Stmt\If_) {
-            if ($assign->var instanceof \PhpParser\Node\Expr\Variable && !$this->isUsedInPreviousNode($assign->var) && !$this->exprUsedInNextNodeAnalyzer->isUsed($assign->var) && $this->isUsedInAssignExpr($assign->expr, $assign)) {
+            if ($assign->var instanceof \PhpParser\Node\Expr\Variable && !$this->isUsedInPreviousNode($assign->var) && !$this->exprUsedInNextNodeAnalyzer->isUsed($assign->var)) {
                 return $this->cleanCastedExpr($assign->expr);
             }
             return null;

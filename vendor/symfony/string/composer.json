@@ -40,7 +40,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220302\\Symfony\\Component\\String\\": ""
+            "RectorPrefix20220303\\Symfony\\Component\\String\\": ""
         },
         "files": [
             "Resources\/functions.php"

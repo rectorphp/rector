@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20220302\React\Promise;
+namespace RectorPrefix20220303\React\Promise;
 
-class Promise implements \RectorPrefix20220302\React\Promise\ExtendedPromiseInterface, \RectorPrefix20220302\React\Promise\CancellablePromiseInterface
+class Promise implements \RectorPrefix20220303\React\Promise\ExtendedPromiseInterface, \RectorPrefix20220303\React\Promise\CancellablePromiseInterface
 {
     private $canceller;
     private $result;
@@ -47,7 +47,7 @@ class Promise implements \RectorPrefix20220302\React\Promise\ExtendedPromiseInte
         if (null !== $this->result) {
             return $this->result->done($onFulfilled, $onRejected, $onProgress);
         }
-        $this->handlers[] = static function (\RectorPrefix20220302\React\Promise\ExtendedPromiseInterface $promise) use($onFulfilled, $onRejected) {
+        $this->handlers[] = static function (\RectorPrefix20220303\React\Promise\ExtendedPromiseInterface $promise) use($onFulfilled, $onRejected) {
             $promise->done($onFulfilled, $onRejected);
         };
         if ($onProgress) {
@@ -58,7 +58,7 @@ class Promise implements \RectorPrefix20220302\React\Promise\ExtendedPromiseInte
     {
         return $this->then(null, static function ($reason) use($onRejected) {
             if (!_checkTypehint($onRejected, $reason)) {
-                return new \RectorPrefix20220302\React\Promise\RejectedPromise($reason);
+                return new \RectorPrefix20220303\React\Promise\RejectedPromise($reason);
             }
             return $onRejected($reason);
         });
@@ -71,7 +71,7 @@ class Promise implements \RectorPrefix20220302\React\Promise\ExtendedPromiseInte
             });
         }, static function ($reason) use($onFulfilledOrRejected) {
             return resolve($onFulfilledOrRejected())->then(function () use($reason) {
-                return new \RectorPrefix20220302\React\Promise\RejectedPromise($reason);
+                return new \RectorPrefix20220303\React\Promise\RejectedPromise($reason);
             });
         });
     }
@@ -104,7 +104,7 @@ class Promise implements \RectorPrefix20220302\React\Promise\ExtendedPromiseInte
             } else {
                 $progressHandler = $notify;
             }
-            $this->handlers[] = static function (\RectorPrefix20220302\React\Promise\ExtendedPromiseInterface $promise) use($onFulfilled, $onRejected, $resolve, $reject, $progressHandler) {
+            $this->handlers[] = static function (\RectorPrefix20220303\React\Promise\ExtendedPromiseInterface $promise) use($onFulfilled, $onRejected, $resolve, $reject, $progressHandler) {
                 $promise->then($onFulfilled, $onRejected)->done($resolve, $reject, $progressHandler);
             };
             $this->progressHandlers[] = $progressHandler;
@@ -117,11 +117,11 @@ class Promise implements \RectorPrefix20220302\React\Promise\ExtendedPromiseInte
         }
         $this->settle(reject($reason));
     }
-    private function settle(\RectorPrefix20220302\React\Promise\ExtendedPromiseInterface $promise)
+    private function settle(\RectorPrefix20220303\React\Promise\ExtendedPromiseInterface $promise)
     {
         $promise = $this->unwrap($promise);
         if ($promise === $this) {
-            $promise = new \RectorPrefix20220302\React\Promise\RejectedPromise(new \LogicException('Cannot resolve a promise with itself.'));
+            $promise = new \RectorPrefix20220303\React\Promise\RejectedPromise(new \LogicException('Cannot resolve a promise with itself.'));
         }
         $handlers = $this->handlers;
         $this->progressHandlers = $this->handlers = [];
@@ -141,7 +141,7 @@ class Promise implements \RectorPrefix20220302\React\Promise\ExtendedPromiseInte
     }
     private function extract($promise)
     {
-        if ($promise instanceof \RectorPrefix20220302\React\Promise\LazyPromise) {
+        if ($promise instanceof \RectorPrefix20220303\React\Promise\LazyPromise) {
             $promise = $promise->promise();
         }
         return $promise;

@@ -13,7 +13,7 @@ use Rector\Privatization\NodeFactory\ClassConstantFetchValueFactory;
 use Rector\Privatization\ValueObject\ReplaceStringWithClassConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220302\Webmozart\Assert\Assert;
+use RectorPrefix20220303\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\ReplaceStringWithClassConstantRectorTest
  */
@@ -92,7 +92,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220302\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Privatization\ValueObject\ReplaceStringWithClassConstant::class);
+        \RectorPrefix20220303\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Privatization\ValueObject\ReplaceStringWithClassConstant::class);
         $this->replaceStringWithClassConstants = $configuration;
     }
     private function matchArg(\PhpParser\Node\Expr\MethodCall $methodCall, \Rector\Privatization\ValueObject\ReplaceStringWithClassConstant $replaceStringWithClassConstant) : ?\PhpParser\Node\Arg

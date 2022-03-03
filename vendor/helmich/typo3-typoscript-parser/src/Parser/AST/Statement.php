@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220302\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20220303\Helmich\TypoScriptParser\Parser\AST;
 
 /**
  * Abstract TypoScript statement.
@@ -36,4 +36,4 @@ abstract class Statement
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST
  */
-\class_alias('RectorPrefix20220302\\Helmich\\TypoScriptParser\\Parser\\AST\\Statement', 'Helmich\\TypoScriptParser\\Parser\\AST\\Statement', \false);
+\class_alias('RectorPrefix20220303\\Helmich\\TypoScriptParser\\Parser\\AST\\Statement', 'Helmich\\TypoScriptParser\\Parser\\AST\\Statement', \false);

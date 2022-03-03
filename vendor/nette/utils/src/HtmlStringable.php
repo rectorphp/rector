@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220302\Nette;
+namespace RectorPrefix20220303\Nette;
 
 interface HtmlStringable
 {
@@ -14,4 +14,4 @@ interface HtmlStringable
      */
     function __toString() : string;
 }
-\interface_exists(\RectorPrefix20220302\Nette\Utils\IHtmlString::class);
+\interface_exists(\RectorPrefix20220303\Nette\Utils\IHtmlString::class);

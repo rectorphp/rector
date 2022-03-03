@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220302;
+namespace RectorPrefix20220303;
 
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Rector\Nette\Rector\Latte\RenameMethodLatteRector;

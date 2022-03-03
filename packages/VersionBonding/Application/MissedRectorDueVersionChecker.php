@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\VersionBonding\Application;
 
-use RectorPrefix20220302\Nette\Utils\Strings;
+use RectorPrefix20220303\Nette\Utils\Strings;
 use PHPStan\Php\PhpVersion;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
@@ -70,7 +70,7 @@ final class MissedRectorDueVersionChecker
         }
         foreach ($minPhpVersions as $minPhpVersion) {
             $phpVersion = new \PHPStan\Php\PhpVersion($minPhpVersion->provideMinPhpVersion());
-            $shortRectorClass = \RectorPrefix20220302\Nette\Utils\Strings::after(\get_class($minPhpVersion), '\\', -1);
+            $shortRectorClass = \RectorPrefix20220303\Nette\Utils\Strings::after(\get_class($minPhpVersion), '\\', -1);
             $rectorMessage = \sprintf(' * [%s] %s', $phpVersion->getVersionString(), $shortRectorClass);
             $this->rectorOutputStyle->writeln($rectorMessage);
         }
