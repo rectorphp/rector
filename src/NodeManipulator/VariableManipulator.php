@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Stmt\Class_;
@@ -53,7 +54,7 @@ final class VariableManipulator
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->getStmts(),
-            function (Node $node) use (&$assignsOfArrayToVariable, $currentClassName) {
+            function (Node $node) use (&$assignsOfArrayToVariable, $currentClass, $currentClassName) {
                 if (! $node instanceof Assign) {
                     return null;
                 }
@@ -78,7 +79,11 @@ final class VariableManipulator
                     return null;
                 }
 
-                if ($node->expr instanceof ClassConstFetch && $this->isOutsideClass($node->expr, $currentClassName)) {
+                if ($node->expr instanceof ClassConstFetch && $this->isOutsideClass(
+                    $node->expr,
+                    $currentClass,
+                    $currentClassName
+                )) {
                     return null;
                 }
 
@@ -101,15 +106,18 @@ final class VariableManipulator
         );
     }
 
-    private function isOutsideClass(ClassConstFetch $classConstFetch, string $currentClassName): bool
-    {
+    private function isOutsideClass(
+        ClassConstFetch $classConstFetch,
+        Class_ $currentClass,
+        string $currentClassName
+    ): bool {
         /**
          * Dynamic class already checked on $this->exprAnalyzer->isDynamicValue() early
          * @var Name $class
          */
         $class = $classConstFetch->class;
-        if ($class->isSpecialClassName()) {
-            return false;
+        if ($this->nodeNameResolver->isName($class, 'self')) {
+            return $currentClass->extends instanceof FullyQualified;
         }
 
         return ! $this->nodeNameResolver->isName($class, $currentClassName);
