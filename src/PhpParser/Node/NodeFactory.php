@@ -392,7 +392,7 @@ final class NodeFactory
         $arguments = $this->createArgs($arguments);
         return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name($name), $arguments);
     }
-    public function createSelfFetchConstant(string $constantName, \PhpParser\Node $node) : \PhpParser\Node\Expr\ClassConstFetch
+    public function createSelfFetchConstant(string $constantName) : \PhpParser\Node\Expr\ClassConstFetch
     {
         $name = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF()->getValue());
         return new \PhpParser\Node\Expr\ClassConstFetch($name, $constantName);

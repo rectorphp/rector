@@ -168,7 +168,7 @@ CODE_SAMPLE
             if ($this->isClassConstExistsWithDifferentValue($classConsts, $constantName, $node->value)) {
                 return null;
             }
-            return $this->nodeFactory->createSelfFetchConstant($constantName, $node);
+            return $this->nodeFactory->createSelfFetchConstant($constantName);
         });
     }
     /**

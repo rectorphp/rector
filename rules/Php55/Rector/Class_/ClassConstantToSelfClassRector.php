@@ -52,7 +52,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\ClassConstFetch
     {
-        return $this->nodeFactory->createSelfFetchConstant('class', $node);
+        return $this->nodeFactory->createSelfFetchConstant('class');
     }
     public function provideMinPhpVersion() : int
     {
