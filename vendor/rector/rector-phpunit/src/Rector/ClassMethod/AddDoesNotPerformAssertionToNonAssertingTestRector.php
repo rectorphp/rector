@@ -4,15 +4,12 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\AssertCallAnalyzer;
+use Rector\PHPUnit\NodeAnalyzer\MockedVariableAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,10 +31,16 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends \Rector\C
      * @var \Rector\PHPUnit\NodeAnalyzer\AssertCallAnalyzer
      */
     private $assertCallAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\PHPUnit\NodeAnalyzer\AssertCallAnalyzer $assertCallAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\PHPUnit\NodeAnalyzer\MockedVariableAnalyzer
+     */
+    private $mockedVariableAnalyzer;
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\PHPUnit\NodeAnalyzer\AssertCallAnalyzer $assertCallAnalyzer, \Rector\PHPUnit\NodeAnalyzer\MockedVariableAnalyzer $mockedVariableAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->assertCallAnalyzer = $assertCallAnalyzer;
+        $this->mockedVariableAnalyzer = $mockedVariableAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -102,29 +105,11 @@ CODE_SAMPLE
         if ($this->assertCallAnalyzer->containsAssertCall($classMethod)) {
             return \true;
         }
-        return $this->containsMockAsUsedVariable($classMethod);
+        return $this->mockedVariableAnalyzer->containsMockAsUsedVariable($classMethod);
     }
     private function addDoesNotPerformAssertions(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@doesNotPerformAssertions', new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
-    }
-    private function containsMockAsUsedVariable(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
-    {
-        $doesContainMock = \false;
-        $this->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) use(&$doesContainMock) {
-            if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch && !$node instanceof \PhpParser\Node\Expr\Variable) {
-                return null;
-            }
-            $variableType = $this->getType($node);
-            if ($variableType instanceof \PHPStan\Type\MixedType) {
-                return null;
-            }
-            if ($variableType->isSuperTypeOf(new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\MockObject\\MockObject'))->yes()) {
-                $doesContainMock = \true;
-            }
-            return null;
-        });
-        return $doesContainMock;
     }
 }

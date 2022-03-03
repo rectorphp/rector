@@ -10,16 +10,16 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
-use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
+use Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator;
 use Rector\PHPUnit\NodeManipulator\StmtManipulator;
 use RectorPrefix20220303\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class SetUpClassMethodFactory
 {
     /**
      * @readonly
-     * @var \Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator
+     * @var \Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator
      */
-    private $phpUnitTypeDeclarationDecorator;
+    private $setUpMethodDecorator;
     /**
      * @readonly
      * @var \Rector\PHPUnit\NodeManipulator\StmtManipulator
@@ -30,9 +30,9 @@ final class SetUpClassMethodFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator, \Rector\PHPUnit\NodeManipulator\StmtManipulator $stmtManipulator, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator $setUpMethodDecorator, \Rector\PHPUnit\NodeManipulator\StmtManipulator $stmtManipulator, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
-        $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
+        $this->setUpMethodDecorator = $setUpMethodDecorator;
         $this->stmtManipulator = $stmtManipulator;
         $this->nodeFactory = $nodeFactory;
     }
@@ -47,7 +47,7 @@ final class SetUpClassMethodFactory
         $classMethodBuilder->addStmt($this->createParentStaticCall());
         $classMethodBuilder->addStmts($stmts);
         $classMethod = $classMethodBuilder->getNode();
-        $this->phpUnitTypeDeclarationDecorator->decorate($classMethod);
+        $this->setUpMethodDecorator->decorate($classMethod);
         return $classMethod;
     }
     public function createParentStaticCall() : \PhpParser\Node\Stmt\Expression

@@ -17,6 +17,7 @@ final class FixtureFinder
         $this->finderSanitizer = $finderSanitizer;
     }
     /**
+     * @param string[] $sources
      * @return SmartFileInfo[]
      */
     public function find(array $sources) : array

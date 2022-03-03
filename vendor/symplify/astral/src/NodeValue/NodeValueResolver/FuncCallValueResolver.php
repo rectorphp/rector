@@ -57,8 +57,8 @@ final class FuncCallValueResolver implements \RectorPrefix20220303\Symplify\Astr
             if (!$this->isAllowedFunctionName($functionName)) {
                 return null;
             }
-            if (\function_exists($functionName) && \is_callable($functionName)) {
-                return \call_user_func_array($functionName, $arguments);
+            if (\function_exists($functionName)) {
+                return $functionName(...$arguments);
             }
             throw new \RectorPrefix20220303\Symplify\Astral\Exception\ShouldNotHappenException();
         }

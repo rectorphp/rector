@@ -30,8 +30,8 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->configure([
         // keep unprefixed to protected from downgrade
-        'PHPUnit\\Framework\\MockObject\\MockBuilder',
-        'PHPUnit\\Framework\\MockObject\\MockObject',
+        'PHPUnit\\Framework\\MockObject\\*',
+        'PHPUnit\\Framework\\TestCase',
         'Prophecy\\Prophet',
     ]);
 };

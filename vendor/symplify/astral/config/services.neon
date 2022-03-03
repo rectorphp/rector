@@ -25,3 +25,4 @@ services:
     - Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
 
     - Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser
+    - Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver

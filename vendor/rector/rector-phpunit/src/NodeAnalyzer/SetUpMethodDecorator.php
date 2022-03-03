@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpSpecToPHPUnit;
+namespace Rector\PHPUnit\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\AstResolver;
@@ -10,7 +10,7 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 /**
  * Decorate setUp() and tearDown() with "void" when local TestClass class uses them
  */
-final class PHPUnitTypeDeclarationDecorator
+final class SetUpMethodDecorator
 {
     /**
      * @readonly
