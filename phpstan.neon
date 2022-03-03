@@ -238,11 +238,6 @@ parameters:
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             path: 'packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php'
 
-        -
-            message: '#Do not use setter on a service#'
-            paths:
-                - packages/NodeTypeResolver/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
-
         # known type
         - '#Parameter \#3 \$pseudoNamespaceToNamespace of method Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\UnderscoreRenamePhpDocNodeVisitor\:\:shouldSkip\(\) expects Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace, Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace\|null given#'
 
@@ -261,8 +256,6 @@ parameters:
 
         - '#Cannot call method getSmartFileInfo\(\) on Rector\\Core\\ValueObject\\Application\\File\|null#'
 
-        - '#Method Rector\\Core\\Tests\\DependencyInjection\\ConfigurableRectorImportConfigCallsMergeTest\:\:provideData\(\) return type has no value type specified in iterable type Iterator#'
-
         -
             message: '#Function "function_exists\(\)" cannot be used/left in the code#'
             paths:
@@ -273,7 +266,6 @@ parameters:
             message: '#File processor must require Rector rules in constructor via TypeRectorInterface\[\] \$typeRectors array autowire#'
             path: src/Application/FileProcessor/PhpFileProcessor.php
 
-        - '#Use required typed property over of nullable property#'
         - '#Method Rector\\BetterPhpDocParser\\PhpDocParser\\BetterPhpDocParser\:\:parseChildAndStoreItsPositions\(\) should return PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTextNode but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode#'
 
         # deserves better architecture
@@ -370,8 +362,6 @@ parameters:
         # waits for phpstan upgrade to php-parser 4.13
         - '#Access to an undefined property PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\:\:\$value#'
         - '#(.*?), array<PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\> given#'
-
-        - '#Parameter "\w+" cannot have default value#'
 
         # scope & mutating scope mish-mash
         - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, Closure\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'
@@ -505,15 +495,6 @@ parameters:
                  - src/Contract/Processor/FileProcessorInterface.php
 
         - '#Call to function property_exists\(\) with PhpParser\\Node\\Stmt\\ClassLike and (.*?) will always evaluate to true#'
-
-        # code sample configuration
-        -
-            message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\. You have 4 nesting#'
-            paths:
-                - rules/Renaming/Rector/ClassConstFetch/RenameClassConstFetchRector.php
-                - rules/Arguments/Rector/ClassMethod/ArgumentAdderRector.php
-                - rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php
-                - rules/Transform/Rector/Assign/PropertyFetchToMethodCallRector.php
 
         # skipped on purpose, as ctor overrie
         - '#Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType\:\:__construct\(\) does not call parent constructor from PHPStan\\Type\\StaticType#'
