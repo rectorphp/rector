@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbaf8dc6c11080cb8e64f50b2c241eb3b
+class ComposerStaticInitc291b87a1b4ce0b46a8e2f223b98b62f
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2520,9 +2520,6 @@ class ComposerStaticInitbaf8dc6c11080cb8e64f50b2c241eb3b
         'Rector\\Laravel\\ValueObject\\AddArgumentDefaultValue' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/AddArgumentDefaultValue.php',
         'Rector\\Laravel\\ValueObject\\ServiceNameTypeAndVariableName' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/ServiceNameTypeAndVariableName.php',
         'Rector\\Laravel\\ValueObject\\TypeToTimeMethodAndPosition' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/TypeToTimeMethodAndPosition.php',
-        'Rector\\MockeryToProphecy\\Collector\\MockVariableCollector' => __DIR__ . '/../..' . '/rules/MockeryToProphecy/Collector/MockVariableCollector.php',
-        'Rector\\MockeryToProphecy\\Rector\\ClassMethod\\MockeryCreateMockToProphizeRector' => __DIR__ . '/../..' . '/rules/MockeryToProphecy/Rector/ClassMethod/MockeryCreateMockToProphizeRector.php',
-        'Rector\\MockeryToProphecy\\Rector\\StaticCall\\MockeryCloseRemoveRector' => __DIR__ . '/../..' . '/rules/MockeryToProphecy/Rector/StaticCall/MockeryCloseRemoveRector.php',
         'Rector\\MysqlToMysqli\\Rector\\Assign\\MysqlAssignToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/Assign/MysqlAssignToMysqliRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlFuncCallToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlFuncCallToMysqliRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlPConnectToMysqliConnectRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlPConnectToMysqliConnectRector.php',
@@ -3848,9 +3845,9 @@ class ComposerStaticInitbaf8dc6c11080cb8e64f50b2c241eb3b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbaf8dc6c11080cb8e64f50b2c241eb3b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbaf8dc6c11080cb8e64f50b2c241eb3b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbaf8dc6c11080cb8e64f50b2c241eb3b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc291b87a1b4ce0b46a8e2f223b98b62f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc291b87a1b4ce0b46a8e2f223b98b62f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc291b87a1b4ce0b46a8e2f223b98b62f::$classMap;
 
         }, null, ClassLoader::class);
     }
