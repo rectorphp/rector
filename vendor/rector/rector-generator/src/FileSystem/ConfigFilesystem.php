@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\RectorGenerator\FileSystem;
 
-use RectorPrefix20220303\Nette\Utils\Strings;
+use RectorPrefix20220304\Nette\Utils\Strings;
 use Rector\RectorGenerator\Exception\ShouldNotHappenException;
 use Rector\RectorGenerator\TemplateFactory;
-use RectorPrefix20220303\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220304\Symplify\SmartFileSystem\SmartFileSystem;
 final class ConfigFilesystem
 {
     /**
@@ -27,7 +27,7 @@ final class ConfigFilesystem
      * @var \Rector\RectorGenerator\TemplateFactory
      */
     private $templateFactory;
-    public function __construct(\RectorPrefix20220303\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\RectorGenerator\TemplateFactory $templateFactory)
+    public function __construct(\RectorPrefix20220304\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\RectorGenerator\TemplateFactory $templateFactory)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->templateFactory = $templateFactory;
@@ -45,7 +45,7 @@ final class ConfigFilesystem
             return;
         }
         $registerServiceLine = \sprintf(';' . \PHP_EOL . '    $services->set(\\%s::class);' . \PHP_EOL . '};', $servicesFullyQualifiedName);
-        $setFileContents = \RectorPrefix20220303\Nette\Utils\Strings::replace($setFileContents, self::LAST_ITEM_REGEX, $registerServiceLine);
+        $setFileContents = \RectorPrefix20220304\Nette\Utils\Strings::replace($setFileContents, self::LAST_ITEM_REGEX, $registerServiceLine);
         // 3. print the content back to file
         $this->smartFileSystem->dumpFile($setFilePath, $setFileContents);
     }

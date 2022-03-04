@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\NodeAnalyzer;
 
-use RectorPrefix20220303\Nette\Utils\Strings;
+use RectorPrefix20220304\Nette\Utils\Strings;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -56,7 +56,7 @@ final class UseImportNameMatcher
         if ($useUse->alias === null) {
             return $useUse->name->toString();
         }
-        $unaliasedShortClass = \RectorPrefix20220303\Nette\Utils\Strings::substring($tag, \RectorPrefix20220303\Nette\Utils\Strings::length($useUse->alias->toString()));
+        $unaliasedShortClass = \RectorPrefix20220304\Nette\Utils\Strings::substring($tag, \RectorPrefix20220304\Nette\Utils\Strings::length($useUse->alias->toString()));
         if (\strncmp($unaliasedShortClass, '\\', \strlen('\\')) === 0) {
             return $useUse->name . $unaliasedShortClass;
         }

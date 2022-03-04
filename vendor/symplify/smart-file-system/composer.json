@@ -14,12 +14,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220303\\Symplify\\SmartFileSystem\\": "src"
+            "RectorPrefix20220304\\Symplify\\SmartFileSystem\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220303\\Symplify\\SmartFileSystem\\Tests\\": "tests"
+            "RectorPrefix20220304\\Symplify\\SmartFileSystem\\Tests\\": "tests"
         }
     },
     "extra": {

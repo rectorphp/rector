@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220303\Tracy;
+namespace RectorPrefix20220304\Tracy;
 
 /**
  * Debug Bar.
@@ -20,7 +20,7 @@ class Bar
      * Add custom panel.
      * @return static
      */
-    public function addPanel(\RectorPrefix20220303\Tracy\IBarPanel $panel, ?string $id = null) : self
+    public function addPanel(\RectorPrefix20220304\Tracy\IBarPanel $panel, ?string $id = null) : self
     {
         if ($id === null) {
             $c = 0;
@@ -34,7 +34,7 @@ class Bar
     /**
      * Returns panel with given id
      */
-    public function getPanel(string $id) : ?\RectorPrefix20220303\Tracy\IBarPanel
+    public function getPanel(string $id) : ?\RectorPrefix20220304\Tracy\IBarPanel
     {
         return $this->panels[$id] ?? null;
     }
@@ -42,33 +42,33 @@ class Bar
      * Renders loading <script>
      * @internal
      */
-    public function renderLoader(\RectorPrefix20220303\Tracy\DeferredContent $defer) : void
+    public function renderLoader(\RectorPrefix20220304\Tracy\DeferredContent $defer) : void
     {
         if (!$defer->isAvailable()) {
             throw new \LogicException('Start session before Tracy is enabled.');
         }
         $this->loaderRendered = \true;
         $requestId = $defer->getRequestId();
-        $nonce = \RectorPrefix20220303\Tracy\Helpers::getNonce();
+        $nonce = \RectorPrefix20220304\Tracy\Helpers::getNonce();
         $async = \true;
         require __DIR__ . '/assets/loader.phtml';
     }
     /**
      * Renders debug bar.
      */
-    public function render(\RectorPrefix20220303\Tracy\DeferredContent $defer) : void
+    public function render(\RectorPrefix20220304\Tracy\DeferredContent $defer) : void
     {
         $redirectQueue =& $defer->getItems('redirect');
         $requestId = $defer->getRequestId();
-        if (\RectorPrefix20220303\Tracy\Helpers::isAjax()) {
+        if (\RectorPrefix20220304\Tracy\Helpers::isAjax()) {
             if ($defer->isAvailable()) {
                 $defer->addSetup('Tracy.Debug.loadAjax', $this->renderPartial('ajax', '-ajax:' . $requestId));
             }
-        } elseif (\RectorPrefix20220303\Tracy\Helpers::isRedirect()) {
+        } elseif (\RectorPrefix20220304\Tracy\Helpers::isRedirect()) {
             if ($defer->isAvailable()) {
                 $redirectQueue[] = ['content' => $this->renderPartial('redirect', '-r' . \count($redirectQueue)), 'time' => \time()];
             }
-        } elseif (\RectorPrefix20220303\Tracy\Helpers::isHtmlMode()) {
+        } elseif (\RectorPrefix20220304\Tracy\Helpers::isHtmlMode()) {
             $content = $this->renderPartial('main');
             foreach (\array_reverse($redirectQueue) as $item) {
                 $content['bar'] .= $item['content']['bar'];
@@ -79,9 +79,9 @@ class Bar
             if ($this->loaderRendered) {
                 $defer->addSetup('Tracy.Debug.init', $content);
             } else {
-                $nonce = \RectorPrefix20220303\Tracy\Helpers::getNonce();
+                $nonce = \RectorPrefix20220304\Tracy\Helpers::getNonce();
                 $async = \false;
-                \RectorPrefix20220303\Tracy\Debugger::removeOutputBuffers(\false);
+                \RectorPrefix20220304\Tracy\Debugger::removeOutputBuffers(\false);
                 require __DIR__ . '/assets/loader.phtml';
             }
         }
@@ -89,9 +89,9 @@ class Bar
     private function renderPartial(string $type, string $suffix = '') : array
     {
         $panels = $this->renderPanels($suffix);
-        return ['bar' => \RectorPrefix20220303\Tracy\Helpers::capture(function () use($type, $panels) {
+        return ['bar' => \RectorPrefix20220304\Tracy\Helpers::capture(function () use($type, $panels) {
             require __DIR__ . '/assets/bar.phtml';
-        }), 'panels' => \RectorPrefix20220303\Tracy\Helpers::capture(function () use($type, $panels) {
+        }), 'panels' => \RectorPrefix20220304\Tracy\Helpers::capture(function () use($type, $panels) {
             require __DIR__ . '/assets/panels.phtml';
         })];
     }
@@ -116,7 +116,7 @@ class Bar
                 }
                 $idHtml = "error-{$idHtml}";
                 $tab = "Error in {$id}";
-                $panelHtml = "<h1>Error: {$id}</h1><div class='tracy-inner'>" . \nl2br(\RectorPrefix20220303\Tracy\Helpers::escapeHtml($e)) . '</div>';
+                $panelHtml = "<h1>Error: {$id}</h1><div class='tracy-inner'>" . \nl2br(\RectorPrefix20220304\Tracy\Helpers::escapeHtml($e)) . '</div>';
                 unset($e);
             }
             $panels[] = (object) ['id' => $idHtml, 'tab' => $tab, 'panel' => $panelHtml];

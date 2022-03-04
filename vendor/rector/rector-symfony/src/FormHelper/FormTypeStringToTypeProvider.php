@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\FormHelper;
 
-use RectorPrefix20220303\Nette\Utils\Strings;
+use RectorPrefix20220304\Nette\Utils\Strings;
 use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 final class FormTypeStringToTypeProvider
@@ -29,7 +29,7 @@ final class FormTypeStringToTypeProvider
     {
         $nameToTypeMap = $this->getNameToTypeMap();
         if (\strncmp($name, 'form.type.', \strlen('form.type.')) === 0) {
-            $name = \RectorPrefix20220303\Nette\Utils\Strings::substring($name, \strlen('form.type.'));
+            $name = \RectorPrefix20220304\Nette\Utils\Strings::substring($name, \strlen('form.type.'));
         }
         return $nameToTypeMap[$name] ?? null;
     }

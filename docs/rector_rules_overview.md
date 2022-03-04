@@ -2542,9 +2542,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ```diff
  {
--    "require-dev": {
+     "require": {
 -        "symfony/console": "^3.4"
-+    "require": {
 +        "symfony/console": "^4.4"
      }
  }
