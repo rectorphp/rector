@@ -94,7 +94,7 @@ final class ClassInsertManipulator
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function insertBefore(array $stmts, \PhpParser\Node\Stmt $stmt, int $key) : array
+    private function insertBefore(array $stmts, \PhpParser\Node\Stmt $stmt, int $key) : array
     {
         \array_splice($stmts, $key, 0, [$stmt]);
         return $stmts;
