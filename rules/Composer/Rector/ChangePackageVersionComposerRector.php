@@ -42,7 +42,7 @@ final class ChangePackageVersionComposerRector implements ComposerRectorInterfac
         return new RuleDefinition('Change package version `composer.json`', [new ConfiguredCodeSample(
             <<<'CODE_SAMPLE'
 {
-    "require-dev": {
+    "require": {
         "symfony/console": "^3.4"
     }
 }
