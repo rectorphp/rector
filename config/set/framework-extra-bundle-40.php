@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220304;
+namespace RectorPrefix20220305;
 
 use Rector\Symfony\Rector\ClassMethod\RemoveServiceFromSensioRouteRector;
 use Rector\Symfony\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector;

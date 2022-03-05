@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220304\Symplify\EasyParallel\Exception;
+namespace RectorPrefix20220305\Symplify\EasyParallel\Exception;
 
 use Exception;
 final class ParallelShouldNotHappenException extends \Exception

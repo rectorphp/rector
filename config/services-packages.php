@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220304;
+namespace RectorPrefix20220305;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220304\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
-use RectorPrefix20220304\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix20220305\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
+use RectorPrefix20220305\Symplify\PackageBuilder\Yaml\ParametersMerger;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     // make use of https://github.com/symplify/easy-parallel
-    $containerConfigurator->import(\RectorPrefix20220304\Symplify\EasyParallel\ValueObject\EasyParallelConfig::FILE_PATH);
+    $containerConfigurator->import(\RectorPrefix20220305\Symplify\EasyParallel\ValueObject\EasyParallelConfig::FILE_PATH);
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
     $services->load('Rector\\', __DIR__ . '/../packages')->exclude([
@@ -23,5 +23,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         __DIR__ . '/../packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php',
     ]);
     // parallel
-    $services->set(\RectorPrefix20220304\Symplify\PackageBuilder\Yaml\ParametersMerger::class);
+    $services->set(\RectorPrefix20220305\Symplify\PackageBuilder\Yaml\ParametersMerger::class);
 };

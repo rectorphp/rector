@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\NodeFactory;
 
-use RectorPrefix20220304\Nette\Utils\Strings;
+use RectorPrefix20220305\Nette\Utils\Strings;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -68,7 +68,7 @@ final class NamedArgsFactory
                 continue;
             }
             $string = $arrayItem->key;
-            $match = \RectorPrefix20220304\Nette\Utils\Strings::match($string->value, self::CLASS_CONST_REGEX);
+            $match = \RectorPrefix20220305\Nette\Utils\Strings::match($string->value, self::CLASS_CONST_REGEX);
             if ($match === null) {
                 continue;
             }

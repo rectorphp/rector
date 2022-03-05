@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Symplify\RuleDocGenerator\ValueObject;
 
-use RectorPrefix20220304\Nette\Utils\Strings;
+use RectorPrefix20220305\Nette\Utils\Strings;
 use Symplify\RuleDocGenerator\Contract\CodeSampleInterface;
 use Symplify\RuleDocGenerator\Exception\PoorDocumentationException;
 use Symplify\RuleDocGenerator\Exception\ShouldNotHappenException;
@@ -69,7 +69,7 @@ final class RuleDefinition
         if ($this->ruleClass === null) {
             throw new \Symplify\RuleDocGenerator\Exception\ShouldNotHappenException();
         }
-        return (string) \RectorPrefix20220304\Nette\Utils\Strings::after($this->ruleClass, '\\', -1);
+        return (string) \RectorPrefix20220305\Nette\Utils\Strings::after($this->ruleClass, '\\', -1);
     }
     /**
      * @return CodeSampleInterface[]

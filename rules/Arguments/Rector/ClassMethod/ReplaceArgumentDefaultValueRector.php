@@ -13,7 +13,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220304\Webmozart\Assert\Assert;
+use RectorPrefix20220305\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\ReplaceArgumentDefaultValueRectorTest
  */
@@ -80,7 +80,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220304\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue::class);
+        \RectorPrefix20220305\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue::class);
         $this->replacedArguments = $configuration;
     }
 }
