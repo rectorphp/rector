@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Transform\ValueObject\MethodCallToPropertyFetch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -18,9 +19,9 @@ use Webmozart\Assert\Assert;
 final class MethodCallToPropertyFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var array<string, string>
+     * @var MethodCallToPropertyFetch[]
      */
-    private array $methodCallToPropertyFetchCollection = [];
+    private array $methodCallsToPropertyFetches = [];
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -66,12 +67,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->methodCallToPropertyFetchCollection as $methodName => $propertyName) {
-            if (! $this->isName($node->name, $methodName)) {
+        foreach ($this->methodCallsToPropertyFetches as $methodCallToPropertyFetch) {
+            if (! $this->isName($node->name, $methodCallToPropertyFetch->getOldMethod())) {
                 continue;
             }
 
-            return $this->nodeFactory->createPropertyFetch('this', $propertyName);
+            if (! $this->isObjectType($node->var, $methodCallToPropertyFetch->getOldObjectType())) {
+                continue;
+            }
+
+            return $this->nodeFactory->createPropertyFetch($node->var, $methodCallToPropertyFetch->getNewProperty());
         }
 
         return null;
@@ -82,10 +87,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        Assert::allString(array_keys($configuration));
-        Assert::allString($configuration);
+        Assert::allIsAOf($configuration, MethodCallToPropertyFetch::class);
 
-        /** @var array<string, string> $configuration */
-        $this->methodCallToPropertyFetchCollection = $configuration;
+        $this->methodCallsToPropertyFetches = $configuration;
     }
 }

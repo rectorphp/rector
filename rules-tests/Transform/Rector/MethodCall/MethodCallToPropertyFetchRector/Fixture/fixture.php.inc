@@ -2,11 +2,13 @@
 
 namespace Rector\Tests\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector\Fixture;
 
-class Fixture
+use Rector\Tests\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector\Source\RenameToProperty;
+
+final class Fixture
 {
-    public function run()
+    public function run(RenameToProperty $renameToProperty)
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager = $renameToProperty->getEntityManager();
     }
 }
 
@@ -16,11 +18,13 @@ class Fixture
 
 namespace Rector\Tests\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector\Fixture;
 
-class Fixture
+use Rector\Tests\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector\Source\RenameToProperty;
+
+final class Fixture
 {
-    public function run()
+    public function run(RenameToProperty $renameToProperty)
     {
-        $entityManager = $this->entityManager;
+        $entityManager = $renameToProperty->entityManager;
     }
 }
 
