@@ -1,10 +1,10 @@
-# 505 Rules Overview
+# 506 Rules Overview
 
 <br>
 
 ## Categories
 
-- [Arguments](#arguments) (4)
+- [Arguments](#arguments) (5)
 
 - [CodeQuality](#codequality) (71)
 
@@ -166,6 +166,42 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -version_compare(PHP_VERSION, '5.6', 'gte');
 +version_compare(PHP_VERSION, '5.6', 'ge');
+```
+
+<br>
+
+### RemoveMethodCallParamRector
+
+Remove parameter of method call
+
+:wrench: **configure it!**
+
+- class: [`Rector\Arguments\Rector\MethodCall\RemoveMethodCallParamRector`](../rules/Arguments/Rector/MethodCall/RemoveMethodCallParamRector.php)
+
+```php
+use Rector\Arguments\Rector\MethodCall\RemoveMethodCallParamRector;
+use Rector\Arguments\ValueObject\RemoveMethodCallParam;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(RemoveMethodCallParamRector::class)
+        ->configure([new RemoveMethodCallParam('Caller', 'process', 1)]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function run(Caller $caller)
+     {
+-        $caller->process(1, 2);
++        $caller->process(1);
+     }
+ }
 ```
 
 <br>

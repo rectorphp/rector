@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdd9b122ef49e82fe057eabfc03fc6cdc
+class ComposerStaticInit981ff19f23011fd3ed14c862e30d2892
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -1740,7 +1740,9 @@ class ComposerStaticInitdd9b122ef49e82fe057eabfc03fc6cdc
         'Rector\\Arguments\\Rector\\ClassMethod\\ReplaceArgumentDefaultValueRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/ClassMethod/ReplaceArgumentDefaultValueRector.php',
         'Rector\\Arguments\\Rector\\FuncCall\\FunctionArgumentDefaultValueReplacerRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/FuncCall/FunctionArgumentDefaultValueReplacerRector.php',
         'Rector\\Arguments\\Rector\\FuncCall\\SwapFuncCallArgumentsRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/FuncCall/SwapFuncCallArgumentsRector.php',
+        'Rector\\Arguments\\Rector\\MethodCall\\RemoveMethodCallParamRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/MethodCall/RemoveMethodCallParamRector.php',
         'Rector\\Arguments\\ValueObject\\ArgumentAdder' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ArgumentAdder.php',
+        'Rector\\Arguments\\ValueObject\\RemoveMethodCallParam' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/RemoveMethodCallParam.php',
         'Rector\\Arguments\\ValueObject\\ReplaceArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\SwapFuncCallArguments' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/SwapFuncCallArguments.php',
@@ -3832,9 +3834,9 @@ class ComposerStaticInitdd9b122ef49e82fe057eabfc03fc6cdc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdd9b122ef49e82fe057eabfc03fc6cdc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdd9b122ef49e82fe057eabfc03fc6cdc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdd9b122ef49e82fe057eabfc03fc6cdc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit981ff19f23011fd3ed14c862e30d2892::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit981ff19f23011fd3ed14c862e30d2892::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit981ff19f23011fd3ed14c862e30d2892::$classMap;
 
         }, null, ClassLoader::class);
     }
