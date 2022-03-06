@@ -12,7 +12,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator;
 use Rector\PHPUnit\NodeManipulator\StmtManipulator;
-use RectorPrefix20220305\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20220306\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class SetUpClassMethodFactory
 {
     /**
@@ -42,7 +42,7 @@ final class SetUpClassMethodFactory
     public function createSetUpMethod(array $stmts) : \PhpParser\Node\Stmt\ClassMethod
     {
         $stmts = $this->stmtManipulator->normalizeStmts($stmts);
-        $classMethodBuilder = new \RectorPrefix20220305\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::SET_UP);
+        $classMethodBuilder = new \RectorPrefix20220306\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::SET_UP);
         $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmt($this->createParentStaticCall());
         $classMethodBuilder->addStmts($stmts);

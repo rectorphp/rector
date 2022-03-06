@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220305\Symplify\PackageBuilder\Reflection;
+namespace RectorPrefix20220306\Symplify\PackageBuilder\Reflection;
 
 use ReflectionClass;
 /**

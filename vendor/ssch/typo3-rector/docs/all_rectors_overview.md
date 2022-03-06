@@ -1,4 +1,4 @@
-# 233 Rules Overview
+# 234 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -1811,6 +1811,32 @@ Migrate the "suggest" wizard in type=group to "hideSuggest" and "suggestOptions"
          ],
      ],
  ];
+```
+
+<br>
+
+## ObjectManagerGetToConstructorInjectionRector
+
+Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
+
+- class: [`Ssch\TYPO3Rector\Rector\Experimental\ObjectManagerGetToConstructorInjectionRector`](../src/Rector/Experimental/ObjectManagerGetToConstructorInjectionRector.php)
+
+```diff
+ final class MyController extends ActionController
+ {
++    private SomeService $someService;
++
++    public function __construct(SomeService $someService)
++    {
++        $this->someService = $someService;
++    }
++
+     public function someAction()
+     {
+-        $someService = $this->objectManager->get(SomeService::class);
++        $someService = $this->someService;
+     }
+ }
 ```
 
 <br>

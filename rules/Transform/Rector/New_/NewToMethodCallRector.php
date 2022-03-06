@@ -18,7 +18,7 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\NewToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220305\Webmozart\Assert\Assert;
+use RectorPrefix20220306\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\NewToMethodCallRectorTest
  */
@@ -114,7 +114,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220305\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\NewToMethodCall::class);
+        \RectorPrefix20220306\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\NewToMethodCall::class);
         $this->newsToMethodCalls = $configuration;
     }
     private function getExistingFactoryPropertyName(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\ObjectType $factoryObjectType) : ?string

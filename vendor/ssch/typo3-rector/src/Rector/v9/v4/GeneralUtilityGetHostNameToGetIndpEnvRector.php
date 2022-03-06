@@ -5,6 +5,7 @@ namespace Ssch\TYPO3Rector\Rector\v9\v4;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -42,7 +43,7 @@ final class GeneralUtilityGetHostNameToGetIndpEnvRector extends \Rector\Core\Rec
      */
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrating method call GeneralUtility::getHostname() to GeneralUtility::getIndpEnv(\'HTTP_HOST\')', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition("Migrating method call GeneralUtility::getHostname() to GeneralUtility::getIndpEnv('HTTP_HOST')", [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 \TYPO3\CMS\Core\Utility\GeneralUtility::getHostname();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
