@@ -6,9 +6,9 @@ use PhpParser\Node\Stmt\Class_;
 
 class ReturnTypeObject
 {
-    public function shouldSkip()
+    public function shouldSkip(Class_ $class)
     {
-        $nonAnonymousClassNodes = array_filter([], function (Class_ $classNode) {
+        $nonAnonymousClassNodes = array_filter([$class], function (Class_ $classNode) {
             return $classNode->name;
         });
     }
@@ -24,9 +24,9 @@ use PhpParser\Node\Stmt\Class_;
 
 class ReturnTypeObject
 {
-    public function shouldSkip()
+    public function shouldSkip(Class_ $class)
     {
-        $nonAnonymousClassNodes = array_filter([], function (Class_ $classNode): ?\PhpParser\Node\Identifier {
+        $nonAnonymousClassNodes = array_filter([$class], function (Class_ $classNode): ?\PhpParser\Node\Identifier {
             return $classNode->name;
         });
     }

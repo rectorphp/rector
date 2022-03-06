@@ -8,4 +8,4 @@ use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver\Sourc
 
 array_map(function (AnotherType $useUse) {
     return $useUse;
-}, []);
+}, [new AnotherType]);
