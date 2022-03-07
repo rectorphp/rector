@@ -20,6 +20,7 @@ final class UnusedParameterResolver
      */
     public function resolve(ClassMethod $classMethod): array
     {
+        /** @var array<int, Param> $unusedParameters */
         $unusedParameters = [];
 
         foreach ($classMethod->params as $i => $param) {

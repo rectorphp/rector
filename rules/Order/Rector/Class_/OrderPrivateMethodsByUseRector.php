@@ -176,7 +176,8 @@ CODE_SAMPLE
      */
     private function resolvePrivateClassMethods(Class_|Trait_ $classLike): array
     {
-        $privateClassMethods = [];
+        /** @var array<int, string> $privateClassMethodNames */
+        $privateClassMethodNames = [];
 
         foreach ($classLike->stmts as $key => $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
@@ -189,9 +190,9 @@ CODE_SAMPLE
 
             /** @var string $classMethodName */
             $classMethodName = $this->getName($classStmt);
-            $privateClassMethods[$key] = $classMethodName;
+            $privateClassMethodNames[$key] = $classMethodName;
         }
 
-        return $privateClassMethods;
+        return $privateClassMethodNames;
     }
 }

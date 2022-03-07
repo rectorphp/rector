@@ -16,7 +16,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ConflictingNameResolver
 {
     /**
-     * @var string[][]
+     * @var array<string, string[]>
      */
     private array $conflictingVariableNamesByClassMethod = [];
 

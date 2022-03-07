@@ -39,7 +39,7 @@ final class ShortNameResolver
     private const BIG_LETTER_START_REGEX = '#^[A-Z]#';
 
     /**
-     * @var string[][]
+     * @var array<string, string[]>
      */
     private array $shortNamesByFilePath = [];
 

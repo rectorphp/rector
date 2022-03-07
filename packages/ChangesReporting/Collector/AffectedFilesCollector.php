@@ -9,7 +9,7 @@ use Rector\Core\ValueObject\Application\File;
 final class AffectedFilesCollector
 {
     /**
-     * @var File[]
+     * @var array<string, File>
      */
     private array $affectedFiles = [];
 

@@ -38,6 +38,7 @@ final class SpreadVariablesCollector
      */
     public function resolveFromClassMethod(ClassMethod $classMethod): array
     {
+        /** @var array<int, Param> $spreadParams */
         $spreadParams = [];
 
         foreach ($classMethod->params as $key => $param) {

@@ -15,7 +15,7 @@ use Symplify\PackageBuilder\Yaml\ParametersMerger;
 final class ConfigureCallValuesCollector
 {
     /**
-     * @var mixed[]
+     * @var array<string, mixed[]>
      */
     private array $configureCallValuesByRectorClass = [];
 

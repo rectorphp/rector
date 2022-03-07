@@ -171,8 +171,8 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Arg[] $args
-     * @return Arg[]
+     * @param array<int, Arg> $args
+     * @return array<int, Arg>
      */
     private function fillMissingArgumentsWithDefaultValues(array $args): array
     {

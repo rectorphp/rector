@@ -577,8 +577,17 @@ parameters:
             path: src/NodeManipulator/BinaryOpManipulator.php
 
         # resolve later
-        - '#Add explicit array type to assigned "(.*?)" expression#'
         - '#Complete known array shape to the method @return type#'
         # @todo remove from phpstan-rules for reoctr
-        - '#Function "array_walk\(\)" cannot be used/left in the code\: #'
-        - '#Instead of "Nette\\Utils\\FileSystem" class/interface use "Symplify\\SmartFileSystem\\SmartFileSystem"#'
+
+        # 3rd party code without types
+        - '#Add explicit array type to assigned "(.*?)->(args|params|items|parts|stmts)" expression#'
+        # false positive on string type
+        - '#Add explicit array type to assigned "\$shortClassName" expression#'
+        - '#Add explicit array type to assigned "\$unusedParameters" expression#'
+        - '#Add explicit array type to assigned "\$unnamedArgs" expression#'
+        - '#Add explicit array type to assigned "\$innerPattern" expression#'
+        # known doc
+        - '#Add explicit array type to assigned "\$reorderedStmts" expression#'
+        - '#Add explicit array type to assigned "\$privateClassMethodNames" expression#'
+        - '#Add explicit array type to assigned "\$spreadParams" expression#'

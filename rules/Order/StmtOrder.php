@@ -6,18 +6,12 @@ namespace Rector\Order;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
-use Rector\NodeNameResolver\NodeNameResolver;
 
 /**
  * @see \Rector\Tests\Order\StmtOrderTest
  */
 final class StmtOrder
 {
-    public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver
-    ) {
-    }
-
     /**
      * @param array<int, string> $desiredStmtOrder
      * @param array<int, string> $currentStmtOrder
@@ -48,6 +42,7 @@ final class StmtOrder
      */
     public function reorderClassStmtsByOldToNewKeys(ClassLike $classLike, array $oldToNewKeys): void
     {
+        /** @var array<int, Node\Stmt> $reorderedStmts */
         $reorderedStmts = [];
 
         $stmtCount = count($classLike->stmts);
@@ -71,28 +66,5 @@ final class StmtOrder
 
             $classLike->stmts[$i] = $reorderedStmts[$i];
         }
-    }
-
-    /**
-     * @param class-string<Node> $type
-     * @return array<int, string>
-     */
-    public function getStmtsOfTypeOrder(ClassLike $classLike, string $type): array
-    {
-        $stmtsByPosition = [];
-        foreach ($classLike->stmts as $position => $classStmt) {
-            if (! is_a($classStmt, $type)) {
-                continue;
-            }
-
-            $name = $this->nodeNameResolver->getName($classStmt);
-            if ($name === null) {
-                continue;
-            }
-
-            $stmtsByPosition[$position] = $name;
-        }
-
-        return $stmtsByPosition;
     }
 }

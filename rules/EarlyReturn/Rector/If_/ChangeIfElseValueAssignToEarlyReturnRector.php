@@ -108,6 +108,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
+        /** @var array<int, Stmt> $elseStmts */
         $elseStmts = $else->stmts;
 
         /** @var Assign $assign */

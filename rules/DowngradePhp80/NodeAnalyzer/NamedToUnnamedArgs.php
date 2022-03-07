@@ -25,10 +25,10 @@ final class NamedToUnnamedArgs
 
     /**
      * @param ParameterReflection[]|PhpParameterReflection[] $parameters
-     * @param Arg[] $currentArgs
+     * @param array<int, Arg> $currentArgs
      * @param string[] $toFillArgs
-     * @param Arg[] $unnamedArgs
-     * @return Arg[]
+     * @param array<int, Arg> $unnamedArgs
+     * @return array<int, Arg>
      */
     public function fillFromNamedArgs(
         array $parameters,
@@ -65,9 +65,9 @@ final class NamedToUnnamedArgs
     }
 
     /**
-     * @param Arg[] $unnamedArgs
+     * @param array<int, Arg> $unnamedArgs
      * @param ParameterReflection[]|PhpParameterReflection[] $parameters
-     * @return Arg[]
+     * @return array<int, Arg>
      */
     public function fillFromJumpedNamedArgs(
         FunctionReflection | MethodReflection | ReflectionFunction $functionLikeReflection,
