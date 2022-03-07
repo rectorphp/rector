@@ -7,6 +7,7 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
@@ -18,7 +19,8 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 final class ArrayShapeTypeMapper
 {
     public function __construct(
-        private readonly PHPStanStaticTypeMapper $phpStanStaticTypeMapper
+        private readonly PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 
@@ -37,7 +39,13 @@ final class ArrayShapeTypeMapper
                 return null;
             }
 
-            $keyDocTypeNode = new IdentifierTypeNode($keyType->getValue());
+            $keyValue = $keyType->getValue();
+
+            if ($this->reflectionProvider->hasClass($keyValue)) {
+                return null;
+            }
+
+            $keyDocTypeNode = new IdentifierTypeNode($keyValue);
             $valueType = $constantArrayType->getValueTypes()[$index];
 
             $valueDocTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode(
