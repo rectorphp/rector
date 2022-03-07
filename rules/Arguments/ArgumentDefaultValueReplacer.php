@@ -117,24 +117,24 @@ final class ArgumentDefaultValueReplacer
         return \PhpParser\BuilderHelpers::normalizeValue($value);
     }
     /**
-     * @param Arg[] $argumentNodes
-     * @return Arg[]|null
+     * @param array<int, Arg> $args
+     * @return array<int, Arg>|null
      */
-    private function processArrayReplacement(array $argumentNodes, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?array
+    private function processArrayReplacement(array $args, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?array
     {
-        $argumentValues = $this->resolveArgumentValuesToBeforeRecipe($argumentNodes, $replaceArgumentDefaultValue);
+        $argumentValues = $this->resolveArgumentValuesToBeforeRecipe($args, $replaceArgumentDefaultValue);
         if ($argumentValues !== $replaceArgumentDefaultValue->getValueBefore()) {
             return null;
         }
         if (\is_string($replaceArgumentDefaultValue->getValueAfter())) {
-            $argumentNodes[$replaceArgumentDefaultValue->getPosition()] = $this->normalizeValueToArgument($replaceArgumentDefaultValue->getValueAfter());
+            $args[$replaceArgumentDefaultValue->getPosition()] = $this->normalizeValueToArgument($replaceArgumentDefaultValue->getValueAfter());
             // clear following arguments
             $argumentCountToClear = \count($replaceArgumentDefaultValue->getValueBefore());
             for ($i = $replaceArgumentDefaultValue->getPosition() + 1; $i <= $replaceArgumentDefaultValue->getPosition() + $argumentCountToClear; ++$i) {
-                unset($argumentNodes[$i]);
+                unset($args[$i]);
             }
         }
-        return $argumentNodes;
+        return $args;
     }
     /**
      * @param Arg[] $argumentNodes

@@ -33,6 +33,7 @@ final class SpreadVariablesCollector
      */
     public function resolveFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
+        /** @var array<int, Param> $spreadParams */
         $spreadParams = [];
         foreach ($classMethod->params as $key => $param) {
             // prevent race-condition removal on class method

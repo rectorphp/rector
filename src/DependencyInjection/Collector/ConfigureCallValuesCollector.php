@@ -13,7 +13,7 @@ use RectorPrefix20220307\Symplify\PackageBuilder\Yaml\ParametersMerger;
 final class ConfigureCallValuesCollector
 {
     /**
-     * @var mixed[]
+     * @var array<string, mixed[]>
      */
     private $configureCallValuesByRectorClass = [];
     /**

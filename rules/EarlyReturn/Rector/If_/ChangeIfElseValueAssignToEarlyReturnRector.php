@@ -103,6 +103,7 @@ CODE_SAMPLE
         if (!$else instanceof \PhpParser\Node\Stmt\Else_) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
+        /** @var array<int, Stmt> $elseStmts */
         $elseStmts = $else->stmts;
         /** @var Assign $assign */
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($elseStmts);

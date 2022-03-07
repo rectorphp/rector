@@ -47,11 +47,11 @@ final class EregToPcreTransformer
      */
     private const MAXIMAL_NUMBER_PART = 'maximal_number';
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $icache = [];
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $cache = [];
     /**

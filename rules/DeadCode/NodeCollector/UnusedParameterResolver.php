@@ -22,6 +22,7 @@ final class UnusedParameterResolver
      */
     public function resolve(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
+        /** @var array<int, Param> $unusedParameters */
         $unusedParameters = [];
         foreach ($classMethod->params as $i => $param) {
             // skip property promotion
