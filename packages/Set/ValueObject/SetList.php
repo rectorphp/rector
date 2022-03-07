@@ -71,11 +71,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const ORDER = __DIR__ . '/../../../config/set/order.php';
-
-    /**
-     * @var string
-     */
     public const PHP_52 = __DIR__ . '/../../../config/set/php52.php';
 
     /**
