@@ -247,7 +247,7 @@ final class ApplicationFileProcessor
     }
 
     /**
-     * Path to called "ecs" binary file, e.g. "vendor/bin/ecs" returns "vendor/bin/ecs" This is needed to re-call the
+     * Path to called "rector" binary file, e.g. "vendor/bin/rector" returns "vendor/bin/rector" This is needed to re-call the
      * ecs binary in sub-process in the same location.
      */
     private function resolveCalledRectorBinary(): ?string
