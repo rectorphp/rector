@@ -42,6 +42,9 @@ final class ClassChildAnalyzer
     {
         return $this->resolveParentClassMethods($classReflection, $methodName) !== [];
     }
+    /**
+     * Look both parent class and interface, yes, all PHP interface methods are abstract
+     */
     public function hasAbstractParentClassMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
     {
         $parentClassMethods = $this->resolveParentClassMethods($classReflection, $methodName);
@@ -76,16 +79,17 @@ final class ClassChildAnalyzer
     private function resolveParentClassMethods(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : array
     {
         $parentClassMethods = [];
-        foreach ($classReflection->getParents() as $parentClassReflections) {
-            if (!$parentClassReflections->hasMethod($methodName)) {
+        $parents = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        foreach ($parents as $parent) {
+            if (!$parent->hasMethod($methodName)) {
                 continue;
             }
-            $methodReflection = $parentClassReflections->getNativeMethod($methodName);
+            $methodReflection = $parent->getNativeMethod($methodName);
             if (!$methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
                 continue;
             }
             $methodDeclaringMethodClass = $methodReflection->getDeclaringClass();
-            if ($methodDeclaringMethodClass->getName() === $parentClassReflections->getName()) {
+            if ($methodDeclaringMethodClass->getName() === $parent->getName()) {
                 $parentClassMethods[] = $methodReflection;
             }
         }
