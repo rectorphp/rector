@@ -6,6 +6,7 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
@@ -20,9 +21,15 @@ final class ArrayShapeTypeMapper
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
-    public function __construct(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper)
+    /**
+     * @readonly
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+        $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @return \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\Type\ArrayType|null
@@ -39,7 +46,11 @@ final class ArrayShapeTypeMapper
             if (!$keyType instanceof \PHPStan\Type\Constant\ConstantStringType) {
                 return null;
             }
-            $keyDocTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($keyType->getValue());
+            $keyValue = $keyType->getValue();
+            if ($this->reflectionProvider->hasClass($keyValue)) {
+                return null;
+            }
+            $keyDocTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($keyValue);
             $valueType = $constantArrayType->getValueTypes()[$index];
             $valueDocTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($valueType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
             $arrayShapeItemNodes[] = new \PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode($keyDocTypeNode, $constantArrayType->isOptionalKey($index), $valueDocTypeNode);
