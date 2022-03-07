@@ -37,7 +37,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeR
 class ChildHasPriority extends ParentClassWithDefinedReturn
 {
     /**
-     * @return array<int, array<string, int|float|string>>
+     * @return array<int, array{a: string, b: int, c: float}>
      */
     public function getData()
     {

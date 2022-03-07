@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
-class PairClassStringArray
+final class PairClassStringArray
 {
     private const CLASSES = [
         \stdClass::class => PairClassStringArray::class,
@@ -15,7 +15,7 @@ class PairClassStringArray
 
 namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
-class PairClassStringArray
+final class PairClassStringArray
 {
     /**
      * @var array<string, class-string<\Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture\PairClassStringArray>>

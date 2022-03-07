@@ -83,7 +83,6 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var FuncCall $node */
         $node->args = $this->composeNewArgs($node);
 
         return $node;

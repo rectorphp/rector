@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -45,14 +46,14 @@ final class CleanPhpstanCommand extends Command
             return self::FAILURE;
         }
 
-        $originalContent = (string) file_get_contents(self::FILE);
+        $originalContent = FileSystem::read(self::FILE);
         $newContent = str_replace(
             'reportUnmatchedIgnoredErrors: false',
             'reportUnmatchedIgnoredErrors: true',
             $originalContent
         );
 
-        file_put_contents(self::FILE, $newContent);
+        FileSystem::write(self::FILE, $newContent);
 
         $process = new Process(['composer', 'phpstan']);
         $process->run();
@@ -63,7 +64,7 @@ final class CleanPhpstanCommand extends Command
         $output->writeln($result);
 
         if (! $isFailure) {
-            file_put_contents(self::FILE, $originalContent);
+            FileSystem::write(self::FILE, $originalContent);
             return self::SUCCESS;
         }
 
@@ -74,8 +75,8 @@ final class CleanPhpstanCommand extends Command
 
         $matchAll = Strings::matchAll($result, self::ONELINE_IGNORED_PATTERN_REGEX);
 
-        foreach ($matchAll as $match) {
-            $newContent = str_replace('        - \'' . $match['content'] . '\'', '', $newContent);
+        foreach ($matchAll as $singleMatchAll) {
+            $newContent = str_replace("        - '" . $singleMatchAll['content'] . "'", '', $newContent);
         }
 
         $newContent = str_replace(
@@ -83,7 +84,7 @@ final class CleanPhpstanCommand extends Command
             'reportUnmatchedIgnoredErrors: false',
             $newContent
         );
-        file_put_contents(self::FILE, $newContent);
+        FileSystem::write(self::FILE, $newContent);
 
         $process2 = new Process(['composer', 'phpstan']);
         $process2->run();

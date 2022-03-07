@@ -105,7 +105,7 @@ final class FileDiff implements SerializableInterface
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{relative_file_path: string, diff: string, diff_console_formatted: string, rectors_with_line_changes: RectorWithLineChange[]}
      */
     public function jsonSerialize(): array
     {

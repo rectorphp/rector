@@ -70,6 +70,10 @@ final class TypeNormalizer
             return $type;
         }
 
+        if ($type instanceof ConstantArrayType && $arrayNesting === 1) {
+            return $type;
+        }
+
         // first collection of types
         if ($arrayNesting === 1) {
             $this->collectedNestedArrayTypes = [];

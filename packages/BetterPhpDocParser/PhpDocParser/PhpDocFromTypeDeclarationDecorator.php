@@ -28,6 +28,9 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use ReturnTypeWillChange;
 
+/**
+ * @see https://wiki.php.net/rfc/internal_method_return_types#proposal
+ */
 final class PhpDocFromTypeDeclarationDecorator
 {
     /**

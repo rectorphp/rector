@@ -34,6 +34,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Core\Tests\PhpParser\Printer\BetterStandardPrinterTest
+ *
+ * @property array<string, array{string, bool, string, null}> $insertionMap
  */
 final class BetterStandardPrinter extends Standard
 {

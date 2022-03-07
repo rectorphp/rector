@@ -16,6 +16,7 @@ use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\TypeDeclaration\Rector\ClassMethod\ArrayShapeFromConstantArrayReturnRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -72,6 +73,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
         MyCLabsClassToEnumRector::class,
         SpatieEnumClassToEnumRector::class,
+
+        ArrayShapeFromConstantArrayReturnRector::class => [
+            __DIR__ . '/rules/Transform/Rector/ClassMethod/ReturnTypeWillChangeRector.php',
+        ],
 
         // test paths
         '*/tests/**/Fixture/*',

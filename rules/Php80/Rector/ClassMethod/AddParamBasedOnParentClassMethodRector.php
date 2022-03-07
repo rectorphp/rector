@@ -163,8 +163,8 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Param[] $currentClassMethodParams
-     * @param Param[] $parentClassMethodParams
+     * @param array<int, Param> $currentClassMethodParams
+     * @param array<int, Param> $parentClassMethodParams
      */
     private function processReplaceClassMethodParams(
         ClassMethod $node,

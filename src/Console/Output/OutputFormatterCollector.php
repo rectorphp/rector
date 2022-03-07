@@ -10,7 +10,7 @@ use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 final class OutputFormatterCollector
 {
     /**
-     * @var OutputFormatterInterface[]
+     * @var array<string, OutputFormatterInterface>
      */
     private array $outputFormatters = [];
 
@@ -32,7 +32,7 @@ final class OutputFormatterCollector
     }
 
     /**
-     * @return int[]|string[]
+     * @return string[]
      */
     public function getNames(): array
     {

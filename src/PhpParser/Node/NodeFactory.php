@@ -142,12 +142,9 @@ final class NodeFactory
      */
     public function createArgs(array $values): array
     {
-        $normalizedValues = [];
-        foreach ($values as $key => $value) {
-            $normalizedValues[$key] = $this->normalizeArgValue($value);
-        }
+        array_walk($values, fn ($value) => $this->normalizeArgValue($value));
 
-        return $this->builderFactory->args($normalizedValues);
+        return $this->builderFactory->args($values);
     }
 
     /**

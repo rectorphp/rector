@@ -95,7 +95,7 @@ final class IndentTest extends TestCase
     }
 
     /**
-     * @return int[]
+     * @return array{int-one: int, int-greater-than-one: int}
      */
     private static function sizes(): array
     {
