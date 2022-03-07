@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220306\Symplify\PackageBuilder\Strings;
+namespace RectorPrefix20220307\Symplify\PackageBuilder\Strings;
 
-use RectorPrefix20220306\Nette\Utils\Strings;
+use RectorPrefix20220307\Nette\Utils\Strings;
 /**
  * @api
  * @see \Symplify\PackageBuilder\Tests\Strings\StringFormatConverterTest
@@ -31,8 +31,8 @@ final class StringFormatConverter
         return $this->camelCaseToGlue($input, '-');
     }
     /**
-     * @param mixed[] $items
-     * @return mixed[]
+     * @param array<int|string, mixed> $items
+     * @return array<int|string, mixed>
      */
     public function camelCaseToUnderscoreInArrayKeys(array $items) : array
     {
@@ -51,7 +51,7 @@ final class StringFormatConverter
     }
     private function camelCaseToGlue(string $input, string $glue) : string
     {
-        $matches = \RectorPrefix20220306\Nette\Utils\Strings::matchAll($input, self::BIG_LETTER_REGEX);
+        $matches = \RectorPrefix20220307\Nette\Utils\Strings::matchAll($input, self::BIG_LETTER_REGEX);
         $parts = [];
         foreach ($matches as $match) {
             $parts[] = $match[0] === \strtoupper($match[0]) ? \strtolower($match[0]) : \lcfirst($match[0]);

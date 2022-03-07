@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220306;
+namespace RectorPrefix20220307;
 
 use Ssch\TYPO3Rector\Rector\v7\v1\GetTemporaryImageWithTextRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

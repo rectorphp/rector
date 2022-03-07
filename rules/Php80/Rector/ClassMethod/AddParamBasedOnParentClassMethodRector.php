@@ -140,8 +140,8 @@ CODE_SAMPLE
         return $classMethod;
     }
     /**
-     * @param Param[] $currentClassMethodParams
-     * @param Param[] $parentClassMethodParams
+     * @param array<int, Param> $currentClassMethodParams
+     * @param array<int, Param> $parentClassMethodParams
      */
     private function processReplaceClassMethodParams(\PhpParser\Node\Stmt\ClassMethod $node, \PhpParser\Node\Stmt\ClassMethod $parentClassMethod, array $currentClassMethodParams, array $parentClassMethodParams) : ?\PhpParser\Node\Stmt\ClassMethod
     {

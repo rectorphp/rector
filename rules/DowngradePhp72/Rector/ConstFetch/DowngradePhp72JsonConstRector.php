@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePhp72JsonConstRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var array<string>
+     * @var string[]
      */
     private const CONSTANTS = ['JSON_INVALID_UTF8_IGNORE', 'JSON_INVALID_UTF8_SUBSTITUTE'];
     /**

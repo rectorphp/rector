@@ -8,7 +8,7 @@ use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 final class OutputFormatterCollector
 {
     /**
-     * @var OutputFormatterInterface[]
+     * @var array<string, OutputFormatterInterface>
      */
     private $outputFormatters = [];
     /**
@@ -26,7 +26,7 @@ final class OutputFormatterCollector
         return $this->outputFormatters[$name];
     }
     /**
-     * @return int[]|string[]
+     * @return string[]
      */
     public function getNames() : array
     {

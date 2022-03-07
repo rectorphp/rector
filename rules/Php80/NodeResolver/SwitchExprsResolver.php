@@ -24,6 +24,7 @@ final class SwitchExprsResolver
         $collectionEmptyCasesCond = [];
         $this->moveDefaultCaseToLast($switch);
         foreach ($switch->cases as $key => $case) {
+            \assert(\is_int($key));
             if (!$this->isValidCase($case)) {
                 return [];
             }

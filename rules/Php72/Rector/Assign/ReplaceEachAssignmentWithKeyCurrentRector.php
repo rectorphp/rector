@@ -96,7 +96,7 @@ CODE_SAMPLE
         return $parentNode->var instanceof \PhpParser\Node\Expr\List_;
     }
     /**
-     * @return array<int, Assign|FuncCall>
+     * @return array<Assign|FuncCall>
      */
     private function createNewNodes(\PhpParser\Node\Expr $assignVariable, \PhpParser\Node\Expr $eachedVariable) : array
     {

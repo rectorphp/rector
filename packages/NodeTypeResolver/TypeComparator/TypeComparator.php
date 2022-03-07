@@ -8,6 +8,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\Generic\GenericClassStringType;
@@ -190,6 +191,12 @@ final class TypeComparator
             return \false;
         }
         if (!$secondType instanceof \PHPStan\Type\ArrayType) {
+            return \false;
+        }
+        if ($firstType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
+            return \false;
+        }
+        if ($secondType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return \false;
         }
         $firstKeyType = $this->normalizeSingleUnionType($firstType->getKeyType());

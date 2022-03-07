@@ -61,7 +61,6 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        /** @var FuncCall $node */
         $node->args = $this->composeNewArgs($node);
         return $node;
     }

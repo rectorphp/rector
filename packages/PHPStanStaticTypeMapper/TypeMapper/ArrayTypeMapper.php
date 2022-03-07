@@ -28,7 +28,7 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
-use RectorPrefix20220306\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220307\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @see \Rector\Tests\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapperTest
  *
@@ -60,17 +60,22 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer
      */
     private $detailedTypeAnalyzer;
+    /**
+     * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayShapeTypeMapper
+     */
+    private $arrayShapeTypeMapper;
     // To avoid circular dependency
     /**
      * @required
      */
-    public function autowire(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer $detailedTypeAnalyzer) : void
+    public function autowire(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer $detailedTypeAnalyzer, \Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayShapeTypeMapper $arrayShapeTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
         $this->reflectionProvider = $reflectionProvider;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
+        $this->arrayShapeTypeMapper = $arrayShapeTypeMapper;
     }
     /**
      * @return class-string<Type>
@@ -87,6 +92,12 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         $itemType = $type->getItemType();
         if ($itemType instanceof \PHPStan\Type\UnionType && !$type instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return $this->createArrayTypeNodeFromUnionType($itemType, $typeKind);
+        }
+        if ($type instanceof \PHPStan\Type\Constant\ConstantArrayType && $typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN())) {
+            $arrayShapeNode = $this->arrayShapeTypeMapper->mapConstantArrayType($type);
+            if ($arrayShapeNode instanceof \PHPStan\PhpDocParser\Ast\Type\TypeNode) {
+                return $arrayShapeNode;
+            }
         }
         if ($itemType instanceof \PHPStan\Type\ArrayType && $this->isGenericArrayCandidate($itemType)) {
             return $this->createGenericArrayType($type, $typeKind, \true);

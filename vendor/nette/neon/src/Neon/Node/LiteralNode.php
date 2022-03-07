@@ -5,11 +5,11 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220306\Nette\Neon\Node;
+namespace RectorPrefix20220307\Nette\Neon\Node;
 
-use RectorPrefix20220306\Nette\Neon\Node;
+use RectorPrefix20220307\Nette\Neon\Node;
 /** @internal */
-final class LiteralNode extends \RectorPrefix20220306\Nette\Neon\Node
+final class LiteralNode extends \RectorPrefix20220307\Nette\Neon\Node
 {
     private const SIMPLE_TYPES = ['true' => \true, 'True' => \true, 'TRUE' => \true, 'yes' => \true, 'Yes' => \true, 'YES' => \true, 'on' => \true, 'On' => \true, 'ON' => \true, 'false' => \false, 'False' => \false, 'FALSE' => \false, 'no' => \false, 'No' => \false, 'NO' => \false, 'off' => \false, 'Off' => \false, 'OFF' => \false, 'null' => null, 'Null' => null, 'NULL' => null];
     private const DEPRECATED_TYPES = ['on' => 1, 'On' => 1, 'ON' => 1, 'off' => 1, 'Off' => 1, 'OFF' => 1];
