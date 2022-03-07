@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd618a636d51fa2348a8e23afcef5c663
+class ComposerStaticInit0483ff6d507191b1cc67ca4bb7d064d1
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2787,9 +2787,6 @@ class ComposerStaticInitd618a636d51fa2348a8e23afcef5c663
         'Rector\\NodeTypeResolver\\TypeComparator\\ScalarTypeComparator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeComparator/ScalarTypeComparator.php',
         'Rector\\NodeTypeResolver\\TypeComparator\\TypeComparator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeComparator/TypeComparator.php',
         'Rector\\NodeTypeResolver\\ValueObject\\OldToNewType' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/ValueObject/OldToNewType.php',
-        'Rector\\Order\\Rector\\Class_\\OrderPrivateMethodsByUseRector' => __DIR__ . '/../..' . '/rules/Order/Rector/Class_/OrderPrivateMethodsByUseRector.php',
-        'Rector\\Order\\StmtOrder' => __DIR__ . '/../..' . '/rules/Order/StmtOrder.php',
-        'Rector\\Order\\ValueObject\\SortedClassMethodsAndOriginalClassMethods' => __DIR__ . '/../..' . '/rules/Order/ValueObject/SortedClassMethodsAndOriginalClassMethods.php',
         'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalGetConditionRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeConditionalGetConditionRector.php',
         'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalReturnedCellRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeConditionalReturnedCellRector.php',
         'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalSetConditionRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeConditionalSetConditionRector.php',
@@ -3839,9 +3836,9 @@ class ComposerStaticInitd618a636d51fa2348a8e23afcef5c663
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd618a636d51fa2348a8e23afcef5c663::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd618a636d51fa2348a8e23afcef5c663::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd618a636d51fa2348a8e23afcef5c663::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0483ff6d507191b1cc67ca4bb7d064d1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0483ff6d507191b1cc67ca4bb7d064d1::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0483ff6d507191b1cc67ca4bb7d064d1::$classMap;
 
         }, null, ClassLoader::class);
     }
