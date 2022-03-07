@@ -261,11 +261,6 @@ parameters:
             paths:
                  - src/functions/node_helper.php
 
-        # special case - cleanup in the future
-        -
-            message: '#File processor must require Rector rules in constructor via TypeRectorInterface\[\] \$typeRectors array autowire#'
-            path: src/Application/FileProcessor/PhpFileProcessor.php
-
         - '#Method Rector\\BetterPhpDocParser\\PhpDocParser\\BetterPhpDocParser\:\:parseChildAndStoreItsPositions\(\) should return PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTextNode but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode#'
 
         # deserves better architecture
@@ -333,7 +328,6 @@ parameters:
         -
             message: '#foreach\(\), while\(\), for\(\) or if\(\) cannot contain a complex expression\. Extract it to a new variable on a line before#'
             paths:
-                - packages/NodeNestingScope/FlowOfControlLocator.php
                 - rules/CodeQuality/Rector/Return_/SimplifyUselessVariableRector.php
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
                 - src/Application/FileProcessor.php
@@ -390,11 +384,6 @@ parameters:
             paths:
                 - packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php
 
-        # use lighter service for performance reasons
-        -
-            path: packages/Caching/ValueObject/Storage/FileCacheStorage.php
-            message: '#Instead of "Nette\\Utils\\FileSystem" class/interface use "Symplify\\SmartFileSystem\\SmartFileSystem"#'
-
         -
             path: src/Bootstrap/RectorConfigsResolver.php
             message: '#Method Rector\\Core\\Bootstrap\\RectorConfigsResolver\:\:resolveFromInput\(\) should return string\|null but returns string\|false#'
@@ -407,10 +396,6 @@ parameters:
 
         -
             message: '#Use separate function calls with readable variable names#'
-            path: src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
-
-        -
-            message: '#\$service\-\>call\("configure", \[\[ \.\.\. \]\]\) must be followed by exact array#'
             path: src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
 
         # on purpose to make use of worker paralle pattern
@@ -548,11 +533,6 @@ parameters:
         # mapper re-use
         - '#Parameter \#1 \$type of method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectWithoutClassTypeMapper\:\:mapToPhpParserNode\(\) expects PHPStan\\Type\\ObjectWithoutClassType, PHPStan\\Type\\Accessory\\Has(Property|Method)Type given#'
 
-        # broken on CI
-        -
-            message: '#Anonymous variables in a method call can lead to false dead methods\. Make sure the variable type is known#'
-            path: packages/NodeNestingScope/FlowOfControlLocator.php
-
         # Scope vs MutatingScope interchangable false positive
         - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, callable\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'
 
@@ -588,6 +568,6 @@ parameters:
         - '#Add explicit array type to assigned "\$unnamedArgs" expression#'
         - '#Add explicit array type to assigned "\$innerPattern" expression#'
         # known doc
-        - '#Add explicit array type to assigned "\$reorderedStmts" expression#'
-        - '#Add explicit array type to assigned "\$privateClassMethodNames" expression#'
         - '#Add explicit array type to assigned "\$spreadParams" expression#'
+
+        - '#foreach\(\), while\(\), for\(\) or if\(\) cannot contain a complex expression\. Extract it to a new variable on a line before#'
