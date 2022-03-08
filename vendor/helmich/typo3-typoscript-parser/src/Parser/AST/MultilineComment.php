@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220307\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20220308\Helmich\TypoScriptParser\Parser\AST;
 
 final class MultilineComment extends \Helmich\TypoScriptParser\Parser\AST\Statement
 {

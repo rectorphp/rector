@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Rector\MethodCall;
 
-use RectorPrefix20220307\Nette\Utils\Strings;
+use RectorPrefix20220308\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -91,7 +91,7 @@ CODE_SAMPLE
         if (!\is_string($entityReferenceName)) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $lastNamePart = (string) \RectorPrefix20220307\Nette\Utils\Strings::after($entityReferenceName, '\\', -1);
+        $lastNamePart = (string) \RectorPrefix20220308\Nette\Utils\Strings::after($entityReferenceName, '\\', -1);
         return \lcfirst($lastNamePart) . 'Repository';
     }
     private function guessRepositoryType(\PhpParser\Node\Expr $expr) : string
@@ -101,8 +101,8 @@ CODE_SAMPLE
             if ($entityClass === null) {
                 return 'Unknown_Repository_Class';
             }
-            $entityClassNamespace = (string) \RectorPrefix20220307\Nette\Utils\Strings::before($entityClass, '\\', -2);
-            $lastNamePart = (string) \RectorPrefix20220307\Nette\Utils\Strings::after($entityClass, '\\', -1);
+            $entityClassNamespace = (string) \RectorPrefix20220308\Nette\Utils\Strings::before($entityClass, '\\', -2);
+            $lastNamePart = (string) \RectorPrefix20220308\Nette\Utils\Strings::after($entityClass, '\\', -1);
             return $entityClassNamespace . '\\Repository\\' . $lastNamePart . 'Repository';
         }
         return 'Unknown_Repository_Class';

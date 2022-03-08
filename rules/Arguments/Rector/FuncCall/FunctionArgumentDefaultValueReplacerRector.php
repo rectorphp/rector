@@ -11,7 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220307\Webmozart\Assert\Assert;
+use RectorPrefix20220308\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/versions/8.1/version_compare-operator-restrictions
  * @changelog https://github.com/rectorphp/rector/issues/6271
@@ -76,7 +76,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220307\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue::class);
+        \RectorPrefix20220308\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue::class);
         $this->replacedArguments = $configuration;
     }
 }

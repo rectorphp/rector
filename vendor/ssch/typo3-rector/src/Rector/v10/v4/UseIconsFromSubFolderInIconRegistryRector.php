@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v10\v4;
 
-use RectorPrefix20220307\Nette\Utils\Strings;
+use RectorPrefix20220308\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
@@ -51,7 +51,7 @@ final class UseIconsFromSubFolderInIconRegistryRector extends \Rector\Core\Recto
         if (\strncmp($options[self::SOURCE], 'typo3/sysext/core/Resources/Public/Icons/T3Icons/content/', \strlen('typo3/sysext/core/Resources/Public/Icons/T3Icons/content/')) !== 0) {
             return null;
         }
-        $options[self::SOURCE] = \RectorPrefix20220307\Nette\Utils\Strings::replace($options[self::SOURCE], '#typo3/sysext/core/Resources/Public/Icons/T3Icons/content/#i', 'typo3/sysext/core/Resources/Public/Icons/T3Icons/svgs/content/');
+        $options[self::SOURCE] = \RectorPrefix20220308\Nette\Utils\Strings::replace($options[self::SOURCE], '#typo3/sysext/core/Resources/Public/Icons/T3Icons/content/#i', 'typo3/sysext/core/Resources/Public/Icons/T3Icons/svgs/content/');
         $node->args[2]->value = $this->nodeFactory->createArray($options);
         return null;
     }

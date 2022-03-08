@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220307\Symfony\Component\Console\Helper;
+namespace RectorPrefix20220308\Symfony\Component\Console\Helper;
 
-use RectorPrefix20220307\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20220308\Symfony\Component\Console\Exception\InvalidArgumentException;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
@@ -29,10 +29,10 @@ class TableCell
         $this->value = $value;
         // check option names
         if ($diff = \array_diff(\array_keys($options), \array_keys($this->options))) {
-            throw new \RectorPrefix20220307\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The TableCell does not support the following options: \'%s\'.', \implode('\', \'', $diff)));
+            throw new \RectorPrefix20220308\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The TableCell does not support the following options: \'%s\'.', \implode('\', \'', $diff)));
         }
-        if (isset($options['style']) && !$options['style'] instanceof \RectorPrefix20220307\Symfony\Component\Console\Helper\TableCellStyle) {
-            throw new \RectorPrefix20220307\Symfony\Component\Console\Exception\InvalidArgumentException('The style option must be an instance of "TableCellStyle".');
+        if (isset($options['style']) && !$options['style'] instanceof \RectorPrefix20220308\Symfony\Component\Console\Helper\TableCellStyle) {
+            throw new \RectorPrefix20220308\Symfony\Component\Console\Exception\InvalidArgumentException('The style option must be an instance of "TableCellStyle".');
         }
         $this->options = \array_merge($this->options, $options);
     }
@@ -57,7 +57,7 @@ class TableCell
     {
         return (int) $this->options['rowspan'];
     }
-    public function getStyle() : ?\RectorPrefix20220307\Symfony\Component\Console\Helper\TableCellStyle
+    public function getStyle() : ?\RectorPrefix20220308\Symfony\Component\Console\Helper\TableCellStyle
     {
         return $this->options['style'];
     }

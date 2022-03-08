@@ -9,16 +9,16 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\NewToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220307\Webmozart\Assert\Assert;
+use RectorPrefix20220308\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\NewToMethodCallRectorTest
  */
@@ -35,12 +35,18 @@ final class NewToMethodCallRector extends \Rector\Core\Rector\AbstractRector imp
     private $classNaming;
     /**
      * @readonly
+     * @var \Rector\Core\NodeManipulator\PropertyManipulator
+     */
+    private $propertyManipulator;
+    /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
+    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->classNaming = $classNaming;
+        $this->propertyManipulator = $propertyManipulator;
         $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -96,7 +102,7 @@ CODE_SAMPLE
             if ($className === $serviceObjectType->getClassName()) {
                 continue;
             }
-            $propertyName = $this->getExistingFactoryPropertyName($class, $newToMethodCall->getServiceObjectType());
+            $propertyName = $this->propertyManipulator->resolveExistingClassPropertyNameByType($class, $newToMethodCall->getServiceObjectType());
             if ($propertyName === null) {
                 $serviceObjectType = $newToMethodCall->getServiceObjectType();
                 $propertyName = $this->classNaming->getShortName($serviceObjectType->getClassName());
@@ -114,17 +120,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220307\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\NewToMethodCall::class);
+        \RectorPrefix20220308\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\NewToMethodCall::class);
         $this->newsToMethodCalls = $configuration;
-    }
-    private function getExistingFactoryPropertyName(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\ObjectType $factoryObjectType) : ?string
-    {
-        foreach ($class->getProperties() as $property) {
-            if (!$this->isObjectType($property, $factoryObjectType)) {
-                continue;
-            }
-            return $this->getName($property);
-        }
-        return null;
     }
 }

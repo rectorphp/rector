@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseClassTypo3VersionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var array<string>
+     * @var string[]
      */
     private const CONSTANTS_TO_REFACTOR = ['TYPO3_version', 'TYPO3_branch'];
     /**
