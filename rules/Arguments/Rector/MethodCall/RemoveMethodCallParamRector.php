@@ -5,6 +5,7 @@ namespace Rector\Arguments\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use Rector\Arguments\ValueObject\RemoveMethodCallParam;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -47,10 +48,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
@@ -59,7 +60,7 @@ CODE_SAMPLE
             if (!$this->isName($node->name, $removeMethodCallParam->getMethodName())) {
                 continue;
             }
-            if (!$this->isObjectType($node->var, $removeMethodCallParam->getObjectType())) {
+            if (!$this->isCallerObjectType($node, $removeMethodCallParam)) {
                 continue;
             }
             $args = $node->getArgs();
@@ -81,5 +82,15 @@ CODE_SAMPLE
     {
         \RectorPrefix20220308\Webmozart\Assert\Assert::allIsInstanceOf($configuration, \Rector\Arguments\ValueObject\RemoveMethodCallParam::class);
         $this->removeMethodCallParams = $configuration;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     */
+    private function isCallerObjectType($call, \Rector\Arguments\ValueObject\RemoveMethodCallParam $removeMethodCallParam) : bool
+    {
+        if ($call instanceof \PhpParser\Node\Expr\MethodCall) {
+            return $this->isObjectType($call->var, $removeMethodCallParam->getObjectType());
+        }
+        return $this->isObjectType($call->class, $removeMethodCallParam->getObjectType());
     }
 }
