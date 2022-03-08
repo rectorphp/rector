@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
@@ -52,7 +53,12 @@ final class DependencyInjectionMethodCallAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver $promotedPropertyResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeManipulator\PropertyManipulator
+     */
+    private $propertyManipulator;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver $promotedPropertyResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator)
     {
         $this->propertyNaming = $propertyNaming;
         $this->serviceTypeMethodCallResolver = $serviceTypeMethodCallResolver;
@@ -61,6 +67,7 @@ final class DependencyInjectionMethodCallAnalyzer
         $this->betterNodeFinder = $betterNodeFinder;
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->propertyManipulator = $propertyManipulator;
     }
     public function replaceMethodCallWithPropertyFetchAndDependency(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\PropertyFetch
     {
@@ -72,8 +79,13 @@ final class DependencyInjectionMethodCallAnalyzer
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
-        $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
-        $propertyName = $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
+        $resolvedPropertyNameByType = $this->propertyManipulator->resolveExistingClassPropertyNameByType($class, $serviceType);
+        if (\is_string($resolvedPropertyNameByType)) {
+            $propertyName = $resolvedPropertyNameByType;
+        } else {
+            $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
+            $propertyName = $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
+        }
         $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $serviceType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
