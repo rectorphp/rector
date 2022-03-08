@@ -20,11 +20,13 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -33,7 +35,9 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
 use Symplify\PackageBuilder\Php\TypeChecker;
@@ -75,7 +79,9 @@ final class PropertyManipulator
         private readonly PropertyFetchFinder $propertyFetchFinder,
         private readonly ReflectionResolver $reflectionResolver,
         private readonly NodeNameResolver $nodeNameResolver,
-        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PromotedPropertyResolver $promotedPropertyResolver
     ) {
     }
 
@@ -191,6 +197,30 @@ final class PropertyManipulator
         }
 
         return false;
+    }
+
+    public function resolveExistingClassPropertyNameByType(Class_ $class, Type $type): ?string
+    {
+        foreach ($class->getProperties() as $property) {
+            $propertyType = $this->nodeTypeResolver->getType($property);
+            if (! $propertyType->equals($type)) {
+                continue;
+            }
+
+            return $this->nodeNameResolver->getName($property);
+        }
+
+        $promotedPropertyParams = $this->promotedPropertyResolver->resolveFromClass($class);
+        foreach ($promotedPropertyParams as $promotedPropertyParam) {
+            $paramType = $this->nodeTypeResolver->getType($promotedPropertyParam);
+            if (! $paramType->equals($type)) {
+                continue;
+            }
+
+            return $this->nodeNameResolver->getName($promotedPropertyParam);
+        }
+
+        return null;
     }
 
     private function isInlineStmtWithConstructMethod(

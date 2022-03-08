@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -33,6 +33,7 @@ final class NewToMethodCallRector extends AbstractRector implements Configurable
 
     public function __construct(
         private readonly ClassNaming $classNaming,
+        private readonly PropertyManipulator $propertyManipulator,
         private readonly PropertyToAddCollector $propertyToAddCollector
     ) {
     }
@@ -102,7 +103,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $propertyName = $this->getExistingFactoryPropertyName(
+            $propertyName = $this->propertyManipulator->resolveExistingClassPropertyNameByType(
                 $class,
                 $newToMethodCall->getServiceObjectType()
             );
@@ -136,18 +137,5 @@ CODE_SAMPLE
         Assert::allIsAOf($configuration, NewToMethodCall::class);
 
         $this->newsToMethodCalls = $configuration;
-    }
-
-    private function getExistingFactoryPropertyName(Class_ $class, ObjectType $factoryObjectType): ?string
-    {
-        foreach ($class->getProperties() as $property) {
-            if (! $this->isObjectType($property, $factoryObjectType)) {
-                continue;
-            }
-
-            return $this->getName($property);
-        }
-
-        return null;
     }
 }
