@@ -6,6 +6,7 @@ namespace Rector\Arguments\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use Rector\Arguments\ValueObject\RemoveMethodCallParam;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -57,11 +58,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -72,7 +73,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isObjectType($node->var, $removeMethodCallParam->getObjectType())) {
+            if (! $this->isCallerObjectType($node, $removeMethodCallParam)) {
                 continue;
             }
 
@@ -99,5 +100,14 @@ CODE_SAMPLE
     {
         Assert::allIsInstanceOf($configuration, RemoveMethodCallParam::class);
         $this->removeMethodCallParams = $configuration;
+    }
+
+    private function isCallerObjectType(StaticCall|MethodCall $call, RemoveMethodCallParam $removeMethodCallParam): bool
+    {
+        if ($call instanceof MethodCall) {
+            return $this->isObjectType($call->var, $removeMethodCallParam->getObjectType());
+        }
+
+        return $this->isObjectType($call->class, $removeMethodCallParam->getObjectType());
     }
 }
