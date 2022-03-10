@@ -10,7 +10,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\TryCatch;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -24,6 +26,15 @@ final class CatchExceptionNameMatchingTypeRector extends \Rector\Core\Rector\Abs
      * @see https://regex101.com/r/xmfMAX/1
      */
     private const STARTS_WITH_ABBREVIATION_REGEX = '#^([A-Za-z]+?)([A-Z]{1}[a-z]{1})([A-Za-z]*)#';
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\PropertyNaming
+     */
+    private $propertyNaming;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    {
+        $this->propertyNaming = $propertyNaming;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Type and name of catch exception should match', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -85,6 +96,8 @@ CODE_SAMPLE
             $output .= $matches[3] ?? '';
             return $output;
         });
+        $objectType = new \PHPStan\Type\ObjectType($newVariableName);
+        $newVariableName = $this->propertyNaming->fqnToVariableName($objectType);
         if ($oldVariableName === $newVariableName) {
             return null;
         }
