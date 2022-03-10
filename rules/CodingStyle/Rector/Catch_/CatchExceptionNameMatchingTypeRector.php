@@ -11,7 +11,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\TryCatch;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,6 +28,11 @@ final class CatchExceptionNameMatchingTypeRector extends AbstractRector
      * @see https://regex101.com/r/xmfMAX/1
      */
     private const STARTS_WITH_ABBREVIATION_REGEX = '#^([A-Za-z]+?)([A-Z]{1}[a-z]{1})([A-Za-z]*)#';
+
+    public function __construct(
+        private readonly PropertyNaming $propertyNaming
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -107,6 +114,8 @@ CODE_SAMPLE
                 return $output;
             }
         );
+        $objectType = new ObjectType($newVariableName);
+        $newVariableName = $this->propertyNaming->fqnToVariableName($objectType);
 
         if ($oldVariableName === $newVariableName) {
             return null;
