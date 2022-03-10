@@ -9,23 +9,15 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Naming\NamespaceMatcher;
 use Rector\Renaming\ValueObject\RenamedNamespace;
+use RectorPrefix20220310\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class DocBlockNamespaceRenamer
 {
-    /**
-     * @var array<class-string<PhpDocTagValueNode>>
-     */
-    private const TO_BE_CHANGED = [\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class, \Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode::class, \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class];
     /**
      * @readonly
      * @var \Rector\Naming\NamespaceMatcher
@@ -48,54 +40,25 @@ final class DocBlockNamespaceRenamer
     public function renameFullyQualifiedNamespace($node, array $oldToNewNamespaces) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-        $children = $phpDocNode->children;
-        foreach ($children as $child) {
-            if (!$child instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
-                continue;
+        $phpDocNodeTraverser = new \RectorPrefix20220310\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $subNode) use($oldToNewNamespaces) : ?DocNode {
+            if (!$subNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+                return null;
             }
-            $value = $child->value;
-            if (!\in_array(\get_class($value), self::TO_BE_CHANGED, \true)) {
-                continue;
+            $name = $subNode->name;
+            $trimmedName = \ltrim($subNode->name, '\\');
+            if ($name === $trimmedName) {
+                return null;
             }
-            /** @var ReturnTagValueNode|VariadicAwareParamTagValueNode|VarTagValueNode $value */
-            $this->refactorDocblock($value, $oldToNewNamespaces);
-        }
+            $renamedNamespaceValueObject = $this->namespaceMatcher->matchRenamedNamespace($trimmedName, $oldToNewNamespaces);
+            if (!$renamedNamespaceValueObject instanceof \Rector\Renaming\ValueObject\RenamedNamespace) {
+                return null;
+            }
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('\\' . $renamedNamespaceValueObject->getNameInNewNamespace());
+        });
         if (!$phpDocInfo->hasChanged()) {
             return null;
         }
         return $node;
-    }
-    /**
-     * @param array<string, string> $oldToNewNamespaces
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode $value
-     */
-    private function refactorDocblock($value, array $oldToNewNamespaces) : void
-    {
-        /** @var ReturnTagValueNode|VariadicAwareParamTagValueNode|VarTagValueNode $value */
-        $types = $value->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode ? $value->type->types : [$value->type];
-        foreach ($types as $key => $type) {
-            if (!$type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
-                continue;
-            }
-            $name = $type->name;
-            $trimmedName = \ltrim($type->name, '\\');
-            if ($name === $trimmedName) {
-                continue;
-            }
-            $renamedNamespaceValueObject = $this->namespaceMatcher->matchRenamedNamespace($trimmedName, $oldToNewNamespaces);
-            if (!$renamedNamespaceValueObject instanceof \Rector\Renaming\ValueObject\RenamedNamespace) {
-                continue;
-            }
-            $newType = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('\\' . $renamedNamespaceValueObject->getNameInNewNamespace());
-            if ($value->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
-                $types[$key] = $newType;
-            } else {
-                $value->type = $newType;
-            }
-        }
-        if ($value->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
-            $value->type->types = $types;
-        }
     }
 }
