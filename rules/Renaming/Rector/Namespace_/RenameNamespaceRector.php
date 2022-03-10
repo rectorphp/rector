@@ -8,13 +8,20 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\NamespaceMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNamespaceRenamer;
 use Rector\Renaming\ValueObject\RenamedNamespace;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,6 +33,18 @@ use Webmozart\Assert\Assert;
 final class RenameNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @var array<class-string<Node>>
+     */
+    private const ONLY_CHANGE_DOCBLOCK_NODE = [
+        Property::class,
+        ClassMethod::class,
+        Function_::class,
+        Expression::class,
+        ClassLike::class,
+        FileWithoutNamespace::class,
+    ];
+
+    /**
      * @var array<string, string>
      */
     private array $oldToNewNamespaces = [];
@@ -36,7 +55,8 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
     private array $isChangedInNamespaces = [];
 
     public function __construct(
-        private readonly NamespaceMatcher $namespaceMatcher
+        private readonly NamespaceMatcher $namespaceMatcher,
+        private readonly DocBlockNamespaceRenamer $docBlockNamespaceRenamer
     ) {
     }
 
@@ -58,14 +78,20 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
      */
     public function getNodeTypes(): array
     {
-        return [Namespace_::class, Use_::class, Name::class];
+        return [Namespace_::class, Use_::class, Name::class, ...self::ONLY_CHANGE_DOCBLOCK_NODE];
     }
 
     /**
-     * @param Namespace_|Use_|Name $node
+     * @param Namespace_|Use_|Name|Property|ClassMethod|Function_|Expression|ClassLike|FileWithoutNamespace $node
      */
     public function refactor(Node $node): ?Node
     {
+        if (in_array($node::class, self::ONLY_CHANGE_DOCBLOCK_NODE, true)) {
+            /** @var Property|ClassMethod|Function_|Expression|ClassLike|FileWithoutNamespace $node */
+            return $this->docBlockNamespaceRenamer->renameFullyQualifiedNamespace($node, $this->oldToNewNamespaces);
+        }
+
+        /** @var Namespace_|Use_|Name $node */
         $name = $this->getName($node);
         if ($name === null) {
             return null;
