@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220308\Tracy;
+namespace RectorPrefix20220310\Tracy;
 
 /**
  * Custom output for Debugger.

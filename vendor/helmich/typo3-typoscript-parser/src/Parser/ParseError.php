@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220308\Helmich\TypoScriptParser\Parser;
+namespace RectorPrefix20220310\Helmich\TypoScriptParser\Parser;
 
 use Exception;
 class ParseError extends \Exception

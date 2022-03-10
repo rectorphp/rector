@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220308;
+namespace RectorPrefix20220310;
 
-use RectorPrefix20220308\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220310\OndraM\CiDetector\CiDetector;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -32,7 +32,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $parameters->set(\Rector\Core\Configuration\Option::CACHE_DIR, \sys_get_temp_dir() . '/rector_cached_files');
     // use faster in-memory cache in CI.
     // CI always starts from scratch, therefore IO intensive caching is not worth it
-    $ciDetector = new \RectorPrefix20220308\OndraM\CiDetector\CiDetector();
+    $ciDetector = new \RectorPrefix20220310\OndraM\CiDetector\CiDetector();
     if ($ciDetector->isCiDetected()) {
         $parameters->set(\Rector\Core\Configuration\Option::CACHE_CLASS, \Rector\Caching\ValueObject\Storage\MemoryCacheStorage::class);
     }

@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\PSR4\Composer;
 
-use RectorPrefix20220308\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
-use RectorPrefix20220308\Symplify\SmartFileSystem\Json\JsonFileSystem;
+use RectorPrefix20220310\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
+use RectorPrefix20220310\Symplify\SmartFileSystem\Json\JsonFileSystem;
 final class PSR4AutoloadPathsProvider
 {
     /**
@@ -16,7 +16,7 @@ final class PSR4AutoloadPathsProvider
      * @var \Symplify\SmartFileSystem\Json\JsonFileSystem
      */
     private $jsonFileSystem;
-    public function __construct(\RectorPrefix20220308\Symplify\SmartFileSystem\Json\JsonFileSystem $jsonFileSystem)
+    public function __construct(\RectorPrefix20220310\Symplify\SmartFileSystem\Json\JsonFileSystem $jsonFileSystem)
     {
         $this->jsonFileSystem = $jsonFileSystem;
     }
@@ -29,7 +29,7 @@ final class PSR4AutoloadPathsProvider
             return $this->cachedComposerJsonPSR4AutoloadPaths;
         }
         $composerJson = $this->jsonFileSystem->loadFilePathToJson($this->getComposerJsonPath());
-        $psr4Autoloads = \array_merge($composerJson[\RectorPrefix20220308\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD]['psr-4'] ?? [], $composerJson[\RectorPrefix20220308\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD_DEV]['psr-4'] ?? []);
+        $psr4Autoloads = \array_merge($composerJson[\RectorPrefix20220310\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD]['psr-4'] ?? [], $composerJson[\RectorPrefix20220310\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD_DEV]['psr-4'] ?? []);
         $this->cachedComposerJsonPSR4AutoloadPaths = $this->removeEmptyNamespaces($psr4Autoloads);
         return $this->cachedComposerJsonPSR4AutoloadPaths;
     }

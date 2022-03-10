@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220308;
+namespace RectorPrefix20220310;
 
 use Rector\Symfony\Rector\MethodCall\RedirectToRouteRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

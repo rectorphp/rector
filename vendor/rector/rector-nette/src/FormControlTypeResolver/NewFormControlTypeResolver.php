@@ -11,7 +11,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220308\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220310\Symfony\Contracts\Service\Attribute\Required;
 final class NewFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**

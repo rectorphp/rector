@@ -6,10 +6,10 @@ namespace Rector\Composer\Rector;
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Composer\Guard\VersionGuard;
 use Rector\Composer\ValueObject\PackageAndVersion;
-use RectorPrefix20220308\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20220310\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220308\Webmozart\Assert\Assert;
+use RectorPrefix20220310\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Composer\Rector\AddPackageToRequireComposerRector\AddPackageToRequireComposerRectorTest
  */
@@ -28,7 +28,7 @@ final class AddPackageToRequireComposerRector implements \Rector\Composer\Contra
     {
         $this->versionGuard = $versionGuard;
     }
-    public function refactor(\RectorPrefix20220308\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20220310\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         foreach ($this->packagesAndVersions as $packageAndVersion) {
             $composerJson->addRequiredPackage($packageAndVersion->getPackageName(), $packageAndVersion->getVersion());
@@ -54,7 +54,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220308\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Composer\ValueObject\PackageAndVersion::class);
+        \RectorPrefix20220310\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Composer\ValueObject\PackageAndVersion::class);
         $this->versionGuard->validate($configuration);
         $this->packagesAndVersions = $configuration;
     }

@@ -7,22 +7,33 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\NamespaceMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNamespaceRenamer;
 use Rector\Renaming\ValueObject\RenamedNamespace;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220308\Webmozart\Assert\Assert;
+use RectorPrefix20220310\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
  */
 final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
+    /**
+     * @var array<class-string<Node>>
+     */
+    private const ONLY_CHANGE_DOCBLOCK_NODE = [\PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\ClassLike::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class];
     /**
      * @var array<string, string>
      */
@@ -36,9 +47,15 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
      * @var \Rector\Naming\NamespaceMatcher
      */
     private $namespaceMatcher;
-    public function __construct(\Rector\Naming\NamespaceMatcher $namespaceMatcher)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNamespaceRenamer
+     */
+    private $docBlockNamespaceRenamer;
+    public function __construct(\Rector\Naming\NamespaceMatcher $namespaceMatcher, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNamespaceRenamer $docBlockNamespaceRenamer)
     {
         $this->namespaceMatcher = $namespaceMatcher;
+        $this->docBlockNamespaceRenamer = $docBlockNamespaceRenamer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -49,13 +66,19 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Namespace_::class, \PhpParser\Node\Stmt\Use_::class, \PhpParser\Node\Name::class];
+        $item3Unpacked = self::ONLY_CHANGE_DOCBLOCK_NODE;
+        return \array_merge([\PhpParser\Node\Stmt\Namespace_::class, \PhpParser\Node\Stmt\Use_::class, \PhpParser\Node\Name::class], $item3Unpacked);
     }
     /**
-     * @param Namespace_|Use_|Name $node
+     * @param Namespace_|Use_|Name|Property|ClassMethod|Function_|Expression|ClassLike|FileWithoutNamespace $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        if (\in_array(\get_class($node), self::ONLY_CHANGE_DOCBLOCK_NODE, \true)) {
+            /** @var Property|ClassMethod|Function_|Expression|ClassLike|FileWithoutNamespace $node */
+            return $this->docBlockNamespaceRenamer->renameFullyQualifiedNamespace($node, $this->oldToNewNamespaces);
+        }
+        /** @var Namespace_|Use_|Name $node */
         $name = $this->getName($node);
         if ($name === null) {
             return null;
@@ -96,8 +119,8 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220308\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220308\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220310\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220310\Webmozart\Assert\Assert::allString($configuration);
         /** @var array<string, string> $configuration */
         $this->oldToNewNamespaces = $configuration;
     }
