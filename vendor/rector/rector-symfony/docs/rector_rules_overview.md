@@ -1,4 +1,4 @@
-# 55 Rules Overview
+# 56 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -12,25 +12,6 @@ Removes Action suffixes from methods in Symfony Controllers
 -    public function indexAction()
 +    public function index()
      {
-     }
- }
-```
-
-<br>
-
-## AddFlashRector
-
-Turns long flash adding to short helper method in Controller in Symfony
-
-- class: [`Rector\Symfony\Rector\MethodCall\AddFlashRector`](../src/Rector/MethodCall/AddFlashRector.php)
-
-```diff
- class SomeController extends Controller
- {
-     public function some(Request $request)
-     {
--        $request->getSession()->getFlashBag()->add("success", "something");
-+        $this->addFlash("success", "something");
      }
  }
 ```
@@ -57,6 +38,20 @@ Add response content to response code assert, so it is easier to debug
 +            $response->getContent()
          );
      }
+ }
+```
+
+<br>
+
+## AuthorizationCheckerIsGrantedExtractorRector
+
+Extract `$this->authorizationChecker->isGranted([$a,` $b]) to `$this->authorizationChecker->isGranted($a)` || `$this->authorizationChecker->isGranted($b)`
+
+- class: [`Rector\Symfony\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector`](../src/Rector/MethodCall/AuthorizationCheckerIsGrantedExtractorRector.php)
+
+```diff
+-if ($this->authorizationChecker->isGranted(['ROLE_USER', 'ROLE_ADMIN'])) {
++if ($this->authorizationChecker->isGranted('ROLE_USER') || $this->authorizationChecker->isGranted('ROLE_USER')) {
  }
 ```
 
@@ -1022,6 +1017,30 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 -return service(ContainerInterface::class);
 +return service('service_container');
+```
+
+<br>
+
+## ResponseReturnTypeControllerActionRector
+
+Add Response object return type to controller actions
+
+- class: [`Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector`](../src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php)
+
+```diff
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Annotation\Route;
+
+ final class SomeController extends AbstractController
+ {
+     #[Route]
+-    public function detail()
++    public function detail(): Response
+     {
+         return $this->render('some_template');
+     }
+ }
 ```
 
 <br>

@@ -6,10 +6,12 @@ namespace RectorPrefix20220311;
 use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector;
 use Rector\Symfony\Rector\Class_\MakeCommandLazyRector;
+use Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector::class);
     $services->set(\Rector\Symfony\Rector\Class_\MakeCommandLazyRector::class);
     $services->set(\Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector::class);
+    $services->set(\Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector::class);
 };

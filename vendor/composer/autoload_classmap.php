@@ -2912,6 +2912,7 @@ return array(
     'Rector\\Symfony\\Rector\\ClassMethod\\RemoveServiceFromSensioRouteRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\RenderMethodParamToTypeDeclarationRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\ReplaceSensioRouteAnnotationWithSymfonyRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php',
+    'Rector\\Symfony\\Rector\\ClassMethod\\ResponseReturnTypeControllerActionRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\RouteCollectionBuilderToRoutingConfiguratorRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/RouteCollectionBuilderToRoutingConfiguratorRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\TemplateAnnotationToThisRenderRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php',
     'Rector\\Symfony\\Rector\\Class_\\ChangeFileLoaderInExtensionAndKernelRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector.php',
