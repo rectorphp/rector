@@ -9,12 +9,15 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -92,7 +95,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node instanceof ClassMethod && ($node->isMagic() || $node->isAbstract())) {
+        if ($this->shouldSkipClassMethod($node)) {
             return null;
         }
 
@@ -139,5 +142,41 @@ CODE_SAMPLE
         }
 
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new VoidType());
+    }
+
+    private function shouldSkipClassMethod(ClassMethod|Function_|Closure $functionLike): bool
+    {
+        if (! $functionLike instanceof ClassMethod) {
+            return false;
+        }
+
+        if ($functionLike->isMagic()) {
+            return true;
+        }
+
+        if ($functionLike->isAbstract()) {
+            return true;
+        }
+
+        if ($functionLike->isProtected()) {
+            return ! $this->isInsideFinalClass($functionLike);
+        }
+
+        return false;
+    }
+
+    private function isInsideFinalClass(ClassMethod $classMethod): bool
+    {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        return $classReflection->isFinal();
     }
 }
