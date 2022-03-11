@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Catch_;
 
-use RectorPrefix20220310\Nette\Utils\Strings;
+use RectorPrefix20220311\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\AliasNameResolver;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -31,9 +32,15 @@ final class CatchExceptionNameMatchingTypeRector extends \Rector\Core\Rector\Abs
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\AliasNameResolver
+     */
+    private $aliasNameResolver;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Naming\Naming\AliasNameResolver $aliasNameResolver)
     {
         $this->propertyNaming = $propertyNaming;
+        $this->aliasNameResolver = $aliasNameResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -89,7 +96,11 @@ CODE_SAMPLE
         }
         $type = $node->types[0];
         $typeShortName = $this->nodeNameResolver->getShortName($type);
-        $newVariableName = \RectorPrefix20220310\Nette\Utils\Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, function (array $matches) : string {
+        $aliasName = $this->aliasNameResolver->resolveByName($type);
+        if (\is_string($aliasName)) {
+            $typeShortName = $aliasName;
+        }
+        $newVariableName = \RectorPrefix20220311\Nette\Utils\Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, function (array $matches) : string {
             $output = '';
             $output .= isset($matches[1]) ? \strtolower($matches[1]) : '';
             $output .= $matches[2] ?? '';
