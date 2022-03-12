@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220311\Symplify\PackageBuilder\Testing;
+namespace RectorPrefix20220312\Symplify\PackageBuilder\Testing;
 
-use RectorPrefix20220311\PHPUnit\Framework\TestCase;
+use RectorPrefix20220312\PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use RectorPrefix20220311\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220311\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220311\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20220311\Symfony\Component\HttpKernel\KernelInterface;
-use RectorPrefix20220311\Symfony\Contracts\Service\ResetInterface;
-use RectorPrefix20220311\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
-use RectorPrefix20220311\Symplify\PackageBuilder\Exception\HttpKernel\MissingInterfaceException;
+use RectorPrefix20220312\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220312\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220312\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20220312\Symfony\Component\HttpKernel\KernelInterface;
+use RectorPrefix20220312\Symfony\Contracts\Service\ResetInterface;
+use RectorPrefix20220312\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
+use RectorPrefix20220312\Symplify\PackageBuilder\Exception\HttpKernel\MissingInterfaceException;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20220311\Symplify\SymplifyKernel\Contract\LightKernelInterface;
-use RectorPrefix20220311\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
+use RectorPrefix20220312\Symplify\SymplifyKernel\Contract\LightKernelInterface;
+use RectorPrefix20220312\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
 /**
  * Inspiration
  *
  * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php
  */
-abstract class AbstractKernelTestCase extends \RectorPrefix20220311\PHPUnit\Framework\TestCase
+abstract class AbstractKernelTestCase extends \RectorPrefix20220312\PHPUnit\Framework\TestCase
 {
     /**
      * @var \Symfony\Component\HttpKernel\KernelInterface|\Symplify\SymplifyKernel\Contract\LightKernelInterface|null
@@ -56,12 +56,12 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20220311\PHPUnit\Fram
     protected function getService(string $type)
     {
         if (self::$container === null) {
-            throw new \RectorPrefix20220311\Symplify\SymplifyKernel\Exception\ShouldNotHappenException('First, create container with booKernel(KernelClass::class)');
+            throw new \RectorPrefix20220312\Symplify\SymplifyKernel\Exception\ShouldNotHappenException('First, create container with booKernel(KernelClass::class)');
         }
         $service = self::$container->get($type);
         if ($service === null) {
             $errorMessage = \sprintf('Services "%s" was not found', $type);
-            throw new \RectorPrefix20220311\Symplify\Astral\Exception\ShouldNotHappenException($errorMessage);
+            throw new \RectorPrefix20220312\Symplify\Astral\Exception\ShouldNotHappenException($errorMessage);
         }
         return $service;
     }
@@ -70,7 +70,7 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20220311\PHPUnit\Fram
      */
     protected function bootKernel(string $kernelClass) : void
     {
-        if (\is_a($kernelClass, \RectorPrefix20220311\Symplify\SymplifyKernel\Contract\LightKernelInterface::class, \true)) {
+        if (\is_a($kernelClass, \RectorPrefix20220312\Symplify\SymplifyKernel\Contract\LightKernelInterface::class, \true)) {
             /** @var LightKernelInterface $kernel */
             $kernel = new $kernelClass();
             $kernel->createFromConfigs([]);
@@ -80,8 +80,8 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20220311\PHPUnit\Fram
         }
         $this->ensureKernelShutdown();
         $kernel = new $kernelClass('test', \true);
-        if (!$kernel instanceof \RectorPrefix20220311\Symfony\Component\HttpKernel\KernelInterface) {
-            throw new \RectorPrefix20220311\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
+        if (!$kernel instanceof \RectorPrefix20220312\Symfony\Component\HttpKernel\KernelInterface) {
+            throw new \RectorPrefix20220312\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
         }
         static::$kernel = $this->bootAndReturnKernel($kernel);
     }
@@ -90,7 +90,7 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20220311\PHPUnit\Fram
      */
     protected function ensureKernelShutdown() : void
     {
-        if (static::$kernel !== null && static::$kernel instanceof \RectorPrefix20220311\Symfony\Component\HttpKernel\KernelInterface) {
+        if (static::$kernel !== null && static::$kernel instanceof \RectorPrefix20220312\Symfony\Component\HttpKernel\KernelInterface) {
             // make sure boot() is called
             // @see https://github.com/symfony/symfony/pull/31202/files
             $kernelReflectionClass = new \ReflectionClass(static::$kernel);
@@ -100,7 +100,7 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20220311\PHPUnit\Fram
             if ($kernel !== null) {
                 $container = static::$kernel->getContainer();
                 static::$kernel->shutdown();
-                if ($container instanceof \RectorPrefix20220311\Symfony\Contracts\Service\ResetInterface) {
+                if ($container instanceof \RectorPrefix20220312\Symfony\Contracts\Service\ResetInterface) {
                     $container->reset();
                 }
             }
@@ -135,15 +135,15 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20220311\PHPUnit\Fram
      */
     private function ensureIsConfigAwareKernel($kernel) : void
     {
-        if ($kernel instanceof \RectorPrefix20220311\Symplify\SymplifyKernel\Contract\LightKernelInterface) {
+        if ($kernel instanceof \RectorPrefix20220312\Symplify\SymplifyKernel\Contract\LightKernelInterface) {
             return;
         }
-        if ($kernel instanceof \RectorPrefix20220311\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface) {
+        if ($kernel instanceof \RectorPrefix20220312\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface) {
             return;
         }
-        throw new \RectorPrefix20220311\Symplify\PackageBuilder\Exception\HttpKernel\MissingInterfaceException(\sprintf('"%s" is missing an "%s" interface', \get_class($kernel), \RectorPrefix20220311\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface::class));
+        throw new \RectorPrefix20220312\Symplify\PackageBuilder\Exception\HttpKernel\MissingInterfaceException(\sprintf('"%s" is missing an "%s" interface', \get_class($kernel), \RectorPrefix20220312\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface::class));
     }
-    private function bootAndReturnKernel(\RectorPrefix20220311\Symfony\Component\HttpKernel\KernelInterface $kernel) : \RectorPrefix20220311\Symfony\Component\HttpKernel\KernelInterface
+    private function bootAndReturnKernel(\RectorPrefix20220312\Symfony\Component\HttpKernel\KernelInterface $kernel) : \RectorPrefix20220312\Symfony\Component\HttpKernel\KernelInterface
     {
         $kernel->boot();
         $container = $kernel->getContainer();
@@ -151,13 +151,13 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20220311\PHPUnit\Fram
         if ($container->has('test.service_container')) {
             $container = $container->get('test.service_container');
         }
-        if (!$container instanceof \RectorPrefix20220311\Symfony\Component\DependencyInjection\ContainerInterface) {
-            throw new \RectorPrefix20220311\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
+        if (!$container instanceof \RectorPrefix20220312\Symfony\Component\DependencyInjection\ContainerInterface) {
+            throw new \RectorPrefix20220312\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
         }
         // has output? keep it silent out of tests
-        if ($container->has(\RectorPrefix20220311\Symfony\Component\Console\Style\SymfonyStyle::class)) {
-            $symfonyStyle = $container->get(\RectorPrefix20220311\Symfony\Component\Console\Style\SymfonyStyle::class);
-            $symfonyStyle->setVerbosity(\RectorPrefix20220311\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+        if ($container->has(\RectorPrefix20220312\Symfony\Component\Console\Style\SymfonyStyle::class)) {
+            $symfonyStyle = $container->get(\RectorPrefix20220312\Symfony\Component\Console\Style\SymfonyStyle::class);
+            $symfonyStyle->setVerbosity(\RectorPrefix20220312\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
         }
         static::$container = $container;
         return $kernel;
@@ -169,7 +169,7 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20220311\PHPUnit\Fram
      */
     private function createBootedKernelFromConfigs(string $kernelClass, string $configsHash, array $configFilePaths)
     {
-        if (\is_a($kernelClass, \RectorPrefix20220311\Symplify\SymplifyKernel\Contract\LightKernelInterface::class, \true)) {
+        if (\is_a($kernelClass, \RectorPrefix20220312\Symplify\SymplifyKernel\Contract\LightKernelInterface::class, \true)) {
             /** @var LightKernelInterface $kernel */
             $kernel = new $kernelClass();
             $kernel->createFromConfigs($configFilePaths);
