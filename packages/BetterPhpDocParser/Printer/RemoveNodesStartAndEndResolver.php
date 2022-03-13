@@ -21,8 +21,12 @@ final class RemoveNodesStartAndEndResolver
         $removedChildNodes = \array_diff($originalPhpDocNode->children, $currentPhpDocNode->children);
         $lastEndPosition = null;
         foreach ($removedChildNodes as $removedChildNode) {
-            /** @var StartAndEnd $removedPhpDocNodeInfo */
+            /** @var StartAndEnd|null $removedPhpDocNodeInfo */
             $removedPhpDocNodeInfo = $removedChildNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
+            // it's not there when comment block has empty row "\s\*\n"
+            if (!$removedPhpDocNodeInfo instanceof \Rector\BetterPhpDocParser\ValueObject\StartAndEnd) {
+                continue;
+            }
             // change start position to start of the line, so the whole line is removed
             $seekPosition = $removedPhpDocNodeInfo->getStart();
             while ($seekPosition >= 0 && $tokens[$seekPosition][1] !== \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_HORIZONTAL_WS) {
