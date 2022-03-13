@@ -138,7 +138,7 @@
             "vendor/bin/ecs check --fix --ansi",
             "vendor/bin/ecs check-markdown README.md --fix --ansi"
         ],
-        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
+        "phpstan": "php -dmemory_limit=1G vendor/bin/phpstan analyse --ansi --error-format symplify",
         "phpstan-config": "vendor/bin/phpstan analyse config --ansi --error-format symplify",
         "docs": [
             "vendor/bin/rule-doc-generator generate packages rules --output-file build/rector_rules_overview.md --ansi --categorize --configure-method",
