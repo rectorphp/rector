@@ -46,8 +46,6 @@
 
 - [Naming](#naming) (6)
 
-- [Order](#order) (1)
-
 - [PSR4](#psr4) (2)
 
 - [Php52](#php52) (2)
@@ -90,7 +88,7 @@
 
 - [Transform](#transform) (36)
 
-- [TypeDeclaration](#typedeclaration) (22)
+- [TypeDeclaration](#typedeclaration) (23)
 
 - [Visibility](#visibility) (2)
 
@@ -6480,37 +6478,6 @@ Rename variable to match new ClassType
 
 <br>
 
-## Order
-
-### OrderPrivateMethodsByUseRector
-
-Order private methods in order of their use
-
-- class: [`Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector`](../rules/Order/Rector/Class_/OrderPrivateMethodsByUseRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $this->call1();
-         $this->call2();
-     }
-
--    private function call2()
-+    private function call1()
-     {
-     }
-
--    private function call1()
-+    private function call2()
-     {
-     }
- }
-```
-
-<br>
-
 ## PSR4
 
 ### MultipleClassFileToPsr4ClassesRector
@@ -11516,6 +11483,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      {
          $value = 1000;
          return;
+     }
+ }
+```
+
+<br>
+
+### ArrayShapeFromConstantArrayReturnRector
+
+Add array shape exact types based on constant keys of array
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ArrayShapeFromConstantArrayReturnRector`](../rules/TypeDeclaration/Rector/ClassMethod/ArrayShapeFromConstantArrayReturnRector.php)
+
+```diff
+ final class SomeClass
+ {
++    /**
++     * @return array{name: string}
++     */
+     public function run(string $name)
+     {
+         return ['name' => $name];
      }
  }
 ```

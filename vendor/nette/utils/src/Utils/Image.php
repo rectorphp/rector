@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220312\Nette\Utils;
+namespace RectorPrefix20220313\Nette\Utils;
 
-use RectorPrefix20220312\Nette;
+use RectorPrefix20220313\Nette;
 /**
  * Basic manipulation with images. Supported types are JPEG, PNG, GIF, WEBP, AVIF and BMP.
  *
@@ -125,11 +125,11 @@ class Image
     public static function fromFile(string $file, ?int &$type = null)
     {
         if (!\extension_loaded('gd')) {
-            throw new \RectorPrefix20220312\Nette\NotSupportedException('PHP extension GD is not loaded.');
+            throw new \RectorPrefix20220313\Nette\NotSupportedException('PHP extension GD is not loaded.');
         }
         $type = self::detectTypeFromFile($file);
         if (!$type) {
-            throw new \RectorPrefix20220312\Nette\Utils\UnknownImageFileException(\is_file($file) ? "Unknown type of file '{$file}'." : "File '{$file}' not found.");
+            throw new \RectorPrefix20220313\Nette\Utils\UnknownImageFileException(\is_file($file) ? "Unknown type of file '{$file}'." : "File '{$file}' not found.");
         }
         return self::invokeSafe('imagecreatefrom' . self::FORMATS[$type], $file, "Unable to open file '{$file}'.", __METHOD__);
     }
@@ -142,22 +142,22 @@ class Image
     public static function fromString(string $s, ?int &$type = null)
     {
         if (!\extension_loaded('gd')) {
-            throw new \RectorPrefix20220312\Nette\NotSupportedException('PHP extension GD is not loaded.');
+            throw new \RectorPrefix20220313\Nette\NotSupportedException('PHP extension GD is not loaded.');
         }
         $type = self::detectTypeFromString($s);
         if (!$type) {
-            throw new \RectorPrefix20220312\Nette\Utils\UnknownImageFileException('Unknown type of image.');
+            throw new \RectorPrefix20220313\Nette\Utils\UnknownImageFileException('Unknown type of image.');
         }
         return self::invokeSafe('imagecreatefromstring', $s, 'Unable to open image from string.', __METHOD__);
     }
     private static function invokeSafe(string $func, string $arg, string $message, string $callee) : self
     {
         $errors = [];
-        $res = \RectorPrefix20220312\Nette\Utils\Callback::invokeSafe($func, [$arg], function (string $message) use(&$errors) : void {
+        $res = \RectorPrefix20220313\Nette\Utils\Callback::invokeSafe($func, [$arg], function (string $message) use(&$errors) : void {
             $errors[] = $message;
         });
         if (!$res) {
-            throw new \RectorPrefix20220312\Nette\Utils\ImageException($message . ' Errors: ' . \implode(', ', $errors));
+            throw new \RectorPrefix20220313\Nette\Utils\ImageException($message . ' Errors: ' . \implode(', ', $errors));
         } elseif ($errors) {
             \trigger_error($callee . '(): ' . \implode(', ', $errors), \E_USER_WARNING);
         }
@@ -171,10 +171,10 @@ class Image
     public static function fromBlank(int $width, int $height, ?array $color = null)
     {
         if (!\extension_loaded('gd')) {
-            throw new \RectorPrefix20220312\Nette\NotSupportedException('PHP extension GD is not loaded.');
+            throw new \RectorPrefix20220313\Nette\NotSupportedException('PHP extension GD is not loaded.');
         }
         if ($width < 1 || $height < 1) {
-            throw new \RectorPrefix20220312\Nette\InvalidArgumentException('Image width and height must be greater than zero.');
+            throw new \RectorPrefix20220313\Nette\InvalidArgumentException('Image width and height must be greater than zero.');
         }
         $image = \imagecreatetruecolor($width, $height);
         if ($color) {
@@ -210,7 +210,7 @@ class Image
     public static function typeToExtension(int $type) : string
     {
         if (!isset(self::FORMATS[$type])) {
-            throw new \RectorPrefix20220312\Nette\InvalidArgumentException("Unsupported image type '{$type}'.");
+            throw new \RectorPrefix20220313\Nette\InvalidArgumentException("Unsupported image type '{$type}'.");
         }
         return self::FORMATS[$type];
     }
@@ -252,7 +252,7 @@ class Image
     protected function setImageResource($image)
     {
         if (!$image instanceof \GdImage && !(\is_resource($image) && \get_resource_type($image) === 'gd')) {
-            throw new \RectorPrefix20220312\Nette\InvalidArgumentException('Image is not valid.');
+            throw new \RectorPrefix20220313\Nette\InvalidArgumentException('Image is not valid.');
         }
         $this->image = $image;
         return $this;
@@ -312,7 +312,7 @@ class Image
         if ($flags & self::STRETCH) {
             // non-proportional
             if (!$newWidth || !$newHeight) {
-                throw new \RectorPrefix20220312\Nette\InvalidArgumentException('For stretching must be both width and height specified.');
+                throw new \RectorPrefix20220313\Nette\InvalidArgumentException('For stretching must be both width and height specified.');
             }
             if ($flags & self::SHRINK_ONLY) {
                 $newWidth = (int) \round($srcWidth * \min(1, $newWidth / $srcWidth));
@@ -321,7 +321,7 @@ class Image
         } else {
             // proportional
             if (!$newWidth && !$newHeight) {
-                throw new \RectorPrefix20220312\Nette\InvalidArgumentException('At least width or height must be specified.');
+                throw new \RectorPrefix20220313\Nette\InvalidArgumentException('At least width or height must be specified.');
             }
             $scale = [];
             if ($newWidth > 0) {
@@ -468,7 +468,7 @@ class Image
             $extensions = \array_flip(self::FORMATS) + ['jpg' => self::JPEG];
             $ext = \strtolower(\pathinfo($file, \PATHINFO_EXTENSION));
             if (!isset($extensions[$ext])) {
-                throw new \RectorPrefix20220312\Nette\InvalidArgumentException("Unsupported file extension '{$ext}'.");
+                throw new \RectorPrefix20220313\Nette\InvalidArgumentException("Unsupported file extension '{$ext}'.");
             }
             $type = $extensions[$ext];
         }
@@ -479,7 +479,7 @@ class Image
      */
     public function toString(int $type = self::JPEG, ?int $quality = null) : string
     {
-        return \RectorPrefix20220312\Nette\Utils\Helpers::capture(function () use($type, $quality) {
+        return \RectorPrefix20220313\Nette\Utils\Helpers::capture(function () use($type, $quality) {
             $this->output($type, $quality);
         });
     }
@@ -543,10 +543,10 @@ class Image
                 // @ is escalated to exception
                 break;
             default:
-                throw new \RectorPrefix20220312\Nette\InvalidArgumentException("Unsupported image type '{$type}'.");
+                throw new \RectorPrefix20220313\Nette\InvalidArgumentException("Unsupported image type '{$type}'.");
         }
         if (!$success) {
-            throw new \RectorPrefix20220312\Nette\Utils\ImageException(\RectorPrefix20220312\Nette\Utils\Helpers::getLastError() ?: 'Unknown error');
+            throw new \RectorPrefix20220313\Nette\Utils\ImageException(\RectorPrefix20220313\Nette\Utils\Helpers::getLastError() ?: 'Unknown error');
         }
     }
     /**
@@ -558,7 +558,7 @@ class Image
     {
         $function = 'image' . $name;
         if (!\function_exists($function)) {
-            \RectorPrefix20220312\Nette\Utils\ObjectHelpers::strictCall(static::class, $name);
+            \RectorPrefix20220313\Nette\Utils\ObjectHelpers::strictCall(static::class, $name);
         }
         foreach ($args as $key => $value) {
             if ($value instanceof self) {
@@ -590,13 +590,13 @@ class Image
             $num = (int) $num;
             return \false;
         }
-        throw new \RectorPrefix20220312\Nette\InvalidArgumentException("Expected dimension in int|string, '{$num}' given.");
+        throw new \RectorPrefix20220313\Nette\InvalidArgumentException("Expected dimension in int|string, '{$num}' given.");
     }
     /**
      * Prevents serialization.
      */
     public function __sleep() : array
     {
-        throw new \RectorPrefix20220312\Nette\NotSupportedException('You cannot serialize or unserialize ' . self::class . ' instances.');
+        throw new \RectorPrefix20220313\Nette\NotSupportedException('You cannot serialize or unserialize ' . self::class . ' instances.');
     }
 }

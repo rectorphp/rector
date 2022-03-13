@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220312\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20220313\Idiosyncratic\EditorConfig\Declaration;
 
 use function in_array;
 use function is_numeric;
