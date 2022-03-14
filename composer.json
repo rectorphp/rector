@@ -150,6 +150,7 @@
         "release": "vendor/bin/monorepo-builder release patch --ansi"
     },
     "extra": {
+        "enable-patching": true,
         "patches": {
             "symfony/dependency-injection": [
                 "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/symfony-dependency-injection.patch"
