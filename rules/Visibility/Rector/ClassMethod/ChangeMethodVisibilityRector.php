@@ -15,7 +15,7 @@ use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220313\Webmozart\Assert\Assert;
+use RectorPrefix20220314\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest
  */
@@ -111,7 +111,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220313\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Visibility\ValueObject\ChangeMethodVisibility::class);
+        \RectorPrefix20220314\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Visibility\ValueObject\ChangeMethodVisibility::class);
         $this->methodVisibilities = $configuration;
     }
 }

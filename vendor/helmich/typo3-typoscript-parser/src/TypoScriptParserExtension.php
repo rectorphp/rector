@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220313\Helmich\TypoScriptParser;
+namespace RectorPrefix20220314\Helmich\TypoScriptParser;
 
-use RectorPrefix20220313\Symfony\Component\Config\FileLocator;
-use RectorPrefix20220313\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220313\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix20220313\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use RectorPrefix20220314\Symfony\Component\Config\FileLocator;
+use RectorPrefix20220314\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220314\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 /**
  * Class TypoScriptParserExtension
  *
  * @package Helmich\TypoScriptParser
  * @codeCoverageIgnore
  */
-class TypoScriptParserExtension implements \RectorPrefix20220313\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
+class TypoScriptParserExtension implements \RectorPrefix20220314\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
 {
     /**
      * Loads a specific configuration.
@@ -26,9 +26,9 @@ class TypoScriptParserExtension implements \RectorPrefix20220313\Symfony\Compone
      * @api
      * @psalm-suppress MissingReturnType Signature is determined by Symfony DI -- nothing to fix, here
      */
-    public function load(array $configs, \RectorPrefix20220313\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function load(array $configs, \RectorPrefix20220314\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
-        $loader = new \RectorPrefix20220313\Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, new \RectorPrefix20220313\Symfony\Component\Config\FileLocator(__DIR__ . '/../config'));
+        $loader = new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, new \RectorPrefix20220314\Symfony\Component\Config\FileLocator(__DIR__ . '/../config'));
         $loader->load('services.yml');
     }
     /**

@@ -24,7 +24,7 @@ use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220313\Webmozart\Assert\Assert;
+use RectorPrefix20220314\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\ArgumentFuncCallToMethodCallRectorTest
  */
@@ -124,7 +124,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220313\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface::class);
+        \RectorPrefix20220314\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface::class);
         $this->argumentFuncCallToMethodCalls = $configuration;
     }
     private function shouldSkipFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
