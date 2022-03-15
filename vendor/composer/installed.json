@@ -2690,12 +2690,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "504967432047b632438de54518618a1dadefd164"
+                "reference": "fcd5c8ee77db079f4dcfc84b5322af24ff9703fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/504967432047b632438de54518618a1dadefd164",
-                "reference": "504967432047b632438de54518618a1dadefd164",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/fcd5c8ee77db079f4dcfc84b5322af24ff9703fe",
+                "reference": "fcd5c8ee77db079f4dcfc84b5322af24ff9703fe",
                 "shasum": ""
             },
             "require": {
@@ -2723,7 +2723,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-03-14T16:25:42+00:00",
+            "time": "2022-03-15T15:56:48+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2750,7 +2750,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.50"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/main"
             },
             "install-path": "..\/rector\/rector-symfony"
         },
