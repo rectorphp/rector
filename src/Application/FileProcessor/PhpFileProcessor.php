@@ -11,7 +11,6 @@ use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
-use Rector\Core\Enum\ApplicationPhase;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -53,7 +52,6 @@ final class PhpFileProcessor implements FileProcessorInterface
         if ($parsingSystemErrors !== []) {
             // we cannot process this file as the parsing and type resolving itself went wrong
             $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
-            $this->notifyPhase($file, ApplicationPhase::PRINT_SKIP());
 
             return $systemErrorsAndFileDiffs;
         }
@@ -64,7 +62,6 @@ final class PhpFileProcessor implements FileProcessorInterface
             $this->refactorNodesWithRectors($file, $configuration);
 
             // 3. apply post rectors
-            $this->notifyPhase($file, ApplicationPhase::POST_RECTORS());
             $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
             // this is needed for new tokens added in "afterTraverse()"
             $file->changeNewStmts($newStmts);
@@ -73,7 +70,6 @@ final class PhpFileProcessor implements FileProcessorInterface
             $this->currentFileProvider->setFile($file);
 
             // important to detect if file has changed
-            $this->notifyPhase($file, ApplicationPhase::PRINT());
             $this->printFile($file, $configuration);
         } while ($file->hasChanged());
 
@@ -104,8 +100,6 @@ final class PhpFileProcessor implements FileProcessorInterface
     private function refactorNodesWithRectors(File $file, Configuration $configuration): void
     {
         $this->currentFileProvider->setFile($file);
-        $this->notifyPhase($file, ApplicationPhase::REFACTORING());
-
         $this->fileProcessor->refactor($file, $configuration);
     }
 
@@ -115,7 +109,7 @@ final class PhpFileProcessor implements FileProcessorInterface
     private function parseFileAndDecorateNodes(File $file): array
     {
         $this->currentFileProvider->setFile($file);
-        $this->notifyPhase($file, ApplicationPhase::PARSING());
+        $this->notifyFile($file);
 
         try {
             $this->fileProcessor->parseFileInfoToLocalCache($file);
@@ -165,7 +159,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         $this->fileDiffFileDecorator->decorate([$file]);
     }
 
-    private function notifyPhase(File $file, ApplicationPhase $applicationPhase): void
+    private function notifyFile(File $file): void
     {
         if (! $this->rectorOutputStyle->isVerbose()) {
             return;
@@ -173,7 +167,7 @@ final class PhpFileProcessor implements FileProcessorInterface
 
         $smartFileInfo = $file->getSmartFileInfo();
         $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
-        $message = sprintf('[%s] %s', $applicationPhase, $relativeFilePath);
+        $message = $relativeFilePath;
         $this->rectorOutputStyle->writeln($message);
     }
 }

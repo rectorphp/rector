@@ -21,7 +21,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
-use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
@@ -118,8 +117,6 @@ CODE_SAMPLE;
 
     private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
 
-    private OutputStyleInterface $rectorOutputStyle;
-
     private ExclusionManager $exclusionManager;
 
     private CurrentRectorProvider $currentRectorProvider;
@@ -127,8 +124,6 @@ CODE_SAMPLE;
     private CurrentNodeProvider $currentNodeProvider;
 
     private Skipper $skipper;
-
-    private string|null $previousAppliedClass = null;
 
     private CurrentFileProvider $currentFileProvider;
 
@@ -153,7 +148,6 @@ CODE_SAMPLE;
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeFactory $nodeFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        OutputStyleInterface $rectorOutputStyle,
         PhpVersionProvider $phpVersionProvider,
         ExclusionManager $exclusionManager,
         StaticTypeMapper $staticTypeMapper,
@@ -178,7 +172,6 @@ CODE_SAMPLE;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeFactory = $nodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->rectorOutputStyle = $rectorOutputStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->exclusionManager = $exclusionManager;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -199,8 +192,6 @@ CODE_SAMPLE;
      */
     public function beforeTraverse(array $nodes): ?array
     {
-        $this->previousAppliedClass = null;
-
         // workaround for file around refactor()
         $file = $this->currentFileProvider->getFile();
         if (! $file instanceof File) {
@@ -239,9 +230,6 @@ CODE_SAMPLE;
         $this->currentRectorProvider->changeCurrentRector($this);
         // for PHP doc info factory and change notifier
         $this->currentNodeProvider->setNode($node);
-
-        // show current Rector class on --debug
-        $this->printDebugApplying();
 
         $originalAttributes = $node->getAttributes();
 
@@ -437,22 +425,6 @@ CODE_SAMPLE;
 
         $rectifiedNode = $this->rectifiedAnalyzer->verify($this, $node, $this->file);
         return $rectifiedNode instanceof RectifiedNode;
-    }
-
-    private function printDebugApplying(): void
-    {
-        if (! $this->rectorOutputStyle->isDebug()) {
-            return;
-        }
-
-        if ($this->previousAppliedClass === static::class) {
-            return;
-        }
-
-        // prevent spamming with the same class over and over
-        // indented on purpose to improve log nesting under [refactoring]
-        $this->rectorOutputStyle->writeln('    [applying] ' . static::class);
-        $this->previousAppliedClass = static::class;
     }
 
     /**
