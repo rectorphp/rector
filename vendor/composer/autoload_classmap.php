@@ -1673,7 +1673,6 @@ return array(
     'Rector\\Core\\DependencyInjection\\Loader\\Configurator\\RectorServiceConfigurator' => $baseDir . '/src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php',
     'Rector\\Core\\DependencyInjection\\RectorContainerFactory' => $baseDir . '/src/DependencyInjection/RectorContainerFactory.php',
     'Rector\\Core\\Differ\\DefaultDiffer' => $baseDir . '/src/Differ/DefaultDiffer.php',
-    'Rector\\Core\\Enum\\ApplicationPhase' => $baseDir . '/src/Enum/ApplicationPhase.php',
     'Rector\\Core\\Enum\\ObjectReference' => $baseDir . '/src/Enum/ObjectReference.php',
     'Rector\\Core\\Error\\ExceptionCorrector' => $baseDir . '/src/Error/ExceptionCorrector.php',
     'Rector\\Core\\Exception\\Cache\\CachingException' => $baseDir . '/src/Exception/Cache/CachingException.php',

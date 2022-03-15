@@ -4,20 +4,20 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit36c38c2eb746b2591be8e3271eb7bf00
+class ComposerStaticInit0c16672f7d25618a5ba45fa1f6006853
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
-        '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
+        '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '2324d0e5cadd603331d27de142371f0b' => __DIR__ . '/..' . '/symfony/contracts/Deprecation/function.php',
+        'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
         '4508688f3cab21375725e8d11ca194a2' => __DIR__ . '/../..' . '/src/constants.php',
     );
@@ -2047,7 +2047,6 @@ class ComposerStaticInit36c38c2eb746b2591be8e3271eb7bf00
         'Rector\\Core\\DependencyInjection\\Loader\\Configurator\\RectorServiceConfigurator' => __DIR__ . '/../..' . '/src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php',
         'Rector\\Core\\DependencyInjection\\RectorContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/RectorContainerFactory.php',
         'Rector\\Core\\Differ\\DefaultDiffer' => __DIR__ . '/../..' . '/src/Differ/DefaultDiffer.php',
-        'Rector\\Core\\Enum\\ApplicationPhase' => __DIR__ . '/../..' . '/src/Enum/ApplicationPhase.php',
         'Rector\\Core\\Enum\\ObjectReference' => __DIR__ . '/../..' . '/src/Enum/ObjectReference.php',
         'Rector\\Core\\Error\\ExceptionCorrector' => __DIR__ . '/../..' . '/src/Error/ExceptionCorrector.php',
         'Rector\\Core\\Exception\\Cache\\CachingException' => __DIR__ . '/../..' . '/src/Exception/Cache/CachingException.php',
@@ -3843,9 +3842,9 @@ class ComposerStaticInit36c38c2eb746b2591be8e3271eb7bf00
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit36c38c2eb746b2591be8e3271eb7bf00::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit36c38c2eb746b2591be8e3271eb7bf00::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit36c38c2eb746b2591be8e3271eb7bf00::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0c16672f7d25618a5ba45fa1f6006853::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0c16672f7d25618a5ba45fa1f6006853::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0c16672f7d25618a5ba45fa1f6006853::$classMap;
 
         }, null, ClassLoader::class);
     }
