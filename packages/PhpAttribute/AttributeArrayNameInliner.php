@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Exception\NotImplementedYetException;
 use RectorPrefix20220315\Webmozart\Assert\Assert;
 final class AttributeArrayNameInliner
 {
@@ -56,6 +57,11 @@ final class AttributeArrayNameInliner
                 if ($arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
                     $arrayItemString = $arrayItem->key;
                     $newArgs[] = new \PhpParser\Node\Arg($arrayItem->value, \false, \false, [], new \PhpParser\Node\Identifier($arrayItemString->value));
+                } elseif ($arrayItem->key === null) {
+                    // silent key
+                    $newArgs[] = new \PhpParser\Node\Arg($arrayItem->value);
+                } else {
+                    throw new \Rector\Core\Exception\NotImplementedYetException(\get_debug_type($arrayItem->key));
                 }
             }
         }
