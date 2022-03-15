@@ -1,4 +1,4 @@
-# 506 Rules Overview
+# 505 Rules Overview
 
 <br>
 
@@ -86,7 +86,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (36)
+- [Transform](#transform) (35)
 
 - [TypeDeclaration](#typedeclaration) (23)
 
@@ -9888,40 +9888,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +#[AllowDynamicProperties]
  class SomeObject {
      public string $someProperty = 'hello world';
- }
-```
-
-<br>
-
-### AddInterfaceByParentRector
-
-Add interface by parent
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\Class_\AddInterfaceByParentRector`](../rules/Transform/Rector/Class_/AddInterfaceByParentRector.php)
-
-```php
-use Rector\Transform\Rector\Class_\AddInterfaceByParentRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddInterfaceByParentRector::class)
-        ->configure([
-            'SomeParent' => 'SomeInterface',
-        ]);
-};
-```
-
-↓
-
-```diff
--class SomeClass extends SomeParent
-+class SomeClass extends SomeParent implements SomeInterface
- {
-
  }
 ```
 
