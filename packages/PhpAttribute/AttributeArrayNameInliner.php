@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Exception\NotImplementedYetException;
 use Webmozart\Assert\Assert;
 
 final class AttributeArrayNameInliner
@@ -66,6 +67,11 @@ final class AttributeArrayNameInliner
                 if ($arrayItem->key instanceof String_) {
                     $arrayItemString = $arrayItem->key;
                     $newArgs[] = new Arg($arrayItem->value, false, false, [], new Identifier($arrayItemString->value));
+                } elseif ($arrayItem->key === null) {
+                    // silent key
+                    $newArgs[] = new Arg($arrayItem->value);
+                } else {
+                    throw new NotImplementedYetException(get_debug_type($arrayItem->key));
                 }
             }
         }
