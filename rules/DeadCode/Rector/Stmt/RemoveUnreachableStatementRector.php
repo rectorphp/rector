@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\While_;
+use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,6 +33,15 @@ final class RemoveUnreachableStatementRector extends \Rector\Core\Rector\Abstrac
      * @var array<class-string<Node>>
      */
     private const STMTS_WITH_IS_UNREACHABLE = [\PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\Do_::class];
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer
+     */
+    private $inlineHTMLAnalyzer;
+    public function __construct(\Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer $inlineHTMLAnalyzer)
+    {
+        $this->inlineHTMLAnalyzer = $inlineHTMLAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unreachable statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -94,7 +104,10 @@ CODE_SAMPLE
         if ($stmt instanceof \PhpParser\Node\Stmt\ClassLike) {
             return \true;
         }
-        return $stmt instanceof \PhpParser\Node\FunctionLike;
+        if ($stmt instanceof \PhpParser\Node\FunctionLike) {
+            return \true;
+        }
+        return $this->inlineHTMLAnalyzer->hasInlineHTML($stmt);
     }
     private function isUnreachable(\PhpParser\Node\Stmt $stmt) : bool
     {
