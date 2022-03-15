@@ -1,4 +1,4 @@
-# 505 Rules Overview
+# 506 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (71)
+- [CodeQuality](#codequality) (72)
 
 - [CodingStyle](#codingstyle) (35)
 
@@ -864,6 +864,27 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 ```diff
 -in_array("key", array_keys($array), true);
 +array_key_exists("key", $array);
+```
+
+<br>
+
+### InlineConstructorDefaultToPropertyRector
+
+Move property default from constructor to property default
+
+- class: [`Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector`](../rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    private $name;
+-
+-    public function __construct()
+-    {
+-        $this->name = 'John';
+-    }
++    private $name = 'John';
+ }
 ```
 
 <br>

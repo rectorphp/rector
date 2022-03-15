@@ -105,6 +105,6 @@ final class ArrayManipulator
         if ($expr instanceof \PhpParser\Node\Expr\Array_) {
             return !$this->isDynamicArray($expr);
         }
-        return !$this->exprAnalyzer->isDynamicValue($expr);
+        return !$this->exprAnalyzer->isDynamicExpr($expr);
     }
 }

@@ -89,7 +89,7 @@ final class VariableManipulator
             if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
                 return null;
             }
-            if ($this->exprAnalyzer->isDynamicValue($node->expr)) {
+            if ($this->exprAnalyzer->isDynamicExpr($node->expr)) {
                 return null;
             }
             if ($this->hasEncapsedStringPart($node->expr)) {

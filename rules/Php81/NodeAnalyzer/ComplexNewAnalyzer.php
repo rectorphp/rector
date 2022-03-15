@@ -42,7 +42,7 @@ final class ComplexNewAnalyzer
             if ($value instanceof \PhpParser\Node\Expr\Array_ && $this->isAllowedArray($value)) {
                 continue;
             }
-            if (!$this->exprAnalyzer->isDynamicValue($value)) {
+            if (!$this->exprAnalyzer->isDynamicExpr($value)) {
                 continue;
             }
             return \true;

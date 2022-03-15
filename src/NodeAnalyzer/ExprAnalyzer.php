@@ -77,24 +77,24 @@ final class ExprAnalyzer
         }
         return \false;
     }
-    public function isDynamicValue(\PhpParser\Node\Expr $expr) : bool
+    public function isDynamicExpr(\PhpParser\Node\Expr $expr) : bool
     {
         if (!$expr instanceof \PhpParser\Node\Expr\Array_) {
             if ($expr instanceof \PhpParser\Node\Scalar) {
                 return \false;
             }
-            return !$this->isAllowedConstFetchOrClassConstFeth($expr);
+            return !$this->isAllowedConstFetchOrClassConstFetch($expr);
         }
         return $this->arrayManipulator->isDynamicArray($expr);
     }
-    private function isAllowedConstFetchOrClassConstFeth(\PhpParser\Node\Expr $expr) : bool
+    private function isAllowedConstFetchOrClassConstFetch(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!\in_array(\get_class($expr), [\PhpParser\Node\Expr\ConstFetch::class, \PhpParser\Node\Expr\ClassConstFetch::class], \true)) {
-            return \false;
+        if ($expr instanceof \PhpParser\Node\Expr\ConstFetch) {
+            return \true;
         }
         if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return $expr->class instanceof \PhpParser\Node\Name && $expr->name instanceof \PhpParser\Node\Identifier;
         }
-        return \true;
+        return \false;
     }
 }
