@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\While_;
+use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -34,6 +35,11 @@ final class RemoveUnreachableStatementRector extends AbstractRector
      * @var array<class-string<Node>>
      */
     private const STMTS_WITH_IS_UNREACHABLE = [If_::class, While_::class, Do_::class];
+
+    public function __construct(
+        private readonly InlineHTMLAnalyzer $inlineHTMLAnalyzer
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -118,7 +124,11 @@ CODE_SAMPLE
             return true;
         }
 
-        return $stmt instanceof FunctionLike;
+        if ($stmt instanceof FunctionLike) {
+            return true;
+        }
+
+        return $this->inlineHTMLAnalyzer->hasInlineHTML($stmt);
     }
 
     private function isUnreachable(Stmt $stmt): bool
