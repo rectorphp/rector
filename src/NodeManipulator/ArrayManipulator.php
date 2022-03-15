@@ -121,6 +121,6 @@ final class ArrayManipulator
             return ! $this->isDynamicArray($expr);
         }
 
-        return ! $this->exprAnalyzer->isDynamicValue($expr);
+        return ! $this->exprAnalyzer->isDynamicExpr($expr);
     }
 }

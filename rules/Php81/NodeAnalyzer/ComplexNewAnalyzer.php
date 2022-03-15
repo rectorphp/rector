@@ -40,7 +40,7 @@ final class ComplexNewAnalyzer
                 continue;
             }
 
-            if (! $this->exprAnalyzer->isDynamicValue($value)) {
+            if (! $this->exprAnalyzer->isDynamicExpr($value)) {
                 continue;
             }
 

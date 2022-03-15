@@ -63,7 +63,7 @@ final class VariableManipulator
                     return null;
                 }
 
-                if ($this->exprAnalyzer->isDynamicValue($node->expr)) {
+                if ($this->exprAnalyzer->isDynamicExpr($node->expr)) {
                     return null;
                 }
 

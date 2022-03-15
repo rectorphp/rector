@@ -64,29 +64,29 @@ final class ExprAnalyzer
         return false;
     }
 
-    public function isDynamicValue(Expr $expr): bool
+    public function isDynamicExpr(Expr $expr): bool
     {
         if (! $expr instanceof Array_) {
             if ($expr instanceof Scalar) {
                 return false;
             }
 
-            return ! $this->isAllowedConstFetchOrClassConstFeth($expr);
+            return ! $this->isAllowedConstFetchOrClassConstFetch($expr);
         }
 
         return $this->arrayManipulator->isDynamicArray($expr);
     }
 
-    private function isAllowedConstFetchOrClassConstFeth(Expr $expr): bool
+    private function isAllowedConstFetchOrClassConstFetch(Expr $expr): bool
     {
-        if (! in_array($expr::class, [ConstFetch::class, ClassConstFetch::class], true)) {
-            return false;
+        if ($expr instanceof ConstFetch) {
+            return true;
         }
 
         if ($expr instanceof ClassConstFetch) {
             return $expr->class instanceof Name && $expr->name instanceof Identifier;
         }
 
-        return true;
+        return false;
     }
 }
