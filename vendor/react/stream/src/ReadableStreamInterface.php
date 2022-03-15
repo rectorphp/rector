@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20220314\React\Stream;
+namespace RectorPrefix20220315\React\Stream;
 
-use RectorPrefix20220314\Evenement\EventEmitterInterface;
+use RectorPrefix20220315\Evenement\EventEmitterInterface;
 /**
  * The `ReadableStreamInterface` is responsible for providing an interface for
  * read-only streams and the readable side of duplex streams.
@@ -161,7 +161,7 @@ use RectorPrefix20220314\Evenement\EventEmitterInterface;
  *
  * @see EventEmitterInterface
  */
-interface ReadableStreamInterface extends \RectorPrefix20220314\Evenement\EventEmitterInterface
+interface ReadableStreamInterface extends \RectorPrefix20220315\Evenement\EventEmitterInterface
 {
     /**
      * Checks whether this stream is in a readable state (not closed already).
@@ -318,7 +318,7 @@ interface ReadableStreamInterface extends \RectorPrefix20220314\Evenement\EventE
      * @param array $options
      * @return WritableStreamInterface $dest stream as-is
      */
-    public function pipe(\RectorPrefix20220314\React\Stream\WritableStreamInterface $dest, array $options = array());
+    public function pipe(\RectorPrefix20220315\React\Stream\WritableStreamInterface $dest, array $options = array());
     /**
      * Closes the stream (forcefully).
      *

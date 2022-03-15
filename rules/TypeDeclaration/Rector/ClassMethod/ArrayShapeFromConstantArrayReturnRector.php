@@ -15,7 +15,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix20220314\Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver;
+use RectorPrefix20220315\Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -33,7 +33,7 @@ final class ArrayShapeFromConstantArrayReturnRector extends \Rector\Core\Rector\
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(\RectorPrefix20220314\Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver $classMethodReturnTypeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(\RectorPrefix20220315\Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver $classMethodReturnTypeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->classMethodReturnTypeResolver = $classMethodReturnTypeResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;

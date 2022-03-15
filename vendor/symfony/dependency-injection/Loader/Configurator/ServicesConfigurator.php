@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix20220314\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix20220314\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix20220314\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220314\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220314\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220314\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix20220315\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix20220315\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix20220315\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220315\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220315\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220315\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ServicesConfigurator extends \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
+class ServicesConfigurator extends \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     public const FACTORY = 'services';
     private $defaults;
@@ -42,31 +42,31 @@ class ServicesConfigurator extends \RectorPrefix20220314\Symfony\Component\Depen
      * @var int
      */
     private $anonymousCount;
-    public function __construct(\RectorPrefix20220314\Symfony\Component\DependencyInjection\ContainerBuilder $container, \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\PhpFileLoader $loader, array &$instanceof, string $path = null, int &$anonymousCount = 0)
+    public function __construct(\RectorPrefix20220315\Symfony\Component\DependencyInjection\ContainerBuilder $container, \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\PhpFileLoader $loader, array &$instanceof, string $path = null, int &$anonymousCount = 0)
     {
-        $this->defaults = new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Definition();
+        $this->defaults = new \RectorPrefix20220315\Symfony\Component\DependencyInjection\Definition();
         $this->container = $container;
         $this->loader = $loader;
         $this->instanceof =& $instanceof;
         $this->path = $path;
-        $this->anonymousHash = \RectorPrefix20220314\Symfony\Component\DependencyInjection\ContainerBuilder::hash($path ?: \mt_rand());
+        $this->anonymousHash = \RectorPrefix20220315\Symfony\Component\DependencyInjection\ContainerBuilder::hash($path ?: \mt_rand());
         $this->anonymousCount =& $anonymousCount;
         $instanceof = [];
     }
     /**
      * Defines a set of defaults for following service definitions.
      */
-    public final function defaults() : \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\DefaultsConfigurator
+    public final function defaults() : \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\DefaultsConfigurator
     {
-        return new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\DefaultsConfigurator($this, $this->defaults = new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Definition(), $this->path);
+        return new \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\DefaultsConfigurator($this, $this->defaults = new \RectorPrefix20220315\Symfony\Component\DependencyInjection\Definition(), $this->path);
     }
     /**
      * Defines an instanceof-conditional to be applied to following service definitions.
      */
-    public final function instanceof(string $fqcn) : \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\InstanceofConfigurator
+    public final function instanceof(string $fqcn) : \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\InstanceofConfigurator
     {
-        $this->instanceof[$fqcn] = $definition = new \RectorPrefix20220314\Symfony\Component\DependencyInjection\ChildDefinition('');
-        return new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\InstanceofConfigurator($this, $definition, $fqcn, $this->path);
+        $this->instanceof[$fqcn] = $definition = new \RectorPrefix20220315\Symfony\Component\DependencyInjection\ChildDefinition('');
+        return new \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\InstanceofConfigurator($this, $definition, $fqcn, $this->path);
     }
     /**
      * Registers a service.
@@ -77,7 +77,7 @@ class ServicesConfigurator extends \RectorPrefix20220314\Symfony\Component\Depen
     public final function set(?string $id, string $class = null) : \Rector\Core\DependencyInjection\Loader\Configurator\RectorServiceConfigurator
     {
         $defaults = $this->defaults;
-        $definition = new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Definition();
+        $definition = new \RectorPrefix20220315\Symfony\Component\DependencyInjection\Definition();
         if (null === $id) {
             if (!$class) {
                 throw new \LogicException('Anonymous services must have a class name.');
@@ -108,42 +108,42 @@ class ServicesConfigurator extends \RectorPrefix20220314\Symfony\Component\Depen
     /**
      * Creates an alias.
      */
-    public final function alias(string $id, string $referencedId) : \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\AliasConfigurator
+    public final function alias(string $id, string $referencedId) : \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\AliasConfigurator
     {
         $ref = static::processValue($referencedId, \true);
-        $alias = new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Alias((string) $ref);
+        $alias = new \RectorPrefix20220315\Symfony\Component\DependencyInjection\Alias((string) $ref);
         if (!$this->defaults->isPublic() || !$this->defaults->isPrivate()) {
             $alias->setPublic($this->defaults->isPublic());
         }
         $this->container->setAlias($id, $alias);
-        return new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\AliasConfigurator($this, $alias);
+        return new \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\AliasConfigurator($this, $alias);
     }
     /**
      * Registers a PSR-4 namespace using a glob pattern.
      */
-    public final function load(string $namespace, string $resource) : \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\PrototypeConfigurator
+    public final function load(string $namespace, string $resource) : \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\PrototypeConfigurator
     {
-        return new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\PrototypeConfigurator($this, $this->loader, $this->defaults, $namespace, $resource, \true);
+        return new \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\PrototypeConfigurator($this, $this->loader, $this->defaults, $namespace, $resource, \true);
     }
     /**
      * Gets an already defined service definition.
      *
      * @throws ServiceNotFoundException if the service definition does not exist
      */
-    public final function get(string $id) : \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator
+    public final function get(string $id) : \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator
     {
         $definition = $this->container->getDefinition($id);
-        return new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator($this->container, $definition->getInstanceofConditionals(), \true, $this, $definition, $id, []);
+        return new \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator($this->container, $definition->getInstanceofConditionals(), \true, $this, $definition, $id, []);
     }
     /**
      * Registers a stack of decorator services.
      *
      * @param InlineServiceConfigurator[]|ReferenceConfigurator[] $services
      */
-    public final function stack(string $id, array $services) : \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\AliasConfigurator
+    public final function stack(string $id, array $services) : \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\AliasConfigurator
     {
         foreach ($services as $i => $service) {
-            if ($service instanceof \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator) {
+            if ($service instanceof \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator) {
                 $definition = $service->definition->setInstanceofConditionals($this->instanceof);
                 $changes = $definition->getChanges();
                 $definition->setAutowired((isset($changes['autowired']) ? $definition : $this->defaults)->isAutowired());
@@ -151,8 +151,8 @@ class ServicesConfigurator extends \RectorPrefix20220314\Symfony\Component\Depen
                 $definition->setBindings(\array_merge($this->defaults->getBindings(), $definition->getBindings()));
                 $definition->setChanges($changes);
                 $services[$i] = $definition;
-            } elseif (!$service instanceof \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator) {
-                throw new \RectorPrefix20220314\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('"%s()" expects a list of definitions as returned by "%s()" or "%s()", "%s" given at index "%s" for service "%s".', __METHOD__, \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator::FACTORY, \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator::FACTORY, $service instanceof \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator ? $service::FACTORY . '()' : \get_debug_type($service), $i, $id));
+            } elseif (!$service instanceof \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator) {
+                throw new \RectorPrefix20220315\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('"%s()" expects a list of definitions as returned by "%s()" or "%s()", "%s" given at index "%s" for service "%s".', __METHOD__, \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator::FACTORY, \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator::FACTORY, $service instanceof \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator ? $service::FACTORY . '()' : \get_debug_type($service), $i, $id));
             }
         }
         $alias = $this->alias($id, '');
@@ -162,7 +162,7 @@ class ServicesConfigurator extends \RectorPrefix20220314\Symfony\Component\Depen
     /**
      * Registers a service.
      */
-    public final function __invoke(string $id, string $class = null) : \RectorPrefix20220314\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator
+    public final function __invoke(string $id, string $class = null) : \RectorPrefix20220315\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator
     {
         return $this->set($id, $class);
     }

@@ -1,4 +1,4 @@
-# 56 Rules Overview
+# 57 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -589,6 +589,27 @@ Turns properties with `@inject` to private properties and constructor injection
 
 <br>
 
+## LiteralGetToRequestClassConstantRector
+
+Replace "GET" string by Symfony Request object class constants
+
+- class: [`Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector`](../src/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php)
+
+```diff
+ use Symfony\Component\Form\FormBuilderInterface;
+
+ final class SomeClass
+ {
+     public function detail(FormBuilderInterface $formBuilder)
+     {
+-        $formBuilder->setMethod('GET');
++        $formBuilder->setMethod(\Symfony\Component\HttpFoundation\Request::GET);
+     }
+ }
+```
+
+<br>
+
 ## LogoutHandlerToLogoutEventSubscriberRector
 
 Change logout handler to an event listener that listens to LogoutEvent
@@ -1052,16 +1073,19 @@ Turns status code numbers to constants
 - class: [`Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector`](../src/Rector/BinaryOp/ResponseStatusCodeRector.php)
 
 ```diff
+ use Symfony\Component\HttpFoundation\Response;
+
  class SomeController
  {
      public function index()
      {
-         $response = new \Symfony\Component\HttpFoundation\Response();
+         $response = new Response();
 -        $response->setStatusCode(200);
-+        $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
++        $response->setStatusCode(Response::HTTP_OK);
 
--        if ($response->getStatusCode() === 200) {}
-+        if ($response->getStatusCode() === \Symfony\Component\HttpFoundation\Response::HTTP_OK) {}
+-        if ($response->getStatusCode() === 200) {
++        if ($response->getStatusCode() === Response::HTTP_OK) {
+         }
      }
  }
 ```

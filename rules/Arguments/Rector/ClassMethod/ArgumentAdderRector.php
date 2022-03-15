@@ -25,7 +25,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220314\Webmozart\Assert\Assert;
+use RectorPrefix20220315\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\ArgumentAdderRectorTest
  */
@@ -113,7 +113,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220314\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ArgumentAdder::class);
+        \RectorPrefix20220315\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ArgumentAdder::class);
         $this->addedArguments = $configuration;
     }
     /**

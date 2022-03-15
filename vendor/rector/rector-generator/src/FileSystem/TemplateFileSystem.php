@@ -3,13 +3,14 @@
 declare (strict_types=1);
 namespace Rector\RectorGenerator\FileSystem;
 
-use RectorPrefix20220314\Nette\Utils\Strings;
+use RectorPrefix20220315\Nette\Utils\Strings;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class TemplateFileSystem
 {
+    public const ROOT_PACKAGES = ['Symfony', 'Nette', 'Doctrine', 'Laravel', 'PHPUnit', 'CakePHP'];
     /**
      * @var string
      * @see https://regex101.com/r/fw3jBe/1
@@ -45,18 +46,19 @@ final class TemplateFileSystem
     public function resolveDestination(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $templateVariables, \Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, string $targetDirectory) : string
     {
         $destination = $smartFileInfo->getRelativeFilePathFromDirectory(\Rector\RectorGenerator\Finder\TemplateFinder::TEMPLATES_DIRECTORY);
+        $destination = $this->changeRootPathForRootPackage($rectorRecipe, $destination);
         // normalize core package
         if (!$rectorRecipe->isRectorRepository()) {
             // special keyword for 3rd party Rectors, not for core Github contribution
-            $destination = \RectorPrefix20220314\Nette\Utils\Strings::replace($destination, self::PACKAGE_RULES_PATH_REGEX, 'utils/rector/src');
-            $destination = \RectorPrefix20220314\Nette\Utils\Strings::replace($destination, self::PACKAGE_RULES_TESTS_PATH_REGEX, 'utils/rector/tests');
+            $destination = \RectorPrefix20220315\Nette\Utils\Strings::replace($destination, self::PACKAGE_RULES_PATH_REGEX, 'utils/rector/src');
+            $destination = \RectorPrefix20220315\Nette\Utils\Strings::replace($destination, self::PACKAGE_RULES_TESTS_PATH_REGEX, 'utils/rector/tests');
         }
         // remove _Configured|_Extra prefix
         $destination = $this->templateFactory->create($destination, $templateVariables);
-        $destination = \RectorPrefix20220314\Nette\Utils\Strings::replace($destination, self::CONFIGURED_OR_EXTRA_REGEX, '');
+        $destination = \RectorPrefix20220315\Nette\Utils\Strings::replace($destination, self::CONFIGURED_OR_EXTRA_REGEX, '');
         // remove ".inc" protection from PHPUnit if not a test case
         if ($this->isNonFixtureFileWithIncSuffix($destination)) {
-            $destination = \RectorPrefix20220314\Nette\Utils\Strings::before($destination, '.inc');
+            $destination = \RectorPrefix20220315\Nette\Utils\Strings::before($destination, '.inc');
         }
         // special hack for tests, to PHPUnit doesn't load the generated file as test case
         /** @var string $destination */
@@ -67,9 +69,18 @@ final class TemplateFileSystem
     }
     private function isNonFixtureFileWithIncSuffix(string $filePath) : bool
     {
-        if (\RectorPrefix20220314\Nette\Utils\Strings::match($filePath, self::FIXTURE_SHORT_REGEX) !== null) {
+        if (\RectorPrefix20220315\Nette\Utils\Strings::match($filePath, self::FIXTURE_SHORT_REGEX) !== null) {
             return \false;
         }
         return \substr_compare($filePath, '.inc', -\strlen('.inc')) === 0;
+    }
+    private function changeRootPathForRootPackage(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, string $destination) : string
+    {
+        // rector split package? path are in the root directory
+        if (!\in_array($rectorRecipe->getPackage(), self::ROOT_PACKAGES, \true)) {
+            return $destination;
+        }
+        $destination = \str_replace('rules/__Package__', 'src', $destination);
+        return \str_replace('rules-tests/__Package__', 'tests', $destination);
     }
 }

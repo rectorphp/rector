@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220314\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20220315\Helmich\TypoScriptParser\Parser\AST;
 
 /**
  * An object path.
@@ -46,11 +46,11 @@ class ObjectPath
      *
      * @return ObjectPath The path to the parent object.
      */
-    public function parent() : \RectorPrefix20220314\Helmich\TypoScriptParser\Parser\AST\ObjectPath
+    public function parent() : \RectorPrefix20220315\Helmich\TypoScriptParser\Parser\AST\ObjectPath
     {
         $components = \explode('.', $this->absoluteName);
         if (\count($components) === 1) {
-            return new \RectorPrefix20220314\Helmich\TypoScriptParser\Parser\AST\RootObjectPath();
+            return new \RectorPrefix20220315\Helmich\TypoScriptParser\Parser\AST\RootObjectPath();
         }
         \array_pop($components);
         return new self(\implode('.', $components), $components[\count($components) - 1]);

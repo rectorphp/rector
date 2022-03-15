@@ -3,9 +3,23 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### [3.3.0] 2022-03-15
+
+  * Improved performance of CompilingMatcher by memoizing more (#131)
+  * Added CompilingMacher::clear to clear all memoization caches
+
+### [3.2.9] 2022-02-04
+
+  * Revert #129 (Fixed MultiConstraint with MatchAllConstraint) which caused regressions
+
+### [3.2.8] 2022-02-04
+
+  * Updates to latest phpstan / CI by @Seldaek in https://github.com/composer/semver/pull/130
+  * Fixed MultiConstraint with MatchAllConstraint by @Toflar in https://github.com/composer/semver/pull/129
+
 ### [3.2.7] 2022-01-04
 
-* Fixed: typo in type definition of Intervals class causing issues with Psalm scanning vendors
+  * Fixed: typo in type definition of Intervals class causing issues with Psalm scanning vendors
 
 ### [3.2.6] 2021-10-25
 
@@ -153,6 +167,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - Namespace: `Composer\Test\Package\LinkConstraint` -> `Composer\Test\Semver\Constraint`
   * Changed: code style using php-cs-fixer.
 
+[3.3.0]: https://github.com/composer/semver/compare/3.2.9...3.3.0
+[3.2.9]: https://github.com/composer/semver/compare/3.2.8...3.2.9
+[3.2.8]: https://github.com/composer/semver/compare/3.2.7...3.2.8
 [3.2.7]: https://github.com/composer/semver/compare/3.2.6...3.2.7
 [3.2.6]: https://github.com/composer/semver/compare/3.2.5...3.2.6
 [3.2.5]: https://github.com/composer/semver/compare/3.2.4...3.2.5
