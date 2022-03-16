@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PhpCsFixer\Fixer\Basic\BracesFixer;
 use PhpCsFixer\Fixer\FunctionNotation\FunctionTypehintSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
@@ -76,6 +77,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php',
             __DIR__ . '/rules/Php70/EregToPcreTransformer.php',
         ],
+
+        // buggy - cause { inlined
+        BracesFixer::class,
     ]);
 
     // import SetList here in the end of ecs. is on purpose

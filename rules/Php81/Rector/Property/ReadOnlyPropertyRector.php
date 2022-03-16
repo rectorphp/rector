@@ -117,6 +117,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($property->isStatic()) {
+            return null;
+        }
+
         $this->visibilityManipulator->makeReadonly($property);
 
         $attributeGroups = $property->attrGroups;

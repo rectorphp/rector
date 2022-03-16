@@ -17,7 +17,7 @@ abstract class AbstractProcessCommand extends Command
     protected ConfigurationFactory $configurationFactory;
 
     #[Required]
-    public function autowire(ConfigurationFactory $configurationFactory,): void
+    public function autowire(ConfigurationFactory $configurationFactory): void
     {
         $this->configurationFactory = $configurationFactory;
     }
