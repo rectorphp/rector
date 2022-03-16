@@ -109,6 +109,9 @@ CODE_SAMPLE
         if (!$this->visibilityManipulator->hasVisibility($property, \Rector\Core\ValueObject\Visibility::PRIVATE)) {
             return null;
         }
+        if ($property->isStatic()) {
+            return null;
+        }
         $this->visibilityManipulator->makeReadonly($property);
         $attributeGroups = $property->attrGroups;
         if ($attributeGroups !== []) {

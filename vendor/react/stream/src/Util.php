@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220315\React\Stream;
+namespace RectorPrefix20220316\React\Stream;
 
 final class Util
 {
@@ -13,7 +13,7 @@ final class Util
      * @return WritableStreamInterface $dest stream as-is
      * @see ReadableStreamInterface::pipe() for more details
      */
-    public static function pipe(\RectorPrefix20220315\React\Stream\ReadableStreamInterface $source, \RectorPrefix20220315\React\Stream\WritableStreamInterface $dest, array $options = array())
+    public static function pipe(\RectorPrefix20220316\React\Stream\ReadableStreamInterface $source, \RectorPrefix20220316\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
         // source not readable => NO-OP
         if (!$source->isReadable()) {

@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220315\Symfony\Contracts\Service;
+namespace RectorPrefix20220316\Symfony\Contracts\Service;
 
-use RectorPrefix20220315\Psr\Container\ContainerInterface;
+use RectorPrefix20220316\Psr\Container\ContainerInterface;
 /**
  * A ServiceProviderInterface exposes the identifiers and the types of services provided by a container.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  * @author Mateusz Sip <mateusz.sip@gmail.com>
  */
-interface ServiceProviderInterface extends \RectorPrefix20220315\Psr\Container\ContainerInterface
+interface ServiceProviderInterface extends \RectorPrefix20220316\Psr\Container\ContainerInterface
 {
     /**
      * Returns an associative array of service types keyed by the identifiers provided by the current container.

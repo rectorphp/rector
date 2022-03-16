@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220315\Tracy;
+namespace RectorPrefix20220316\Tracy;
 
 /**
  * Debugger for outputs.
@@ -54,7 +54,7 @@ final class OutputDebugger
                 $t += ['class' => '', 'type' => '', 'function' => ''];
                 $stack[] = "{$t['class']}{$t['type']}{$t['function']}()" . (isset($t['file'], $t['line']) ? ' in ' . \basename($t['file']) . ":{$t['line']}" : '');
             }
-            $res .= '<span title="' . \RectorPrefix20220315\Tracy\Helpers::escapeHtml(\implode("\n", $stack)) . '">' . \RectorPrefix20220315\Tracy\Helpers::editorLink($item[0], $item[1]) . ' ' . \str_replace(self::BOM, '<big>BOM</big>', \RectorPrefix20220315\Tracy\Dumper::toHtml($item[2])) . "</span><br>\n";
+            $res .= '<span title="' . \RectorPrefix20220316\Tracy\Helpers::escapeHtml(\implode("\n", $stack)) . '">' . \RectorPrefix20220316\Tracy\Helpers::editorLink($item[0], $item[1]) . ' ' . \str_replace(self::BOM, '<big>BOM</big>', \RectorPrefix20220316\Tracy\Dumper::toHtml($item[2])) . "</span><br>\n";
         }
         return $res . '</code>';
     }

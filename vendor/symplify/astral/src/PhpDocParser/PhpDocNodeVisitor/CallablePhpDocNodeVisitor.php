@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220315\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
+namespace RectorPrefix20220316\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
-final class CallablePhpDocNodeVisitor extends \RectorPrefix20220315\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+final class CallablePhpDocNodeVisitor extends \RectorPrefix20220316\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var callable(Node, string|null): (int|null|Node)
@@ -23,7 +23,7 @@ final class CallablePhpDocNodeVisitor extends \RectorPrefix20220315\Symplify\Ast
         $this->callable = $callable;
     }
     /**
-     * @return int|Node|null
+     * @return int|\PHPStan\PhpDocParser\Ast\Node|null
      */
     public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node)
     {

@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220315\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
+namespace RectorPrefix20220316\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
-use RectorPrefix20220315\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
+use RectorPrefix20220316\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/master/lib/PhpParser/NodeVisitorAbstract.php
  */
-abstract class AbstractPhpDocNodeVisitor implements \RectorPrefix20220315\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface
+abstract class AbstractPhpDocNodeVisitor implements \RectorPrefix20220316\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface
 {
     public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {
     }
     /**
-     * @return int|Node|null
+     * @return int|\PHPStan\PhpDocParser\Ast\Node|null
      */
     public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node)
     {
         return null;
     }
     /**
-     * @return null|int|\PhpParser\Node|Node[] Replacement node (or special return)
+     * @return mixed[]|int|\PhpParser\Node|null Replacement node (or special return)
      */
     public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node)
     {

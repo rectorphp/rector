@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220315\Symplify\Astral\NodeVisitor;
+namespace RectorPrefix20220316\Symplify\Astral\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -22,7 +22,7 @@ final class CallableNodeVisitor extends \PhpParser\NodeVisitorAbstract
         $this->callable = $callable;
     }
     /**
-     * @return int|Node|null
+     * @return int|\PhpParser\Node|null
      */
     public function enterNode(\PhpParser\Node $node)
     {

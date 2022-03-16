@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220315\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix20220316\Symfony\Component\Finder\Iterator;
 
-use RectorPrefix20220315\Symfony\Component\Finder\Exception\AccessDeniedException;
-use RectorPrefix20220315\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix20220316\Symfony\Component\Finder\Exception\AccessDeniedException;
+use RectorPrefix20220316\Symfony\Component\Finder\SplFileInfo;
 /**
  * Extends the \RecursiveDirectoryIterator to support relative paths.
  *
@@ -58,7 +58,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     /**
      * Return an instance of SplFileInfo with support for relative paths.
      */
-    public function current() : \RectorPrefix20220315\Symfony\Component\Finder\SplFileInfo
+    public function current() : \RectorPrefix20220316\Symfony\Component\Finder\SplFileInfo
     {
         // the logic here avoids redoing the same work in all iterations
         if (!isset($this->subPath)) {
@@ -72,7 +72,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
         if ('/' !== ($basePath = $this->rootPath)) {
             $basePath .= $this->directorySeparator;
         }
-        return new \RectorPrefix20220315\Symfony\Component\Finder\SplFileInfo($basePath . $subPathname, $this->subPath, $subPathname);
+        return new \RectorPrefix20220316\Symfony\Component\Finder\SplFileInfo($basePath . $subPathname, $this->subPath, $subPathname);
     }
     public function hasChildren($allowLinks = \false) : bool
     {
@@ -104,7 +104,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
             }
             return $children;
         } catch (\UnexpectedValueException $e) {
-            throw new \RectorPrefix20220315\Symfony\Component\Finder\Exception\AccessDeniedException($e->getMessage(), $e->getCode(), $e);
+            throw new \RectorPrefix20220316\Symfony\Component\Finder\Exception\AccessDeniedException($e->getMessage(), $e->getCode(), $e);
         }
     }
     /**

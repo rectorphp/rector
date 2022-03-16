@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220315\Nette\Neon;
+namespace RectorPrefix20220316\Nette\Neon;
 
 /**
  * Simple parser & generator for Nette Object Notation.
@@ -13,14 +13,14 @@ namespace RectorPrefix20220315\Nette\Neon;
  */
 final class Neon
 {
-    public const BLOCK = \RectorPrefix20220315\Nette\Neon\Encoder::BLOCK;
+    public const BLOCK = \RectorPrefix20220316\Nette\Neon\Encoder::BLOCK;
     public const CHAIN = '!!chain';
     /**
      * Returns value converted to NEON.
      */
     public static function encode($value, bool $blockMode = \false, string $indentation = "\t") : string
     {
-        $encoder = new \RectorPrefix20220315\Nette\Neon\Encoder();
+        $encoder = new \RectorPrefix20220316\Nette\Neon\Encoder();
         $encoder->blockMode = $blockMode;
         $encoder->indentation = $indentation;
         return $encoder->encode($value);
@@ -31,7 +31,7 @@ final class Neon
      */
     public static function decode(string $input)
     {
-        $decoder = new \RectorPrefix20220315\Nette\Neon\Decoder();
+        $decoder = new \RectorPrefix20220316\Nette\Neon\Decoder();
         return $decoder->decode($input);
     }
     /**
@@ -41,7 +41,7 @@ final class Neon
     public static function decodeFile(string $file)
     {
         if (!\is_file($file)) {
-            throw new \RectorPrefix20220315\Nette\Neon\Exception("File '{$file}' does not exist.");
+            throw new \RectorPrefix20220316\Nette\Neon\Exception("File '{$file}' does not exist.");
         }
         $input = \file_get_contents($file);
         if (\substr($input, 0, 3) === "﻿") {
