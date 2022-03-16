@@ -55,7 +55,7 @@ class CompilingMatcher
      */
     public static function match(\RectorPrefix20220316\Composer\Semver\Constraint\ConstraintInterface $constraint, $operator, $version)
     {
-        $resultCacheKey = $operator . $constraint . $version;
+        $resultCacheKey = $operator . $constraint . ';' . $version;
         if (isset(self::$resultCache[$resultCacheKey])) {
             return self::$resultCache[$resultCacheKey];
         }

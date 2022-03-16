@@ -2893,6 +2893,7 @@ return array(
     'Rector\\Symfony\\NodeAnalyzer\\DependencyInjectionMethodCallAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/DependencyInjectionMethodCallAnalyzer.php',
     'Rector\\Symfony\\NodeAnalyzer\\FormAddMethodCallAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/FormAddMethodCallAnalyzer.php',
     'Rector\\Symfony\\NodeAnalyzer\\FormCollectionAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/FormCollectionAnalyzer.php',
+    'Rector\\Symfony\\NodeAnalyzer\\FormInstanceToFormClassConstFetchConverter' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/FormInstanceToFormClassConstFetchConverter.php',
     'Rector\\Symfony\\NodeAnalyzer\\FormOptionsArrayMatcher' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/FormOptionsArrayMatcher.php',
     'Rector\\Symfony\\NodeAnalyzer\\LiteralCallLikeConstFetchReplacer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/LiteralCallLikeConstFetchReplacer.php',
     'Rector\\Symfony\\NodeAnalyzer\\ServiceTypeMethodCallResolver' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ServiceTypeMethodCallResolver.php',
