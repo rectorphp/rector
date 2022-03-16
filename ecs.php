@@ -9,7 +9,6 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
-use Symplify\CodingStandard\Fixer\Spacing\StandaloneLineConstructorParamFixer;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
@@ -77,9 +76,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php',
             __DIR__ . '/rules/Php70/EregToPcreTransformer.php',
         ],
-
-        // buggy - cause { inlined
-        StandaloneLineConstructorParamFixer::class,
     ]);
 
     // import SetList here in the end of ecs. is on purpose
