@@ -4,11 +4,13 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Param;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\MixedType;
@@ -19,6 +21,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,9 +35,15 @@ final class ParamTypeFromStrictTypedPropertyRector extends \Rector\Core\Rector\A
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
+     */
+    private $parentClassMethodTypeOverrideGuard;
+    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->reflectionResolver = $reflectionResolver;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -75,20 +84,23 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\FunctionLike) {
+        if (!$parent instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
         return $this->decorateParamWithType($parent, $node);
     }
-    public function decorateParamWithType(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Param $param) : ?\PhpParser\Node\Param
+    public function decorateParamWithType(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param) : ?\PhpParser\Node\Param
     {
         if ($param->type !== null) {
+            return null;
+        }
+        if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod)) {
             return null;
         }
         $originalParamType = $this->resolveParamOriginalType($param);
         $paramName = $this->getName($param);
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->getStmts(), \PhpParser\Node\Expr\Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->getStmts(), \PhpParser\Node\Expr\Assign::class);
         foreach ($assigns as $assign) {
             if (!$this->nodeComparator->areNodesEqual($assign->expr, $param->var)) {
                 continue;
@@ -113,7 +125,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
-     * @return Node\Name|Node\ComplexType|null
+     * @return Name|ComplexType|null
      */
     private function matchPropertySingleTypeNode(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
     {
