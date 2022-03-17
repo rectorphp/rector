@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220316;
+namespace RectorPrefix20220317;
 
 use Rector\DeadCode\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Doctrine\Rector\Class_\MoveRepositoryFromParentToConstructorRector;

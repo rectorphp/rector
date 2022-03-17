@@ -86,6 +86,9 @@ final class ComplexNodeRemover
             if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
                 return;
             }
+            if ($assign->expr instanceof \PhpParser\Node\Expr\Assign) {
+                return;
+            }
             $assigns[] = $assign;
         }
         $this->processRemovePropertyAssigns($assigns);

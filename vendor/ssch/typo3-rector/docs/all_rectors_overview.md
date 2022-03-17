@@ -1817,7 +1817,7 @@ Migrate the "suggest" wizard in type=group to "hideSuggest" and "suggestOptions"
 
 ## ObjectManagerGetToConstructorInjectionRector
 
-Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
+Turns fetching of dependencies via `$objectManager->get()` to constructor injection
 
 - class: [`Ssch\TYPO3Rector\Rector\Experimental\ObjectManagerGetToConstructorInjectionRector`](../src/Rector/Experimental/ObjectManagerGetToConstructorInjectionRector.php)
 

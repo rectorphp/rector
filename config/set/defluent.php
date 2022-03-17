@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220316;
+namespace RectorPrefix20220317;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/

@@ -9,7 +9,7 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use RectorPrefix20220316\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix20220317\Symplify\Astral\Naming\SimpleNameResolver;
 final class ControllerRenderMethodAnalyzer
 {
     /**
@@ -27,7 +27,7 @@ final class ControllerRenderMethodAnalyzer
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\RectorPrefix20220316\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(\RectorPrefix20220317\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;

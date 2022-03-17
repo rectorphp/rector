@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220316\Symplify\VendorPatches\ValueObject;
+namespace RectorPrefix20220317\Symplify\VendorPatches\ValueObject;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class OldAndNewFileInfo
