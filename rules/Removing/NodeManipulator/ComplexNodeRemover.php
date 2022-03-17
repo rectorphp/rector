@@ -57,6 +57,10 @@ final class ComplexNodeRemover
                 return;
             }
 
+            if ($assign->expr instanceof Assign) {
+                return;
+            }
+
             $assigns[] = $assign;
         }
 
