@@ -2,6 +2,8 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector\Fixture;
 
+use Rector\Tests\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector\Source\ExternalClass;
+
 final class ExternalType
 {
     public function setValues($age, ExternalClass $externalClass)
@@ -10,16 +12,13 @@ final class ExternalType
     }
 }
 
-final class ExternalClass
-{
-    public int $age;
-}
-
 ?>
 -----
 <?php
 
 namespace Rector\Tests\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector\Fixture;
+
+use Rector\Tests\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector\Source\ExternalClass;
 
 final class ExternalType
 {
@@ -27,11 +26,6 @@ final class ExternalType
     {
         $externalClass->age = $age;
     }
-}
-
-final class ExternalClass
-{
-    public int $age;
 }
 
 ?>
