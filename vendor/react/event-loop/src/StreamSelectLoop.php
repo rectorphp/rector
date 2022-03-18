@@ -1,21 +1,22 @@
 <?php
 
-namespace RectorPrefix20220317\React\EventLoop;
+namespace RectorPrefix20220318\React\EventLoop;
 
-use RectorPrefix20220317\React\EventLoop\Tick\FutureTickQueue;
-use RectorPrefix20220317\React\EventLoop\Timer\Timer;
-use RectorPrefix20220317\React\EventLoop\Timer\Timers;
+use RectorPrefix20220318\React\EventLoop\Tick\FutureTickQueue;
+use RectorPrefix20220318\React\EventLoop\Timer\Timer;
+use RectorPrefix20220318\React\EventLoop\Timer\Timers;
 /**
  * A `stream_select()` based event loop.
  *
  * This uses the [`stream_select()`](https://www.php.net/manual/en/function.stream-select.php)
- * function and is the only implementation which works out of the box with PHP.
+ * function and is the only implementation that works out of the box with PHP.
  *
- * This event loop works out of the box on PHP 5.4 through PHP 7+ and HHVM.
+ * This event loop works out of the box on PHP 5.4 through PHP 8+ and HHVM.
  * This means that no installation is required and this library works on all
  * platforms and supported PHP versions.
- * Accordingly, the [`Factory`](#factory) will use this event loop by default if
- * you do not install any of the event loop extensions listed below.
+ * Accordingly, the [`Loop` class](#loop) and the deprecated [`Factory`](#factory)
+ * will use this event loop by default if you do not install any of the event loop
+ * extensions listed below.
  *
  * Under the hood, it does a simple `select` system call.
  * This system call is limited to the maximum file descriptor number of
@@ -48,7 +49,7 @@ use RectorPrefix20220317\React\EventLoop\Timer\Timers;
  *
  * @link https://www.php.net/manual/en/function.stream-select.php
  */
-final class StreamSelectLoop implements \RectorPrefix20220317\React\EventLoop\LoopInterface
+final class StreamSelectLoop implements \RectorPrefix20220318\React\EventLoop\LoopInterface
 {
     /** @internal */
     const MICROSECONDS_PER_SECOND = 1000000;
@@ -64,11 +65,11 @@ final class StreamSelectLoop implements \RectorPrefix20220317\React\EventLoop\Lo
     private $signals;
     public function __construct()
     {
-        $this->futureTickQueue = new \RectorPrefix20220317\React\EventLoop\Tick\FutureTickQueue();
-        $this->timers = new \RectorPrefix20220317\React\EventLoop\Timer\Timers();
+        $this->futureTickQueue = new \RectorPrefix20220318\React\EventLoop\Tick\FutureTickQueue();
+        $this->timers = new \RectorPrefix20220318\React\EventLoop\Timer\Timers();
         $this->pcntl = \function_exists('pcntl_signal') && \function_exists('pcntl_signal_dispatch');
         $this->pcntlPoll = $this->pcntl && !\function_exists('pcntl_async_signals');
-        $this->signals = new \RectorPrefix20220317\React\EventLoop\SignalsHandler();
+        $this->signals = new \RectorPrefix20220318\React\EventLoop\SignalsHandler();
         // prefer async signals if available (PHP 7.1+) or fall back to dispatching on each tick
         if ($this->pcntl && !$this->pcntlPoll) {
             \pcntl_async_signals(\true);
@@ -102,17 +103,17 @@ final class StreamSelectLoop implements \RectorPrefix20220317\React\EventLoop\Lo
     }
     public function addTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20220317\React\EventLoop\Timer\Timer($interval, $callback, \false);
+        $timer = new \RectorPrefix20220318\React\EventLoop\Timer\Timer($interval, $callback, \false);
         $this->timers->add($timer);
         return $timer;
     }
     public function addPeriodicTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20220317\React\EventLoop\Timer\Timer($interval, $callback, \true);
+        $timer = new \RectorPrefix20220318\React\EventLoop\Timer\Timer($interval, $callback, \true);
         $this->timers->add($timer);
         return $timer;
     }
-    public function cancelTimer(\RectorPrefix20220317\React\EventLoop\TimerInterface $timer)
+    public function cancelTimer(\RectorPrefix20220318\React\EventLoop\TimerInterface $timer)
     {
         $this->timers->cancel($timer);
     }
@@ -237,8 +238,28 @@ final class StreamSelectLoop implements \RectorPrefix20220317\React\EventLoop\Lo
                     }
                 }
             }
-            // suppress warnings that occur, when stream_select is interrupted by a signal
-            $ret = @\stream_select($read, $write, $except, $timeout === null ? null : 0, $timeout);
+            /** @var ?callable $previous */
+            $previous = \set_error_handler(function ($errno, $errstr) use(&$previous) {
+                // suppress warnings that occur when `stream_select()` is interrupted by a signal
+                $eintr = \defined('SOCKET_EINTR') ? \SOCKET_EINTR : 4;
+                if ($errno === \E_WARNING && \strpos($errstr, '[' . $eintr . ']: ') !== \false) {
+                    return;
+                }
+                // forward any other error to registered error handler or print warning
+                return $previous !== null ? \call_user_func_array($previous, \func_get_args()) : \false;
+            });
+            try {
+                $ret = \stream_select($read, $write, $except, $timeout === null ? null : 0, $timeout);
+                \restore_error_handler();
+            } catch (\Throwable $e) {
+                // @codeCoverageIgnoreStart
+                \restore_error_handler();
+                throw $e;
+            } catch (\Exception $e) {
+                \restore_error_handler();
+                throw $e;
+            }
+            // @codeCoverageIgnoreEnd
             if ($except) {
                 $write = \array_merge($write, $except);
             }

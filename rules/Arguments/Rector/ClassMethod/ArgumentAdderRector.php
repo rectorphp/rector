@@ -6,6 +6,8 @@ namespace Rector\Arguments\Rector\ClassMethod;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -21,11 +23,12 @@ use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220317\Webmozart\Assert\Assert;
+use RectorPrefix20220318\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\ArgumentAdderRectorTest
  */
@@ -49,10 +52,16 @@ final class ArgumentAdderRector extends \Rector\Core\Rector\AbstractRector imple
      * @var \Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector
      */
     private $changedArgumentsDetector;
-    public function __construct(\Rector\Arguments\NodeAnalyzer\ArgumentAddingScope $argumentAddingScope, \Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector $changedArgumentsDetector)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\Arguments\NodeAnalyzer\ArgumentAddingScope $argumentAddingScope, \Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector $changedArgumentsDetector, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->argumentAddingScope = $argumentAddingScope;
         $this->changedArgumentsDetector = $changedArgumentsDetector;
+        $this->astResolver = $astResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -113,7 +122,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220317\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ArgumentAdder::class);
+        \RectorPrefix20220318\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ArgumentAdder::class);
         $this->addedArguments = $configuration;
     }
     /**
@@ -146,15 +155,49 @@ CODE_SAMPLE
         $position = $argumentAdder->getPosition();
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $this->addClassMethodParam($node, $argumentAdder, $defaultValue, $argumentType, $position);
-        } elseif ($node instanceof \PhpParser\Node\Expr\StaticCall) {
+            return;
+        }
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             $this->processStaticCall($node, $position, $argumentAdder);
-        } else {
-            $arg = new \PhpParser\Node\Arg(\PhpParser\BuilderHelpers::normalizeValue($defaultValue));
-            if (isset($node->args[$position])) {
-                return;
+            return;
+        }
+        $this->processMethodCall($node, $defaultValue, $position);
+    }
+    /**
+     * @param mixed $defaultValue
+     */
+    private function processMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall, $defaultValue, int $position) : void
+    {
+        $arg = new \PhpParser\Node\Arg(\PhpParser\BuilderHelpers::normalizeValue($defaultValue));
+        if (isset($methodCall->args[$position])) {
+            return;
+        }
+        $this->fillGapBetweenWithDefaultValue($methodCall, $position);
+        $methodCall->args[$position] = $arg;
+        $this->haveArgumentsChanged = \true;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     */
+    private function fillGapBetweenWithDefaultValue($node, int $position) : void
+    {
+        $lastPosition = \count($node->getArgs()) - 1;
+        if ($position <= $lastPosition) {
+            return;
+        }
+        if ($position - $lastPosition === 1) {
+            return;
+        }
+        $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return;
+        }
+        for ($index = $lastPosition + 1; $index < $position; ++$index) {
+            $param = $classMethod->params[$index];
+            if (!$param->default instanceof \PhpParser\Node\Expr) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException('Previous position does not has default value');
             }
-            $node->args[$position] = $arg;
-            $this->haveArgumentsChanged = \true;
+            $node->args[$index] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($this->print($param->default))));
         }
     }
     /**
@@ -219,6 +262,7 @@ CODE_SAMPLE
         if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
             return;
         }
+        $this->fillGapBetweenWithDefaultValue($staticCall, $position);
         $staticCall->args[$position] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Variable($argumentName));
         $this->haveArgumentsChanged = \true;
     }

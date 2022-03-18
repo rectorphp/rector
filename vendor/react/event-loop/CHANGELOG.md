@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.3.0 (2022-03-17)
+
+*   Feature: Improve default `StreamSelectLoop` to report any warnings for invalid streams.
+    (#245 by @clue)
+
+*   Feature: Improve performance of `StreamSelectLoop` when no timers are scheduled.
+    (#246 by @clue)
+
+*   Fix: Fix periodic timer with zero interval for `ExtEvLoop` and legacy `ExtLibevLoop`.
+    (#243 by @lucasnetau)
+
+*   Minor documentation improvements, update PHP version references.
+    (#240, #248 and #250 by @SimonFrings, #241 by @dbu and #249 by @clue)
+
+*   Improve test suite and test against PHP 8.1.
+    (#238 by @WyriHaximus and #242 by @clue)
+
 ## 1.2.0 (2021-07-11)
 
 A major new feature release, see [**release announcement**](https://clue.engineering/2021/announcing-reactphp-default-loop).

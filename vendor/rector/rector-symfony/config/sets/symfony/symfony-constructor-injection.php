@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220317;
+namespace RectorPrefix20220318;
 
 use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector;

@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220317\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20220318\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220317\Symfony\Component\Config\Definition\IntegerNode;
+use RectorPrefix20220318\Symfony\Component\Config\Definition\IntegerNode;
 /**
  * This class provides a fluent interface for defining an integer node.
  *
  * @author Jeanmonod David <david.jeanmonod@gmail.com>
  */
-class IntegerNodeDefinition extends \RectorPrefix20220317\Symfony\Component\Config\Definition\Builder\NumericNodeDefinition
+class IntegerNodeDefinition extends \RectorPrefix20220318\Symfony\Component\Config\Definition\Builder\NumericNodeDefinition
 {
     /**
      * Instantiates a Node.
      */
-    protected function instantiateNode() : \RectorPrefix20220317\Symfony\Component\Config\Definition\ScalarNode
+    protected function instantiateNode() : \RectorPrefix20220318\Symfony\Component\Config\Definition\ScalarNode
     {
-        return new \RectorPrefix20220317\Symfony\Component\Config\Definition\IntegerNode($this->name, $this->parent, $this->min, $this->max, $this->pathSeparator);
+        return new \RectorPrefix20220318\Symfony\Component\Config\Definition\IntegerNode($this->name, $this->parent, $this->min, $this->max, $this->pathSeparator);
     }
 }

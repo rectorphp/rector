@@ -5,26 +5,26 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220317\Tracy\Bridges\Psr;
+namespace RectorPrefix20220318\Tracy\Bridges\Psr;
 
-use RectorPrefix20220317\Psr;
-use RectorPrefix20220317\Tracy;
+use RectorPrefix20220318\Psr;
+use RectorPrefix20220318\Tracy;
 /**
  * Tracy\ILogger to Psr\Log\LoggerInterface adapter.
  */
-class TracyToPsrLoggerAdapter extends \RectorPrefix20220317\Psr\Log\AbstractLogger
+class TracyToPsrLoggerAdapter extends \RectorPrefix20220318\Psr\Log\AbstractLogger
 {
     /** PSR-3 log level to Tracy logger level mapping */
-    private const LEVEL_MAP = [\RectorPrefix20220317\Psr\Log\LogLevel::EMERGENCY => \RectorPrefix20220317\Tracy\ILogger::CRITICAL, \RectorPrefix20220317\Psr\Log\LogLevel::ALERT => \RectorPrefix20220317\Tracy\ILogger::CRITICAL, \RectorPrefix20220317\Psr\Log\LogLevel::CRITICAL => \RectorPrefix20220317\Tracy\ILogger::CRITICAL, \RectorPrefix20220317\Psr\Log\LogLevel::ERROR => \RectorPrefix20220317\Tracy\ILogger::ERROR, \RectorPrefix20220317\Psr\Log\LogLevel::WARNING => \RectorPrefix20220317\Tracy\ILogger::WARNING, \RectorPrefix20220317\Psr\Log\LogLevel::NOTICE => \RectorPrefix20220317\Tracy\ILogger::WARNING, \RectorPrefix20220317\Psr\Log\LogLevel::INFO => \RectorPrefix20220317\Tracy\ILogger::INFO, \RectorPrefix20220317\Psr\Log\LogLevel::DEBUG => \RectorPrefix20220317\Tracy\ILogger::DEBUG];
+    private const LEVEL_MAP = [\RectorPrefix20220318\Psr\Log\LogLevel::EMERGENCY => \RectorPrefix20220318\Tracy\ILogger::CRITICAL, \RectorPrefix20220318\Psr\Log\LogLevel::ALERT => \RectorPrefix20220318\Tracy\ILogger::CRITICAL, \RectorPrefix20220318\Psr\Log\LogLevel::CRITICAL => \RectorPrefix20220318\Tracy\ILogger::CRITICAL, \RectorPrefix20220318\Psr\Log\LogLevel::ERROR => \RectorPrefix20220318\Tracy\ILogger::ERROR, \RectorPrefix20220318\Psr\Log\LogLevel::WARNING => \RectorPrefix20220318\Tracy\ILogger::WARNING, \RectorPrefix20220318\Psr\Log\LogLevel::NOTICE => \RectorPrefix20220318\Tracy\ILogger::WARNING, \RectorPrefix20220318\Psr\Log\LogLevel::INFO => \RectorPrefix20220318\Tracy\ILogger::INFO, \RectorPrefix20220318\Psr\Log\LogLevel::DEBUG => \RectorPrefix20220318\Tracy\ILogger::DEBUG];
     /** @var Tracy\ILogger */
     private $tracyLogger;
-    public function __construct(\RectorPrefix20220317\Tracy\ILogger $tracyLogger)
+    public function __construct(\RectorPrefix20220318\Tracy\ILogger $tracyLogger)
     {
         $this->tracyLogger = $tracyLogger;
     }
     public function log($level, $message, array $context = []) : void
     {
-        $level = self::LEVEL_MAP[$level] ?? \RectorPrefix20220317\Tracy\ILogger::ERROR;
+        $level = self::LEVEL_MAP[$level] ?? \RectorPrefix20220318\Tracy\ILogger::ERROR;
         if (isset($context['exception']) && $context['exception'] instanceof \Throwable) {
             $this->tracyLogger->log($context['exception'], $level);
             unset($context['exception']);
