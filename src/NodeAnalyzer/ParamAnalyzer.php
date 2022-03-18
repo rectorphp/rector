@@ -37,7 +37,7 @@ final class ParamAnalyzer
     }
     public function isParamUsedInClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) use($param) : bool {
+        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (\PhpParser\Node $node) use($param) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\Variable) {
                 return \false;
             }
