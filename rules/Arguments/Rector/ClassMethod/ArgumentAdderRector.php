@@ -7,6 +7,8 @@ namespace Rector\Arguments\Rector\ClassMethod;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -22,6 +24,7 @@ use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -42,7 +45,8 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
 
     public function __construct(
         private readonly ArgumentAddingScope $argumentAddingScope,
-        private readonly ChangedArgumentsDetector $changedArgumentsDetector
+        private readonly ChangedArgumentsDetector $changedArgumentsDetector,
+        private readonly AstResolver $astResolver
     ) {
     }
 
@@ -162,16 +166,54 @@ CODE_SAMPLE
 
         if ($node instanceof ClassMethod) {
             $this->addClassMethodParam($node, $argumentAdder, $defaultValue, $argumentType, $position);
-        } elseif ($node instanceof StaticCall) {
+            return;
+        }
+
+        if ($node instanceof StaticCall) {
             $this->processStaticCall($node, $position, $argumentAdder);
-        } else {
-            $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
-            if (isset($node->args[$position])) {
-                return;
+            return;
+        }
+
+        $this->processMethodCall($node, $defaultValue, $position);
+    }
+
+    private function processMethodCall(MethodCall $methodCall, mixed $defaultValue, int $position): void
+    {
+        $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
+        if (isset($methodCall->args[$position])) {
+            return;
+        }
+
+        $this->fillGapBetweenWithDefaultValue($methodCall, $position);
+
+        $methodCall->args[$position] = $arg;
+        $this->haveArgumentsChanged = true;
+    }
+
+    private function fillGapBetweenWithDefaultValue(MethodCall | StaticCall $node, int $position): void
+    {
+        $lastPosition = count($node->getArgs()) - 1;
+
+        if ($position <= $lastPosition) {
+            return;
+        }
+
+        if ($position - $lastPosition === 1) {
+            return;
+        }
+
+        $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
+        if (! $classMethod instanceof ClassMethod) {
+            return;
+        }
+
+        for ($index = $lastPosition + 1; $index < $position; ++$index) {
+            $param = $classMethod->params[$index];
+            if (! $param->default instanceof Expr) {
+                throw new ShouldNotHappenException('Previous position does not has default value');
             }
 
-            $node->args[$position] = $arg;
-            $this->haveArgumentsChanged = true;
+            $node->args[$index] = new Arg(new ConstFetch(new Name($this->print($param->default))));
         }
     }
 
@@ -254,6 +296,8 @@ CODE_SAMPLE
         if (! $this->isName($staticCall->class, ObjectReference::PARENT()->getValue())) {
             return;
         }
+
+        $this->fillGapBetweenWithDefaultValue($staticCall, $position);
 
         $staticCall->args[$position] = new Arg(new Variable($argumentName));
         $this->haveArgumentsChanged = true;
