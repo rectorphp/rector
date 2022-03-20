@@ -18,6 +18,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\ValueObject\MethodName;
+use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\AssignRemover;
 use Rector\NodeRemoval\NodeRemover;
@@ -33,25 +34,17 @@ final class ComplexNodeRemover
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly NodeRemover $nodeRemover,
         private readonly NodeComparator $nodeComparator,
-        private readonly ForbiddenPropertyRemovalAnalyzer $forbiddenPropertyRemovalAnalyzer
+        private readonly ForbiddenPropertyRemovalAnalyzer $forbiddenPropertyRemovalAnalyzer,
+        private readonly SideEffectNodeDetector $sideEffectNodeDetector
     ) {
     }
 
-    /**
-     * @param string[] $classMethodNamesToSkip
-     */
-    public function removePropertyAndUsages(Property $property, array $classMethodNamesToSkip = []): void
+    public function removePropertyAndUsages(Property $property, bool $removeAssignSideEffect = true): void
     {
-        $shouldKeepProperty = false;
-
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
         $assigns = [];
-        foreach ($propertyFetches as $propertyFetch) {
-            if ($this->shouldSkipPropertyForClassMethod($propertyFetch, $classMethodNamesToSkip)) {
-                $shouldKeepProperty = true;
-                continue;
-            }
 
+        foreach ($propertyFetches as $propertyFetch) {
             $assign = $this->resolveAssign($propertyFetch);
             if (! $assign instanceof Assign) {
                 return;
@@ -61,15 +54,14 @@ final class ComplexNodeRemover
                 return;
             }
 
+            if (! $removeAssignSideEffect && $this->sideEffectNodeDetector->detect($assign->expr)) {
+                return;
+            }
+
             $assigns[] = $assign;
         }
 
         $this->processRemovePropertyAssigns($assigns);
-
-        if ($shouldKeepProperty) {
-            return;
-        }
-
         $this->nodeRemover->removeNode($property);
     }
 
@@ -116,22 +108,6 @@ final class ComplexNodeRemover
             $this->assignRemover->removeAssignNode($assign);
             $this->removeConstructorDependency($assign);
         }
-    }
-
-    /**
-     * @param string[] $classMethodNamesToSkip
-     */
-    private function shouldSkipPropertyForClassMethod(
-        StaticPropertyFetch | PropertyFetch $expr,
-        array $classMethodNamesToSkip
-    ): bool {
-        $classMethodNode = $this->betterNodeFinder->findParentType($expr, ClassMethod::class);
-        if (! $classMethodNode instanceof ClassMethod) {
-            return false;
-        }
-
-        $classMethodName = $this->nodeNameResolver->getName($classMethodNode);
-        return in_array($classMethodName, $classMethodNamesToSkip, true);
     }
 
     private function resolveAssign(PropertyFetch | StaticPropertyFetch $expr): ?Assign
