@@ -10,8 +10,8 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
-use RectorPrefix20220318\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix20220318\Webmozart\Assert\Assert;
+use RectorPrefix20220320\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220320\Webmozart\Assert\Assert;
 /**
  * @implements AnnotationToAttributeMapperInterface<CurlyListNode>
  */
@@ -48,11 +48,11 @@ final class CurlyListNodeAnnotationToAttributeMapper implements \Rector\PhpAttri
             if ($valueExpr === \Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY) {
                 continue;
             }
-            \RectorPrefix20220318\Webmozart\Assert\Assert::isInstanceOf($valueExpr, \PhpParser\Node\Expr::class);
+            \RectorPrefix20220320\Webmozart\Assert\Assert::isInstanceOf($valueExpr, \PhpParser\Node\Expr::class);
             $keyExpr = null;
             if (!\is_int($key)) {
                 $keyExpr = $this->annotationToAttributeMapper->map($key);
-                \RectorPrefix20220318\Webmozart\Assert\Assert::isInstanceOf($keyExpr, \PhpParser\Node\Expr::class);
+                \RectorPrefix20220320\Webmozart\Assert\Assert::isInstanceOf($keyExpr, \PhpParser\Node\Expr::class);
             }
             $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($valueExpr, $keyExpr);
         }

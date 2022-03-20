@@ -17,6 +17,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\ValueObject\MethodName;
+use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\AssignRemover;
 use Rector\NodeRemoval\NodeRemover;
@@ -59,7 +60,12 @@ final class ComplexNodeRemover
      * @var \Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer
      */
     private $forbiddenPropertyRemovalAnalyzer;
-    public function __construct(\Rector\NodeRemoval\AssignRemover $assignRemover, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer $forbiddenPropertyRemovalAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
+     */
+    private $sideEffectNodeDetector;
+    public function __construct(\Rector\NodeRemoval\AssignRemover $assignRemover, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer $forbiddenPropertyRemovalAnalyzer, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector)
     {
         $this->assignRemover = $assignRemover;
         $this->propertyFetchFinder = $propertyFetchFinder;
@@ -68,20 +74,13 @@ final class ComplexNodeRemover
         $this->nodeRemover = $nodeRemover;
         $this->nodeComparator = $nodeComparator;
         $this->forbiddenPropertyRemovalAnalyzer = $forbiddenPropertyRemovalAnalyzer;
+        $this->sideEffectNodeDetector = $sideEffectNodeDetector;
     }
-    /**
-     * @param string[] $classMethodNamesToSkip
-     */
-    public function removePropertyAndUsages(\PhpParser\Node\Stmt\Property $property, array $classMethodNamesToSkip = []) : void
+    public function removePropertyAndUsages(\PhpParser\Node\Stmt\Property $property, bool $removeAssignSideEffect = \true) : void
     {
-        $shouldKeepProperty = \false;
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
         $assigns = [];
         foreach ($propertyFetches as $propertyFetch) {
-            if ($this->shouldSkipPropertyForClassMethod($propertyFetch, $classMethodNamesToSkip)) {
-                $shouldKeepProperty = \true;
-                continue;
-            }
             $assign = $this->resolveAssign($propertyFetch);
             if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
                 return;
@@ -89,12 +88,12 @@ final class ComplexNodeRemover
             if ($assign->expr instanceof \PhpParser\Node\Expr\Assign) {
                 return;
             }
+            if (!$removeAssignSideEffect && $this->sideEffectNodeDetector->detect($assign->expr)) {
+                return;
+            }
             $assigns[] = $assign;
         }
         $this->processRemovePropertyAssigns($assigns);
-        if ($shouldKeepProperty) {
-            return;
-        }
         $this->nodeRemover->removeNode($property);
     }
     /**
@@ -134,19 +133,6 @@ final class ComplexNodeRemover
             $this->assignRemover->removeAssignNode($assign);
             $this->removeConstructorDependency($assign);
         }
-    }
-    /**
-     * @param string[] $classMethodNamesToSkip
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
-     */
-    private function shouldSkipPropertyForClassMethod($expr, array $classMethodNamesToSkip) : bool
-    {
-        $classMethodNode = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\ClassMethod::class);
-        if (!$classMethodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return \false;
-        }
-        $classMethodName = $this->nodeNameResolver->getName($classMethodNode);
-        return \in_array($classMethodName, $classMethodNamesToSkip, \true);
     }
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr

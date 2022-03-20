@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20220318\React\Socket;
+namespace RectorPrefix20220320\React\Socket;
 
-use RectorPrefix20220318\Evenement\EventEmitter;
-use RectorPrefix20220318\React\EventLoop\Loop;
-use RectorPrefix20220318\React\EventLoop\LoopInterface;
+use RectorPrefix20220320\Evenement\EventEmitter;
+use RectorPrefix20220320\React\EventLoop\Loop;
+use RectorPrefix20220320\React\EventLoop\LoopInterface;
 /**
  * [Internal] The `FdServer` class implements the `ServerInterface` and
  * is responsible for accepting connections from an existing file descriptor.
@@ -30,7 +30,7 @@ use RectorPrefix20220318\React\EventLoop\LoopInterface;
  * @see ConnectionInterface
  * @internal
  */
-final class FdServer extends \RectorPrefix20220318\Evenement\EventEmitter implements \RectorPrefix20220318\React\Socket\ServerInterface
+final class FdServer extends \RectorPrefix20220320\Evenement\EventEmitter implements \RectorPrefix20220320\React\Socket\ServerInterface
 {
     private $master;
     private $loop;
@@ -73,7 +73,7 @@ final class FdServer extends \RectorPrefix20220318\Evenement\EventEmitter implem
      * @throws \InvalidArgumentException if the listening address is invalid
      * @throws \RuntimeException if listening on this address fails (already in use etc.)
      */
-    public function __construct($fd, \RectorPrefix20220318\React\EventLoop\LoopInterface $loop = null)
+    public function __construct($fd, \RectorPrefix20220320\React\EventLoop\LoopInterface $loop = null)
     {
         if (\preg_match('#^php://fd/(\\d+)$#', $fd, $m)) {
             $fd = (int) $m[1];
@@ -81,7 +81,7 @@ final class FdServer extends \RectorPrefix20220318\Evenement\EventEmitter implem
         if (!\is_int($fd) || $fd < 0 || $fd >= \PHP_INT_MAX) {
             throw new \InvalidArgumentException('Invalid FD number given (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22);
         }
-        $this->loop = $loop ?: \RectorPrefix20220318\React\EventLoop\Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20220320\React\EventLoop\Loop::get();
         $this->master = @\fopen('php://fd/' . $fd, 'r+');
         if (\false === $this->master) {
             // Match errstr from PHP's warning message.
@@ -90,7 +90,7 @@ final class FdServer extends \RectorPrefix20220318\Evenement\EventEmitter implem
             \preg_match('/\\[(\\d+)\\]: (.*)/', $error['message'], $m);
             $errno = isset($m[1]) ? (int) $m[1] : 0;
             $errstr = isset($m[2]) ? $m[2] : $error['message'];
-            throw new \RuntimeException('Failed to listen on FD ' . $fd . ': ' . $errstr . \RectorPrefix20220318\React\Socket\SocketServer::errconst($errno), $errno);
+            throw new \RuntimeException('Failed to listen on FD ' . $fd . ': ' . $errstr . \RectorPrefix20220320\React\Socket\SocketServer::errconst($errno), $errno);
         }
         $meta = \stream_get_meta_data($this->master);
         if (!isset($meta['stream_type']) || $meta['stream_type'] !== 'tcp_socket') {
@@ -146,7 +146,7 @@ final class FdServer extends \RectorPrefix20220318\Evenement\EventEmitter implem
         $that = $this;
         $this->loop->addReadStream($this->master, function ($master) use($that) {
             try {
-                $newSocket = \RectorPrefix20220318\React\Socket\SocketServer::accept($master);
+                $newSocket = \RectorPrefix20220320\React\Socket\SocketServer::accept($master);
             } catch (\RuntimeException $e) {
                 $that->emit('error', array($e));
                 return;
@@ -167,7 +167,7 @@ final class FdServer extends \RectorPrefix20220318\Evenement\EventEmitter implem
     /** @internal */
     public function handleConnection($socket)
     {
-        $connection = new \RectorPrefix20220318\React\Socket\Connection($socket, $this->loop);
+        $connection = new \RectorPrefix20220320\React\Socket\Connection($socket, $this->loop);
         $connection->unix = $this->unix;
         $this->emit('connection', array($connection));
     }

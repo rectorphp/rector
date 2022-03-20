@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\PropertyAssignToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220318\Webmozart\Assert\Assert;
+use RectorPrefix20220320\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\Assign\PropertyAssignToMethodCallRector\PropertyAssignToMethodCallRectorTest
  */
@@ -68,7 +68,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220318\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\PropertyAssignToMethodCall::class);
+        \RectorPrefix20220320\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\PropertyAssignToMethodCall::class);
         $this->propertyAssignsToMethodCalls = $configuration;
     }
 }
