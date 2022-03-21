@@ -24,6 +24,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -197,10 +198,14 @@ final class PropertyManipulator
             }
             // skip for constructor? it is allowed to set value in constructor method
             $classMethod = $this->betterNodeFinder->findParentType($propertyFetch, \PhpParser\Node\Stmt\ClassMethod::class);
-            if ($classMethod instanceof \PhpParser\Node\Stmt\ClassMethod && $this->isInlineStmtWithConstructMethod($propertyFetch, $classMethod)) {
+            if ($this->isInlineStmtWithConstructMethod($propertyFetch, $classMethod)) {
                 continue;
             }
             if ($this->assignManipulator->isLeftPartOfAssign($propertyFetch)) {
+                return \true;
+            }
+            $isInUnset = (bool) $this->betterNodeFinder->findParentType($propertyFetch, \PhpParser\Node\Stmt\Unset_::class);
+            if ($isInUnset) {
                 return \true;
             }
         }
@@ -241,8 +246,11 @@ final class PropertyManipulator
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
      */
-    private function isInlineStmtWithConstructMethod($propertyFetch, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isInlineStmtWithConstructMethod($propertyFetch, ?\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return \false;
+        }
         if (!$this->nodeNameResolver->isName($classMethod->name, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return \false;
         }
