@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
@@ -113,7 +114,7 @@ CODE_SAMPLE
         $match = $this->processImplicitReturnAfterSwitch($node, $match, $condAndExprs);
         $match = $this->processImplicitThrowsAfterSwitch($node, $match, $condAndExprs);
         if ($isReturn) {
-            return new \PhpParser\Node\Stmt\Return_($match);
+            return $this->processReturn($match, $node->cond);
         }
         $assignExpr = $this->resolveAssignExpr($condAndExprs);
         if ($assignExpr instanceof \PhpParser\Node\Expr) {
@@ -124,6 +125,13 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::MATCH_EXPRESSION;
+    }
+    private function processReturn(\PhpParser\Node\Expr\Match_ $match, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Stmt\Return_
+    {
+        if (!$this->matchSwitchAnalyzer->hasDefaultValue($match)) {
+            $match->arms[] = new \PhpParser\Node\MatchArm(null, $expr);
+        }
+        return new \PhpParser\Node\Stmt\Return_($match);
     }
     private function changeToAssign(\PhpParser\Node\Stmt\Switch_ $switch, \PhpParser\Node\Expr\Match_ $match, \PhpParser\Node\Expr $assignExpr) : \PhpParser\Node\Expr\Assign
     {

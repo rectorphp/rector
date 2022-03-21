@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220320\Tracy;
+namespace RectorPrefix20220321\Tracy;
 
 use ErrorException;
 /**
@@ -16,40 +16,40 @@ final class ProductionStrategy
     public function initialize() : void
     {
         if (!\function_exists('ini_set') && (\ini_get('display_errors') && \ini_get('display_errors') !== 'stderr')) {
-            \RectorPrefix20220320\Tracy\Debugger::exceptionHandler(new \RuntimeException("Unable to set 'display_errors' because function ini_set() is disabled."));
+            \RectorPrefix20220321\Tracy\Debugger::exceptionHandler(new \RuntimeException("Unable to set 'display_errors' because function ini_set() is disabled."));
         }
     }
     public function handleException(\Throwable $exception, bool $firstTime) : void
     {
         try {
-            \RectorPrefix20220320\Tracy\Debugger::log($exception, \RectorPrefix20220320\Tracy\Debugger::EXCEPTION);
+            \RectorPrefix20220321\Tracy\Debugger::log($exception, \RectorPrefix20220321\Tracy\Debugger::EXCEPTION);
         } catch (\Throwable $e) {
         }
         if (!$firstTime) {
             // nothing
-        } elseif (\RectorPrefix20220320\Tracy\Helpers::isHtmlMode()) {
+        } elseif (\RectorPrefix20220321\Tracy\Helpers::isHtmlMode()) {
             if (!\headers_sent()) {
                 \header('Content-Type: text/html; charset=UTF-8');
             }
             (function ($logged) use($exception) {
-                require \RectorPrefix20220320\Tracy\Debugger::$errorTemplate ?: __DIR__ . '/assets/error.500.phtml';
+                require \RectorPrefix20220321\Tracy\Debugger::$errorTemplate ?: __DIR__ . '/assets/error.500.phtml';
             })(empty($e));
-        } elseif (\RectorPrefix20220320\Tracy\Helpers::isCli()) {
+        } elseif (\RectorPrefix20220321\Tracy\Helpers::isCli()) {
             // @ triggers E_NOTICE when strerr is closed since PHP 7.4
             @\fwrite(\STDERR, "ERROR: {$exception->getMessage()}\n" . (isset($e) ? 'Unable to log error. You may try enable debug mode to inspect the problem.' : 'Check log to see more info.') . "\n");
         }
     }
     public function handleError(int $severity, string $message, string $file, int $line, array $context = null) : void
     {
-        if ($severity & \RectorPrefix20220320\Tracy\Debugger::$logSeverity) {
+        if ($severity & \RectorPrefix20220321\Tracy\Debugger::$logSeverity) {
             $err = new \ErrorException($message, 0, $severity, $file, $line);
             $err->context = $context;
-            \RectorPrefix20220320\Tracy\Helpers::improveException($err);
+            \RectorPrefix20220321\Tracy\Helpers::improveException($err);
         } else {
-            $err = 'PHP ' . \RectorPrefix20220320\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20220320\Tracy\Helpers::improveError($message, (array) $context) . " in {$file}:{$line}";
+            $err = 'PHP ' . \RectorPrefix20220321\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20220321\Tracy\Helpers::improveError($message, (array) $context) . " in {$file}:{$line}";
         }
         try {
-            \RectorPrefix20220320\Tracy\Debugger::log($err, \RectorPrefix20220320\Tracy\Debugger::ERROR);
+            \RectorPrefix20220321\Tracy\Debugger::log($err, \RectorPrefix20220321\Tracy\Debugger::ERROR);
         } catch (\Throwable $e) {
         }
     }
