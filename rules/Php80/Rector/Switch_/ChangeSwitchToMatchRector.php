@@ -136,7 +136,7 @@ CODE_SAMPLE
     {
         $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($switch, function (\PhpParser\Node $node) use($assignExpr) : bool {
             return $node instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($node->var, $assignExpr);
-        });
+        }, \false);
         $assign = new \PhpParser\Node\Expr\Assign($assignExpr, $match);
         if (!$prevInitializedAssign instanceof \PhpParser\Node\Expr\Assign) {
             return $assign;
