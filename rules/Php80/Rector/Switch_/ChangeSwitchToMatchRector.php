@@ -9,7 +9,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
@@ -37,7 +36,7 @@ final class ChangeSwitchToMatchRector extends AbstractRector implements MinPhpVe
     public function __construct(
         private readonly SwitchExprsResolver $switchExprsResolver,
         private readonly MatchSwitchAnalyzer $matchSwitchAnalyzer,
-        private readonly MatchFactory $matchFactory,
+        private readonly MatchFactory $matchFactory
     ) {
     }
 
@@ -117,7 +116,7 @@ CODE_SAMPLE
         $match = $this->processImplicitThrowsAfterSwitch($node, $match, $condAndExprs);
 
         if ($isReturn) {
-            return $this->processReturn($match, $node->cond);
+            return $this->processReturn($match);
         }
 
         $assignExpr = $this->resolveAssignExpr($condAndExprs);
@@ -133,10 +132,10 @@ CODE_SAMPLE
         return PhpVersionFeature::MATCH_EXPRESSION;
     }
 
-    private function processReturn(Match_ $match, Expr $expr): Return_
+    private function processReturn(Match_ $match): ?Return_
     {
         if (! $this->matchSwitchAnalyzer->hasDefaultValue($match)) {
-            $match->arms[] = new MatchArm(null, $expr);
+            return null;
         }
 
         return new Return_($match);

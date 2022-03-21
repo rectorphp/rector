@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
-class SkipNoDefault
+class SkipNoDefaultNextNoReturn
 {
     public function run($value)
     {
@@ -16,7 +16,5 @@ class SkipNoDefault
 
             }
         }
-
-        return $value;
     }
 }
