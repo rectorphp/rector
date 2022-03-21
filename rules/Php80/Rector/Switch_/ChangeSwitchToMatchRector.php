@@ -148,7 +148,8 @@ CODE_SAMPLE
             fn (Node $node): bool => $node instanceof Assign && $this->nodeComparator->areNodesEqual(
                 $node->var,
                 $assignExpr
-            )
+            ),
+            false
         );
 
         $assign = new Assign($assignExpr, $match);

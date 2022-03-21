@@ -279,7 +279,7 @@ final class BetterNodeFinder
     /**
      * @param callable(Node $node): bool $filter
      */
-    public function findFirstPreviousOfNode(Node $node, callable $filter): ?Node
+    public function findFirstPreviousOfNode(Node $node, callable $filter, bool $lookupParent = true): ?Node
     {
         // move to previous expression
         $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
@@ -291,6 +291,10 @@ final class BetterNodeFinder
             }
 
             return $this->findFirstPreviousOfNode($previousStatement, $filter);
+        }
+
+        if (! $lookupParent) {
+            return null;
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
