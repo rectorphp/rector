@@ -11,7 +11,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220321\Webmozart\Assert\Assert;
+use RectorPrefix20220322\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/doctrine/dbal/blob/3.1.x/src/Types/Types.php
  *
@@ -86,7 +86,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220321\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\AttributeKeyToClassConstFetch::class);
+        \RectorPrefix20220322\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\AttributeKeyToClassConstFetch::class);
         $this->attributeKeysToClassConstFetches = $configuration;
     }
 }

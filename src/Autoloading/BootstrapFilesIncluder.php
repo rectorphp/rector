@@ -5,9 +5,9 @@ namespace Rector\Core\Autoloading;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220321\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220322\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
-use RectorPrefix20220321\Webmozart\Assert\Assert;
+use RectorPrefix20220322\Webmozart\Assert\Assert;
 final class BootstrapFilesIncluder
 {
     /**
@@ -15,7 +15,7 @@ final class BootstrapFilesIncluder
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\RectorPrefix20220321\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\RectorPrefix20220322\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->parameterProvider = $parameterProvider;
     }
@@ -26,7 +26,7 @@ final class BootstrapFilesIncluder
     public function includeBootstrapFiles() : void
     {
         $bootstrapFiles = $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES);
-        \RectorPrefix20220321\Webmozart\Assert\Assert::allString($bootstrapFiles);
+        \RectorPrefix20220322\Webmozart\Assert\Assert::allString($bootstrapFiles);
         /** @var string[] $bootstrapFiles */
         foreach ($bootstrapFiles as $bootstrapFile) {
             if (!\is_file($bootstrapFile)) {
@@ -38,6 +38,9 @@ final class BootstrapFilesIncluder
                 $errorMessage = \sprintf('"%s" thrown in "%s" on line %d while loading bootstrap file %s: %s', \get_class($throwable), $throwable->getFile(), $throwable->getLine(), $bootstrapFile, $throwable->getMessage());
                 throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage, $throwable->getCode(), $throwable);
             }
+        }
+        if (\is_file(__DIR__ . '/../../stubs-rector/PHPUnit/Framework/TestCase.php')) {
+            require_once __DIR__ . '/../../stubs-rector/PHPUnit/Framework/TestCase.php';
         }
     }
 }

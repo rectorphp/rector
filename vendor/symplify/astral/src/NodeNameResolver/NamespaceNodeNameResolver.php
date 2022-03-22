@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220321\Symplify\Astral\NodeNameResolver;
+namespace RectorPrefix20220322\Symplify\Astral\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
-use RectorPrefix20220321\Symplify\Astral\Contract\NodeNameResolverInterface;
-final class NamespaceNodeNameResolver implements \RectorPrefix20220321\Symplify\Astral\Contract\NodeNameResolverInterface
+use RectorPrefix20220322\Symplify\Astral\Contract\NodeNameResolverInterface;
+final class NamespaceNodeNameResolver implements \RectorPrefix20220322\Symplify\Astral\Contract\NodeNameResolverInterface
 {
     public function match(\PhpParser\Node $node) : bool
     {
