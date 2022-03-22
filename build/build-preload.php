@@ -124,7 +124,6 @@ PHP;
             ->notPath('#\/tests\/#')
             ->notPath('#\/config\/#')
             ->notPath('#\/set\/#')
-            ->in($vendorDir . '/symplify/symfony-php-config')
             ->sortByName();
 
         return iterator_to_array($finder->getIterator());

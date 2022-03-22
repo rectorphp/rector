@@ -48,5 +48,9 @@ final class BootstrapFilesIncluder
                 throw new ShouldNotHappenException($errorMessage, $throwable->getCode(), $throwable);
             }
         }
+
+        if (is_file(__DIR__ . '/../../stubs-rector/PHPUnit/Framework/TestCase.php')) {
+            require_once __DIR__ . '/../../stubs-rector/PHPUnit/Framework/TestCase.php';
+        }
     }
 }
