@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\CallableType;
 use PHPStan\Type\MixedType;
@@ -36,6 +38,7 @@ final class ClassMethodParamTypeCompleter
         $hasChanged = false;
 
         foreach ($classParameterTypes as $position => $argumentStaticType) {
+            /** @var Type $argumentStaticType */
             if ($this->shouldSkipArgumentStaticType($classMethod, $argumentStaticType, $position, $maxUnionTypes)) {
                 continue;
             }
@@ -49,8 +52,15 @@ final class ClassMethodParamTypeCompleter
                 continue;
             }
 
+            // check default override
+            $param = $classMethod->params[$position];
+
+            if (! $this->isAcceptedByDefault($param, $argumentStaticType)) {
+                continue;
+            }
+
             // update parameter
-            $classMethod->params[$position]->type = $phpParserTypeNode;
+            $param->type = $phpParserTypeNode;
             $hasChanged = true;
         }
 
@@ -164,5 +174,17 @@ final class ClassMethodParamTypeCompleter
         }
 
         return $type;
+    }
+
+    private function isAcceptedByDefault(Param $param, Type $argumentStaticType): bool
+    {
+        if (! $param->default instanceof Expr) {
+            return true;
+        }
+
+        $defaultExpr = $param->default;
+        $defaultStaticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($defaultExpr);
+        return $argumentStaticType->accepts($defaultStaticType, false)
+            ->yes();
     }
 }
