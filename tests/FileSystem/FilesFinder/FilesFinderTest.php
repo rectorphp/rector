@@ -35,6 +35,14 @@ final class FilesFinderTest extends AbstractTestCase
         $this->assertCount(2, $foundFiles);
     }
 
+    public function testWithFollowingBrokenSymlinks(): void
+    {
+        $this->bootFromConfigFiles([__DIR__ . '/config/test_broken_symlinks.php']);
+        $filesFinder = $this->getService(FilesFinder::class);
+        $foundFiles = $filesFinder->findInDirectoriesAndFiles([__DIR__ . '/SourceWithBrokenSymlinks']);
+        $this->assertCount(0, $foundFiles);
+    }
+
     /**
      * @dataProvider provideData()
      */
