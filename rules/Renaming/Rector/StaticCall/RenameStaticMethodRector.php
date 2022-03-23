@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220322\Webmozart\Assert\Assert;
+use RectorPrefix20220323\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\StaticCall\RenameStaticMethodRector\RenameStaticMethodRectorTest
  */
@@ -54,7 +54,7 @@ final class RenameStaticMethodRector extends \Rector\Core\Rector\AbstractRector 
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220322\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\ValueObject\RenameStaticMethod::class);
+        \RectorPrefix20220323\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\ValueObject\RenameStaticMethod::class);
         $this->staticMethodRenames = $configuration;
     }
     private function rename(\PhpParser\Node\Expr\StaticCall $staticCall, \Rector\Renaming\ValueObject\RenameStaticMethod $renameStaticMethod) : \PhpParser\Node\Expr\StaticCall
