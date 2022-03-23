@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9b3422a50ab1b016db399db42c488cf1
+class ComposerStaticInita1802dba323f03b8eb3a43c52fc11f67
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3271,14 +3271,18 @@ class ComposerStaticInit9b3422a50ab1b016db399db42c488cf1
         'Rector\\Symfony\\NodeAnalyzer\\FormOptionsArrayMatcher' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormOptionsArrayMatcher.php',
         'Rector\\Symfony\\NodeAnalyzer\\LiteralCallLikeConstFetchReplacer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/LiteralCallLikeConstFetchReplacer.php',
         'Rector\\Symfony\\NodeAnalyzer\\ServiceTypeMethodCallResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ServiceTypeMethodCallResolver.php',
+        'Rector\\Symfony\\NodeAnalyzer\\SymfonyControllerFilter' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyControllerFilter.php',
         'Rector\\Symfony\\NodeFactory\\ArrayFromCompactFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/ArrayFromCompactFactory.php',
         'Rector\\Symfony\\NodeFactory\\BareLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/BareLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\EventReferenceFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/EventReferenceFactory.php',
         'Rector\\Symfony\\NodeFactory\\GetSubscribedEventsClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/GetSubscribedEventsClassMethodFactory.php',
+        'Rector\\Symfony\\NodeFactory\\InvokableControllerClassFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableControllerClassFactory.php',
+        'Rector\\Symfony\\NodeFactory\\InvokableControllerNameFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableControllerNameFactory.php',
         'Rector\\Symfony\\NodeFactory\\OnLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\OnSuccessLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnSuccessLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\ThisRenderFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/ThisRenderFactory.php',
         'Rector\\Symfony\\PhpDocNode\\SymfonyRouteTagValueNodeFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/PhpDocNode/SymfonyRouteTagValueNodeFactory.php',
+        'Rector\\Symfony\\Printer\\NeighbourClassLikePrinter' => __DIR__ . '/..' . '/rector/rector-symfony/src/Printer/NeighbourClassLikePrinter.php',
         'Rector\\Symfony\\Rector\\BinaryOp\\ResponseStatusCodeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/BinaryOp/ResponseStatusCodeRector.php',
         'Rector\\Symfony\\Rector\\ClassConstFetch\\ConsoleExceptionToErrorEventConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassConstFetch/ConsoleExceptionToErrorEventConstantRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\ActionSuffixRemoverRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/ActionSuffixRemoverRector.php',
@@ -3295,6 +3299,7 @@ class ComposerStaticInit9b3422a50ab1b016db399db42c488cf1
         'Rector\\Symfony\\Rector\\ClassMethod\\TemplateAnnotationToThisRenderRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php',
         'Rector\\Symfony\\Rector\\Class_\\ChangeFileLoaderInExtensionAndKernelRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector.php',
         'Rector\\Symfony\\Rector\\Class_\\EventListenerToEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/EventListenerToEventSubscriberRector.php',
+        'Rector\\Symfony\\Rector\\Class_\\InvokableControllerRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/InvokableControllerRector.php',
         'Rector\\Symfony\\Rector\\Class_\\LogoutHandlerToLogoutEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/LogoutHandlerToLogoutEventSubscriberRector.php',
         'Rector\\Symfony\\Rector\\Class_\\LogoutSuccessHandlerToLogoutEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/LogoutSuccessHandlerToLogoutEventSubscriberRector.php',
         'Rector\\Symfony\\Rector\\Class_\\MakeCommandLazyRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/MakeCommandLazyRector.php',
@@ -3845,9 +3850,9 @@ class ComposerStaticInit9b3422a50ab1b016db399db42c488cf1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9b3422a50ab1b016db399db42c488cf1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9b3422a50ab1b016db399db42c488cf1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9b3422a50ab1b016db399db42c488cf1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita1802dba323f03b8eb3a43c52fc11f67::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita1802dba323f03b8eb3a43c52fc11f67::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita1802dba323f03b8eb3a43c52fc11f67::$classMap;
 
         }, null, ClassLoader::class);
     }

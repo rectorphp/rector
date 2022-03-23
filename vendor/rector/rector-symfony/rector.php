@@ -15,7 +15,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $parameters->set(\Rector\Core\Configuration\Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
     // experimental
     $parameters->set(\Rector\Core\Configuration\Option::PARALLEL, \true);
-    $parameters->set(\Rector\Core\Configuration\Option::SKIP, ['*/Fixture/*', '*/Source/*', '*/Source*/*']);
+    $parameters->set(\Rector\Core\Configuration\Option::SKIP, ['*/Fixture/*', '*/Source/*', '*/Source*/*', '*/tests/*/Fixture*/Expected/*']);
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->configure(['Symfony\\*', 'Twig_*', 'Swift_*', 'Doctrine\\*']);
     $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_81);
