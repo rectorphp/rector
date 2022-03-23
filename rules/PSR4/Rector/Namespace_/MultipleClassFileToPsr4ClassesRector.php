@@ -7,16 +7,14 @@ namespace Rector\PSR4\Rector\Namespace_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
 use Rector\PSR4\NodeManipulator\NamespaceManipulator;
+use Rector\Symfony\Printer\NeighbourClassLikePrinter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Tests\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector\MultipleClassFileToPsr4ClassesRectorTest
@@ -25,7 +23,8 @@ final class MultipleClassFileToPsr4ClassesRector extends AbstractRector
 {
     public function __construct(
         private readonly NamespaceManipulator $namespaceManipulator,
-        private readonly FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
+        private readonly FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer,
+        private readonly NeighbourClassLikePrinter $neighbourClassLikePrinter
     ) {
     }
 
@@ -164,29 +163,7 @@ CODE_SAMPLE
     private function printNewNodes(ClassLike $classLike, Namespace_ | FileWithoutNamespace $mainNode): void
     {
         $smartFileInfo = $this->file->getSmartFileInfo();
-
-        $declares = [];
-        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class]);
-        if ($declare instanceof Declare_) {
-            $declares = [$declare];
-        }
-
-        if ($mainNode instanceof FileWithoutNamespace) {
-            $nodesToPrint = array_merge($declares, [$classLike]);
-        } else {
-            $nodesToPrint = array_merge($declares, [$mainNode]);
-        }
-
-        $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
-
-        $addedFileWithNodes = new AddedFileWithNodes($fileDestination, $nodesToPrint);
-        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
-    }
-
-    private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string
-    {
-        $currentDirectory = dirname($smartFileInfo->getRealPath());
-        return $currentDirectory . DIRECTORY_SEPARATOR . $classLike->name . '.php';
+        $this->neighbourClassLikePrinter->printClassLike($classLike, $mainNode, $smartFileInfo);
     }
 
     /**
