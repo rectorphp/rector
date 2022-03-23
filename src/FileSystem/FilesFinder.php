@@ -121,8 +121,9 @@ final class FilesFinder
             return;
         }
         $finder->filter(function (\RectorPrefix20220323\Symfony\Component\Finder\SplFileInfo $splFileInfo) use($excludePaths) : bool {
+            /** @var string|false $realPath */
             $realPath = $splFileInfo->getRealPath();
-            if ($realPath === '') {
+            if ($realPath === \false) {
                 // dead symlink
                 return \false;
             }
