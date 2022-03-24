@@ -12,7 +12,6 @@ use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
-use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
@@ -21,7 +20,6 @@ use Rector\Core\Validation\EmptyConfigurableRectorChecker;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
-use Rector\VersionBonding\Application\MissedRectorDueVersionChecker;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,9 +28,6 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class ProcessCommand extends AbstractProcessCommand
 {
-    /**
-     * @param RectorInterface[] $rectors
-     */
     public function __construct(
         private readonly AdditionalAutoloader $additionalAutoloader,
         private readonly ChangedFilesDetector $changedFilesDetector,
@@ -41,12 +36,10 @@ final class ProcessCommand extends AbstractProcessCommand
         private readonly BootstrapFilesIncluder $bootstrapFilesIncluder,
         private readonly ProcessResultFactory $processResultFactory,
         private readonly DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
-        private readonly MissedRectorDueVersionChecker $missedRectorDueVersionChecker,
         private readonly EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker,
         private readonly OutputFormatterCollector $outputFormatterCollector,
         private readonly OutputStyleInterface $rectorOutputStyle,
         private readonly MemoryLimiter $memoryLimiter,
-        private readonly array $rectors
     ) {
         parent::__construct();
     }
@@ -82,11 +75,8 @@ final class ProcessCommand extends AbstractProcessCommand
 
         $paths = $configuration->getPaths();
 
-        // 0. add files and directories to static locator
+        // 1. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
-
-        // 1. inform user about non-runnable rules
-        $this->missedRectorDueVersionChecker->check($this->rectors);
 
         // 2. inform user about registering configurable rule without configuration
         $this->emptyConfigurableRectorChecker->check();
