@@ -23,7 +23,7 @@ final class GeneralUtilityDynamicReturnTypeExtension implements \PHPStan\Type\Dy
     {
         return 'makeInstance' === $methodReflection->getName();
     }
-    public function getTypeFromStaticMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\StaticCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
+    public function getTypeFromStaticMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\StaticCall $methodCall, \PHPStan\Analyser\Scope $scope) : ?\PHPStan\Type\Type
     {
         $arg = $methodCall->args[0]->value;
         if (!$arg instanceof \PhpParser\Node\Expr\ClassConstFetch) {

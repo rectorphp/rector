@@ -27,7 +27,7 @@ final class ObjectManagerDynamicReturnTypeExtension implements \PHPStan\Type\Dyn
     {
         return 'get' === $methodReflection->getName();
     }
-    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
+    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : ?\PHPStan\Type\Type
     {
         return $this->argumentTypeResolver->resolveFromMethodCall($methodCall, $methodReflection);
     }

@@ -27,7 +27,7 @@ final class ValidatorResolverDynamicReturnTypeExtension implements \PHPStan\Type
     {
         return 'createValidator' === $methodReflection->getName();
     }
-    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
+    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : ?\PHPStan\Type\Type
     {
         return $this->argumentTypeResolver->resolveFromMethodCall($methodCall, $methodReflection);
     }
