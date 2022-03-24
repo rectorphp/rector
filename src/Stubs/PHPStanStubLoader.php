@@ -43,10 +43,6 @@ final class PHPStanStubLoader
                 continue;
             }
 
-            if ($vendorPath === '') {
-                continue;
-            }
-
             foreach (self::STUBS as $stub) {
                 $path = $this->getStubPath($vendorPath, $stub);
                 if ($path === null) {
