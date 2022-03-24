@@ -24,9 +24,8 @@ final class ValueObjectInliner
     /**
      * @param ReflectionClass<object> $reflectionClass
      * @return mixed[]
-     * @param object $object
      */
-    public static function resolveArgumentValues(\ReflectionClass $reflectionClass, $object) : array
+    public static function resolveArgumentValues(\ReflectionClass $reflectionClass, object $object) : array
     {
         $argumentValues = [];
         $constructorReflectionMethod = $reflectionClass->getConstructor();
@@ -56,10 +55,7 @@ final class ValueObjectInliner
         }
         return $inlineServices;
     }
-    /**
-     * @param object $object
-     */
-    private static function inlineSingle($object) : \RectorPrefix20220324\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
+    private static function inlineSingle(object $object) : \RectorPrefix20220324\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
     {
         $reflectionClass = new \ReflectionClass($object);
         $className = $reflectionClass->getName();

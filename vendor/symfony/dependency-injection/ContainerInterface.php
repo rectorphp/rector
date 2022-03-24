@@ -27,18 +27,14 @@ interface ContainerInterface extends \RectorPrefix20220324\Psr\Container\Contain
     public const NULL_ON_INVALID_REFERENCE = 2;
     public const IGNORE_ON_INVALID_REFERENCE = 3;
     public const IGNORE_ON_UNINITIALIZED_REFERENCE = 4;
-    /**
-     * @param object|null $service
-     */
-    public function set(string $id, $service);
+    public function set(string $id, ?object $service);
     /**
      * @throws ServiceCircularReferenceException When a circular reference is detected
      * @throws ServiceNotFoundException          When the service is not defined
      *
      * @see Reference
-     * @return object|null
      */
-    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE);
+    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE) : ?object;
     public function has(string $id) : bool;
     /**
      * Check for whether or not a service has been initialized.

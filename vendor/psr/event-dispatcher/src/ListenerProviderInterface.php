@@ -15,5 +15,5 @@ interface ListenerProviderInterface
      *   An iterable (array, iterator, or generator) of callables.  Each
      *   callable MUST be type-compatible with $event.
      */
-    public function getListenersForEvent($event) : iterable;
+    public function getListenersForEvent(object $event) : iterable;
 }

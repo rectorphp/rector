@@ -43,9 +43,8 @@ abstract class Loader implements \RectorPrefix20220324\Symfony\Component\Config\
      *
      * @return mixed
      * @param mixed $resource
-     * @param string|null $type
      */
-    public function import($resource, $type = null)
+    public function import($resource, string $type = null)
     {
         return $this->resolve($resource, $type)->load($resource, $type);
     }

@@ -125,9 +125,8 @@ class Container implements \RectorPrefix20220324\Symfony\Component\DependencyInj
      *
      * Setting a synthetic service to null resets it: has() returns false and get()
      * behaves in the same way as if the service was never created.
-     * @param object|null $service
      */
-    public function set(string $id, $service)
+    public function set(string $id, ?object $service)
     {
         // Runs the internal initializer; used by the dumped container to include always-needed files
         if (isset($this->privates['service_container']) && $this->privates['service_container'] instanceof \Closure) {
@@ -179,9 +178,8 @@ class Container implements \RectorPrefix20220324\Symfony\Component\DependencyInj
      * @throws \Exception                        if an exception has been thrown when the service has been resolved
      *
      * @see Reference
-     * @return object|null
      */
-    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
+    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE) : ?object
     {
         return $this->services[$id] ?? $this->services[$id = $this->aliases[$id] ?? $id] ?? ('service_container' === $id ? $this : ($this->factories[$id] ?? [$this, 'make'])($id, $invalidBehavior));
     }

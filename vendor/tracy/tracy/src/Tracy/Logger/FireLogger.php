@@ -70,7 +70,7 @@ class FireLogger implements \RectorPrefix20220324\Tracy\ILogger
         }
         $item['args'] = $args;
         $this->payload['logs'][] = $this->jsonDump($item, -1);
-        foreach (\str_split(\base64_encode(\json_encode($this->payload, 0)), 4990) as $k => $v) {
+        foreach (\str_split(\base64_encode(\json_encode($this->payload, \JSON_INVALID_UTF8_SUBSTITUTE)), 4990) as $k => $v) {
             \header("FireLogger-de11e-{$k}: {$v}");
         }
         return \true;

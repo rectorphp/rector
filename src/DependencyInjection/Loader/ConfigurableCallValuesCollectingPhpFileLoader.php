@@ -26,9 +26,8 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix2
     /**
      * @param mixed $resource
      * @return mixed
-     * @param string|null $type
      */
-    public function load($resource, $type = null)
+    public function load($resource, string $type = null)
     {
         // this call collects root values
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();
@@ -40,10 +39,8 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix2
      * @param bool|string $ignoreErrors
      * @param mixed $resource
      * @return mixed
-     * @param string|null $type
-     * @param string|null $sourceResource
      */
-    public function import($resource, $type = null, $ignoreErrors = \false, $sourceResource = null, $exclude = null)
+    public function import($resource, string $type = null, $ignoreErrors = \false, string $sourceResource = null, $exclude = null)
     {
         // this call collects root values
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();

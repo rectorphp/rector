@@ -39,7 +39,7 @@ final class DeferredContent
     }
     public function addSetup(string $method, $argument) : void
     {
-        $argument = \json_encode($argument, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
+        $argument = \json_encode($argument, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_INVALID_UTF8_SUBSTITUTE);
         $item =& $this->getItems('setup')[$this->requestId];
         $item['code'] = ($item['code'] ?? '') . "{$method}({$argument});\n";
         $item['time'] = \time();

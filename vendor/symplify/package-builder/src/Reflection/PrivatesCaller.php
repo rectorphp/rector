@@ -39,10 +39,7 @@ final class PrivatesCaller
         $methodReflection->invokeArgs($object, [&$argument]);
         return $argument;
     }
-    /**
-     * @param object $object
-     */
-    private function createAccessibleMethodReflection($object, string $methodName) : \ReflectionMethod
+    private function createAccessibleMethodReflection(object $object, string $methodName) : \ReflectionMethod
     {
         $reflectionMethod = new \ReflectionMethod(\get_class($object), $methodName);
         $reflectionMethod->setAccessible(\true);

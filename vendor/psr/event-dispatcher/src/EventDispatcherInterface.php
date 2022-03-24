@@ -17,5 +17,5 @@ interface EventDispatcherInterface
      * @return object
      *   The Event that was passed, now modified by listeners.
      */
-    public function dispatch($event);
+    public function dispatch(object $event);
 }

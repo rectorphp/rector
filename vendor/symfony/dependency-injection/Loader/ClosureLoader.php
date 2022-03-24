@@ -31,9 +31,8 @@ class ClosureLoader extends \RectorPrefix20220324\Symfony\Component\Config\Loade
      * {@inheritdoc}
      * @param mixed $resource
      * @return mixed
-     * @param string|null $type
      */
-    public function load($resource, $type = null)
+    public function load($resource, string $type = null)
     {
         return $resource($this->container, $this->env);
     }

@@ -207,7 +207,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20220324\Symfony\Compo
             throw new \RectorPrefix20220324\Symfony\Component\String\Exception\InvalidArgumentException($m);
         });
         try {
-            if (\false === $match($regexp . 'u', $this->string, $matches, $flags, $offset)) {
+            if (\false === $match($regexp . 'u', $this->string, $matches, $flags | \PREG_UNMATCHED_AS_NULL, $offset)) {
                 $lastError = \preg_last_error();
                 foreach (\get_defined_constants(\true)['pcre'] as $k => $v) {
                     if ($lastError === $v && '_ERROR' === \substr($k, -6)) {
@@ -216,11 +216,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20220324\Symfony\Compo
                 }
                 throw new \RectorPrefix20220324\Symfony\Component\String\Exception\RuntimeException('Matching failed with unknown error code.');
             }
-            \array_walk_recursive($matches, function (&$value) {
-                if ($value === '') {
-                    $value = null;
-                }
-            });
         } finally {
             \restore_error_handler();
         }

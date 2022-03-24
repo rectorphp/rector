@@ -40,9 +40,8 @@ class DescriptorHelper extends \RectorPrefix20220324\Symfony\Component\Console\H
      * * raw_text: boolean, sets output type as raw
      *
      * @throws InvalidArgumentException when the given format is not supported
-     * @param object|null $object
      */
-    public function describe(\RectorPrefix20220324\Symfony\Component\Console\Output\OutputInterface $output, $object, array $options = [])
+    public function describe(\RectorPrefix20220324\Symfony\Component\Console\Output\OutputInterface $output, ?object $object, array $options = [])
     {
         $options = \array_merge(['raw_text' => \false, 'format' => 'txt'], $options);
         if (!isset($this->descriptors[$options['format']])) {

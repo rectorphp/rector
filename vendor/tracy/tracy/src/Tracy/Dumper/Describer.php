@@ -134,10 +134,7 @@ final class Describer
         }
         return $res ?? $items;
     }
-    /**
-     * @param object $obj
-     */
-    private function describeObject($obj, int $depth = 0) : \RectorPrefix20220324\Tracy\Dumper\Value
+    private function describeObject(object $obj, int $depth = 0) : \RectorPrefix20220324\Tracy\Dumper\Value
     {
         $id = \spl_object_id($obj);
         $value =& $this->snapshot[$id];
@@ -205,10 +202,7 @@ final class Describer
         $class = $class ?? $value->value;
         $value->items[] = [$this->describeKey($k), $type !== \RectorPrefix20220324\Tracy\Dumper\Value::PROP_VIRTUAL && $this->isSensitive($k, $v, $class) ? new \RectorPrefix20220324\Tracy\Dumper\Value(\RectorPrefix20220324\Tracy\Dumper\Value::TYPE_TEXT, self::hideValue($v)) : $this->describeVar($v, $value->depth + 1, $refId), $type === \RectorPrefix20220324\Tracy\Dumper\Value::PROP_PRIVATE ? $class : $type] + ($refId ? [3 => $refId] : []);
     }
-    /**
-     * @param object $obj
-     */
-    private function exposeObject($obj, \RectorPrefix20220324\Tracy\Dumper\Value $value) : ?array
+    private function exposeObject(object $obj, \RectorPrefix20220324\Tracy\Dumper\Value $value) : ?array
     {
         foreach ($this->objectExposers as $type => $dumper) {
             if (!$type || $obj instanceof $type) {

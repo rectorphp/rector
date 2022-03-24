@@ -55,8 +55,8 @@ final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCo
         $tcpConnector = new \RectorPrefix20220324\React\Socket\TcpConnector($streamSelectLoop);
         $promise = $tcpConnector->connect('127.0.0.1:' . $configuration->getParallelPort());
         $promise->then(function (\RectorPrefix20220324\React\Socket\ConnectionInterface $connection) use($parallelIdentifier, $configuration) : void {
-            $inDecoder = new \RectorPrefix20220324\Clue\React\NDJson\Decoder($connection, \true, 512, 0);
-            $outEncoder = new \RectorPrefix20220324\Clue\React\NDJson\Encoder($connection, 0);
+            $inDecoder = new \RectorPrefix20220324\Clue\React\NDJson\Decoder($connection, \true, 512, \JSON_INVALID_UTF8_IGNORE);
+            $outEncoder = new \RectorPrefix20220324\Clue\React\NDJson\Encoder($connection, \JSON_INVALID_UTF8_IGNORE);
             // handshake?
             $outEncoder->write([\RectorPrefix20220324\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20220324\Symplify\EasyParallel\Enum\Action::HELLO, \RectorPrefix20220324\Symplify\EasyParallel\Enum\ReactCommand::IDENTIFIER => $parallelIdentifier]);
             $this->workerRunner->run($outEncoder, $inDecoder, $configuration);

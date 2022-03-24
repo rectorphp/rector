@@ -30,9 +30,8 @@ abstract class Descriptor implements \RectorPrefix20220324\Symfony\Component\Con
     protected $output;
     /**
      * {@inheritdoc}
-     * @param object $object
      */
-    public function describe(\RectorPrefix20220324\Symfony\Component\Console\Output\OutputInterface $output, $object, array $options = [])
+    public function describe(\RectorPrefix20220324\Symfony\Component\Console\Output\OutputInterface $output, object $object, array $options = [])
     {
         $this->output = $output;
         switch (\true) {

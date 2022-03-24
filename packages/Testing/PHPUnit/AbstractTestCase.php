@@ -43,9 +43,9 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      *
      * @template T of object
      * @param class-string<T> $type
-     * @return object
+     * @return T
      */
-    protected function getService(string $type)
+    protected function getService(string $type) : object
     {
         if (self::$currentContainer === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException('First, create container with "bootWithConfigFileInfos([...])"');

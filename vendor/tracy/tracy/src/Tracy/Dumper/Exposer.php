@@ -14,10 +14,7 @@ use RectorPrefix20220324\Ds;
  */
 final class Exposer
 {
-    /**
-     * @param object $obj
-     */
-    public static function exposeObject($obj, \RectorPrefix20220324\Tracy\Dumper\Value $value, \RectorPrefix20220324\Tracy\Dumper\Describer $describer) : void
+    public static function exposeObject(object $obj, \RectorPrefix20220324\Tracy\Dumper\Value $value, \RectorPrefix20220324\Tracy\Dumper\Describer $describer) : void
     {
         $tmp = (array) $obj;
         $values = $tmp;

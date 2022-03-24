@@ -33,9 +33,8 @@ final class ParameterMergingPhpFileLoader extends \RectorPrefix20220324\Symfony\
      * @see https://github.com/symplify/symplify/pull/697
      * @param mixed $resource
      * @return mixed
-     * @param string|null $type
      */
-    public function load($resource, $type = null)
+    public function load($resource, string $type = null)
     {
         // get old parameters
         $parameterBag = $this->container->getParameterBag();

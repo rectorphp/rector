@@ -29,9 +29,8 @@ class DelegatingLoader extends \RectorPrefix20220324\Symfony\Component\Config\Lo
      * {@inheritdoc}
      * @param mixed $resource
      * @return mixed
-     * @param string|null $type
      */
-    public function load($resource, $type = null)
+    public function load($resource, string $type = null)
     {
         if (\false === ($loader = $this->resolver->resolve($resource, $type))) {
             throw new \RectorPrefix20220324\Symfony\Component\Config\Exception\LoaderLoadException($resource, null, 0, null, $type);

@@ -27,12 +27,7 @@ class Preg
         if (($flags & \PREG_OFFSET_CAPTURE) !== 0) {
             throw new \InvalidArgumentException('PREG_OFFSET_CAPTURE is not supported as it changes the type of $matches, use matchWithOffsets() instead');
         }
-        $result = \preg_match($pattern, $subject, $matches, $flags, $offset);
-        \array_walk_recursive($matches, function (&$value) {
-            if ($value === '') {
-                $value = null;
-            }
-        });
+        $result = \preg_match($pattern, $subject, $matches, $flags | \PREG_UNMATCHED_AS_NULL, $offset);
         if ($result === \false) {
             throw \RectorPrefix20220324\Composer\Pcre\PcreException::fromFunction('preg_match', $pattern);
         }
@@ -50,12 +45,7 @@ class Preg
      */
     public static function matchWithOffsets(string $pattern, string $subject, ?array &$matches, int $flags = 0, int $offset = 0) : int
     {
-        $result = \preg_match($pattern, $subject, $matches, $flags | \PREG_OFFSET_CAPTURE, $offset);
-        \array_walk_recursive($matches, function (&$value) {
-            if ($value === '') {
-                $value = null;
-            }
-        });
+        $result = \preg_match($pattern, $subject, $matches, $flags | \PREG_UNMATCHED_AS_NULL | \PREG_OFFSET_CAPTURE, $offset);
         if ($result === \false) {
             throw \RectorPrefix20220324\Composer\Pcre\PcreException::fromFunction('preg_match', $pattern);
         }
@@ -75,12 +65,7 @@ class Preg
         if (($flags & \PREG_SET_ORDER) !== 0) {
             throw new \InvalidArgumentException('PREG_SET_ORDER is not supported as it changes the type of $matches');
         }
-        $result = \preg_match_all($pattern, $subject, $matches, $flags, $offset);
-        \array_walk_recursive($matches, function (&$value) {
-            if ($value === '') {
-                $value = null;
-            }
-        });
+        $result = \preg_match_all($pattern, $subject, $matches, $flags | \PREG_UNMATCHED_AS_NULL, $offset);
         if ($result === \false || $result === null) {
             throw \RectorPrefix20220324\Composer\Pcre\PcreException::fromFunction('preg_match_all', $pattern);
         }
@@ -98,12 +83,7 @@ class Preg
      */
     public static function matchAllWithOffsets(string $pattern, string $subject, ?array &$matches, int $flags = 0, int $offset = 0) : int
     {
-        $result = \preg_match_all($pattern, $subject, $matches, $flags | \PREG_OFFSET_CAPTURE, $offset);
-        \array_walk_recursive($matches, function (&$value) {
-            if ($value === '') {
-                $value = null;
-            }
-        });
+        $result = \preg_match_all($pattern, $subject, $matches, $flags | \PREG_UNMATCHED_AS_NULL | \PREG_OFFSET_CAPTURE, $offset);
         if ($result === \false || $result === null) {
             throw \RectorPrefix20220324\Composer\Pcre\PcreException::fromFunction('preg_match_all', $pattern);
         }

@@ -16,10 +16,9 @@ final class PrivatesAccessor
      * @template T of object
      *
      * @param class-string<T> $valueClassName
-     * @return object
-     * @param object $object
+     * @return T
      */
-    public function getPrivatePropertyOfClass($object, string $propertyName, string $valueClassName)
+    public function getPrivatePropertyOfClass(object $object, string $propertyName, string $valueClassName) : object
     {
         $value = $this->getPrivateProperty($object, $propertyName);
         if ($value instanceof $valueClassName) {
@@ -30,9 +29,8 @@ final class PrivatesAccessor
     }
     /**
      * @return mixed
-     * @param object $object
      */
-    public function getPrivateProperty($object, string $propertyName)
+    public function getPrivateProperty(object $object, string $propertyName)
     {
         $propertyReflection = $this->resolvePropertyReflection($object, $propertyName);
         $propertyReflection->setAccessible(\true);
@@ -43,9 +41,8 @@ final class PrivatesAccessor
      *
      * @param class-string<T> $valueClassName
      * @param mixed $value
-     * @param object $object
      */
-    public function setPrivatePropertyOfClass($object, string $propertyName, $value, string $valueClassName) : void
+    public function setPrivatePropertyOfClass(object $object, string $propertyName, $value, string $valueClassName) : void
     {
         if ($value instanceof $valueClassName) {
             $this->setPrivateProperty($object, $propertyName, $value);
@@ -56,18 +53,14 @@ final class PrivatesAccessor
     }
     /**
      * @param mixed $value
-     * @param object $object
      */
-    public function setPrivateProperty($object, string $propertyName, $value) : void
+    public function setPrivateProperty(object $object, string $propertyName, $value) : void
     {
         $propertyReflection = $this->resolvePropertyReflection($object, $propertyName);
         $propertyReflection->setAccessible(\true);
         $propertyReflection->setValue($object, $value);
     }
-    /**
-     * @param object $object
-     */
-    private function resolvePropertyReflection($object, string $propertyName) : \ReflectionProperty
+    private function resolvePropertyReflection(object $object, string $propertyName) : \ReflectionProperty
     {
         if (\property_exists($object, $propertyName)) {
             return new \ReflectionProperty($object, $propertyName);
