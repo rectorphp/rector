@@ -3144,7 +3144,6 @@ return array(
     'Rector\\VendorLocker\\NodeVendorLocker\\PropertyTypeVendorLockResolver' => $baseDir . '/packages/VendorLocker/NodeVendorLocker/PropertyTypeVendorLockResolver.php',
     'Rector\\VendorLocker\\ParentClassMethodTypeOverrideGuard' => $baseDir . '/packages/VendorLocker/ParentClassMethodTypeOverrideGuard.php',
     'Rector\\VendorLocker\\VendorLockResolver' => $baseDir . '/packages/VendorLocker/VendorLockResolver.php',
-    'Rector\\VersionBonding\\Application\\MissedRectorDueVersionChecker' => $baseDir . '/packages/VersionBonding/Application/MissedRectorDueVersionChecker.php',
     'Rector\\VersionBonding\\Contract\\MinPhpVersionInterface' => $baseDir . '/packages/VersionBonding/Contract/MinPhpVersionInterface.php',
     'Rector\\VersionBonding\\PhpVersionedFilter' => $baseDir . '/packages/VersionBonding/PhpVersionedFilter.php',
     'Rector\\Visibility\\Rector\\ClassConst\\ChangeConstantVisibilityRector' => $baseDir . '/rules/Visibility/Rector/ClassConst/ChangeConstantVisibilityRector.php',

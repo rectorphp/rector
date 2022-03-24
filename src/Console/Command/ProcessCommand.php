@@ -11,7 +11,6 @@ use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
-use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
@@ -20,7 +19,6 @@ use Rector\Core\Validation\EmptyConfigurableRectorChecker;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
-use Rector\VersionBonding\Application\MissedRectorDueVersionChecker;
 use RectorPrefix20220324\Symfony\Component\Console\Application;
 use RectorPrefix20220324\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220324\Symfony\Component\Console\Input\InputInterface;
@@ -65,11 +63,6 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     private $dynamicSourceLocatorDecorator;
     /**
      * @readonly
-     * @var \Rector\VersionBonding\Application\MissedRectorDueVersionChecker
-     */
-    private $missedRectorDueVersionChecker;
-    /**
-     * @readonly
      * @var \Rector\Core\Validation\EmptyConfigurableRectorChecker
      */
     private $emptyConfigurableRectorChecker;
@@ -88,15 +81,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
      * @var \Rector\Core\Util\MemoryLimiter
      */
     private $memoryLimiter;
-    /**
-     * @var RectorInterface[]
-     * @readonly
-     */
-    private $rectors;
-    /**
-     * @param RectorInterface[] $rectors
-     */
-    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\VersionBonding\Application\MissedRectorDueVersionChecker $missedRectorDueVersionChecker, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\Util\MemoryLimiter $memoryLimiter, array $rectors)
+    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\Util\MemoryLimiter $memoryLimiter)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -105,12 +90,10 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->bootstrapFilesIncluder = $bootstrapFilesIncluder;
         $this->processResultFactory = $processResultFactory;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
-        $this->missedRectorDueVersionChecker = $missedRectorDueVersionChecker;
         $this->emptyConfigurableRectorChecker = $emptyConfigurableRectorChecker;
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->memoryLimiter = $memoryLimiter;
-        $this->rectors = $rectors;
         parent::__construct();
     }
     protected function configure() : void
@@ -136,10 +119,8 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->additionalAutoloader->autoloadInput($input);
         $this->additionalAutoloader->autoloadPaths();
         $paths = $configuration->getPaths();
-        // 0. add files and directories to static locator
+        // 1. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
-        // 1. inform user about non-runnable rules
-        $this->missedRectorDueVersionChecker->check($this->rectors);
         // 2. inform user about registering configurable rule without configuration
         $this->emptyConfigurableRectorChecker->check();
         // MAIN PHASE
