@@ -16,14 +16,9 @@ rm -rf composer.lock
 rm -rf vendor
 composer clear-cache
 
-# somehow needed now when downgrading ssch/typo3-rector
-composer require psr/http-message --ansi
-composer update --no-dev --ansi
+composer install --no-dev --ansi
 
 rsync --exclude rector-build -av * rector-build --quiet
-
-# back to original composer.json
-git checkout composer.json
 
 rm -rf rector-build/packages-tests rector-build/rules-tests rector-build/tests rector-build/bin/generate-changelog.php rector-build/bin/validate-phpstan-version.php
 

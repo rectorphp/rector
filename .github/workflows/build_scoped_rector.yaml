@@ -46,10 +46,7 @@ jobs:
                     COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
-            # somehow psr/http-message needed now when downgrading ssch/typo3-rector
-            -   run: |
-                    composer require psr/http-message --ansi
-                    composer update --no-dev --ansi
+            -   run: composer install --no-dev --ansi
 
             # early downgrade individual functions
             -   run: bin/rector process src/functions -c build/config/config-downgrade.php --ansi
