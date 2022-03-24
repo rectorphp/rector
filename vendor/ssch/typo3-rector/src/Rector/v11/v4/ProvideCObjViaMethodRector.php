@@ -13,8 +13,8 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
-use RectorPrefix20220323\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20220323\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix20220324\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20220324\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -87,11 +87,11 @@ CODE_SAMPLE
     }
     private function addSetContentObjectRendererMethod(\PhpParser\Node\Stmt\Class_ $node) : void
     {
-        $paramBuilder = new \RectorPrefix20220323\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder(self::COBJ);
+        $paramBuilder = new \RectorPrefix20220324\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder(self::COBJ);
         $paramBuilder->setType(new \PhpParser\Node\Name\FullyQualified('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'));
         $param = $paramBuilder->getNode();
         $propertyAssignNode = $this->nodeFactory->createPropertyAssignmentWithExpr(self::COBJ, new \PhpParser\Node\Expr\Variable(self::COBJ));
-        $classMethodBuilder = new \RectorPrefix20220323\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('setContentObjectRenderer');
+        $classMethodBuilder = new \RectorPrefix20220324\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('setContentObjectRenderer');
         $classMethodBuilder->addParam($param);
         $classMethodBuilder->addStmt($propertyAssignNode);
         $classMethodBuilder->makePublic();

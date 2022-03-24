@@ -31,7 +31,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220323\Symplify\Astral\PhpParser\SmartPhpParser;
+use RectorPrefix20220324\Symplify\Astral\PhpParser\SmartPhpParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * The nodes provided by this resolver is for read-only analysis only!
@@ -93,7 +93,7 @@ final class AstResolver
      * @var \Rector\Core\PhpParser\ClassLikeAstResolver
      */
     private $classLikeAstResolver;
-    public function __construct(\RectorPrefix20220323\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver)
+    public function __construct(\RectorPrefix20220324\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver)
     {
         $this->smartPhpParser = $smartPhpParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;

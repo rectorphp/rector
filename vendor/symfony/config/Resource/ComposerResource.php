@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220323\Symfony\Component\Config\Resource;
+namespace RectorPrefix20220324\Symfony\Component\Config\Resource;
 
 /**
  * ComposerResource tracks the PHP version and Composer dependencies.
@@ -17,7 +17,7 @@ namespace RectorPrefix20220323\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class ComposerResource implements \RectorPrefix20220323\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class ComposerResource implements \RectorPrefix20220324\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     /**
      * @var mixed[]
