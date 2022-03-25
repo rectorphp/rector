@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220324\Symplify\PackageBuilder\Reflection;
+namespace RectorPrefix20220325\Symplify\PackageBuilder\Reflection;
 
 use ReflectionProperty;
-use RectorPrefix20220324\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException;
-use RectorPrefix20220324\Symplify\PackageBuilder\Exception\MissingPrivatePropertyException;
+use RectorPrefix20220325\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException;
+use RectorPrefix20220325\Symplify\PackageBuilder\Exception\MissingPrivatePropertyException;
 /**
  * @api
  * @see \Symplify\PackageBuilder\Tests\Reflection\PrivatesAccessorTest
@@ -25,7 +25,7 @@ final class PrivatesAccessor
             return $value;
         }
         $errorMessage = \sprintf('The type "%s" is required, but "%s" type given', $valueClassName, \get_class($value));
-        throw new \RectorPrefix20220324\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException($errorMessage);
+        throw new \RectorPrefix20220325\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException($errorMessage);
     }
     /**
      * @return mixed
@@ -49,7 +49,7 @@ final class PrivatesAccessor
             return;
         }
         $errorMessage = \sprintf('The type "%s" is required, but "%s" type given', $valueClassName, \get_class($value));
-        throw new \RectorPrefix20220324\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException($errorMessage);
+        throw new \RectorPrefix20220325\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException($errorMessage);
     }
     /**
      * @param mixed $value
@@ -70,6 +70,6 @@ final class PrivatesAccessor
             return new \ReflectionProperty($parentClass, $propertyName);
         }
         $errorMessage = \sprintf('Property "$%s" was not found in "%s" class', $propertyName, \get_class($object));
-        throw new \RectorPrefix20220324\Symplify\PackageBuilder\Exception\MissingPrivatePropertyException($errorMessage);
+        throw new \RectorPrefix20220325\Symplify\PackageBuilder\Exception\MissingPrivatePropertyException($errorMessage);
     }
 }

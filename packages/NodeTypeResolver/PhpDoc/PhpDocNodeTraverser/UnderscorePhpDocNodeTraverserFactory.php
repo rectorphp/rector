@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser;
 
 use Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor;
-use RectorPrefix20220324\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220325\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class UnderscorePhpDocNodeTraverserFactory
 {
     /**
@@ -16,9 +16,9 @@ final class UnderscorePhpDocNodeTraverserFactory
     {
         $this->underscoreRenamePhpDocNodeVisitor = $underscoreRenamePhpDocNodeVisitor;
     }
-    public function create() : \RectorPrefix20220324\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser
+    public function create() : \RectorPrefix20220325\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser
     {
-        $phpDocNodeTraverser = new \RectorPrefix20220324\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20220325\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->addPhpDocNodeVisitor($this->underscoreRenamePhpDocNodeVisitor);
         return $phpDocNodeTraverser;
     }

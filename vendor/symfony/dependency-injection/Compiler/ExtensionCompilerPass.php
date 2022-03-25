@@ -8,24 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220324\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20220325\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20220324\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220325\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * A pass to automatically process extensions if they implement
  * CompilerPassInterface.
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
-class ExtensionCompilerPass implements \RectorPrefix20220324\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class ExtensionCompilerPass implements \RectorPrefix20220325\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function process(\RectorPrefix20220324\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(\RectorPrefix20220325\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         foreach ($container->getExtensions() as $extension) {
-            if (!$extension instanceof \RectorPrefix20220324\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface) {
+            if (!$extension instanceof \RectorPrefix20220325\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface) {
                 continue;
             }
             $extension->process($container);

@@ -14,8 +14,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use RectorPrefix20220324\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20220324\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20220325\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20220325\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 final class NodeFactory
 {
     /**
@@ -46,13 +46,13 @@ final class NodeFactory
     }
     public function createPublicMethod(string $methodName) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20220324\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($methodName);
+        $methodBuilder = new \RectorPrefix20220325\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($methodName);
         $methodBuilder->makePublic();
         return $methodBuilder->getNode();
     }
     public function createPrivateArrayProperty(string $propertyName) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20220324\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($propertyName);
+        $propertyBuilder = new \RectorPrefix20220325\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($propertyName);
         $propertyBuilder->makePrivate();
         $docContent = <<<'CODE_SAMPLE'
 /**
