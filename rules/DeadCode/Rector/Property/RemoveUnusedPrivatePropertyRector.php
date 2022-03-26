@@ -11,7 +11,7 @@ use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Removing\NodeManipulator\ComplexNodeRemover;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -46,7 +46,7 @@ final class RemoveUnusedPrivatePropertyRector extends AbstractRector implements 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused private properties', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -59,6 +59,10 @@ class SomeClass
 {
 }
 CODE_SAMPLE
+,
+                [
+                    self::REMOVE_ASSIGN_SIDE_EFFECT => true,
+                ]
             ),
         ]);
     }

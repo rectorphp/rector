@@ -3529,7 +3529,25 @@ Remove unused private method
 
 Remove unused private properties
 
+:wrench: **configure it!**
+
 - class: [`Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector`](../rules/DeadCode/Rector/Property/RemoveUnusedPrivatePropertyRector.php)
+
+```php
+use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(RemoveUnusedPrivatePropertyRector::class)
+        ->configure([
+            RemoveUnusedPrivatePropertyRector::REMOVE_ASSIGN_SIDE_EFFECT => true,
+        ]);
+};
+```
+
+↓
 
 ```diff
  class SomeClass
