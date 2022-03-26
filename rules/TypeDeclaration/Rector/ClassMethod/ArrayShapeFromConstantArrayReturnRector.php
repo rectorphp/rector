@@ -10,7 +10,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\Core\Rector\AbstractRector;
@@ -25,6 +28,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ArrayShapeFromConstantArrayReturnRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const SKIPPED_CHARS = [':', '@'];
+
     public function __construct(
         private readonly ClassMethodReturnTypeResolver $classMethodReturnTypeResolver,
         private readonly PhpDocTypeChanger $phpDocTypeChanger
@@ -91,8 +99,8 @@ CODE_SAMPLE
             return null;
         }
 
-        // empty array
-        if ($returnExprType->getKeyType() instanceof NeverType) {
+        $keyType = $returnExprType->getKeyType();
+        if ($this->shouldSkipKeyType($keyType)) {
             return null;
         }
 
@@ -122,5 +130,31 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    private function shouldSkipKeyType(Type $keyType): bool
+    {
+        // empty array
+        if ($keyType instanceof NeverType) {
+            return true;
+        }
+
+        $types = $keyType instanceof UnionType
+            ? $keyType->getTypes()
+            : [$keyType];
+
+        foreach ($types as $type) {
+            if (! $type instanceof ConstantStringType) {
+                continue;
+            }
+
+            foreach (self::SKIPPED_CHARS as $skippedChar) {
+                if (str_contains($type->getValue(), $skippedChar)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
