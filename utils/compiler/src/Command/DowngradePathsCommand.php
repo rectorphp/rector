@@ -41,7 +41,6 @@ final class DowngradePathsCommand extends Command
 
         $downgradePaths = array_merge([
             // must be separated to cover container get() trait + psr container contract get()
-            'src/functions',
             'config',
             'vendor/phpstan/phpdoc-parser/src',
             'vendor/symfony/dependency-injection',
