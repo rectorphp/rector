@@ -9,7 +9,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\Core\Rector\AbstractRector;
@@ -23,6 +26,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ArrayShapeFromConstantArrayReturnRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const SKIPPED_CHARS = [':', '@'];
     /**
      * @readonly
      * @var \Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver
@@ -89,8 +96,8 @@ CODE_SAMPLE
         if (!$returnExprType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return null;
         }
-        // empty array
-        if ($returnExprType->getKeyType() instanceof \PHPStan\Type\NeverType) {
+        $keyType = $returnExprType->getKeyType();
+        if ($this->shouldSkipKeyType($keyType)) {
             return null;
         }
         $returnType = $this->classMethodReturnTypeResolver->resolve($node, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));
@@ -110,5 +117,24 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    private function shouldSkipKeyType(\PHPStan\Type\Type $keyType) : bool
+    {
+        // empty array
+        if ($keyType instanceof \PHPStan\Type\NeverType) {
+            return \true;
+        }
+        $types = $keyType instanceof \PHPStan\Type\UnionType ? $keyType->getTypes() : [$keyType];
+        foreach ($types as $type) {
+            if (!$type instanceof \PHPStan\Type\Constant\ConstantStringType) {
+                continue;
+            }
+            foreach (self::SKIPPED_CHARS as $skippedChar) {
+                if (\strpos($type->getValue(), $skippedChar) !== \false) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
 }
