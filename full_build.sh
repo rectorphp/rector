@@ -18,8 +18,6 @@ composer clear-cache
 
 composer install --no-dev --ansi
 
-bin/rector process src/functions -c build/config/config-downgrade.php --ansi
-
 rsync --exclude rector-build -av * rector-build --quiet
 
 rm -rf rector-build/packages-tests rector-build/rules-tests rector-build/tests rector-build/bin/generate-changelog.php rector-build/bin/validate-phpstan-version.php
