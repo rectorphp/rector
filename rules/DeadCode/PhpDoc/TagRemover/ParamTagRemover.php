@@ -9,7 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
-use RectorPrefix20220325\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220326\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class ParamTagRemover
 {
     /**
@@ -24,7 +24,7 @@ final class ParamTagRemover
     public function removeParamTagsIfUseless(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
         $hasChanged = \false;
-        $phpDocNodeTraverser = new \RectorPrefix20220325\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20220326\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $docNode) use($functionLike, $phpDocInfo, &$hasChanged) : ?int {
             if (!$docNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
                 return null;
@@ -41,7 +41,7 @@ final class ParamTagRemover
             }
             $phpDocInfo->markAsChanged();
             $hasChanged = \true;
-            return \RectorPrefix20220325\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+            return \RectorPrefix20220326\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
         });
         return $hasChanged;
     }

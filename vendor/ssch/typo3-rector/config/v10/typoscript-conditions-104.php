@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220325;
+namespace RectorPrefix20220326;
 
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\PIDupinRootlineConditionMatcher;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

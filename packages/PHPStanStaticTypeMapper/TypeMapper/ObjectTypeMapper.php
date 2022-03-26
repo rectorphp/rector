@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
-use RectorPrefix20220325\Nette\Utils\Strings;
+use RectorPrefix20220326\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -23,7 +23,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20220325\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220326\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ObjectType>
  */
@@ -81,7 +81,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
             $className = $type->getClassName();
             if (\strncmp($className, '\\', \strlen('\\')) === 0) {
                 // skip leading \
-                return new \PhpParser\Node\Name\FullyQualified(\RectorPrefix20220325\Nette\Utils\Strings::substring($className, 1));
+                return new \PhpParser\Node\Name\FullyQualified(\RectorPrefix20220326\Nette\Utils\Strings::substring($className, 1));
             }
             return new \PhpParser\Node\Name\FullyQualified($className);
         }
