@@ -16,9 +16,10 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix20220326\Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver;
+use RectorPrefix20220327\Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -27,9 +28,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArrayShapeFromConstantArrayReturnRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var string[]
+     * @see https://regex101.com/r/WvUD0m/2
+     * @var string
      */
-    private const SKIPPED_CHARS = [':', '@'];
+    private const SKIPPED_CHAR_REGEX = '#\\W#u';
     /**
      * @readonly
      * @var \Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver
@@ -40,7 +42,7 @@ final class ArrayShapeFromConstantArrayReturnRector extends \Rector\Core\Rector\
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(\RectorPrefix20220326\Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver $classMethodReturnTypeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(\RectorPrefix20220327\Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver $classMethodReturnTypeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->classMethodReturnTypeResolver = $classMethodReturnTypeResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
@@ -129,10 +131,12 @@ CODE_SAMPLE
             if (!$type instanceof \PHPStan\Type\Constant\ConstantStringType) {
                 continue;
             }
-            foreach (self::SKIPPED_CHARS as $skippedChar) {
-                if (\strpos($type->getValue(), $skippedChar) !== \false) {
-                    return \true;
-                }
+            $value = $type->getValue();
+            if (\trim($value) === '') {
+                return \true;
+            }
+            if (\Rector\Core\Util\StringUtils::isMatch($value, self::SKIPPED_CHAR_REGEX)) {
+                return \true;
             }
         }
         return \false;

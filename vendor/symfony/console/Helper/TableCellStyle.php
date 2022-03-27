@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220326\Symfony\Component\Console\Helper;
+namespace RectorPrefix20220327\Symfony\Component\Console\Helper;
 
-use RectorPrefix20220326\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20220327\Symfony\Component\Console\Exception\InvalidArgumentException;
 /**
  * @author Yewhen Khoptynskyi <khoptynskyi@gmail.com>
  */
@@ -26,10 +26,10 @@ class TableCellStyle
     public function __construct(array $options = [])
     {
         if ($diff = \array_diff(\array_keys($options), \array_keys($this->options))) {
-            throw new \RectorPrefix20220326\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The TableCellStyle does not support the following options: \'%s\'.', \implode('\', \'', $diff)));
+            throw new \RectorPrefix20220327\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The TableCellStyle does not support the following options: \'%s\'.', \implode('\', \'', $diff)));
         }
         if (isset($options['align']) && !\array_key_exists($options['align'], self::ALIGN_MAP)) {
-            throw new \RectorPrefix20220326\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Wrong align value. Value must be following: \'%s\'.', \implode('\', \'', \array_keys(self::ALIGN_MAP))));
+            throw new \RectorPrefix20220327\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Wrong align value. Value must be following: \'%s\'.', \implode('\', \'', \array_keys(self::ALIGN_MAP))));
         }
         $this->options = \array_merge($this->options, $options);
     }

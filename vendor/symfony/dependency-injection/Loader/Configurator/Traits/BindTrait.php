@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220326\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
+namespace RectorPrefix20220327\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
 
-use RectorPrefix20220326\Symfony\Component\DependencyInjection\Argument\BoundArgument;
-use RectorPrefix20220326\Symfony\Component\DependencyInjection\Loader\Configurator\DefaultsConfigurator;
-use RectorPrefix20220326\Symfony\Component\DependencyInjection\Loader\Configurator\InstanceofConfigurator;
+use RectorPrefix20220327\Symfony\Component\DependencyInjection\Argument\BoundArgument;
+use RectorPrefix20220327\Symfony\Component\DependencyInjection\Loader\Configurator\DefaultsConfigurator;
+use RectorPrefix20220327\Symfony\Component\DependencyInjection\Loader\Configurator\InstanceofConfigurator;
 trait BindTrait
 {
     /**
@@ -31,8 +31,8 @@ trait BindTrait
     {
         $valueOrRef = static::processValue($valueOrRef, \true);
         $bindings = $this->definition->getBindings();
-        $type = $this instanceof \RectorPrefix20220326\Symfony\Component\DependencyInjection\Loader\Configurator\DefaultsConfigurator ? \RectorPrefix20220326\Symfony\Component\DependencyInjection\Argument\BoundArgument::DEFAULTS_BINDING : ($this instanceof \RectorPrefix20220326\Symfony\Component\DependencyInjection\Loader\Configurator\InstanceofConfigurator ? \RectorPrefix20220326\Symfony\Component\DependencyInjection\Argument\BoundArgument::INSTANCEOF_BINDING : \RectorPrefix20220326\Symfony\Component\DependencyInjection\Argument\BoundArgument::SERVICE_BINDING);
-        $bindings[$nameOrFqcn] = new \RectorPrefix20220326\Symfony\Component\DependencyInjection\Argument\BoundArgument($valueOrRef, \true, $type, $this->path ?? null);
+        $type = $this instanceof \RectorPrefix20220327\Symfony\Component\DependencyInjection\Loader\Configurator\DefaultsConfigurator ? \RectorPrefix20220327\Symfony\Component\DependencyInjection\Argument\BoundArgument::DEFAULTS_BINDING : ($this instanceof \RectorPrefix20220327\Symfony\Component\DependencyInjection\Loader\Configurator\InstanceofConfigurator ? \RectorPrefix20220327\Symfony\Component\DependencyInjection\Argument\BoundArgument::INSTANCEOF_BINDING : \RectorPrefix20220327\Symfony\Component\DependencyInjection\Argument\BoundArgument::SERVICE_BINDING);
+        $bindings[$nameOrFqcn] = new \RectorPrefix20220327\Symfony\Component\DependencyInjection\Argument\BoundArgument($valueOrRef, \true, $type, $this->path ?? null);
         $this->definition->setBindings($bindings);
         return $this;
     }

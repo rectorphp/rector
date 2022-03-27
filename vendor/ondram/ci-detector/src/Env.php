@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220326\OndraM\CiDetector;
+namespace RectorPrefix20220327\OndraM\CiDetector;
 
 /**
  * Encapsulate access to the environment variables
