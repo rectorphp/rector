@@ -77,15 +77,15 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->isPrivate()) {
-            return null;
-        }
-
-        if ($node->isProtected()) {
+        if (! $node->isPublic()) {
             return null;
         }
 
         if ($node->isFinal()) {
+            return null;
+        }
+
+        if ($this->classAnalyzer->isAnonymousClass($class)) {
             return null;
         }
 
@@ -104,10 +104,6 @@ CODE_SAMPLE
 
     private function isClassHasChildren(Class_ $class): bool
     {
-        if ($this->classAnalyzer->isAnonymousClass($class)) {
-            return false;
-        }
-
         $className = (string) $this->nodeNameResolver->getName($class);
         if (! $this->reflectionProvider->hasClass($className)) {
             return false;
