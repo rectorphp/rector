@@ -1,4 +1,4 @@
-# 506 Rules Overview
+# 507 Rules Overview
 
 <br>
 
@@ -66,7 +66,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (15)
+- [Php74](#php74) (16)
 
 - [Php80](#php80) (17)
 
@@ -7837,9 +7837,28 @@ Change `filter_var()` with slash escaping to `addslashes()`
 
 <br>
 
+### GetCalledClassToSelfClassRector
+
+Change `get_called_class()` to self::class on final class
+
+- class: [`Rector\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector`](../rules/Php74/Rector/FuncCall/GetCalledClassToSelfClassRector.php)
+
+```diff
+ final class SomeClass
+ {
+    public function callOnMe()
+    {
+-       var_dump(get_called_class());
++       var_dump(self::class);
+    }
+ }
+```
+
+<br>
+
 ### GetCalledClassToStaticClassRector
 
-Change `get_called_class()` to static::class
+Change `get_called_class()` to static::class on non-final class
 
 - class: [`Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector`](../rules/Php74/Rector/FuncCall/GetCalledClassToStaticClassRector.php)
 

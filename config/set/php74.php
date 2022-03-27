@@ -9,6 +9,7 @@ use Rector\Php74\Rector\Double\RealToFloatTypeCastRector;
 use Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;
 use Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector;
 use Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector;
+use Rector\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector;
 use Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector;
 use Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;
 use Rector\Php74\Rector\Function_\ReservedFnFunctionRector;
@@ -40,6 +41,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FilterVarToAddSlashesRector::class);
 
     $services->set(ExportToReflectionFunctionRector::class);
+
+    $services->set(GetCalledClassToSelfClassRector::class);
 
     $services->set(GetCalledClassToStaticClassRector::class);
 
