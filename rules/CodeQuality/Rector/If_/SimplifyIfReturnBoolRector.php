@@ -78,7 +78,14 @@ CODE_SAMPLE
         if ($this->valueResolver->isTrue($innerIfInnerNode)) {
             $newReturnNode = $this->processReturnTrue($node, $nextNode);
         } elseif ($this->valueResolver->isFalse($innerIfInnerNode)) {
-            $newReturnNode = $this->processReturnFalse($node, $nextNode);
+            /** @var Expr $expr */
+            $expr = $nextNode->expr;
+            if ($node->cond instanceof NotIdentical && $this->valueResolver->isTrue($expr)) {
+                $node->cond = new Identical($node->cond->left, $node->cond->right);
+                $newReturnNode = $this->processReturnTrue($node, $nextNode);
+            } else {
+                $newReturnNode = $this->processReturnFalse($node, $nextNode);
+            }
         } else {
             return null;
         }
@@ -122,7 +129,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($nextNode->expr === null) {
+        if (! $nextNode->expr instanceof Expr) {
             return true;
         }
 
@@ -136,7 +143,7 @@ CODE_SAMPLE
             return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
 
-        return true;
+        return ! $if->cond instanceof NotIdentical;
     }
 
     private function processReturnTrue(If_ $if, Return_ $nextReturnNode): Return_

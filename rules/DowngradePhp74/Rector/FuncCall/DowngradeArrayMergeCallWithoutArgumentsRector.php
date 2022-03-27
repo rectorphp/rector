@@ -78,10 +78,6 @@ CODE_SAMPLE
         }
 
         // If param is provided, do nothing
-        if ($funcCall->args !== []) {
-            return false;
-        }
-
-        return true;
+        return $funcCall->args === [];
     }
 }

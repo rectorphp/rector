@@ -101,10 +101,6 @@ final class ConditionSearcher
             return false;
         }
 
-        if ($variable->name !== $assignVar->name) {
-            return false;
-        }
-
-        return true;
+        return $variable->name === $assignVar->name;
     }
 }
