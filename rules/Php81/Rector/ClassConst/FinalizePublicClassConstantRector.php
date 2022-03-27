@@ -84,13 +84,13 @@ CODE_SAMPLE
         if ($class->isFinal()) {
             return null;
         }
-        if ($node->isPrivate()) {
-            return null;
-        }
-        if ($node->isProtected()) {
+        if (!$node->isPublic()) {
             return null;
         }
         if ($node->isFinal()) {
+            return null;
+        }
+        if ($this->classAnalyzer->isAnonymousClass($class)) {
             return null;
         }
         if ($this->isClassHasChildren($class)) {
@@ -105,9 +105,6 @@ CODE_SAMPLE
     }
     private function isClassHasChildren(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
-        if ($this->classAnalyzer->isAnonymousClass($class)) {
-            return \false;
-        }
         $className = (string) $this->nodeNameResolver->getName($class);
         if (!$this->reflectionProvider->hasClass($className)) {
             return \false;

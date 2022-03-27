@@ -10,6 +10,7 @@ use Rector\Php74\Rector\Double\RealToFloatTypeCastRector;
 use Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;
 use Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector;
 use Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector;
+use Rector\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector;
 use Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector;
 use Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;
 use Rector\Php74\Rector\Function_\ReservedFnFunctionRector;
@@ -34,6 +35,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector::class);
     $services->set(\Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector::class);
     $services->set(\Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector::class);
+    $services->set(\Rector\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector::class);
     $services->set(\Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector::class);
     $services->set(\Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector::class);
     $services->set(\Rector\Php74\Rector\Double\RealToFloatTypeCastRector::class);

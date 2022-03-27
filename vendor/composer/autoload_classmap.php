@@ -2625,6 +2625,7 @@ return array(
     'Rector\\Php74\\Rector\\FuncCall\\ArrayKeyExistsOnPropertyRector' => $baseDir . '/rules/Php74/Rector/FuncCall/ArrayKeyExistsOnPropertyRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\ArraySpreadInsteadOfArrayMergeRector' => $baseDir . '/rules/Php74/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\FilterVarToAddSlashesRector' => $baseDir . '/rules/Php74/Rector/FuncCall/FilterVarToAddSlashesRector.php',
+    'Rector\\Php74\\Rector\\FuncCall\\GetCalledClassToSelfClassRector' => $baseDir . '/rules/Php74/Rector/FuncCall/GetCalledClassToSelfClassRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\GetCalledClassToStaticClassRector' => $baseDir . '/rules/Php74/Rector/FuncCall/GetCalledClassToStaticClassRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\MbStrrposEncodingArgumentPositionRector' => $baseDir . '/rules/Php74/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php',
     'Rector\\Php74\\Rector\\Function_\\ReservedFnFunctionRector' => $baseDir . '/rules/Php74/Rector/Function_/ReservedFnFunctionRector.php',
