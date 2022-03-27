@@ -17,6 +17,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver;
@@ -29,9 +30,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArrayShapeFromConstantArrayReturnRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @see https://regex101.com/r/WvUD0m/2
+     * @var string
      */
-    private const SKIPPED_CHARS = [':', '@'];
+    private const SKIPPED_CHAR_REGEX = '#\W#u';
 
     public function __construct(
         private readonly ClassMethodReturnTypeResolver $classMethodReturnTypeResolver,
@@ -148,10 +150,14 @@ CODE_SAMPLE
                 continue;
             }
 
-            foreach (self::SKIPPED_CHARS as $skippedChar) {
-                if (str_contains($type->getValue(), $skippedChar)) {
-                    return true;
-                }
+            $value = $type->getValue();
+
+            if (trim($value) === '') {
+                return true;
+            }
+
+            if (StringUtils::isMatch($value, self::SKIPPED_CHAR_REGEX)) {
+                return true;
             }
         }
 
