@@ -114,10 +114,7 @@ CODE_SAMPLE
             if ($classLike->implements !== []) {
                 return \false;
             }
-            if ($classLike->extends !== null) {
-                return \false;
-            }
-            return \true;
+            return $classLike->extends === null;
         }
         // skip interface without parents
         /** @var Interface_ $classLike */

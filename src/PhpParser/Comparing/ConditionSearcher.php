@@ -90,9 +90,6 @@ final class ConditionSearcher
         if (!$assignVar instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
-        if ($variable->name !== $assignVar->name) {
-            return \false;
-        }
-        return \true;
+        return $variable->name === $assignVar->name;
     }
 }

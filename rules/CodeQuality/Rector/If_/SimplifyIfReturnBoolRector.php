@@ -71,7 +71,14 @@ CODE_SAMPLE
         if ($this->valueResolver->isTrue($innerIfInnerNode)) {
             $newReturnNode = $this->processReturnTrue($node, $nextNode);
         } elseif ($this->valueResolver->isFalse($innerIfInnerNode)) {
-            $newReturnNode = $this->processReturnFalse($node, $nextNode);
+            /** @var Expr $expr */
+            $expr = $nextNode->expr;
+            if ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical && $this->valueResolver->isTrue($expr)) {
+                $node->cond = new \PhpParser\Node\Expr\BinaryOp\Identical($node->cond->left, $node->cond->right);
+                $newReturnNode = $this->processReturnTrue($node, $nextNode);
+            } else {
+                $newReturnNode = $this->processReturnFalse($node, $nextNode);
+            }
         } else {
             return null;
         }
@@ -104,7 +111,7 @@ CODE_SAMPLE
         if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_) {
             return \true;
         }
-        if ($nextNode->expr === null) {
+        if (!$nextNode->expr instanceof \PhpParser\Node\Expr) {
             return \true;
         }
         // negate + negate → skip for now
@@ -115,7 +122,7 @@ CODE_SAMPLE
         if (\strpos($condString, '!=') === \false) {
             return !$this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
-        return \true;
+        return !$if->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical;
     }
     private function processReturnTrue(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Stmt\Return_ $nextReturnNode) : \PhpParser\Node\Stmt\Return_
     {
