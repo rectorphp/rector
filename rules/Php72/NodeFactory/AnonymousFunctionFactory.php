@@ -49,7 +49,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use ReflectionParameter;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class AnonymousFunctionFactory
 {
@@ -68,7 +70,8 @@ final class AnonymousFunctionFactory
         private readonly SimplePhpParser $simplePhpParser,
         private readonly NodeComparator $nodeComparator,
         private readonly AstResolver $astResolver,
-        private readonly BetterStandardPrinter $betterStandardPrinter
+        private readonly BetterStandardPrinter $betterStandardPrinter,
+        private readonly PrivatesAccessor $privatesAccessor
     ) {
     }
 
@@ -330,6 +333,7 @@ final class AnonymousFunctionFactory
             $param = new Param(new Variable($parameterReflection->getName()));
             $this->applyParamType($param, $parameterReflection);
             $this->applyParamDefaultValue($param, $parameterReflection, $key, $classMethod);
+            $this->applyParamByReference($param, $parameterReflection);
 
             $params[] = $param;
         }
@@ -347,6 +351,13 @@ final class AnonymousFunctionFactory
             $parameterReflection->getType(),
             TypeKind::PARAM()
         );
+    }
+
+    private function applyParamByReference(Param $param, ParameterReflection $parameterReflection): void
+    {
+        /** @var ReflectionParameter $reflection */
+        $reflection = $this->privatesAccessor->getPrivateProperty($parameterReflection, 'reflection');
+        $param->byRef = $reflection->isPassedByReference();
     }
 
     private function applyParamDefaultValue(

@@ -125,7 +125,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedArgOrParamOrder);
+        $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->getArgs(), $expectedArgOrParamOrder);
 
         return $new;
     }
@@ -143,7 +143,7 @@ CODE_SAMPLE
         }
 
         $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder(
-            $methodCall->args,
+            $methodCall->getArgs(),
             $expectedArgOrParamOrder
         );
 
