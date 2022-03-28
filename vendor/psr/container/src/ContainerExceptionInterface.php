@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220327\Psr\Container;
+namespace RectorPrefix20220328\Psr\Container;
 
 use Throwable;
 /**

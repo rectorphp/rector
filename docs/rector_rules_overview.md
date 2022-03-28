@@ -54,7 +54,7 @@
 
 - [Php54](#php54) (2)
 
-- [Php55](#php55) (3)
+- [Php55](#php55) (5)
 
 - [Php56](#php56) (2)
 
@@ -66,7 +66,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (16)
+- [Php74](#php74) (14)
 
 - [Php80](#php80) (17)
 
@@ -6740,6 +6740,44 @@ Change `__CLASS__` to self::class
 
 <br>
 
+### GetCalledClassToSelfClassRector
+
+Change `get_called_class()` to self::class on final class
+
+- class: [`Rector\Php55\Rector\FuncCall\GetCalledClassToSelfClassRector`](../rules/Php55/Rector/FuncCall/GetCalledClassToSelfClassRector.php)
+
+```diff
+ final class SomeClass
+ {
+    public function callOnMe()
+    {
+-       var_dump(get_called_class());
++       var_dump(self::class);
+    }
+ }
+```
+
+<br>
+
+### GetCalledClassToStaticClassRector
+
+Change `get_called_class()` to static::class on non-final class
+
+- class: [`Rector\Php55\Rector\FuncCall\GetCalledClassToStaticClassRector`](../rules/Php55/Rector/FuncCall/GetCalledClassToStaticClassRector.php)
+
+```diff
+ class SomeClass
+ {
+    public function callOnMe()
+    {
+-       var_dump(get_called_class());
++       var_dump(static::class);
+    }
+ }
+```
+
+<br>
+
 ### PregReplaceEModifierRector
 
 The /e modifier is no longer supported, use preg_replace_callback instead
@@ -7833,44 +7871,6 @@ Change `filter_var()` with slash escaping to `addslashes()`
  $var= "Satya's here!";
 -filter_var($var, FILTER_SANITIZE_MAGIC_QUOTES);
 +addslashes($var);
-```
-
-<br>
-
-### GetCalledClassToSelfClassRector
-
-Change `get_called_class()` to self::class on final class
-
-- class: [`Rector\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector`](../rules/Php74/Rector/FuncCall/GetCalledClassToSelfClassRector.php)
-
-```diff
- final class SomeClass
- {
-    public function callOnMe()
-    {
--       var_dump(get_called_class());
-+       var_dump(self::class);
-    }
- }
-```
-
-<br>
-
-### GetCalledClassToStaticClassRector
-
-Change `get_called_class()` to static::class on non-final class
-
-- class: [`Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector`](../rules/Php74/Rector/FuncCall/GetCalledClassToStaticClassRector.php)
-
-```diff
- class SomeClass
- {
-    public function callOnMe()
-    {
--       var_dump(get_called_class());
-+       var_dump(static::class);
-    }
- }
 ```
 
 <br>

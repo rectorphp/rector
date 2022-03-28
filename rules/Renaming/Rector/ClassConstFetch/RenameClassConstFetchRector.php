@@ -14,7 +14,7 @@ use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220327\Webmozart\Assert\Assert;
+use RectorPrefix20220328\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector\RenameClassConstFetchRectorTest
  */
@@ -68,7 +68,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220327\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\Contract\RenameClassConstFetchInterface::class);
+        \RectorPrefix20220328\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\Contract\RenameClassConstFetchInterface::class);
         $this->renameClassConstFetches = $configuration;
     }
     private function createClassAndConstFetch(\Rector\Renaming\ValueObject\RenameClassAndConstFetch $renameClassAndConstFetch) : \PhpParser\Node\Expr\ClassConstFetch

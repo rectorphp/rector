@@ -4,6 +4,11 @@ declare (strict_types=1);
 namespace PHPStan\PhpDocParser\Parser;
 
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use function array_pop;
+use function assert;
+use function count;
+use function in_array;
+use function strlen;
 class TokenIterator
 {
     /** @var mixed[][] */
@@ -50,8 +55,7 @@ class TokenIterator
         return ($this->tokens[$this->index - 1][\PHPStan\PhpDocParser\Lexer\Lexer::TYPE_OFFSET] ?? -1) === \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_HORIZONTAL_WS;
     }
     /**
-     * @param  int $tokenType
-     * @throws \PHPStan\PhpDocParser\Parser\ParserException
+     * @throws ParserException
      */
     public function consumeTokenType(int $tokenType) : void
     {
@@ -133,8 +137,7 @@ class TokenIterator
         $this->index = $index;
     }
     /**
-     * @param  int $expectedTokenType
-     * @throws \PHPStan\PhpDocParser\Parser\ParserException
+     * @throws ParserException
      */
     private function throwError(int $expectedTokenType) : void
     {

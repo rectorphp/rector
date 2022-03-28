@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Catch_;
 
-use RectorPrefix20220327\Nette\Utils\Strings;
+use RectorPrefix20220328\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -100,7 +100,7 @@ CODE_SAMPLE
         if (\is_string($aliasName)) {
             $typeShortName = $aliasName;
         }
-        $newVariableName = \RectorPrefix20220327\Nette\Utils\Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, function (array $matches) : string {
+        $newVariableName = \RectorPrefix20220328\Nette\Utils\Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, function (array $matches) : string {
             $output = '';
             $output .= isset($matches[1]) ? \strtolower($matches[1]) : '';
             $output .= $matches[2] ?? '';

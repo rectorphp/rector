@@ -9,15 +9,15 @@ use Rector\RectorGenerator\Generator\RectorGenerator;
 use Rector\RectorGenerator\Provider\RectorRecipeProvider;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\NamePattern;
-use RectorPrefix20220327\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220327\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220327\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220327\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220328\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220328\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220328\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220328\Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\RectorGenerator\Tests\RectorGenerator\GenerateCommandInteractiveModeTest
  */
-final class GenerateCommand extends \RectorPrefix20220327\Symfony\Component\Console\Command\Command
+final class GenerateCommand extends \RectorPrefix20220328\Symfony\Component\Console\Command\Command
 {
     /**
      * @readonly
@@ -44,7 +44,7 @@ final class GenerateCommand extends \RectorPrefix20220327\Symfony\Component\Cons
      * @var \Rector\RectorGenerator\Generator\RectorGenerator
      */
     private $rectorGenerator;
-    public function __construct(\Rector\RectorGenerator\FileSystem\ConfigFilesystem $configFilesystem, \RectorPrefix20220327\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\RectorGenerator\TemplateVariablesFactory $templateVariablesFactory, \Rector\RectorGenerator\Provider\RectorRecipeProvider $rectorRecipeProvider, \Rector\RectorGenerator\Generator\RectorGenerator $rectorGenerator)
+    public function __construct(\Rector\RectorGenerator\FileSystem\ConfigFilesystem $configFilesystem, \RectorPrefix20220328\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\RectorGenerator\TemplateVariablesFactory $templateVariablesFactory, \Rector\RectorGenerator\Provider\RectorRecipeProvider $rectorRecipeProvider, \Rector\RectorGenerator\Generator\RectorGenerator $rectorGenerator)
     {
         $this->configFilesystem = $configFilesystem;
         $this->symfonyStyle = $symfonyStyle;
@@ -58,7 +58,7 @@ final class GenerateCommand extends \RectorPrefix20220327\Symfony\Component\Cons
         $this->setName('generate');
         $this->setDescription('[DEV] Create a new Rector, in a proper location, with new tests');
     }
-    protected function execute(\RectorPrefix20220327\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220327\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(\RectorPrefix20220328\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220328\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $rectorRecipe = $this->rectorRecipeProvider->provide();
         $targetDirectory = \getcwd();

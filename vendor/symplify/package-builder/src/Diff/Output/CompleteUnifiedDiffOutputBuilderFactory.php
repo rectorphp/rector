@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220327\Symplify\PackageBuilder\Diff\Output;
+namespace RectorPrefix20220328\Symplify\PackageBuilder\Diff\Output;
 
-use RectorPrefix20220327\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
-use RectorPrefix20220327\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20220328\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
+use RectorPrefix20220328\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 /**
  * @api
  * Creates @see UnifiedDiffOutputBuilder with "$contextLines = 1000;"
@@ -15,16 +15,16 @@ final class CompleteUnifiedDiffOutputBuilderFactory
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(\RectorPrefix20220327\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
+    public function __construct(\RectorPrefix20220328\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
     {
         $this->privatesAccessor = $privatesAccessor;
     }
     /**
      * @api
      */
-    public function create() : \RectorPrefix20220327\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder
+    public function create() : \RectorPrefix20220328\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder
     {
-        $unifiedDiffOutputBuilder = new \RectorPrefix20220327\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder('');
+        $unifiedDiffOutputBuilder = new \RectorPrefix20220328\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder('');
         $this->privatesAccessor->setPrivateProperty($unifiedDiffOutputBuilder, 'contextLines', 10000);
         return $unifiedDiffOutputBuilder;
     }

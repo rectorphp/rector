@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace PHPStan\PhpDocParser\Ast\ConstExpr;
 
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
+use function implode;
 class ConstExprArrayNode implements \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode
 {
     use NodeAttributes;

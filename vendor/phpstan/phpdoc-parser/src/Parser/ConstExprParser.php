@@ -3,8 +3,11 @@
 declare (strict_types=1);
 namespace PHPStan\PhpDocParser\Parser;
 
+use LogicException;
 use PHPStan\PhpDocParser\Ast;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use function strtolower;
+use function trim;
 class ConstExprParser
 {
     public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, bool $trimStrings = \false) : \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode

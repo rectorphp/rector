@@ -6,6 +6,10 @@ namespace PHPStan\PhpDocParser\Parser;
 use PHPStan\PhpDocParser\Ast;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\ShouldNotHappenException;
+use function array_values;
+use function count;
+use function trim;
 class PhpDocParser
 {
     private const DISALLOWED_DESCRIPTION_START_TOKENS = [\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_UNION, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_INTERSECTION];

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php74\Rector\FuncCall;
+namespace Rector\Php55\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -14,11 +14,11 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
- * @see https://3v4l.org/GU9dP
- * @see \Rector\Tests\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector\GetCalledClassToSelfClassRectorTest
+ * @changelog https://www.php.net/ChangeLog-5.php#5.5.0
+ * @see https://3v4l.org/dJgXd
+ * @see \Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToStaticClassRector\GetCalledClassToStaticClassRectorTest
  */
-final class GetCalledClassToSelfClassRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class GetCalledClassToStaticClassRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -31,8 +31,8 @@ final class GetCalledClassToSelfClassRector extends \Rector\Core\Rector\Abstract
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change get_called_class() to self::class on final class', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-final class SomeClass
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change get_called_class() to static::class on non-final class', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+class SomeClass
 {
    public function callOnMe()
    {
@@ -41,11 +41,11 @@ final class SomeClass
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-final class SomeClass
+class SomeClass
 {
    public function callOnMe()
    {
-       var_dump(self::class);
+       var_dump(static::class);
    }
 }
 CODE_SAMPLE
@@ -68,13 +68,13 @@ CODE_SAMPLE
         }
         $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
-            return null;
-        }
-        if ($class->isFinal()) {
-            return $this->nodeFactory->createClassConstFetch(\Rector\Core\Enum\ObjectReference::SELF(), 'class');
+            return $this->nodeFactory->createClassConstFetch(\Rector\Core\Enum\ObjectReference::STATIC(), 'class');
         }
         if ($this->classAnalyzer->isAnonymousClass($class)) {
-            return $this->nodeFactory->createClassConstFetch(\Rector\Core\Enum\ObjectReference::SELF(), 'class');
+            return null;
+        }
+        if (!$class->isFinal()) {
+            return $this->nodeFactory->createClassConstFetch(\Rector\Core\Enum\ObjectReference::STATIC(), 'class');
         }
         return null;
     }
