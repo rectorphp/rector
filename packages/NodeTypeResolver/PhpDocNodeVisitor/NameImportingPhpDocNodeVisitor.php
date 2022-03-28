@@ -109,6 +109,9 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20220328\Symplif
     }
     private function processFqnNameImport(\PhpParser\Node $phpParserNode, \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \Rector\Core\ValueObject\Application\File $file) : ?\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode
     {
+        if (\strncmp($fullyQualifiedObjectType->getClassName(), '@', \strlen('@')) === 0) {
+            $fullyQualifiedObjectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType(\ltrim($fullyQualifiedObjectType->getClassName(), '@'));
+        }
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($file, $phpParserNode, $fullyQualifiedObjectType)) {
             return null;
         }
