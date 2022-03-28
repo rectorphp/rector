@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector;
+namespace Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToSelfClassRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

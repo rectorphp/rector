@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector\Fixture;
+namespace Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToStaticClassRector\Fixture;
 
 trait SomeTrait
 {
@@ -14,7 +14,7 @@ trait SomeTrait
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector\Fixture;
+namespace Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToStaticClassRector\Fixture;
 
 trait SomeTrait
 {

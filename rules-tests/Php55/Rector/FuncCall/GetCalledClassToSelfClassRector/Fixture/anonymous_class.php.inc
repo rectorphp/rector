@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector\Fixture;
+namespace Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToSelfClassRector\Fixture;
 
 new class {
     public function callOnMe()
@@ -13,7 +13,7 @@ new class {
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector\Fixture;
+namespace Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToSelfClassRector\Fixture;
 
 new class {
     public function callOnMe()

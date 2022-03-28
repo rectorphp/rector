@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector\Fixture;
+namespace Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToSelfClassRector\Fixture;
 
 final class Fixture
 {
@@ -14,7 +14,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector\Fixture;
+namespace Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToSelfClassRector\Fixture;
 
 final class Fixture
 {

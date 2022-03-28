@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php74\Rector\FuncCall;
+namespace Rector\Php55\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @changelog https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
- * @see https://3v4l.org/GU9dP
- * @see \Rector\Tests\Php74\Rector\FuncCall\GetCalledClassToSelfClassRector\GetCalledClassToSelfClassRectorTest
+ * @changelog https://www.php.net/ChangeLog-5.php#5.5.0
+ * @see https://3v4l.org/dJgXd
+ * @see \Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToStaticClassRector\GetCalledClassToStaticClassRectorTest
  */
-final class GetCalledClassToSelfClassRector extends AbstractRector implements MinPhpVersionInterface
+final class GetCalledClassToStaticClassRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(private readonly ClassAnalyzer $classAnalyzer)
     {
@@ -28,10 +28,10 @@ final class GetCalledClassToSelfClassRector extends AbstractRector implements Mi
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change get_called_class() to self::class on final class', [
+        return new RuleDefinition('Change get_called_class() to static::class on non-final class', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-final class SomeClass
+class SomeClass
 {
    public function callOnMe()
    {
@@ -41,11 +41,11 @@ final class SomeClass
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-final class SomeClass
+class SomeClass
 {
    public function callOnMe()
    {
-       var_dump(self::class);
+       var_dump(static::class);
    }
 }
 CODE_SAMPLE
@@ -71,17 +71,16 @@ CODE_SAMPLE
         }
 
         $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-
         if (! $class instanceof Class_) {
-            return null;
-        }
-
-        if ($class->isFinal()) {
-            return $this->nodeFactory->createClassConstFetch(ObjectReference::SELF(), 'class');
+            return $this->nodeFactory->createClassConstFetch(ObjectReference::STATIC(), 'class');
         }
 
         if ($this->classAnalyzer->isAnonymousClass($class)) {
-            return $this->nodeFactory->createClassConstFetch(ObjectReference::SELF(), 'class');
+            return null;
+        }
+
+        if (! $class->isFinal()) {
+            return $this->nodeFactory->createClassConstFetch(ObjectReference::STATIC(), 'class');
         }
 
         return null;
