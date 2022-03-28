@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit784ff7722743891cd3bc094793583fb2
+class ComposerStaticInite10d76492c42050d4ac6c3834dd4a982
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -416,6 +416,8 @@ class ComposerStaticInit784ff7722743891cd3bc094793583fb2
         'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\CallableTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\CallableTypeParameterNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeParameterNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ConditionalTypeForParameterNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ConditionalTypeForParameterNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ConditionalTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ConditionalTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\ConstTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ConstTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\GenericTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/GenericTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/IdentifierTypeNode.php',
@@ -3838,9 +3840,9 @@ class ComposerStaticInit784ff7722743891cd3bc094793583fb2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit784ff7722743891cd3bc094793583fb2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit784ff7722743891cd3bc094793583fb2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit784ff7722743891cd3bc094793583fb2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite10d76492c42050d4ac6c3834dd4a982::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite10d76492c42050d4ac6c3834dd4a982::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite10d76492c42050d4ac6c3834dd4a982::$classMap;
 
         }, null, ClassLoader::class);
     }

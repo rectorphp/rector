@@ -3,11 +3,18 @@
 declare (strict_types=1);
 namespace PHPStan\Rules\PHPUnit;
 
+use Countable;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\NodeAbstract;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
 use PHPStan\Type\ObjectType;
+use function count;
+use function strtolower;
 /**
- * @implements \PHPStan\Rules\Rule<\PhpParser\NodeAbstract>
+ * @implements Rule<NodeAbstract>
  */
 class AssertSameWithCountRule implements \PHPStan\Rules\Rule
 {
@@ -20,7 +27,7 @@ class AssertSameWithCountRule implements \PHPStan\Rules\Rule
         if (!\PHPStan\Rules\PHPUnit\AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
             return [];
         }
-        /** @var \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node */
+        /** @var MethodCall|StaticCall $node */
         $node = $node;
         if (\count($node->getArgs()) < 2) {
             return [];

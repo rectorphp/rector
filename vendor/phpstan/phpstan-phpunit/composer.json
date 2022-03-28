@@ -6,8 +6,8 @@
         "MIT"
     ],
     "require": {
-        "php": "^7.1 || ^8.0",
-        "phpstan\/phpstan": "^1.0"
+        "php": "^7.2 || ^8.0",
+        "phpstan\/phpstan": "^1.5.0"
     },
     "conflict": {
         "phpunit\/phpunit": "<7.0"
@@ -25,9 +25,6 @@
         "sort-packages": true
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        },
         "phpstan": {
             "includes": [
                 "extension.neon",

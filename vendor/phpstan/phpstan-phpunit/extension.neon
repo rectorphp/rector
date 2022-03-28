@@ -12,6 +12,7 @@ parameters:
 		- stubs/InvocationMocker.stub
 		- stubs/MockBuilder.stub
 		- stubs/MockObject.stub
+		- stubs/Stub.stub
 		- stubs/TestCase.stub
 	exceptions:
 		uncheckedExceptionRegexes:

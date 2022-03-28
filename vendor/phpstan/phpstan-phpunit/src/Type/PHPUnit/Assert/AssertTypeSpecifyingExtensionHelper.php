@@ -3,8 +3,12 @@
 declare (strict_types=1);
 namespace PHPStan\Type\PHPUnit\Assert;
 
+use Closure;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name;
@@ -13,14 +17,18 @@ use PHPStan\Analyser\SpecifiedTypes;
 use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Analyser\TypeSpecifierContext;
 use PHPStan\Type\Constant\ConstantStringType;
+use ReflectionObject;
+use function array_key_exists;
+use function count;
+use function strlen;
+use function strpos;
+use function substr;
 class AssertTypeSpecifyingExtensionHelper
 {
-    /** @var \Closure[] */
+    /** @var Closure[] */
     private static $resolvers;
     /**
-     * @param string $name
-     * @param \PhpParser\Node\Arg[] $args
-     * @return bool
+     * @param Arg[] $args
      */
     public static function isSupported(string $name, array $args) : bool
     {
@@ -48,11 +56,7 @@ class AssertTypeSpecifyingExtensionHelper
         return $name;
     }
     /**
-     * @param TypeSpecifier $typeSpecifier
-     * @param Scope $scope
-     * @param string $name
-     * @param \PhpParser\Node\Arg[] $args $args
-     * @return SpecifiedTypes
+     * @param Arg[] $args $args
      */
     public static function specifyTypes(\PHPStan\Analyser\TypeSpecifier $typeSpecifier, \PHPStan\Analyser\Scope $scope, string $name, array $args) : \PHPStan\Analyser\SpecifiedTypes
     {
@@ -63,10 +67,7 @@ class AssertTypeSpecifyingExtensionHelper
         return $typeSpecifier->specifyTypesInCondition($scope, $expression, \PHPStan\Analyser\TypeSpecifierContext::createTruthy());
     }
     /**
-     * @param Scope $scope
-     * @param string $name
-     * @param \PhpParser\Node\Arg[] $args
-     * @return \PhpParser\Node\Expr|null
+     * @param Arg[] $args
      */
     private static function createExpression(\PHPStan\Analyser\Scope $scope, string $name, array $args) : ?\PhpParser\Node\Expr
     {
@@ -83,48 +84,48 @@ class AssertTypeSpecifyingExtensionHelper
         return $expression;
     }
     /**
-     * @return \Closure[]
+     * @return Closure[]
      */
     private static function getExpressionResolvers() : array
     {
         if (self::$resolvers === null) {
-            self::$resolvers = ['InstanceOf' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $class, \PhpParser\Node\Arg $object) : ?Instanceof_ {
+            self::$resolvers = ['InstanceOf' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $class, \PhpParser\Node\Arg $object) : ?Instanceof_ {
                 $classType = $scope->getType($class->value);
                 if (!$classType instanceof \PHPStan\Type\Constant\ConstantStringType) {
                     return null;
                 }
                 return new \PhpParser\Node\Expr\Instanceof_($object->value, new \PhpParser\Node\Name($classType->getValue()));
-            }, 'Same' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $expected, \PhpParser\Node\Arg $actual) : Identical {
+            }, 'Same' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $expected, \PhpParser\Node\Arg $actual) : Identical {
                 return new \PhpParser\Node\Expr\BinaryOp\Identical($expected->value, $actual->value);
-            }, 'True' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : Identical {
+            }, 'True' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : Identical {
                 return new \PhpParser\Node\Expr\BinaryOp\Identical($actual->value, new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('true')));
-            }, 'False' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : Identical {
+            }, 'False' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : Identical {
                 return new \PhpParser\Node\Expr\BinaryOp\Identical($actual->value, new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('false')));
-            }, 'Null' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : Identical {
+            }, 'Null' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : Identical {
                 return new \PhpParser\Node\Expr\BinaryOp\Identical($actual->value, new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null')));
-            }, 'IsArray' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsArray' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_array'), [$actual]);
-            }, 'IsBool' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsBool' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_bool'), [$actual]);
-            }, 'IsCallable' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsCallable' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_callable'), [$actual]);
-            }, 'IsFloat' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsFloat' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_float'), [$actual]);
-            }, 'IsInt' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsInt' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_int'), [$actual]);
-            }, 'IsIterable' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsIterable' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_iterable'), [$actual]);
-            }, 'IsNumeric' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsNumeric' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_numeric'), [$actual]);
-            }, 'IsObject' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsObject' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_object'), [$actual]);
-            }, 'IsResource' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsResource' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_resource'), [$actual]);
-            }, 'IsString' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsString' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_string'), [$actual]);
-            }, 'IsScalar' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
+            }, 'IsScalar' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $actual) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_scalar'), [$actual]);
-            }, 'InternalType' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $type, \PhpParser\Node\Arg $value) : ?FuncCall {
+            }, 'InternalType' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $type, \PhpParser\Node\Arg $value) : ?FuncCall {
                 $typeType = $scope->getType($type->value);
                 if (!$typeType instanceof \PHPStan\Type\Constant\ConstantStringType) {
                     return null;
@@ -171,9 +172,9 @@ class AssertTypeSpecifyingExtensionHelper
                         return null;
                 }
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name($functionName), [$value]);
-            }, 'ArrayHasKey' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $key, \PhpParser\Node\Arg $array) : FuncCall {
+            }, 'ArrayHasKey' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $key, \PhpParser\Node\Arg $array) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_key_exists'), [$key, $array]);
-            }, 'ObjectHasAttribute' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $property, \PhpParser\Node\Arg $object) : FuncCall {
+            }, 'ObjectHasAttribute' => static function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $property, \PhpParser\Node\Arg $object) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('property_exists'), [$object, $property]);
             }];
         }

@@ -4,6 +4,7 @@ namespace PHPUnit\Framework;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\MockBuilder;
+use PHPUnit\Framework\MockObject\Stub;
 
 class TestCase
 {
@@ -11,7 +12,7 @@ class TestCase
 	/**
 	 * @template T
 	 * @phpstan-param class-string<T> $originalClassName
-	 * @phpstan-return MockObject&T
+	 * @phpstan-return Stub&T
 	 */
 	public function createStub($originalClassName) {}
 

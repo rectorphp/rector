@@ -4,15 +4,23 @@ declare (strict_types=1);
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use RectorPrefix20220328\PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use RectorPrefix20220328\PHPUnit\Framework\MockObject\MockObject;
+use RectorPrefix20220328\PHPUnit\Framework\MockObject\Stub;
+use function array_filter;
+use function count;
+use function implode;
+use function in_array;
+use function sprintf;
 /**
- * @implements \PHPStan\Rules\Rule<\PhpParser\Node\Expr\MethodCall>
+ * @implements Rule<MethodCall>
  */
 class MockMethodCallRule implements \PHPStan\Rules\Rule
 {
@@ -36,9 +44,9 @@ class MockMethodCallRule implements \PHPStan\Rules\Rule
         }
         $method = $argType->getValue();
         $type = $scope->getType($node->var);
-        if ($type instanceof \PHPStan\Type\IntersectionType && \in_array(\RectorPrefix20220328\PHPUnit\Framework\MockObject\MockObject::class, $type->getReferencedClasses(), \true) && !$type->hasMethod($method)->yes()) {
-            $mockClass = \array_filter($type->getReferencedClasses(), function (string $class) : bool {
-                return $class !== \RectorPrefix20220328\PHPUnit\Framework\MockObject\MockObject::class;
+        if ($type instanceof \PHPStan\Type\IntersectionType && (\in_array(\RectorPrefix20220328\PHPUnit\Framework\MockObject\MockObject::class, $type->getReferencedClasses(), \true) || \in_array(\RectorPrefix20220328\PHPUnit\Framework\MockObject\Stub::class, $type->getReferencedClasses(), \true)) && !$type->hasMethod($method)->yes()) {
+            $mockClass = \array_filter($type->getReferencedClasses(), static function (string $class) : bool {
+                return $class !== \RectorPrefix20220328\PHPUnit\Framework\MockObject\MockObject::class && $class !== \RectorPrefix20220328\PHPUnit\Framework\MockObject\Stub::class;
             });
             return [\sprintf('Trying to mock an undefined method %s() on class %s.', $method, \implode('&', $mockClass))];
         }

@@ -6,10 +6,14 @@ namespace PHPStan\Rules\PHPUnit;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
+use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use RectorPrefix20220328\PHPUnit\Framework\TestCase;
+use function in_array;
+use function sprintf;
+use function strtolower;
 /**
- * @implements \PHPStan\Rules\Rule<InClassMethodNode>
+ * @implements Rule<InClassMethodNode>
  */
 class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
 {
@@ -48,9 +52,7 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
     }
     /**
      * @param Node\Stmt[]|null $stmts
-     * @param string           $methodName
      *
-     * @return bool
      */
     private function hasParentClassCall(?array $stmts, string $methodName) : bool
     {

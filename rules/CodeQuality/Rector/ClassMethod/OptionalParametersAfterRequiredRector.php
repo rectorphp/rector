@@ -120,7 +120,7 @@ CODE_SAMPLE
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
-        $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedArgOrParamOrder);
+        $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->getArgs(), $expectedArgOrParamOrder);
         return $new;
     }
     private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
@@ -133,7 +133,7 @@ CODE_SAMPLE
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
-        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($methodCall->args, $expectedArgOrParamOrder);
+        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($methodCall->getArgs(), $expectedArgOrParamOrder);
         if ($methodCall->args === $newArgs) {
             return null;
         }

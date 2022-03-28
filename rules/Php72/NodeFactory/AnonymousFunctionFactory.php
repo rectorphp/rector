@@ -48,7 +48,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use ReflectionParameter;
 use RectorPrefix20220328\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220328\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class AnonymousFunctionFactory
 {
     /**
@@ -101,7 +103,12 @@ final class AnonymousFunctionFactory
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20220328\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)
+    /**
+     * @readonly
+     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     */
+    private $privatesAccessor;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20220328\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \RectorPrefix20220328\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -112,6 +119,7 @@ final class AnonymousFunctionFactory
         $this->nodeComparator = $nodeComparator;
         $this->astResolver = $astResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->privatesAccessor = $privatesAccessor;
     }
     /**
      * @param Param[] $params
@@ -307,6 +315,7 @@ final class AnonymousFunctionFactory
             $param = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($parameterReflection->getName()));
             $this->applyParamType($param, $parameterReflection);
             $this->applyParamDefaultValue($param, $parameterReflection, $key, $classMethod);
+            $this->applyParamByReference($param, $parameterReflection);
             $params[] = $param;
         }
         return $params;
@@ -317,6 +326,12 @@ final class AnonymousFunctionFactory
             return;
         }
         $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+    }
+    private function applyParamByReference(\PhpParser\Node\Param $param, \PHPStan\Reflection\ParameterReflection $parameterReflection) : void
+    {
+        /** @var ReflectionParameter $reflection */
+        $reflection = $this->privatesAccessor->getPrivateProperty($parameterReflection, 'reflection');
+        $param->byRef = $reflection->isPassedByReference();
     }
     private function applyParamDefaultValue(\PhpParser\Node\Param $param, \PHPStan\Reflection\ParameterReflection $parameterReflection, int $key, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {

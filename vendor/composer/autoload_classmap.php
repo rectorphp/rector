@@ -47,6 +47,8 @@ return array(
     'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\CallableTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\CallableTypeParameterNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeParameterNode.php',
+    'PHPStan\\PhpDocParser\\Ast\\Type\\ConditionalTypeForParameterNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ConditionalTypeForParameterNode.php',
+    'PHPStan\\PhpDocParser\\Ast\\Type\\ConditionalTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ConditionalTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\ConstTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ConstTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\GenericTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/GenericTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/IdentifierTypeNode.php',
