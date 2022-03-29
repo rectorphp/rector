@@ -38,21 +38,21 @@ final class ClosureArrowFunctionAnalyzer
             return null;
         }
 
-        if ($this->shouldSkipForUsedReferencedValue($closure, $return->expr)) {
+        if ($this->shouldSkipForUsedReferencedValue($closure)) {
             return null;
         }
 
         return $return->expr;
     }
 
-    private function shouldSkipForUsedReferencedValue(Closure $closure, Expr $expr): bool
+    private function shouldSkipForUsedReferencedValue(Closure $closure): bool
     {
         $referencedValues = $this->resolveReferencedUseVariablesFromClosure($closure);
         if ($referencedValues === []) {
             return false;
         }
 
-        return (bool) $this->betterNodeFinder->findFirst([$expr], function (Node $node) use (
+        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($closure, function (Node $node) use (
             $referencedValues
         ): bool {
             foreach ($referencedValues as $referencedValue) {
