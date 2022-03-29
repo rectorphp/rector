@@ -85,7 +85,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf($node, Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, Return_::class);
         // exact one shape only
         if (count($returns) !== 1) {
             return null;
