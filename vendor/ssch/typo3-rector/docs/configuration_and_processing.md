@@ -53,6 +53,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // this will not import root namespace classes, like \DateTime or \Exception
     $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
 
+    // this prevents infinite loop issues due to symlinks in e.g. ".Build/" folders within single extensions
+    $parameters->set(Option::FOLLOW_SYMLINKS, false);
+
     // this will not import classes used in PHP DocBlocks, like in /** @var \Some\Class */
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
 
