@@ -42,18 +42,18 @@ final class ClosureArrowFunctionAnalyzer
         if ($return->expr === null) {
             return null;
         }
-        if ($this->shouldSkipForUsedReferencedValue($closure, $return->expr)) {
+        if ($this->shouldSkipForUsedReferencedValue($closure)) {
             return null;
         }
         return $return->expr;
     }
-    private function shouldSkipForUsedReferencedValue(\PhpParser\Node\Expr\Closure $closure, \PhpParser\Node\Expr $expr) : bool
+    private function shouldSkipForUsedReferencedValue(\PhpParser\Node\Expr\Closure $closure) : bool
     {
         $referencedValues = $this->resolveReferencedUseVariablesFromClosure($closure);
         if ($referencedValues === []) {
             return \false;
         }
-        return (bool) $this->betterNodeFinder->findFirst([$expr], function (\PhpParser\Node $node) use($referencedValues) : bool {
+        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($closure, function (\PhpParser\Node $node) use($referencedValues) : bool {
             foreach ($referencedValues as $referencedValue) {
                 if ($this->nodeComparator->areNodesEqual($node, $referencedValue)) {
                     return \true;
