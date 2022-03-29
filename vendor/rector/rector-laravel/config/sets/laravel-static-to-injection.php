@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220328;
+namespace RectorPrefix20220329;
 
 use Rector\Laravel\Rector\FuncCall\HelperFuncCallToFacadeClassRector;
 use Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
@@ -40,7 +40,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         new \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall('info', 'Illuminate\\Log\\Writer', 'info'),
         new \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall('view', 'Illuminate\\Contracts\\View\\Factory', 'make'),
         new \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall('bcrypt', 'Illuminate\\Hashing\\BcryptHasher', 'make'),
-        new \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall('redirect', 'Illuminate\\Routing\\Redirector', 'back'),
+        new \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall('redirect', 'Illuminate\\Routing\\Redirector', 'to'),
         new \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall('broadcast', 'Illuminate\\Contracts\\Broadcasting\\Factory', 'event'),
         new \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall('event', 'Illuminate\\Events\\Dispatcher', 'dispatch'),
         new \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall('dispatch', 'Illuminate\\Events\\Dispatcher', 'dispatch'),

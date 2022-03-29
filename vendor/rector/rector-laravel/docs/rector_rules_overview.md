@@ -392,6 +392,33 @@ Change "redirect" call with 301 to "permanentRedirect"
 
 <br>
 
+## RedirectBackToBackHelperRector
+
+Replace `redirect()->back()` and `Redirect::back()` with `back()`
+
+- class: [`Rector\Laravel\Rector\MethodCall\RedirectBackToBackHelperRector`](../src/Rector/MethodCall/RedirectBackToBackHelperRector.php)
+
+```diff
+ use Illuminate\Support\Facades\Redirect;
+
+ class MyController
+ {
+    public function store()
+    {
+-        return redirect()->back()->with('error', 'Incorrect details.');
++        return back()->with('error', 'Incorrect details.');
+    }
+
+    public function update()
+    {
+-        return Redirect::back()->with('error', 'Incorrect details.');
++        return back()->with('error', 'Incorrect details.');
+    }
+ }
+```
+
+<br>
+
 ## RemoveAllOnDispatchingMethodsWithJobChainingRector
 
 Remove `allOnQueue()` and `allOnConnection()` methods used with job chaining, use the `onQueue()` and `onConnection()` methods instead.

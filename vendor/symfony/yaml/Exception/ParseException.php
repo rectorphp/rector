@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220328\Symfony\Component\Yaml\Exception;
+namespace RectorPrefix20220329\Symfony\Component\Yaml\Exception;
 
 /**
  * Exception class thrown when an error occurs during parsing.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParseException extends \RectorPrefix20220328\Symfony\Component\Yaml\Exception\RuntimeException
+class ParseException extends \RectorPrefix20220329\Symfony\Component\Yaml\Exception\RuntimeException
 {
     /**
      * @var string|null
