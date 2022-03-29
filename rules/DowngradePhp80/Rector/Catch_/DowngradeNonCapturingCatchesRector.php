@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\VariableNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,6 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeNonCapturingCatchesRector extends AbstractRector
 {
+    public function __construct(private readonly VariableNaming $variableNaming)
+    {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade catch () without variable to one', [
@@ -71,7 +77,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->var = new Variable('exception');
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $exceptionVarName = $this->variableNaming->createCountedValueName('exception', $scope);
+        $node->var = new Variable($exceptionVarName);
 
         return $node;
     }

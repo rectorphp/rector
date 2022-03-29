@@ -6,7 +6,7 @@ namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromo
 
 use JetBrains\PhpStorm\Immutable;
 
-final class Coordinate
+final class PropertyWithAttribute
 {
     #[Immutable]
     public float $latitude;
@@ -26,7 +26,7 @@ namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromo
 
 use JetBrains\PhpStorm\Immutable;
 
-final class Coordinate
+final class PropertyWithAttribute
 {
     public function __construct(#[Immutable] public float $latitude)
     {

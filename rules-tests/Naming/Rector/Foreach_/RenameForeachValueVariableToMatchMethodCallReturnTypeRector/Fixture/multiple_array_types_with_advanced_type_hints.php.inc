@@ -4,7 +4,7 @@ namespace Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\Method;
 
-class SomeClass
+class MultipleArrayTypesWithAdvancedTypeHints
 {
     public function simpleArray()
     {
@@ -47,7 +47,7 @@ namespace Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\Method;
 
-class SomeClass
+class MultipleArrayTypesWithAdvancedTypeHints
 {
     public function simpleArray()
     {

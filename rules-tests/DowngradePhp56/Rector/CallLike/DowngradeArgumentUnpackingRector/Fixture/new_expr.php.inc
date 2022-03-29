@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector\Fixture;
 
-final class SomeClass extends stdClass
+final class NewExpr extends stdClass
 {
     public function run(array $items)
     {
@@ -17,7 +17,7 @@ final class SomeClass extends stdClass
 
 namespace Rector\Tests\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector\Fixture;
 
-final class SomeClass extends stdClass
+final class NewExpr extends stdClass
 {
     public function run(array $items)
     {

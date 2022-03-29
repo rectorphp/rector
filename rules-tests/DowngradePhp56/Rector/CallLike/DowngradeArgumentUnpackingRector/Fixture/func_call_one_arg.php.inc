@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector\Fixture;
 
-final class SomeClass
+final class FuncCallOnArg
 {
     public function run(array $items)
     {
@@ -16,7 +16,7 @@ final class SomeClass
 
 namespace Rector\Tests\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector\Fixture;
 
-final class SomeClass
+final class FuncCallOnArg
 {
     public function run(array $items)
     {

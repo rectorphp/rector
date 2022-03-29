@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector\Fixture;
 
-final class SomeClass extends stdClass
+final class NewInlinedArgs extends stdClass
 {
     public function run(mixed $item)
     {
@@ -16,7 +16,7 @@ final class SomeClass extends stdClass
 
 namespace Rector\Tests\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector\Fixture;
 
-final class SomeClass extends stdClass
+final class NewInlinedArgs extends stdClass
 {
     public function run(mixed $item)
     {

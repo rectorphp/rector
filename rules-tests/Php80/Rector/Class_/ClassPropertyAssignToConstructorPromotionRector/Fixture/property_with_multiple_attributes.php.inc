@@ -7,7 +7,7 @@ namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromo
 use JetBrains\PhpStorm\Deprecated;
 use JetBrains\PhpStorm\Immutable;
 
-final class Coordinate
+final class PropertyWithMultipleAttributes
 {
     #[Immutable]
     #[Deprecated]
@@ -29,7 +29,7 @@ namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromo
 use JetBrains\PhpStorm\Deprecated;
 use JetBrains\PhpStorm\Immutable;
 
-final class Coordinate
+final class PropertyWithMultipleAttributes
 {
     public function __construct(#[Immutable] #[Deprecated] public float $latitude)
     {

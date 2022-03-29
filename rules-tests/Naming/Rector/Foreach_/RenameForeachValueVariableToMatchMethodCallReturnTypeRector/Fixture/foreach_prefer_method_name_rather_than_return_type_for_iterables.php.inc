@@ -4,7 +4,7 @@ namespace Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\DummyCollection;
 
-final class MyLibrary
+final class ForeachPreferMethodNameRatherThanReturnTypeForIterables
 {
     private DummyCollection $books;
 
@@ -34,7 +34,7 @@ namespace Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\DummyCollection;
 
-final class MyLibrary
+final class ForeachPreferMethodNameRatherThanReturnTypeForIterables
 {
     private DummyCollection $books;
 

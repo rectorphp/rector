@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector\Fixture;
 
-final class SomeClass
+final class StaticCallSpecialClassName
 {
     public static function run()
     {
@@ -21,7 +21,7 @@ final class SomeClass
 
 namespace Rector\Tests\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector\Fixture;
 
-final class SomeClass
+final class StaticCallSpecialClassName
 {
     public static function run()
     {
