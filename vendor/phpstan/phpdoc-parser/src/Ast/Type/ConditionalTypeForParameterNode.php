@@ -18,16 +18,16 @@ class ConditionalTypeForParameterNode implements \PHPStan\PhpDocParser\Ast\Type\
     public $else;
     /** @var bool */
     public $negated;
-    public function __construct(string $parameterName, \PHPStan\PhpDocParser\Ast\Type\TypeNode $targetType, \PHPStan\PhpDocParser\Ast\Type\TypeNode $if, \PHPStan\PhpDocParser\Ast\Type\TypeNode $false, bool $negated)
+    public function __construct(string $parameterName, \PHPStan\PhpDocParser\Ast\Type\TypeNode $targetType, \PHPStan\PhpDocParser\Ast\Type\TypeNode $if, \PHPStan\PhpDocParser\Ast\Type\TypeNode $else, bool $negated)
     {
         $this->parameterName = $parameterName;
         $this->targetType = $targetType;
         $this->if = $if;
-        $this->else = $false;
+        $this->else = $else;
         $this->negated = $negated;
     }
     public function __toString() : string
     {
-        return \sprintf('%s %s %s ? %s : %s', $this->parameterName, $this->negated ? 'is not' : 'is', $this->targetType, $this->if, $this->else);
+        return \sprintf('(%s %s %s ? %s : %s)', $this->parameterName, $this->negated ? 'is not' : 'is', $this->targetType, $this->if, $this->else);
     }
 }

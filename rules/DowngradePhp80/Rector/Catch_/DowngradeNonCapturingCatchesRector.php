@@ -7,6 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\VariableNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -16,6 +18,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeNonCapturingCatchesRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\VariableNaming
+     */
+    private $variableNaming;
+    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
+    {
+        $this->variableNaming = $variableNaming;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade catch () without variable to one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -61,7 +72,9 @@ CODE_SAMPLE
         if ($node->var !== null) {
             return null;
         }
-        $node->var = new \PhpParser\Node\Expr\Variable('exception');
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $exceptionVarName = $this->variableNaming->createCountedValueName('exception', $scope);
+        $node->var = new \PhpParser\Node\Expr\Variable($exceptionVarName);
         return $node;
     }
 }
