@@ -85,7 +85,7 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, \PhpParser\Node\Stmt\Return_::class);
         // exact one shape only
         if (\count($returns) !== 1) {
             return null;

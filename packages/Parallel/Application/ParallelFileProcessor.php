@@ -18,6 +18,7 @@ use Rector\Parallel\Command\WorkerCommandLineFactory;
 use Rector\Parallel\ValueObject\Bridge;
 use RectorPrefix20220329\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220329\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220329\Symplify\EasyParallel\Contract\SerializableInterface;
 use RectorPrefix20220329\Symplify\EasyParallel\Enum\Action;
 use RectorPrefix20220329\Symplify\EasyParallel\Enum\Content;
 use RectorPrefix20220329\Symplify\EasyParallel\Enum\ReactCommand;
@@ -61,7 +62,7 @@ final class ParallelFileProcessor
     }
     /**
      * @param callable(int $stepCount): void $postFileCallback Used for progress bar jump
-     * @return mixed[]
+     * @return array{file_diffs: SerializableInterface[], system_errors: SerializableInterface[], system_errors_count: int}
      */
     public function process(\RectorPrefix20220329\Symplify\EasyParallel\ValueObject\Schedule $schedule, string $mainScript, callable $postFileCallback, \RectorPrefix20220329\Symfony\Component\Console\Input\InputInterface $input) : array
     {
