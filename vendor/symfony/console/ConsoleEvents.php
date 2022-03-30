@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220329\Symfony\Component\Console;
+namespace RectorPrefix20220330\Symfony\Component\Console;
 
-use RectorPrefix20220329\Symfony\Component\Console\Event\ConsoleCommandEvent;
-use RectorPrefix20220329\Symfony\Component\Console\Event\ConsoleErrorEvent;
-use RectorPrefix20220329\Symfony\Component\Console\Event\ConsoleSignalEvent;
-use RectorPrefix20220329\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use RectorPrefix20220330\Symfony\Component\Console\Event\ConsoleCommandEvent;
+use RectorPrefix20220330\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use RectorPrefix20220330\Symfony\Component\Console\Event\ConsoleSignalEvent;
+use RectorPrefix20220330\Symfony\Component\Console\Event\ConsoleTerminateEvent;
 /**
  * Contains all events dispatched by an Application.
  *
@@ -57,5 +57,5 @@ final class ConsoleEvents
      *
      * These aliases can be consumed by RegisterListenersPass.
      */
-    public const ALIASES = [\RectorPrefix20220329\Symfony\Component\Console\Event\ConsoleCommandEvent::class => self::COMMAND, \RectorPrefix20220329\Symfony\Component\Console\Event\ConsoleErrorEvent::class => self::ERROR, \RectorPrefix20220329\Symfony\Component\Console\Event\ConsoleSignalEvent::class => self::SIGNAL, \RectorPrefix20220329\Symfony\Component\Console\Event\ConsoleTerminateEvent::class => self::TERMINATE];
+    public const ALIASES = [\RectorPrefix20220330\Symfony\Component\Console\Event\ConsoleCommandEvent::class => self::COMMAND, \RectorPrefix20220330\Symfony\Component\Console\Event\ConsoleErrorEvent::class => self::ERROR, \RectorPrefix20220330\Symfony\Component\Console\Event\ConsoleSignalEvent::class => self::SIGNAL, \RectorPrefix20220330\Symfony\Component\Console\Event\ConsoleTerminateEvent::class => self::TERMINATE];
 }

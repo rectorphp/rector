@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220329\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20220330\Helmich\TypoScriptParser\Parser\AST\Operator;
 
-use RectorPrefix20220329\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
+use RectorPrefix20220330\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
 /**
  * A reference statement.
  *
@@ -15,7 +15,7 @@ use RectorPrefix20220329\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-class Reference extends \RectorPrefix20220329\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryObjectOperator
+class Reference extends \RectorPrefix20220330\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryObjectOperator
 {
     /**
      * Constructs a new reference statement.
@@ -24,7 +24,7 @@ class Reference extends \RectorPrefix20220329\Helmich\TypoScriptParser\Parser\AS
      * @param ObjectPath $target     The target object.
      * @param int        $sourceLine The original source line.
      */
-    public function __construct(\RectorPrefix20220329\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, \RectorPrefix20220329\Helmich\TypoScriptParser\Parser\AST\ObjectPath $target, int $sourceLine)
+    public function __construct(\RectorPrefix20220330\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, \RectorPrefix20220330\Helmich\TypoScriptParser\Parser\AST\ObjectPath $target, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;

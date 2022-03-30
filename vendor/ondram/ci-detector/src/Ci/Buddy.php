@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220329\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220330\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220329\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220329\OndraM\CiDetector\Env;
-use RectorPrefix20220329\OndraM\CiDetector\TrinaryLogic;
-class Buddy extends \RectorPrefix20220329\OndraM\CiDetector\Ci\AbstractCi
+use RectorPrefix20220330\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220330\OndraM\CiDetector\Env;
+use RectorPrefix20220330\OndraM\CiDetector\TrinaryLogic;
+class Buddy extends \RectorPrefix20220330\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220329\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(\RectorPrefix20220330\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('BUDDY') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220329\OndraM\CiDetector\CiDetector::CI_BUDDY;
+        return \RectorPrefix20220330\OndraM\CiDetector\CiDetector::CI_BUDDY;
     }
-    public function isPullRequest() : \RectorPrefix20220329\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220330\OndraM\CiDetector\TrinaryLogic
     {
-        return \RectorPrefix20220329\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('BUDDY_EXECUTION_PULL_REQUEST_ID') !== '');
+        return \RectorPrefix20220330\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('BUDDY_EXECUTION_PULL_REQUEST_ID') !== '');
     }
     public function getBuildNumber() : string
     {
