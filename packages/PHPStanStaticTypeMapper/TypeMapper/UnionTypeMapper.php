@@ -330,11 +330,7 @@ final class UnionTypeMapper implements TypeMapperInterface
 
     private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType): bool
     {
-        if ($firstType->accepts($secondType, false)->yes()) {
-            return true;
-        }
-
-        return $secondType->accepts($firstType, false)
+        return $firstType->accepts($secondType, false)
             ->yes();
     }
 
