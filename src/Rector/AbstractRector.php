@@ -206,7 +206,7 @@ CODE_SAMPLE;
     }
 
     /**
-     * @return Node|int|null
+     * @return Node|null
      */
     final public function enterNode(Node $node)
     {
