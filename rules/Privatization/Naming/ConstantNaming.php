@@ -6,7 +6,7 @@ namespace Rector\Privatization\Naming;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220330\Symfony\Component\String\UnicodeString;
+use RectorPrefix20220331\Symfony\Component\String\UnicodeString;
 final class ConstantNaming
 {
     /**
@@ -40,7 +40,7 @@ final class ConstantNaming
     }
     private function createUnderscoreUppercaseString(string $propertyName) : string
     {
-        $propertyNameUnicodeString = new \RectorPrefix20220330\Symfony\Component\String\UnicodeString($propertyName);
+        $propertyNameUnicodeString = new \RectorPrefix20220331\Symfony\Component\String\UnicodeString($propertyName);
         return $propertyNameUnicodeString->snake()->upper()->toString();
     }
 }

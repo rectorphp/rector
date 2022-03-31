@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220330\SebastianBergmann\Diff\Output;
+namespace RectorPrefix20220331\SebastianBergmann\Diff\Output;
 
 use function array_merge;
 use function array_splice;
@@ -25,14 +25,14 @@ use function min;
 use function sprintf;
 use function stream_get_contents;
 use function substr;
-use RectorPrefix20220330\SebastianBergmann\Diff\ConfigurationException;
-use RectorPrefix20220330\SebastianBergmann\Diff\Differ;
+use RectorPrefix20220331\SebastianBergmann\Diff\ConfigurationException;
+use RectorPrefix20220331\SebastianBergmann\Diff\Differ;
 /**
  * Strict Unified diff output builder.
  *
  * Generates (strict) Unified diff's (unidiffs) with hunks.
  */
-final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20220330\SebastianBergmann\Diff\Output\DiffOutputBuilderInterface
+final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20220331\SebastianBergmann\Diff\Output\DiffOutputBuilderInterface
 {
     private static $default = [
         'collapseRanges' => \true,
@@ -70,13 +70,13 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20220330\Seba
     {
         $options = \array_merge(self::$default, $options);
         if (!\is_bool($options['collapseRanges'])) {
-            throw new \RectorPrefix20220330\SebastianBergmann\Diff\ConfigurationException('collapseRanges', 'a bool', $options['collapseRanges']);
+            throw new \RectorPrefix20220331\SebastianBergmann\Diff\ConfigurationException('collapseRanges', 'a bool', $options['collapseRanges']);
         }
         if (!\is_int($options['contextLines']) || $options['contextLines'] < 0) {
-            throw new \RectorPrefix20220330\SebastianBergmann\Diff\ConfigurationException('contextLines', 'an int >= 0', $options['contextLines']);
+            throw new \RectorPrefix20220331\SebastianBergmann\Diff\ConfigurationException('contextLines', 'an int >= 0', $options['contextLines']);
         }
         if (!\is_int($options['commonLineThreshold']) || $options['commonLineThreshold'] <= 0) {
-            throw new \RectorPrefix20220330\SebastianBergmann\Diff\ConfigurationException('commonLineThreshold', 'an int > 0', $options['commonLineThreshold']);
+            throw new \RectorPrefix20220331\SebastianBergmann\Diff\ConfigurationException('commonLineThreshold', 'an int > 0', $options['commonLineThreshold']);
         }
         $this->assertString($options, 'fromFile');
         $this->assertString($options, 'toFile');
@@ -114,7 +114,7 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20220330\Seba
         if (0 === $diff[$upperLimit - 1][1]) {
             $lc = \substr($diff[$upperLimit - 1][0], -1);
             if ("\n" !== $lc) {
-                \array_splice($diff, $upperLimit, 0, [["\n\\ No newline at end of file\n", \RectorPrefix20220330\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING]]);
+                \array_splice($diff, $upperLimit, 0, [["\n\\ No newline at end of file\n", \RectorPrefix20220331\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING]]);
             }
         } else {
             // search back for the last `+` and `-` line,
@@ -125,7 +125,7 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20220330\Seba
                     unset($toFind[$diff[$i][1]]);
                     $lc = \substr($diff[$i][0], -1);
                     if ("\n" !== $lc) {
-                        \array_splice($diff, $i + 1, 0, [["\n\\ No newline at end of file\n", \RectorPrefix20220330\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING]]);
+                        \array_splice($diff, $i + 1, 0, [["\n\\ No newline at end of file\n", \RectorPrefix20220331\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING]]);
                     }
                     if (!\count($toFind)) {
                         break;
@@ -172,18 +172,18 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20220330\Seba
                 continue;
             }
             $sameCount = 0;
-            if ($entry[1] === \RectorPrefix20220330\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING) {
+            if ($entry[1] === \RectorPrefix20220331\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING) {
                 continue;
             }
             $this->changed = \true;
             if (\false === $hunkCapture) {
                 $hunkCapture = $i;
             }
-            if (\RectorPrefix20220330\SebastianBergmann\Diff\Differ::ADDED === $entry[1]) {
+            if (\RectorPrefix20220331\SebastianBergmann\Diff\Differ::ADDED === $entry[1]) {
                 // added
                 ++$toRange;
             }
-            if (\RectorPrefix20220330\SebastianBergmann\Diff\Differ::REMOVED === $entry[1]) {
+            if (\RectorPrefix20220331\SebastianBergmann\Diff\Differ::REMOVED === $entry[1]) {
                 // removed
                 ++$fromRange;
             }
@@ -213,15 +213,15 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20220330\Seba
         }
         \fwrite($output, " @@\n");
         for ($i = $diffStartIndex; $i < $diffEndIndex; ++$i) {
-            if ($diff[$i][1] === \RectorPrefix20220330\SebastianBergmann\Diff\Differ::ADDED) {
+            if ($diff[$i][1] === \RectorPrefix20220331\SebastianBergmann\Diff\Differ::ADDED) {
                 $this->changed = \true;
                 \fwrite($output, '+' . $diff[$i][0]);
-            } elseif ($diff[$i][1] === \RectorPrefix20220330\SebastianBergmann\Diff\Differ::REMOVED) {
+            } elseif ($diff[$i][1] === \RectorPrefix20220331\SebastianBergmann\Diff\Differ::REMOVED) {
                 $this->changed = \true;
                 \fwrite($output, '-' . $diff[$i][0]);
-            } elseif ($diff[$i][1] === \RectorPrefix20220330\SebastianBergmann\Diff\Differ::OLD) {
+            } elseif ($diff[$i][1] === \RectorPrefix20220331\SebastianBergmann\Diff\Differ::OLD) {
                 \fwrite($output, ' ' . $diff[$i][0]);
-            } elseif ($diff[$i][1] === \RectorPrefix20220330\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING) {
+            } elseif ($diff[$i][1] === \RectorPrefix20220331\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING) {
                 $this->changed = \true;
                 \fwrite($output, $diff[$i][0]);
             }
@@ -235,13 +235,13 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20220330\Seba
     private function assertString(array $options, string $option) : void
     {
         if (!\is_string($options[$option])) {
-            throw new \RectorPrefix20220330\SebastianBergmann\Diff\ConfigurationException($option, 'a string', $options[$option]);
+            throw new \RectorPrefix20220331\SebastianBergmann\Diff\ConfigurationException($option, 'a string', $options[$option]);
         }
     }
     private function assertStringOrNull(array $options, string $option) : void
     {
         if (null !== $options[$option] && !\is_string($options[$option])) {
-            throw new \RectorPrefix20220330\SebastianBergmann\Diff\ConfigurationException($option, 'a string or <null>', $options[$option]);
+            throw new \RectorPrefix20220331\SebastianBergmann\Diff\ConfigurationException($option, 'a string or <null>', $options[$option]);
         }
     }
 }

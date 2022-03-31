@@ -10,8 +10,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220330\TYPO3\CMS\Core\Utility\GeneralUtility;
-use RectorPrefix20220330\Webmozart\Assert\Assert;
+use RectorPrefix20220331\TYPO3\CMS\Core\Utility\GeneralUtility;
+use RectorPrefix20220331\Webmozart\Assert\Assert;
 /**
  * @see \Ssch\TYPO3Rector\Tests\Rector\General\MethodGetInstanceToMakeInstanceCallRector\MethodGetInstanceToMakeInstanceCallRectorTest
  */
@@ -49,7 +49,7 @@ final class MethodGetInstanceToMakeInstanceCallRector extends \Rector\Core\Recto
             return null;
         }
         $class = $this->nodeFactory->createClassConstReference($className);
-        return $this->nodeFactory->createStaticCall(\RectorPrefix20220330\TYPO3\CMS\Core\Utility\GeneralUtility::class, 'makeInstance', [$class]);
+        return $this->nodeFactory->createStaticCall(\RectorPrefix20220331\TYPO3\CMS\Core\Utility\GeneralUtility::class, 'makeInstance', [$class]);
     }
     /**
      * @codeCoverageIgnore
@@ -72,8 +72,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $classes = $configuration[self::CLASSES_GET_INSTANCE_TO_MAKE_INSTANCE] ?? $configuration;
-        \RectorPrefix20220330\Webmozart\Assert\Assert::isArray($classes);
-        \RectorPrefix20220330\Webmozart\Assert\Assert::allString($classes);
+        \RectorPrefix20220331\Webmozart\Assert\Assert::isArray($classes);
+        \RectorPrefix20220331\Webmozart\Assert\Assert::allString($classes);
         $this->classes = $classes;
     }
     private function shouldSkip(\PhpParser\Node\Expr\StaticCall $node) : bool

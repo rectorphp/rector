@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220330;
+namespace RectorPrefix20220331;
 
 /*
  * This file is part of the Symfony package.
@@ -10,20 +10,20 @@ namespace RectorPrefix20220330;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use RectorPrefix20220330\Symfony\Polyfill\Php81 as p;
+use RectorPrefix20220331\Symfony\Polyfill\Php81 as p;
 if (\PHP_VERSION_ID >= 80100) {
     return;
 }
 if (\defined('MYSQLI_REFRESH_SLAVE') && !\defined('MYSQLI_REFRESH_REPLICA')) {
     \define('MYSQLI_REFRESH_REPLICA', 64);
 }
-if (!\function_exists('RectorPrefix20220330\\array_is_list')) {
+if (!\function_exists('RectorPrefix20220331\\array_is_list')) {
     function array_is_list(array $array) : bool
     {
-        return \RectorPrefix20220330\Symfony\Polyfill\Php81\Php81::array_is_list($array);
+        return \RectorPrefix20220331\Symfony\Polyfill\Php81\Php81::array_is_list($array);
     }
 }
-if (!\function_exists('RectorPrefix20220330\\enum_exists')) {
+if (!\function_exists('RectorPrefix20220331\\enum_exists')) {
     function enum_exists(string $enum, bool $autoload = \true) : bool
     {
         return $autoload && \class_exists($enum) && \false;

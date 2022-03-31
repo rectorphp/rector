@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220330\Symplify\Astral\NodeFinder;
+namespace RectorPrefix20220331\Symplify\Astral\NodeFinder;
 
 use PhpParser\Node;
 use PhpParser\NodeFinder;
-use RectorPrefix20220330\Symplify\Astral\ValueObject\AttributeKey;
+use RectorPrefix20220331\Symplify\Astral\ValueObject\AttributeKey;
 final class SimpleNodeFinder
 {
     /**
@@ -57,12 +57,12 @@ final class SimpleNodeFinder
      */
     public function findFirstParentByType(\PhpParser\Node $node, string $nodeClass) : ?\PhpParser\Node
     {
-        $node = $node->getAttribute(\RectorPrefix20220330\Symplify\Astral\ValueObject\AttributeKey::PARENT);
+        $node = $node->getAttribute(\RectorPrefix20220331\Symplify\Astral\ValueObject\AttributeKey::PARENT);
         while ($node instanceof \PhpParser\Node) {
             if (\is_a($node, $nodeClass, \true)) {
                 return $node;
             }
-            $node = $node->getAttribute(\RectorPrefix20220330\Symplify\Astral\ValueObject\AttributeKey::PARENT);
+            $node = $node->getAttribute(\RectorPrefix20220331\Symplify\Astral\ValueObject\AttributeKey::PARENT);
         }
         return null;
     }
@@ -73,14 +73,14 @@ final class SimpleNodeFinder
      */
     public function findFirstParentByTypes(\PhpParser\Node $node, array $nodeTypes) : ?\PhpParser\Node
     {
-        $node = $node->getAttribute(\RectorPrefix20220330\Symplify\Astral\ValueObject\AttributeKey::PARENT);
+        $node = $node->getAttribute(\RectorPrefix20220331\Symplify\Astral\ValueObject\AttributeKey::PARENT);
         while ($node instanceof \PhpParser\Node) {
             foreach ($nodeTypes as $nodeType) {
                 if (\is_a($node, $nodeType)) {
                     return $node;
                 }
             }
-            $node = $node->getAttribute(\RectorPrefix20220330\Symplify\Astral\ValueObject\AttributeKey::PARENT);
+            $node = $node->getAttribute(\RectorPrefix20220331\Symplify\Astral\ValueObject\AttributeKey::PARENT);
         }
         return null;
     }

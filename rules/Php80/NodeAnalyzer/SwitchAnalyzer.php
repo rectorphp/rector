@@ -30,6 +30,9 @@ final class SwitchAnalyzer
     public function hasEachCaseSingleStmt(\PhpParser\Node\Stmt\Switch_ $switch) : bool
     {
         foreach ($switch->cases as $case) {
+            if ($case->cond === null) {
+                continue;
+            }
             $stmtsWithoutBreak = \array_filter($case->stmts, function (\PhpParser\Node $node) : bool {
                 return !$node instanceof \PhpParser\Node\Stmt\Break_;
             });
@@ -39,11 +42,14 @@ final class SwitchAnalyzer
         }
         return \true;
     }
-    public function hasDefault(\PhpParser\Node\Stmt\Switch_ $switch) : bool
+    public function hasDefaultSingleStmt(\PhpParser\Node\Stmt\Switch_ $switch) : bool
     {
         foreach ($switch->cases as $case) {
             if ($case->cond === null) {
-                return \true;
+                $stmtsWithoutBreak = \array_filter($case->stmts, function (\PhpParser\Node $node) : bool {
+                    return !$node instanceof \PhpParser\Node\Stmt\Break_;
+                });
+                return \count($stmtsWithoutBreak) === 1;
             }
         }
         return \false;

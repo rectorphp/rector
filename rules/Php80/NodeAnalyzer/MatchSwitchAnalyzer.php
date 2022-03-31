@@ -44,7 +44,7 @@ final class MatchSwitchAnalyzer
         if (!$this->switchAnalyzer->hasEachCaseSingleStmt($switch)) {
             return \false;
         }
-        if ($this->switchAnalyzer->hasDefault($switch)) {
+        if ($this->switchAnalyzer->hasDefaultSingleStmt($switch)) {
             return \false;
         }
         // is followed by return? is considered implicit default
