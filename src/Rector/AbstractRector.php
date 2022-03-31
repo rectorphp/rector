@@ -215,7 +215,7 @@ CODE_SAMPLE;
         return parent::beforeTraverse($nodes);
     }
     /**
-     * @return Node|int|null
+     * @return Node|null
      */
     public final function enterNode(\PhpParser\Node $node)
     {
