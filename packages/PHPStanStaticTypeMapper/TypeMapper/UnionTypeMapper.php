@@ -305,10 +305,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     }
     private function areTypeWithClassNamesRelated(\PHPStan\Type\TypeWithClassName $firstType, \PHPStan\Type\TypeWithClassName $secondType) : bool
     {
-        if ($firstType->accepts($secondType, \false)->yes()) {
-            return \true;
-        }
-        return $secondType->accepts($firstType, \false)->yes();
+        return $firstType->accepts($secondType, \false)->yes();
     }
     private function correctObjectType(\PHPStan\Type\TypeWithClassName $typeWithClassName) : \PHPStan\Type\TypeWithClassName
     {
