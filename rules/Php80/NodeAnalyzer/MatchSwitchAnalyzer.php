@@ -40,7 +40,7 @@ final class MatchSwitchAnalyzer
             return false;
         }
 
-        if ($this->switchAnalyzer->hasDefault($switch)) {
+        if ($this->switchAnalyzer->hasDefaultSingleStmt($switch)) {
             return false;
         }
 
