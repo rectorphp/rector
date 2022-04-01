@@ -2415,12 +2415,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "0aaf0a6d587b387982a6844538bce58c96cda86f"
+                "reference": "1c9a431e806e0214cb38ffd33bbd225bbf34ee42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/0aaf0a6d587b387982a6844538bce58c96cda86f",
-                "reference": "0aaf0a6d587b387982a6844538bce58c96cda86f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/1c9a431e806e0214cb38ffd33bbd225bbf34ee42",
+                "reference": "1c9a431e806e0214cb38ffd33bbd225bbf34ee42",
                 "shasum": ""
             },
             "require": {
@@ -2452,7 +2452,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-03-10T07:53:32+00:00",
+            "time": "2022-04-01T07:12:16+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

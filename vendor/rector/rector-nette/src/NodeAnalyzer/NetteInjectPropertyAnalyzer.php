@@ -27,8 +27,10 @@ final class NetteInjectPropertyAnalyzer
         if (!$phpDocInfo->hasByName('inject')) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        /** @var Scope $scope */
         $scope = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return \false;
+        }
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;

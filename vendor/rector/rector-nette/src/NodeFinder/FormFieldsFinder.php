@@ -102,10 +102,7 @@ final class FormFieldsFinder
         if (!$methodCallVariable instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
-        if ($methodCallVariable->name !== $form->name) {
-            return \false;
-        }
-        return \true;
+        return $methodCallVariable->name === $form->name;
     }
     private function findMethodCallVariable(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\Variable
     {

@@ -54,9 +54,6 @@ final class FormOnSuccessCallbackFinder
         if (!$arrayDimFetch->var->name instanceof \PhpParser\Node\Identifier) {
             return \false;
         }
-        if ($arrayDimFetch->var->name->name !== 'onSuccess') {
-            return \false;
-        }
-        return \true;
+        return $arrayDimFetch->var->name->name === 'onSuccess';
     }
 }
