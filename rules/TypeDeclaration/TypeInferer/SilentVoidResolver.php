@@ -38,12 +38,12 @@ final class SilentVoidResolver
             return false;
         }
 
-        if ($this->betterNodeFinder->hasInstancesOf((array) $functionLike->stmts, [Yield_::class])) {
+        if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($functionLike, Yield_::class)) {
             return false;
         }
 
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Return_::class);
         foreach ($returns as $return) {
             if ($return->expr !== null) {
                 return false;
