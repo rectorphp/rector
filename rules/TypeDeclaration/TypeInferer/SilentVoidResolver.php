@@ -41,11 +41,11 @@ final class SilentVoidResolver
         if ($this->hasNeverType($functionLike)) {
             return \false;
         }
-        if ($this->betterNodeFinder->hasInstancesOf((array) $functionLike->stmts, [\PhpParser\Node\Expr\Yield_::class])) {
+        if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($functionLike, \PhpParser\Node\Expr\Yield_::class)) {
             return \false;
         }
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, \PhpParser\Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, \PhpParser\Node\Stmt\Return_::class);
         foreach ($returns as $return) {
             if ($return->expr !== null) {
                 return \false;

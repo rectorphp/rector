@@ -5,10 +5,10 @@ namespace Rector\Composer\Rector;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Composer\ValueObject\RenamePackage;
-use RectorPrefix20220331\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20220401\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220331\Webmozart\Assert\Assert;
+use RectorPrefix20220401\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Composer\Rector\RenamePackageComposerRector\RenamePackageComposerRectorTest
  */
@@ -18,7 +18,7 @@ final class RenamePackageComposerRector implements \Rector\Composer\Contract\Rec
      * @var RenamePackage[]
      */
     private $renamePackages = [];
-    public function refactor(\RectorPrefix20220331\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20220401\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         foreach ($this->renamePackages as $renamePackage) {
             if ($composerJson->hasRequiredPackage($renamePackage->getOldPackageName())) {
@@ -54,7 +54,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220331\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Composer\ValueObject\RenamePackage::class);
+        \RectorPrefix20220401\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Composer\ValueObject\RenamePackage::class);
         $this->renamePackages = $configuration;
     }
 }

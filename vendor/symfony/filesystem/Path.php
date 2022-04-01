@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220331\Symfony\Component\Filesystem;
+namespace RectorPrefix20220401\Symfony\Component\Filesystem;
 
-use RectorPrefix20220331\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
-use RectorPrefix20220331\Symfony\Component\Filesystem\Exception\RuntimeException;
+use RectorPrefix20220401\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
+use RectorPrefix20220401\Symfony\Component\Filesystem\Exception\RuntimeException;
 /**
  * Contains utility methods for handling path strings.
  *
@@ -176,7 +176,7 @@ final class Path
         if (\getenv('HOMEDRIVE') && \getenv('HOMEPATH')) {
             return self::canonicalize(\getenv('HOMEDRIVE') . \getenv('HOMEPATH'));
         }
-        throw new \RectorPrefix20220331\Symfony\Component\Filesystem\Exception\RuntimeException("Cannot find the home directory path: Your environment or operating system isn't supported.");
+        throw new \RectorPrefix20220401\Symfony\Component\Filesystem\Exception\RuntimeException("Cannot find the home directory path: Your environment or operating system isn't supported.");
     }
     /**
      * Returns the root directory of a path.
@@ -379,10 +379,10 @@ final class Path
     public static function makeAbsolute(string $path, string $basePath) : string
     {
         if ('' === $basePath) {
-            throw new \RectorPrefix20220331\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The base path must be a non-empty string. Got: "%s".', $basePath));
+            throw new \RectorPrefix20220401\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The base path must be a non-empty string. Got: "%s".', $basePath));
         }
         if (!self::isAbsolute($basePath)) {
-            throw new \RectorPrefix20220331\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The base path "%s" is not an absolute path.', $basePath));
+            throw new \RectorPrefix20220401\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The base path "%s" is not an absolute path.', $basePath));
         }
         if (self::isAbsolute($path)) {
             return self::canonicalize($path);
@@ -464,11 +464,11 @@ final class Path
         // If the passed path is absolute, but the base path is not, we
         // cannot generate a relative path
         if ('' !== $root && '' === $baseRoot) {
-            throw new \RectorPrefix20220331\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The absolute path "%s" cannot be made relative to the relative path "%s". You should provide an absolute base path instead.', $path, $basePath));
+            throw new \RectorPrefix20220401\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The absolute path "%s" cannot be made relative to the relative path "%s". You should provide an absolute base path instead.', $path, $basePath));
         }
         // Fail if the roots of the two paths are different
         if ($baseRoot && $root !== $baseRoot) {
-            throw new \RectorPrefix20220331\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The path "%s" cannot be made relative to "%s", because they have different roots ("%s" and "%s").', $path, $basePath, $root, $baseRoot));
+            throw new \RectorPrefix20220401\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The path "%s" cannot be made relative to "%s", because they have different roots ("%s" and "%s").', $path, $basePath, $root, $baseRoot));
         }
         if ('' === $relativeBasePath) {
             return $relativePath;

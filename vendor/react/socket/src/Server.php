@@ -1,16 +1,16 @@
 <?php
 
-namespace RectorPrefix20220331\React\Socket;
+namespace RectorPrefix20220401\React\Socket;
 
-use RectorPrefix20220331\Evenement\EventEmitter;
-use RectorPrefix20220331\React\EventLoop\Loop;
-use RectorPrefix20220331\React\EventLoop\LoopInterface;
+use RectorPrefix20220401\Evenement\EventEmitter;
+use RectorPrefix20220401\React\EventLoop\Loop;
+use RectorPrefix20220401\React\EventLoop\LoopInterface;
 use Exception;
 /**
  * @deprecated 1.9.0 See `SocketServer` instead
  * @see SocketServer
  */
-final class Server extends \RectorPrefix20220331\Evenement\EventEmitter implements \RectorPrefix20220331\React\Socket\ServerInterface
+final class Server extends \RectorPrefix20220401\Evenement\EventEmitter implements \RectorPrefix20220401\React\Socket\ServerInterface
 {
     private $server;
     /**
@@ -47,9 +47,9 @@ final class Server extends \RectorPrefix20220331\Evenement\EventEmitter implemen
      * @deprecated 1.9.0 See `SocketServer` instead
      * @see SocketServer
      */
-    public function __construct($uri, \RectorPrefix20220331\React\EventLoop\LoopInterface $loop = null, array $context = array())
+    public function __construct($uri, \RectorPrefix20220401\React\EventLoop\LoopInterface $loop = null, array $context = array())
     {
-        $loop = $loop ?: \RectorPrefix20220331\React\EventLoop\Loop::get();
+        $loop = $loop ?: \RectorPrefix20220401\React\EventLoop\Loop::get();
         // sanitize TCP context options if not properly wrapped
         if ($context && (!isset($context['tcp']) && !isset($context['tls']) && !isset($context['unix']))) {
             $context = array('tcp' => $context);
@@ -62,16 +62,16 @@ final class Server extends \RectorPrefix20220331\Evenement\EventEmitter implemen
             $scheme = \substr($uri, 0, $pos);
         }
         if ($scheme === 'unix') {
-            $server = new \RectorPrefix20220331\React\Socket\UnixServer($uri, $loop, $context['unix']);
+            $server = new \RectorPrefix20220401\React\Socket\UnixServer($uri, $loop, $context['unix']);
         } else {
-            $server = new \RectorPrefix20220331\React\Socket\TcpServer(\str_replace('tls://', '', $uri), $loop, $context['tcp']);
+            $server = new \RectorPrefix20220401\React\Socket\TcpServer(\str_replace('tls://', '', $uri), $loop, $context['tcp']);
             if ($scheme === 'tls') {
-                $server = new \RectorPrefix20220331\React\Socket\SecureServer($server, $loop, $context['tls']);
+                $server = new \RectorPrefix20220401\React\Socket\SecureServer($server, $loop, $context['tls']);
             }
         }
         $this->server = $server;
         $that = $this;
-        $server->on('connection', function (\RectorPrefix20220331\React\Socket\ConnectionInterface $conn) use($that) {
+        $server->on('connection', function (\RectorPrefix20220401\React\Socket\ConnectionInterface $conn) use($that) {
             $that->emit('connection', array($conn));
         });
         $server->on('error', function (\Exception $error) use($that) {

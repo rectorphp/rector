@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220331\Doctrine\Inflector\Rules\Portuguese;
+namespace RectorPrefix20220401\Doctrine\Inflector\Rules\Portuguese;
 
-use RectorPrefix20220331\Doctrine\Inflector\Rules\Pattern;
+use RectorPrefix20220401\Doctrine\Inflector\Rules\Pattern;
 final class Uninflected
 {
     /**
@@ -25,10 +25,10 @@ final class Uninflected
      */
     private static function getDefault() : iterable
     {
-        (yield new \RectorPrefix20220331\Doctrine\Inflector\Rules\Pattern('tórax'));
-        (yield new \RectorPrefix20220331\Doctrine\Inflector\Rules\Pattern('tênis'));
-        (yield new \RectorPrefix20220331\Doctrine\Inflector\Rules\Pattern('ônibus'));
-        (yield new \RectorPrefix20220331\Doctrine\Inflector\Rules\Pattern('lápis'));
-        (yield new \RectorPrefix20220331\Doctrine\Inflector\Rules\Pattern('fênix'));
+        (yield new \RectorPrefix20220401\Doctrine\Inflector\Rules\Pattern('tórax'));
+        (yield new \RectorPrefix20220401\Doctrine\Inflector\Rules\Pattern('tênis'));
+        (yield new \RectorPrefix20220401\Doctrine\Inflector\Rules\Pattern('ônibus'));
+        (yield new \RectorPrefix20220401\Doctrine\Inflector\Rules\Pattern('lápis'));
+        (yield new \RectorPrefix20220401\Doctrine\Inflector\Rules\Pattern('fênix'));
     }
 }

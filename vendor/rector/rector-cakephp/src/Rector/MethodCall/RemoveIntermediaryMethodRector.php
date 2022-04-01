@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220331\Webmozart\Assert\Assert;
+use RectorPrefix20220401\Webmozart\Assert\Assert;
 /**
  * @see https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#deprecated-combined-get-set-methods
  * @see https://github.com/cakephp/cakephp/commit/326292688c5e6d08945a3cafa4b6ffb33e714eea#diff-e7c0f0d636ca50a0350e9be316d8b0f9
@@ -76,8 +76,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $removeIntermediaryMethods = $configuration[self::REMOVE_INTERMEDIARY_METHOD] ?? $configuration;
-        \RectorPrefix20220331\Webmozart\Assert\Assert::isArray($removeIntermediaryMethods);
-        \RectorPrefix20220331\Webmozart\Assert\Assert::allIsAOf($removeIntermediaryMethods, \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod::class);
+        \RectorPrefix20220401\Webmozart\Assert\Assert::isArray($removeIntermediaryMethods);
+        \RectorPrefix20220401\Webmozart\Assert\Assert::allIsAOf($removeIntermediaryMethods, \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod::class);
         $this->removeIntermediaryMethod = $removeIntermediaryMethods;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\RemoveIntermediaryMethod
