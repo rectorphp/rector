@@ -1,4 +1,4 @@
-# 507 Rules Overview
+# 506 Rules Overview
 
 <br>
 
@@ -14,7 +14,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (50)
+- [DeadCode](#deadcode) (49)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -3348,31 +3348,6 @@ Remove unreachable statements
          return 5;
 -
 -        $removeMe = 10;
-     }
- }
-```
-
-<br>
-
-### RemoveUnusedAssignVariableRector
-
-Remove assigned unused variable
-
-- class: [`Rector\DeadCode\Rector\Assign\RemoveUnusedAssignVariableRector`](../rules/DeadCode/Rector/Assign/RemoveUnusedAssignVariableRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $value = $this->process();
-+        $this->process();
-     }
-
-     public function process()
-     {
-         // something going on
-         return 5;
      }
  }
 ```
