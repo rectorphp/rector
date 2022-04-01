@@ -58,6 +58,7 @@ final class ReservedKeywordAnalyzer
         'interface',
         'isset',
         'list',
+        'match',
         'namespace',
         'new',
         'or',
@@ -65,6 +66,7 @@ final class ReservedKeywordAnalyzer
         'private',
         'protected',
         'public',
+        'readonly',
         'require',
         'require_once',
         'return',
@@ -79,6 +81,7 @@ final class ReservedKeywordAnalyzer
         'while',
         'xor',
         'yield',
+        'yield from',
     ];
 
     /**
