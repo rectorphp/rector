@@ -40,7 +40,7 @@ jobs:
             # see https://github.com/rectorphp/rector/commit/d395e1c28b8e6a56711dcc2e10490a82965850e4
             -
                 if: github.event.pull_request.head.repo.full_name == github.repository
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
                 with:
                     # Must be used to trigger workflow after push
                     token: ${{ secrets.ACCESS_TOKEN }}
@@ -48,7 +48,7 @@ jobs:
             # in forks, the token is not available - so we cannot us eit
             -
                 if: github.event.pull_request.head.repo.full_name != github.repository
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -
                 uses: shivammathur/setup-php@v2
