@@ -1,13 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp72\Rector\FuncCall;
+namespace Rector\DowngradePhp81\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
@@ -18,11 +19,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://github.com/symfony/polyfill/commit/cc2bf55accd32b989348e2039e8c91cde46aebed
+ * @changelog https://wiki.php.net/rfc/is_list
  *
- * @see \Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector\DowngradeStreamIsattyRectorTest
+ * @see \Rector\Tests\DowngradePhp81\Rector\FuncCall\DowngradeArrayIsListRector\DowngradeArrayIsListRectorTest
  */
-final class DowngradeStreamIsattyRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeArrayIsListRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -47,42 +48,27 @@ final class DowngradeStreamIsattyRector extends \Rector\Core\Rector\AbstractRect
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade stream_isatty() function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run($stream)
-    {
-        $isStream = stream_isatty($stream);
-    }
-}
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace array_is_list() function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+array_is_list([1 => 'apple', 'orange']);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run($stream)
-    {
-        $streamIsatty = function ($stream) {
-            if (\function_exists('stream_isatty')) {
-                return stream_isatty($stream);
-            }
-
-            if (!\is_resource($stream)) {
-                trigger_error('stream_isatty() expects parameter 1 to be resource, '.\gettype($stream).' given', \E_USER_WARNING);
-
-                return false;
-            }
-
-            if ('\\' === \DIRECTORY_SEPARATOR) {
-                $stat = @fstat($stream);
-                // Check if formatted mode is S_IFCHR
-                return $stat ? 0020000 === ($stat['mode'] & 0170000) : false;
-            }
-
-            return \function_exists('posix_isatty') && @posix_isatty($stream);
-        };
-        $isStream = $streamIsatty($stream);
+$arrayIsList = function (array $array) : bool {
+    if (function_exists('array_is_list')) {
+        return array_is_list($array);
     }
-}
+    if ($array === []) {
+        return true;
+    }
+    $current_key = 0;
+    foreach ($array as $key => $noop) {
+        if ($key !== $current_key) {
+            return false;
+        }
+        ++$current_key;
+    }
+    return true;
+};
+$arrayIsList([1 => 'apple', 'orange']);
 CODE_SAMPLE
 )]);
     }
@@ -96,24 +82,25 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\FuncCall
     {
-        if (!$this->isName($node, 'stream_isatty')) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
-        if ($this->functionExistsFunCallAnalyzer->detect($node, 'stream_isatty')) {
+        $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
             return null;
         }
-        $function = $this->createClosure();
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        $variable = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
-        $assign = new \PhpParser\Node\Expr\Assign($variable, $function);
-        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
+        $variable = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('arrayIsList', $scope));
+        $function = $this->createClosure();
+        $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $function));
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $currentStmt);
         return new \PhpParser\Node\Expr\FuncCall($variable, $node->args);
     }
     private function createClosure() : \PhpParser\Node\Expr\Closure
     {
-        $stmts = $this->inlineCodeParser->parse(__DIR__ . '/../../snippet/isatty_closure.php.inc');
+        $stmts = $this->inlineCodeParser->parse(__DIR__ . '/../../snippet/array_is_list_closure.php.inc');
         /** @var Expression $expression */
         $expression = $stmts[0];
         $expr = $expression->expr;
@@ -121,5 +108,16 @@ CODE_SAMPLE
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $expr;
+    }
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    {
+        if (!$this->nodeNameResolver->isName($funcCall, 'array_is_list')) {
+            return \true;
+        }
+        if ($this->functionExistsFunCallAnalyzer->detect($funcCall, 'array_is_list')) {
+            return \true;
+        }
+        $args = $funcCall->getArgs();
+        return \count($args) !== 1;
     }
 }

@@ -182,7 +182,23 @@ class PrototypedArrayNode extends \RectorPrefix20220402\Symfony\Component\Config
             return $value;
         }
         $value = $this->remapXml($value);
-        $isList = array_is_list($value);
+        $arrayIsList = function (array $array) : bool {
+            if (\function_exists('RectorPrefix20220402\\array_is_list')) {
+                return array_is_list($array);
+            }
+            if ($array === []) {
+                return \true;
+            }
+            $current_key = 0;
+            foreach ($array as $key => $noop) {
+                if ($key !== $current_key) {
+                    return \false;
+                }
+                ++$current_key;
+            }
+            return \true;
+        };
+        $isList = $arrayIsList($value);
         $normalized = [];
         foreach ($value as $k => $v) {
             if (null !== $this->keyAttribute && \is_array($v)) {
@@ -245,7 +261,23 @@ class PrototypedArrayNode extends \RectorPrefix20220402\Symfony\Component\Config
         if (\false === $leftSide || !$this->performDeepMerging) {
             return $rightSide;
         }
-        $isList = array_is_list($rightSide);
+        $arrayIsList = function (array $array) : bool {
+            if (\function_exists('RectorPrefix20220402\\array_is_list')) {
+                return array_is_list($array);
+            }
+            if ($array === []) {
+                return \true;
+            }
+            $current_key = 0;
+            foreach ($array as $key => $noop) {
+                if ($key !== $current_key) {
+                    return \false;
+                }
+                ++$current_key;
+            }
+            return \true;
+        };
+        $isList = $arrayIsList($rightSide);
         foreach ($rightSide as $k => $v) {
             // prototype, and key is irrelevant there are no named keys, append the element
             if (null === $this->keyAttribute && $isList) {

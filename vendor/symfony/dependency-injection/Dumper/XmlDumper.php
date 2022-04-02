@@ -229,7 +229,23 @@ class XmlDumper extends \RectorPrefix20220402\Symfony\Component\DependencyInject
     }
     private function convertParameters(array $parameters, string $type, \DOMElement $parent, string $keyAttribute = 'key')
     {
-        $withKeys = !array_is_list($parameters);
+        $arrayIsList = function (array $array) : bool {
+            if (\function_exists('RectorPrefix20220402\\array_is_list')) {
+                return array_is_list($array);
+            }
+            if ($array === []) {
+                return \true;
+            }
+            $current_key = 0;
+            foreach ($array as $key => $noop) {
+                if ($key !== $current_key) {
+                    return \false;
+                }
+                ++$current_key;
+            }
+            return \true;
+        };
+        $withKeys = !$arrayIsList($parameters);
         foreach ($parameters as $key => $value) {
             $element = $this->document->createElement($type);
             if ($withKeys) {

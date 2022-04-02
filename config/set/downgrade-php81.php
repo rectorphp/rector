@@ -7,6 +7,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector;
 use Rector\DowngradePhp81\Rector\ClassConst\DowngradeFinalizePublicClassConstantRector;
+use Rector\DowngradePhp81\Rector\FuncCall\DowngradeArrayIsListRector;
 use Rector\DowngradePhp81\Rector\FuncCall\DowngradeFirstClassCallableSyntaxRector;
 use Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNeverTypeDeclarationRector;
 use Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNewInInitializerRector;
@@ -26,4 +27,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DowngradePhp81\Rector\Instanceof_\DowngradePhp81ResourceReturnToObjectRector::class);
     $services->set(\Rector\DowngradePhp81\Rector\Property\DowngradeReadonlyPropertyRector::class);
     $services->set(\Rector\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector::class);
+    $services->set(\Rector\DowngradePhp81\Rector\FuncCall\DowngradeArrayIsListRector::class);
 };
