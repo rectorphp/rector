@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220401\Symfony\Component\Yaml\Command;
+namespace RectorPrefix20220402\Symfony\Component\Yaml\Command;
 
-use RectorPrefix20220401\Symfony\Component\Console\Attribute\AsCommand;
-use RectorPrefix20220401\Symfony\Component\Console\CI\GithubActionReporter;
-use RectorPrefix20220401\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220401\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix20220401\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix20220401\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20220401\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix20220401\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix20220401\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220401\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20220401\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220401\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220401\Symfony\Component\Yaml\Exception\ParseException;
-use RectorPrefix20220401\Symfony\Component\Yaml\Parser;
-use RectorPrefix20220401\Symfony\Component\Yaml\Yaml;
+use RectorPrefix20220402\Symfony\Component\Console\Attribute\AsCommand;
+use RectorPrefix20220402\Symfony\Component\Console\CI\GithubActionReporter;
+use RectorPrefix20220402\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220402\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix20220402\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix20220402\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20220402\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20220402\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20220402\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220402\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20220402\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220402\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220402\Symfony\Component\Yaml\Exception\ParseException;
+use RectorPrefix20220402\Symfony\Component\Yaml\Parser;
+use RectorPrefix20220402\Symfony\Component\Yaml\Yaml;
 /**
  * Validates YAML files syntax and outputs encountered errors.
  *
@@ -32,7 +32,7 @@ use RectorPrefix20220401\Symfony\Component\Yaml\Yaml;
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
 #[AsCommand(name: 'lint:yaml', description: 'Lint a YAML file and outputs encountered errors')]
-class LintCommand extends \RectorPrefix20220401\Symfony\Component\Console\Command\Command
+class LintCommand extends \RectorPrefix20220402\Symfony\Component\Console\Command\Command
 {
     private $parser;
     /**
@@ -62,7 +62,7 @@ class LintCommand extends \RectorPrefix20220401\Symfony\Component\Console\Comman
      */
     protected function configure()
     {
-        $this->addArgument('filename', \RectorPrefix20220401\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')->addOption('format', null, \RectorPrefix20220401\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The output format')->addOption('exclude', null, \RectorPrefix20220401\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED | \RectorPrefix20220401\Symfony\Component\Console\Input\InputOption::VALUE_IS_ARRAY, 'Path(s) to exclude')->addOption('parse-tags', null, \RectorPrefix20220401\Symfony\Component\Console\Input\InputOption::VALUE_NEGATABLE, 'Parse custom tags', null)->setHelp(<<<EOF
+        $this->addArgument('filename', \RectorPrefix20220402\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')->addOption('format', null, \RectorPrefix20220402\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The output format')->addOption('exclude', null, \RectorPrefix20220402\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED | \RectorPrefix20220402\Symfony\Component\Console\Input\InputOption::VALUE_IS_ARRAY, 'Path(s) to exclude')->addOption('parse-tags', null, \RectorPrefix20220402\Symfony\Component\Console\Input\InputOption::VALUE_NEGATABLE, 'Parse custom tags', null)->setHelp(<<<EOF
 The <info>%command.name%</info> command lints a YAML file and outputs to STDOUT
 the first encountered syntax error.
 
@@ -86,32 +86,32 @@ You can also exclude one or more specific files:
 EOF
 );
     }
-    protected function execute(\RectorPrefix20220401\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220401\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(\RectorPrefix20220402\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220402\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
-        $io = new \RectorPrefix20220401\Symfony\Component\Console\Style\SymfonyStyle($input, $output);
+        $io = new \RectorPrefix20220402\Symfony\Component\Console\Style\SymfonyStyle($input, $output);
         $filenames = (array) $input->getArgument('filename');
         $excludes = $input->getOption('exclude');
         $this->format = $input->getOption('format');
         $flags = $input->getOption('parse-tags');
-        if ('github' === $this->format && !\class_exists(\RectorPrefix20220401\Symfony\Component\Console\CI\GithubActionReporter::class)) {
+        if ('github' === $this->format && !\class_exists(\RectorPrefix20220402\Symfony\Component\Console\CI\GithubActionReporter::class)) {
             throw new \InvalidArgumentException('The "github" format is only available since "symfony/console" >= 5.3.');
         }
         if (null === $this->format) {
             // Autodetect format according to CI environment
-            $this->format = \class_exists(\RectorPrefix20220401\Symfony\Component\Console\CI\GithubActionReporter::class) && \RectorPrefix20220401\Symfony\Component\Console\CI\GithubActionReporter::isGithubActionEnvironment() ? 'github' : 'txt';
+            $this->format = \class_exists(\RectorPrefix20220402\Symfony\Component\Console\CI\GithubActionReporter::class) && \RectorPrefix20220402\Symfony\Component\Console\CI\GithubActionReporter::isGithubActionEnvironment() ? 'github' : 'txt';
         }
-        $flags = $flags ? \RectorPrefix20220401\Symfony\Component\Yaml\Yaml::PARSE_CUSTOM_TAGS : 0;
+        $flags = $flags ? \RectorPrefix20220402\Symfony\Component\Yaml\Yaml::PARSE_CUSTOM_TAGS : 0;
         $this->displayCorrectFiles = $output->isVerbose();
         if (['-'] === $filenames) {
             return $this->display($io, [$this->validate(\file_get_contents('php://stdin'), $flags)]);
         }
         if (!$filenames) {
-            throw new \RectorPrefix20220401\Symfony\Component\Console\Exception\RuntimeException('Please provide a filename or pipe file content to STDIN.');
+            throw new \RectorPrefix20220402\Symfony\Component\Console\Exception\RuntimeException('Please provide a filename or pipe file content to STDIN.');
         }
         $filesInfo = [];
         foreach ($filenames as $filename) {
             if (!$this->isReadable($filename)) {
-                throw new \RectorPrefix20220401\Symfony\Component\Console\Exception\RuntimeException(\sprintf('File or directory "%s" is not readable.', $filename));
+                throw new \RectorPrefix20220402\Symfony\Component\Console\Exception\RuntimeException(\sprintf('File or directory "%s" is not readable.', $filename));
             }
             foreach ($this->getFiles($filename) as $file) {
                 if (!\in_array($file->getPathname(), $excludes, \true)) {
@@ -125,20 +125,20 @@ EOF
     {
         $prevErrorHandler = \set_error_handler(function ($level, $message, $file, $line) use(&$prevErrorHandler) {
             if (\E_USER_DEPRECATED === $level) {
-                throw new \RectorPrefix20220401\Symfony\Component\Yaml\Exception\ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
+                throw new \RectorPrefix20220402\Symfony\Component\Yaml\Exception\ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
             }
             return $prevErrorHandler ? $prevErrorHandler($level, $message, $file, $line) : \false;
         });
         try {
-            $this->getParser()->parse($content, \RectorPrefix20220401\Symfony\Component\Yaml\Yaml::PARSE_CONSTANT | $flags);
-        } catch (\RectorPrefix20220401\Symfony\Component\Yaml\Exception\ParseException $e) {
+            $this->getParser()->parse($content, \RectorPrefix20220402\Symfony\Component\Yaml\Yaml::PARSE_CONSTANT | $flags);
+        } catch (\RectorPrefix20220402\Symfony\Component\Yaml\Exception\ParseException $e) {
             return ['file' => $file, 'line' => $e->getParsedLine(), 'valid' => \false, 'message' => $e->getMessage()];
         } finally {
             \restore_error_handler();
         }
         return ['file' => $file, 'valid' => \true];
     }
-    private function display(\RectorPrefix20220401\Symfony\Component\Console\Style\SymfonyStyle $io, array $files) : int
+    private function display(\RectorPrefix20220402\Symfony\Component\Console\Style\SymfonyStyle $io, array $files) : int
     {
         switch ($this->format) {
             case 'txt':
@@ -148,16 +148,16 @@ EOF
             case 'github':
                 return $this->displayTxt($io, $files, \true);
             default:
-                throw new \RectorPrefix20220401\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The format "%s" is not supported.', $this->format));
+                throw new \RectorPrefix20220402\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The format "%s" is not supported.', $this->format));
         }
     }
-    private function displayTxt(\RectorPrefix20220401\Symfony\Component\Console\Style\SymfonyStyle $io, array $filesInfo, bool $errorAsGithubAnnotations = \false) : int
+    private function displayTxt(\RectorPrefix20220402\Symfony\Component\Console\Style\SymfonyStyle $io, array $filesInfo, bool $errorAsGithubAnnotations = \false) : int
     {
         $countFiles = \count($filesInfo);
         $erroredFiles = 0;
         $suggestTagOption = \false;
         if ($errorAsGithubAnnotations) {
-            $githubReporter = new \RectorPrefix20220401\Symfony\Component\Console\CI\GithubActionReporter($io);
+            $githubReporter = new \RectorPrefix20220402\Symfony\Component\Console\CI\GithubActionReporter($io);
         }
         foreach ($filesInfo as $info) {
             if ($info['valid'] && $this->displayCorrectFiles) {
@@ -181,7 +181,7 @@ EOF
         }
         return \min($erroredFiles, 1);
     }
-    private function displayJson(\RectorPrefix20220401\Symfony\Component\Console\Style\SymfonyStyle $io, array $filesInfo) : int
+    private function displayJson(\RectorPrefix20220402\Symfony\Component\Console\Style\SymfonyStyle $io, array $filesInfo) : int
     {
         $errors = 0;
         \array_walk($filesInfo, function (&$v) use(&$errors) {
@@ -209,9 +209,9 @@ EOF
             (yield $file);
         }
     }
-    private function getParser() : \RectorPrefix20220401\Symfony\Component\Yaml\Parser
+    private function getParser() : \RectorPrefix20220402\Symfony\Component\Yaml\Parser
     {
-        return $this->parser = $this->parser ?? new \RectorPrefix20220401\Symfony\Component\Yaml\Parser();
+        return $this->parser = $this->parser ?? new \RectorPrefix20220402\Symfony\Component\Yaml\Parser();
     }
     private function getDirectoryIterator(string $directory) : iterable
     {
@@ -233,7 +233,7 @@ EOF
         }
         return $default($fileOrDirectory);
     }
-    public function complete(\RectorPrefix20220401\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20220401\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
+    public function complete(\RectorPrefix20220402\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20220402\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
     {
         if ($input->mustSuggestOptionValuesFor('format')) {
             $suggestions->suggestValues(['txt', 'json', 'github']);

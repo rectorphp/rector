@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220401\Symfony\Component\Process;
+namespace RectorPrefix20220402\Symfony\Component\Process;
 
 /**
  * An executable finder specifically designed for the PHP executable.
@@ -21,7 +21,7 @@ class PhpExecutableFinder
     private $executableFinder;
     public function __construct()
     {
-        $this->executableFinder = new \RectorPrefix20220401\Symfony\Component\Process\ExecutableFinder();
+        $this->executableFinder = new \RectorPrefix20220402\Symfony\Component\Process\ExecutableFinder();
     }
     /**
      * Finds The PHP executable.
@@ -40,6 +40,9 @@ class PhpExecutableFinder
                     return \false;
                 }
             }
+            if (@\is_dir($php)) {
+                return \false;
+            }
             return $php;
         }
         $args = $this->findArguments();
@@ -49,17 +52,17 @@ class PhpExecutableFinder
             return \PHP_BINARY . $args;
         }
         if ($php = \getenv('PHP_PATH')) {
-            if (!@\is_executable($php)) {
+            if (!@\is_executable($php) || @\is_dir($php)) {
                 return \false;
             }
             return $php;
         }
         if ($php = \getenv('PHP_PEAR_PHP_BIN')) {
-            if (@\is_executable($php)) {
+            if (@\is_executable($php) && !@\is_dir($php)) {
                 return $php;
             }
         }
-        if (@\is_executable($php = \PHP_BINDIR . ('\\' === \DIRECTORY_SEPARATOR ? '\\php.exe' : '/php'))) {
+        if (@\is_executable($php = \PHP_BINDIR . ('\\' === \DIRECTORY_SEPARATOR ? '\\php.exe' : '/php')) && !@\is_dir($php)) {
             return $php;
         }
         $dirs = [\PHP_BINDIR];

@@ -1,7 +1,7 @@
 composer/semver
 ===============
 
-Semver library that offers utilities, version constraint parsing and validation.
+Semver (Semantic Versioning) library that offers utilities, version constraint parsing and validation.
 
 Originally written as part of [composer/composer](https://github.com/composer/composer),
 now extracted and made available as a stand-alone library.

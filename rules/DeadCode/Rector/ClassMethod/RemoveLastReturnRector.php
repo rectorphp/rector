@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
@@ -57,7 +58,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class];
     }
     /**
      * @param ClassMethod|Function_ $node
@@ -68,9 +69,6 @@ CODE_SAMPLE
         $lastNode = $this->betterNodeFinder->findLastInstanceOf((array) $node->stmts, \PhpParser\Node::class);
         $lastReturn = $this->betterNodeFinder->findLastInstanceOf((array) $node->stmts, \PhpParser\Node\Stmt\Return_::class);
         if (!$lastReturn instanceof \PhpParser\Node\Stmt\Return_) {
-            return null;
-        }
-        if (!$lastNode instanceof \PhpParser\Node) {
             return null;
         }
         if ($lastNode !== $lastReturn) {

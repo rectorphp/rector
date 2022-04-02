@@ -4,21 +4,21 @@
  * @file
  * Tests event dispatching.
  */
-namespace RectorPrefix20220401\cweagans\Composer\Tests;
+namespace RectorPrefix20220402\cweagans\Composer\Tests;
 
-use RectorPrefix20220401\cweagans\Composer\PatchEvent;
-use RectorPrefix20220401\cweagans\Composer\PatchEvents;
-use RectorPrefix20220401\Composer\Package\PackageInterface;
-class PatchEventTest extends \RectorPrefix20220401\PHPUnit_Framework_TestCase
+use RectorPrefix20220402\cweagans\Composer\PatchEvent;
+use RectorPrefix20220402\cweagans\Composer\PatchEvents;
+use RectorPrefix20220402\Composer\Package\PackageInterface;
+class PatchEventTest extends \RectorPrefix20220402\PHPUnit_Framework_TestCase
 {
     /**
      * Tests all the getters.
      *
      * @dataProvider patchEventDataProvider
      */
-    public function testGetters($event_name, \RectorPrefix20220401\Composer\Package\PackageInterface $package, $url, $description)
+    public function testGetters($event_name, \RectorPrefix20220402\Composer\Package\PackageInterface $package, $url, $description)
     {
-        $patch_event = new \RectorPrefix20220401\cweagans\Composer\PatchEvent($event_name, $package, $url, $description);
+        $patch_event = new \RectorPrefix20220402\cweagans\Composer\PatchEvent($event_name, $package, $url, $description);
         $this->assertEquals($event_name, $patch_event->getName());
         $this->assertEquals($package, $patch_event->getPackage());
         $this->assertEquals($url, $patch_event->getUrl());
@@ -26,8 +26,8 @@ class PatchEventTest extends \RectorPrefix20220401\PHPUnit_Framework_TestCase
     }
     public function patchEventDataProvider()
     {
-        $prophecy = $this->prophesize('RectorPrefix20220401\\Composer\\Package\\PackageInterface');
+        $prophecy = $this->prophesize('RectorPrefix20220402\\Composer\\Package\\PackageInterface');
         $package = $prophecy->reveal();
-        return array(array(\RectorPrefix20220401\cweagans\Composer\PatchEvents::PRE_PATCH_APPLY, $package, 'https://www.drupal.org', 'A test patch'), array(\RectorPrefix20220401\cweagans\Composer\PatchEvents::POST_PATCH_APPLY, $package, 'https://www.drupal.org', 'A test patch'));
+        return array(array(\RectorPrefix20220402\cweagans\Composer\PatchEvents::PRE_PATCH_APPLY, $package, 'https://www.drupal.org', 'A test patch'), array(\RectorPrefix20220402\cweagans\Composer\PatchEvents::POST_PATCH_APPLY, $package, 'https://www.drupal.org', 'A test patch'));
     }
 }
