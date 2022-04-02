@@ -13,6 +13,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer;
+use Rector\Naming\Naming\VariableNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,10 +34,16 @@ final class DowngradeStreamIsattyRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer
      */
     private $functionExistsFunCallAnalyzer;
-    public function __construct(\Rector\Core\PhpParser\Parser\InlineCodeParser $inlineCodeParser, \Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\VariableNaming
+     */
+    private $variableNaming;
+    public function __construct(\Rector\Core\PhpParser\Parser\InlineCodeParser $inlineCodeParser, \Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer, \Rector\Naming\Naming\VariableNaming $variableNaming)
     {
         $this->inlineCodeParser = $inlineCodeParser;
         $this->functionExistsFunCallAnalyzer = $functionExistsFunCallAnalyzer;
+        $this->variableNaming = $variableNaming;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -97,9 +105,11 @@ CODE_SAMPLE
             return null;
         }
         $function = $this->createClosure();
-        $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('streamIsatty'), $function);
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $variable = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
+        $assign = new \PhpParser\Node\Expr\Assign($variable, $function);
         $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
-        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Expr\Variable('streamIsatty'), $node->args);
+        return new \PhpParser\Node\Expr\FuncCall($variable, $node->args);
     }
     private function createClosure() : \PhpParser\Node\Expr\Closure
     {
