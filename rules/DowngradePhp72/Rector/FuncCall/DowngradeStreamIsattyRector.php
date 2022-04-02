@@ -14,6 +14,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer;
+use Rector\Naming\Naming\VariableNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,7 +28,8 @@ final class DowngradeStreamIsattyRector extends AbstractRector
 {
     public function __construct(
         private readonly InlineCodeParser $inlineCodeParser,
-        private readonly FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer
+        private readonly FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer,
+        private readonly VariableNaming $variableNaming
     ) {
     }
 
@@ -99,11 +102,13 @@ CODE_SAMPLE
         }
 
         $function = $this->createClosure();
-        $assign = new Assign(new Variable('streamIsatty'), $function);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $variable = new Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
+        $assign = new Assign($variable, $function);
 
         $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
 
-        return new FuncCall(new Variable('streamIsatty'), $node->args);
+        return new FuncCall($variable, $node->args);
     }
 
     private function createClosure(): Closure
