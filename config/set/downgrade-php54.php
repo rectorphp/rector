@@ -6,6 +6,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector;
 use Rector\DowngradePhp54\Rector\Closure\DowngradeStaticClosureRector;
+use Rector\DowngradePhp54\Rector\Closure\DowngradeThisInClosureRector;
 use Rector\DowngradePhp54\Rector\FuncCall\DowngradeIndirectCallByArrayRector;
 use Rector\DowngradePhp54\Rector\FunctionLike\DowngradeCallableTypeDeclarationRector;
 use Rector\DowngradePhp54\Rector\LNumber\DowngradeBinaryNotationRector;
@@ -23,4 +24,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeCallableTypeDeclarationRector::class);
     $services->set(DowngradeBinaryNotationRector::class);
     $services->set(DowngradeInstanceMethodCallRector::class);
+    $services->set(DowngradeThisInClosureRector::class);
 };
