@@ -11,24 +11,7 @@ use Rector\Core\Application\VersionResolver;
 use Rector\Core\Util\StringUtils;
 
 require_once __DIR__ . '/vendor/autoload.php';
-// [BEWARE] this path is relative to the root and location of this file
-$filePathsToRemoveNamespace = [
-    // it would make polyfill function work only with namespace = brokes
-    'vendor/symfony/polyfill-ctype/bootstrap.php',
-    'vendor/symfony/polyfill-ctype/bootstrap80.php',
-    'vendor/symfony/polyfill-intl-normalizer/bootstrap.php',
-    'vendor/symfony/polyfill-intl-normalizer/bootstrap80.php',
-    'vendor/symfony/polyfill-intl-grapheme/bootstrap.php',
-    'vendor/symfony/polyfill-intl-grapheme/bootstrap80.php',
-    'vendor/symfony/polyfill-mbstring/bootstrap.php',
-    'vendor/symfony/polyfill-mbstring/bootstrap80.php',
-    'vendor/symfony/polyfill-php81/bootstrap.php',
-    'vendor/symfony/polyfill-php80/bootstrap.php',
-    'vendor/symfony/polyfill-php74/bootstrap.php',
-    'vendor/symfony/polyfill-php73/bootstrap.php',
-    'vendor/symfony/polyfill-php72/bootstrap.php',
-    'vendor/symfony/polyfill-uuid/bootstrap.php',
-];
+
 // remove phpstan, because it is already prefixed in its own scope
 $dateTime = DateTime::from('now');
 $timestamp = $dateTime->format('Ymd');
@@ -49,6 +32,11 @@ const UNPREFIX_CLASSES_BY_FILE = [
     'packages/Testing/PHPUnit/AbstractTestCase.php' => ['PHPUnit\Framework\TestCase'],
 ];
 
+/**
+ * @see https://regex101.com/r/LMDq0p/1
+ * @var string
+ */
+const POLYFILL_FILE_NAME_REGEX = '#vendor\/symfony\/polyfill\-(.*)\/bootstrap(.*?)\.php#';
 
 /**
  * @see https://regex101.com/r/RBZ0bN/1
@@ -257,6 +245,19 @@ return [
             }
 
             return Strings::replace($content, '#services\->load\(\'#', "services->load('" . $prefix . '\\');
+        },
+
+        // unprefix polyfill functions
+        // @see https://github.com/humbug/php-scoper/issues/440#issuecomment-795160132
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::match($filePath, POLYFILL_FILE_NAME_REGEX)) {
+                return $content;
+            }
+
+            $content = Strings::replace($content, '#namespace ' . $prefix . ';#', '');
+
+            // add missing use statements prefixes
+            return Strings::replace($content, '#use Symfony\\\\Polyfill#', 'use ' . $prefix . ' Symfony\Polyfill');
         },
 
         // remove namespace from polyfill stubs
