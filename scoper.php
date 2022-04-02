@@ -22,6 +22,7 @@ $filePathsToRemoveNamespace = [
     'vendor/symfony/polyfill-intl-grapheme/bootstrap80.php',
     'vendor/symfony/polyfill-mbstring/bootstrap.php',
     'vendor/symfony/polyfill-mbstring/bootstrap80.php',
+    'vendor/symfony/polyfill-php81/bootstrap.php',
     'vendor/symfony/polyfill-php80/bootstrap.php',
     'vendor/symfony/polyfill-php74/bootstrap.php',
     'vendor/symfony/polyfill-php73/bootstrap.php',
