@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -16,6 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddFalseDefaultToBoolPropertyRector extends AbstractRector
 {
+    public function __construct(private readonly ConstructorAssignDetector $constructorAssignDetector)
+    {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -72,8 +80,18 @@ CODE_SAMPLE
             return null;
         }
 
-        $onlyProperty->default = $this->nodeFactory->createFalse();
+        $classLike = $this->betterNodeFinder->findParentByTypes($node, [Class_::class, Trait_::class]);
 
+        if (! $classLike instanceof ClassLike) {
+            return null;
+        }
+
+        $propertyName = $this->nodeNameResolver->getName($onlyProperty);
+        if ($this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName)) {
+            return null;
+        }
+
+        $onlyProperty->default = $this->nodeFactory->createFalse();
         return $node;
     }
 
