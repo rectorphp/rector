@@ -6,6 +6,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector;
 use Rector\DowngradePhp81\Rector\ClassConst\DowngradeFinalizePublicClassConstantRector;
+use Rector\DowngradePhp81\Rector\FuncCall\DowngradeArrayIsListRector;
 use Rector\DowngradePhp81\Rector\FuncCall\DowngradeFirstClassCallableSyntaxRector;
 use Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNeverTypeDeclarationRector;
 use Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNewInInitializerRector;
@@ -27,4 +28,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradePhp81ResourceReturnToObjectRector::class);
     $services->set(DowngradeReadonlyPropertyRector::class);
     $services->set(DowngradeArraySpreadStringKeyRector::class);
+    $services->set(DowngradeArrayIsListRector::class);
 };
