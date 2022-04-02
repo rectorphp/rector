@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeManipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Php71\ValueObject\TwoNodeMatch;
@@ -95,6 +96,10 @@ final class GetClassToInstanceOfRector extends AbstractRector
         }
 
         if ($className === null) {
+            return null;
+        }
+
+        if ($className === ObjectReference::PARENT()->getValue()) {
             return null;
         }
 
