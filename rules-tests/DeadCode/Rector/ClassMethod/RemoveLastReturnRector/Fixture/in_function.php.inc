@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveLastReturnRector\Fixture;
 
-function some_function($value)
+function InFunction($value)
 {
     if ($value === 1000) {
         return;
@@ -19,7 +19,7 @@ function some_function($value)
 
 namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveLastReturnRector\Fixture;
 
-function some_function($value)
+function InFunction($value)
 {
     if ($value === 1000) {
         return;
