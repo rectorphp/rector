@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220402\Symfony\Component\DependencyInjection\Attribute;
+namespace RectorPrefix20220403\Symfony\Component\DependencyInjection\Attribute;
 
 /**
  * An attribute to tell how a base type should be autoconfigured.

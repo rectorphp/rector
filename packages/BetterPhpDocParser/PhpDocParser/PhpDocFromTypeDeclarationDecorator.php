@@ -25,7 +25,7 @@ use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20220402\ReturnTypeWillChange;
+use RectorPrefix20220403\ReturnTypeWillChange;
 /**
  * @see https://wiki.php.net/rfc/internal_method_return_types#proposal
  */

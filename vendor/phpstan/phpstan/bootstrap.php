@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace PHPStan;
 
-use RectorPrefix20220402\Composer\Autoload\ClassLoader;
+use RectorPrefix20220403\Composer\Autoload\ClassLoader;
 final class PharAutoloader
 {
     /** @var ClassLoader */

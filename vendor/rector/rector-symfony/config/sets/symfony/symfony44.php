@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220402;
+namespace RectorPrefix20220403;
 
 use Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector;
 use Rector\Symfony\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector;

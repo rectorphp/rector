@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220402\Doctrine\Inflector\Rules;
+namespace RectorPrefix20220403\Doctrine\Inflector\Rules;
 
-use RectorPrefix20220402\Doctrine\Inflector\WordInflector;
+use RectorPrefix20220403\Doctrine\Inflector\WordInflector;
 use function strtolower;
 use function strtoupper;
 use function substr;
-class Substitutions implements \RectorPrefix20220402\Doctrine\Inflector\WordInflector
+class Substitutions implements \RectorPrefix20220403\Doctrine\Inflector\WordInflector
 {
     /** @var Substitution[] */
     private $substitutions;
-    public function __construct(\RectorPrefix20220402\Doctrine\Inflector\Rules\Substitution ...$substitutions)
+    public function __construct(\RectorPrefix20220403\Doctrine\Inflector\Rules\Substitution ...$substitutions)
     {
         foreach ($substitutions as $substitution) {
             $this->substitutions[$substitution->getFrom()->getWord()] = $substitution;
         }
     }
-    public function getFlippedSubstitutions() : \RectorPrefix20220402\Doctrine\Inflector\Rules\Substitutions
+    public function getFlippedSubstitutions() : \RectorPrefix20220403\Doctrine\Inflector\Rules\Substitutions
     {
         $substitutions = [];
         foreach ($this->substitutions as $substitution) {
-            $substitutions[] = new \RectorPrefix20220402\Doctrine\Inflector\Rules\Substitution($substitution->getTo(), $substitution->getFrom());
+            $substitutions[] = new \RectorPrefix20220403\Doctrine\Inflector\Rules\Substitution($substitution->getTo(), $substitution->getFrom());
         }
-        return new \RectorPrefix20220402\Doctrine\Inflector\Rules\Substitutions(...$substitutions);
+        return new \RectorPrefix20220403\Doctrine\Inflector\Rules\Substitutions(...$substitutions);
     }
     public function inflect(string $word) : string
     {
