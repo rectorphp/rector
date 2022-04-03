@@ -225,10 +225,7 @@ return [
                 return $content;
             }
 
-            $content = Strings::replace($content, '#namespace ' . $prefix . ';#', '');
-
-            // add missing use statements prefixes
-            return Strings::replace($content, '#use Symfony\\\\Polyfill#', 'use ' . $prefix . ' Symfony\Polyfill');
+            return Strings::replace($content, '#namespace ' . $prefix . ';#', '');
         },
 
         // remove namespace from polyfill stubs
