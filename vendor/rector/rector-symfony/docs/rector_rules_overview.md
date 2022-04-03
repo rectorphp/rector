@@ -1,4 +1,4 @@
-# 57 Rules Overview
+# 59 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -452,12 +452,14 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
 - class: [`Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector`](../src/Rector/MethodCall/FormTypeInstanceToClassConstRector.php)
 
 ```diff
- class SomeController
+ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+ final class SomeController extends Controller
  {
      public function action()
      {
--        $form = $this->createForm(new TeamType, $entity);
-+        $form = $this->createForm(TeamType::class, $entity);
+-        $form = $this->createForm(new TeamType);
++        $form = $this->createForm(TeamType::class);
      }
  }
 ```
@@ -561,6 +563,37 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 -        // ...
 -        $this->get('some_service');
 +        $this->someService;
+     }
+ }
+```
+
+<br>
+
+## InvokableControllerRector
+
+Change god controller to single-action invokable controllers
+
+- class: [`Rector\Symfony\Rector\Class_\InvokableControllerRector`](../src/Rector/Class_/InvokableControllerRector.php)
+
+```diff
+ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+-final class SomeController extends Controller
++final class SomeDetailController extends Controller
+ {
+-    public function detailAction()
++    public function __invoke()
+     {
+     }
++}
+
+-    public function listAction()
++use Symfony\Bundle\FrameworkBundle\Controller\Controller;
++
++final class SomeListController extends Controller
++{
++    public function __invoke()
+     {
      }
  }
 ```
@@ -777,6 +810,32 @@ Turns old option names to new ones in FormTypes in Form in Symfony
  $builder = new FormBuilder;
 -$builder->add("...", ["precision" => "...", "virtual" => "..."];
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
+```
+
+<br>
+
+## ParamTypeFromRouteRequiredRegexRector
+
+Complete strict param type declaration based on route annotation
+
+- class: [`Rector\Symfony\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector`](../src/Rector/ClassMethod/ParamTypeFromRouteRequiredRegexRector.php)
+
+```diff
+ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+ use Symfony\Component\Routing\Annotation\Route;
+
+ final class SomeController extends Controller
+ {
+     /**
+      * @Route(
+      *     requirements={"number"="\d+"},
+      * )
+      */
+-    public function detailAction($number)
++    public function detailAction(int $number)
+     {
+     }
+ }
 ```
 
 <br>

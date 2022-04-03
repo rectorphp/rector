@@ -64,9 +64,6 @@ final class ConstraintUrlOptionRector extends \Rector\Core\Rector\AbstractRector
         if (!$newType instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }
-        if ($newType->getClassName() !== self::URL_CONSTRAINT_CLASS) {
-            return \false;
-        }
-        return \true;
+        return $newType->getClassName() === self::URL_CONSTRAINT_CLASS;
     }
 }

@@ -8,6 +8,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 final class AttrinationFinder
@@ -26,6 +27,19 @@ final class AttrinationFinder
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->attributeFinder = $attributeFinder;
+    }
+    /**
+     * @param class-string $name
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
+     * @return \PhpParser\Node\Attribute|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|null
+     */
+    public function getByOne($node, string $name)
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if ($phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo && $phpDocInfo->hasByAnnotationClass($name)) {
+            return $phpDocInfo->getByAnnotationClass($name);
+        }
+        return $this->attributeFinder->findAttributeByClass($node, $name);
     }
     /**
      * @param class-string $name
