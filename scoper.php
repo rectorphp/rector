@@ -8,7 +8,6 @@ use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\Unprefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 use Rector\Core\Application\VersionResolver;
-use Rector\Core\Util\StringUtils;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -179,18 +178,6 @@ return [
             }
 
             return $content;
-        },
-
-        // fixes https://github.com/rectorphp/rector/issues/6010 + test case prefix
-        function (string $filePath, string $prefix, string $content): string {
-            // @see https://regex101.com/r/bA1nQa/1
-            if (! StringUtils::isMatch($filePath, '#vendor/symfony/polyfill-php\d{2}/Resources/stubs#')) {
-                return $content;
-            }
-
-            // @see https://regex101.com/r/x5Ukrx/1
-            $namespace = sprintf('#namespace %s;#m', $prefix);
-            return Strings::replace($content, $namespace);
         },
 
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
