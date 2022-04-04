@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220403\Symfony\Contracts\Translation\Test;
+namespace RectorPrefix20220404\Symfony\Contracts\Translation\Test;
 
-use RectorPrefix20220403\PHPUnit\Framework\TestCase;
-use RectorPrefix20220403\Symfony\Contracts\Translation\TranslatorInterface;
-use RectorPrefix20220403\Symfony\Contracts\Translation\TranslatorTrait;
+use RectorPrefix20220404\PHPUnit\Framework\TestCase;
+use RectorPrefix20220404\Symfony\Contracts\Translation\TranslatorInterface;
+use RectorPrefix20220404\Symfony\Contracts\Translation\TranslatorTrait;
 /**
  * Test should cover all languages mentioned on http://translate.sourceforge.net/wiki/l10n/pluralforms
  * and Plural forms mentioned on http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms.
@@ -26,7 +26,7 @@ use RectorPrefix20220403\Symfony\Contracts\Translation\TranslatorTrait;
  *
  * @author Clemens Tolboom clemens@build2be.nl
  */
-class TranslatorTest extends \RectorPrefix20220403\PHPUnit\Framework\TestCase
+class TranslatorTest extends \RectorPrefix20220404\PHPUnit\Framework\TestCase
 {
     private $defaultLocale;
     protected function setUp() : void
@@ -38,9 +38,9 @@ class TranslatorTest extends \RectorPrefix20220403\PHPUnit\Framework\TestCase
     {
         \Locale::setDefault($this->defaultLocale);
     }
-    public function getTranslator() : \RectorPrefix20220403\Symfony\Contracts\Translation\TranslatorInterface
+    public function getTranslator() : \RectorPrefix20220404\Symfony\Contracts\Translation\TranslatorInterface
     {
-        return new class implements \RectorPrefix20220403\Symfony\Contracts\Translation\TranslatorInterface
+        return new class implements \RectorPrefix20220404\Symfony\Contracts\Translation\TranslatorInterface
         {
             use TranslatorTrait;
         };

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220403\Symplify\SymplifyKernel\Exception;
+namespace RectorPrefix20220404\Symplify\SymplifyKernel\Exception;
 
 use Exception;
 /**

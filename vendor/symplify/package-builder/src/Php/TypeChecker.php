@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220403\Symplify\PackageBuilder\Php;
+namespace RectorPrefix20220404\Symplify\PackageBuilder\Php;
 
 /**
  * @api

@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220403\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20220404\Idiosyncratic\EditorConfig\Declaration;
 
-use RectorPrefix20220403\Idiosyncratic\EditorConfig\Exception\InvalidValue;
-use RectorPrefix20220403\PHPUnit\Framework\TestCase;
-class TabWidthTest extends \RectorPrefix20220403\PHPUnit\Framework\TestCase
+use RectorPrefix20220404\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20220404\PHPUnit\Framework\TestCase;
+class TabWidthTest extends \RectorPrefix20220404\PHPUnit\Framework\TestCase
 {
     public function testValidValues()
     {
-        $declaration = new \RectorPrefix20220403\Idiosyncratic\EditorConfig\Declaration\TabWidth('4');
+        $declaration = new \RectorPrefix20220404\Idiosyncratic\EditorConfig\Declaration\TabWidth('4');
         $this->assertEquals('tab_width=4', (string) $declaration);
         $this->assertSame(4, $declaration->getValue());
     }
     public function testInvalidValues()
     {
-        $this->expectException(\RectorPrefix20220403\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20220403\Idiosyncratic\EditorConfig\Declaration\TabWidth('true');
-        $this->expectException(\RectorPrefix20220403\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20220403\Idiosyncratic\EditorConfig\Declaration\TabWidth('four');
-        $this->expectException(\RectorPrefix20220403\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20220403\Idiosyncratic\EditorConfig\Declaration\TabWidth('-1');
+        $this->expectException(\RectorPrefix20220404\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20220404\Idiosyncratic\EditorConfig\Declaration\TabWidth('true');
+        $this->expectException(\RectorPrefix20220404\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20220404\Idiosyncratic\EditorConfig\Declaration\TabWidth('four');
+        $this->expectException(\RectorPrefix20220404\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20220404\Idiosyncratic\EditorConfig\Declaration\TabWidth('-1');
     }
 }

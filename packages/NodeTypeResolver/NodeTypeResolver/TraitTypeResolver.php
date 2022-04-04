@@ -52,9 +52,6 @@ final class TraitTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         if (\count($types) === 1) {
             return $types[0];
         }
-        if (\count($types) > 1) {
-            return new \PHPStan\Type\UnionType($types);
-        }
-        return new \PHPStan\Type\MixedType();
+        return new \PHPStan\Type\UnionType($types);
     }
 }

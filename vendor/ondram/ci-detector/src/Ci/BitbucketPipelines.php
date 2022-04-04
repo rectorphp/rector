@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220403\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220404\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220403\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220403\OndraM\CiDetector\Env;
-use RectorPrefix20220403\OndraM\CiDetector\TrinaryLogic;
-class BitbucketPipelines extends \RectorPrefix20220403\OndraM\CiDetector\Ci\AbstractCi
+use RectorPrefix20220404\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220404\OndraM\CiDetector\Env;
+use RectorPrefix20220404\OndraM\CiDetector\TrinaryLogic;
+class BitbucketPipelines extends \RectorPrefix20220404\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220403\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(\RectorPrefix20220404\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('BITBUCKET_COMMIT') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220403\OndraM\CiDetector\CiDetector::CI_BITBUCKET_PIPELINES;
+        return \RectorPrefix20220404\OndraM\CiDetector\CiDetector::CI_BITBUCKET_PIPELINES;
     }
-    public function isPullRequest() : \RectorPrefix20220403\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220404\OndraM\CiDetector\TrinaryLogic
     {
-        return \RectorPrefix20220403\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('BITBUCKET_PR_ID') !== '');
+        return \RectorPrefix20220404\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('BITBUCKET_PR_ID') !== '');
     }
     public function getBuildNumber() : string
     {

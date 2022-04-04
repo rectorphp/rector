@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220403\Symfony\Component\DependencyInjection\Exception;
+namespace RectorPrefix20220404\Symfony\Component\DependencyInjection\Exception;
 
 /**
  * This exception is thrown when a circular reference is detected.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ServiceCircularReferenceException extends \RectorPrefix20220403\Symfony\Component\DependencyInjection\Exception\RuntimeException
+class ServiceCircularReferenceException extends \RectorPrefix20220404\Symfony\Component\DependencyInjection\Exception\RuntimeException
 {
     /**
      * @var string

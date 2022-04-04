@@ -117,6 +117,6 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
         foreach ($functionLikeReflection->getVariants() as $parametersAcceptor) {
             $parameterCounts[] = \count($parametersAcceptor->getParameters());
         }
-        return (int) \max($parameterCounts);
+        return \max($parameterCounts);
     }
 }

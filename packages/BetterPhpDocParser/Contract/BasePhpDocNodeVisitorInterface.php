@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\Contract;
 
-use RectorPrefix20220403\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
-interface BasePhpDocNodeVisitorInterface extends \RectorPrefix20220403\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface
+use RectorPrefix20220404\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
+interface BasePhpDocNodeVisitorInterface extends \RectorPrefix20220404\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface
 {
 }
