@@ -56,10 +56,6 @@ final class TraitTypeResolver implements NodeTypeResolverInterface
             return $types[0];
         }
 
-        if (count($types) > 1) {
-            return new UnionType($types);
-        }
-
-        return new MixedType();
+        return new UnionType($types);
     }
 }

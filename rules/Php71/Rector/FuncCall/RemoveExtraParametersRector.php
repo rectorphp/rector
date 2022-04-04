@@ -123,6 +123,6 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
             $parameterCounts[] = count($parametersAcceptor->getParameters());
         }
 
-        return (int) max($parameterCounts);
+        return max($parameterCounts);
     }
 }
