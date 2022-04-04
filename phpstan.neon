@@ -391,10 +391,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\Core\\NodeManipulator\\ClassMethodAssignManipulator\:\:collectReferenceVariableNames\(\)" is 13, keep it under 10#'
 
         -
-            path: rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php
-            message: '#Class cognitive complexity is 31, keep it under 30#'
-
-        -
             message: '#Use separate function calls with readable variable names#'
             path: src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
 
@@ -460,11 +456,6 @@ parameters:
 
         # confused generics
         - '#Return type \(array<class\-string<PhpParser\\Node\>\>\) of method Rector\\NodeTypeResolver\\NodeTypeResolver\\(.*?)TypeResolver\:\:getNodeClasses\(\) should be covariant with return type \(array<class\-string<PhpParser\\Node\\(.*?)\>\>\) of method Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface<PhpParser\\Node\\(.*?)\>\:\:getNodeClasses\(\)#'
-
-        # respect webmozzart naming convention to make eaiser to discovery
-        -
-            message: '#Method name should be different to its parameter name, in a verb form#'
-            path: src/Validation/RectorAssert.php
 
         -
             message: '#Class has a static method must so must contains "Static" in its name#'
@@ -563,7 +554,6 @@ parameters:
         # 3rd party code without types
         - '#Add explicit array type to assigned "(.*?)->(args|params|items|parts|stmts)" expression#'
         # false positive on string type
-        - '#Add explicit array type to assigned "\$shortClassName" expression#'
         - '#Add explicit array type to assigned "\$unusedParameters" expression#'
         - '#Add explicit array type to assigned "\$unnamedArgs" expression#'
         - '#Add explicit array type to assigned "\$innerPattern" expression#'
