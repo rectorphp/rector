@@ -105,4 +105,8 @@ final class Typo3SetList
      * @var string
      */
     public const EXTBASE_COMMAND_CONTROLLERS_TO_SYMFONY_COMMANDS = __DIR__ . '/../../config/extbase-command-controllers-to-symfony-commands/extbase_command_controllers_to_symfony_commands.php';
+    /**
+     * @var string
+     */
+    public const REGISTER_ICONS_TO_ICON = __DIR__ . '/../../config/register-icon-to-icons-file/register-icon-to-icons-file.php';
 }

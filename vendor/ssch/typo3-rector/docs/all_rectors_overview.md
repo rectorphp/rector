@@ -1,4 +1,4 @@
-# 234 Rules Overview
+# 236 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -68,6 +68,44 @@ return static function (ContainerConfigurator $containerConfigurator): void {
          $this->setDescription('This is the description of the command');
 +        $this->addArgument('foo', \Symfony\Component\Console\Input\InputArgument::REQUIRED, 'The foo argument', null);
  }
+```
+
+<br>
+
+## AddIconsToReturnRector
+
+Add arguments to configure method in Symfony Command
+
+:wrench: **configure it!**
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector`](../src/Rector/v11/v5/RegisterIconToIconFileRector/AddIconsToReturnRector.php)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddIconsToReturnRector::class)
+        ->call('configure', [[AddIconsToReturnRector::ICON_IDENTIFIER => 'my-icon', AddIconsToReturnRector::ICON_CONFIGURATION => ['provider' => 'stdClass', 'source' => 'mysvg.svg']]]);
+};
+```
+
+↓
+
+```diff
+-return [];
++return [
++    'my-icon' => [
++        'provider' => stdClass::class,
++        'source' => 'mysvg.svg'
++    ]
++];
 ```
 
 <br>
@@ -2471,6 +2509,31 @@ Refactor various deprecated methods of class GeneralUtility
  $url = 'https://www.domain.com/';
 -$url = GeneralUtility::rawUrlEncodeFP($url);
 +$url = str_replace('%2F', '/', rawurlencode($url));
+```
+
+<br>
+
+## RegisterIconToIconFileRector
+
+Generate or add registerIcon calls to Icons.php file
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector`](../src/Rector/v11/v5/RegisterIconToIconFileRector.php)
+
+```diff
+ use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
+ use TYPO3\CMS\Core\Imaging\IconRegistry;
+ use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+ $iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
+-$iconRegistry->registerIcon(
+-    'mybitmapicon',
+-    BitmapIconProvider::class,
+-    [
+-        'source' => 'EXT:my_extension/Resources/Public/Icons/mybitmap.png',
+-    ]
+-);
++
++// Add Icons.php file
 ```
 
 <br>

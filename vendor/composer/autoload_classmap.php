@@ -3295,6 +3295,8 @@ return array(
     'Ssch\\TYPO3Rector\\Rector\\v11\\v4\\UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v11/v4/UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector.php',
     'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\FlexFormToolsArrayValueByPathRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v11/v5/FlexFormToolsArrayValueByPathRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\HandleCObjRendererATagParamsMethodRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v11/v5/HandleCObjRendererATagParamsMethodRector.php',
+    'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\RegisterIconToIconFileRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v11/v5/RegisterIconToIconFileRector.php',
+    'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\RegisterIconToIconFileRector\\AddIconsToReturnRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v11/v5/RegisterIconToIconFileRector/AddIconsToReturnRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\RemoveDefaultInternalTypeDBRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v11/v5/RemoveDefaultInternalTypeDBRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\ReplaceTSFEATagParamsCallOnGlobalsRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v11/v5/ReplaceTSFEATagParamsCallOnGlobalsRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\SubstituteBackendTemplateViewWithModuleTemplateRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v11/v5/SubstituteBackendTemplateViewWithModuleTemplateRector.php',

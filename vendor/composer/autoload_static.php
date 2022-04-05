@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4dbb3f74c784ae10d042ef06776f5e59
+class ComposerStaticInit3ed0f6f1bf0fbe71728e66d7742e61d1
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3664,6 +3664,8 @@ class ComposerStaticInit4dbb3f74c784ae10d042ef06776f5e59
         'Ssch\\TYPO3Rector\\Rector\\v11\\v4\\UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v4/UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector.php',
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\FlexFormToolsArrayValueByPathRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/FlexFormToolsArrayValueByPathRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\HandleCObjRendererATagParamsMethodRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/HandleCObjRendererATagParamsMethodRector.php',
+        'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\RegisterIconToIconFileRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/RegisterIconToIconFileRector.php',
+        'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\RegisterIconToIconFileRector\\AddIconsToReturnRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/RegisterIconToIconFileRector/AddIconsToReturnRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\RemoveDefaultInternalTypeDBRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/RemoveDefaultInternalTypeDBRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\ReplaceTSFEATagParamsCallOnGlobalsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/ReplaceTSFEATagParamsCallOnGlobalsRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\SubstituteBackendTemplateViewWithModuleTemplateRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/SubstituteBackendTemplateViewWithModuleTemplateRector.php',
@@ -3842,9 +3844,9 @@ class ComposerStaticInit4dbb3f74c784ae10d042ef06776f5e59
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4dbb3f74c784ae10d042ef06776f5e59::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4dbb3f74c784ae10d042ef06776f5e59::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4dbb3f74c784ae10d042ef06776f5e59::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3ed0f6f1bf0fbe71728e66d7742e61d1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3ed0f6f1bf0fbe71728e66d7742e61d1::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3ed0f6f1bf0fbe71728e66d7742e61d1::$classMap;
 
         }, null, ClassLoader::class);
     }
