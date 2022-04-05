@@ -226,7 +226,7 @@ final class PropertyManipulator
         return null;
     }
 
-    private function isInlineStmtWithConstructMethod(
+    public function isInlineStmtWithConstructMethod(
         PropertyFetch|StaticPropertyFetch $propertyFetch,
         ?ClassMethod $classMethod
     ): bool {

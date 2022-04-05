@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\NodeManipulator\PropertyManipulator;
+use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -25,7 +29,9 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector
     public function __construct(
         private readonly ConstructorPropertyTypeInferer $constructorPropertyTypeInferer,
         private readonly VarTagRemover $varTagRemover,
-        private readonly PhpDocTypeChanger $phpDocTypeChanger
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly PropertyFetchFinder $propertyFetchFinder,
+        private readonly PropertyManipulator $propertyManipulator
     ) {
     }
 
@@ -87,8 +93,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (! $classLike instanceof Class_) {
+            return null;
+        }
 
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $varType);
             return $node;
@@ -106,7 +116,10 @@ CODE_SAMPLE
         }
 
         $node->type = $propertyTypeNode;
-        $node->props[0]->default = null;
+
+        if ($this->isDefaultToBeNull($node, $classLike)) {
+            $node->props[0]->default = null;
+        }
 
         $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
 
@@ -116,5 +129,20 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
+    }
+
+    private function isDefaultToBeNull(Property $property, Class_ $class): bool
+    {
+        $propertyName = $this->nodeNameResolver->getName($property);
+        $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($class, $propertyName);
+
+        foreach ($propertyFetches as $propertyFetch) {
+            $classMethod = $this->betterNodeFinder->findParentType($propertyFetch, ClassMethod::class);
+            if (! $this->propertyManipulator->isInlineStmtWithConstructMethod($propertyFetch, $classMethod)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
