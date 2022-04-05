@@ -469,6 +469,7 @@ parameters:
                  - src/*/*Processor.php
                  - rules/Composer/Application/FileProcessor/ComposerFileProcessor.php
                  - src/Contract/Processor/FileProcessorInterface.php
+                 - packages/Parallel/Application/ParallelFileProcessor.php
 
         - '#Call to function property_exists\(\) with PhpParser\\Node\\Stmt\\ClassLike and (.*?) will always evaluate to true#'
 
