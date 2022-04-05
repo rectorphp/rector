@@ -14,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -138,6 +139,14 @@ CODE_SAMPLE
 
         foreach ($propertyFetches as $propertyFetch) {
             $classMethod = $this->betterNodeFinder->findParentType($propertyFetch, ClassMethod::class);
+            if (! $classMethod instanceof ClassMethod) {
+                continue;
+            }
+
+            if (! $this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
+                continue;
+            }
+
             if (! $this->propertyManipulator->isInlineStmtWithConstructMethod($propertyFetch, $classMethod)) {
                 return false;
             }
