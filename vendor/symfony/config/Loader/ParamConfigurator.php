@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220404\Symfony\Component\Config\Loader;
+namespace RectorPrefix20220405\Symfony\Component\Config\Loader;
 
 /**
  * Placeholder for a parameter.

@@ -4,10 +4,14 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\NodeManipulator\PropertyManipulator;
+use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -35,11 +39,23 @@ final class TypedPropertyFromStrictConstructorRector extends \Rector\Core\Rector
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer $constructorPropertyTypeInferer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
+     */
+    private $propertyFetchFinder;
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeManipulator\PropertyManipulator
+     */
+    private $propertyManipulator;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer $constructorPropertyTypeInferer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator)
     {
         $this->constructorPropertyTypeInferer = $constructorPropertyTypeInferer;
         $this->varTagRemover = $varTagRemover;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->propertyFetchFinder = $propertyFetchFinder;
+        $this->propertyManipulator = $propertyManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -89,6 +105,10 @@ CODE_SAMPLE
         if ($varType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            return null;
+        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $varType);
@@ -104,12 +124,26 @@ CODE_SAMPLE
             return $node;
         }
         $node->type = $propertyTypeNode;
-        $node->props[0]->default = null;
+        if ($this->isDefaultToBeNull($node, $classLike)) {
+            $node->props[0]->default = null;
+        }
         $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
         return $node;
     }
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
+    }
+    private function isDefaultToBeNull(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Stmt\Class_ $class) : bool
+    {
+        $propertyName = $this->nodeNameResolver->getName($property);
+        $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($class, $propertyName);
+        foreach ($propertyFetches as $propertyFetch) {
+            $classMethod = $this->betterNodeFinder->findParentType($propertyFetch, \PhpParser\Node\Stmt\ClassMethod::class);
+            if (!$this->propertyManipulator->isInlineStmtWithConstructMethod($propertyFetch, $classMethod)) {
+                return \false;
+            }
+        }
+        return \true;
     }
 }

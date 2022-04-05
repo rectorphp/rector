@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220404;
+namespace RectorPrefix20220405;
 
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector;

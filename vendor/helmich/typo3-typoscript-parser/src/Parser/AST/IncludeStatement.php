@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220404\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20220405\Helmich\TypoScriptParser\Parser\AST;
 
 /**
  * Abstract base class for include statements.

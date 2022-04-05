@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\Class_;
 
-use RectorPrefix20220404\Nette\Utils\Strings;
+use RectorPrefix20220405\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
@@ -156,7 +156,7 @@ CODE_SAMPLE
         $class->implements[] = new \PhpParser\Node\Name\FullyQualified(self::EVENT_SUBSCRIBER_INTERFACE);
         $classShortName = $this->nodeNameResolver->getShortName($class);
         // remove suffix
-        $classShortName = \RectorPrefix20220404\Nette\Utils\Strings::replace($classShortName, self::LISTENER_MATCH_REGEX, '$1');
+        $classShortName = \RectorPrefix20220405\Nette\Utils\Strings::replace($classShortName, self::LISTENER_MATCH_REGEX, '$1');
         $class->name = new \PhpParser\Node\Identifier($classShortName . 'EventSubscriber');
         $classMethod = $this->getSubscribedEventsClassMethodFactory->createFromServiceDefinitionsAndEventsToMethods($eventsToMethods, $this->eventNamesToClassConstants);
         $class->stmts[] = $classMethod;

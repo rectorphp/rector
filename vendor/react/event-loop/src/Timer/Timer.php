@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20220404\React\EventLoop\Timer;
+namespace RectorPrefix20220405\React\EventLoop\Timer;
 
-use RectorPrefix20220404\React\EventLoop\TimerInterface;
+use RectorPrefix20220405\React\EventLoop\TimerInterface;
 /**
  * The actual connection implementation for TimerInterface
  *
@@ -11,7 +11,7 @@ use RectorPrefix20220404\React\EventLoop\TimerInterface;
  * @see TimerInterface
  * @internal
  */
-final class Timer implements \RectorPrefix20220404\React\EventLoop\TimerInterface
+final class Timer implements \RectorPrefix20220405\React\EventLoop\TimerInterface
 {
     const MIN_INTERVAL = 1.0E-6;
     private $interval;

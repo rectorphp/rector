@@ -1,5 +1,5 @@
 <?php
 
-namespace RectorPrefix20220404;
+namespace RectorPrefix20220405;
 
 return [];

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220404;
+namespace RectorPrefix20220405;
 
 use Rector\RectorGenerator\ValueObject\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
