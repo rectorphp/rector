@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
@@ -19,7 +20,8 @@ final class ClassMethodPropertyFetchManipulator
 {
     public function __construct(
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private readonly NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -38,7 +40,7 @@ final class ClassMethodPropertyFetchManipulator
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
-            function (Node $node) use ($propertyName, &$assignedParamName): ?int {
+            function (Node $node) use ($propertyName, &$assignedParamName, $classMethod): ?int {
                 if (! $node instanceof Assign) {
                     return null;
                 }
@@ -48,6 +50,11 @@ final class ClassMethodPropertyFetchManipulator
                 }
 
                 if ($node->expr instanceof MethodCall || $node->expr instanceof StaticCall) {
+                    return null;
+                }
+
+                $parentClassMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
+                if ($parentClassMethod !== $classMethod) {
                     return null;
                 }
 
@@ -90,7 +97,7 @@ final class ClassMethodPropertyFetchManipulator
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
-            function (Node $node) use ($propertyName, &$assignExprs, $paramNames): ?int {
+            function (Node $node) use ($propertyName, &$assignExprs, $paramNames, $classMethod): ?int {
                 if (! $node instanceof Assign) {
                     return null;
                 }
@@ -101,6 +108,11 @@ final class ClassMethodPropertyFetchManipulator
 
                 // skip param assigns
                 if ($this->nodeNameResolver->isNames($node->expr, $paramNames)) {
+                    return null;
+                }
+
+                $parentClassMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
+                if ($parentClassMethod !== $classMethod) {
                     return null;
                 }
 
