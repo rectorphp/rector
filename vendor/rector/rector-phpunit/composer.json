@@ -19,7 +19,8 @@
         "phpstan\/phpstan-strict-rules": "^1.1",
         "phpstan\/phpstan-webmozart-assert": "^1.0",
         "symplify\/vendor-patches": "^10.0",
-        "symplify\/monorepo-builder": "^10.0"
+        "symplify\/monorepo-builder": "^10.0",
+        "symplify\/easy-ci": "^10.1"
     },
     "autoload": {
         "psr-4": {

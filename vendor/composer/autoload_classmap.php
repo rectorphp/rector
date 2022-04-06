@@ -2470,6 +2470,7 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
     'Rector\\PHPStanStaticTypeMapper\\ValueObject\\UnionTypeAnalysis' => $baseDir . '/packages/PHPStanStaticTypeMapper/ValueObject/UnionTypeAnalysis.php',
     'Rector\\PHPUnit\\Naming\\TestClassNameResolver' => $vendorDir . '/rector/rector-phpunit/src/Naming/TestClassNameResolver.php',
+    'Rector\\PHPUnit\\Naming\\TestClassNameResolverInterface' => $vendorDir . '/rector/rector-phpunit/src/Naming/TestClassNameResolverInterface.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\AssertCallAnalyzer' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/AssertCallAnalyzer.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\IdentifierManipulator' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/IdentifierManipulator.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\MockedVariableAnalyzer' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/MockedVariableAnalyzer.php',

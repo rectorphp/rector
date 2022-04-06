@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\Naming;
 
-final class TestClassNameResolver
+final class TestClassNameResolver implements \Rector\PHPUnit\Naming\TestClassNameResolverInterface
 {
     /**
      * @return string[]
