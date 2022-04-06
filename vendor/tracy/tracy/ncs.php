@@ -5,7 +5,7 @@
  * https://github.com/nette/coding-standard
  */
 declare (strict_types=1);
-namespace RectorPrefix20220405;
+namespace RectorPrefix20220406;
 
 return [
     // src/Tracy/Debugger/Debugger.php

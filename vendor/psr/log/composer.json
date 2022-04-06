@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220405\\Psr\\Log\\": "src"
+            "RectorPrefix20220406\\Psr\\Log\\": "src"
         }
     },
     "extra": {
