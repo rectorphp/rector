@@ -562,3 +562,6 @@ parameters:
         - '#Add explicit array type to assigned "\$spreadParams" expression#'
 
         - '#foreach\(\), while\(\), for\(\) or if\(\) cannot contain a complex expression\. Extract it to a new variable on a line before#'
+
+        # false positive
+        - '#Method Rector\\Php71\\Rector\\FuncCall\\RemoveExtraParametersRector\:\:resolveMaximumAllowedParameterCount\(\) should return int but returns int<0, max>\|false#'
