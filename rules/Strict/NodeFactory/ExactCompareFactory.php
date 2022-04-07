@@ -104,10 +104,13 @@ final class ExactCompareFactory
         foreach ($unionType->getTypes() as $unionedType) {
             $compareExprs[] = $this->createNotIdenticalFalsyCompare($unionedType, $expr, $treatAsNotEmpty);
         }
-        /** @var Expr $truthyExpr */
+        /** @var ?Expr $truthyExpr */
         $truthyExpr = \array_shift($compareExprs);
         foreach ($compareExprs as $compareExpr) {
             if (!$compareExpr instanceof \PhpParser\Node\Expr) {
+                return null;
+            }
+            if (!$truthyExpr instanceof \PhpParser\Node\Expr) {
                 return null;
             }
             /** @var Expr $compareExpr */
