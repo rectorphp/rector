@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220406\Symplify\Skipper\FileSystem;
+namespace RectorPrefix20220407\Symplify\Skipper\FileSystem;
 
-use RectorPrefix20220406\Nette\Utils\Strings;
+use RectorPrefix20220407\Nette\Utils\Strings;
 /**
  * @see \Symplify\Skipper\Tests\FileSystem\FnMatchPathNormalizerTest
  */
@@ -22,11 +22,11 @@ final class FnMatchPathNormalizer
     public function normalizeForFnmatch(string $path) : string
     {
         // ends with *
-        if (\RectorPrefix20220406\Nette\Utils\Strings::match($path, self::ONLY_ENDS_WITH_ASTERISK_REGEX)) {
+        if (\RectorPrefix20220407\Nette\Utils\Strings::match($path, self::ONLY_ENDS_WITH_ASTERISK_REGEX)) {
             return '*' . $path;
         }
         // starts with *
-        if (\RectorPrefix20220406\Nette\Utils\Strings::match($path, self::ONLY_STARTS_WITH_ASTERISK_REGEX)) {
+        if (\RectorPrefix20220407\Nette\Utils\Strings::match($path, self::ONLY_STARTS_WITH_ASTERISK_REGEX)) {
             return $path . '*';
         }
         if (\strpos($path, '..') !== \false) {

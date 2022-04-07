@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220406\Symplify\EasyTesting\Kernel;
+namespace RectorPrefix20220407\Symplify\EasyTesting\Kernel;
 
-use RectorPrefix20220406\Psr\Container\ContainerInterface;
-use RectorPrefix20220406\Symplify\EasyTesting\ValueObject\EasyTestingConfig;
-use RectorPrefix20220406\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
-final class EasyTestingKernel extends \RectorPrefix20220406\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
+use RectorPrefix20220407\Psr\Container\ContainerInterface;
+use RectorPrefix20220407\Symplify\EasyTesting\ValueObject\EasyTestingConfig;
+use RectorPrefix20220407\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
+final class EasyTestingKernel extends \RectorPrefix20220407\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
 {
     /**
      * @param string[] $configFiles
      */
-    public function createFromConfigs(array $configFiles) : \RectorPrefix20220406\Psr\Container\ContainerInterface
+    public function createFromConfigs(array $configFiles) : \RectorPrefix20220407\Psr\Container\ContainerInterface
     {
-        $configFiles[] = \RectorPrefix20220406\Symplify\EasyTesting\ValueObject\EasyTestingConfig::FILE_PATH;
+        $configFiles[] = \RectorPrefix20220407\Symplify\EasyTesting\ValueObject\EasyTestingConfig::FILE_PATH;
         return $this->create($configFiles);
     }
 }

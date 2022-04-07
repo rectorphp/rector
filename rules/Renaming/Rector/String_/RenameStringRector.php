@@ -9,7 +9,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220406\Webmozart\Assert\Assert;
+use RectorPrefix20220407\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/symfony/symfony/pull/35858
  *
@@ -68,8 +68,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220406\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220406\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220407\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220407\Webmozart\Assert\Assert::allString($configuration);
         $this->stringChanges = $configuration;
     }
 }

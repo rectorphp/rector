@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\Node;
-use RectorPrefix20220406\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220407\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class PhpDocNodeFinder
 {
     /**
@@ -15,7 +15,7 @@ final class PhpDocNodeFinder
     public function findByType(\PHPStan\PhpDocParser\Ast\Node $node, string $nodeType) : array
     {
         $foundNodes = [];
-        $phpDocNodeTraverser = new \RectorPrefix20220406\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20220407\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($node, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use(&$foundNodes, $nodeType) {
             if (!\is_a($node, $nodeType, \true)) {
                 return null;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220406\Doctrine\Inflector;
+namespace RectorPrefix20220407\Doctrine\Inflector;
 
 final class Language
 {

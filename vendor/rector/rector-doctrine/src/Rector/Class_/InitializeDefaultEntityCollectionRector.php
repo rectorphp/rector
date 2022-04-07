@@ -10,7 +10,7 @@ use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -39,11 +39,17 @@ final class InitializeDefaultEntityCollectionRector extends \Rector\Core\Rector\
      * @var \Rector\Doctrine\NodeAnalyzer\AttrinationFinder
      */
     private $attrinationFinder;
-    public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator, \Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory $arrayCollectionAssignFactory, \Rector\Doctrine\NodeAnalyzer\AttrinationFinder $attrinationFinder)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
+     */
+    private $constructorAssignDetector;
+    public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator, \Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory $arrayCollectionAssignFactory, \Rector\Doctrine\NodeAnalyzer\AttrinationFinder $attrinationFinder, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->arrayCollectionAssignFactory = $arrayCollectionAssignFactory;
         $this->attrinationFinder = $attrinationFinder;
+        $this->constructorAssignDetector = $constructorAssignDetector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -94,10 +100,6 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
-        if ($kind === 'initialized') {
-            return null;
-        }
         if (!$this->attrinationFinder->hasByOne($node, 'Doctrine\\ORM\\Mapping\\Entity')) {
             return null;
         }
@@ -118,6 +120,9 @@ CODE_SAMPLE
             }
             /** @var string $propertyName */
             $propertyName = $this->getName($property);
+            if ($this->constructorAssignDetector->isPropertyAssigned($class, $propertyName)) {
+                continue;
+            }
             $collectionPropertyNames[] = $propertyName;
         }
         return $collectionPropertyNames;
@@ -145,7 +150,6 @@ CODE_SAMPLE
         }
         $assigns = $this->createAssignsOfArrayCollectionsForPropertyNames($toManyPropertyNames);
         $this->classDependencyManipulator->addStmtsToConstructorIfNotThereYet($class, $assigns);
-        $class->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, 'initialized');
         return $class;
     }
 }

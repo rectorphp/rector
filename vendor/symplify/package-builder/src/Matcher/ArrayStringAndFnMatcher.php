@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220406\Symplify\PackageBuilder\Matcher;
+namespace RectorPrefix20220407\Symplify\PackageBuilder\Matcher;
 
 /**
  * @api

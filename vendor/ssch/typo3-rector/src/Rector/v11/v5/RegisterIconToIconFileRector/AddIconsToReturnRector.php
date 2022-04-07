@@ -14,7 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220406\Webmozart\Assert\Assert;
+use RectorPrefix20220407\Webmozart\Assert\Assert;
 /**
  * @changelog https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/Icon/Index.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v5\RegisterIconToIconFileRector\RegisterIconToIconFileRectorTest
@@ -78,9 +78,9 @@ CODE_SAMPLE
     {
         $iconIdentifier = $configuration[self::ICON_IDENTIFIER] ?? '';
         $iconConfiguration = $configuration[self::ICON_CONFIGURATION] ?? [];
-        \RectorPrefix20220406\Webmozart\Assert\Assert::stringNotEmpty($iconIdentifier);
-        \RectorPrefix20220406\Webmozart\Assert\Assert::isArray($iconConfiguration);
-        \RectorPrefix20220406\Webmozart\Assert\Assert::keyExists($iconConfiguration, 'provider');
+        \RectorPrefix20220407\Webmozart\Assert\Assert::stringNotEmpty($iconIdentifier);
+        \RectorPrefix20220407\Webmozart\Assert\Assert::isArray($iconConfiguration);
+        \RectorPrefix20220407\Webmozart\Assert\Assert::keyExists($iconConfiguration, 'provider');
         $this->iconConfiguration = $iconConfiguration;
         $this->iconIdentifier = $iconIdentifier;
     }
