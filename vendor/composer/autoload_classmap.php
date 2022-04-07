@@ -3158,6 +3158,7 @@ return array(
     'Rector\\VersionBonding\\PhpVersionedFilter' => $baseDir . '/packages/VersionBonding/PhpVersionedFilter.php',
     'Rector\\Visibility\\Rector\\ClassConst\\ChangeConstantVisibilityRector' => $baseDir . '/rules/Visibility/Rector/ClassConst/ChangeConstantVisibilityRector.php',
     'Rector\\Visibility\\Rector\\ClassMethod\\ChangeMethodVisibilityRector' => $baseDir . '/rules/Visibility/Rector/ClassMethod/ChangeMethodVisibilityRector.php',
+    'Rector\\Visibility\\Rector\\ClassMethod\\ExplicitPublicClassMethodRector' => $baseDir . '/rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php',
     'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => $baseDir . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
     'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => $baseDir . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
     'ReturnTypeWillChange' => $vendorDir . '/symfony/polyfill-php81/Resources/stubs/ReturnTypeWillChange.php',
