@@ -17,9 +17,11 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
@@ -65,7 +67,12 @@ final class UndefinedVariableResolver
                 return null;
             }
 
-            if ($this->shouldSkipVariable($node)) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parentNode instanceof Node) {
+                return null;
+            }
+
+            if ($this->shouldSkipVariable($node, $parentNode)) {
                 return null;
             }
 
@@ -104,13 +111,8 @@ final class UndefinedVariableResolver
         return in_array($parentNode::class, [Assign::class, AssignRef::class], true);
     }
 
-    private function shouldSkipVariable(Variable $variable): bool
+    private function shouldSkipVariable(Variable $variable, Node $parentNode): bool
     {
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Node) {
-            return true;
-        }
-
         if ($this->variableAnalyzer->isStaticOrGlobal($variable)) {
             return true;
         }
@@ -151,7 +153,26 @@ final class UndefinedVariableResolver
             return true;
         }
 
-        return $this->hasPreviousCheckedWithEmpty($variable);
+        if ($this->hasPreviousCheckedWithEmpty($variable)) {
+            return true;
+        }
+
+        return $this->isAfterSwitchCaseWithParentCase($variable);
+    }
+
+    private function isAfterSwitchCaseWithParentCase(Variable $variable): bool
+    {
+        $previousSwitch = $this->betterNodeFinder->findFirstPreviousOfNode(
+            $variable,
+            fn (Node $subNode): bool => $subNode instanceof Switch_
+        );
+
+        if (! $previousSwitch instanceof Switch_) {
+            return false;
+        }
+
+        $parentSwitch = $previousSwitch->getAttribute(AttributeKey::PARENT_NODE);
+        return $parentSwitch instanceof Case_;
     }
 
     private function isDifferentWithOriginalNodeOrNoScope(Variable $variable): bool
