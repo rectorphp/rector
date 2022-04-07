@@ -70,6 +70,9 @@ CODE_SAMPLE
         if (\strncmp($includeValue, '/', \strlen('/')) === 0) {
             return null;
         }
+        if (\strpos($includeValue, 'config/') !== \false) {
+            return null;
+        }
         // add preslash to string
         if (\strncmp($includeValue, './', \strlen('./')) === 0) {
             $node->expr->value = \RectorPrefix20220407\Nette\Utils\Strings::substring($includeValue, 1);

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6bfd3a272b2d669f2b768bcfc24ec97d
+class ComposerStaticInit7ee0a501eb5b4ff5e69562987dc66212
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3262,6 +3262,7 @@ class ComposerStaticInit6bfd3a272b2d669f2b768bcfc24ec97d
         'Rector\\Symfony\\NodeAnalyzer\\FormCollectionAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormCollectionAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\FormInstanceToFormClassConstFetchConverter' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormInstanceToFormClassConstFetchConverter.php',
         'Rector\\Symfony\\NodeAnalyzer\\FormOptionsArrayMatcher' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormOptionsArrayMatcher.php',
+        'Rector\\Symfony\\NodeAnalyzer\\InvokableAnalyzer\\ActiveClassElementsClassMethodResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/InvokableAnalyzer/ActiveClassElementsClassMethodResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\LiteralCallLikeConstFetchReplacer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/LiteralCallLikeConstFetchReplacer.php',
         'Rector\\Symfony\\NodeAnalyzer\\RouteRequiredParamNameToTypesResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/RouteRequiredParamNameToTypesResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\ServiceTypeMethodCallResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ServiceTypeMethodCallResolver.php',
@@ -3272,6 +3273,7 @@ class ComposerStaticInit6bfd3a272b2d669f2b768bcfc24ec97d
         'Rector\\Symfony\\NodeFactory\\GetSubscribedEventsClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/GetSubscribedEventsClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\InvokableControllerClassFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableControllerClassFactory.php',
         'Rector\\Symfony\\NodeFactory\\InvokableControllerNameFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableControllerNameFactory.php',
+        'Rector\\Symfony\\NodeFactory\\InvokableController\\ActiveClassElementsFilter' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableController/ActiveClassElementsFilter.php',
         'Rector\\Symfony\\NodeFactory\\OnLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\OnSuccessLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnSuccessLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\ThisRenderFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/ThisRenderFactory.php',
@@ -3353,6 +3355,7 @@ class ComposerStaticInit6bfd3a272b2d669f2b768bcfc24ec97d
         'Rector\\Symfony\\ValueObject\\EventNameToClassAndConstant' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventNameToClassAndConstant.php',
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodName' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodName.php',
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodNameWithPriority' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodNameWithPriority.php',
+        'Rector\\Symfony\\ValueObject\\InvokableController\\ActiveClassElements' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/InvokableController/ActiveClassElements.php',
         'Rector\\Symfony\\ValueObject\\ReplaceServiceArgument' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ReplaceServiceArgument.php',
         'Rector\\Symfony\\ValueObject\\ServiceDefinition' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ServiceDefinition.php',
         'Rector\\Symfony\\ValueObject\\ServiceMap\\ServiceMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ServiceMap/ServiceMap.php',
@@ -3846,9 +3849,9 @@ class ComposerStaticInit6bfd3a272b2d669f2b768bcfc24ec97d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6bfd3a272b2d669f2b768bcfc24ec97d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6bfd3a272b2d669f2b768bcfc24ec97d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6bfd3a272b2d669f2b768bcfc24ec97d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7ee0a501eb5b4ff5e69562987dc66212::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7ee0a501eb5b4ff5e69562987dc66212::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7ee0a501eb5b4ff5e69562987dc66212::$classMap;
 
         }, null, ClassLoader::class);
     }
