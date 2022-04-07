@@ -6,6 +6,8 @@ namespace Rector\Core\Console\Style;
 use RectorPrefix20220407\OndraM\CiDetector\CiDetector;
 use RectorPrefix20220407\Symfony\Component\Console\Exception\RuntimeException;
 use RectorPrefix20220407\Symfony\Component\Console\Helper\ProgressBar;
+use RectorPrefix20220407\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220407\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20220407\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorConsoleOutputStyle extends \RectorPrefix20220407\Symfony\Component\Console\Style\SymfonyStyle
 {
@@ -17,6 +19,14 @@ final class RectorConsoleOutputStyle extends \RectorPrefix20220407\Symfony\Compo
      * @var bool|null
      */
     private $isCiDetected = null;
+    public function __construct(\RectorPrefix20220407\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220407\Symfony\Component\Console\Output\OutputInterface $output)
+    {
+        parent::__construct($input, $output);
+        // silent output in tests
+        if (\defined('PHPUNIT_COMPOSER_INSTALL')) {
+            $this->setVerbosity(\RectorPrefix20220407\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+        }
+    }
     /**
      * @see https://github.com/phpstan/phpstan-src/commit/0993d180e5a15a17631d525909356081be59ffeb
      */
