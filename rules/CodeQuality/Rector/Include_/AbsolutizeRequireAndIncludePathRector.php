@@ -85,6 +85,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (str_contains($includeValue, 'config/')) {
+            return null;
+        }
+
         // add preslash to string
         if (\str_starts_with($includeValue, './')) {
             $node->expr->value = Strings::substring($includeValue, 1);
