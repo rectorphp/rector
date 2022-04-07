@@ -6,6 +6,7 @@ namespace Rector\Strict\Rector\Empty_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PHPStan\Analyser\Scope;
@@ -80,6 +81,10 @@ CODE_SAMPLE
 
         if ($node instanceof BooleanNot) {
             return $this->refactorBooleanNot($node, $scope);
+        }
+
+        if ($node->expr instanceof ArrayDimFetch) {
+            return null;
         }
 
         return $this->refactorEmpty($node, $scope, $this->treatAsNonEmpty);
