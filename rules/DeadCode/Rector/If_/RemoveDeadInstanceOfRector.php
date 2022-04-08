@@ -101,6 +101,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $originalCondNode = $node->cond->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if (! $originalCondNode instanceof Node) {
+            return null;
+        }
+
         if ($node->cond instanceof BooleanNot && $node->cond->expr instanceof Instanceof_) {
             return $this->processMayDeadInstanceOf($node, $node->cond->expr);
         }
@@ -198,17 +203,12 @@ CODE_SAMPLE
             return true;
         }
 
-        $isFilledByConstructParam = $this->propertyFetchAnalyzer->isFilledByConstructParam($property);
-        if ($this->isInPropertyPromotedParams($propertyFetch)) {
-            return false;
-        }
-
         $isPropertyAssignedInConstuctor = $this->constructorAssignDetector->isPropertyAssigned(
             $classLike,
             $propertyName
         );
 
-        return $property->type === null && ! $isPropertyAssignedInConstuctor && ! $isFilledByConstructParam;
+        return $property->type === null && ! $isPropertyAssignedInConstuctor;
     }
 
     private function isInPropertyPromotedParams(Expr $expr): bool
