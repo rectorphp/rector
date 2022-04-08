@@ -1626,6 +1626,7 @@ return array(
     'Rector\\Composer\\ValueObject\\PackageAndVersion' => $baseDir . '/rules/Composer/ValueObject/PackageAndVersion.php',
     'Rector\\Composer\\ValueObject\\RenamePackage' => $baseDir . '/rules/Composer/ValueObject/RenamePackage.php',
     'Rector\\Composer\\ValueObject\\ReplacePackageAndVersion' => $baseDir . '/rules/Composer/ValueObject/ReplacePackageAndVersion.php',
+    'Rector\\Config\\RectorConfig' => $baseDir . '/packages/Config/RectorConfig.php',
     'Rector\\Core\\Application\\ApplicationFileProcessor' => $baseDir . '/src/Application/ApplicationFileProcessor.php',
     'Rector\\Core\\Application\\FileDecorator\\FileDiffFileDecorator' => $baseDir . '/src/Application/FileDecorator/FileDiffFileDecorator.php',
     'Rector\\Core\\Application\\FileProcessor' => $baseDir . '/src/Application/FileProcessor.php',

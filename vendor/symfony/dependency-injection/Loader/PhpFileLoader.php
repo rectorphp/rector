@@ -10,6 +10,7 @@
  */
 namespace RectorPrefix20220408\Symfony\Component\DependencyInjection\Loader;
 
+use Rector\Config\RectorConfig;
 use RectorPrefix20220408\Symfony\Component\Config\Builder\ConfigBuilderGenerator;
 use RectorPrefix20220408\Symfony\Component\Config\Builder\ConfigBuilderGeneratorInterface;
 use RectorPrefix20220408\Symfony\Component\Config\Builder\ConfigBuilderInterface;
@@ -58,7 +59,7 @@ class PhpFileLoader extends \RectorPrefix20220408\Symfony\Component\DependencyIn
         try {
             $callback = $load($path, $this->env);
             if (\is_object($callback) && \is_callable($callback)) {
-                $this->executeCallback($callback, new \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator($this->container, $this, $this->instanceof, $path, $resource, $this->env), $path);
+                $this->executeCallback($callback, new \Rector\Config\RectorConfig($this->container, $this, $this->instanceof, $path, $resource, $this->env), $path);
             }
         } finally {
             $this->instanceof = [];
@@ -108,6 +109,9 @@ class PhpFileLoader extends \RectorPrefix20220408\Symfony\Component\DependencyIn
             }
             $type = $reflectionType->getName();
             switch ($type) {
+                case \Rector\Config\RectorConfig::class:
+                    $arguments[] = $containerConfigurator;
+                    break;
                 case \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class:
                     $arguments[] = $containerConfigurator;
                     break;

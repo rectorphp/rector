@@ -5,3 +5,7 @@ Patches applied to this directory:
 Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/symfony-dependency-injection.patch
 
 
+1
+Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/symfony-php-config-loader.patch
+
+
