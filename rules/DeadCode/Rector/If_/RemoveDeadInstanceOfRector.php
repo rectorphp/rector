@@ -113,6 +113,10 @@ CODE_SAMPLE
         if ($this->contextAnalyzer->isInLoop($node)) {
             return null;
         }
+        $originalCondNode = $node->cond->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+        if (!$originalCondNode instanceof \PhpParser\Node) {
+            return null;
+        }
         if ($node->cond instanceof \PhpParser\Node\Expr\BooleanNot && $node->cond->expr instanceof \PhpParser\Node\Expr\Instanceof_) {
             return $this->processMayDeadInstanceOf($node, $node->cond->expr);
         }
@@ -182,12 +186,8 @@ CODE_SAMPLE
         if (!$property instanceof \PhpParser\Node\Stmt\Property) {
             return \true;
         }
-        $isFilledByConstructParam = $this->propertyFetchAnalyzer->isFilledByConstructParam($property);
-        if ($this->isInPropertyPromotedParams($propertyFetch)) {
-            return \false;
-        }
         $isPropertyAssignedInConstuctor = $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
-        return $property->type === null && !$isPropertyAssignedInConstuctor && !$isFilledByConstructParam;
+        return $property->type === null && !$isPropertyAssignedInConstuctor;
     }
     private function isInPropertyPromotedParams(\PhpParser\Node\Expr $expr) : bool
     {
