@@ -11,6 +11,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -19,6 +20,7 @@ use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
@@ -76,7 +78,17 @@ final class VarDocPropertyTypeInferer
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
-    public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer
+     */
+    private $assignToPropertyTypeInferer;
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+    public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer $assignToPropertyTypeInferer, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->defaultValuePropertyTypeInferer = $defaultValuePropertyTypeInferer;
@@ -88,12 +100,18 @@ final class VarDocPropertyTypeInferer
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyManipulator = $propertyManipulator;
+        $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
     public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $resolvedType = $phpDocInfo->getVarType();
         if ($resolvedType instanceof \PHPStan\Type\VoidType) {
+            return new \PHPStan\Type\MixedType();
+        }
+        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return new \PHPStan\Type\MixedType();
         }
         // default value type must be added to each resolved type if set
@@ -103,7 +121,36 @@ final class VarDocPropertyTypeInferer
         } else {
             $resolvedType = $this->makeNullableForAccessedBeforeInitialization($property, $resolvedType, $phpDocInfo);
         }
-        return $this->genericClassStringTypeNormalizer->normalize($resolvedType);
+        $resolvedType = $this->genericClassStringTypeNormalizer->normalize($resolvedType);
+        $propertyName = $this->nodeNameResolver->getName($property);
+        $assignInferredPropertyType = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($property, $propertyName, $class);
+        if (!$assignInferredPropertyType instanceof \PHPStan\Type\Type) {
+            return $resolvedType;
+        }
+        if ($this->isAssignInferredUnionTypesMoreThanResolvedType($resolvedType, $assignInferredPropertyType)) {
+            return new \PHPStan\Type\MixedType();
+        }
+        if (\get_class($resolvedType) === \get_class($assignInferredPropertyType)) {
+            return $resolvedType;
+        }
+        if ($this->isBothTypeWithClassName($resolvedType, $assignInferredPropertyType)) {
+            /** @var TypeWithClassName $resolvedType */
+            $classNameResolvedType = $this->nodeTypeResolver->getFullyQualifiedClassName($resolvedType);
+            /** @var TypeWithClassName $assignInferredPropertyType */
+            $classNameInferredPropertyType = $this->nodeTypeResolver->getFullyQualifiedClassName($assignInferredPropertyType);
+            if ($classNameResolvedType === $classNameInferredPropertyType) {
+                return $resolvedType;
+            }
+        }
+        return new \PHPStan\Type\MixedType();
+    }
+    private function isAssignInferredUnionTypesMoreThanResolvedType(\PHPStan\Type\Type $resolvedType, \PHPStan\Type\Type $assignInferredPropertyType) : bool
+    {
+        return $resolvedType instanceof \PHPStan\Type\UnionType && $assignInferredPropertyType instanceof \PHPStan\Type\UnionType && \count($assignInferredPropertyType->getTypes()) > \count($resolvedType->getTypes());
+    }
+    private function isBothTypeWithClassName(\PHPStan\Type\Type $resolvedType, \PHPStan\Type\Type $assignInferredPropertyType) : bool
+    {
+        return $resolvedType instanceof \PHPStan\Type\TypeWithClassName && $assignInferredPropertyType instanceof \PHPStan\Type\TypeWithClassName;
     }
     private function makeNullableForAccessedBeforeInitialization(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $resolvedType, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : \PHPStan\Type\Type
     {

@@ -16,6 +16,7 @@ use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 /**
  * @deprecated
@@ -85,7 +86,7 @@ final class PropertyNaming
         if ($type instanceof \PHPStan\Type\StaticType) {
             return null;
         }
-        $className = $this->nodeTypeResolver->getFullyQualifiedClassName($type);
+        $className = $type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType ? $type->getClassName() : $this->nodeTypeResolver->getFullyQualifiedClassName($type);
         // generic types are usually mix of parent type and specific type - various way to handle it
         if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
             return null;

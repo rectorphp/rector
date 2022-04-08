@@ -23,8 +23,8 @@ Initially you need to run `composer install`, or `composer update` in case you a
 
 Afterwards you can either run the whole build including linting and coding standards using
 
-    vendor/bin/phing
-    
+    make
+
 or run only tests using
 
-    vendor/bin/phing tests
+    make tests

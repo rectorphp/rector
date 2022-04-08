@@ -1036,17 +1036,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.4.2",
-            "version_normalized": "1.4.2.0",
+            "version": "1.4.3",
+            "version_normalized": "1.4.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "4cb3021a4e10ffe3d5f94a4c34cf4b3f6de2fa3d"
+                "reference": "34545bb30a6f8bd86cfa371dbd42140a657bbf0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/4cb3021a4e10ffe3d5f94a4c34cf4b3f6de2fa3d",
-                "reference": "4cb3021a4e10ffe3d5f94a4c34cf4b3f6de2fa3d",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/34545bb30a6f8bd86cfa371dbd42140a657bbf0d",
+                "reference": "34545bb30a6f8bd86cfa371dbd42140a657bbf0d",
                 "shasum": ""
             },
             "require": {
@@ -1060,7 +1060,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2022-03-30T13:33:37+00:00",
+            "time": "2022-04-08T11:30:34+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1077,7 +1077,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.4.2"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.4.3"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
