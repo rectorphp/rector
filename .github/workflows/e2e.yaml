@@ -23,13 +23,14 @@ jobs:
             matrix:
                 php_version: ['8.1']
                 directory:
-                    - 'e2e/template-extends'
-                    - 'e2e/plain-views'
+                    - 'e2e/applied-rule-change-docblock'
+                    - 'e2e/applied-rule-return-array-nodes'
+                    - 'e2e/no-parallel-reflection-resolver'
                     - 'e2e/parallel-custom-config'
                     - 'e2e/parallel-reflection-resolver'
-                    - 'e2e/no-parallel-reflection-resolver'
-                    - 'e2e/applied-rule-return-array-nodes'
-                    - 'e2e/applied-rule-change-docblock'
+                    - 'e2e/plain-views'
+                    - 'e2e/template-extends'
+                    - 'e2e/use-rector-configurator'
 
         name: End to end test - ${{ matrix.directory }}
 

@@ -19,6 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->load('Rector\\', __DIR__ . '/../packages')
         ->exclude([
+            __DIR__ . '/../packages/Config/RectorConfig.php',
             __DIR__ . '/../packages/*/{ValueObject,Contract,Exception}',
             __DIR__ . '/../packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php',
             __DIR__ . '/../packages/Testing/PHPUnit',

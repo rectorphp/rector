@@ -7,6 +7,7 @@ use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
+use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\Option;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
@@ -16,25 +17,24 @@ use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
+return static function (RectorConfig $rectorConfig): void {
     // include the latest PHP version + all bellow in one config!
-    $containerConfigurator->import(LevelSetList::UP_TO_PHP_81);
+    $rectorConfig->import(LevelSetList::UP_TO_PHP_81);
 
     // include sets
-    $containerConfigurator->import(SetList::CODING_STYLE);
-    $containerConfigurator->import(SetList::CODE_QUALITY);
-    $containerConfigurator->import(SetList::DEAD_CODE);
-    $containerConfigurator->import(SetList::PRIVATIZATION);
-    $containerConfigurator->import(SetList::NAMING);
-    $containerConfigurator->import(SetList::TYPE_DECLARATION);
-    $containerConfigurator->import(SetList::EARLY_RETURN);
-    $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
-    $containerConfigurator->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
-    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
+    $rectorConfig->import(SetList::CODING_STYLE);
+    $rectorConfig->import(SetList::CODE_QUALITY);
+    $rectorConfig->import(SetList::DEAD_CODE);
+    $rectorConfig->import(SetList::PRIVATIZATION);
+    $rectorConfig->import(SetList::NAMING);
+    $rectorConfig->import(SetList::TYPE_DECLARATION);
+    $rectorConfig->import(SetList::EARLY_RETURN);
+    $rectorConfig->import(SetList::TYPE_DECLARATION_STRICT);
+    $rectorConfig->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
+    $rectorConfig->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
 
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
 
     // phpunit
     $services->set(PreferThisOrSelfMethodCallRector::class)
@@ -45,9 +45,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->configure([new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*')]);
 
-    $parameters = $containerConfigurator->parameters();
+    $parameters = $rectorConfig->parameters();
 
-    $parameters->set(Option::PATHS, [
+    $rectorConfig->paths([
         __DIR__ . '/bin',
         __DIR__ . '/src',
         __DIR__ . '/rules',

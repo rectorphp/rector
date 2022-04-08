@@ -1,0 +1,22 @@
+1 file with changes
+===================
+
+1) src/SomeClass.php:6
+
+    ---------- begin diff ----------
+@@ @@
+ class SomeClass
+ {
+     public function __construct(
+-        private readonly \stdClass $stdClass
++        private \stdClass $stdClass
+     )
+     {
+     }
+    ----------- end diff -----------
+
+Applied rules:
+ * DowngradeReadonlyPropertyRector (https://wiki.php.net/rfc/readonly_properties_v2)
+
+
+ [OK] 1 file would have changed (dry-run) by Rector
