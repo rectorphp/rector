@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220407\Symfony\Component\Console;
+namespace RectorPrefix20220408\Symfony\Component\Console;
 
-use RectorPrefix20220407\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20220408\Symfony\Component\Console\Exception\InvalidArgumentException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -37,7 +37,7 @@ final class Color
         $this->background = $this->parseColor($background, \true);
         foreach ($options as $option) {
             if (!isset(self::AVAILABLE_OPTIONS[$option])) {
-                throw new \RectorPrefix20220407\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Invalid option specified: "%s". Expected one of (%s).', $option, \implode(', ', \array_keys(self::AVAILABLE_OPTIONS))));
+                throw new \RectorPrefix20220408\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Invalid option specified: "%s". Expected one of (%s).', $option, \implode(', ', \array_keys(self::AVAILABLE_OPTIONS))));
             }
             $this->options[$option] = self::AVAILABLE_OPTIONS[$option];
         }
@@ -91,7 +91,7 @@ final class Color
                 $color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
             }
             if (6 !== \strlen($color)) {
-                throw new \RectorPrefix20220407\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Invalid "%s" color.', $color));
+                throw new \RectorPrefix20220408\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Invalid "%s" color.', $color));
             }
             return ($background ? '4' : '3') . $this->convertHexColorToAnsi(\hexdec($color));
         }
@@ -101,7 +101,7 @@ final class Color
         if (isset(self::BRIGHT_COLORS[$color])) {
             return ($background ? '10' : '9') . self::BRIGHT_COLORS[$color];
         }
-        throw new \RectorPrefix20220407\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Invalid "%s" color; expected one of (%s).', $color, \implode(', ', \array_merge(\array_keys(self::COLORS), \array_keys(self::BRIGHT_COLORS)))));
+        throw new \RectorPrefix20220408\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Invalid "%s" color; expected one of (%s).', $color, \implode(', ', \array_merge(\array_keys(self::COLORS), \array_keys(self::BRIGHT_COLORS)))));
     }
     private function convertHexColorToAnsi(int $color) : string
     {

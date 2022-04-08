@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\NonPhpFile\Rector;
 
-use RectorPrefix20220407\Nette\Utils\Strings;
+use RectorPrefix20220408\Nette\Utils\Strings;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
@@ -11,7 +11,7 @@ use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220407\Webmozart\Assert\Assert;
+use RectorPrefix20220408\Webmozart\Assert\Assert;
 final class RenameClassNonPhpRector implements \Rector\Core\Contract\Rector\NonPhpRectorInterface, \Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface, \Rector\PostRector\Contract\Rector\ComplementaryRectorInterface
 {
     /**
@@ -62,8 +62,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $renameClasses = $configuration;
-        \RectorPrefix20220407\Webmozart\Assert\Assert::allString(\array_keys($renameClasses));
-        \RectorPrefix20220407\Webmozart\Assert\Assert::allString($renameClasses);
+        \RectorPrefix20220408\Webmozart\Assert\Assert::allString(\array_keys($renameClasses));
+        \RectorPrefix20220408\Webmozart\Assert\Assert::allString($renameClasses);
         $this->renameClasses = $renameClasses;
     }
     /**
@@ -75,7 +75,7 @@ CODE_SAMPLE
         foreach ($classRenames as $oldClass => $newClass) {
             // the old class is without slashes, it can make mess as similar to a word in the text, so we have to be more strict about it
             $oldClassRegex = $this->createOldClassRegex($oldClass);
-            $newContent = \RectorPrefix20220407\Nette\Utils\Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
+            $newContent = \RectorPrefix20220408\Nette\Utils\Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
                 return ($match['extra_space'] ?? '') . $newClass;
             });
         }

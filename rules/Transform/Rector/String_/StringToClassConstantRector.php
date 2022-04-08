@@ -10,7 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\StringToClassConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220407\Webmozart\Assert\Assert;
+use RectorPrefix20220408\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\String_\StringToClassConstantRector\StringToClassConstantRectorTest
  */
@@ -67,7 +67,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220407\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\StringToClassConstant::class);
+        \RectorPrefix20220408\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\StringToClassConstant::class);
         $this->stringsToClassConstants = $configuration;
     }
 }

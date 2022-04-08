@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20220407\Composer\Semver;
+namespace RectorPrefix20220408\Composer\Semver;
 
-use RectorPrefix20220407\Composer\Semver\Constraint\Constraint;
-use RectorPrefix20220407\Composer\Semver\Constraint\ConstraintInterface;
-use RectorPrefix20220407\Composer\Semver\Constraint\MatchAllConstraint;
-use RectorPrefix20220407\Composer\Semver\Constraint\MatchNoneConstraint;
-use RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint;
+use RectorPrefix20220408\Composer\Semver\Constraint\Constraint;
+use RectorPrefix20220408\Composer\Semver\Constraint\ConstraintInterface;
+use RectorPrefix20220408\Composer\Semver\Constraint\MatchAllConstraint;
+use RectorPrefix20220408\Composer\Semver\Constraint\MatchNoneConstraint;
+use RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint;
 /**
  * Helper class generating intervals from constraints
  *
@@ -51,15 +51,15 @@ class Intervals
      *
      * @return bool
      */
-    public static function isSubsetOf(\RectorPrefix20220407\Composer\Semver\Constraint\ConstraintInterface $candidate, \RectorPrefix20220407\Composer\Semver\Constraint\ConstraintInterface $constraint)
+    public static function isSubsetOf(\RectorPrefix20220408\Composer\Semver\Constraint\ConstraintInterface $candidate, \RectorPrefix20220408\Composer\Semver\Constraint\ConstraintInterface $constraint)
     {
-        if ($constraint instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MatchAllConstraint) {
+        if ($constraint instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MatchAllConstraint) {
             return \true;
         }
-        if ($candidate instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MatchNoneConstraint || $constraint instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MatchNoneConstraint) {
+        if ($candidate instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MatchNoneConstraint || $constraint instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MatchNoneConstraint) {
             return \false;
         }
-        $intersectionIntervals = self::get(new \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint(array($candidate, $constraint), \true));
+        $intersectionIntervals = self::get(new \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint(array($candidate, $constraint), \true));
         $candidateIntervals = self::get($candidate);
         if (\count($intersectionIntervals['numeric']) !== \count($candidateIntervals['numeric'])) {
             return \false;
@@ -93,15 +93,15 @@ class Intervals
      *
      * @return bool
      */
-    public static function haveIntersections(\RectorPrefix20220407\Composer\Semver\Constraint\ConstraintInterface $a, \RectorPrefix20220407\Composer\Semver\Constraint\ConstraintInterface $b)
+    public static function haveIntersections(\RectorPrefix20220408\Composer\Semver\Constraint\ConstraintInterface $a, \RectorPrefix20220408\Composer\Semver\Constraint\ConstraintInterface $b)
     {
-        if ($a instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MatchAllConstraint || $b instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MatchAllConstraint) {
+        if ($a instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MatchAllConstraint || $b instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MatchAllConstraint) {
             return \true;
         }
-        if ($a instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MatchNoneConstraint || $b instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MatchNoneConstraint) {
+        if ($a instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MatchNoneConstraint || $b instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MatchNoneConstraint) {
             return \false;
         }
-        $intersectionIntervals = self::generateIntervals(new \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint(array($a, $b), \true), \true);
+        $intersectionIntervals = self::generateIntervals(new \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint(array($a, $b), \true), \true);
         return \count($intersectionIntervals['numeric']) > 0 || $intersectionIntervals['branches']['exclude'] || \count($intersectionIntervals['branches']['names']) > 0;
     }
     /**
@@ -114,15 +114,15 @@ class Intervals
      *
      * @return ConstraintInterface
      */
-    public static function compactConstraint(\RectorPrefix20220407\Composer\Semver\Constraint\ConstraintInterface $constraint)
+    public static function compactConstraint(\RectorPrefix20220408\Composer\Semver\Constraint\ConstraintInterface $constraint)
     {
-        if (!$constraint instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint) {
+        if (!$constraint instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint) {
             return $constraint;
         }
         $intervals = self::generateIntervals($constraint);
         $constraints = array();
         $hasNumericMatchAll = \false;
-        if (\count($intervals['numeric']) === 1 && (string) $intervals['numeric'][0]->getStart() === (string) \RectorPrefix20220407\Composer\Semver\Interval::fromZero() && (string) $intervals['numeric'][0]->getEnd() === (string) \RectorPrefix20220407\Composer\Semver\Interval::untilPositiveInfinity()) {
+        if (\count($intervals['numeric']) === 1 && (string) $intervals['numeric'][0]->getStart() === (string) \RectorPrefix20220408\Composer\Semver\Interval::fromZero() && (string) $intervals['numeric'][0]->getEnd() === (string) \RectorPrefix20220408\Composer\Semver\Interval::untilPositiveInfinity()) {
             $constraints[] = $intervals['numeric'][0]->getStart();
             $hasNumericMatchAll = \true;
         } else {
@@ -139,21 +139,21 @@ class Intervals
                         // only add a start if we didn't already do so, can be skipped if we're looking at second
                         // interval in [>=M, <N] || [>N, <P] || [>P, <Q] where unEqualConstraints currently contains
                         // [>=M, !=N] already and we only want to add !=P right now
-                        if (\count($unEqualConstraints) === 0 && (string) $interval->getStart() !== (string) \RectorPrefix20220407\Composer\Semver\Interval::fromZero()) {
+                        if (\count($unEqualConstraints) === 0 && (string) $interval->getStart() !== (string) \RectorPrefix20220408\Composer\Semver\Interval::fromZero()) {
                             $unEqualConstraints[] = $interval->getStart();
                         }
-                        $unEqualConstraints[] = new \RectorPrefix20220407\Composer\Semver\Constraint\Constraint('!=', $interval->getEnd()->getVersion());
+                        $unEqualConstraints[] = new \RectorPrefix20220408\Composer\Semver\Constraint\Constraint('!=', $interval->getEnd()->getVersion());
                         continue;
                     }
                 }
                 if (\count($unEqualConstraints) > 0) {
                     // this is where the end of the following interval of a != constraint is added as explained above
-                    if ((string) $interval->getEnd() !== (string) \RectorPrefix20220407\Composer\Semver\Interval::untilPositiveInfinity()) {
+                    if ((string) $interval->getEnd() !== (string) \RectorPrefix20220408\Composer\Semver\Interval::untilPositiveInfinity()) {
                         $unEqualConstraints[] = $interval->getEnd();
                     }
                     // count is 1 if entire constraint is just one != expression
                     if (\count($unEqualConstraints) > 1) {
-                        $constraints[] = new \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint($unEqualConstraints, \true);
+                        $constraints[] = new \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint($unEqualConstraints, \true);
                     } else {
                         $constraints[] = $unEqualConstraints[0];
                     }
@@ -162,15 +162,15 @@ class Intervals
                 }
                 // convert back >= x - <= x intervals to == x
                 if ($interval->getStart()->getVersion() === $interval->getEnd()->getVersion() && $interval->getStart()->getOperator() === '>=' && $interval->getEnd()->getOperator() === '<=') {
-                    $constraints[] = new \RectorPrefix20220407\Composer\Semver\Constraint\Constraint('==', $interval->getStart()->getVersion());
+                    $constraints[] = new \RectorPrefix20220408\Composer\Semver\Constraint\Constraint('==', $interval->getStart()->getVersion());
                     continue;
                 }
-                if ((string) $interval->getStart() === (string) \RectorPrefix20220407\Composer\Semver\Interval::fromZero()) {
+                if ((string) $interval->getStart() === (string) \RectorPrefix20220408\Composer\Semver\Interval::fromZero()) {
                     $constraints[] = $interval->getEnd();
-                } elseif ((string) $interval->getEnd() === (string) \RectorPrefix20220407\Composer\Semver\Interval::untilPositiveInfinity()) {
+                } elseif ((string) $interval->getEnd() === (string) \RectorPrefix20220408\Composer\Semver\Interval::untilPositiveInfinity()) {
                     $constraints[] = $interval->getStart();
                 } else {
-                    $constraints[] = new \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint(array($interval->getStart(), $interval->getEnd()), \true);
+                    $constraints[] = new \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint(array($interval->getStart(), $interval->getEnd()), \true);
                 }
             }
         }
@@ -178,43 +178,43 @@ class Intervals
         if (0 === \count($intervals['branches']['names'])) {
             if ($intervals['branches']['exclude']) {
                 if ($hasNumericMatchAll) {
-                    return new \RectorPrefix20220407\Composer\Semver\Constraint\MatchAllConstraint();
+                    return new \RectorPrefix20220408\Composer\Semver\Constraint\MatchAllConstraint();
                 }
                 // otherwise constraint should contain a != operator and already cover this
             }
         } else {
             foreach ($intervals['branches']['names'] as $branchName) {
                 if ($intervals['branches']['exclude']) {
-                    $devConstraints[] = new \RectorPrefix20220407\Composer\Semver\Constraint\Constraint('!=', $branchName);
+                    $devConstraints[] = new \RectorPrefix20220408\Composer\Semver\Constraint\Constraint('!=', $branchName);
                 } else {
-                    $devConstraints[] = new \RectorPrefix20220407\Composer\Semver\Constraint\Constraint('==', $branchName);
+                    $devConstraints[] = new \RectorPrefix20220408\Composer\Semver\Constraint\Constraint('==', $branchName);
                 }
             }
             // excluded branches, e.g. != dev-foo are conjunctive with the interval, so
             // > 2.0 != dev-foo must return a conjunctive constraint
             if ($intervals['branches']['exclude']) {
                 if (\count($constraints) > 1) {
-                    return new \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint(\array_merge(array(new \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint($constraints, \false)), $devConstraints), \true);
+                    return new \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint(\array_merge(array(new \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint($constraints, \false)), $devConstraints), \true);
                 }
-                if (\count($constraints) === 1 && (string) $constraints[0] === (string) \RectorPrefix20220407\Composer\Semver\Interval::fromZero()) {
+                if (\count($constraints) === 1 && (string) $constraints[0] === (string) \RectorPrefix20220408\Composer\Semver\Interval::fromZero()) {
                     if (\count($devConstraints) > 1) {
-                        return new \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint($devConstraints, \true);
+                        return new \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint($devConstraints, \true);
                     }
                     return $devConstraints[0];
                 }
-                return new \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint(\array_merge($constraints, $devConstraints), \true);
+                return new \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint(\array_merge($constraints, $devConstraints), \true);
             }
             // otherwise devConstraints contains a list of == operators for branches which are disjunctive with the
             // rest of the constraint
             $constraints = \array_merge($constraints, $devConstraints);
         }
         if (\count($constraints) > 1) {
-            return new \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint($constraints, \false);
+            return new \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint($constraints, \false);
         }
         if (\count($constraints) === 1) {
             return $constraints[0];
         }
-        return new \RectorPrefix20220407\Composer\Semver\Constraint\MatchNoneConstraint();
+        return new \RectorPrefix20220408\Composer\Semver\Constraint\MatchNoneConstraint();
     }
     /**
      * Creates an array of numeric intervals and branch constraints representing a given constraint
@@ -226,7 +226,7 @@ class Intervals
      * @return array
      * @phpstan-return array{'numeric': Interval[], 'branches': array{'names': string[], 'exclude': bool}}
      */
-    public static function get(\RectorPrefix20220407\Composer\Semver\Constraint\ConstraintInterface $constraint)
+    public static function get(\RectorPrefix20220408\Composer\Semver\Constraint\ConstraintInterface $constraint)
     {
         $key = (string) $constraint;
         if (!isset(self::$intervalsCache[$key])) {
@@ -239,18 +239,18 @@ class Intervals
      *
      * @phpstan-return array{'numeric': Interval[], 'branches': array{'names': string[], 'exclude': bool}}
      */
-    private static function generateIntervals(\RectorPrefix20220407\Composer\Semver\Constraint\ConstraintInterface $constraint, $stopOnFirstValidInterval = \false)
+    private static function generateIntervals(\RectorPrefix20220408\Composer\Semver\Constraint\ConstraintInterface $constraint, $stopOnFirstValidInterval = \false)
     {
-        if ($constraint instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MatchAllConstraint) {
-            return array('numeric' => array(new \RectorPrefix20220407\Composer\Semver\Interval(\RectorPrefix20220407\Composer\Semver\Interval::fromZero(), \RectorPrefix20220407\Composer\Semver\Interval::untilPositiveInfinity())), 'branches' => \RectorPrefix20220407\Composer\Semver\Interval::anyDev());
+        if ($constraint instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MatchAllConstraint) {
+            return array('numeric' => array(new \RectorPrefix20220408\Composer\Semver\Interval(\RectorPrefix20220408\Composer\Semver\Interval::fromZero(), \RectorPrefix20220408\Composer\Semver\Interval::untilPositiveInfinity())), 'branches' => \RectorPrefix20220408\Composer\Semver\Interval::anyDev());
         }
-        if ($constraint instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MatchNoneConstraint) {
+        if ($constraint instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MatchNoneConstraint) {
             return array('numeric' => array(), 'branches' => array('names' => array(), 'exclude' => \false));
         }
-        if ($constraint instanceof \RectorPrefix20220407\Composer\Semver\Constraint\Constraint) {
+        if ($constraint instanceof \RectorPrefix20220408\Composer\Semver\Constraint\Constraint) {
             return self::generateSingleConstraintIntervals($constraint);
         }
-        if (!$constraint instanceof \RectorPrefix20220407\Composer\Semver\Constraint\MultiConstraint) {
+        if (!$constraint instanceof \RectorPrefix20220408\Composer\Semver\Constraint\MultiConstraint) {
             throw new \UnexpectedValueException('The constraint passed in should be an MatchAllConstraint, Constraint or MultiConstraint instance, got ' . \get_class($constraint) . '.');
         }
         $constraints = $constraint->getConstraints();
@@ -262,7 +262,7 @@ class Intervals
             $constraintBranches[] = $res['branches'];
         }
         if ($constraint->isDisjunctive()) {
-            $branches = \RectorPrefix20220407\Composer\Semver\Interval::noDev();
+            $branches = \RectorPrefix20220408\Composer\Semver\Interval::noDev();
             foreach ($constraintBranches as $b) {
                 if ($b['exclude']) {
                     if ($branches['exclude']) {
@@ -288,7 +288,7 @@ class Intervals
                 }
             }
         } else {
-            $branches = \RectorPrefix20220407\Composer\Semver\Interval::anyDev();
+            $branches = \RectorPrefix20220408\Composer\Semver\Interval::anyDev();
             foreach ($constraintBranches as $b) {
                 if ($b['exclude']) {
                     if ($branches['exclude']) {
@@ -345,13 +345,13 @@ class Intervals
                 $activeIntervals--;
             }
             if (!$start && $activeIntervals >= $activationThreshold) {
-                $start = new \RectorPrefix20220407\Composer\Semver\Constraint\Constraint($border['operator'], $border['version']);
+                $start = new \RectorPrefix20220408\Composer\Semver\Constraint\Constraint($border['operator'], $border['version']);
             } elseif ($start && $activeIntervals < $activationThreshold) {
                 // filter out invalid intervals like > x - <= x, or >= x - < x
                 if (\version_compare($start->getVersion(), $border['version'], '=') && ($start->getOperator() === '>' && $border['operator'] === '<=' || $start->getOperator() === '>=' && $border['operator'] === '<')) {
                     unset($intervals[$index]);
                 } else {
-                    $intervals[$index] = new \RectorPrefix20220407\Composer\Semver\Interval($start, new \RectorPrefix20220407\Composer\Semver\Constraint\Constraint($border['operator'], $border['version']));
+                    $intervals[$index] = new \RectorPrefix20220408\Composer\Semver\Interval($start, new \RectorPrefix20220408\Composer\Semver\Constraint\Constraint($border['operator'], $border['version']));
                     $index++;
                     if ($stopOnFirstValidInterval) {
                         break;
@@ -365,7 +365,7 @@ class Intervals
     /**
      * @phpstan-return array{'numeric': Interval[], 'branches': array{'names': string[], 'exclude': bool}}
      */
-    private static function generateSingleConstraintIntervals(\RectorPrefix20220407\Composer\Semver\Constraint\Constraint $constraint)
+    private static function generateSingleConstraintIntervals(\RectorPrefix20220408\Composer\Semver\Constraint\Constraint $constraint)
     {
         $op = $constraint->getOperator();
         // handle branch constraints first
@@ -374,7 +374,7 @@ class Intervals
             $branches = array('names' => array(), 'exclude' => \false);
             // != dev-foo means any numeric version may match, we treat >/< like != they are not really defined for branches
             if ($op === '!=') {
-                $intervals[] = new \RectorPrefix20220407\Composer\Semver\Interval(\RectorPrefix20220407\Composer\Semver\Interval::fromZero(), \RectorPrefix20220407\Composer\Semver\Interval::untilPositiveInfinity());
+                $intervals[] = new \RectorPrefix20220408\Composer\Semver\Interval(\RectorPrefix20220408\Composer\Semver\Interval::fromZero(), \RectorPrefix20220408\Composer\Semver\Interval::untilPositiveInfinity());
                 $branches = array('names' => array($constraint->getVersion()), 'exclude' => \true);
             } elseif ($op === '==') {
                 $branches['names'][] = $constraint->getVersion();
@@ -383,17 +383,17 @@ class Intervals
         }
         if ($op[0] === '>') {
             // > & >=
-            return array('numeric' => array(new \RectorPrefix20220407\Composer\Semver\Interval($constraint, \RectorPrefix20220407\Composer\Semver\Interval::untilPositiveInfinity())), 'branches' => \RectorPrefix20220407\Composer\Semver\Interval::noDev());
+            return array('numeric' => array(new \RectorPrefix20220408\Composer\Semver\Interval($constraint, \RectorPrefix20220408\Composer\Semver\Interval::untilPositiveInfinity())), 'branches' => \RectorPrefix20220408\Composer\Semver\Interval::noDev());
         }
         if ($op[0] === '<') {
             // < & <=
-            return array('numeric' => array(new \RectorPrefix20220407\Composer\Semver\Interval(\RectorPrefix20220407\Composer\Semver\Interval::fromZero(), $constraint)), 'branches' => \RectorPrefix20220407\Composer\Semver\Interval::noDev());
+            return array('numeric' => array(new \RectorPrefix20220408\Composer\Semver\Interval(\RectorPrefix20220408\Composer\Semver\Interval::fromZero(), $constraint)), 'branches' => \RectorPrefix20220408\Composer\Semver\Interval::noDev());
         }
         if ($op === '!=') {
             // convert !=x to intervals of 0 - <x && >x - +inf + dev*
-            return array('numeric' => array(new \RectorPrefix20220407\Composer\Semver\Interval(\RectorPrefix20220407\Composer\Semver\Interval::fromZero(), new \RectorPrefix20220407\Composer\Semver\Constraint\Constraint('<', $constraint->getVersion())), new \RectorPrefix20220407\Composer\Semver\Interval(new \RectorPrefix20220407\Composer\Semver\Constraint\Constraint('>', $constraint->getVersion()), \RectorPrefix20220407\Composer\Semver\Interval::untilPositiveInfinity())), 'branches' => \RectorPrefix20220407\Composer\Semver\Interval::anyDev());
+            return array('numeric' => array(new \RectorPrefix20220408\Composer\Semver\Interval(\RectorPrefix20220408\Composer\Semver\Interval::fromZero(), new \RectorPrefix20220408\Composer\Semver\Constraint\Constraint('<', $constraint->getVersion())), new \RectorPrefix20220408\Composer\Semver\Interval(new \RectorPrefix20220408\Composer\Semver\Constraint\Constraint('>', $constraint->getVersion()), \RectorPrefix20220408\Composer\Semver\Interval::untilPositiveInfinity())), 'branches' => \RectorPrefix20220408\Composer\Semver\Interval::anyDev());
         }
         // convert ==x to an interval of >=x - <=x
-        return array('numeric' => array(new \RectorPrefix20220407\Composer\Semver\Interval(new \RectorPrefix20220407\Composer\Semver\Constraint\Constraint('>=', $constraint->getVersion()), new \RectorPrefix20220407\Composer\Semver\Constraint\Constraint('<=', $constraint->getVersion()))), 'branches' => \RectorPrefix20220407\Composer\Semver\Interval::noDev());
+        return array('numeric' => array(new \RectorPrefix20220408\Composer\Semver\Interval(new \RectorPrefix20220408\Composer\Semver\Constraint\Constraint('>=', $constraint->getVersion()), new \RectorPrefix20220408\Composer\Semver\Constraint\Constraint('<=', $constraint->getVersion()))), 'branches' => \RectorPrefix20220408\Composer\Semver\Interval::noDev());
     }
 }

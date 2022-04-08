@@ -5,10 +5,16 @@ namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeManipulator\FunctionLikeManipulator;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
@@ -34,12 +40,18 @@ final class SetterNodeReturnTypeInfererTypeInferer implements \Rector\TypeDeclar
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer $assignToPropertyTypeInferer, \Rector\Core\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer $assignToPropertyTypeInferer, \Rector\Core\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
         $this->functionLikeManipulator = $functionLikeManipulator;
         $this->typeFactory = $typeFactory;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->astResolver = $astResolver;
     }
     public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
@@ -48,9 +60,25 @@ final class SetterNodeReturnTypeInfererTypeInferer implements \Rector\TypeDeclar
             return new \PHPStan\Type\MixedType();
         }
         $returnedPropertyNames = $this->functionLikeManipulator->getReturnedLocalPropertyNames($functionLike);
+        $scope = $classLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return new \PHPStan\Type\MixedType();
+        }
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            return new \PHPStan\Type\MixedType();
+        }
         $types = [];
         foreach ($returnedPropertyNames as $returnedPropertyName) {
-            $inferredPropertyType = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($returnedPropertyName, $classLike);
+            $propertyReflection = $classReflection->getProperty($returnedPropertyName, $scope);
+            if (!$propertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+                continue;
+            }
+            $property = $this->astResolver->resolvePropertyFromPropertyReflection($propertyReflection);
+            if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+                continue;
+            }
+            $inferredPropertyType = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($property, $returnedPropertyName, $classLike);
             if (!$inferredPropertyType instanceof \PHPStan\Type\Type) {
                 continue;
             }
