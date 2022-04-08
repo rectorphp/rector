@@ -28,6 +28,6 @@ final class AllAssignNodePropertyTypeInferer
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
-        return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $classLike);
+        return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($property, $propertyName, $classLike);
     }
 }

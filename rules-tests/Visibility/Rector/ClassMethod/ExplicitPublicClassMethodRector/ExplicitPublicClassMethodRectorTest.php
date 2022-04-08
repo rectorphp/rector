@@ -31,4 +31,3 @@ final class ExplicitPublicClassMethodRectorTest extends AbstractRectorTestCase
         return __DIR__ . '/config/configured_rule.php';
     }
 }
-

@@ -30,7 +30,7 @@ final class TypedPropertyFromAssignsRector extends AbstractRector
         private readonly AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer,
         private readonly PropertyTypeDecorator $propertyTypeDecorator,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
-        private readonly VarTagRemover $varTagRemover,
+        private readonly VarTagRemover $varTagRemover
     ) {
     }
 

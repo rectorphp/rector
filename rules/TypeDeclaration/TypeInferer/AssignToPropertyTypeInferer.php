@@ -9,11 +9,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
@@ -32,11 +34,12 @@ final class AssignToPropertyTypeInferer
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private readonly TypeFactory $typeFactory,
         private readonly NodeTypeResolver $nodeTypeResolver,
-        private readonly ExprAnalyzer $exprAnalyzer
+        private readonly ExprAnalyzer $exprAnalyzer,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 
-    public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): ?Type
+    public function inferPropertyInClassLike(Property $property, string $propertyName, ClassLike $classLike): ?Type
     {
         $assignedExprTypes = [];
 
@@ -70,7 +73,29 @@ final class AssignToPropertyTypeInferer
             return null;
         }
 
-        return $this->typeFactory->createMixedPassedOrUnionType($assignedExprTypes);
+        $inferredType = $this->typeFactory->createMixedPassedOrUnionType($assignedExprTypes);
+        $defaultPropertyValue = $property->props[0]->default;
+
+        if ($this->shouldSkipWithDifferentDefaultValueType($defaultPropertyValue, $inferredType)) {
+            return null;
+        }
+
+        return $inferredType;
+    }
+
+    private function shouldSkipWithDifferentDefaultValueType(?Expr $expr, Type $inferredType): bool
+    {
+        if (! $expr instanceof Expr) {
+            return false;
+        }
+
+        if ($this->valueResolver->isNull($expr)) {
+            return false;
+        }
+
+        $defaultType = $this->nodeTypeResolver->getNativeType($expr);
+        return $inferredType->isSuperTypeOf($defaultType)
+            ->no();
     }
 
     private function resolveExprStaticTypeIncludingDimFetch(Assign $assign): Type
