@@ -42,6 +42,7 @@ use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrect
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
@@ -253,6 +254,10 @@ final class NodeTypeResolver
     public function getFullyQualifiedClassName(TypeWithClassName $typeWithClassName): string
     {
         if ($typeWithClassName instanceof ShortenedObjectType) {
+            return $typeWithClassName->getFullyQualifiedName();
+        }
+
+        if ($typeWithClassName instanceof AliasedObjectType) {
             return $typeWithClassName->getFullyQualifiedName();
         }
 
