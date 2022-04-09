@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220408\Doctrine\Inflector\Rules\French;
+namespace RectorPrefix20220409\Doctrine\Inflector\Rules\French;
 
-use RectorPrefix20220408\Doctrine\Inflector\GenericLanguageInflectorFactory;
-use RectorPrefix20220408\Doctrine\Inflector\Rules\Ruleset;
-final class InflectorFactory extends \RectorPrefix20220408\Doctrine\Inflector\GenericLanguageInflectorFactory
+use RectorPrefix20220409\Doctrine\Inflector\GenericLanguageInflectorFactory;
+use RectorPrefix20220409\Doctrine\Inflector\Rules\Ruleset;
+final class InflectorFactory extends \RectorPrefix20220409\Doctrine\Inflector\GenericLanguageInflectorFactory
 {
-    protected function getSingularRuleset() : \RectorPrefix20220408\Doctrine\Inflector\Rules\Ruleset
+    protected function getSingularRuleset() : \RectorPrefix20220409\Doctrine\Inflector\Rules\Ruleset
     {
-        return \RectorPrefix20220408\Doctrine\Inflector\Rules\French\Rules::getSingularRuleset();
+        return \RectorPrefix20220409\Doctrine\Inflector\Rules\French\Rules::getSingularRuleset();
     }
-    protected function getPluralRuleset() : \RectorPrefix20220408\Doctrine\Inflector\Rules\Ruleset
+    protected function getPluralRuleset() : \RectorPrefix20220409\Doctrine\Inflector\Rules\Ruleset
     {
-        return \RectorPrefix20220408\Doctrine\Inflector\Rules\French\Rules::getPluralRuleset();
+        return \RectorPrefix20220409\Doctrine\Inflector\Rules\French\Rules::getPluralRuleset();
     }
 }

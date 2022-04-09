@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
-use RectorPrefix20220408\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
+use RectorPrefix20220409\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 use LogicException;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
@@ -36,7 +36,7 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3
     }
     public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20220408\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
+        if (!$statement instanceof \RectorPrefix20220409\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
             return;
         }
         \preg_match_all('#\\[(.*)]#imU', $statement->condition, $conditions, \PREG_SET_ORDER);

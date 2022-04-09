@@ -6,25 +6,20 @@ namespace Rector\Php74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
-use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php74\Guard\MakePropertyTypedGuard;
 use Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -89,20 +84,15 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
     private $familyRelationsAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\PropertyAnalyzer
-     */
-    private $propertyAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
-     */
-    private $astResolver;
-    /**
-     * @readonly
      * @var \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer
      */
     private $objectTypeAnalyzer;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer $objectTypeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Php74\Guard\MakePropertyTypedGuard
+     */
+    private $makePropertyTypedGuard;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer $objectTypeAnalyzer, \Rector\Php74\Guard\MakePropertyTypedGuard $makePropertyTypedGuard)
     {
         $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
@@ -110,9 +100,8 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
         $this->varTagRemover = $varTagRemover;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
-        $this->propertyAnalyzer = $propertyAnalyzer;
-        $this->astResolver = $astResolver;
         $this->objectTypeAnalyzer = $objectTypeAnalyzer;
+        $this->makePropertyTypedGuard = $makePropertyTypedGuard;
     }
     public function configure(array $configuration) : void
     {
@@ -153,11 +142,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return null;
-        }
-        if ($this->shouldSkipProperty($node, $scope)) {
+        if (!$this->makePropertyTypedGuard->isLegal($node, $this->inlinePublic)) {
             return null;
         }
         $varType = $this->varDocPropertyTypeInferer->inferProperty($node);
@@ -171,6 +156,7 @@ CODE_SAMPLE
         if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
             return null;
         }
+        /** @var Scope $scope */
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $propertyType = $this->familyRelationsAnalyzer->getPossibleUnionPropertyType($node, $varType, $scope, $propertyTypeNode);
         $varType = $propertyType->getVarType();
@@ -227,65 +213,5 @@ CODE_SAMPLE
             return;
         }
         $onlyProperty->default = $this->nodeFactory->createNull();
-    }
-    private function shouldSkipProperty(\PhpParser\Node\Stmt\Property $property, \PHPStan\Analyser\Scope $scope) : bool
-    {
-        // type is already set → skip
-        if ($property->type !== null) {
-            return \true;
-        }
-        // skip multiple properties
-        if (\count($property->props) > 1) {
-            return \true;
-        }
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            return \true;
-        }
-        /**
-         * - skip trait properties, as they are unpredictable based on class context they appear in
-         * - skip interface properties as well, as interface not allowed to have property
-         */
-        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
-            return \true;
-        }
-        $propertyName = $this->getName($property);
-        if ($this->isModifiedByTrait($class, $propertyName)) {
-            return \true;
-        }
-        if ($this->inlinePublic) {
-            return $this->propertyAnalyzer->hasForbiddenType($property);
-        }
-        if ($property->isPrivate()) {
-            return $this->propertyAnalyzer->hasForbiddenType($property);
-        }
-        // is we're in final class, the type can be changed
-        return !$this->isSafeProtectedProperty($property, $class);
-    }
-    private function isModifiedByTrait(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : bool
-    {
-        foreach ($class->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $traitName) {
-                $trait = $this->astResolver->resolveClassFromName($traitName->toString());
-                if (!$trait instanceof \PhpParser\Node\Stmt\Trait_) {
-                    continue;
-                }
-                if ($this->propertyFetchAnalyzer->containsLocalPropertyFetchName($trait, $propertyName)) {
-                    return \true;
-                }
-            }
-        }
-        return \false;
-    }
-    private function isSafeProtectedProperty(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Stmt\Class_ $class) : bool
-    {
-        if (!$property->isProtected()) {
-            return \false;
-        }
-        if (!$class->isFinal()) {
-            return \false;
-        }
-        return !$class->extends instanceof \PhpParser\Node\Name\FullyQualified;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220408;
+namespace RectorPrefix20220409;
 
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

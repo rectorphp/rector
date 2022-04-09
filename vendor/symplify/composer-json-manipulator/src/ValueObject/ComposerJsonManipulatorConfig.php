@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220408\Symplify\ComposerJsonManipulator\ValueObject;
+namespace RectorPrefix20220409\Symplify\ComposerJsonManipulator\ValueObject;
 
 /**
  * @api

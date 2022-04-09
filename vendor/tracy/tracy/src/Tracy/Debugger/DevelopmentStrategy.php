@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220408\Tracy;
+namespace RectorPrefix20220409\Tracy;
 
 use ErrorException;
 /**
@@ -19,7 +19,7 @@ final class DevelopmentStrategy
     private $blueScreen;
     /** @var DeferredContent */
     private $defer;
-    public function __construct(\RectorPrefix20220408\Tracy\Bar $bar, \RectorPrefix20220408\Tracy\BlueScreen $blueScreen, \RectorPrefix20220408\Tracy\DeferredContent $defer)
+    public function __construct(\RectorPrefix20220409\Tracy\Bar $bar, \RectorPrefix20220409\Tracy\BlueScreen $blueScreen, \RectorPrefix20220409\Tracy\DeferredContent $defer)
     {
         $this->bar = $bar;
         $this->blueScreen = $blueScreen;
@@ -30,19 +30,19 @@ final class DevelopmentStrategy
     }
     public function handleException(\Throwable $exception, bool $firstTime) : void
     {
-        if (\RectorPrefix20220408\Tracy\Helpers::isAjax() && $this->defer->isAvailable()) {
+        if (\RectorPrefix20220409\Tracy\Helpers::isAjax() && $this->defer->isAvailable()) {
             $this->blueScreen->renderToAjax($exception, $this->defer);
-        } elseif ($firstTime && \RectorPrefix20220408\Tracy\Helpers::isHtmlMode()) {
+        } elseif ($firstTime && \RectorPrefix20220409\Tracy\Helpers::isHtmlMode()) {
             $this->blueScreen->render($exception);
         } else {
-            \RectorPrefix20220408\Tracy\Debugger::fireLog($exception);
+            \RectorPrefix20220409\Tracy\Debugger::fireLog($exception);
             $this->renderExceptionCli($exception);
         }
     }
     private function renderExceptionCli(\Throwable $exception) : void
     {
         try {
-            $logFile = \RectorPrefix20220408\Tracy\Debugger::log($exception, \RectorPrefix20220408\Tracy\Debugger::EXCEPTION);
+            $logFile = \RectorPrefix20220409\Tracy\Debugger::log($exception, \RectorPrefix20220409\Tracy\Debugger::EXCEPTION);
         } catch (\Throwable $e) {
             echo "{$exception}\nTracy is unable to log error: {$e->getMessage()}\n";
             return;
@@ -50,12 +50,12 @@ final class DevelopmentStrategy
         if ($logFile && !\headers_sent()) {
             \header("X-Tracy-Error-Log: {$logFile}", \false);
         }
-        if (\RectorPrefix20220408\Tracy\Helpers::detectColors()) {
+        if (\RectorPrefix20220409\Tracy\Helpers::detectColors()) {
             echo "\n\n" . $this->blueScreen->highlightPhpCli($exception->getFile(), $exception->getLine()) . "\n";
         }
         echo "{$exception}\n" . ($logFile ? "\n(stored in {$logFile})\n" : '');
-        if ($logFile && \RectorPrefix20220408\Tracy\Debugger::$browser) {
-            \exec(\RectorPrefix20220408\Tracy\Debugger::$browser . ' ' . \escapeshellarg(\strtr($logFile, \RectorPrefix20220408\Tracy\Debugger::$editorMapping)));
+        if ($logFile && \RectorPrefix20220409\Tracy\Debugger::$browser) {
+            \exec(\RectorPrefix20220409\Tracy\Debugger::$browser . ' ' . \escapeshellarg(\strtr($logFile, \RectorPrefix20220409\Tracy\Debugger::$editorMapping)));
         }
     }
     public function handleError(int $severity, string $message, string $file, int $line, array $context = null) : void
@@ -63,19 +63,19 @@ final class DevelopmentStrategy
         if (\function_exists('ini_set')) {
             $oldDisplay = \ini_set('display_errors', '1');
         }
-        if ((\is_bool(\RectorPrefix20220408\Tracy\Debugger::$strictMode) ? \RectorPrefix20220408\Tracy\Debugger::$strictMode : \RectorPrefix20220408\Tracy\Debugger::$strictMode & $severity) && !isset($_GET['_tracy_skip_error'])) {
+        if ((\is_bool(\RectorPrefix20220409\Tracy\Debugger::$strictMode) ? \RectorPrefix20220409\Tracy\Debugger::$strictMode : \RectorPrefix20220409\Tracy\Debugger::$strictMode & $severity) && !isset($_GET['_tracy_skip_error'])) {
             $e = new \ErrorException($message, 0, $severity, $file, $line);
             $e->context = $context;
             $e->skippable = \true;
-            \RectorPrefix20220408\Tracy\Debugger::exceptionHandler($e);
+            \RectorPrefix20220409\Tracy\Debugger::exceptionHandler($e);
             exit(255);
         }
-        $message = 'PHP ' . \RectorPrefix20220408\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20220408\Tracy\Helpers::improveError($message, (array) $context);
+        $message = 'PHP ' . \RectorPrefix20220409\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20220409\Tracy\Helpers::improveError($message, (array) $context);
         $count =& $this->bar->getPanel('Tracy:errors')->data["{$file}|{$line}|{$message}"];
         if (!$count++) {
             // not repeated error
-            \RectorPrefix20220408\Tracy\Debugger::fireLog(new \ErrorException($message, 0, $severity, $file, $line));
-            if (!\RectorPrefix20220408\Tracy\Helpers::isHtmlMode() && !\RectorPrefix20220408\Tracy\Helpers::isAjax()) {
+            \RectorPrefix20220409\Tracy\Debugger::fireLog(new \ErrorException($message, 0, $severity, $file, $line));
+            if (!\RectorPrefix20220409\Tracy\Helpers::isHtmlMode() && !\RectorPrefix20220409\Tracy\Helpers::isAjax()) {
                 echo "\n{$message} in {$file} on line {$line}\n";
             }
         }
