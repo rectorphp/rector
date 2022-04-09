@@ -7,25 +7,20 @@ namespace Rector\Php74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
-use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php74\Guard\MakePropertyTypedGuard;
 use Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -67,9 +62,8 @@ final class TypedPropertyRector extends AbstractRector implements AllowEmptyConf
         private readonly VarTagRemover $varTagRemover,
         private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
         private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        private readonly PropertyAnalyzer $propertyAnalyzer,
-        private readonly AstResolver $astResolver,
-        private readonly ObjectTypeAnalyzer $objectTypeAnalyzer
+        private readonly ObjectTypeAnalyzer $objectTypeAnalyzer,
+        private readonly MakePropertyTypedGuard $makePropertyTypedGuard
     ) {
     }
 
@@ -126,12 +120,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        if ($this->shouldSkipProperty($node, $scope)) {
+        if (! $this->makePropertyTypedGuard->isLegal($node, $this->inlinePublic)) {
             return null;
         }
 
@@ -150,6 +139,7 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var Scope $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
 
         $propertyType = $this->familyRelationsAnalyzer->getPossibleUnionPropertyType(
@@ -228,80 +218,5 @@ CODE_SAMPLE
         }
 
         $onlyProperty->default = $this->nodeFactory->createNull();
-    }
-
-    private function shouldSkipProperty(Property $property, Scope $scope): bool
-    {
-        // type is already set → skip
-        if ($property->type !== null) {
-            return true;
-        }
-
-        // skip multiple properties
-        if (count($property->props) > 1) {
-            return true;
-        }
-
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return true;
-        }
-
-        /**
-         * - skip trait properties, as they are unpredictable based on class context they appear in
-         * - skip interface properties as well, as interface not allowed to have property
-         */
-        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
-        if (! $class instanceof Class_) {
-            return true;
-        }
-
-        $propertyName = $this->getName($property);
-
-        if ($this->isModifiedByTrait($class, $propertyName)) {
-            return true;
-        }
-
-        if ($this->inlinePublic) {
-            return $this->propertyAnalyzer->hasForbiddenType($property);
-        }
-
-        if ($property->isPrivate()) {
-            return $this->propertyAnalyzer->hasForbiddenType($property);
-        }
-
-        // is we're in final class, the type can be changed
-        return ! ($this->isSafeProtectedProperty($property, $class));
-    }
-
-    private function isModifiedByTrait(Class_ $class, string $propertyName): bool
-    {
-        foreach ($class->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $traitName) {
-                $trait = $this->astResolver->resolveClassFromName($traitName->toString());
-                if (! $trait instanceof Trait_) {
-                    continue;
-                }
-
-                if ($this->propertyFetchAnalyzer->containsLocalPropertyFetchName($trait, $propertyName)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private function isSafeProtectedProperty(Property $property, Class_ $class): bool
-    {
-        if (! $property->isProtected()) {
-            return false;
-        }
-
-        if (! $class->isFinal()) {
-            return false;
-        }
-
-        return ! $class->extends instanceof FullyQualified;
     }
 }
