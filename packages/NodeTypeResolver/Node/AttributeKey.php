@@ -3,8 +3,6 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\Node;
 
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeNameResolver\NodeNameResolver;
 /**
  * @enum
  */
@@ -23,36 +21,6 @@ final class AttributeKey
      * @var string
      */
     public const USE_NODES = 'useNodes';
-    /**
-     * @deprecated Use
-     * @see BetterNodeFinder and
-     * @see NodeNameResolver to find your parent nodes.
-     *
-     * @var string
-     */
-    public const CLASS_NAME = 'className';
-    /**
-     * @deprecated Use
-     * @see BetterNodeFinder::findParentType($node, ClassLike::class) to find your parent nodes.
-     *
-     * @var string
-     */
-    public const CLASS_NODE = 'class_node';
-    /**
-     * @deprecated Use
-     * @see BetterNodeFinder and
-     * @see NodeNameResolver
-     *
-     * @var string
-     */
-    public const METHOD_NAME = 'methodName';
-    /**
-     * @deprecated Use
-     * @see BetterNodeFinder::findParentType($node, ClassMethod::class) to find your parent nodes.
-     *
-     * @var string
-     */
-    public const METHOD_NODE = 'methodNode';
     /**
      * Internal php-parser name.
      * Do not change this even if you want!
