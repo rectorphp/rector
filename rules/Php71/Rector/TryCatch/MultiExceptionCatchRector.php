@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\TryCatch;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -19,6 +20,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MultiExceptionCatchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     */
+    private $nodePrinter;
+    public function __construct(\Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
+    {
+        $this->nodePrinter = $nodePrinter;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes multi catch of same exception to single one | separated.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -83,7 +93,7 @@ CODE_SAMPLE
     {
         $catchKeysByContent = [];
         foreach ($tryCatch->catches as $catch) {
-            $catchContent = $this->print($catch->stmts);
+            $catchContent = $this->nodePrinter->print($catch->stmts);
             $catchKeysByContent[$catchContent][] = $catch;
         }
         return $catchKeysByContent;

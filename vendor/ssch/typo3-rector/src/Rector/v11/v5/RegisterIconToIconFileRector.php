@@ -5,11 +5,13 @@ namespace Ssch\TYPO3Rector\Rector\v11\v5;
 
 use RectorPrefix20220409\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
@@ -40,11 +42,16 @@ final class RegisterIconToIconFileRector extends \Rector\Core\Rector\AbstractRec
      * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
     private $simplePhpParser;
-    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector $addIconsToReturnRector, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser)
+    /**
+     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     */
+    private $nodePrinter;
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector $addIconsToReturnRector, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->filesFinder = $filesFinder;
         $this->addIconsToReturnRector = $addIconsToReturnRector;
         $this->simplePhpParser = $simplePhpParser;
+        $this->nodePrinter = $nodePrinter;
     }
     /**
      * @return array<class-string<Node>>
@@ -54,7 +61,7 @@ final class RegisterIconToIconFileRector extends \Rector\Core\Rector\AbstractRec
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param Node\Expr\MethodCall $node
+     * @param MethodCall $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
@@ -138,16 +145,17 @@ CODE_SAMPLE
             }
         }
         if (\is_string($existingIcons)) {
-            $nodes = $this->simplePhpParser->parseString($existingIcons);
+            $stmts = $this->simplePhpParser->parseString($existingIcons);
         } else {
-            $nodes = [new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createArray([]))];
+            $stmts = [new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createArray([]))];
         }
-        $this->decorateNamesToFullyQualified($nodes);
+        $this->decorateNamesToFullyQualified($stmts);
         $nodeTraverser = new \PhpParser\NodeTraverser();
         $this->addIconsToReturnRector->configure([\Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector::ICON_IDENTIFIER => $iconIdentifier, \Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector::ICON_CONFIGURATION => $iconConfiguration]);
         $nodeTraverser->addVisitor($this->addIconsToReturnRector);
-        $nodes = $nodeTraverser->traverse($nodes);
-        $changedIconsContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
+        /** @var Stmt[] $stmts */
+        $stmts = $nodeTraverser->traverse($stmts);
+        $changedIconsContent = $this->nodePrinter->prettyPrintFile($stmts);
         $changedIconsContent = \RectorPrefix20220409\Nette\Utils\Strings::replace($changedIconsContent, self::REMOVE_EMPTY_LINES);
         $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($iconsFilePath, $changedIconsContent));
     }

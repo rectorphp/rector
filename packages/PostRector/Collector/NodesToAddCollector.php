@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector\NodeCollectorInterface
@@ -36,14 +36,14 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     private $rectorChangeCollector;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
+     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
-    private $betterStandardPrinter;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)
+    private $nodePrinter;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->rectorChangeCollector = $rectorChangeCollector;
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodePrinter = $nodePrinter;
     }
     public function isActive() : bool
     {
@@ -133,7 +133,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         }
         $foundNode = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt::class);
         if (!$foundNode instanceof \PhpParser\Node\Stmt) {
-            $printedNode = $this->betterStandardPrinter->print($node);
+            $printedNode = $this->nodePrinter->print($node);
             $errorMessage = \sprintf('Could not find parent Stmt of "%s" node', $printedNode);
             throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
         }

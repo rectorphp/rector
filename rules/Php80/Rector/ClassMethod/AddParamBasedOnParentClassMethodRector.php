@@ -13,6 +13,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -38,10 +39,16 @@ final class AddParamBasedOnParentClassMethodRector extends \Rector\Core\Rector\A
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(\Rector\VendorLocker\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, \Rector\Core\PhpParser\AstResolver $astResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     */
+    private $nodePrinter;
+    public function __construct(\Rector\VendorLocker\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
         $this->astResolver = $astResolver;
+        $this->nodePrinter = $nodePrinter;
     }
     public function provideMinPhpVersion() : int
     {
@@ -168,7 +175,7 @@ CODE_SAMPLE
             }
             $paramDefault = $parentClassMethodParam->default;
             if ($paramDefault instanceof \PhpParser\Node\Expr) {
-                $printParamDefault = $this->print($paramDefault);
+                $printParamDefault = $this->nodePrinter->print($paramDefault);
                 $paramDefault = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($printParamDefault));
             }
             $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);

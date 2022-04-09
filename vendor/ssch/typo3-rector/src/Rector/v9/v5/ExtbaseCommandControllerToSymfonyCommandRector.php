@@ -13,6 +13,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\Core\Rector\AbstractRector;
@@ -64,7 +65,11 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
      * @var \Ssch\TYPO3Rector\Template\TemplateFinder
      */
     private $templateFinder;
-    public function __construct(\RectorPrefix20220409\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder)
+    /**
+     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     */
+    private $nodePrinter;
+    public function __construct(\RectorPrefix20220409\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->rectorParser = $rectorParser;
@@ -73,6 +78,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
         $this->addCommandsToReturnRector = $addCommandsToReturnRector;
         $this->simplePhpParser = $simplePhpParser;
         $this->templateFinder = $templateFinder;
+        $this->nodePrinter = $nodePrinter;
     }
     /**
      * @return array<class-string<Node>>
@@ -138,7 +144,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             if ($this->smartFileSystem->exists($filePath) && !\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 continue;
             }
-            $commandVariables = ['__TEMPLATE_NAMESPACE__' => \ltrim($commandNamespace, '\\'), '__TEMPLATE_COMMAND_NAME__' => $commandName, '__TEMPLATE_DESCRIPTION__' => $commandDescription, '__TEMPLATE_COMMAND_BODY__' => $this->betterStandardPrinter->prettyPrint($commandMethod->stmts)];
+            $commandVariables = ['__TEMPLATE_NAMESPACE__' => \ltrim($commandNamespace, '\\'), '__TEMPLATE_COMMAND_NAME__' => $commandName, '__TEMPLATE_DESCRIPTION__' => $commandDescription, '__TEMPLATE_COMMAND_BODY__' => $this->nodePrinter->prettyPrint($commandMethod->stmts)];
             // Add traits, other methods etc. to class
             // Maybe inject dependencies into __constructor
             $commandContent = \str_replace(\array_keys($commandVariables), $commandVariables, $commandContent);
@@ -156,8 +162,9 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             }
             $this->addArgumentToSymfonyCommandRector->configure([\Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector::INPUT_ARGUMENTS => $inputArguments]);
             $nodeTraverser->addVisitor($this->addArgumentToSymfonyCommandRector);
+            /** @var Stmt[] $stmts */
             $stmts = $nodeTraverser->traverse($stmts);
-            $changedSetConfigContent = $this->betterStandardPrinter->prettyPrintFile($stmts);
+            $changedSetConfigContent = $this->nodePrinter->prettyPrintFile($stmts);
             $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($filePath, $changedSetConfigContent));
             $newCommandName = \sprintf('%s:%s', \RectorPrefix20220409\Nette\Utils\Strings::lower($vendorName), \RectorPrefix20220409\Nette\Utils\Strings::lower($commandName));
             $newCommandsWithFullQualifiedNamespace[$newCommandName] = \sprintf('%s\\%s', $commandNamespace, $commandName);
@@ -235,16 +242,17 @@ CODE_SAMPLE
     {
         if ($this->smartFileSystem->exists($commandsFilePath)) {
             $commandsSmartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($commandsFilePath);
-            $nodes = $this->rectorParser->parseFile($commandsSmartFileInfo);
+            $stmts = $this->rectorParser->parseFile($commandsSmartFileInfo);
         } else {
-            $nodes = [new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createArray([]))];
+            $stmts = [new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createArray([]))];
         }
-        $this->decorateNamesToFullyQualified($nodes);
+        $this->decorateNamesToFullyQualified($stmts);
         $nodeTraverser = new \PhpParser\NodeTraverser();
         $this->addCommandsToReturnRector->configure([\Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector::COMMANDS => $newCommandsWithFullQualifiedNamespace]);
         $nodeTraverser->addVisitor($this->addCommandsToReturnRector);
-        $nodes = $nodeTraverser->traverse($nodes);
-        $changedCommandsContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
+        /** @var Stmt[] $stmts */
+        $stmts = $nodeTraverser->traverse($stmts);
+        $changedCommandsContent = $this->nodePrinter->prettyPrintFile($stmts);
         $changedCommandsContent = \RectorPrefix20220409\Nette\Utils\Strings::replace($changedCommandsContent, self::REMOVE_EMPTY_LINES, '');
         $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($commandsFilePath, $changedCommandsContent));
     }

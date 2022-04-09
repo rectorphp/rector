@@ -137,10 +137,7 @@ CODE_SAMPLE
         if (!$extensionNameArgumentValue->right instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
-        if (null !== $this->valueResolver->getValue($extensionNameArgumentValue->right)) {
-            return \false;
-        }
-        return \true;
+        return null === $this->valueResolver->getValue($extensionNameArgumentValue->right);
     }
     private function prepareVendorName(string $extensionName, int $delimiterPosition) : string
     {

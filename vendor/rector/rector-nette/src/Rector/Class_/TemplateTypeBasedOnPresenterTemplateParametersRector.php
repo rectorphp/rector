@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\VerbosityLevel;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
@@ -40,9 +41,15 @@ final class TemplateTypeBasedOnPresenterTemplateParametersRector extends \Rector
      * @var \Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory
      */
     private $classWithPublicPropertiesFactory;
-    public function __construct(\Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory)
+    /**
+     * @readonly
+     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     */
+    private $nodePrinter;
+    public function __construct(\Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->classWithPublicPropertiesFactory = $classWithPublicPropertiesFactory;
+        $this->nodePrinter = $nodePrinter;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -216,7 +223,7 @@ CODE_SAMPLE
         $presenterPattern = '#Presenter$#';
         $fullTemplateClassName = '\\' . \RectorPrefix20220409\Nette\Utils\Strings::replace($fullPresenterName, $presenterPattern, $upperCasedActionName . 'Template');
         $templateClass = $this->classWithPublicPropertiesFactory->createNode($fullTemplateClassName, $properties, $this->templateClassParent, $this->templateClassTraits);
-        $printedClassContent = "<?php\n\n" . $this->betterStandardPrinter->print($templateClass) . "\n";
+        $printedClassContent = "<?php\n\n" . $this->nodePrinter->print($templateClass) . "\n";
         $smartFileInfo = $this->file->getSmartFileInfo();
         $targetFilePath = $smartFileInfo->getRealPathDirectory() . '/' . $templateClassName . '.php';
         $addedFileWithContent = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($targetFilePath, $printedClassContent);

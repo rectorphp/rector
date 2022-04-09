@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -35,9 +36,28 @@ final class ParseFileRector extends \Rector\Core\Rector\AbstractRector
      * @see https://regex101.com/r/JmNhZj/1
      */
     private const YAML_SUFFIX_REGEX = '#\\.(yml|yaml)$#';
+    /**
+     * @readonly
+     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     */
+    private $nodePrinter;
+    public function __construct(\Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
+    {
+        $this->nodePrinter = $nodePrinter;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('session > use_strict_mode is true by default and can be removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('session > use_strict_mode: true', 'session:')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces deprecated Yaml::parse() of file argument with file contents', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+use Symfony\Component\Yaml\Yaml;
+
+$parsedFile = Yaml::parse('someFile.yml');
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use Symfony\Component\Yaml\Yaml;
+
+$parsedFile = Yaml::parse(file_get_contents('someFile.yml'));
+CODE_SAMPLE
+)]);
     }
     /**
      * @return array<class-string<Node>>
@@ -73,7 +93,7 @@ final class ParseFileRector extends \Rector\Core\Rector\AbstractRector
             return \false;
         }
         $possibleFileNode = $firstArg->value;
-        $possibleFileNodeAsString = $this->print($possibleFileNode);
+        $possibleFileNodeAsString = $this->nodePrinter->print($possibleFileNode);
         // is yml/yaml file
         if (\Rector\Core\Util\StringUtils::isMatch($possibleFileNodeAsString, self::YAML_SUFFIX_IN_QUOTE_REGEX)) {
             return \true;

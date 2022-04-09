@@ -25,7 +25,7 @@ final class RenderTypeFlexFormRector implements \Ssch\TYPO3Rector\Contract\FileP
         foreach ($elements as $element) {
             $types = $element->getElementsByTagName('type');
             $type = $types->item(0);
-            if (null === $type) {
+            if (!$type instanceof \DOMElement) {
                 continue;
             }
             if ('select' !== $type->textContent) {

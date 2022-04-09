@@ -1,4 +1,4 @@
-# 59 Rules Overview
+# 60 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -638,6 +638,34 @@ Replace "GET" string by Symfony Request object class constants
 -        $formBuilder->setMethod('GET');
 +        $formBuilder->setMethod(\Symfony\Component\HttpFoundation\Request::GET);
      }
+ }
+```
+
+<br>
+
+## LoadValidatorMetadataToAnnotationRector
+
+Move metadata from `loadValidatorMetadata()` to property/getter/method annotations
+
+- class: [`Rector\Symfony\Rector\Class_\LoadValidatorMetadataToAnnotationRector`](../src/Rector/Class_/LoadValidatorMetadataToAnnotationRector.php)
+
+```diff
+ use Symfony\Component\Validator\Constraints as Assert;
+ use Symfony\Component\Validator\Mapping\ClassMetadata;
+
+ final class SomeClass
+ {
++    /**
++     * @Assert\NotBlank(message="City can't be blank.")
++     */
+     private $city;
+-
+-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+-    {
+-        $metadata->addPropertyConstraint('city', new Assert\NotBlank([
+-            'message' => 'City can\'t be blank.',
+-        ]));
+-    }
  }
 ```
 

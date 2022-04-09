@@ -8,18 +8,18 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class DoctrineAnnotationFactory
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
+     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
-    private $betterStandardPrinter;
-    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)
+    private $nodePrinter;
+    public function __construct(\Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodePrinter = $nodePrinter;
     }
     public function createFromAttribute(\PhpParser\Node\Attribute $attribute, string $className) : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
     {
@@ -39,9 +39,9 @@ final class DoctrineAnnotationFactory
                 // standardize double quotes for annotations
                 $arg->value->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED);
             }
-            $itemValue = $this->betterStandardPrinter->print($arg->value);
+            $itemValue = $this->nodePrinter->print($arg->value);
             if ($arg->name !== null) {
-                $name = $this->betterStandardPrinter->print($arg->name);
+                $name = $this->nodePrinter->print($arg->name);
                 $items[$name] = $itemValue;
             } else {
                 $items[] = $itemValue;

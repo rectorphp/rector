@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -38,10 +39,16 @@ final class DowngradePropertyPromotionRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    /**
+     * @readonly
+     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     */
+    private $nodePrinter;
+    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->nodePrinter = $nodePrinter;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -126,7 +133,7 @@ CODE_SAMPLE
     }
     private function setParamAttrGroupAsComment(\PhpParser\Node\Param $param) : void
     {
-        $attrGroupsPrint = $this->betterStandardPrinter->print($param->attrGroups);
+        $attrGroupsPrint = $this->nodePrinter->print($param->attrGroups);
         $comments = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS);
         if (\is_array($comments)) {
             /** @var Comment[] $comments */

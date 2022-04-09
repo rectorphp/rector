@@ -2415,12 +2415,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "1c9a431e806e0214cb38ffd33bbd225bbf34ee42"
+                "reference": "8e037b5b5c9ef83304eeace33823d5e717bd8e94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/1c9a431e806e0214cb38ffd33bbd225bbf34ee42",
-                "reference": "1c9a431e806e0214cb38ffd33bbd225bbf34ee42",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/8e037b5b5c9ef83304eeace33823d5e717bd8e94",
+                "reference": "8e037b5b5c9ef83304eeace33823d5e717bd8e94",
                 "shasum": ""
             },
             "require": {
@@ -2444,7 +2444,7 @@
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.4.7",
-                "rector\/rector-src": "dev-main",
+                "rector\/rector-src": "dev-main#988850a",
                 "symplify\/easy-coding-standard": "^10.0",
                 "symplify\/monorepo-builder": "^10.0",
                 "symplify\/phpstan-extensions": "^10.0",
@@ -2452,7 +2452,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-04-01T07:12:16+00:00",
+            "time": "2022-04-09T21:14:33+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2627,12 +2627,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "5adc03e1b0f6b240953eb4e7f9d75d84fde4a0d9"
+                "reference": "991a3c8206c1af27f5f528c13047055b192a03d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5adc03e1b0f6b240953eb4e7f9d75d84fde4a0d9",
-                "reference": "5adc03e1b0f6b240953eb4e7f9d75d84fde4a0d9",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/991a3c8206c1af27f5f528c13047055b192a03d6",
+                "reference": "991a3c8206c1af27f5f528c13047055b192a03d6",
                 "shasum": ""
             },
             "require": {
@@ -2650,7 +2650,7 @@
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.4.4",
-                "rector\/rector-src": "dev-main",
+                "rector\/rector-src": "dev-main#988850a",
                 "symfony\/security-core": "^5.4",
                 "symfony\/security-http": "^5.4",
                 "symplify\/easy-coding-standard": "^10.0",
@@ -2660,7 +2660,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-04-07T14:05:05+00:00",
+            "time": "2022-04-09T21:10:49+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2767,12 +2767,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "4c5f0193e2d418b9054c89a294da52d15487a3a0"
+                "reference": "4328e276e1b50645086efd78638a8502d74e06fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/4c5f0193e2d418b9054c89a294da52d15487a3a0",
-                "reference": "4c5f0193e2d418b9054c89a294da52d15487a3a0",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/4328e276e1b50645086efd78638a8502d74e06fa",
+                "reference": "4328e276e1b50645086efd78638a8502d74e06fa",
                 "shasum": ""
             },
             "require": {
@@ -2792,7 +2792,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.4.20",
                 "rector\/rector-generator": "dev-main",
-                "rector\/rector-src": "dev-main",
+                "rector\/rector-src": "dev-main#aee04ac",
                 "symfony\/console": "^6.0",
                 "symplify\/coding-standard": "^10.1",
                 "symplify\/easy-coding-standard": "^10.1",
@@ -2802,7 +2802,7 @@
                 "symplify\/vendor-patches": "^10.1",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-04-05T08:38:09+00:00",
+            "time": "2022-04-09T22:07:57+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2836,7 +2836,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.43"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/main"
             },
             "funding": [
                 {
