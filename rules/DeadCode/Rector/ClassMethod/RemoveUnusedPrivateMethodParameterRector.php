@@ -83,7 +83,7 @@ CODE_SAMPLE
         if ($unusedParameters === []) {
             return null;
         }
-        $this->removeNodes($unusedParameters);
+        $this->nodeRemover->removeNodes($unusedParameters);
         $this->clearPhpDocInfo($node, $unusedParameters);
         $this->removeCallerArgs($node, $unusedParameters);
         return $node;

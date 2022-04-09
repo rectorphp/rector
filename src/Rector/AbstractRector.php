@@ -7,10 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\NodeVisitorAbstract;
@@ -18,7 +15,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -43,7 +39,6 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20220409\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20220409\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix20220409\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20220409\Symplify\Skipper\Skipper\Skipper;
 /**
  * @see \Rector\Testing\PHPUnit\AbstractRectorTestCase
@@ -79,14 +74,6 @@ CODE_SAMPLE;
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     protected $nodeTypeResolver;
-    /**
-     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
-     */
-    protected $removedAndAddedFilesCollector;
-    /**
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
-     */
-    protected $parameterProvider;
     /**
      * @var \Rector\Core\Php\PhpVersionProvider
      */
@@ -170,12 +157,11 @@ CODE_SAMPLE;
     /**
      * @required
      */
-    public function autowire(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20220409\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20220409\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20220409\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\ProcessAnalyzer\RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Core\NodeDecorator\CreatedByRuleDecorator $createdByRuleDecorator) : void
+    public function autowire(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20220409\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20220409\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\ProcessAnalyzer\RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Core\NodeDecorator\CreatedByRuleDecorator $createdByRuleDecorator) : void
     {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
         $this->nodeRemover = $nodeRemover;
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -184,7 +170,6 @@ CODE_SAMPLE;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->exclusionManager = $exclusionManager;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
@@ -343,20 +328,6 @@ CODE_SAMPLE;
     protected function removeNode(\PhpParser\Node $node) : void
     {
         $this->nodeRemover->removeNode($node);
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $nodeWithStatements
-     */
-    protected function removeNodeFromStatements($nodeWithStatements, \PhpParser\Node $toBeRemovedNode) : void
-    {
-        $this->nodeRemover->removeNodeFromStatements($nodeWithStatements, $toBeRemovedNode);
-    }
-    /**
-     * @param Node[] $nodes
-     */
-    protected function removeNodes(array $nodes) : void
-    {
-        $this->nodeRemover->removeNodes($nodes);
     }
     /**
      * @param class-string<Node> $nodeClass

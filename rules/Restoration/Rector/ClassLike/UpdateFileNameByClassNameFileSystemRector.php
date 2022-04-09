@@ -5,6 +5,7 @@ namespace Rector\Restoration\Rector\ClassLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Application\File;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -14,6 +15,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UpdateFileNameByClassNameFileSystemRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+    public function __construct(\Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    {
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename file to respect class name', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'

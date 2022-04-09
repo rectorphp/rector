@@ -61,7 +61,7 @@ CODE_SAMPLE
         if ($appUsesStaticCalls === []) {
             return null;
         }
-        $this->removeNodes($appUsesStaticCalls);
+        $this->nodeRemover->removeNodes($appUsesStaticCalls);
         $names = $this->resolveNamesFromStaticCalls($appUsesStaticCalls);
         $uses = $this->nodeFactory->createUsesFromNames($names);
         if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {

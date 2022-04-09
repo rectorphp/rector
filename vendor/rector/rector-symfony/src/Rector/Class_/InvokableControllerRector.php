@@ -9,6 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
@@ -48,12 +49,18 @@ final class InvokableControllerRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Symfony\NodeFactory\InvokableControllerClassFactory
      */
     private $invokableControllerClassFactory;
-    public function __construct(\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer, \Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter $symfonyControllerFilter, \Rector\Symfony\Printer\NeighbourClassLikePrinter $neighbourClassLikePrinter, \Rector\Symfony\NodeFactory\InvokableControllerClassFactory $invokableControllerClassFactory)
+    /**
+     * @readonly
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+    public function __construct(\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer, \Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter $symfonyControllerFilter, \Rector\Symfony\Printer\NeighbourClassLikePrinter $neighbourClassLikePrinter, \Rector\Symfony\NodeFactory\InvokableControllerClassFactory $invokableControllerClassFactory, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->symfonyControllerFilter = $symfonyControllerFilter;
         $this->neighbourClassLikePrinter = $neighbourClassLikePrinter;
         $this->invokableControllerClassFactory = $invokableControllerClassFactory;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

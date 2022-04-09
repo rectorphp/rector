@@ -109,6 +109,9 @@ CODE_SAMPLE
         if ($parent instanceof \PhpParser\Node\Expr\ArrowFunction && $this->nodeComparator->areNodesEqual($parent->expr, $node)) {
             return $this->processArrowFunction($parent, $node);
         }
+        if (!$parent instanceof \PhpParser\Node\Stmt\Expression) {
+            return null;
+        }
         $this->removeNode($node);
         return $node;
     }

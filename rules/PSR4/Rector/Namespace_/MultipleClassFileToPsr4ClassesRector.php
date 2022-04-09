@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
@@ -34,11 +35,17 @@ final class MultipleClassFileToPsr4ClassesRector extends \Rector\Core\Rector\Abs
      * @var \Rector\Symfony\Printer\NeighbourClassLikePrinter
      */
     private $neighbourClassLikePrinter;
-    public function __construct(\Rector\PSR4\NodeManipulator\NamespaceManipulator $namespaceManipulator, \Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer, \Rector\Symfony\Printer\NeighbourClassLikePrinter $neighbourClassLikePrinter)
+    /**
+     * @readonly
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+    public function __construct(\Rector\PSR4\NodeManipulator\NamespaceManipulator $namespaceManipulator, \Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer, \Rector\Symfony\Printer\NeighbourClassLikePrinter $neighbourClassLikePrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->namespaceManipulator = $namespaceManipulator;
         $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
         $this->neighbourClassLikePrinter = $neighbourClassLikePrinter;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

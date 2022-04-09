@@ -8,6 +8,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\NodeManipulator\ClassManipulator;
@@ -49,12 +50,18 @@ final class TranslationBehaviorRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Doctrine\NodeAnalyzer\TranslatablePropertyCollectorAndRemover
      */
     private $translatablePropertyCollectorAndRemover;
-    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\Doctrine\NodeFactory\TranslationClassNodeFactory $translationClassNodeFactory, \Rector\Doctrine\NodeAnalyzer\TranslatablePropertyCollectorAndRemover $translatablePropertyCollectorAndRemover)
+    /**
+     * @readonly
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\Doctrine\NodeFactory\TranslationClassNodeFactory $translationClassNodeFactory, \Rector\Doctrine\NodeAnalyzer\TranslatablePropertyCollectorAndRemover $translatablePropertyCollectorAndRemover, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->classManipulator = $classManipulator;
         $this->translationClassNodeFactory = $translationClassNodeFactory;
         $this->translatablePropertyCollectorAndRemover = $translatablePropertyCollectorAndRemover;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

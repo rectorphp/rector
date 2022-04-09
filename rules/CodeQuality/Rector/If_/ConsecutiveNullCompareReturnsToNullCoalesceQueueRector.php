@@ -102,7 +102,7 @@ CODE_SAMPLE
         if (\count($this->coalescingNodes) < 2) {
             return null;
         }
-        $this->removeNodes($this->nodesToRemove);
+        $this->nodeRemover->removeNodes($this->nodesToRemove);
         return $this->createReturnCoalesceNode($this->coalescingNodes);
     }
     public function provideMinPhpVersion() : int

@@ -102,7 +102,7 @@ CODE_SAMPLE
         if ($nodesToRemove === []) {
             return null;
         }
-        $this->removeNodes($nodesToRemove);
+        $this->nodeRemover->removeNodes($nodesToRemove);
         return $node;
     }
     /**

@@ -117,7 +117,7 @@ CODE_SAMPLE
     {
         foreach ($class->getMethods() as $classMethod) {
             if ($this->isName($classMethod, $propertyAndClassMethodName->getClassMethodName())) {
-                $this->removeNodeFromStatements($class, $classMethod);
+                $this->nodeRemover->removeNodeFromStatements($class, $classMethod);
                 continue;
             }
             if (!$this->isNames($classMethod, [\Rector\Core\ValueObject\MethodName::CONSTRUCT, \Rector\Core\ValueObject\MethodName::CLONE, '__wakeup'])) {
@@ -128,7 +128,7 @@ CODE_SAMPLE
             }
             // remove non-public empty
             if ($classMethod->stmts === []) {
-                $this->removeNodeFromStatements($class, $classMethod);
+                $this->nodeRemover->removeNodeFromStatements($class, $classMethod);
             } else {
                 $this->visibilityManipulator->makePublic($classMethod);
             }
@@ -142,7 +142,7 @@ CODE_SAMPLE
             if (!$this->isName($property, $propertyName)) {
                 continue;
             }
-            $this->removeNodeFromStatements($class, $property);
+            $this->nodeRemover->removeNodeFromStatements($class, $property);
         }
     }
 }

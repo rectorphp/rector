@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\Core\Rector\AbstractRector;
@@ -46,12 +47,17 @@ final class RegisterIconToIconFileRector extends \Rector\Core\Rector\AbstractRec
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector $addIconsToReturnRector, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
+    /**
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector $addIconsToReturnRector, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->filesFinder = $filesFinder;
         $this->addIconsToReturnRector = $addIconsToReturnRector;
         $this->simplePhpParser = $simplePhpParser;
         $this->nodePrinter = $nodePrinter;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
     /**
      * @return array<class-string<Node>>

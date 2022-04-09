@@ -59,7 +59,7 @@ CODE_SAMPLE
         foreach ($arrayItemsWithDuplicatedKey as $arrayItemWithDuplicatedKey) {
             // keep last item
             \array_pop($arrayItemWithDuplicatedKey);
-            $this->removeNodes($arrayItemWithDuplicatedKey);
+            $this->nodeRemover->removeNodes($arrayItemWithDuplicatedKey);
         }
         return $node;
     }

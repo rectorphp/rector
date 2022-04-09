@@ -64,7 +64,7 @@ CODE_SAMPLE
         if ($duplicatedInstanceOfs === []) {
             return null;
         }
-        $this->removeNodes($duplicatedInstanceOfs);
+        $this->nodeRemover->removeNodes($duplicatedInstanceOfs);
         return $node;
     }
     /**
