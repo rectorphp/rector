@@ -53,7 +53,7 @@ final class ClosureArrowFunctionAnalyzer
         if ($referencedValues === []) {
             return \false;
         }
-        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($closure, function (\PhpParser\Node $node) use($referencedValues) : bool {
+        $isFoundInStmt = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($closure, function (\PhpParser\Node $node) use($referencedValues) : bool {
             foreach ($referencedValues as $referencedValue) {
                 if ($this->nodeComparator->areNodesEqual($node, $referencedValue)) {
                     return \true;
@@ -61,6 +61,30 @@ final class ClosureArrowFunctionAnalyzer
             }
             return \false;
         });
+        if ($isFoundInStmt) {
+            return \true;
+        }
+        return $this->isFoundInInnerUses($closure, $referencedValues);
+    }
+    /**
+     * @param Variable[] $referencedValues
+     */
+    private function isFoundInInnerUses(\PhpParser\Node\Expr\Closure $node, array $referencedValues) : bool
+    {
+        foreach ($referencedValues as $referencedValue) {
+            $isFoundInInnerUses = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, function (\PhpParser\Node $subNode) use($referencedValue) : bool {
+                if (!$subNode instanceof \PhpParser\Node\Expr\Closure) {
+                    return \false;
+                }
+                return (bool) \array_filter($subNode->uses, function (\PhpParser\Node\Expr\ClosureUse $closureUse) use($referencedValue) : bool {
+                    return $closureUse->byRef && $this->nodeComparator->areNodesEqual($closureUse->var, $referencedValue);
+                });
+            });
+            if ($isFoundInInnerUses) {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * @return Variable[]
