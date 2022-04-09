@@ -115,7 +115,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeNodes($this->nodesToRemove);
+        $this->nodeRemover->removeNodes($this->nodesToRemove);
 
         return $this->createReturnCoalesceNode($this->coalescingNodes);
     }

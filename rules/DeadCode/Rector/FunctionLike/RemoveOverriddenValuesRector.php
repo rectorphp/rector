@@ -97,7 +97,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeNodes($nodesToRemove);
+        $this->nodeRemover->removeNodes($nodesToRemove);
 
         return $node;
     }

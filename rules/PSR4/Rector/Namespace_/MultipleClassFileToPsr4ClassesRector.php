@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
@@ -24,7 +25,8 @@ final class MultipleClassFileToPsr4ClassesRector extends AbstractRector
     public function __construct(
         private readonly NamespaceManipulator $namespaceManipulator,
         private readonly FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer,
-        private readonly NeighbourClassLikePrinter $neighbourClassLikePrinter
+        private readonly NeighbourClassLikePrinter $neighbourClassLikePrinter,
+        private readonly RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
     ) {
     }
 

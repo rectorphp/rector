@@ -69,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeNodes($duplicatedInstanceOfs);
+        $this->nodeRemover->removeNodes($duplicatedInstanceOfs);
 
         return $node;
     }

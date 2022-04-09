@@ -82,7 +82,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeNodes($unusedParameters);
+        $this->nodeRemover->removeNodes($unusedParameters);
+
         $this->clearPhpDocInfo($node, $unusedParameters);
         $this->removeCallerArgs($node, $unusedParameters);
 

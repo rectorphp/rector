@@ -8,10 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\NodeVisitorAbstract;
@@ -19,7 +16,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -44,7 +40,6 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\Skipper\Skipper\Skipper;
 
 /**
@@ -85,10 +80,6 @@ CODE_SAMPLE;
     protected NodeNameResolver $nodeNameResolver;
 
     protected NodeTypeResolver $nodeTypeResolver;
-
-    protected RemovedAndAddedFilesCollector $removedAndAddedFilesCollector;
-
-    protected ParameterProvider $parameterProvider;
 
     protected PhpVersionProvider $phpVersionProvider;
 
@@ -138,7 +129,6 @@ CODE_SAMPLE;
         NodesToRemoveCollector $nodesToRemoveCollector,
         NodesToAddCollector $nodesToAddCollector,
         NodeRemover $nodeRemover,
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
@@ -147,7 +137,6 @@ CODE_SAMPLE;
         PhpVersionProvider $phpVersionProvider,
         ExclusionManager $exclusionManager,
         StaticTypeMapper $staticTypeMapper,
-        ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
         CurrentNodeProvider $currentNodeProvider,
         Skipper $skipper,
@@ -161,7 +150,6 @@ CODE_SAMPLE;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
         $this->nodeRemover = $nodeRemover;
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -170,7 +158,6 @@ CODE_SAMPLE;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->exclusionManager = $exclusionManager;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
@@ -364,21 +351,6 @@ CODE_SAMPLE;
     protected function removeNode(Node $node): void
     {
         $this->nodeRemover->removeNode($node);
-    }
-
-    protected function removeNodeFromStatements(
-        Class_ | ClassMethod | Function_ $nodeWithStatements,
-        Node $toBeRemovedNode
-    ): void {
-        $this->nodeRemover->removeNodeFromStatements($nodeWithStatements, $toBeRemovedNode);
-    }
-
-    /**
-     * @param Node[] $nodes
-     */
-    protected function removeNodes(array $nodes): void
-    {
-        $this->nodeRemover->removeNodes($nodes);
     }
 
     /**

@@ -205,12 +205,6 @@ final class AttributeKey
     public const CREATED_BY_RULE = 'created_by_rule';
 
     /**
-     * Provided by PHPStan parser, depth in sense of nesting
-     * @var string
-     */
-    public const STATEMENT_DEPTH = 'statementDepth';
-
-    /**
      * @var string
      */
     public const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_type';

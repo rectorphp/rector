@@ -125,7 +125,7 @@ CODE_SAMPLE
     ): Class_ {
         foreach ($class->getMethods() as $classMethod) {
             if ($this->isName($classMethod, $propertyAndClassMethodName->getClassMethodName())) {
-                $this->removeNodeFromStatements($class, $classMethod);
+                $this->nodeRemover->removeNodeFromStatements($class, $classMethod);
                 continue;
             }
 
@@ -139,7 +139,7 @@ CODE_SAMPLE
 
             // remove non-public empty
             if ($classMethod->stmts === []) {
-                $this->removeNodeFromStatements($class, $classMethod);
+                $this->nodeRemover->removeNodeFromStatements($class, $classMethod);
             } else {
                 $this->visibilityManipulator->makePublic($classMethod);
             }
@@ -157,7 +157,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->removeNodeFromStatements($class, $property);
+            $this->nodeRemover->removeNodeFromStatements($class, $property);
         }
     }
 }
