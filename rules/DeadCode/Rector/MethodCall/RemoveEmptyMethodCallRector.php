@@ -116,6 +116,10 @@ CODE_SAMPLE
             return $this->processArrowFunction($parent, $node);
         }
 
+        if (! $parent instanceof Expression) {
+            return null;
+        }
+
         $this->removeNode($node);
 
         return $node;
