@@ -21,6 +21,7 @@ use PHPStan\Type\Type;
 use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -46,7 +47,8 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     public function __construct(
         private readonly ArgumentAddingScope $argumentAddingScope,
         private readonly ChangedArgumentsDetector $changedArgumentsDetector,
-        private readonly AstResolver $astResolver
+        private readonly AstResolver $astResolver,
+        private readonly NodePrinterInterface $nodePrinter
     ) {
     }
 
@@ -213,7 +215,8 @@ CODE_SAMPLE
                 throw new ShouldNotHappenException('Previous position does not has default value');
             }
 
-            $node->args[$index] = new Arg(new ConstFetch(new Name($this->print($param->default))));
+            $default = $this->nodePrinter->print($param->default);
+            $node->args[$index] = new Arg(new ConstFetch(new Name($default)));
         }
     }
 

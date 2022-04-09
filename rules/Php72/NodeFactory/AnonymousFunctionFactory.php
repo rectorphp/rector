@@ -38,13 +38,13 @@ use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -70,7 +70,7 @@ final class AnonymousFunctionFactory
         private readonly SimplePhpParser $simplePhpParser,
         private readonly NodeComparator $nodeComparator,
         private readonly AstResolver $astResolver,
-        private readonly BetterStandardPrinter $betterStandardPrinter,
+        private readonly NodePrinterInterface $nodePrinter,
         private readonly PrivatesAccessor $privatesAccessor
     ) {
     }
@@ -370,7 +370,7 @@ final class AnonymousFunctionFactory
             return;
         }
 
-        $printDefaultValue = $this->betterStandardPrinter->print($classMethod->params[$key]->default);
+        $printDefaultValue = $this->nodePrinter->print($classMethod->params[$key]->default);
         $param->default = new ConstFetch(new Name($printDefaultValue));
     }
 

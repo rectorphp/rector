@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,6 +28,11 @@ final class SimplifyIfElseToTernaryRector extends AbstractRector
      * @var int
      */
     private const LINE_LENGTH_LIMIT = 120;
+
+    public function __construct(
+        private readonly NodePrinterInterface $nodePrinter
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -205,6 +211,7 @@ CODE_SAMPLE
 
     private function isNodeTooLong(Assign $assign): bool
     {
-        return Strings::length($this->print($assign)) > self::LINE_LENGTH_LIMIT;
+        $assignContent = $this->nodePrinter->print($assign);
+        return Strings::length($assignContent) > self::LINE_LENGTH_LIMIT;
     }
 }

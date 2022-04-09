@@ -27,6 +27,7 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector;
 use Rector\Core\Util\StringUtils;
@@ -37,7 +38,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  * @property array<string, array{string, bool, string, null}> $insertionMap
  */
-final class BetterStandardPrinter extends Standard
+final class BetterStandardPrinter extends Standard implements NodePrinterInterface
 {
     /**
      * @var string

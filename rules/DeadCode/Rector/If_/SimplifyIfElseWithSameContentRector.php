@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -18,6 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyIfElseWithSameContentRector extends AbstractRector
 {
+    public function __construct(
+        private readonly NodePrinterInterface $nodePrinter,
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove if/else if they have same content', [
@@ -77,10 +83,10 @@ CODE_SAMPLE
     private function isIfWithConstantReturns(If_ $if): bool
     {
         $possibleContents = [];
-        $possibleContents[] = $this->print($if->stmts);
+        $possibleContents[] = $this->nodePrinter->print($if->stmts);
 
         foreach ($if->elseifs as $elseif) {
-            $possibleContents[] = $this->print($elseif->stmts);
+            $possibleContents[] = $this->nodePrinter->print($elseif->stmts);
         }
 
         $else = $if->else;
@@ -88,7 +94,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $possibleContents[] = $this->print($else->stmts);
+        $possibleContents[] = $this->nodePrinter->print($else->stmts);
 
         $uniqueContents = array_unique($possibleContents);
 

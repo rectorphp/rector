@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StringUtils;
@@ -27,6 +28,11 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector impl
      * @var CompleteImportForPartialAnnotation[]
      */
     private array $useImportsToRestore = [];
+
+    public function __construct(
+        private readonly NodePrinterInterface $nodePrinter
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -81,7 +87,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $printedClass = $this->print($class);
+        $printedClass = $this->nodePrinter->print($class);
         $hasChanged = false;
         foreach ($this->useImportsToRestore as $useImportToRestore) {
             $annotationToSeek = '#\*\s+\@' . $useImportToRestore->getAlias() . '#';

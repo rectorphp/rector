@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StringUtils;
@@ -85,6 +86,11 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Allo
     ];
 
     private string $delimiter = '#';
+
+    public function __construct(
+        private readonly NodePrinterInterface $nodePrinter
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -219,7 +225,7 @@ CODE_SAMPLE
         $string->value = Strings::replace($string->value, self::INNER_REGEX, function (array $match) use (
             &$string
         ): string {
-            $printedString = $this->betterStandardPrinter->print($string);
+            $printedString = $this->nodePrinter->print($string);
             if (StringUtils::isMatch($printedString, self::DOUBLE_QUOTED_REGEX)) {
                 $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
             }

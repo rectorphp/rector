@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\CodeQuality\NodeManipulator\ExprBoolCaster;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -25,7 +26,8 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
 {
     public function __construct(
         private readonly CommentsMerger $commentsMerger,
-        private readonly ExprBoolCaster $exprBoolCaster
+        private readonly ExprBoolCaster $exprBoolCaster,
+        private readonly NodePrinterInterface $nodePrinter
     ) {
     }
 
@@ -138,7 +140,7 @@ CODE_SAMPLE
             return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
 
-        $condString = $this->print($if->cond);
+        $condString = $this->nodePrinter->print($if->cond);
         if (! \str_contains($condString, '!=')) {
             return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
         }

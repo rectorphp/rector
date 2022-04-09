@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -22,6 +23,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ListSwapArrayOrderRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function __construct(
+        private readonly NodePrinterInterface $nodePrinter
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -57,7 +63,7 @@ final class ListSwapArrayOrderRector extends AbstractRector implements MinPhpVer
             }
 
             if ($arrayItem->value instanceof ArrayDimFetch && $arrayItem->value->dim === null) {
-                $printedVariables[] = $this->print($arrayItem->value->var);
+                $printedVariables[] = $this->nodePrinter->print($arrayItem->value->var);
             } else {
                 return null;
             }

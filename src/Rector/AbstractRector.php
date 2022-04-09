@@ -31,7 +31,6 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ProcessAnalyzer\RectifiedAnalyzer;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -87,8 +86,6 @@ CODE_SAMPLE;
 
     protected NodeTypeResolver $nodeTypeResolver;
 
-    protected BetterStandardPrinter $betterStandardPrinter;
-
     protected RemovedAndAddedFilesCollector $removedAndAddedFilesCollector;
 
     protected ParameterProvider $parameterProvider;
@@ -142,7 +139,6 @@ CODE_SAMPLE;
         NodesToAddCollector $nodesToAddCollector,
         NodeRemover $nodeRemover,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
@@ -166,7 +162,6 @@ CODE_SAMPLE;
         $this->nodesToAddCollector = $nodesToAddCollector;
         $this->nodeRemover = $nodeRemover;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -335,14 +330,6 @@ CODE_SAMPLE;
     protected function traverseNodesWithCallable(Node | array $nodes, callable $callable): void
     {
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, $callable);
-    }
-
-    /**
-     * @param Node|Node[]|null $node
-     */
-    protected function print(Node | array | null $node): string
-    {
-        return $this->betterStandardPrinter->print($node);
     }
 
     protected function mirrorComments(Node $newNode, Node $oldNode): void

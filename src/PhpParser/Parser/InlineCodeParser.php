@@ -14,8 +14,8 @@ use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -47,7 +47,7 @@ final class InlineCodeParser
     private const ENDING_SEMI_COLON_REGEX = '#;(\s+)?$#';
 
     public function __construct(
-        private readonly BetterStandardPrinter $betterStandardPrinter,
+        private readonly NodePrinterInterface $nodePrinter,
         private readonly NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         private readonly SimplePhpParser $simplePhpParser,
         private readonly SmartFileSystem $smartFileSystem
@@ -80,7 +80,7 @@ final class InlineCodeParser
 
         if ($expr instanceof Encapsed) {
             // remove "
-            $expr = trim($this->betterStandardPrinter->print($expr), '""');
+            $expr = trim($this->nodePrinter->print($expr), '""');
             // use \$ → $
             $expr = Strings::replace($expr, self::PRESLASHED_DOLLAR_REGEX, '$');
             // use \'{$...}\' → $...
@@ -92,7 +92,7 @@ final class InlineCodeParser
         }
 
         if ($expr instanceof Variable || $expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch) {
-            return $this->betterStandardPrinter->print($expr);
+            return $this->nodePrinter->print($expr);
         }
 
         throw new ShouldNotHappenException($expr::class . ' ' . __METHOD__);

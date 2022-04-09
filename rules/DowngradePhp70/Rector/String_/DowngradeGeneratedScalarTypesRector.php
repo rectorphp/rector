@@ -10,6 +10,7 @@ use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeTraverser;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
@@ -45,7 +46,8 @@ final class DowngradeGeneratedScalarTypesRector extends AbstractRector
     public function __construct(
         private readonly InlineCodeParser $inlineCodeParser,
         DowngradeScalarTypeDeclarationRector $downgradeScalarTypeDeclarationRector,
-        DowngradeVoidTypeDeclarationRector $downgradeVoidTypeDeclarationRector
+        DowngradeVoidTypeDeclarationRector $downgradeVoidTypeDeclarationRector,
+        private readonly NodePrinterInterface $nodePrinter
     ) {
         $this->phpRectors = [$downgradeScalarTypeDeclarationRector, $downgradeVoidTypeDeclarationRector];
     }
@@ -154,7 +156,7 @@ CODE_SAMPLE
     {
         $refactoredContent = '';
         foreach ($class->stmts as $classStmt) {
-            $refactoredContent .= $this->betterStandardPrinter->prettyPrint([$classStmt]) . PHP_EOL;
+            $refactoredContent .= $this->nodePrinter->prettyPrint([$classStmt]) . PHP_EOL;
         }
 
         return $refactoredContent;

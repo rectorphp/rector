@@ -9,13 +9,13 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class DoctrineAnnotationFactory
 {
     public function __construct(
-        private readonly BetterStandardPrinter $betterStandardPrinter
+        private readonly NodePrinterInterface $nodePrinter
     ) {
     }
 
@@ -40,9 +40,9 @@ final class DoctrineAnnotationFactory
                 $arg->value->setAttribute(AttributeKey::KIND, String_::KIND_DOUBLE_QUOTED);
             }
 
-            $itemValue = $this->betterStandardPrinter->print($arg->value);
+            $itemValue = $this->nodePrinter->print($arg->value);
             if ($arg->name !== null) {
-                $name = $this->betterStandardPrinter->print($arg->name);
+                $name = $this->nodePrinter->print($arg->name);
                 $items[$name] = $itemValue;
             } else {
                 $items[] = $itemValue;

@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -32,7 +33,8 @@ final class DowngradePropertyPromotionRector extends AbstractRector
 {
     public function __construct(
         private readonly ClassInsertManipulator $classInsertManipulator,
-        private readonly PhpDocTypeChanger $phpDocTypeChanger
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly NodePrinterInterface $nodePrinter,
     ) {
     }
 
@@ -139,7 +141,7 @@ CODE_SAMPLE
 
     private function setParamAttrGroupAsComment(Param $param): void
     {
-        $attrGroupsPrint = $this->betterStandardPrinter->print($param->attrGroups);
+        $attrGroupsPrint = $this->nodePrinter->print($param->attrGroups);
 
         $comments = $param->getAttribute(AttributeKey::COMMENTS);
         if (is_array($comments)) {

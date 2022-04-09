@@ -14,6 +14,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -32,7 +33,8 @@ final class AddParamBasedOnParentClassMethodRector extends AbstractRector implem
 {
     public function __construct(
         private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard,
-        private readonly AstResolver $astResolver
+        private readonly AstResolver $astResolver,
+        private readonly NodePrinterInterface $nodePrinter,
     ) {
     }
 
@@ -206,7 +208,7 @@ CODE_SAMPLE
             $paramDefault = $parentClassMethodParam->default;
 
             if ($paramDefault instanceof Expr) {
-                $printParamDefault = $this->print($paramDefault);
+                $printParamDefault = $this->nodePrinter->print($paramDefault);
                 $paramDefault = new ConstFetch(new Name($printParamDefault));
             }
 

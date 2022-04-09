@@ -7,6 +7,7 @@ namespace Rector\DeadCode\Rector\Array_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -17,6 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDuplicatedArrayKeyRector extends AbstractRector
 {
+    public function __construct(
+        private readonly NodePrinterInterface $nodePrinter
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove duplicated key in defined arrays.', [
@@ -80,7 +86,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $keyValue = $this->print($arrayItem->key);
+            $keyValue = $this->nodePrinter->print($arrayItem->key);
             $arrayItemsByKeys[$keyValue][] = $arrayItem;
         }
 

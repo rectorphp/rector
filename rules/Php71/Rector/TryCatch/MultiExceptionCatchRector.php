@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\TryCatch;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -21,6 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MultiExceptionCatchRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function __construct(
+        private readonly NodePrinterInterface $nodePrinter
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -101,7 +107,7 @@ CODE_SAMPLE
     {
         $catchKeysByContent = [];
         foreach ($tryCatch->catches as $catch) {
-            $catchContent = $this->print($catch->stmts);
+            $catchContent = $this->nodePrinter->print($catch->stmts);
             $catchKeysByContent[$catchContent][] = $catch;
         }
 

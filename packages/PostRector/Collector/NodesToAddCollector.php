@@ -10,9 +10,9 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 
@@ -31,7 +31,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
     public function __construct(
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly RectorChangeCollector $rectorChangeCollector,
-        private readonly BetterStandardPrinter $betterStandardPrinter
+        private readonly NodePrinterInterface $nodePrinter
     ) {
     }
 
@@ -142,7 +142,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
         $foundNode = $this->betterNodeFinder->findParentType($node, Stmt::class);
 
         if (! $foundNode instanceof Stmt) {
-            $printedNode = $this->betterStandardPrinter->print($node);
+            $printedNode = $this->nodePrinter->print($node);
             $errorMessage = sprintf('Could not find parent Stmt of "%s" node', $printedNode);
             throw new ShouldNotHappenException($errorMessage);
         }

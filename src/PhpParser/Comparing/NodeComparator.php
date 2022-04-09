@@ -6,14 +6,14 @@ namespace Rector\Core\PhpParser\Comparing;
 
 use PhpParser\Node;
 use Rector\Comments\CommentRemover;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NodeComparator
 {
     public function __construct(
         private readonly CommentRemover $commentRemover,
-        private readonly BetterStandardPrinter $betterStandardPrinter
+        private readonly NodePrinterInterface $nodePrinter
     ) {
     }
 
@@ -24,7 +24,7 @@ final class NodeComparator
     public function printWithoutComments(Node | array | null $node): string
     {
         $node = $this->commentRemover->removeFromNode($node);
-        $content = $this->betterStandardPrinter->print($node);
+        $content = $this->nodePrinter->print($node);
 
         return trim($content);
     }

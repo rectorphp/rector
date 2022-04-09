@@ -6,9 +6,9 @@ namespace Rector\NodeNameResolver\Error;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -22,7 +22,7 @@ final class InvalidNameNodeReporter
 
     public function __construct(
         private readonly CurrentFileProvider $currentFileProvider,
-        private readonly BetterStandardPrinter $betterStandardPrinter
+        private readonly NodePrinterInterface $nodePrinter
     ) {
     }
 
@@ -39,7 +39,7 @@ final class InvalidNameNodeReporter
                 'Caused in "%s" file on line %d on code "%s"',
                 $smartFileInfo->getRelativeFilePathFromCwd(),
                 $node->getStartLine(),
-                $this->betterStandardPrinter->print($node)
+                $this->nodePrinter->print($node)
             );
         }
 

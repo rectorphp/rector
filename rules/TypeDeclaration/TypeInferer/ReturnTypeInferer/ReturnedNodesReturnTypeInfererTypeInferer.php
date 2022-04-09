@@ -19,9 +19,9 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -39,7 +39,7 @@ final class ReturnedNodesReturnTypeInfererTypeInferer implements ReturnTypeInfer
         private readonly TypeFactory $typeFactory,
         private readonly SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
         private readonly AstResolver $reflectionAstResolver,
-        private readonly BetterStandardPrinter $betterStandardPrinter,
+        private readonly NodePrinterInterface $nodePrinter,
         private readonly ReflectionResolver $reflectionResolver,
         private readonly BetterNodeFinder $betterNodeFinder,
     ) {
@@ -183,8 +183,8 @@ final class ReturnedNodesReturnTypeInfererTypeInferer implements ReturnTypeInfer
             return new MixedType();
         }
 
-        $classMethodCacheKey = $this->betterStandardPrinter->print($classMethod);
-        $functionLikeCacheKey = $this->betterStandardPrinter->print($originalFunctionLike);
+        $classMethodCacheKey = $this->nodePrinter->print($classMethod);
+        $functionLikeCacheKey = $this->nodePrinter->print($originalFunctionLike);
 
         if ($classMethodCacheKey === $functionLikeCacheKey) {
             return new MixedType();

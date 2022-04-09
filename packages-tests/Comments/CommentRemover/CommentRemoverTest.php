@@ -6,6 +6,7 @@ namespace Rector\Tests\Comments\CommentRemover;
 
 use Iterator;
 use Rector\Comments\CommentRemover;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\Testing\PHPUnit\AbstractTestCase;
@@ -19,14 +20,14 @@ final class CommentRemoverTest extends AbstractTestCase
 
     private FileInfoParser $fileInfoParser;
 
-    private BetterStandardPrinter $betterStandardPrinter;
+    private NodePrinterInterface $nodePrinter;
 
     protected function setUp(): void
     {
         $this->boot();
         $this->commentRemover = $this->getService(CommentRemover::class);
         $this->fileInfoParser = $this->getService(FileInfoParser::class);
-        $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
+        $this->nodePrinter = $this->getService(BetterStandardPrinter::class);
     }
 
     /**
@@ -42,7 +43,7 @@ final class CommentRemoverTest extends AbstractTestCase
 
         $nodesWithoutComments = $this->commentRemover->removeFromNode($nodes);
 
-        $fileContent = $this->betterStandardPrinter->print($nodesWithoutComments);
+        $fileContent = $this->nodePrinter->print($nodesWithoutComments);
         $fileContent = trim($fileContent);
 
         $expectedContent = trim($fileInfoToLocalInputAndExpected->getExpected());
@@ -50,7 +51,7 @@ final class CommentRemoverTest extends AbstractTestCase
         $this->assertSame($fileContent, $expectedContent, $smartFileInfo->getRelativeFilePathFromCwd());
 
         // original nodes are not touched
-        $originalContent = $this->betterStandardPrinter->print($nodes);
+        $originalContent = $this->nodePrinter->print($nodes);
         $this->assertNotSame($expectedContent, $originalContent);
     }
 
