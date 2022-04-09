@@ -154,6 +154,7 @@ final class AssertCallAnalyzer
             'assert*',
             'expectException*',
             'setExpectedException*',
+            'expectOutput*',
         ]);
     }
 }
