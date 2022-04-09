@@ -24,6 +24,7 @@ use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
+use Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -331,7 +332,12 @@ final class PhpDocInfo
     public function addTagValueNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $phpDocTagValueNode) : void
     {
         if ($phpDocTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-            $spacelessPhpDocTagNode = new \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode('@\\' . $phpDocTagValueNode->identifierTypeNode, $phpDocTagValueNode);
+            if ($phpDocTagValueNode->identifierTypeNode instanceof \Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode) {
+                $name = '@' . $phpDocTagValueNode->identifierTypeNode;
+            } else {
+                $name = '@\\' . $phpDocTagValueNode->identifierTypeNode;
+            }
+            $spacelessPhpDocTagNode = new \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode($name, $phpDocTagValueNode);
             $this->addPhpDocTagNode($spacelessPhpDocTagNode);
             return;
         }
