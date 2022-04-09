@@ -6,6 +6,7 @@ namespace Rector\DeadCode\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PHPStan\Type\TypeWithClassName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -33,6 +34,10 @@ final class CallCollectionAnalyzer
 
             if ($callerType->getClassName() !== $className) {
                 continue;
+            }
+
+            if (! $call->name instanceof Identifier) {
+                return true;
             }
 
             // the method is used
