@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\Config;
 
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix20220410\Webmozart\Assert\Assert;
 /**
@@ -45,5 +47,31 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
     {
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::SKIP, $criteria);
+    }
+    public function autoImportNames() : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \true);
+    }
+    /**
+     * Set PHPStan custom config to load extensions and custom configuration to Rector.
+     * By default, the "phpstan.neon" path is used.
+     */
+    public function phpstanConfig(string $filePath) : void
+    {
+        \RectorPrefix20220410\Webmozart\Assert\Assert::fileExists($filePath);
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH, $filePath);
+    }
+    /**
+     * @param class-string<ConfigurableRectorInterface&RectorInterface> $rectorClass
+     * @param mixed[] $configuration
+     */
+    public function ruleWithConfiguration(string $rectorClass, array $configuration) : void
+    {
+        \RectorPrefix20220410\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
+        \RectorPrefix20220410\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class);
+        $services = $this->services();
+        $services->set($rectorClass)->configure($configuration);
     }
 }
