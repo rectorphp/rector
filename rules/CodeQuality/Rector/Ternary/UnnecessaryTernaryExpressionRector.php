@@ -30,7 +30,7 @@ final class UnnecessaryTernaryExpressionRector extends \Rector\Core\Rector\Abstr
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unnecessary ternary expressions.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$foo === $bar ? true : false;', '$foo === $bar;')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unnecessary ternary expressions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$foo === $bar ? true : false;', '$foo === $bar;')]);
     }
     /**
      * @return array<class-string<Node>>

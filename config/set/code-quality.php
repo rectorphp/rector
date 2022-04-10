@@ -69,7 +69,6 @@ use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
 use Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector;
 use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
-use Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
@@ -110,7 +109,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector::class);
     $services->set(\Rector\CodeQuality\Rector\If_\CombineIfRector::class);
     $services->set(\Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector::class);
-    $services->set(\Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector::class);
     $services->set(\Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector::class);
     $services->set(\Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector::class);
     $services->set(\Rector\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector::class);
