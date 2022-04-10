@@ -1590,7 +1590,6 @@ return array(
     'Rector\\CodingStyle\\Rector\\FuncCall\\StrictArraySearchRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/StrictArraySearchRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\VersionCompareFuncCallToConstantRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/VersionCompareFuncCallToConstantRector.php',
     'Rector\\CodingStyle\\Rector\\If_\\NullableCompareToNullRector' => $baseDir . '/rules/CodingStyle/Rector/If_/NullableCompareToNullRector.php',
-    'Rector\\CodingStyle\\Rector\\Include_\\FollowRequireByDirRector' => $baseDir . '/rules/CodingStyle/Rector/Include_/FollowRequireByDirRector.php',
     'Rector\\CodingStyle\\Rector\\MethodCall\\PreferThisOrSelfMethodCallRector' => $baseDir . '/rules/CodingStyle/Rector/MethodCall/PreferThisOrSelfMethodCallRector.php',
     'Rector\\CodingStyle\\Rector\\Plus\\UseIncrementAssignRector' => $baseDir . '/rules/CodingStyle/Rector/Plus/UseIncrementAssignRector.php',
     'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => $baseDir . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',

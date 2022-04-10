@@ -57,7 +57,14 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat && $node->expr->left instanceof \PhpParser\Node\Scalar\String_ && $this->isRefactorableStringPath($node->expr->left)) {
+            $node->expr->left = $this->prefixWithDirConstant($node->expr->left);
+            return $node;
+        }
         if (!$node->expr instanceof \PhpParser\Node\Scalar\String_) {
+            return null;
+        }
+        if (!$this->isRefactorableStringPath($node->expr)) {
             return null;
         }
         /** @var string $includeValue */
@@ -79,7 +86,34 @@ CODE_SAMPLE
         } else {
             $node->expr->value = '/' . $includeValue;
         }
-        $node->expr = new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Scalar\MagicConst\Dir(), $node->expr);
+        $node->expr = $this->prefixWithDirConstant($node->expr);
         return $node;
+    }
+    private function isRefactorableStringPath(\PhpParser\Node\Scalar\String_ $string) : bool
+    {
+        return \strncmp($string->value, 'phar://', \strlen('phar://')) !== 0;
+    }
+    private function prefixWithDirConstant(\PhpParser\Node\Scalar\String_ $string) : \PhpParser\Node\Expr\BinaryOp\Concat
+    {
+        $this->removeExtraDotSlash($string);
+        $this->prependSlashIfMissing($string);
+        return new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Scalar\MagicConst\Dir(), $string);
+    }
+    /**
+     * Remove "./" which would break the path
+     */
+    private function removeExtraDotSlash(\PhpParser\Node\Scalar\String_ $string) : void
+    {
+        if (\strncmp($string->value, './', \strlen('./')) !== 0) {
+            return;
+        }
+        $string->value = \RectorPrefix20220410\Nette\Utils\Strings::replace($string->value, '#^\\.\\/#', '/');
+    }
+    private function prependSlashIfMissing(\PhpParser\Node\Scalar\String_ $string) : void
+    {
+        if (\strncmp($string->value, '/', \strlen('/')) === 0) {
+            return;
+        }
+        $string->value = '/' . $string->value;
     }
 }

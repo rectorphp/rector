@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcadec8a1bb1db7ed826d29c6d9d16a64
+class ComposerStaticInitb38f3bf486e5558397479f86400a7103
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -1959,7 +1959,6 @@ class ComposerStaticInitcadec8a1bb1db7ed826d29c6d9d16a64
         'Rector\\CodingStyle\\Rector\\FuncCall\\StrictArraySearchRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/StrictArraySearchRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\VersionCompareFuncCallToConstantRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/VersionCompareFuncCallToConstantRector.php',
         'Rector\\CodingStyle\\Rector\\If_\\NullableCompareToNullRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/If_/NullableCompareToNullRector.php',
-        'Rector\\CodingStyle\\Rector\\Include_\\FollowRequireByDirRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Include_/FollowRequireByDirRector.php',
         'Rector\\CodingStyle\\Rector\\MethodCall\\PreferThisOrSelfMethodCallRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/MethodCall/PreferThisOrSelfMethodCallRector.php',
         'Rector\\CodingStyle\\Rector\\Plus\\UseIncrementAssignRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Plus/UseIncrementAssignRector.php',
         'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
@@ -3857,9 +3856,9 @@ class ComposerStaticInitcadec8a1bb1db7ed826d29c6d9d16a64
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcadec8a1bb1db7ed826d29c6d9d16a64::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcadec8a1bb1db7ed826d29c6d9d16a64::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcadec8a1bb1db7ed826d29c6d9d16a64::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb38f3bf486e5558397479f86400a7103::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb38f3bf486e5558397479f86400a7103::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb38f3bf486e5558397479f86400a7103::$classMap;
 
         }, null, ClassLoader::class);
     }
