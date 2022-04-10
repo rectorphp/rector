@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5fde1ba4078f2b9e85edfecc2f522e04
+class ComposerStaticInit73e6fc3983761eda226122cce054a877
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -1836,6 +1836,7 @@ class ComposerStaticInit5fde1ba4078f2b9e85edfecc2f522e04
         'Rector\\CodeQuality\\NodeAnalyzer\\ForAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ForAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ForeachAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ForeachAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\LocalPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/LocalPropertyAnalyzer.php',
+        'Rector\\CodeQuality\\NodeAnalyzer\\ReturnAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ReturnAnalyzer.php',
         'Rector\\CodeQuality\\NodeFactory\\ArrayFilterFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/ArrayFilterFactory.php',
         'Rector\\CodeQuality\\NodeFactory\\ForeachFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/ForeachFactory.php',
         'Rector\\CodeQuality\\NodeFactory\\MissingPropertiesFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/MissingPropertiesFactory.php',
@@ -1885,6 +1886,7 @@ class ComposerStaticInit5fde1ba4078f2b9e85edfecc2f522e04
         'Rector\\CodeQuality\\Rector\\FuncCall\\SingleInArrayToCompareRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SingleInArrayToCompareRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\UnwrapSprintfOneArgumentRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/UnwrapSprintfOneArgumentRector.php',
         'Rector\\CodeQuality\\Rector\\FunctionLike\\RemoveAlwaysTrueConditionSetInConstructorRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FunctionLike/RemoveAlwaysTrueConditionSetInConstructorRector.php',
+        'Rector\\CodeQuality\\Rector\\FunctionLike\\SimplifyUselessVariableRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FunctionLike/SimplifyUselessVariableRector.php',
         'Rector\\CodeQuality\\Rector\\Identical\\BooleanNotIdenticalToNotIdenticalRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Identical/BooleanNotIdenticalToNotIdenticalRector.php',
         'Rector\\CodeQuality\\Rector\\Identical\\FlipTypeControlToUseExclusiveTypeRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Identical/FlipTypeControlToUseExclusiveTypeRector.php',
         'Rector\\CodeQuality\\Rector\\Identical\\GetClassToInstanceOfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Identical/GetClassToInstanceOfRector.php',
@@ -1908,7 +1910,6 @@ class ComposerStaticInit5fde1ba4078f2b9e85edfecc2f522e04
         'Rector\\CodeQuality\\Rector\\New_\\NewStaticToNewSelfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/New_/NewStaticToNewSelfRector.php',
         'Rector\\CodeQuality\\Rector\\NotEqual\\CommonNotEqualRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/NotEqual/CommonNotEqualRector.php',
         'Rector\\CodeQuality\\Rector\\PropertyFetch\\ExplicitMethodCallOverMagicGetSetRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php',
-        'Rector\\CodeQuality\\Rector\\Return_\\SimplifyUselessVariableRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Return_/SimplifyUselessVariableRector.php',
         'Rector\\CodeQuality\\Rector\\Switch_\\SingularSwitchToIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Switch_/SingularSwitchToIfRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\ArrayKeyExistsTernaryThenValueToCoalescingRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\SimplifyDuplicatedTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/SimplifyDuplicatedTernaryRector.php',
@@ -3858,9 +3859,9 @@ class ComposerStaticInit5fde1ba4078f2b9e85edfecc2f522e04
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5fde1ba4078f2b9e85edfecc2f522e04::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5fde1ba4078f2b9e85edfecc2f522e04::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5fde1ba4078f2b9e85edfecc2f522e04::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit73e6fc3983761eda226122cce054a877::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit73e6fc3983761eda226122cce054a877::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit73e6fc3983761eda226122cce054a877::$classMap;
 
         }, null, ClassLoader::class);
     }

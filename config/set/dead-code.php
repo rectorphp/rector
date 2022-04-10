@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220410;
 
-use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
+use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
 use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
@@ -73,7 +73,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector::class);
     $services->set(\Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector::class);
     $services->set(\Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector::class);
-    $services->set(\Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector::class);
+    $services->set(\Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector::class);
     $services->set(\Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector::class);
     $services->set(\Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector::class);
     $services->set(\Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector::class);
