@@ -34,15 +34,15 @@ final class VariableAnalyzer
         if ($this->isParentStaticOrGlobal($variable)) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $n) use($variable) : bool {
-            if (!\in_array(\get_class($n), [\PhpParser\Node\Stmt\Static_::class, \PhpParser\Node\Stmt\Global_::class], \true)) {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $node) use($variable) : bool {
+            if (!\in_array(\get_class($node), [\PhpParser\Node\Stmt\Static_::class, \PhpParser\Node\Stmt\Global_::class], \true)) {
                 return \false;
             }
             /**
-             * @var Static_|Global_ $n
+             * @var Static_|Global_ $node
              * @var StaticVar[]|Variable[] $vars
              */
-            $vars = $n->vars;
+            $vars = $node->vars;
             foreach ($vars as $var) {
                 $staticVarVariable = $var instanceof \PhpParser\Node\Stmt\StaticVar ? $var->var : $var;
                 if ($this->nodeComparator->areNodesEqual($staticVarVariable, $variable)) {

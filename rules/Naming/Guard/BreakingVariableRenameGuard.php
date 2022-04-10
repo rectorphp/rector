@@ -102,7 +102,10 @@ final class BreakingVariableRenameGuard
         }
         return $this->isUsedInIfAndOtherBranches($variable, $currentName);
     }
-    public function shouldSkipParam(string $currentName, string $expectedName, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param) : bool
+    /**
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $classMethod
+     */
+    public function shouldSkipParam(string $currentName, string $expectedName, $classMethod, \PhpParser\Node\Param $param) : bool
     {
         // is the suffix? → also accepted
         $expectedNameCamelCase = \ucfirst($expectedName);
@@ -116,7 +119,7 @@ final class BreakingVariableRenameGuard
         if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $classMethod)) {
             return \true;
         }
-        if ($this->overridenExistingNamesResolver->hasNameInClassMethodForParam($expectedName, $classMethod)) {
+        if ($this->overridenExistingNamesResolver->hasNameInFunctionLikeForParam($expectedName, $classMethod)) {
             return \true;
         }
         if ($this->isVariableAlreadyDefined($param->var, $currentName)) {

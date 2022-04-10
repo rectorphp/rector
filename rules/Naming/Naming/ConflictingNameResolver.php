@@ -52,8 +52,9 @@ final class ConflictingNameResolver
     }
     /**
      * @return string[]
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $classMethod
      */
-    public function resolveConflictingVariableNamesForParam(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function resolveConflictingVariableNamesForParam($classMethod) : array
     {
         $expectedNames = [];
         foreach ($classMethod->params as $param) {

@@ -130,15 +130,15 @@ final class NodesToRemoveCollector implements \Rector\PostRector\Contract\Collec
         }
         $paramVariable = $node->var;
         if ($paramVariable instanceof \PhpParser\Node\Expr\Variable) {
-            return (bool) $this->betterNodeFinder->findFirst((array) $parentNode->stmts, function (\PhpParser\Node $variable) use($paramVariable) : bool {
-                if (!$this->nodeComparator->areNodesEqual($variable, $paramVariable)) {
+            return (bool) $this->betterNodeFinder->findFirst((array) $parentNode->stmts, function (\PhpParser\Node $node) use($paramVariable) : bool {
+                if (!$this->nodeComparator->areNodesEqual($node, $paramVariable)) {
                     return \false;
                 }
-                $hasArgParent = (bool) $this->betterNodeFinder->findParentType($variable, \PhpParser\Node\Arg::class);
+                $hasArgParent = (bool) $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Arg::class);
                 if (!$hasArgParent) {
                     return \false;
                 }
-                return !(bool) $this->betterNodeFinder->findParentType($variable, \PhpParser\Node\Expr\StaticCall::class);
+                return !(bool) $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Expr\StaticCall::class);
             });
         }
         return \false;

@@ -132,15 +132,15 @@ CODE_SAMPLE
      */
     private function completeDefaultArrayToPropertyNames(\PhpParser\Node\Stmt\Class_ $class, array $propertyNames) : void
     {
-        $this->traverseNodesWithCallable($class, function (\PhpParser\Node $class) use($propertyNames) : ?PropertyProperty {
-            if (!$class instanceof \PhpParser\Node\Stmt\PropertyProperty) {
+        $this->traverseNodesWithCallable($class, function (\PhpParser\Node $node) use($propertyNames) : ?PropertyProperty {
+            if (!$node instanceof \PhpParser\Node\Stmt\PropertyProperty) {
                 return null;
             }
-            if (!$this->isNames($class, $propertyNames)) {
+            if (!$this->isNames($node, $propertyNames)) {
                 return null;
             }
-            $class->default = new \PhpParser\Node\Expr\Array_();
-            return $class;
+            $node->default = new \PhpParser\Node\Expr\Array_();
+            return $node;
         });
     }
     /**

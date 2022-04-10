@@ -41,12 +41,12 @@ final class DocBlockNamespaceRenamer
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $phpDocNodeTraverser = new \RectorPrefix20220410\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $subNode) use($oldToNewNamespaces) : ?DocNode {
-            if (!$subNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $docNode) use($oldToNewNamespaces) : ?DocNode {
+            if (!$docNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
                 return null;
             }
-            $name = $subNode->name;
-            $trimmedName = \ltrim($subNode->name, '\\');
+            $name = $docNode->name;
+            $trimmedName = \ltrim($docNode->name, '\\');
             if ($name === $trimmedName) {
                 return null;
             }

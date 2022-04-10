@@ -111,11 +111,11 @@ final class PHPStanNodeScopeResolver
         $this->removeDeepChainMethodCallNodes($stmts);
         $scope = $this->scopeFactory->createFromFile($smartFileInfo);
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
-        $nodeCallback = function (\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $scope) use(&$nodeCallback) : void {
+        $nodeCallback = function (\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $mutatingScope) use(&$nodeCallback) : void {
             if ($node instanceof \PhpParser\Node\Stmt\Trait_) {
                 $traitName = $this->resolveClassName($node);
                 $traitReflectionClass = $this->reflectionProvider->getClass($traitName);
-                $traitScope = clone $scope;
+                $traitScope = clone $mutatingScope;
                 $scopeContext = $this->privatesAccessor->getPrivatePropertyOfClass($traitScope, self::CONTEXT, \PHPStan\Analyser\ScopeContext::class);
                 $traitContext = clone $scopeContext;
                 $this->privatesAccessor->setPrivatePropertyOfClass($traitContext, 'classReflection', $traitReflectionClass, \PHPStan\Reflection\ClassReflection::class);
@@ -126,16 +126,16 @@ final class PHPStanNodeScopeResolver
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
             if ($node instanceof \PhpParser\Node\Stmt\Class_ || $node instanceof \PhpParser\Node\Stmt\Interface_) {
-                /** @var MutatingScope $scope */
-                $scope = $this->resolveClassOrInterfaceScope($node, $scope);
+                /** @var MutatingScope $mutatingScope */
+                $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
             }
             // special case for unreachable nodes
             if ($node instanceof \PHPStan\Node\UnreachableStatementNode) {
                 $originalNode = $node->getOriginalStatement();
                 $originalNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE, \true);
-                $originalNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $scope);
+                $originalNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
             } else {
-                $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $scope);
+                $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
             }
         };
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);

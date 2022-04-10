@@ -4,8 +4,10 @@ declare (strict_types=1);
 namespace Rector\Naming\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
@@ -85,10 +87,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param ClassMethod|Function_|Closure $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
@@ -117,12 +119,18 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipParam(\PhpParser\Node\Param $param, string $expectedName, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    /**
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $classMethod
+     */
+    private function shouldSkipParam(\PhpParser\Node\Param $param, string $expectedName, $classMethod) : bool
     {
         /** @var string $paramName */
         $paramName = $this->getName($param);
         if ($this->breakingVariableRenameGuard->shouldSkipParam($paramName, $expectedName, $classMethod, $param)) {
             return \true;
+        }
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return \false;
         }
         // promoted property
         if (!$this->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
