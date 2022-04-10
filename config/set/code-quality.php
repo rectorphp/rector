@@ -31,7 +31,6 @@ use Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector;
 use Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
-use Rector\CodeQuality\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector;
 use Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector;
 use Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector;
 use Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector;
@@ -86,7 +85,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\CodeQuality\Rector\BooleanNot\ReplaceMultipleBooleanNotRector::class);
     $services->set(\Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector::class);
     $services->set(\Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector::class);
-    $services->set(\Rector\CodeQuality\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector::class);
     $services->set(\Rector\CodeQuality\Rector\FuncCall\SimplifyFuncGetArgsCountRector::class);
     $services->set(\Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector::class);
     $services->set(\Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector::class);

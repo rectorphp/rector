@@ -1505,7 +1505,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\FuncCall\\CallUserFuncWithArrowFunctionToInlineRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/CallUserFuncWithArrowFunctionToInlineRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\ChangeArrayPushToArrayAssignRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/ChangeArrayPushToArrayAssignRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\CompactToVariablesRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/CompactToVariablesRector.php',
-    'Rector\\CodeQuality\\Rector\\FuncCall\\InArrayAndArrayKeysToArrayKeyExistsRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/InArrayAndArrayKeysToArrayKeyExistsRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\IntvalToTypeCastRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/IntvalToTypeCastRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\IsAWithStringWithThirdArgumentRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/IsAWithStringWithThirdArgumentRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\RemoveSoleValueSprintfRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/RemoveSoleValueSprintfRector.php',
