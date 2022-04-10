@@ -2,6 +2,13 @@
     "name": "ssch\/typo3-rector",
     "type": "rector-extension",
     "description": "Instant fixes for your TYPO3 code by using Rector.",
+    "homepage": "https:\/\/packagist.org\/packages\/ssch\/typo3-rector",
+    "support": {
+        "docs": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/main\/docs",
+        "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
+        "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector",
+        "chat": "https:\/\/typo3.slack.com\/archives\/C019R5LAA6A"
+    },
     "license": "MIT",
     "authors": [
         {
@@ -15,7 +22,7 @@
         "symfony\/string": "^6.0"
     },
     "require-dev": {
-        "friendsofphp\/php-cs-fixer": "^3.7",
+        "friendsofphp\/php-cs-fixer": "^3.8",
         "php-parallel-lint\/php-parallel-lint": "^1.3",
         "phpspec\/prophecy-phpunit": "^2.0",
         "phpstan\/extension-installer": "^1.1",
@@ -23,7 +30,7 @@
         "phpunit\/phpunit": "^9.5",
         "rector\/phpstan-rules": "^0.4.20",
         "rector\/rector-generator": "dev-main",
-        "rector\/rector-src": "dev-main#848e23b",
+        "rector\/rector-src": "dev-main#4c6e22b",
         "symfony\/console": "^6.0",
         "symplify\/coding-standard": "^10.1",
         "symplify\/easy-coding-standard": "^10.1",

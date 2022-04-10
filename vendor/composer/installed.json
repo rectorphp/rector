@@ -2767,12 +2767,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "1d5463b9ca498da3d3ae0aa5b5d826fdbfe98c28"
+                "reference": "5fc785d248790100268581a318cb28fe7e672041"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/1d5463b9ca498da3d3ae0aa5b5d826fdbfe98c28",
-                "reference": "1d5463b9ca498da3d3ae0aa5b5d826fdbfe98c28",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/5fc785d248790100268581a318cb28fe7e672041",
+                "reference": "5fc785d248790100268581a318cb28fe7e672041",
                 "shasum": ""
             },
             "require": {
@@ -2784,7 +2784,7 @@
                 "rector\/rector": "<0.11"
             },
             "require-dev": {
-                "friendsofphp\/php-cs-fixer": "^3.7",
+                "friendsofphp\/php-cs-fixer": "^3.8",
                 "php-parallel-lint\/php-parallel-lint": "^1.3",
                 "phpspec\/prophecy-phpunit": "^2.0",
                 "phpstan\/extension-installer": "^1.1",
@@ -2792,7 +2792,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.4.20",
                 "rector\/rector-generator": "dev-main",
-                "rector\/rector-src": "dev-main#848e23b",
+                "rector\/rector-src": "dev-main#4c6e22b",
                 "symfony\/console": "^6.0",
                 "symplify\/coding-standard": "^10.1",
                 "symplify\/easy-coding-standard": "^10.1",
@@ -2802,7 +2802,7 @@
                 "symplify\/vendor-patches": "^10.1",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-04-09T23:20:57+00:00",
+            "time": "2022-04-10T11:46:27+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2834,9 +2834,12 @@
                 }
             ],
             "description": "Instant fixes for your TYPO3 code by using Rector.",
+            "homepage": "https:\/\/packagist.org\/packages\/ssch\/typo3-rector",
             "support": {
+                "chat": "https:\/\/typo3.slack.com\/archives\/C019R5LAA6A",
+                "docs": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/main\/docs",
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/main"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector"
             },
             "funding": [
                 {

@@ -99,7 +99,7 @@ CODE_SAMPLE
                 continue;
             }
             $this->classDependencyManipulator->addConstructorDependency($node, new \Rector\PostRector\ValueObject\PropertyMetadata($paramName, new \PHPStan\Type\ObjectType((string) $param->type), \PhpParser\Node\Stmt\Class_::MODIFIER_PROTECTED));
-            $this->removeNodeFromStatements($node, $injectMethod);
+            $this->nodeRemover->removeNodeFromStatements($node, $injectMethod);
         }
         return $node;
     }

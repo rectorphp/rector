@@ -14,12 +14,36 @@ use RectorPrefix20220410\Webmozart\Assert\Assert;
 final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator
 {
     /**
-     * @param mixed[] $paths
+     * @param string[] $paths
      */
     public function paths(array $paths) : void
     {
         \RectorPrefix20220410\Webmozart\Assert\Assert::allString($paths);
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::PATHS, $paths);
+    }
+    /**
+     * @param string[] $sets
+     */
+    public function sets(array $sets) : void
+    {
+        \RectorPrefix20220410\Webmozart\Assert\Assert::allString($sets);
+        foreach ($sets as $set) {
+            \RectorPrefix20220410\Webmozart\Assert\Assert::fileExists($set);
+            $this->import($set);
+        }
+    }
+    public function parallel() : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::PARALLEL, \true);
+    }
+    /**
+     * @param array<int|string, mixed> $criteria
+     */
+    public function skip(array $criteria) : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::SKIP, $criteria);
     }
 }

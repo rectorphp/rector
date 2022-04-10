@@ -13,6 +13,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
@@ -69,7 +70,11 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(\RectorPrefix20220410\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
+    /**
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+    public function __construct(\RectorPrefix20220410\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->rectorParser = $rectorParser;
@@ -79,6 +84,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
         $this->simplePhpParser = $simplePhpParser;
         $this->templateFinder = $templateFinder;
         $this->nodePrinter = $nodePrinter;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
     /**
      * @return array<class-string<Node>>
