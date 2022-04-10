@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\FunctionLike;
@@ -26,23 +27,17 @@ final class ArrayKeysAndInArrayToArrayKeyExistsRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-class SomeClass
+function run($packageName, $values)
 {
-    public function run($packageName, $values)
-    {
-        $keys = array_keys($values);
-        return in_array($packageName, $keys, true);
-    }
+    $keys = array_keys($values);
+    return in_array($packageName, $keys, true);
 }
 CODE_SAMPLE
 ,
                     <<<'CODE_SAMPLE'
-class SomeClass
+function run($packageName, $values)
 {
-    public function run($packageName, $values)
-    {
-        return array_key_exists($packageName, $values);
-    }
+    return array_key_exists($packageName, $values);
 }
 CODE_SAMPLE
                 ),
@@ -67,53 +62,37 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! isset($node->args[1])) {
-            return null;
+        $args = $node->getArgs();
+        $secondArg = $args[1];
+
+        $arrayVariable = $secondArg->value;
+
+        $previousAssignArraysKeysFuncCall = $this->findPreviousAssignToArrayKeys($node, $arrayVariable);
+        if ($previousAssignArraysKeysFuncCall instanceof Assign) {
+            /** @var FuncCall $arrayKeysFuncCall */
+            $arrayKeysFuncCall = $previousAssignArraysKeysFuncCall->expr;
+
+            $this->removeNode($previousAssignArraysKeysFuncCall);
+
+            return $this->createArrayKeyExists($node, $arrayKeysFuncCall);
         }
 
-        if (! $node->args[1] instanceof Arg) {
-            return null;
+        if ($arrayVariable instanceof FuncCall && $this->isName($arrayVariable, 'array_keys')) {
+            $arrayKeysFuncCallArgs = $arrayVariable->getArgs();
+            if (count($arrayKeysFuncCallArgs) > 1) {
+                return null;
+            }
+
+            // unwrap array func call
+            $secondArg->value = $arrayKeysFuncCallArgs[0]->value;
+            $node->name = new Name('array_key_exists');
+
+            unset($node->args[2]);
+
+            return $node;
         }
 
-        $arrayVariable = $node->args[1]->value;
-
-        /** @var Assign|Node|null $previousAssignArraysKeysFuncCall */
-        $previousAssignArraysKeysFuncCall = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (
-            Node $node
-        ) use ($arrayVariable): bool {
-            // breaking out of scope
-            if ($node instanceof FunctionLike) {
-                return true;
-            }
-
-            if (! $node instanceof Assign) {
-                return ! (bool) $this->betterNodeFinder->find(
-                    $node,
-                    fn (Node $n): bool => $this->nodeComparator->areNodesEqual($arrayVariable, $n)
-                );
-            }
-
-            if (! $this->nodeComparator->areNodesEqual($arrayVariable, $node->var)) {
-                return false;
-            }
-
-            if (! $node->expr instanceof FuncCall) {
-                return false;
-            }
-
-            return $this->nodeNameResolver->isName($node->expr, 'array_keys');
-        });
-
-        if (! $previousAssignArraysKeysFuncCall instanceof Assign) {
-            return null;
-        }
-
-        /** @var FuncCall $arrayKeysFuncCall */
-        $arrayKeysFuncCall = $previousAssignArraysKeysFuncCall->expr;
-
-        $this->removeNode($previousAssignArraysKeysFuncCall);
-
-        return $this->createArrayKeyExists($node, $arrayKeysFuncCall);
+        return null;
     }
 
     private function createArrayKeyExists(FuncCall $inArrayFuncCall, FuncCall $arrayKeysFuncCall): ?FuncCall
@@ -137,5 +116,32 @@ CODE_SAMPLE
         $arguments = [$inArrayFuncCall->args[0], $arrayKeysFuncCall->args[0]];
 
         return new FuncCall(new Name('array_key_exists'), $arguments);
+    }
+
+    private function findPreviousAssignToArrayKeys(FuncCall $funcCall, Expr $expr): null|Node|FunctionLike
+    {
+        return $this->betterNodeFinder->findFirstPreviousOfNode($funcCall, function (Node $node) use ($expr): bool {
+            // breaking out of scope
+            if ($node instanceof FunctionLike) {
+                return true;
+            }
+
+            if (! $node instanceof Assign) {
+                return ! (bool) $this->betterNodeFinder->find(
+                    $node,
+                    fn (Node $n): bool => $this->nodeComparator->areNodesEqual($expr, $n)
+                );
+            }
+
+            if (! $this->nodeComparator->areNodesEqual($expr, $node->var)) {
+                return false;
+            }
+
+            if (! $node->expr instanceof FuncCall) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($node->expr, 'array_keys');
+        });
     }
 }

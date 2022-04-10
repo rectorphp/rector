@@ -30,7 +30,6 @@ use Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector;
 use Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
-use Rector\CodeQuality\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector;
 use Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector;
 use Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector;
 use Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector;
@@ -86,7 +85,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceMultipleBooleanNotRector::class);
     $services->set(ForeachToInArrayRector::class);
     $services->set(SimplifyForeachToCoalescingRector::class);
-    $services->set(InArrayAndArrayKeysToArrayKeyExistsRector::class);
     $services->set(SimplifyFuncGetArgsCountRector::class);
     $services->set(SimplifyInArrayValuesRector::class);
     $services->set(SimplifyStrposLowerRector::class);

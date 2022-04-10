@@ -1,4 +1,4 @@
-# 510 Rules Overview
+# 508 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (72)
+- [CodeQuality](#codequality) (70)
 
 - [CodingStyle](#codingstyle) (35)
 
@@ -354,14 +354,11 @@ Replace `array_keys()` and `in_array()` to `array_key_exists()`
 - class: [`Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector`](../rules/CodeQuality/Rector/FuncCall/ArrayKeysAndInArrayToArrayKeyExistsRector.php)
 
 ```diff
- class SomeClass
+ function run($packageName, $values)
  {
-     public function run($packageName, $values)
-     {
--        $keys = array_keys($values);
--        return in_array($packageName, $keys, true);
-+        return array_key_exists($packageName, $values);
-     }
+-    $keys = array_keys($values);
+-    return in_array($packageName, $keys, true);
++    return array_key_exists($packageName, $values);
  }
 ```
 
@@ -855,19 +852,6 @@ Changes comparison with get_class to instanceof
 
 <br>
 
-### InArrayAndArrayKeysToArrayKeyExistsRector
-
-Simplify `in_array` and `array_keys` functions combination into `array_key_exists` when `array_keys` has one argument only
-
-- class: [`Rector\CodeQuality\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector`](../rules/CodeQuality/Rector/FuncCall/InArrayAndArrayKeysToArrayKeyExistsRector.php)
-
-```diff
--in_array("key", array_keys($array), true);
-+array_key_exists("key", $array);
-```
-
-<br>
-
 ### InlineConstructorDefaultToPropertyRector
 
 Move property default from constructor to property default
@@ -1239,26 +1223,6 @@ Simplify negated conditions with de Morgan theorem
  $b = 10;
 -$result = !($a > 20 || $b <= 50);
 +$result = $a <= 20 && $b > 50;
-```
-
-<br>
-
-### SimplifyDuplicatedTernaryRector
-
-Remove ternary that duplicated return value of true : false
-
-- class: [`Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector`](../rules/CodeQuality/Rector/Ternary/SimplifyDuplicatedTernaryRector.php)
-
-```diff
- class SomeClass
- {
-     public function run(bool $value, string $name)
-     {
--         $isTrue = $value ? true : false;
-+         $isTrue = $value;
-          $isName = $name ? true : false;
-     }
- }
 ```
 
 <br>
@@ -1641,7 +1605,7 @@ When throwing into a catch block, checks that the previous exception is passed t
 
 ### UnnecessaryTernaryExpressionRector
 
-Remove unnecessary ternary expressions.
+Remove unnecessary ternary expressions
 
 - class: [`Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector`](../rules/CodeQuality/Rector/Ternary/UnnecessaryTernaryExpressionRector.php)
 
