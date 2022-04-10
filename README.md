@@ -34,7 +34,7 @@ By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring
 
 ## Documentation
 
-- [Explore 450+ Rector Rules](/docs/rector_rules_overview.md)
+- [Explore 500+ Rector Rules](/docs/rector_rules_overview.md)
 - [Auto Import Names](/docs/auto_import_names.md)
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [Static Reflection and Autoload](/docs/static_reflection_and_autoload.md)
