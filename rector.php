@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
@@ -33,18 +31,16 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::CODING_STYLE,
     ]);
 
-    $services = $rectorConfig->services();
+    $rectorConfig->ruleWithConfiguration(
+        PreferThisOrSelfMethodCallRector::class,
+        [
+            'PHPUnit\Framework\TestCase' => PreferenceSelfThis::PREFER_THIS(),
+        ]
+    );
 
-    // phpunit
-    $services->set(PreferThisOrSelfMethodCallRector::class)
-        ->configure([
-            TestCase::class => PreferenceSelfThis::PREFER_THIS(),
-        ]);
-
-    $services->set(ReturnArrayClassMethodToYieldRector::class)
-        ->configure([new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*')]);
-
-    $parameters = $rectorConfig->parameters();
+    $rectorConfig->ruleWithConfiguration(ReturnArrayClassMethodToYieldRector::class, [
+        new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*'),
+    ]);
 
     $rectorConfig->paths([
         __DIR__ . '/bin',
@@ -59,8 +55,7 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/scoper.php',
     ]);
 
-    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-
+    $rectorConfig->autoImportNames();
     $rectorConfig->parallel();
 
     $rectorConfig->skip([
@@ -99,5 +94,5 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',
     ]);
 
-    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-rector.neon');
+    $rectorConfig->phpstanConfig(__DIR__ . '/phpstan-for-rector.neon');
 };

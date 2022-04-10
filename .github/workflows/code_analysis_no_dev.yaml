@@ -8,18 +8,9 @@ env:
     COMPOSER_ROOT_VERSION: "dev-main"
 
 jobs:
-    matrix:
-        strategy:
-            fail-fast: false
-            matrix:
-                actions:
-                    -
-                        name: 'Rector List'
-                        run: bin/rector list --ansi
-
-        name: ${{ matrix.actions.name }}
+    code_analysis_no_dev:
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 10
 
         steps:
             -   uses: actions/checkout@v3
@@ -29,9 +20,10 @@ jobs:
                     php-version: 8.1
                     coverage: none
 
-            # must be removed, as local config is missing dev dependencies
-            -   run: rm phpstan-for-rector.neon
+            # must be cleared, as local config is missing dev dependencies
+            -  run: |
+                rm phpstan-for-rector.neon
+                touch phpstan-for-rector.neon
 
             -   run: composer install --no-progress --ansi --no-dev
-
-            -   run: ${{ matrix.actions.run }}
+            -   run: bin/rector list --ansi
