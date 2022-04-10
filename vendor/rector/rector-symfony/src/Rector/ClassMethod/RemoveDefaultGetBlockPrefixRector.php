@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\ClassMethod;
 
-use RectorPrefix20220409\Nette\Utils\Strings;
+use RectorPrefix20220410\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220409\Symfony\Component\String\UnicodeString;
+use RectorPrefix20220410\Symfony\Component\String\UnicodeString;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -75,9 +75,9 @@ CODE_SAMPLE
         }
         $shortClassName = $this->nodeNameResolver->getShortName($className);
         if (\substr_compare($shortClassName, 'Type', -\strlen('Type')) === 0) {
-            $shortClassName = (string) \RectorPrefix20220409\Nette\Utils\Strings::before($shortClassName, 'Type');
+            $shortClassName = (string) \RectorPrefix20220410\Nette\Utils\Strings::before($shortClassName, 'Type');
         }
-        $shortClassNameUnicodeString = new \RectorPrefix20220409\Symfony\Component\String\UnicodeString($shortClassName);
+        $shortClassNameUnicodeString = new \RectorPrefix20220410\Symfony\Component\String\UnicodeString($shortClassName);
         $underscoredClassShortName = $shortClassNameUnicodeString->snake()->toString();
         if ($underscoredClassShortName !== $returnedValue) {
             return null;

@@ -11,9 +11,9 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
-use RectorPrefix20220409\PHPUnit\Framework\MockObject\Builder\InvocationMocker;
-use RectorPrefix20220409\PHPUnit\Framework\MockObject\MockObject;
-use RectorPrefix20220409\PHPUnit\Framework\MockObject\Stub;
+use RectorPrefix20220410\PHPUnit\Framework\MockObject\Builder\InvocationMocker;
+use RectorPrefix20220410\PHPUnit\Framework\MockObject\MockObject;
+use RectorPrefix20220410\PHPUnit\Framework\MockObject\Stub;
 use function array_filter;
 use function count;
 use function implode;
@@ -44,13 +44,13 @@ class MockMethodCallRule implements \PHPStan\Rules\Rule
         }
         $method = $argType->getValue();
         $type = $scope->getType($node->var);
-        if ($type instanceof \PHPStan\Type\IntersectionType && (\in_array(\RectorPrefix20220409\PHPUnit\Framework\MockObject\MockObject::class, $type->getReferencedClasses(), \true) || \in_array(\RectorPrefix20220409\PHPUnit\Framework\MockObject\Stub::class, $type->getReferencedClasses(), \true)) && !$type->hasMethod($method)->yes()) {
+        if ($type instanceof \PHPStan\Type\IntersectionType && (\in_array(\RectorPrefix20220410\PHPUnit\Framework\MockObject\MockObject::class, $type->getReferencedClasses(), \true) || \in_array(\RectorPrefix20220410\PHPUnit\Framework\MockObject\Stub::class, $type->getReferencedClasses(), \true)) && !$type->hasMethod($method)->yes()) {
             $mockClass = \array_filter($type->getReferencedClasses(), static function (string $class) : bool {
-                return $class !== \RectorPrefix20220409\PHPUnit\Framework\MockObject\MockObject::class && $class !== \RectorPrefix20220409\PHPUnit\Framework\MockObject\Stub::class;
+                return $class !== \RectorPrefix20220410\PHPUnit\Framework\MockObject\MockObject::class && $class !== \RectorPrefix20220410\PHPUnit\Framework\MockObject\Stub::class;
             });
             return [\sprintf('Trying to mock an undefined method %s() on class %s.', $method, \implode('&', $mockClass))];
         }
-        if ($type instanceof \PHPStan\Type\Generic\GenericObjectType && $type->getClassName() === \RectorPrefix20220409\PHPUnit\Framework\MockObject\Builder\InvocationMocker::class && \count($type->getTypes()) > 0) {
+        if ($type instanceof \PHPStan\Type\Generic\GenericObjectType && $type->getClassName() === \RectorPrefix20220410\PHPUnit\Framework\MockObject\Builder\InvocationMocker::class && \count($type->getTypes()) > 0) {
             $mockClass = $type->getTypes()[0];
             if ($mockClass instanceof \PHPStan\Type\ObjectType && !$mockClass->hasMethod($method)->yes()) {
                 return [\sprintf('Trying to mock an undefined method %s() on class %s.', $method, $mockClass->getClassName())];

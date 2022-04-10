@@ -5,7 +5,7 @@ namespace Rector\Config;
 
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220409\Webmozart\Assert\Assert;
+use RectorPrefix20220410\Webmozart\Assert\Assert;
 /**
  * @api
  * Same as Symfony container configurator, with patched return type for "set()" method for easier DX.
@@ -18,7 +18,7 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function paths(array $paths) : void
     {
-        \RectorPrefix20220409\Webmozart\Assert\Assert::allString($paths);
+        \RectorPrefix20220410\Webmozart\Assert\Assert::allString($paths);
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::PATHS, $paths);
     }

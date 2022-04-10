@@ -1,4 +1,4 @@
-# 509 Rules Overview
+# 510 Rules Overview
 
 <br>
 
@@ -90,7 +90,7 @@
 
 - [TypeDeclaration](#typedeclaration) (23)
 
-- [Visibility](#visibility) (2)
+- [Visibility](#visibility) (3)
 
 <br>
 
@@ -12002,6 +12002,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  {
 -    public function someMethod()
 +    protected function someMethod()
+     {
+     }
+ }
+```
+
+<br>
+
+### ExplicitPublicClassMethodRector
+
+Add explicit public method visibility.
+
+- class: [`Rector\Visibility\Rector\ClassMethod\ExplicitPublicClassMethodRector`](../rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php)
+
+```diff
+ class SomeClass
+ {
+-    function foo()
++    public function foo()
      {
      }
  }
