@@ -570,3 +570,6 @@ parameters:
         -
             message: '#Call to static method Webmozart\\Assert\\Assert\:\:allString\(\) with array<string> will always evaluate to true#'
             path: packages/Config/RectorConfig.php
+
+        # foreaching all stmts
+        - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\FunctionLike\\SimplifyUselessVariableRector\:\:refactor\(\)" is 1\d+, keep it under 10#'

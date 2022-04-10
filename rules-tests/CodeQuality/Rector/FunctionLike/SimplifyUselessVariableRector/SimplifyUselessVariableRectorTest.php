@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
+namespace Rector\Tests\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

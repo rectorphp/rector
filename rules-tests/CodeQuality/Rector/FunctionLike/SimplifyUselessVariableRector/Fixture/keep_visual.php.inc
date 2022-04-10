@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\CodeQuality\Rector\Return_\SimplifyUselessVariableRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector\Fixture;
 
 // covers https://github.com/Sylius/Sylius/pull/9902/files#r231437165
 function simplifyUselessVariable5()

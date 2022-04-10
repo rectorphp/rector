@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\Return_;
+namespace Rector\CodeQuality\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
+use Rector\CodeQuality\NodeAnalyzer\ReturnAnalyzer;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
@@ -23,14 +24,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see Based on https://github.com/slevomat/coding-standard/blob/master/SlevomatCodingStandard/Sniffs/Variables/UselessVariableSniff.php
- * @see \Rector\Tests\CodeQuality\Rector\Return_\SimplifyUselessVariableRector\SimplifyUselessVariableRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector\SimplifyUselessVariableRectorTest
  */
 final class SimplifyUselessVariableRector extends AbstractRector
 {
     public function __construct(
         private readonly AssignAndBinaryMap $assignAndBinaryMap,
         private readonly VariableAnalyzer $variableAnalyzer,
-        private readonly CallAnalyzer $callAnalyzer
+        private readonly CallAnalyzer $callAnalyzer,
+        private readonly ReturnAnalyzer $returnAnalyzer,
     ) {
     }
 
@@ -59,101 +61,104 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Return_::class];
+        return [FunctionLike::class];
     }
 
     /**
-     * @param Return_ $node
+     * @param FunctionLike $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        $stmts = $node->getStmts();
+        if ($stmts === null) {
             return null;
         }
 
-        /** @var Expression $previousExpression */
-        $previousExpression = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        /** @var Assign|AssignOp $previousNode */
-        $previousNode = $previousExpression->expr;
-        $previousVariableNode = $previousNode->var;
+        $previousStmt = null;
+        $hasChanged = false;
 
-        if ($this->hasSomeComment($previousVariableNode)) {
-            return null;
-        }
-
-        if ($previousNode instanceof Assign) {
-            if ($this->isReturnWithVarAnnotation($node)) {
-                return null;
+        foreach ($stmts as $stmt) {
+            if ($previousStmt === null || ! $stmt instanceof Return_) {
+                $previousStmt = $stmt;
+                continue;
             }
 
-            $node->expr = $previousNode->expr;
-        }
-
-        if ($previousNode instanceof AssignOp) {
-            $binaryClass = $this->assignAndBinaryMap->getAlternative($previousNode);
-            if ($binaryClass === null) {
-                return null;
+            if ($this->shouldSkipStmt($stmt, $previousStmt)) {
+                $previousStmt = $stmt;
+                continue;
             }
 
-            $node->expr = new $binaryClass($previousNode->var, $previousNode->expr);
+            /** @var Expression $previousStmt */
+            /** @var Assign|AssignOp $previousNode */
+            $previousNode = $previousStmt->expr;
+
+            /** @var Return_ $stmt */
+            if ($previousNode instanceof Assign) {
+                if ($this->isReturnWithVarAnnotation($stmt)) {
+                    continue;
+                }
+
+                $stmt->expr = $previousNode->expr;
+            } else {
+                $binaryClass = $this->assignAndBinaryMap->getAlternative($previousNode);
+                if ($binaryClass === null) {
+                    continue;
+                }
+
+                $stmt->expr = new $binaryClass($previousNode->var, $previousNode->expr);
+            }
+
+            $this->removeNode($previousStmt);
+            $hasChanged = true;
+
+            $previousStmt = $stmt;
         }
 
-        $this->removeNode($previousNode);
+        if ($hasChanged) {
+            return $node;
+        }
 
-        return $node;
+        return null;
     }
 
-    private function hasByRefReturn(Return_ $return): bool
+    private function shouldSkipStmt(Return_ $return, Stmt $previousStmt): bool
     {
-        $node = $return;
-
-        while ($node = $node->getAttribute(AttributeKey::PARENT_NODE)) {
-            if ($node instanceof FunctionLike) {
-                return $node->returnsByRef();
-            }
-
-            if (! $node instanceof Node) {
-                break;
-            }
+        if ($this->hasSomeComment($previousStmt)) {
+            return true;
         }
 
-        return false;
-    }
-
-    private function shouldSkip(Return_ $return): bool
-    {
         if (! $return->expr instanceof Variable) {
             return true;
         }
 
-        if ($this->hasByRefReturn($return)) {
+        if ($this->returnAnalyzer->hasByRefReturn($return)) {
             return true;
         }
 
-        /** @var Variable $variableNode */
-        $variableNode = $return->expr;
+        /** @var Variable $variable */
+        $variable = $return->expr;
 
-        $previousExpression = $return->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (! $previousExpression instanceof Expression) {
+        if (! $previousStmt instanceof Expression) {
             return true;
         }
 
         // is variable part of single assign
-        $previousNode = $previousExpression->expr;
+        $previousNode = $previousStmt->expr;
+
         if (! $previousNode instanceof AssignOp && ! $previousNode instanceof Assign) {
             return true;
         }
 
         // is the same variable
-        if (! $this->nodeComparator->areNodesEqual($previousNode->var, $variableNode)) {
+        if (! $this->nodeComparator->areNodesEqual($previousNode->var, $variable)) {
             return true;
         }
 
-        if ($this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode)) {
+        if ($this->isPreviousExpressionVisuallySimilar($previousStmt, $previousNode)) {
             return true;
         }
 
-        if ($this->variableAnalyzer->isStaticOrGlobal($variableNode)) {
+        if ($this->variableAnalyzer->isStaticOrGlobal($variable)) {
             return true;
         }
 
@@ -161,16 +166,16 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->variableAnalyzer->isUsedByReference($variableNode);
+        return $this->variableAnalyzer->isUsedByReference($variable);
     }
 
-    private function hasSomeComment(Expr $expr): bool
+    private function hasSomeComment(Stmt $stmt): bool
     {
-        if ($expr->getComments() !== []) {
+        if ($stmt->getComments() !== []) {
             return true;
         }
 
-        return $expr->getDocComment() !== null;
+        return $stmt->getDocComment() !== null;
     }
 
     private function isReturnWithVarAnnotation(Return_ $return): bool
