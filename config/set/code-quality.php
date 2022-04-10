@@ -68,7 +68,6 @@ use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
 use Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector;
 use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
-use Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
@@ -110,7 +109,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ExplicitBoolCompareRector::class);
     $services->set(CombineIfRector::class);
     $services->set(UseIdenticalOverEqualWithSameTypeRector::class);
-    $services->set(SimplifyDuplicatedTernaryRector::class);
     $services->set(SimplifyBoolIdenticalTrueRector::class);
     $services->set(SimplifyRegexPatternRector::class);
     $services->set(BooleanNotIdenticalToNotIdenticalRector::class);

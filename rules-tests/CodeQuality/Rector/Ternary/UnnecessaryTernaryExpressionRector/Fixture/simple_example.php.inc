@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector\Fixture;
 
-class Fixture
+final class SimpleExample
 {
     public function run(bool $value, string $name)
     {
@@ -15,14 +15,14 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Tests\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector\Fixture;
 
-class Fixture
+final class SimpleExample
 {
     public function run(bool $value, string $name)
     {
          $isTrue = $value;
-         $isName = $name ? true : false;
+         $isName = (bool) $name;
     }
 }
 

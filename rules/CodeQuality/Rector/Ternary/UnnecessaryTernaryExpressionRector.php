@@ -29,7 +29,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove unnecessary ternary expressions.',
+            'Remove unnecessary ternary expressions',
             [new CodeSample('$foo === $bar ? true : false;', '$foo === $bar;')]
         );
     }
