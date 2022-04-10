@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\CodingStyle\Rector\Include_\FollowRequireByDirRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector\Fixture;
 
 class ExtraDot
 {
@@ -15,7 +15,7 @@ class ExtraDot
 -----
 <?php
 
-namespace Rector\Tests\CodingStyle\Rector\Include_\FollowRequireByDirRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector\Fixture;
 
 class ExtraDot
 {

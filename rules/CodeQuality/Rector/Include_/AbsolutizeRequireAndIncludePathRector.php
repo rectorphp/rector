@@ -68,7 +68,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->expr instanceof Concat && $node->expr->left instanceof String_ && $this->isRefactorableStringPath(
+            $node->expr->left
+        )) {
+            $node->expr->left = $this->prefixWithDirConstant($node->expr->left);
+
+            return $node;
+        }
+
         if (! $node->expr instanceof String_) {
+            return null;
+        }
+
+        if (! $this->isRefactorableStringPath($node->expr)) {
             return null;
         }
 
@@ -96,8 +108,42 @@ CODE_SAMPLE
             $node->expr->value = '/' . $includeValue;
         }
 
-        $node->expr = new Concat(new Dir(), $node->expr);
+        $node->expr = $this->prefixWithDirConstant($node->expr);
 
         return $node;
+    }
+
+    private function isRefactorableStringPath(String_ $string): bool
+    {
+        return ! \str_starts_with($string->value, 'phar://');
+    }
+
+    private function prefixWithDirConstant(String_ $string): Concat
+    {
+        $this->removeExtraDotSlash($string);
+        $this->prependSlashIfMissing($string);
+
+        return new Concat(new Dir(), $string);
+    }
+
+    /**
+     * Remove "./" which would break the path
+     */
+    private function removeExtraDotSlash(String_ $string): void
+    {
+        if (! \str_starts_with($string->value, './')) {
+            return;
+        }
+
+        $string->value = Strings::replace($string->value, '#^\.\/#', '/');
+    }
+
+    private function prependSlashIfMissing(String_ $string): void
+    {
+        if (\str_starts_with($string->value, '/')) {
+            return;
+        }
+
+        $string->value = '/' . $string->value;
     }
 }

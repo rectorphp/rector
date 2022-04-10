@@ -20,7 +20,6 @@ use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
-use Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector;
 use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 use Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector;
@@ -44,7 +43,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SplitGroupedConstantsAndPropertiesRector::class);
     $services->set(StringClassNameToClassConstantRector::class);
     $services->set(ConsistentPregDelimiterRector::class);
-    $services->set(FollowRequireByDirRector::class);
     $services->set(CatchExceptionNameMatchingTypeRector::class);
     $services->set(UseIncrementAssignRector::class);
     $services->set(SplitDoubleAssignRector::class);

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\CodingStyle\Rector\Include_\FollowRequireByDirRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector\Fixture;
 
-class Fixture
+final class FullList
 {
     public function run()
     {
@@ -12,7 +12,7 @@ class Fixture
         require_once 'autoload.php';
         include 'autoload.php';
         include_once 'autoload.php';
-        require 'path/' . $variable;
+
         require $variable;
         require __DIR__ . $variable;
         require __DIR__ . 'string';
@@ -23,9 +23,9 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Tests\CodingStyle\Rector\Include_\FollowRequireByDirRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector\Fixture;
 
-class Fixture
+final class FullList
 {
     public function run()
     {
@@ -35,7 +35,7 @@ class Fixture
         require_once __DIR__ . '/autoload.php';
         include __DIR__ . '/autoload.php';
         include_once __DIR__ . '/autoload.php';
-        require __DIR__ . '/path/' . $variable;
+
         require $variable;
         require __DIR__ . $variable;
         require __DIR__ . 'string';
