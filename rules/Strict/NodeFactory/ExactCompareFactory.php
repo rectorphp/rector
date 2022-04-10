@@ -18,6 +18,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -48,6 +49,10 @@ final class ExactCompareFactory
 
         if ($exprType instanceof ArrayType) {
             return new Identical($expr, new Array_([]));
+        }
+
+        if ($exprType instanceof NullType) {
+            return new Identical($expr, $this->nodeFactory->createNull());
         }
 
         if (! $exprType instanceof UnionType) {
@@ -113,8 +118,36 @@ final class ExactCompareFactory
             $compareExprs[] = $this->createNotIdenticalFalsyCompare($unionedType, $expr, $treatAsNotEmpty);
         }
 
-        /** @var ?Expr $truthyExpr */
+        return $this->resolveTruthyExpr($compareExprs);
+    }
+
+    /**
+     * @return array<Expr|null>
+     */
+    private function collectCompareExprs(UnionType $unionType, Expr $expr, bool $treatAsNonEmpty): array
+    {
+        $compareExprs = [];
+        foreach ($unionType->getTypes() as $unionedType) {
+            $compareExprs[] = $this->createIdenticalFalsyCompare($unionedType, $expr, $treatAsNonEmpty);
+        }
+
+        return $compareExprs;
+    }
+
+    private function cleanUpPossibleNullableUnionType(UnionType $unionType): Type
+    {
+        return count($unionType->getTypes()) === 2
+            ? TypeCombinator::removeNull($unionType)
+            : $unionType;
+    }
+
+    /**
+     * @param array<Expr|null> $compareExprs
+     */
+    private function resolveTruthyExpr(array $compareExprs): ?Expr
+    {
         $truthyExpr = array_shift($compareExprs);
+
         foreach ($compareExprs as $compareExpr) {
             if (! $compareExpr instanceof Expr) {
                 return null;
@@ -124,7 +157,6 @@ final class ExactCompareFactory
                 return null;
             }
 
-            /** @var Expr $compareExpr */
             $truthyExpr = new BooleanOr($truthyExpr, $compareExpr);
         }
 
@@ -133,22 +165,11 @@ final class ExactCompareFactory
 
     private function createTruthyFromUnionType(UnionType $unionType, Expr $expr, bool $treatAsNonEmpty): Expr|null
     {
-        $unionType = TypeCombinator::removeNull($unionType);
+        $unionType = $this->cleanUpPossibleNullableUnionType($unionType);
 
         if ($unionType instanceof UnionType) {
-            $compareExprs = [];
-            foreach ($unionType->getTypes() as $unionedType) {
-                $compareExprs[] = $this->createIdenticalFalsyCompare($unionedType, $expr, $treatAsNonEmpty);
-            }
-
-            /** @var Expr $truthyExpr */
-            $truthyExpr = array_shift($compareExprs);
-            foreach ($compareExprs as $compareExpr) {
-                /** @var Expr $compareExpr */
-                $truthyExpr = new BooleanOr($truthyExpr, $compareExpr);
-            }
-
-            return $truthyExpr;
+            $compareExprs = $this->collectCompareExprs($unionType, $expr, $treatAsNonEmpty);
+            return $this->resolveTruthyExpr($compareExprs);
         }
 
         if ($unionType instanceof BooleanType) {
@@ -162,16 +183,16 @@ final class ExactCompareFactory
 
         $toNullIdentical = new Identical($expr, $this->nodeFactory->createNull());
 
-        // assume we have to check empty string, integer and bools
-        if (! $treatAsNonEmpty) {
-            $scalarFalsyIdentical = $this->createIdenticalFalsyCompare($unionType, $expr, $treatAsNonEmpty);
-            if (! $scalarFalsyIdentical instanceof Expr) {
-                return null;
-            }
-
-            return new BooleanOr($toNullIdentical, $scalarFalsyIdentical);
+        if ($treatAsNonEmpty) {
+            return $toNullIdentical;
         }
 
-        return $toNullIdentical;
+        // assume we have to check empty string, integer and bools
+        $scalarFalsyIdentical = $this->createIdenticalFalsyCompare($unionType, $expr, $treatAsNonEmpty);
+        if (! $scalarFalsyIdentical instanceof Expr) {
+            return null;
+        }
+
+        return new BooleanOr($toNullIdentical, $scalarFalsyIdentical);
     }
 }

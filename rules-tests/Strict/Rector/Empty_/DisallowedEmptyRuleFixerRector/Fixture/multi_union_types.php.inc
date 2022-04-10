@@ -26,7 +26,7 @@ final class MultiUnionTypes
      */
     public function get($id)
     {
-        return $id === [] || $id === 0 || $id === '';
+        return $id === [] || $id === 0 || $id === '' || $id === null;
     }
 }
 

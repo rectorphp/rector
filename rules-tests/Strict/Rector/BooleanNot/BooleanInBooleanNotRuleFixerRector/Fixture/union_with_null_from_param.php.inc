@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\Fixture;
 
-final class UnionWithStringNull
+final class UnionWithNullFromParam
 {
     public function run(string|null $value)
     {
@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\Fixture;
 
-final class UnionWithStringNull
+final class UnionWithNullFromParam
 {
     public function run(string|null $value)
     {
