@@ -9811,8 +9811,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
  class SomeClass
  {
--    public function run(string|null $name)
-+    public function run(string $name)
+     public function run(string|null $name)
      {
 -        if (! $name) {
 +        if ($name === null) {

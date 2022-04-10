@@ -48,7 +48,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run(string $name)
+    public function run(string|null $name)
     {
         if ($name === null) {
             return 'no name';
