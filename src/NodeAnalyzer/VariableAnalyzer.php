@@ -28,18 +28,18 @@ final class VariableAnalyzer
             return true;
         }
 
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $n) use (
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use (
             $variable
         ): bool {
-            if (! in_array($n::class, [Static_::class, Global_::class], true)) {
+            if (! in_array($node::class, [Static_::class, Global_::class], true)) {
                 return false;
             }
 
             /**
-             * @var Static_|Global_ $n
+             * @var Static_|Global_ $node
              * @var StaticVar[]|Variable[] $vars
              */
-            $vars = $n->vars;
+            $vars = $node->vars;
             foreach ($vars as $var) {
                 $staticVarVariable = $var instanceof StaticVar
                     ? $var->var

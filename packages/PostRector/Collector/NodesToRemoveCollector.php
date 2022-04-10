@@ -119,19 +119,19 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
 
         $paramVariable = $node->var;
         if ($paramVariable instanceof Variable) {
-            return (bool) $this->betterNodeFinder->findFirst((array) $parentNode->stmts, function (Node $variable) use (
+            return (bool) $this->betterNodeFinder->findFirst((array) $parentNode->stmts, function (Node $node) use (
                 $paramVariable
             ): bool {
-                if (! $this->nodeComparator->areNodesEqual($variable, $paramVariable)) {
+                if (! $this->nodeComparator->areNodesEqual($node, $paramVariable)) {
                     return false;
                 }
 
-                $hasArgParent = (bool) $this->betterNodeFinder->findParentType($variable, Arg::class);
+                $hasArgParent = (bool) $this->betterNodeFinder->findParentType($node, Arg::class);
                 if (! $hasArgParent) {
                     return false;
                 }
 
-                return ! (bool) $this->betterNodeFinder->findParentType($variable, StaticCall::class);
+                return ! (bool) $this->betterNodeFinder->findParentType($node, StaticCall::class);
             });
         }
 

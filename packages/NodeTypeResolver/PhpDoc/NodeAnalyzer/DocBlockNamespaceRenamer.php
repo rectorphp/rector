@@ -39,13 +39,13 @@ final class DocBlockNamespaceRenamer
         $phpDocNodeTraverser->traverseWithCallable(
             $phpDocInfo->getPhpDocNode(),
             '',
-            function (DocNode $subNode) use ($oldToNewNamespaces): ?DocNode {
-                if (! $subNode instanceof IdentifierTypeNode) {
+            function (DocNode $docNode) use ($oldToNewNamespaces): ?DocNode {
+                if (! $docNode instanceof IdentifierTypeNode) {
                     return null;
                 }
 
-                $name = $subNode->name;
-                $trimmedName = ltrim($subNode->name, '\\');
+                $name = $docNode->name;
+                $trimmedName = ltrim($docNode->name, '\\');
 
                 if ($name === $trimmedName) {
                     return null;

@@ -88,7 +88,7 @@ final class BreakingVariableRenameGuard
     public function shouldSkipParam(
         string $currentName,
         string $expectedName,
-        ClassMethod $classMethod,
+        ClassMethod|Function_|Closure $classMethod,
         Param $param
     ): bool {
         // is the suffix? → also accepted
@@ -106,7 +106,7 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        if ($this->overridenExistingNamesResolver->hasNameInClassMethodForParam($expectedName, $classMethod)) {
+        if ($this->overridenExistingNamesResolver->hasNameInFunctionLikeForParam($expectedName, $classMethod)) {
             return true;
         }
 

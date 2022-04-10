@@ -140,18 +140,18 @@ CODE_SAMPLE
      */
     private function completeDefaultArrayToPropertyNames(Class_ $class, array $propertyNames): void
     {
-        $this->traverseNodesWithCallable($class, function (Node $class) use ($propertyNames): ?PropertyProperty {
-            if (! $class instanceof PropertyProperty) {
+        $this->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames): ?PropertyProperty {
+            if (! $node instanceof PropertyProperty) {
                 return null;
             }
 
-            if (! $this->isNames($class, $propertyNames)) {
+            if (! $this->isNames($node, $propertyNames)) {
                 return null;
             }
 
-            $class->default = new Array_();
+            $node->default = new Array_();
 
-            return $class;
+            return $node;
         });
     }
 

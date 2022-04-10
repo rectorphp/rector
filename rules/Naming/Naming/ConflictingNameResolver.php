@@ -32,7 +32,7 @@ final class ConflictingNameResolver
     /**
      * @return string[]
      */
-    public function resolveConflictingVariableNamesForParam(ClassMethod $classMethod): array
+    public function resolveConflictingVariableNamesForParam(ClassMethod|Function_|Closure $classMethod): array
     {
         $expectedNames = [];
         foreach ($classMethod->params as $param) {

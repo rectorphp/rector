@@ -73,13 +73,13 @@ final class PHPStanNodeScopeResolver
         $scope = $this->scopeFactory->createFromFile($smartFileInfo);
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
-        $nodeCallback = function (Node $node, MutatingScope $scope) use (&$nodeCallback): void {
+        $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use (&$nodeCallback): void {
             if ($node instanceof Trait_) {
                 $traitName = $this->resolveClassName($node);
 
                 $traitReflectionClass = $this->reflectionProvider->getClass($traitName);
 
-                $traitScope = clone $scope;
+                $traitScope = clone $mutatingScope;
 
                 $scopeContext = $this->privatesAccessor->getPrivatePropertyOfClass(
                     $traitScope,
@@ -109,17 +109,17 @@ final class PHPStanNodeScopeResolver
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
             if ($node instanceof Class_ || $node instanceof Interface_) {
-                /** @var MutatingScope $scope */
-                $scope = $this->resolveClassOrInterfaceScope($node, $scope);
+                /** @var MutatingScope $mutatingScope */
+                $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
             }
 
             // special case for unreachable nodes
             if ($node instanceof UnreachableStatementNode) {
                 $originalNode = $node->getOriginalStatement();
                 $originalNode->setAttribute(AttributeKey::IS_UNREACHABLE, true);
-                $originalNode->setAttribute(AttributeKey::SCOPE, $scope);
+                $originalNode->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             } else {
-                $node->setAttribute(AttributeKey::SCOPE, $scope);
+                $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
         };
 

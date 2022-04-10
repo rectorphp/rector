@@ -32,8 +32,8 @@ class CallbackUse
 {
     public function run(ClassMethod $classMethod, array $items)
     {
-        array_walk($classMethod->stmts, function (Node $stmt) use ($classMethod) {
-            return $stmt + $classMethod;
+        array_walk($classMethod->stmts, function (Node $node) use ($classMethod) {
+            return $node + $classMethod;
         });
 
         function someFunction($node)
