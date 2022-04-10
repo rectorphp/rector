@@ -1,4 +1,4 @@
-# 508 Rules Overview
+# 507 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (70)
 
-- [CodingStyle](#codingstyle) (35)
+- [CodingStyle](#codingstyle) (34)
 
 - [Compatibility](#compatibility) (1)
 
@@ -1895,25 +1895,6 @@ Convert enscaped {$string} to more readable sprintf
      {
 -        return "Unsupported format {$format}";
 +        return sprintf('Unsupported format %s', $format);
-     }
- }
-```
-
-<br>
-
-### FollowRequireByDirRector
-
-include/require should be followed by absolute path
-
-- class: [`Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector`](../rules/CodingStyle/Rector/Include_/FollowRequireByDirRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        require 'autoload.php';
-+        require __DIR__ . '/autoload.php';
      }
  }
 ```
