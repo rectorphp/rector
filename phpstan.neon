@@ -565,3 +565,8 @@ parameters:
 
         # false positive
         - '#Method Rector\\Php71\\Rector\\FuncCall\\RemoveExtraParametersRector\:\:resolveMaximumAllowedParameterCount\(\) should return int but returns int<0, max>\|false#'
+
+        # double protection on purpose to ensure the type
+        -
+            message: '#Call to static method Webmozart\\Assert\\Assert\:\:allString\(\) with array<string> will always evaluate to true#'
+            path: packages/Config/RectorConfig.php

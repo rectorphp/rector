@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
 final class RectorConfig extends ContainerConfigurator
 {
     /**
-     * @param mixed[] $paths
+     * @param string[] $paths
      */
     public function paths(array $paths): void
     {
@@ -24,5 +24,33 @@ final class RectorConfig extends ContainerConfigurator
 
         $parameters = $this->parameters();
         $parameters->set(Option::PATHS, $paths);
+    }
+
+    /**
+     * @param string[] $sets
+     */
+    public function sets(array $sets): void
+    {
+        Assert::allString($sets);
+
+        foreach ($sets as $set) {
+            Assert::fileExists($set);
+            $this->import($set);
+        }
+    }
+
+    public function parallel(): void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::PARALLEL, true);
+    }
+
+    /**
+     * @param array<int|string, mixed> $criteria
+     */
+    public function skip(array $criteria): void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::SKIP, $criteria);
     }
 }

@@ -19,20 +19,19 @@ use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    // include the latest PHP version + all bellow in one config!
-    $rectorConfig->import(LevelSetList::UP_TO_PHP_81);
-
-    // include sets
-    $rectorConfig->import(SetList::CODING_STYLE);
-    $rectorConfig->import(SetList::CODE_QUALITY);
-    $rectorConfig->import(SetList::DEAD_CODE);
-    $rectorConfig->import(SetList::PRIVATIZATION);
-    $rectorConfig->import(SetList::NAMING);
-    $rectorConfig->import(SetList::TYPE_DECLARATION);
-    $rectorConfig->import(SetList::EARLY_RETURN);
-    $rectorConfig->import(SetList::TYPE_DECLARATION_STRICT);
-    $rectorConfig->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
-    $rectorConfig->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
+    $rectorConfig->sets([
+        LevelSetList::UP_TO_PHP_81,
+        SetList::CODE_QUALITY,
+        SetList::DEAD_CODE,
+        SetList::PRIVATIZATION,
+        SetList::NAMING,
+        SetList::TYPE_DECLARATION,
+        SetList::EARLY_RETURN,
+        SetList::TYPE_DECLARATION_STRICT,
+        NetteSetList::NETTE_UTILS_CODE_QUALITY,
+        PHPUnitSetList::PHPUNIT_CODE_QUALITY,
+        SetList::CODING_STYLE,
+    ]);
 
     $services = $rectorConfig->services();
 
@@ -61,9 +60,10 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-    $parameters->set(Option::PARALLEL, true);
 
-    $parameters->set(Option::SKIP, [
+    $rectorConfig->parallel();
+
+    $rectorConfig->skip([
         StringClassNameToClassConstantRector::class,
 
         FinalizeClassesWithoutChildrenRector::class => [
