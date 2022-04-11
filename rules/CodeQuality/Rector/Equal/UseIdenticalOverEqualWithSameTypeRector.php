@@ -4,12 +4,14 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Equal;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,6 +20,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UseIdenticalOverEqualWithSameTypeRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     */
+    private $exprAnalyzer;
+    public function __construct(\Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer)
+    {
+        $this->exprAnalyzer = $exprAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use ===/!== over ==/!=, it values have the same type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -70,9 +81,19 @@ CODE_SAMPLE
         if (!$leftStaticType->equals($rightStaticType)) {
             return null;
         }
+        if ($this->areNonTypedFromParam($node->left, $node->right)) {
+            return null;
+        }
         if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Equal) {
             return new \PhpParser\Node\Expr\BinaryOp\Identical($node->left, $node->right);
         }
         return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($node->left, $node->right);
+    }
+    private function areNonTypedFromParam(\PhpParser\Node\Expr $left, \PhpParser\Node\Expr $right) : bool
+    {
+        if ($this->exprAnalyzer->isNonTypedFromParam($left)) {
+            return \true;
+        }
+        return $this->exprAnalyzer->isNonTypedFromParam($right);
     }
 }
