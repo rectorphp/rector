@@ -5,15 +5,12 @@ declare(strict_types=1);
 namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,6 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RestoreDefaultNullToNullableTypePropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function __construct(private readonly ConstructorAssignDetector $constructorAssignDetector)
+    {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -96,40 +97,14 @@ CODE_SAMPLE
 
         // is variable assigned in constructor
         $propertyName = $this->getName($property);
-
-        return $this->isPropertyInitiatedInConstuctor($property, $propertyName);
-    }
-
-    private function isPropertyInitiatedInConstuctor(Property $property, string $propertyName): bool
-    {
         $classLike = $this->betterNodeFinder->findParentType($property, Class_::class);
+
+        // a trait can be used in multiple context, we don't know whether it is assigned in __construct or not
+        // so it needs to has null default
         if (! $classLike instanceof Class_) {
             return false;
         }
 
-        $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
-        if (! $constructClassMethod instanceof ClassMethod) {
-            return false;
-        }
-
-        $isPropertyInitiated = false;
-        $this->traverseNodesWithCallable((array) $constructClassMethod->stmts, function (Node $node) use (
-            $propertyName,
-            &$isPropertyInitiated
-        ): ?int {
-            if (! $node instanceof Assign) {
-                return null;
-            }
-
-            if (! $this->nodeNameResolver->isLocalPropertyFetchNamed($node->var, $propertyName)) {
-                return null;
-            }
-
-            $isPropertyInitiated = true;
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
-
-        return $isPropertyInitiated;
+        return $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
     }
 }
