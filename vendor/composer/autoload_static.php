@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc89d1340da3f491de02a64145948ccaf
+class ComposerStaticInit064d84f5cbfe5c1a80ab647854581c5b
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3398,6 +3398,7 @@ class ComposerStaticInitc89d1340da3f491de02a64145948ccaf
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToMethodCallRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToNewRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToNewRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToStaticCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToStaticCallRector.php',
+        'Rector\\Transform\\Rector\\FunctionLike\\FileGetContentsAndJsonDecodeToStaticCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FunctionLike/FileGetContentsAndJsonDecodeToStaticCallRector.php',
         'Rector\\Transform\\Rector\\Isset_\\UnsetAndIssetToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Isset_/UnsetAndIssetToMethodCallRector.php',
         'Rector\\Transform\\Rector\\MethodCall\\CallableInMethodCallToVariableRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/MethodCall/CallableInMethodCallToVariableRector.php',
         'Rector\\Transform\\Rector\\MethodCall\\MethodCallToAnotherMethodCallWithArgumentsRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector.php',
@@ -3436,6 +3437,7 @@ class ComposerStaticInitc89d1340da3f491de02a64145948ccaf
         'Rector\\Transform\\ValueObject\\PropertyFetchToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/PropertyFetchToMethodCall.php',
         'Rector\\Transform\\ValueObject\\ReplaceParentCallByPropertyCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/ReplaceParentCallByPropertyCall.php',
         'Rector\\Transform\\ValueObject\\ServiceGetterToConstructorInjection' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/ServiceGetterToConstructorInjection.php',
+        'Rector\\Transform\\ValueObject\\StaticCallRecipe' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/StaticCallRecipe.php',
         'Rector\\Transform\\ValueObject\\StaticCallToFuncCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/StaticCallToFuncCall.php',
         'Rector\\Transform\\ValueObject\\StaticCallToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/StaticCallToMethodCall.php',
         'Rector\\Transform\\ValueObject\\StaticCallToNew' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/StaticCallToNew.php',
@@ -3859,9 +3861,9 @@ class ComposerStaticInitc89d1340da3f491de02a64145948ccaf
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc89d1340da3f491de02a64145948ccaf::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc89d1340da3f491de02a64145948ccaf::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc89d1340da3f491de02a64145948ccaf::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit064d84f5cbfe5c1a80ab647854581c5b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit064d84f5cbfe5c1a80ab647854581c5b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit064d84f5cbfe5c1a80ab647854581c5b::$classMap;
 
         }, null, ClassLoader::class);
     }
