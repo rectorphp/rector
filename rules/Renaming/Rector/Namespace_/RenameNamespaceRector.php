@@ -24,7 +24,7 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNamespaceRenamer;
 use Rector\Renaming\ValueObject\RenamedNamespace;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220410\Webmozart\Assert\Assert;
+use RectorPrefix20220411\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
  */
@@ -119,8 +119,8 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220410\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220410\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220411\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220411\Webmozart\Assert\Assert::allString($configuration);
         /** @var array<string, string> $configuration */
         $this->oldToNewNamespaces = $configuration;
     }

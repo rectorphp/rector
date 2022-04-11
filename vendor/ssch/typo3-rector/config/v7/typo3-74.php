@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220410;
+namespace RectorPrefix20220411;
 
 use Ssch\TYPO3Rector\Rector\v7\v4\InstantiatePageRendererExplicitlyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

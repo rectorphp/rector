@@ -10,7 +10,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
-use RectorPrefix20220410\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220411\Symfony\Contracts\Service\Attribute\Required;
 final class ArrayManipulator
 {
     /**

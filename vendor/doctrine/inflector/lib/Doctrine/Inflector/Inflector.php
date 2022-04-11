@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220410\Doctrine\Inflector;
+namespace RectorPrefix20220411\Doctrine\Inflector;
 
 use RuntimeException;
 use function chr;
@@ -25,7 +25,7 @@ class Inflector
     private $singularizer;
     /** @var WordInflector */
     private $pluralizer;
-    public function __construct(\RectorPrefix20220410\Doctrine\Inflector\WordInflector $singularizer, \RectorPrefix20220410\Doctrine\Inflector\WordInflector $pluralizer)
+    public function __construct(\RectorPrefix20220411\Doctrine\Inflector\WordInflector $singularizer, \RectorPrefix20220411\Doctrine\Inflector\WordInflector $pluralizer)
     {
         $this->singularizer = $singularizer;
         $this->pluralizer = $pluralizer;
@@ -168,7 +168,7 @@ class Inflector
         } else {
             $lowered = \strtolower($unaccented);
         }
-        $replacements = ['/\\W/' => ' ', '/([A-Z]+)([A-Z][a-z])/' => 'RectorPrefix20220410\\1_\\2', '/([a-z\\d])([A-Z])/' => 'RectorPrefix20220410\\1_\\2', '/[^A-Z^a-z^0-9^\\/]+/' => '-'];
+        $replacements = ['/\\W/' => ' ', '/([A-Z]+)([A-Z][a-z])/' => 'RectorPrefix20220411\\1_\\2', '/([a-z\\d])([A-Z])/' => 'RectorPrefix20220411\\1_\\2', '/[^A-Z^a-z^0-9^\\/]+/' => '-'];
         $urlized = $lowered;
         foreach ($replacements as $pattern => $replacement) {
             $replaced = \preg_replace($pattern, $replacement, $urlized);

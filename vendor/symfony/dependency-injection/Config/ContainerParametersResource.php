@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220410\Symfony\Component\DependencyInjection\Config;
+namespace RectorPrefix20220411\Symfony\Component\DependencyInjection\Config;
 
-use RectorPrefix20220410\Symfony\Component\Config\Resource\ResourceInterface;
+use RectorPrefix20220411\Symfony\Component\Config\Resource\ResourceInterface;
 /**
  * Tracks container parameters.
  *
@@ -18,7 +18,7 @@ use RectorPrefix20220410\Symfony\Component\Config\Resource\ResourceInterface;
  *
  * @final
  */
-class ContainerParametersResource implements \RectorPrefix20220410\Symfony\Component\Config\Resource\ResourceInterface
+class ContainerParametersResource implements \RectorPrefix20220411\Symfony\Component\Config\Resource\ResourceInterface
 {
     /**
      * @var mixed[]
