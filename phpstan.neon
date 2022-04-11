@@ -573,3 +573,5 @@ parameters:
 
         # foreaching all stmts
         - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\FunctionLike\\SimplifyUselessVariableRector\:\:refactor\(\)" is 1\d+, keep it under 10#'
+        - '#Method "processStmt\(\)" returns bool type, so the name should start with is/has/was#'
+        - '#Method "refactorReturnAndAssign\(\)" returns bool type, so the name should start with is/has/was#'
