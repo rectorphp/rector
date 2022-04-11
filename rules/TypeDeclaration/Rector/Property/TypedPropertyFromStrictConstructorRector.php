@@ -6,18 +6,15 @@ namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\NodeManipulator\PropertyManipulator;
-use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -31,8 +28,7 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector
         private readonly ConstructorPropertyTypeInferer $constructorPropertyTypeInferer,
         private readonly VarTagRemover $varTagRemover,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
-        private readonly PropertyFetchFinder $propertyFetchFinder,
-        private readonly PropertyManipulator $propertyManipulator
+        private readonly ConstructorAssignDetector $constructorAssignDetector
     ) {
     }
 
@@ -117,8 +113,9 @@ CODE_SAMPLE
         }
 
         $node->type = $propertyTypeNode;
+        $propertyName = $this->nodeNameResolver->getName($node);
 
-        if ($this->isDefaultToBeNull($node, $classLike)) {
+        if ($this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName)) {
             $node->props[0]->default = null;
         }
 
@@ -130,28 +127,5 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
-    }
-
-    private function isDefaultToBeNull(Property $property, Class_ $class): bool
-    {
-        $propertyName = $this->nodeNameResolver->getName($property);
-        $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($class, $propertyName);
-
-        foreach ($propertyFetches as $propertyFetch) {
-            $classMethod = $this->betterNodeFinder->findParentType($propertyFetch, ClassMethod::class);
-            if (! $classMethod instanceof ClassMethod) {
-                continue;
-            }
-
-            if (! $this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
-                continue;
-            }
-
-            if (! $this->propertyManipulator->isInlineStmtWithConstructMethod($propertyFetch, $classMethod)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
