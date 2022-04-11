@@ -12,7 +12,6 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\NeverType;
-use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
@@ -101,8 +100,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $keyType = $returnExprType->getKeyType();
-        if ($this->shouldSkipKeyType($keyType)) {
+        if ($this->shouldSkip($returnExprType)) {
             return null;
         }
 
@@ -134,8 +132,10 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkipKeyType(Type $keyType): bool
+    private function shouldSkip(ConstantArrayType $constantArrayType): bool
     {
+        $keyType = $constantArrayType->getKeyType();
+
         // empty array
         if ($keyType instanceof NeverType) {
             return true;
@@ -159,6 +159,11 @@ CODE_SAMPLE
             if (StringUtils::isMatch($value, self::SKIPPED_CHAR_REGEX)) {
                 return true;
             }
+        }
+
+        $itemType = $constantArrayType->getItemType();
+        if ($itemType instanceof ConstantArrayType) {
+            return $this->shouldSkip($itemType);
         }
 
         return false;
