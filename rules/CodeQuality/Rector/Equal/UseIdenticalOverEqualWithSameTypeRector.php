@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Equal;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,6 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UseIdenticalOverEqualWithSameTypeRector extends AbstractRector
 {
+    public function __construct(private readonly ExprAnalyzer $exprAnalyzer)
+    {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -86,10 +92,23 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->areNonTypedFromParam($node->left, $node->right)) {
+            return null;
+        }
+
         if ($node instanceof Equal) {
             return new Identical($node->left, $node->right);
         }
 
         return new NotIdentical($node->left, $node->right);
+    }
+
+    private function areNonTypedFromParam(Expr $left, Expr $right): bool
+    {
+        if ($this->exprAnalyzer->isNonTypedFromParam($left)) {
+            return true;
+        }
+
+        return $this->exprAnalyzer->isNonTypedFromParam($right);
     }
 }
