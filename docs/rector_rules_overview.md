@@ -1,4 +1,4 @@
-# 507 Rules Overview
+# 508 Rules Overview
 
 <br>
 
@@ -88,7 +88,7 @@
 
 - [Transform](#transform) (35)
 
-- [TypeDeclaration](#typedeclaration) (23)
+- [TypeDeclaration](#typedeclaration) (24)
 
 - [Visibility](#visibility) (3)
 
@@ -11866,6 +11866,25 @@ Complete property type based on getter strict types
      {
          return $this->name;
      }
+ }
+```
+
+<br>
+
+### VarAnnotationIncorrectNullableRector
+
+Add or remove null type from `@var` phpdoc typehint based on php property type declaration
+
+- class: [`Rector\TypeDeclaration\Rector\Property\VarAnnotationIncorrectNullableRector`](../rules/TypeDeclaration/Rector/Property/VarAnnotationIncorrectNullableRector.php)
+
+```diff
+ final class SomeClass
+ {
+     /**
+-     * @var DateTime[]
++     * @var DateTime[]|null
+      */
+     private ?array $dateTimes;
  }
 ```
 

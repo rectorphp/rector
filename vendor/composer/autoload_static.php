@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit156ea5388f1439fc65a15f12dc64c7cb
+class ComposerStaticInitaa8ed53f16a77f2106a0a22262db4438
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3450,7 +3450,9 @@ class ComposerStaticInit156ea5388f1439fc65a15f12dc64c7cb
         'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ReturnTypeInfererInterface.php',
         'Rector\\TypeDeclaration\\Exception\\ConflictingPriorityException' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Exception/ConflictingPriorityException.php',
         'Rector\\TypeDeclaration\\FunctionLikeReturnTypeResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/FunctionLikeReturnTypeResolver.php',
+        'Rector\\TypeDeclaration\\Guard\\PhpDocNestedAnnotationGuard' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Guard/PhpDocNestedAnnotationGuard.php',
         'Rector\\TypeDeclaration\\Guard\\PropertyTypeOverrideGuard' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Guard/PropertyTypeOverrideGuard.php',
+        'Rector\\TypeDeclaration\\Helper\\PhpDocNullableTypeHelper' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Helper/PhpDocNullableTypeHelper.php',
         'Rector\\TypeDeclaration\\Matcher\\PropertyAssignMatcher' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Matcher/PropertyAssignMatcher.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\AutowiredClassMethodOrPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/AutowiredClassMethodOrPropertyAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\CallTypesResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/CallTypesResolver.php',
@@ -3491,6 +3493,7 @@ class ComposerStaticInit156ea5388f1439fc65a15f12dc64c7cb
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromAssignsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromAssignsRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictConstructorRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictGetterMethodReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php',
+        'Rector\\TypeDeclaration\\Rector\\Property\\VarAnnotationIncorrectNullableRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/VarAnnotationIncorrectNullableRector.php',
         'Rector\\TypeDeclaration\\Sorter\\PriorityAwareSorter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Sorter/PriorityAwareSorter.php',
         'Rector\\TypeDeclaration\\TypeAlreadyAddedChecker\\ReturnTypeAlreadyAddedChecker' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAlreadyAddedChecker/ReturnTypeAlreadyAddedChecker.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AdvancedArrayAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AdvancedArrayAnalyzer.php',
@@ -3856,9 +3859,9 @@ class ComposerStaticInit156ea5388f1439fc65a15f12dc64c7cb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit156ea5388f1439fc65a15f12dc64c7cb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit156ea5388f1439fc65a15f12dc64c7cb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit156ea5388f1439fc65a15f12dc64c7cb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitaa8ed53f16a77f2106a0a22262db4438::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitaa8ed53f16a77f2106a0a22262db4438::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitaa8ed53f16a77f2106a0a22262db4438::$classMap;
 
         }, null, ClassLoader::class);
     }
