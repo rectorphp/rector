@@ -19,7 +19,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -41,6 +40,7 @@ use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Symplify\PackageBuilder\Php\TypeChecker;
 
 /**
@@ -82,7 +82,8 @@ final class PropertyManipulator
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
         private readonly NodeTypeResolver $nodeTypeResolver,
-        private readonly PromotedPropertyResolver $promotedPropertyResolver
+        private readonly PromotedPropertyResolver $promotedPropertyResolver,
+        private readonly ConstructorAssignDetector $constructorAssignDetector
     ) {
     }
 
@@ -167,8 +168,10 @@ final class PropertyManipulator
             }
 
             // skip for constructor? it is allowed to set value in constructor method
+            $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch);
             $classMethod = $this->betterNodeFinder->findParentType($propertyFetch, ClassMethod::class);
-            if ($this->isInlineStmtWithConstructMethod($propertyFetch, $classMethod)) {
+
+            if ($this->isPropertyAssignedOnlyInConstructor($classLike, $propertyName, $classMethod)) {
                 continue;
             }
 
@@ -226,25 +229,21 @@ final class PropertyManipulator
         return null;
     }
 
-    public function isInlineStmtWithConstructMethod(
-        PropertyFetch|StaticPropertyFetch $propertyFetch,
+    private function isPropertyAssignedOnlyInConstructor(
+        ClassLike $classLike,
+        string $propertyName,
         ?ClassMethod $classMethod
     ): bool {
         if (! $classMethod instanceof ClassMethod) {
             return false;
         }
 
+        // there is property unset in Test class, so only check on __construct
         if (! $this->nodeNameResolver->isName($classMethod->name, MethodName::CONSTRUCT)) {
             return false;
         }
 
-        $currentStmt = $propertyFetch->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (! $currentStmt instanceof Stmt) {
-            return false;
-        }
-
-        $parent = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
-        return $parent === $classMethod;
+        return $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
     }
 
     private function isChangeableContext(PropertyFetch | StaticPropertyFetch $propertyFetch): bool
