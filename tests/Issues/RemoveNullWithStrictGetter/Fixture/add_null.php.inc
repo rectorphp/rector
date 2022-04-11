@@ -1,6 +1,8 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
+declare(strict_types=1);
+
+namespace Rector\Core\Tests\Issues\RemoveNullWithStrictGetter\Fixture;
 
 final class AddNull
 {
@@ -21,7 +23,9 @@ final class AddNull
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
+declare(strict_types=1);
+
+namespace Rector\Core\Tests\Issues\RemoveNullWithStrictGetter\Fixture;
 
 final class AddNull
 {
