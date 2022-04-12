@@ -12,7 +12,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(SetList::PHP_71);
     $rectorConfig->import(LevelSetList::UP_TO_PHP_70);
 
-    // parameter must be defined after import, to override impored param version
+    // parameter must be defined after import, to override imported param version
     $parameters = $rectorConfig->parameters();
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_71);
 };
