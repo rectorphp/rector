@@ -28,6 +28,7 @@ use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache;
 use Rector\Caching\CacheFactory;
+use Rector\Config\RectorConfig;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
@@ -36,7 +37,6 @@ use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use RectorPrefix20220412\Symfony\Component\Console\Application;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function RectorPrefix20220412\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use RectorPrefix20220412\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix20220412\Symplify\PackageBuilder\Console\Command\CommandNaming;
@@ -50,8 +50,8 @@ use RectorPrefix20220412\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix20220412\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use RectorPrefix20220412\Symplify\SmartFileSystem\Json\JsonFileSystem;
 use RectorPrefix20220412\Symplify\SmartFileSystem\SmartFileSystem;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $services = $rectorConfig->services();
     $services->defaults()->public()->autowire()->autoconfigure();
     $services->load('Rector\\Core\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/Console/Style/RectorConsoleOutputStyle.php', __DIR__ . '/../src/Exception', __DIR__ . '/../src/DependencyInjection/CompilerPass', __DIR__ . '/../src/DependencyInjection/Loader', __DIR__ . '/../src/Kernel', __DIR__ . '/../src/ValueObject', __DIR__ . '/../src/Bootstrap', __DIR__ . '/../src/Enum', __DIR__ . '/../src/PhpParser/Node/CustomNode', __DIR__ . '/../src/PhpParser/ValueObject', __DIR__ . '/../src/functions', __DIR__ . '/../src/constants.php']);
     $services->alias(\RectorPrefix20220412\Symfony\Component\Console\Application::class, \Rector\Core\Console\ConsoleApplication::class);

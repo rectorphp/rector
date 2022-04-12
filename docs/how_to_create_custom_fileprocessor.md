@@ -62,14 +62,12 @@ final class BoldStatementFileProcessor implements FileProcessorInterface
 Now register your FileProcessor in your configuration (actually in the container):
 
 ```php
-<?php
-// rector.php
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use MyVendor\MyPackage\FileProcessor\BoldStatementFileProcessor;
+use Rector\Config\RectorConfig
 
-return static function (ContainerConfigurator $containerConfigurator): void {
+return static function (RectorConfig $rectorConfig): void {
     // [...]
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
     $services->set(BoldStatementFileProcessor::class);
 };
 ```
@@ -107,8 +105,8 @@ use Rector\Core\ValueObject\Application\File;
 final class BoldStatementMakeAmericaGreatAgainRector implements BoldStatementRectorInterface
 {
     /**
-    * @var string
-    */
+     * @var string
+     */
     private const OLD_STATEMENT = 'Make america great again';
 
     public function transform(string $content): string
@@ -185,18 +183,16 @@ Notice the annotation BoldStatementRectorInterface[]. This is important to injec
 Yes, we said active. So last but not least we must register our new rule in the container, so it is applied:
 
 ```php
-<?php
-// rector.php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use MyVendor\MyPackage\FileProcessor\BoldStatementFileProcessor;
 use MyVendor\MyPackage\FileProcessor\Rector\BoldStatementMakeAmericaGreatAgainRector;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
+return static function (RectorConfig $rectorConfig): void {
     // [...]
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
     $services->set(BoldStatementFileProcessor::class);
-    $services->set(BoldStatementMakeAmericaGreatAgainRector::class);
+
+    $rectorConfig->rule(BoldStatementMakeAmericaGreatAgainRector::class);
 };
 ```
 

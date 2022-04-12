@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220412;
 
+use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector;
@@ -16,11 +17,10 @@ use Rector\DowngradePhp71\Rector\List_\DowngradeKeysInListRector;
 use Rector\DowngradePhp71\Rector\StaticCall\DowngradeClosureFromCallableRector;
 use Rector\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector;
 use Rector\DowngradePhp71\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $parameters = $containerConfigurator->parameters();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $parameters = $rectorConfig->parameters();
     $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_70);
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
     $services->set(\Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector::class);

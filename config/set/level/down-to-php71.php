@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace RectorPrefix20220412;
 
+use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\Set\ValueObject\DowngradeSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $containerConfigurator->import(\Rector\Set\ValueObject\DowngradeLevelSetList::DOWN_TO_PHP_72);
-    $containerConfigurator->import(\Rector\Set\ValueObject\DowngradeSetList::PHP_72);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->import(\Rector\Set\ValueObject\DowngradeLevelSetList::DOWN_TO_PHP_72);
+    $rectorConfig->import(\Rector\Set\ValueObject\DowngradeSetList::PHP_72);
 };

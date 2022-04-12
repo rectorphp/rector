@@ -5,10 +5,10 @@ namespace RectorPrefix20220412;
 
 use RectorPrefix20220412\OndraM\CiDetector\CiDetector;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
+use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\Option;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $parameters = $containerConfigurator->parameters();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $parameters = $rectorConfig->parameters();
     // paths and extensions
     $parameters->set(\Rector\Core\Configuration\Option::PATHS, []);
     $parameters->set(\Rector\Core\Configuration\Option::FILE_EXTENSIONS, ['php']);

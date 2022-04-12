@@ -66,23 +66,18 @@ E.g. in this case, first the `@expectedException` annotation will be changed to 
  then the `setExpectedException` method will be changed to `expectedException`.
 
 ```php
-<?php
-// rector.php
+use Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Config\RectorConfig
+use Rector\Renaming\ValueObject\MethodCallRename;
 
-declare(strict_types=1);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->rule(ExceptionAnnotationRector::class);
 
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-    $services->set(Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector::class);
-    $services->set(Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-             PHPUnit\Framework\TestClass::class => [
-                'setExpectedException' => 'expectedException',
-                'setExpectedExceptionRegExp' => 'expectedException',
-            ],
-        ]);
+    $rectorConfig->ruleWithConfiguration(Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
+        new MethodCallRename('PHPUnit\Framework\TestClass', 'setExpectedException', 'expectedException'),
+        new MethodCallRename('PHPUnit\Framework\TestClass', 'setExpectedExceptionRegExp', 'expectedException'),
+    ]);
 };
 ```
 

@@ -9,19 +9,16 @@ vendor/bin/rector init
 This will create a `rector.php` if it doesn't already exist in your root directory with some sensitive defaults to start with.
 
 ```php
-// rector.php
-use Rector\Core\Configuration\Option;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Set\ValueObject\SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
+return static function (RectorConfig $rectorConfig): void {
     // here we can define, what sets of rules will be applied
-    $containerConfigurator->import(SetList::CODE_QUALITY);
+    $rectorConfig->sets([SetList::CODE_QUALITY]);
 
     // register single rule
-    $services = $containerConfigurator->services();
-    $services->set(TypedPropertyRector::class);
+    $rectorConfig->rule(TypedPropertyRector::class);
 };
 ```
 
@@ -36,20 +33,20 @@ The rector.php file for TYPO3 contains useful framework specific defaults to sta
 
 ```php
 use Ssch\TYPO3Rector\Set\Typo3SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Rector\PostRector\Rector\NameImportingPostRector;
 use Rector\Core\Configuration\Option;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(Typo3SetList::TYPO3_76);
-    $containerConfigurator->import(Typo3SetList::TYPO3_87);
-    $containerConfigurator->import(Typo3SetList::TYPO3_95);
-    $containerConfigurator->import(Typo3SetList::TYPO3_104);
-    $containerConfigurator->import(Typo3SetList::TYPO3_11);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([
+        Typo3SetList::TYPO3_76,
+        Typo3SetList::TYPO3_87,
+        Typo3SetList::TYPO3_95,
+        Typo3SetList::TYPO3_104,
+        Typo3SetList::TYPO3_11,
+    ]);
 
-    // get parameters
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::SKIP, [
+    $rectorConfig->skip([
         NameImportingPostRector::class => [
             'ClassAliasMap.php',
             'ext_localconf.php',

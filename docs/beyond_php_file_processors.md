@@ -17,60 +17,48 @@ Let´s say you want to define a custom configuration where you want to update th
 All you have to do is using the ChangePackageVersionComposerRector:
 
 ```php
-// rector.php
-
 use Rector\Composer\Rector\ChangePackageVersionComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-    $services->set(ChangePackageVersionComposerRector::class)
-        ->configure([
-            new PackageAndVersion('symfony/yaml', '^5.0'),
-        ]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ChangePackageVersionComposerRector::class, [
+        new PackageAndVersion('symfony/yaml', '^5.0'),
+    ]);
 };
 ```
 
 There are some more rules related to manipulate your composer.json files. Let´s see them in action:
 
 ```php
-// rector.php
-
 use Rector\Composer\Rector\AddPackageToRequireComposerRector;
 use Rector\Composer\Rector\AddPackageToRequireDevComposerRector;
 use Rector\Composer\Rector\RemovePackageComposerRector;
 use Rector\Composer\Rector\ReplacePackageAndVersionComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Composer\ValueObject\ReplacePackageAndVersion;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
+return static function (RectorConfig $rectorConfig): void {
     // Add a package to the require section of your composer.json
-    $services->set(AddPackageToRequireComposerRector::class)
-        ->configure([
-            new PackageAndVersion('symfony/yaml', '^5.0'),
-        ]);
+    $rectorConfig->ruleWithConfiguration(AddPackageToRequireComposerRector::class, [
+        new PackageAndVersion('symfony/yaml', '^5.0'),
+    ]);
 
     // Add a package to the require dev section of your composer.json
-    $services->set(AddPackageToRequireDevComposerRector::class)
-        ->configure([
-            new PackageAndVersion('phpunit/phpunit', '^9.0'),
-        ]);
+    $rectorConfig->ruleWithConfiguration(AddPackageToRequireDevComposerRector::class, [
+        new PackageAndVersion('phpunit/phpunit', '^9.0'),
+    ]);
 
     // Remove a package from composer.json
-    $services->set(RemovePackageComposerRector::class)
-        ->configure([
-            'symfony/console'
-        ]);
+    $rectorConfig->ruleWithConfiguration(RemovePackageComposerRector::class, [
+        'symfony/console'
+    ]);
 
-        // Replace a package in the composer.json
-    $services->set(ReplacePackageAndVersionComposerRector::class)
-        ->configure([
-            new ReplacePackageAndVersion('vendor1/package2', 'vendor2/package1', '^3.0'),
-        ]);
+    // Replace a package in the composer.json
+    $rectorConfig->ruleWithConfiguration(ReplacePackageAndVersionComposerRector::class, [
+        new ReplacePackageAndVersion('vendor1/package2', 'vendor2/package1', '^3.0'),
+    ]);
 };
 ```
 

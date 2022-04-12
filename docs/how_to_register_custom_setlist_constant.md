@@ -20,37 +20,27 @@ Now, you can register your custom `SetList`'s constant via import from `$contain
 
 
 ```php
-<?php
-// rector.php
-declare(strict_types=1);
-
 use Rector\Core\Configuration\Option;
 use App\Set\ValueObject\SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(SetList::MY_FRAMEWORK_20);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([SetList::MY_FRAMEWORK_20]);
 
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PATHS, [__DIR__ . '/src']);
+    $rectorConfig->paths([__DIR__ . '/src']);
 };
 ```
 
 Note that if you are looking for the downgrade categories, there is already the `DowngradeSetList`:
 
 ```php
-<?php
-// rector.php
-declare(strict_types=1);
-
 use Rector\Core\Configuration\Option;
 use Rector\Set\ValueObject\DowngradeSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(DowngradeSetList::PHP_70)
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([DowngradeSetList::PHP_70])
 
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PATHS, [__DIR__ . '/src']);
+    $rectorConfig->paths([__DIR__ . '/src']);
 };
 ```
