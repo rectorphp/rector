@@ -7,7 +7,7 @@ Contributions here are more than welcomed! You can contribute to [rector-src](ht
 1. Fork the [rector/rector-src](https://github.com/rectorphp/rector-src) repository and clone it
 
 ```bash
-git clone git@github.com:rectorphp/rector-src.git
+git clone git@github.com:<your-name>/rector-src.git
 cd rector-src
 ```
 
