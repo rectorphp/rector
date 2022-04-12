@@ -6,7 +6,7 @@ namespace Rector\TypeDeclaration\Guard;
 
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
-use PhpParser\Node\Stmt\Property;
+use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -28,14 +28,14 @@ final class PhpDocNestedAnnotationGuard
      * Check if rector accidentally skipped annotation during parsing which it should not have (this bug is likely related to parsing of annotations
      * in phpstan / rector)
      */
-    public function isPhpDocCommentCorrectlyParsed(Property $property): bool
+    public function isPhpDocCommentCorrectlyParsed(Node $node): bool
     {
-        $comments = $property->getAttribute(AttributeKey::COMMENTS, []);
+        $comments = $node->getAttribute(AttributeKey::COMMENTS, []);
         if ((is_countable($comments) ? count($comments) : 0) !== 1) {
             return true;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         /** @var Doc $phpDoc */
         $phpDoc = $comments[0];
