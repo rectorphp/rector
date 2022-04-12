@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Assign;
 
-use RectorPrefix20220411\Nette\Utils\Strings;
+use RectorPrefix20220412\Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -124,11 +124,11 @@ CODE_SAMPLE
         // normalize content
         // starts with "/*", instead of "/**"
         if (\strncmp($docContent, '/* ', \strlen('/* ')) === 0) {
-            $docContent = \RectorPrefix20220411\Nette\Utils\Strings::replace($docContent, self::SINGLE_ASTERISK_COMMENT_START_REGEX, '/** ');
+            $docContent = \RectorPrefix20220412\Nette\Utils\Strings::replace($docContent, self::SINGLE_ASTERISK_COMMENT_START_REGEX, '/** ');
         }
         // $value is first, instead of type is first
         if (\Rector\Core\Util\StringUtils::isMatch($docContent, self::VAR_ANNOTATION_REGEX)) {
-            $docContent = \RectorPrefix20220411\Nette\Utils\Strings::replace($docContent, self::VARIABLE_NAME_AND_TYPE_MATCH_REGEX, '$3$2$1');
+            $docContent = \RectorPrefix20220412\Nette\Utils\Strings::replace($docContent, self::VARIABLE_NAME_AND_TYPE_MATCH_REGEX, '$3$2$1');
         }
         return new \PhpParser\Comment\Doc($docContent);
     }

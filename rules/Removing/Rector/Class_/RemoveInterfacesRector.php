@@ -9,7 +9,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220411\Webmozart\Assert\Assert;
+use RectorPrefix20220412\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Removing\Rector\Class_\RemoveInterfacesRector\RemoveInterfacesRectorTest
  */
@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220411\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220412\Webmozart\Assert\Assert::allString($configuration);
         /** @var string[] $configuration */
         $this->interfacesToRemove = $configuration;
     }

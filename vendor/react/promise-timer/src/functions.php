@@ -1,12 +1,12 @@
 <?php
 
-namespace RectorPrefix20220411\React\Promise\Timer;
+namespace RectorPrefix20220412\React\Promise\Timer;
 
-use RectorPrefix20220411\React\EventLoop\Loop;
-use RectorPrefix20220411\React\EventLoop\LoopInterface;
-use RectorPrefix20220411\React\Promise\CancellablePromiseInterface;
-use RectorPrefix20220411\React\Promise\Promise;
-use RectorPrefix20220411\React\Promise\PromiseInterface;
+use RectorPrefix20220412\React\EventLoop\Loop;
+use RectorPrefix20220412\React\EventLoop\LoopInterface;
+use RectorPrefix20220412\React\Promise\CancellablePromiseInterface;
+use RectorPrefix20220412\React\Promise\Promise;
+use RectorPrefix20220412\React\Promise\PromiseInterface;
 /**
  * Cancel operations that take *too long*.
  *
@@ -138,12 +138,12 @@ use RectorPrefix20220411\React\Promise\PromiseInterface;
  * @param ?LoopInterface $loop
  * @return PromiseInterface<mixed, TimeoutException|\Exception|mixed>
  */
-function timeout(\RectorPrefix20220411\React\Promise\PromiseInterface $promise, $time, \RectorPrefix20220411\React\EventLoop\LoopInterface $loop = null)
+function timeout(\RectorPrefix20220412\React\Promise\PromiseInterface $promise, $time, \RectorPrefix20220412\React\EventLoop\LoopInterface $loop = null)
 {
     // cancelling this promise will only try to cancel the input promise,
     // thus leaving responsibility to the input promise.
     $canceller = null;
-    if ($promise instanceof \RectorPrefix20220411\React\Promise\CancellablePromiseInterface || !\interface_exists('RectorPrefix20220411\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
+    if ($promise instanceof \RectorPrefix20220412\React\Promise\CancellablePromiseInterface || !\interface_exists('RectorPrefix20220412\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
         // pass promise by reference to clean reference after cancellation handler
         // has been invoked once in order to avoid garbage references in call stack.
         $canceller = function () use(&$promise) {
@@ -152,9 +152,9 @@ function timeout(\RectorPrefix20220411\React\Promise\PromiseInterface $promise, 
         };
     }
     if ($loop === null) {
-        $loop = \RectorPrefix20220411\React\EventLoop\Loop::get();
+        $loop = \RectorPrefix20220412\React\EventLoop\Loop::get();
     }
-    return new \RectorPrefix20220411\React\Promise\Promise(function ($resolve, $reject) use($loop, $time, $promise) {
+    return new \RectorPrefix20220412\React\Promise\Promise(function ($resolve, $reject) use($loop, $time, $promise) {
         $timer = null;
         $promise = $promise->then(function ($v) use(&$timer, $loop, $resolve) {
             if ($timer) {
@@ -175,10 +175,10 @@ function timeout(\RectorPrefix20220411\React\Promise\PromiseInterface $promise, 
         }
         // start timeout timer which will cancel the input promise
         $timer = $loop->addTimer($time, function () use($time, &$promise, $reject) {
-            $reject(new \RectorPrefix20220411\React\Promise\Timer\TimeoutException($time, 'Timed out after ' . $time . ' seconds'));
+            $reject(new \RectorPrefix20220412\React\Promise\Timer\TimeoutException($time, 'Timed out after ' . $time . ' seconds'));
             // try to invoke cancellation handler of input promise and then clean
             // reference in order to avoid garbage references in call stack.
-            if ($promise instanceof \RectorPrefix20220411\React\Promise\CancellablePromiseInterface || !\interface_exists('RectorPrefix20220411\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
+            if ($promise instanceof \RectorPrefix20220412\React\Promise\CancellablePromiseInterface || !\interface_exists('RectorPrefix20220412\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
                 $promise->cancel();
             }
             $promise = null;
@@ -219,13 +219,13 @@ function timeout(\RectorPrefix20220411\React\Promise\PromiseInterface $promise, 
  * @param ?LoopInterface $loop
  * @return PromiseInterface<void, \RuntimeException>
  */
-function sleep($time, \RectorPrefix20220411\React\EventLoop\LoopInterface $loop = null)
+function sleep($time, \RectorPrefix20220412\React\EventLoop\LoopInterface $loop = null)
 {
     if ($loop === null) {
-        $loop = \RectorPrefix20220411\React\EventLoop\Loop::get();
+        $loop = \RectorPrefix20220412\React\EventLoop\Loop::get();
     }
     $timer = null;
-    return new \RectorPrefix20220411\React\Promise\Promise(function ($resolve) use($loop, $time, &$timer) {
+    return new \RectorPrefix20220412\React\Promise\Promise(function ($resolve) use($loop, $time, &$timer) {
         // resolve the promise when the timer fires in $time seconds
         $timer = $loop->addTimer($time, function () use($resolve) {
             $resolve();
@@ -274,7 +274,7 @@ function sleep($time, \RectorPrefix20220411\React\EventLoop\LoopInterface $loop 
  * @deprecated 1.8.0 See `sleep()` instead
  * @see sleep()
  */
-function resolve($time, \RectorPrefix20220411\React\EventLoop\LoopInterface $loop = null)
+function resolve($time, \RectorPrefix20220412\React\EventLoop\LoopInterface $loop = null)
 {
     return \sleep($time, $loop)->then(function () use($time) {
         return $time;
@@ -316,9 +316,9 @@ function resolve($time, \RectorPrefix20220411\React\EventLoop\LoopInterface $loo
  * @deprecated 1.8.0 See `sleep()` instead
  * @see sleep()
  */
-function reject($time, \RectorPrefix20220411\React\EventLoop\LoopInterface $loop = null)
+function reject($time, \RectorPrefix20220412\React\EventLoop\LoopInterface $loop = null)
 {
     return \sleep($time, $loop)->then(function () use($time) {
-        throw new \RectorPrefix20220411\React\Promise\Timer\TimeoutException($time, 'Timer expired after ' . $time . ' seconds');
+        throw new \RectorPrefix20220412\React\Promise\Timer\TimeoutException($time, 'Timer expired after ' . $time . ' seconds');
     });
 }

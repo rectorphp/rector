@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Guard;
 
-use RectorPrefix20220411\Nette\Utils\Strings;
+use RectorPrefix20220412\Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
-use PhpParser\Node\Stmt\Property;
+use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PhpDocNestedAnnotationGuard
@@ -30,13 +30,13 @@ final class PhpDocNestedAnnotationGuard
      * Check if rector accidentally skipped annotation during parsing which it should not have (this bug is likely related to parsing of annotations
      * in phpstan / rector)
      */
-    public function isPhpDocCommentCorrectlyParsed(\PhpParser\Node\Stmt\Property $property) : bool
+    public function isPhpDocCommentCorrectlyParsed(\PhpParser\Node $node) : bool
     {
-        $comments = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, []);
+        $comments = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, []);
         if ((\is_array($comments) || $comments instanceof \Countable ? \count($comments) : 0) !== 1) {
             return \true;
         }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         /** @var Doc $phpDoc */
         $phpDoc = $comments[0];
         $originalPhpDocText = $phpDoc->getText();
@@ -48,8 +48,8 @@ final class PhpDocNestedAnnotationGuard
     }
     public function hasAnnotationCountChanged(string $originalPhpDocText, string $updatedPhpDocText) : bool
     {
-        $originalAnnotationCount = \count(\RectorPrefix20220411\Nette\Utils\Strings::matchAll($originalPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
-        $reconstructedAnnotationCount = \count(\RectorPrefix20220411\Nette\Utils\Strings::matchAll($updatedPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
+        $originalAnnotationCount = \count(\RectorPrefix20220412\Nette\Utils\Strings::matchAll($originalPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
+        $reconstructedAnnotationCount = \count(\RectorPrefix20220412\Nette\Utils\Strings::matchAll($updatedPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
         return $originalAnnotationCount !== $reconstructedAnnotationCount;
     }
 }

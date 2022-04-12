@@ -1,4 +1,4 @@
-# 508 Rules Overview
+# 510 Rules Overview
 
 <br>
 
@@ -86,9 +86,9 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (35)
+- [Transform](#transform) (36)
 
-- [TypeDeclaration](#typedeclaration) (24)
+- [TypeDeclaration](#typedeclaration) (25)
 
 - [Visibility](#visibility) (3)
 
@@ -10195,6 +10195,43 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+### FileGetContentsAndJsonDecodeToStaticCallRector
+
+Merge 2 function calls to static call
+
+:wrench: **configure it!**
+
+- class: [`Rector\Transform\Rector\FunctionLike\FileGetContentsAndJsonDecodeToStaticCallRector`](../rules/Transform/Rector/FunctionLike/FileGetContentsAndJsonDecodeToStaticCallRector.php)
+
+```php
+use Rector\Transform\Rector\FunctionLike\FileGetContentsAndJsonDecodeToStaticCallRector;
+use Rector\Transform\ValueObject\StaticCallRecipe;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(FileGetContentsAndJsonDecodeToStaticCallRector::class)
+        ->configure([new StaticCallRecipe('FileLoader', 'loadJson')]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function load($filePath)
+     {
+-        $fileGetContents = file_get_contents($filePath);
+-        return json_decode($fileGetContents, true);
++        return FileLoader::loadJson($filePath);
+     }
+ }
+```
+
+<br>
+
 ### FuncCallToConstFetchRector
 
 Changes use of function calls to use constants
@@ -11696,6 +11733,28 @@ Add `@var` to properties that are missing it
      public function run()
      {
          $this->value = 123;
+     }
+ }
+```
+
+<br>
+
+### ReturnAnnotationIncorrectNullableRector
+
+Add or remove null type from `@return` phpdoc typehint based on php return type declaration
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnAnnotationIncorrectNullableRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnAnnotationIncorrectNullableRector.php)
+
+```diff
+ final class SomeClass
+ {
+     /**
+-     * @return \DateTime[]
++     * @return \DateTime[]|null
+      */
+     public function getDateTimes(): ?array
+     {
+         return $this->dateTimes;
      }
  }
 ```

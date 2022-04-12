@@ -7,7 +7,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220411\Webmozart\Assert\Assert;
+use RectorPrefix20220412\Webmozart\Assert\Assert;
 /**
  * @api
  * Same as Symfony container configurator, with patched return type for "set()" method for easier DX.
@@ -20,7 +20,7 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function paths(array $paths) : void
     {
-        \RectorPrefix20220411\Webmozart\Assert\Assert::allString($paths);
+        \RectorPrefix20220412\Webmozart\Assert\Assert::allString($paths);
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::PATHS, $paths);
     }
@@ -29,9 +29,9 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function sets(array $sets) : void
     {
-        \RectorPrefix20220411\Webmozart\Assert\Assert::allString($sets);
+        \RectorPrefix20220412\Webmozart\Assert\Assert::allString($sets);
         foreach ($sets as $set) {
-            \RectorPrefix20220411\Webmozart\Assert\Assert::fileExists($set);
+            \RectorPrefix20220412\Webmozart\Assert\Assert::fileExists($set);
             $this->import($set);
         }
     }
@@ -59,7 +59,7 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function phpstanConfig(string $filePath) : void
     {
-        \RectorPrefix20220411\Webmozart\Assert\Assert::fileExists($filePath);
+        \RectorPrefix20220412\Webmozart\Assert\Assert::fileExists($filePath);
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH, $filePath);
     }
@@ -69,8 +69,8 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function ruleWithConfiguration(string $rectorClass, array $configuration) : void
     {
-        \RectorPrefix20220411\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
-        \RectorPrefix20220411\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class);
+        \RectorPrefix20220412\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
+        \RectorPrefix20220412\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class);
         $services = $this->services();
         $services->set($rectorClass)->configure($configuration);
     }
