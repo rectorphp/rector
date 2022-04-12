@@ -8,7 +8,7 @@ Rector instantly upgrades and refactors the PHP code of your application.  It ca
 
 ### 1. Instant Upgrades
 
-Rector now supports upgrades from PHP 5.3 to 8.0 and major open-source projects like [Symfony](https://github.com/rectorphp/rector-symfony), [PHPUnit](https://github.com/rectorphp/rector-phpunit), [Nette](https://github.com/rectorphp/rector-nette), [Laravel](https://github.com/rectorphp/rector-laravel), [CakePHP](https://github.com/rectorphp/rector-cakephp), [Doctrine](https://github.com/rectorphp/rector-doctrine), [PHPOffice](https://github.com/rectorphp/rector-phpoffice) and [TYPO3](https://github.com/sabbelasichon/typo3-rector) out of the box. Do you want to **be constantly on the latest PHP/framework version without effort**?
+Rector now supports upgrades from PHP 5.3 to 8.1 and major open-source projects like [Symfony](https://github.com/rectorphp/rector-symfony), [PHPUnit](https://github.com/rectorphp/rector-phpunit), [Nette](https://github.com/rectorphp/rector-nette), [Laravel](https://github.com/rectorphp/rector-laravel), [CakePHP](https://github.com/rectorphp/rector-cakephp), [Doctrine](https://github.com/rectorphp/rector-doctrine) and [TYPO3](https://github.com/sabbelasichon/typo3-rector) out of the box. Do you want to **be constantly on the latest PHP and Framework without effort**?
 
 Use Rector to handle **instant upgrades** for you.
 
@@ -34,21 +34,22 @@ By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring
 
 ## Documentation
 
-- [Explore 450+ Rector Rules](/docs/rector_rules_overview.md)
-- [Auto Import Names](/docs/auto_import_names.md)
+- [Explore 500+ Rector Rules](/docs/rector_rules_overview.md)
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [Static Reflection and Autoload](/docs/static_reflection_and_autoload.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
-- [Beyond PHP - Entering the realm of FileProcessors](/docs/beyond_php_file_processors.md)
+- [Auto Import Names](/docs/auto_import_names.md)
 
 ### For Rule Developers and Contributors
 
+- [How to add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
 - [How Does Rector Work?](/docs/how_it_works.md)
 - [PHP Parser Nodes](https://github.com/rectorphp/php-parser-nodes-docs/)
 - [How to Work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
 - [How to Generate New Rector Rule](/docs/create_own_rule.md)
-- [How to add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
-- [How to create a custom FileProcessor](/docs/how_to_create_custom_fileprocessor.md)
+
+See [the full documentation](/docs).
+
 <br>
 
 ## Install

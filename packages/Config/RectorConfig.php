@@ -88,4 +88,15 @@ final class RectorConfig extends ContainerConfigurator
         $services->set($rectorClass)
             ->configure($configuration);
     }
+
+    /**
+     * @param class-string<RectorInterface> $rectorClass
+     */
+    public function rule(string $rectorClass): void
+    {
+        Assert::isAOf($rectorClass, RectorInterface::class);
+
+        $services = $this->services();
+        $services->set($rectorClass);
+    }
 }
