@@ -74,4 +74,13 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
         $services = $this->services();
         $services->set($rectorClass)->configure($configuration);
     }
+    /**
+     * @param class-string<RectorInterface> $rectorClass
+     */
+    public function rule(string $rectorClass) : void
+    {
+        \RectorPrefix20220412\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
+        $services = $this->services();
+        $services->set($rectorClass);
+    }
 }

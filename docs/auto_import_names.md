@@ -16,7 +16,7 @@ Rector works with all class names as fully qualified by default, so it knows the
 To import FQN like these, configure `rector.php` with:
 
 ```php
-$parameters->set(Option::AUTO_IMPORT_NAMES, true);
+$rectorConfig->autoImportNames();
 ```
 
 <br>
@@ -37,8 +37,9 @@ $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
 
 <br>
 
-If you have set Option::AUTO_IMPORT_NAMES to true, rector is applying this to every analyzed file, even if no real change by a rector was applied to the file.
-The reason is that a so-called post rector is responsible for this, namely the NameImportingPostRector.
+If you have set `Option::AUTO_IMPORT_NAMES` to `true`, rector is applying this to every analyzed file, even if no real change by a rector was applied to the file.
+
+The reason is that a so-called post-rector is responsible for this, namely the `NameImportingPostRector`.
 If you like to apply the Option::AUTO_IMPORT_NAMES only for real changed files, you can configure this.
 
 ```php
@@ -65,3 +66,7 @@ Run it:
 ```bash
 vendor/bin/ecs check src --fix
 ```
+
+<br>
+
+Happy coding!

@@ -9,37 +9,11 @@ When using Rector to update your own code, you will typically be using release r
 - Install dependencies by executing `composer install`
 - Tests your installation by executing `composer fix-cs` and `composer phpstan`
 - Create a new branch for your test
-- Add your test as described below.  Note that the rector binary is located at `bin/rector` instead of the typical `vendor/bin/rector`
-- Push the branch and create a new pull request to https://github.com/rectorphp/rector-src
+- Add your test as described below. Note that the rector binary is located at `bin/rector` instead of the typical `vendor/bin/rector`
+- Push the branch
+- Create a new pull request to https://github.com/rectorphp/rector-src
 
-Alternatively, the above may be performed on the CLI
-
-```bash
-# Authenticate
-gh auth login
-
-# Fork and clone the repository
-gh repo fork https://github.com/rectorphp/rector-src
-
-# Install dependencies
-cd rector-src
-composer install
-
-# Test installation
-composer fix-cs
-composer phpstan
-
-# Create and checkout a branch
-git checkout -b your_branch_name
-
-# Create test as described below
-
-# Push the branch
-git push -u origin your_branch_name
-
-# create new pull request to https://github.com/rectorphp/rector-src
-gh pr create --title "Your title text" --body "Your body text"
-```
+<br>
 
 ## 2. Detect the Rector Rule
 
@@ -56,6 +30,8 @@ See "Applied rules" under the diff:
 Our rule in this example is: `Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector`
 
 This rule's job is to add `final` to every class that has no children and is not a Doctrine entity = everywhere it can without breaking our code.
+
+<br>
 
 ## 3. Detect the Minimal File
 
@@ -79,6 +55,8 @@ bin/rector process app/SomeFile.php
 
 Do we have the same diff? Great!
 
+<br>
+
 ## 4. Find the Rector Test Case
 
 Now we need to find the test case. The test case name is rule + `Test` suffix.
@@ -89,13 +67,11 @@ Now we need to find the test case. The test case name is rule + `Test` suffix.
 
 `FinalizeClassesWithoutChildrenRectorTest` (test class)
 
-↓
-
-`FinalizeClassesWithoutChildrenRectorTest.php` (test file)
-
 Right here:
 
 ![Rule Test Case](/docs/images/docs_rule_test_case.png)
+
+<br>
 
 ## 5. Add Change or No-Change Test Fixture File
 
@@ -105,9 +81,11 @@ Do you see *test fixture file* first time? It's a file with real-life PHP code t
 
 In the `/Fixture` directory, we create our test fixture file, e.g., `add_final.php.inc`. The `.php.inc` is there on purpose, so the file is hidden from coding standard tools and static analysis.
 
-There are 2 fixture formats.
+<br>
 
-### 1. The Code Should Change
+There are 2 fixture formats:
+
+### A. The Code Should Change
 
 ```bash
 <code before>
@@ -115,7 +93,7 @@ There are 2 fixture formats.
 <code after>
 ```
 
-### 2. The Code Should Be Skipped
+### B. The Code Should Be Skipped
 
 ```bash
 <code before>
@@ -164,3 +142,7 @@ vendor/bin/phpunit rules-tests/Privatization/Rector/Class_/FinalizeClassesWithou
 ```
 
 If PHPUnit fails, you've successfully added a test case! :)
+
+<br>
+
+Thank you
