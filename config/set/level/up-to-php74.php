@@ -11,7 +11,7 @@ use Rector\Set\ValueObject\SetList;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->import(\Rector\Set\ValueObject\SetList::PHP_74);
     $rectorConfig->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_73);
-    // parameter must be defined after import, to override impored param version
+    // parameter must be defined after import, to override imported param version
     $parameters = $rectorConfig->parameters();
     $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_74);
 };

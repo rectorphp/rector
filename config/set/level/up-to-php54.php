@@ -10,7 +10,7 @@ use Rector\Set\ValueObject\SetList;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->import(\Rector\Set\ValueObject\SetList::PHP_54);
     $rectorConfig->import(\Rector\Set\ValueObject\SetList::PHP_53);
-    // parameter must be defined after import, to override impored param version
+    // parameter must be defined after import, to override imported param version
     $parameters = $rectorConfig->parameters();
     $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_54);
 };
