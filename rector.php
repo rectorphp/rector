@@ -55,7 +55,7 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/scoper.php',
     ]);
 
-    $rectorConfig->autoImportNames();
+    $rectorConfig->importNames();
     $rectorConfig->parallel();
 
     $rectorConfig->skip([

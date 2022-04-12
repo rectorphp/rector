@@ -3,18 +3,14 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\DowngradePhp81\Rector\Property\DowngradeReadonlyPropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $parameters = $rectorConfig->parameters();
+    $rectorConfig->parallel();
 
-    $parameters->set(Option::PARALLEL, true);
-    $parameters->set(Option::PATHS, [
+    $rectorConfig->paths([
         __DIR__.'/../../src/',
     ]);
 
-    $services = $rectorConfig->services();
-    $services->set(DowngradeReadonlyPropertyRector::class);
+    $rectorConfig->rule(DowngradeReadonlyPropertyRector::class);
 };
-

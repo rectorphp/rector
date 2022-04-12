@@ -11,8 +11,9 @@ return static function (RectorConfig $rectorConfig): void {
     $services = $rectorConfig->services();
     $services->set(TernaryToNullCoalescingRector::class);
 
+    $rectorConfig->disableParallel();
+
     $parameters = $rectorConfig->parameters();
-    $parameters->set(Option::PARALLEL, false);
 
     // to invalidate cache and change file everytime
     $parameters->set(Option::CACHE_CLASS, MemoryCacheStorage::class);

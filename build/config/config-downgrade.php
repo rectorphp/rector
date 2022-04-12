@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
 
@@ -16,11 +15,11 @@ require_once  __DIR__ . '/../../stubs/Composer/Plugin/PluginInterface.php';
 require_once  __DIR__ . '/../../stubs/Nette/DI/CompilerExtension.php';
 
 return static function (RectorConfig $rectorConfig): void {
-    $parameters = $rectorConfig->parameters();
+    $rectorConfig->disableParallel();
 
-    $parameters->set(Option::PARALLEL, false);
-    $parameters->set(Option::SKIP, DowngradeRectorConfig::DEPENDENCY_EXCLUDE_PATHS);
-    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-downgrade.neon');
+    $rectorConfig->skip(DowngradeRectorConfig::DEPENDENCY_EXCLUDE_PATHS);
+
+    $rectorConfig->phpstanConfig(__DIR__ . '/phpstan-for-downgrade.neon');
 
     $rectorConfig->import(DowngradeLevelSetList::DOWN_TO_PHP_72);
 };

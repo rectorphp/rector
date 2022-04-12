@@ -7,6 +7,7 @@ namespace Rector\Config;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\ValueObject\PhpVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Webmozart\Assert\Assert;
 
@@ -41,6 +42,12 @@ final class RectorConfig extends ContainerConfigurator
         }
     }
 
+    public function disableParallel(): void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::PARALLEL, false);
+    }
+
     public function parallel(): void
     {
         $parameters = $this->parameters();
@@ -56,10 +63,16 @@ final class RectorConfig extends ContainerConfigurator
         $parameters->set(Option::SKIP, $criteria);
     }
 
-    public function autoImportNames(): void
+    public function importNames(): void
     {
         $parameters = $this->parameters();
         $parameters->set(Option::AUTO_IMPORT_NAMES, true);
+    }
+
+    public function disableImportNames(): void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::AUTO_IMPORT_NAMES, false);
     }
 
     /**
@@ -98,5 +111,36 @@ final class RectorConfig extends ContainerConfigurator
 
         $services = $this->services();
         $services->set($rectorClass);
+    }
+
+    /**
+     * @param PhpVersion::* $phpVersion
+     */
+    public function phpVersion(int $phpVersion): void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::PHP_VERSION_FEATURES, $phpVersion);
+    }
+
+    /**
+     * @param string[] $autoloadPaths
+     */
+    public function autoloadPaths(array $autoloadPaths): void
+    {
+        Assert::allString($autoloadPaths);
+
+        $parameters = $this->parameters();
+        $parameters->set(Option::AUTOLOAD_PATHS, $autoloadPaths);
+    }
+
+    /**
+     * @param string[] $bootstrapFiles
+     */
+    public function bootstrapFiles(array $bootstrapFiles): void
+    {
+        Assert::allString($bootstrapFiles);
+
+        $parameters = $this->parameters();
+        $parameters->set(Option::BOOTSTRAP_FILES, $bootstrapFiles);
     }
 }

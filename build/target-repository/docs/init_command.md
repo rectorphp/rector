@@ -34,7 +34,6 @@ The rector.php file for TYPO3 contains useful framework specific defaults to sta
 ```php
 use Ssch\TYPO3Rector\Set\Typo3SetList;
 use Rector\PostRector\Rector\NameImportingPostRector;
-use Rector\Core\Configuration\Option;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {

@@ -10,7 +10,7 @@ use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\SecondNamespace\SomeServiceClass;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->autoImportNames();
+    $rectorConfig->importNames();
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         OldClass::class => NewClass::class,

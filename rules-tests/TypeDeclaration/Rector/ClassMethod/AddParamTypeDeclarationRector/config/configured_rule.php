@@ -6,7 +6,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector\Contract\ParentInterfaceWithChangeTypeInterface;
 use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector\Contract\ParentTypeToMixed;
@@ -36,6 +35,5 @@ return static function (RectorConfig $rectorConfig): void {
             new AddParamTypeDeclaration(ParentTypeToMixed::class, 'process', 0, new MixedType(true)),
         ]);
 
-    $parameters = $rectorConfig->parameters();
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersionFeature::MIXED_TYPE);
+    $rectorConfig->phpVersion(PhpVersionFeature::MIXED_TYPE);
 };

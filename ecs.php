@@ -37,9 +37,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
 
-    // make ECS 16x faster
-    $parameters->set(Option::PARALLEL, true);
-
     $parameters->set(Option::PATHS, [
         __DIR__ . '/bin',
         __DIR__ . '/src',

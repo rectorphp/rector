@@ -20,7 +20,6 @@ Now, you can register your custom `SetList`'s constant via import from `$contain
 
 
 ```php
-use Rector\Core\Configuration\Option;
 use App\Set\ValueObject\SetList;
 use Rector\Config\RectorConfig;
 
@@ -34,7 +33,6 @@ return static function (RectorConfig $rectorConfig): void {
 Note that if you are looking for the downgrade categories, there is already the `DowngradeSetList`:
 
 ```php
-use Rector\Core\Configuration\Option;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Rector\Config\RectorConfig;
 
