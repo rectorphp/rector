@@ -222,19 +222,19 @@ CODE_SAMPLE
         }
         return $property;
     }
-    private function refactorAttribute(\PhpParser\Node\Expr $targetEntity, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
+    private function refactorAttribute(\PhpParser\Node\Expr $expr, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
     {
         $phpDocVarTagValueNode = $phpDocInfo->getVarTagValueNode();
         $phpDocCollectionVarTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
         if ($phpDocVarTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode && !$phpDocCollectionVarTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
             return null;
         }
-        $targetEntityClassName = $this->targetEntityResolver->resolveFromExpr($targetEntity);
+        $targetEntityClassName = $this->targetEntityResolver->resolveFromExpr($expr);
         if ($targetEntityClassName === null) {
             return null;
         }
-        $collectionObjectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($targetEntityClassName);
-        $newVarType = $this->collectionTypeFactory->createType($collectionObjectType);
+        $fullyQualifiedObjectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($targetEntityClassName);
+        $newVarType = $this->collectionTypeFactory->createType($fullyQualifiedObjectType);
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newVarType);
         return $property;
     }

@@ -53,9 +53,9 @@ final class ToManyRelationPropertyTypeResolver
     public function resolve(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $toManyRelationTagValueNode = $phpDocInfo->getByAnnotationClasses(self::TO_MANY_ANNOTATION_CLASSES);
-        if ($toManyRelationTagValueNode !== null) {
-            return $this->processToManyRelation($property, $toManyRelationTagValueNode);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(self::TO_MANY_ANNOTATION_CLASSES);
+        if ($doctrineAnnotationTagValueNode !== null) {
+            return $this->processToManyRelation($property, $doctrineAnnotationTagValueNode);
         }
         $targetEntity = $this->attributeFinder->findAttributeByClassesArgByName($property, self::TO_MANY_ANNOTATION_CLASSES, 'targetEntity');
         if (!$targetEntity instanceof \PhpParser\Node\Expr) {
@@ -86,7 +86,7 @@ final class ToManyRelationPropertyTypeResolver
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType(self::COLLECTION_TYPE);
         }
         $entityFullyQualifiedClass = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
-        $relatedEntityType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($entityFullyQualifiedClass);
-        return new \PHPStan\Type\Generic\GenericObjectType(self::COLLECTION_TYPE, [$relatedEntityType]);
+        $fullyQualifiedObjectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($entityFullyQualifiedClass);
+        return new \PHPStan\Type\Generic\GenericObjectType(self::COLLECTION_TYPE, [$fullyQualifiedObjectType]);
     }
 }

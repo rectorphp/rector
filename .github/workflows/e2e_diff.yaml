@@ -1,7 +1,7 @@
 # This workflow runs system tests: Use the Rector application from the source
 # checkout to process "fixture" projects in tests/system-tests
 # to see if those can be processed successfully
-name: End to End tests
+name: End to End tests that expect diff
 
 on:
     pull_request: null
@@ -10,20 +10,16 @@ on:
             - main
 
 jobs:
-    end_to_end:
+    end_to_end_with_diff:
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
             matrix:
                 php_version: ['7.2', '7.3', '7.4', '8.0', '8.1']
                 directory:
-                    - 'e2e/define-constant'
-                    - 'e2e/dont-execute-code'
-                    - 'e2e/finalize'
-                    - 'e2e/parse-php7-code'
-                    - 'e2e/parse-php8-code'
+                    - 'e2e/attributes'
 
-        name: End to end test - ${{ matrix.directory }}
+        name: End to end test with diff - ${{ matrix.directory }}
 
         steps:
             -   uses: actions/checkout@v2
@@ -38,5 +34,5 @@ jobs:
                 working-directory: ${{ matrix.directory }}
 
             -
-                run: ../../bin/rector process --dry-run --ansi
+                run: ../../bin/rector --ansi
                 working-directory: ${{ matrix.directory }}

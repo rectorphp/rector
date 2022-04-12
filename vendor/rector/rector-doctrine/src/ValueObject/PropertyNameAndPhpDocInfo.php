@@ -15,11 +15,11 @@ final class PropertyNameAndPhpDocInfo
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
      */
-    private $phpDocInfos;
-    public function __construct(string $propertyName, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfos)
+    private $phpDocInfo;
+    public function __construct(string $propertyName, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo)
     {
         $this->propertyName = $propertyName;
-        $this->phpDocInfos = $phpDocInfos;
+        $this->phpDocInfo = $phpDocInfo;
     }
     public function getPropertyName() : string
     {
@@ -27,6 +27,6 @@ final class PropertyNameAndPhpDocInfo
     }
     public function getPhpDocInfo() : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
-        return $this->phpDocInfos;
+        return $this->phpDocInfo;
     }
 }

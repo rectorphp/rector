@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220412;
 
+use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Doctrine\Rector\Class_\MoveRepositoryFromParentToConstructorRector;
 use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
@@ -13,15 +14,15 @@ use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
+use Rector\Transform\ValueObject\MethodCallToPropertyFetch;
 use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 /**
  * @see https://tomasvotruba.com/blog/2017/10/16/how-to-use-repository-with-doctrine-as-service-in-symfony/
  * @see https://tomasvotruba.com/blog/2018/04/02/rectify-turn-repositories-to-services-in-symfony/
  * @see https://getrector.org/blog/2021/02/08/how-to-instantly-decouple-symfony-doctrine-repository-inheritance-to-clean-composition
  */
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $services = $rectorConfig->services();
     # order matters, this needs to be first to correctly detect parent repository
     // covers "extends EntityRepository"
     $services->set(\Rector\Doctrine\Rector\Class_\MoveRepositoryFromParentToConstructorRector::class);

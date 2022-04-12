@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220412;
 
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $containerConfigurator->import(__DIR__ . '/doctrine-annotations-to-attributes.php');
+use Rector\Config\RectorConfig;
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->import(__DIR__ . '/doctrine-annotations-to-attributes.php');
 };

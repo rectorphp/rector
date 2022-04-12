@@ -13,9 +13,9 @@ final class CollectionTypeFactory
 {
     public function createType(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : \PHPStan\Type\UnionType
     {
-        $genericType = $this->createGenericObjectType($fullyQualifiedObjectType);
+        $genericObjectType = $this->createGenericObjectType($fullyQualifiedObjectType);
         $arrayType = new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), $fullyQualifiedObjectType);
-        return new \PHPStan\Type\UnionType([$genericType, $arrayType]);
+        return new \PHPStan\Type\UnionType([$genericObjectType, $arrayType]);
     }
     private function createGenericObjectType(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : \PHPStan\Type\Generic\GenericObjectType
     {

@@ -101,12 +101,12 @@ final class IssetDimFetchCleaner
             }
         }
     }
-    private function isArrayDimFetchOnVariable(\PhpParser\Node\Expr $var, \PhpParser\Node\Expr\Variable $desiredVariable) : bool
+    private function isArrayDimFetchOnVariable(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\Variable $desiredVariable) : bool
     {
-        if (!$var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if (!$expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return \false;
         }
-        return $this->nodeComparator->areNodesEqual($desiredVariable, $var->var);
+        return $this->nodeComparator->areNodesEqual($desiredVariable, $expr->var);
     }
     /**
      * @return mixed|mixed[]|string|null

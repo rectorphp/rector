@@ -176,9 +176,9 @@ CODE_SAMPLE
     }
     private function dumpEntityTranslation(\PhpParser\Node\Stmt\Class_ $class, \Rector\Doctrine\ValueObject\PropertyNamesAndPhpDocInfos $propertyNamesAndPhpDocInfos) : void
     {
-        $fileInfo = $this->file->getSmartFileInfo();
+        $smartFileInfo = $this->file->getSmartFileInfo();
         $classShortName = $class->name . 'Translation';
-        $filePath = \dirname($fileInfo->getRealPath()) . \DIRECTORY_SEPARATOR . $classShortName . '.php';
+        $filePath = \dirname($smartFileInfo->getRealPath()) . \DIRECTORY_SEPARATOR . $classShortName . '.php';
         $namespace = $class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$namespace instanceof \PhpParser\Node\Stmt\Namespace_) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();

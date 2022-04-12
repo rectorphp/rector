@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace RectorPrefix20220412;
 
+use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $services = $rectorConfig->services();
     $services->set(\Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector::class);
     $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([
         // https://github.com/sebastianbergmann/phpunit/issues/4087

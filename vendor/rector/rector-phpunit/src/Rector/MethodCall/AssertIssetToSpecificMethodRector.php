@@ -111,16 +111,16 @@ final class AssertIssetToSpecificMethodRector extends \Rector\Core\Rector\Abstra
             // object not found, skip
             return $resolved instanceof \PHPStan\Type\ObjectWithoutClassType;
         }
-        $reflection = $resolved->getClassReflection();
-        if (!$reflection instanceof \PHPStan\Reflection\ClassReflection) {
+        $classReflection = $resolved->getClassReflection();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
-        if ($reflection->hasMethod('__isset')) {
+        if ($classReflection->hasMethod('__isset')) {
             return \true;
         }
         // reflection->getParents() got empty array when
         // extends class not found by PHPStan
-        $className = $reflection->getName();
+        $className = $classReflection->getName();
         $class = $this->astResolver->resolveClassFromName($className);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;

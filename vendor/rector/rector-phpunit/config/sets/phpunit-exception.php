@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace RectorPrefix20220412;
 
+use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector;
 use Rector\PHPUnit\Rector\MethodCall\DelegateExceptionArgumentsRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $services = $rectorConfig->services();
     # handles 2nd and 3rd argument of setExpectedException
     $services->set(\Rector\PHPUnit\Rector\MethodCall\DelegateExceptionArgumentsRector::class);
     $services->set(\Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector::class);

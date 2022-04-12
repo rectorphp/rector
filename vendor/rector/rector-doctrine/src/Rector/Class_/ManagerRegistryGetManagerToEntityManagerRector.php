@@ -174,11 +174,11 @@ CODE_SAMPLE
      */
     private function replaceEntityRegistryVariableWithEntityManagerProperty(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        $this->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $class) : ?PropertyFetch {
-            if (!$class instanceof \PhpParser\Node\Expr\Variable) {
+        $this->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $node) : ?PropertyFetch {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
                 return null;
             }
-            if (!$this->isObjectType($class, new \PHPStan\Type\ObjectType('Doctrine\\Common\\Persistence\\ObjectManager'))) {
+            if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Doctrine\\Common\\Persistence\\ObjectManager'))) {
                 return null;
             }
             return new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), self::ENTITY_MANAGER);

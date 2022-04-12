@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220412;
 
+use Rector\Config\RectorConfig;
 use Rector\Doctrine\Rector\Class_\InitializeDefaultEntityCollectionRector;
 use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
 use Rector\Doctrine\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
@@ -22,9 +23,8 @@ use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
 use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
 use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $services = $rectorConfig->services();
     $services->set(\Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector::class);
     $services->set(\Rector\Doctrine\Rector\Class_\InitializeDefaultEntityCollectionRector::class);
     $services->set(\Rector\Doctrine\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector::class);

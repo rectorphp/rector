@@ -5,6 +5,7 @@ namespace RectorPrefix20220412;
 
 use PHPStan\Type\MixedType;
 use PHPStan\Type\VoidType;
+use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\MethodName;
 use Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
@@ -14,10 +15,9 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $containerConfigurator->import(__DIR__ . '/phpunit-exception.php');
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->import(__DIR__ . '/phpunit-exception.php');
+    $services = $rectorConfig->services();
     $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector::class)->configure([
         // https://github.com/rectorphp/rector/issues/1024 - no type, $dataName
         new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('PHPUnit\\Framework\\TestCase', \Rector\Core\ValueObject\MethodName::CONSTRUCT, 2, new \PHPStan\Type\MixedType()),

@@ -48,14 +48,14 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         /** @var MethodCall|StaticCall|null $matchedNode */
-        $matchedNode = $this->foreachManipulator->matchOnlyStmt($node, function (\PhpParser\Node $node, \PhpParser\Node\Stmt\Foreach_ $foreachNode) : ?Node {
+        $matchedNode = $this->foreachManipulator->matchOnlyStmt($node, function (\PhpParser\Node $node, \PhpParser\Node\Stmt\Foreach_ $foreach) : ?Node {
             if (!$node instanceof \PhpParser\Node\Expr\MethodCall && !$node instanceof \PhpParser\Node\Expr\StaticCall) {
                 return null;
             }
             if (!$this->isName($node->name, 'assertInstanceOf')) {
                 return null;
             }
-            if (!$this->nodeComparator->areNodesEqual($foreachNode->valueVar, $node->args[1]->value)) {
+            if (!$this->nodeComparator->areNodesEqual($foreach->valueVar, $node->args[1]->value)) {
                 return null;
             }
             return $node;
