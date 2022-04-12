@@ -12,7 +12,7 @@
         "symfony\/string": "^6.0"
     },
     "require-dev": {
-        "rector\/rector-src": "dev-main#988850a",
+        "rector\/rector-src": "dev-main",
         "phpunit\/phpunit": "^9.5",
         "symplify\/phpstan-extensions": "^10.0",
         "symplify\/phpstan-rules": "^10.0",

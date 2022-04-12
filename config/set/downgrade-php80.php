@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20220412;
 
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp80\Rector\ArrayDimFetch\DowngradeDereferenceableOperationRector;
 use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
@@ -37,8 +36,7 @@ use Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $parameters = $rectorConfig->parameters();
-    $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_74);
+    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_74);
     $services = $rectorConfig->services();
     $services->set(\Rector\Removing\Rector\Class_\RemoveInterfacesRector::class)->configure([
         // @see https://wiki.php.net/rfc/stringable

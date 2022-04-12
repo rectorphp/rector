@@ -6,6 +6,7 @@ namespace Rector\Config;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\ValueObject\PhpVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix20220412\Webmozart\Assert\Assert;
 /**
@@ -35,6 +36,11 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
             $this->import($set);
         }
     }
+    public function disableParallel() : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::PARALLEL, \false);
+    }
     public function parallel() : void
     {
         $parameters = $this->parameters();
@@ -48,10 +54,15 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::SKIP, $criteria);
     }
-    public function autoImportNames() : void
+    public function importNames() : void
     {
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \true);
+    }
+    public function disableImportNames() : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \false);
     }
     /**
      * Set PHPStan custom config to load extensions and custom configuration to Rector.
@@ -82,5 +93,31 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
         \RectorPrefix20220412\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
         $services = $this->services();
         $services->set($rectorClass);
+    }
+    /**
+     * @param PhpVersion::* $phpVersion
+     */
+    public function phpVersion(int $phpVersion) : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, $phpVersion);
+    }
+    /**
+     * @param string[] $autoloadPaths
+     */
+    public function autoloadPaths(array $autoloadPaths) : void
+    {
+        \RectorPrefix20220412\Webmozart\Assert\Assert::allString($autoloadPaths);
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::AUTOLOAD_PATHS, $autoloadPaths);
+    }
+    /**
+     * @param string[] $bootstrapFiles
+     */
+    public function bootstrapFiles(array $bootstrapFiles) : void
+    {
+        \RectorPrefix20220412\Webmozart\Assert\Assert::allString($bootstrapFiles);
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES, $bootstrapFiles);
     }
 }

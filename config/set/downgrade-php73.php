@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20220412;
 
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp73\Rector\ConstFetch\DowngradePhp73JsonConstRector;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector;
@@ -14,8 +13,7 @@ use Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector
 use Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector;
 use Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $parameters = $rectorConfig->parameters();
-    $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_72);
+    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_72);
     $services = $rectorConfig->services();
     $services->set(\Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector::class);
     $services->set(\Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector::class);

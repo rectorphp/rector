@@ -10,14 +10,11 @@ Do you want to know more about it? Continue here:
 - [Zero Config Analysis with Static Reflection](https://phpstan.org/blog/zero-config-analysis-with-static-reflection) - from PHPStan
 
 ```php
-use Rector\Core\Configuration\Option;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $parameters = $rectorConfig->parameters();
-
     // Rector is using static reflection to load code without running it - see https://phpstan.org/blog/zero-config-analysis-with-static-reflection
-    $parameters->set(Option::AUTOLOAD_PATHS, [
+    $rectorConfig->autoloadPaths([
         // discover specific file
         __DIR__ . '/file-with-functions.php',
         // or full directory
@@ -27,17 +24,13 @@ return static function (RectorConfig $rectorConfig): void {
 
 ## Include Files
 
-Do you need to include constants, class aliases or custom autoloader? Use `BOOTSTRAP_FILES` parameter:
+Do you need to include constants, class aliases or custom autoloader? Use bootstrap files:
 
 ```php
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (RectorConfig $rectorConfig): void {
-    $parameters = $rectorConfig->parameters();
-
-    $parameters->set(Option::BOOTSTRAP_FILES, [
+    $rectorConfig->bootstrapFiles([
         __DIR__ . '/constants.php',
         __DIR__ . '/project/special/autoload.php',
     ]);
@@ -65,8 +58,10 @@ before run the rector.
 If the false positive still happen, you can skip the rule applied as last resort to do:
 
 ```php
-    $parameters->set(Option::SKIP, [
-        \Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector::class => [
+use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
+
+    $rectorConfig->skip([
+        FinalizeClassesWithoutChildrenRector::class => [
             // classes that has children, and not detected even with composer dump-autoload -o
             __DIR__ . '/src/HasChildClass.php',
         ],
@@ -78,10 +73,10 @@ Sometimes you may encounter this error ([see here for an example](https://github
 
 In this case you may want to try one of the following solutions:
 
-### Register to `Option::AUTOLOAD_PATHS`:
+### Register
 
 ```php
-    $parameters->set(Option::AUTOLOAD_PATHS, [
+    $rectorConfig->autoloadPaths([
         // the path to the exact class file
         __DIR__ . '/vendor/acme/my-custom-dependency/src/Your/Own/Namespace/TheAffectedClass.php',
         // or you can specify a wider scope

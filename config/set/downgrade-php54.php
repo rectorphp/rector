@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20220412;
 
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector;
 use Rector\DowngradePhp54\Rector\Closure\DowngradeStaticClosureRector;
@@ -14,8 +13,7 @@ use Rector\DowngradePhp54\Rector\FunctionLike\DowngradeCallableTypeDeclarationRe
 use Rector\DowngradePhp54\Rector\LNumber\DowngradeBinaryNotationRector;
 use Rector\DowngradePhp54\Rector\MethodCall\DowngradeInstanceMethodCallRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $parameters = $rectorConfig->parameters();
-    $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_53);
+    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_53);
     $services = $rectorConfig->services();
     $services->set(\Rector\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector::class);
     $services->set(\Rector\DowngradePhp54\Rector\Closure\DowngradeStaticClosureRector::class);

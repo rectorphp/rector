@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -67,7 +68,12 @@ final class FormDataRector extends \Rector\Core\Rector\AbstractRector implements
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(\Rector\Nette\NodeFinder\FormVariableFinder $formVariableFinder, \Rector\Nette\NodeFinder\FormFieldsFinder $formFieldsFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder $formOnSuccessCallbackFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder $formOnSuccessCallbackValuesParamFinder, \Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
+    /**
+     * @readonly
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+    public function __construct(\Rector\Nette\NodeFinder\FormVariableFinder $formVariableFinder, \Rector\Nette\NodeFinder\FormFieldsFinder $formFieldsFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder $formOnSuccessCallbackFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder $formOnSuccessCallbackValuesParamFinder, \Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->formVariableFinder = $formVariableFinder;
         $this->formFieldsFinder = $formFieldsFinder;
@@ -75,6 +81,7 @@ final class FormDataRector extends \Rector\Core\Rector\AbstractRector implements
         $this->formOnSuccessCallbackValuesParamFinder = $formOnSuccessCallbackValuesParamFinder;
         $this->classWithPublicPropertiesFactory = $classWithPublicPropertiesFactory;
         $this->nodePrinter = $nodePrinter;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

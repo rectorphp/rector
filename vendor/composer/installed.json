@@ -2415,12 +2415,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "8e037b5b5c9ef83304eeace33823d5e717bd8e94"
+                "reference": "e01d41e5caa10ff5057d3b922c95ba4f15d41657"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/8e037b5b5c9ef83304eeace33823d5e717bd8e94",
-                "reference": "8e037b5b5c9ef83304eeace33823d5e717bd8e94",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/e01d41e5caa10ff5057d3b922c95ba4f15d41657",
+                "reference": "e01d41e5caa10ff5057d3b922c95ba4f15d41657",
                 "shasum": ""
             },
             "require": {
@@ -2444,7 +2444,7 @@
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.4.7",
-                "rector\/rector-src": "dev-main#988850a",
+                "rector\/rector-src": "dev-main",
                 "symplify\/easy-coding-standard": "^10.0",
                 "symplify\/monorepo-builder": "^10.0",
                 "symplify\/phpstan-extensions": "^10.0",
@@ -2452,7 +2452,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-04-09T21:14:33+00:00",
+            "time": "2022-04-12T13:19:17+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

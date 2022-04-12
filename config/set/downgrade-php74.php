@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20220412;
 
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
 use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
@@ -19,8 +18,7 @@ use Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector;
 use Rector\DowngradePhp74\Rector\MethodCall\DowngradeReflectionGetTypeRector;
 use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $parameters = $rectorConfig->parameters();
-    $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_73);
+    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_73);
     $services = $rectorConfig->services();
     $services->set(\Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector::class);
     $services->set(\Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector::class);

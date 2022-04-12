@@ -8,25 +8,23 @@ use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\Option;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $parameters = $rectorConfig->parameters();
     // paths and extensions
-    $parameters->set(\Rector\Core\Configuration\Option::PATHS, []);
+    $rectorConfig->paths([]);
+    $parameters = $rectorConfig->parameters();
     $parameters->set(\Rector\Core\Configuration\Option::FILE_EXTENSIONS, ['php']);
-    $parameters->set(\Rector\Core\Configuration\Option::AUTOLOAD_PATHS, []);
+    $rectorConfig->autoloadPaths([]);
     // these files will be executed, useful e.g. for constant definitions
-    $parameters->set(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES, []);
+    $rectorConfig->bootstrapFiles([]);
     // parallel
-    $parameters->set(\Rector\Core\Configuration\Option::PARALLEL, \false);
+    $rectorConfig->disableParallel();
     $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_MAX_NUMBER_OF_PROCESSES, 16);
     $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_JOB_SIZE, 20);
     $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_TIMEOUT_IN_SECONDS, 120);
     // FQN class importing
-    $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \false);
+    $rectorConfig->disableImportNames();
     $parameters->set(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES, \true);
-    $parameters->set(\Rector\Core\Configuration\Option::IMPORT_DOC_BLOCKS, \true);
-    $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, null);
     $parameters->set(\Rector\Core\Configuration\Option::NESTED_CHAIN_METHOD_CALL_LIMIT, 60);
-    $parameters->set(\Rector\Core\Configuration\Option::SKIP, []);
+    $rectorConfig->skip([]);
     $parameters->set(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH, null);
     // cache
     $parameters->set(\Rector\Core\Configuration\Option::CACHE_DIR, \sys_get_temp_dir() . '/rector_cached_files');

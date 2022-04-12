@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20220412;
 
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector;
@@ -26,8 +25,7 @@ use Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector;
 use Rector\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector;
 use Rector\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $parameters = $rectorConfig->parameters();
-    $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_56);
+    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_56);
     $services = $rectorConfig->services();
     $services->set(\Rector\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector::class);
     $services->set(\Rector\DowngradePhp70\Rector\Instanceof_\DowngradeInstanceofThrowableRector::class);
