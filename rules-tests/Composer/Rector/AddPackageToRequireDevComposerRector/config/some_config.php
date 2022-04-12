@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Rector\Composer\Rector\AddPackageToRequireDevComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
     $services->set(AddPackageToRequireDevComposerRector::class)
         ->configure([
             new PackageAndVersion('vendor1/package3', '^3.0'),

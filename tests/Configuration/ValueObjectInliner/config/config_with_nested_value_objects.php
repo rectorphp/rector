@@ -6,13 +6,13 @@ namespace Rector\Core\Tests\Configuration\ValueObjectInliner\config;
 
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
+use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\ValueObjectInliner;
 use Rector\Core\Tests\Configuration\ValueObjectInliner\Source\ServiceWithValueObject;
 use Rector\Core\Tests\Configuration\ValueObjectInliner\Source\WithType;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
 
     $services->defaults()
         ->public()

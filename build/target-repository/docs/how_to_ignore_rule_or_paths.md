@@ -3,21 +3,12 @@
 ## Preferred Way: Config
 
 ```php
-<?php
-
-// rector.php
-
-declare(strict_types=1);
-
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
-use Rector\Core\Configuration\Option;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
-
+return static function (RectorConfig $rectorConfig): void {
     // is there a file you need to skip?
-    $parameters->set(Option::SKIP, [
+    $rectorConfig->skip([
         // single file
         __DIR__ . '/src/ComplicatedFile.php',
         // or directory

@@ -5,20 +5,12 @@ Rector rules that implement `Rector\Core\Contract\Rector\ConfigurableRectorInter
 Typical example is `Rector\Renaming\Rector\Name\RenameClassRector`:
 
 ```php
-<?php
-
-// rector.php
-
-declare(strict_types=1);
-
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-    $services->set(RenameClassRector::class)
-        ->configure([
-            'App\SomeOldClass' => 'App\SomeNewClass',
-        ]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'App\SomeOldClass' => 'App\SomeNewClass',
+    ]);
 };
 ```

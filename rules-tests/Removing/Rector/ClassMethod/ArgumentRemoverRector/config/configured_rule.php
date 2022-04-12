@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister;
 use Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Yaml\Yaml;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
     $services->set(ArgumentRemoverRector::class)
         ->configure([
             new ArgumentRemover(Persister::class, 'getSelectJoinColumnSQL', 4, null), new ArgumentRemover(

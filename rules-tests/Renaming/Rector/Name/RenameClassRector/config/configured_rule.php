@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Acme\Bar\DoNotUpdateExistingTargetNamespace;
 use Manual\Twig\TwigFilter;
+use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture\DuplicatedClass;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\AbstractManualExtension;
@@ -16,10 +17,9 @@ use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClassWithTypo;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\SomeFinalClass;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\SomeNonFinalClass;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
     $services->set(RenameClassRector::class)
         ->configure([
             'FqnizeNamespaced' => 'Abc\FqnizeNamespaced',

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Rector\Composer\Rector\ReplacePackageAndVersionComposerRector;
 use Rector\Composer\ValueObject\ReplacePackageAndVersion;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
     $services->set(ReplacePackageAndVersionComposerRector::class)
         ->configure([new ReplacePackageAndVersion('vendor1/package1', 'vendor1/package3', '^4.0')]);
 };

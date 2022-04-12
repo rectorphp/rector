@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Symfony\Set\TwigSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_60);
-    $containerConfigurator->import(TwigSetList::TWIG_20);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->import(PHPUnitSetList::PHPUNIT_60);
+    $rectorConfig->import(TwigSetList::TWIG_20);
 
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
     $services->set(RenameClassRector::class)
         ->call('configure', [[
             'Old' => 'New',

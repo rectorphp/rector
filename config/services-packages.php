@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
+
 use Symplify\EasyParallel\ValueObject\EasyParallelConfig;
 use Symplify\PackageBuilder\Yaml\ParametersMerger;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
+return static function (RectorConfig $rectorConfig): void {
     // make use of https://github.com/symplify/easy-parallel
-    $containerConfigurator->import(EasyParallelConfig::FILE_PATH);
+    $rectorConfig->import(EasyParallelConfig::FILE_PATH);
 
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
 
     $services->defaults()
         ->public()

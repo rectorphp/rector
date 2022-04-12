@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector;
@@ -23,13 +24,12 @@ use Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
 use Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector;
 use Rector\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector;
 use Rector\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+return static function (RectorConfig $rectorConfig): void {
+    $parameters = $rectorConfig->parameters();
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_56);
 
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
     $services->set(DowngradeCatchThrowableRector::class);
     $services->set(DowngradeInstanceofThrowableRector::class);
     $services->set(DowngradeScalarTypeDeclarationRector::class);

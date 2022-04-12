@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 $phpStanStubLoader = new PHPStanStubLoader();
 $phpStanStubLoader->loadStubs();
@@ -15,14 +15,14 @@ require_once  __DIR__ . '/../../stubs/Composer/EventDispatcher/EventSubscriberIn
 require_once  __DIR__ . '/../../stubs/Composer/Plugin/PluginInterface.php';
 require_once  __DIR__ . '/../../stubs/Nette/DI/CompilerExtension.php';
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+return static function (RectorConfig $rectorConfig): void {
+    $parameters = $rectorConfig->parameters();
 
     $parameters->set(Option::PARALLEL, false);
     $parameters->set(Option::SKIP, DowngradeRectorConfig::DEPENDENCY_EXCLUDE_PATHS);
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-downgrade.neon');
 
-    $containerConfigurator->import(DowngradeLevelSetList::DOWN_TO_PHP_72);
+    $rectorConfig->import(DowngradeLevelSetList::DOWN_TO_PHP_72);
 };
 
 /**

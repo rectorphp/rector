@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
     $services->set(FuncCallToConstFetchRector::class)
         ->configure([
             'php_sapi_name' => 'PHP_SAPI',

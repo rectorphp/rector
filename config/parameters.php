@@ -3,12 +3,13 @@
 declare(strict_types=1);
 
 use OndraM\CiDetector\CiDetector;
-use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
-use Rector\Core\Configuration\Option;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
+use Rector\Config\RectorConfig;
+use Rector\Core\Configuration\Option;
+
+return static function (RectorConfig $rectorConfig): void {
+    $parameters = $rectorConfig->parameters();
 
     // paths and extensions
     $parameters->set(Option::PATHS, []);

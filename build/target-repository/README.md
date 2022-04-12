@@ -76,19 +76,19 @@ vendor/bin/rector init
 And modify it:
 
 ```php
-// rector.php
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Set\ValueObject\SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
+return static function (RectorConfig $rectorConfig): void {
     // here we can define, what sets of rules will be applied
     // tip: use "SetList" class to autocomplete sets
-    $containerConfigurator->import(SetList::CODE_QUALITY);
+    $rectorConfig->sets([
+        SetList::CODE_QUALITY
+    ]);
 
     // register single rule
-    $services = $containerConfigurator->services();
-    $services->set(TypedPropertyRector::class);
+    $rectorConfig->rule(TypedPropertyRector::class);
 };
 ```
 
@@ -116,19 +116,18 @@ vendor/bin/rector process src
 // rector.php
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
-
+return static function (RectorConfig $rectorConfig): void {
     // paths to refactor; solid alternative to CLI arguments
-    $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
+    $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
 
     // is your PHP version different from the one you refactor to? [default: your PHP version], uses PHP_VERSION_ID format
+    $parameters = $rectorConfig->parameters();
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
 
     // Path to PHPStan with extensions, that PHPStan in Rector uses to determine types
-    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan-for-config.neon');
+    $rectorConfig->phpstanConfig(__DIR__ . '/phpstan-for-config.neon');
 };
 ```
 

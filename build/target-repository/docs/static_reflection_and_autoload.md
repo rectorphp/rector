@@ -10,13 +10,11 @@ Do you want to know more about it? Continue here:
 - [Zero Config Analysis with Static Reflection](https://phpstan.org/blog/zero-config-analysis-with-static-reflection) - from PHPStan
 
 ```php
-// rector.php
-
 use Rector\Core\Configuration\Option;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+return static function (RectorConfig $rectorConfig): void {
+    $parameters = $rectorConfig->parameters();
 
     // Rector is using static reflection to load code without running it - see https://phpstan.org/blog/zero-config-analysis-with-static-reflection
     $parameters->set(Option::AUTOLOAD_PATHS, [
@@ -32,13 +30,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 Do you need to include constants, class aliases or custom autoloader? Use `BOOTSTRAP_FILES` parameter:
 
 ```php
-// rector.php
-
+use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+return static function (RectorConfig $rectorConfig): void {
+    $parameters = $rectorConfig->parameters();
 
     $parameters->set(Option::BOOTSTRAP_FILES, [
         __DIR__ . '/constants.php',

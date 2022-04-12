@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
     $services->set(DowngradeFlexibleHeredocSyntaxRector::class);
 };

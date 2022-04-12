@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Rector\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector;
 use Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
     $services->set(FunctionArgumentDefaultValueReplacerRector::class)
         ->configure([
             new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'lte', 'le'),
