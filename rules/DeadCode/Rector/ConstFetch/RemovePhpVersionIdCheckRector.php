@@ -26,7 +26,7 @@ final class RemovePhpVersionIdCheckRector extends \Rector\Core\Rector\AbstractRe
     /**
      * @var int|string|null
      */
-    private $phpVersionConstraint;
+    private $phpVersionConstraint = null;
     /**
      * @readonly
      * @var \Rector\Core\Util\PhpVersionFactory
