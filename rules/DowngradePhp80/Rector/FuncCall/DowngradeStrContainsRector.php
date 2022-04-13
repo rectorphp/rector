@@ -98,9 +98,6 @@ CODE_SAMPLE
         return new NotIdentical($funcCall, $this->nodeFactory->createFalse());
     }
 
-    /**
-     * @return FuncCall
-     */
     private function matchStrContainsOrNotStrContains(FuncCall | BooleanNot $expr): ?FuncCall
     {
         $expr = ($expr instanceof BooleanNot) ? $expr->expr : $expr;

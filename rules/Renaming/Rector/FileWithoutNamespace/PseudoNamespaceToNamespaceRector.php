@@ -145,7 +145,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Name|Identifier
+     * @return Identifier|Name|null
      */
     private function processNameOrIdentifier(Name | Identifier $node): ?Node
     {

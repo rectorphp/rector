@@ -145,7 +145,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return PropertyFetch|MethodCall
+     * @return MethodCall|PropertyFetch|null
      */
     private function refactorFuncCallToMethodCall(
         ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall,

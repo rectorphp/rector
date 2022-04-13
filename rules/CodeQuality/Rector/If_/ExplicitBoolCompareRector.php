@@ -186,7 +186,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Identical|NotIdentical
+     * @return Identical|NotIdentical|null
      */
     private function resolveArray(bool $isNegated, Expr $expr): ?BinaryOp
     {
