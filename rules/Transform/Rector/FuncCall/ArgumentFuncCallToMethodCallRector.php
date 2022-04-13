@@ -138,7 +138,7 @@ CODE_SAMPLE
         return $classMethod->isStatic();
     }
     /**
-     * @return PropertyFetch|MethodCall
+     * @return MethodCall|PropertyFetch|null
      */
     private function refactorFuncCallToMethodCall(\Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall, \PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node
     {

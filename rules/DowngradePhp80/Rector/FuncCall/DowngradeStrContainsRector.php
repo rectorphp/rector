@@ -84,7 +84,6 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($funcCall, $this->nodeFactory->createFalse());
     }
     /**
-     * @return FuncCall
      * @param \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\FuncCall $expr
      */
     private function matchStrContainsOrNotStrContains($expr) : ?\PhpParser\Node\Expr\FuncCall

@@ -170,7 +170,7 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\BinaryOp\Greater($funcCall, $lNumber);
     }
     /**
-     * @return Identical|NotIdentical
+     * @return Identical|NotIdentical|null
      */
     private function resolveArray(bool $isNegated, \PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\BinaryOp
     {

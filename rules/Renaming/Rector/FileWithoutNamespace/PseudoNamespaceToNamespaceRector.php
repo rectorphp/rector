@@ -125,7 +125,7 @@ CODE_SAMPLE
         return $stmts;
     }
     /**
-     * @return Name|Identifier
+     * @return Identifier|Name|null
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $node
      */
     private function processNameOrIdentifier($node) : ?\PhpParser\Node
