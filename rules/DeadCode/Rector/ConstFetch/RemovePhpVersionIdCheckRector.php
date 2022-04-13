@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemovePhpVersionIdCheckRector extends AbstractRector implements ConfigurableRectorInterface
 {
-    private string | int | null $phpVersionConstraint;
+    private string | int | null $phpVersionConstraint = null;
 
     public function __construct(
         private readonly PhpVersionFactory $phpVersionFactory

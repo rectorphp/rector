@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
@@ -78,7 +77,7 @@ CODE_SAMPLE
 
     private function shouldSkip(Property $property): bool
     {
-        if (! $property->type instanceof NullableType) {
+        if ($property->type === null) {
             return true;
         }
 
@@ -103,6 +102,10 @@ CODE_SAMPLE
         // so it needs to has null default
         if (! $classLike instanceof Class_) {
             return false;
+        }
+
+        if (! $this->nodeTypeResolver->isNullableType($property)) {
+            return true;
         }
 
         return $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
