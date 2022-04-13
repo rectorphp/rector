@@ -14,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
+use Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
 final class DeadReturnTagValueNodeAnalyzer
@@ -22,6 +23,7 @@ final class DeadReturnTagValueNodeAnalyzer
         private readonly TypeComparator $typeComparator,
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer,
+        private readonly MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer,
     ) {
     }
 
@@ -54,6 +56,10 @@ final class DeadReturnTagValueNodeAnalyzer
         }
 
         if ($this->genericTypeNodeAnalyzer->hasGenericType($returnTagValueNode->type)) {
+            return false;
+        }
+
+        if ($this->mixedArrayTypeNodeAnalyzer->hasMixedArrayType($returnTagValueNode->type)) {
             return false;
         }
 

@@ -215,7 +215,7 @@ final class ValueResolver
     }
 
     /**
-     * @return mixed[]
+     * @return mixed[]|null
      */
     private function extractConstantArrayTypeValue(ConstantArrayType $constantArrayType): ?array
     {

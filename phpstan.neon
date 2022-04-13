@@ -248,6 +248,7 @@ parameters:
             message: '#Class cognitive complexity is \d+, keep it under \d+#'
             paths:
                 - packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php
+                - rules/Php80/Rector/FunctionLike/UnionTypesRector.php
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
