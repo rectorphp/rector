@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\FixtureComplexTypes;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\FixtureInlinePublic;
 
 final class IfElse
 {
@@ -20,14 +20,11 @@ final class IfElse
 -----
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\FixtureComplexTypes;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\FixtureInlinePublic;
 
 final class IfElse
 {
-    /**
-     * @var int|string
-     */
-    protected $stringOrInteger = 'hi';
+    protected int|string $stringOrInteger = 'hi';
 
     public function setNumber()
     {

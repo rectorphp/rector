@@ -128,6 +128,34 @@ final class TypeComparator
         return $this->arrayTypeComparator->isSubtype($checkedType, $mainType);
     }
 
+    public function areTypesPossiblyIncluded(?Type $assumptionType, ?Type $exactType): bool
+    {
+        if (! $assumptionType instanceof Type) {
+            return true;
+        }
+
+        if (! $exactType instanceof Type) {
+            return true;
+        }
+
+        if ($this->areTypesEqual($assumptionType, $exactType)) {
+            return true;
+        }
+
+        if (! $assumptionType instanceof UnionType) {
+            return true;
+        }
+
+        if (! $exactType instanceof UnionType) {
+            return true;
+        }
+
+        $assumpionTypeTypes = $assumptionType->getTypes();
+        $exactTypeTypes = $exactType->getTypes();
+
+        return count($assumpionTypeTypes) > count($exactTypeTypes);
+    }
+
     private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType): bool
     {
         if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType && $firstType->getFullyQualifiedName() === $secondType->getClassName()) {

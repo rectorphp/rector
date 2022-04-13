@@ -22,6 +22,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
@@ -40,7 +41,8 @@ final class VarDocPropertyTypeInferer
         private readonly PropertyFetchFinder $propertyFetchFinder,
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly PropertyManipulator $propertyManipulator,
-        private readonly AssignToPropertyTypeInferer $assignToPropertyTypeInferer
+        private readonly AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
+        private readonly TypeComparator $typeComparator
     ) {
     }
 
@@ -76,6 +78,10 @@ final class VarDocPropertyTypeInferer
 
         if ($this->shouldAddNull($resolvedType, $assignInferredPropertyType)) {
             $resolvedType = TypeCombinator::addNull($resolvedType);
+        }
+
+        if (! $this->typeComparator->areTypesPossiblyIncluded($resolvedType, $assignInferredPropertyType)) {
+            return new MixedType();
         }
 
         return $resolvedType;

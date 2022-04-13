@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\FixtureInlinePublic;
 
 use stdClass;
 
@@ -18,16 +18,13 @@ final class PublicPropertyDocAssign
 -----
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\FixtureInlinePublic;
 
 use stdClass;
 
 final class PublicPropertyDocAssign
 {
-    /**
-     * @var stdClass|null
-     */
-    public $config = null;
+    public ?\stdClass $config = null;
 
     public function run()
     {
