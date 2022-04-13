@@ -11,6 +11,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -18,13 +19,27 @@ use Rector\Php74\Guard\MakePropertyTypedGuard;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\TypedPropertyFromAssignsRectorTest
  */
-final class TypedPropertyFromAssignsRector extends \Rector\Core\Rector\AbstractRector
+final class TypedPropertyFromAssignsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const INLINE_PUBLIC = 'inline_public';
+    /**
+     * Default to false, which only apply changes:
+     *
+     *  – private modifier property
+     *  - protected modifier property on final class without extends
+     *
+     * Set to true will allow change other modifiers as well as far as not forbidden, eg: callable type, null type, etc.
+     * @var bool
+     */
+    private $inlinePublic = \false;
     /**
      * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer
@@ -58,9 +73,13 @@ final class TypedPropertyFromAssignsRector extends \Rector\Core\Rector\AbstractR
         $this->varTagRemover = $varTagRemover;
         $this->makePropertyTypedGuard = $makePropertyTypedGuard;
     }
+    public function configure(array $configuration) : void
+    {
+        $this->inlinePublic = $configuration[self::INLINE_PUBLIC] ?? (bool) \current($configuration);
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add typed property from assigned types', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add typed property from assigned types', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $name;
@@ -82,7 +101,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+, [self::INLINE_PUBLIC => \false])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -96,7 +115,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->makePropertyTypedGuard->isLegal($node)) {
+        if (!$this->makePropertyTypedGuard->isLegal($node, $this->inlinePublic)) {
             return null;
         }
         $inferredType = $this->allAssignNodePropertyTypeInferer->inferProperty($node);
@@ -117,8 +136,8 @@ CODE_SAMPLE
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $inferredType);
             return $node;
         }
-        // public property can be anything
-        if ($node->isPublic()) {
+        // non-private property can be anything with not inline public configured
+        if (!$node->isPrivate() && !$this->inlinePublic) {
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $inferredType);
             return $node;
         }

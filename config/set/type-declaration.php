@@ -12,6 +12,7 @@ use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $services = $rectorConfig->services();
     $services->set(\Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector::class);
@@ -22,4 +23,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector::class);
     $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector::class);
     $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector::class);
+    $services->set(\Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector::class);
 };

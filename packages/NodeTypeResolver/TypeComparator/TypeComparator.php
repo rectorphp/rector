@@ -125,6 +125,27 @@ final class TypeComparator
         }
         return $this->arrayTypeComparator->isSubtype($checkedType, $mainType);
     }
+    public function areTypesPossiblyIncluded(?\PHPStan\Type\Type $assumptionType, ?\PHPStan\Type\Type $exactType) : bool
+    {
+        if (!$assumptionType instanceof \PHPStan\Type\Type) {
+            return \true;
+        }
+        if (!$exactType instanceof \PHPStan\Type\Type) {
+            return \true;
+        }
+        if ($this->areTypesEqual($assumptionType, $exactType)) {
+            return \true;
+        }
+        if (!$assumptionType instanceof \PHPStan\Type\UnionType) {
+            return \true;
+        }
+        if (!$exactType instanceof \PHPStan\Type\UnionType) {
+            return \true;
+        }
+        $assumpionTypeTypes = $assumptionType->getTypes();
+        $exactTypeTypes = $exactType->getTypes();
+        return \count($assumpionTypeTypes) > \count($exactTypeTypes);
+    }
     private function areAliasedObjectMatchingFqnObject(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
         if ($firstType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $secondType instanceof \PHPStan\Type\ObjectType && $firstType->getFullyQualifiedName() === $secondType->getClassName()) {

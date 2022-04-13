@@ -21,6 +21,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
@@ -82,7 +83,12 @@ final class VarDocPropertyTypeInferer
      * @var \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer
      */
     private $assignToPropertyTypeInferer;
-    public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer $assignToPropertyTypeInferer)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     */
+    private $typeComparator;
+    public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer $assignToPropertyTypeInferer, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
     {
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->defaultValuePropertyTypeInferer = $defaultValuePropertyTypeInferer;
@@ -95,6 +101,7 @@ final class VarDocPropertyTypeInferer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyManipulator = $propertyManipulator;
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
+        $this->typeComparator = $typeComparator;
     }
     public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {
@@ -119,6 +126,9 @@ final class VarDocPropertyTypeInferer
         $assignInferredPropertyType = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($property, $propertyName, $class);
         if ($this->shouldAddNull($resolvedType, $assignInferredPropertyType)) {
             $resolvedType = \PHPStan\Type\TypeCombinator::addNull($resolvedType);
+        }
+        if (!$this->typeComparator->areTypesPossiblyIncluded($resolvedType, $assignInferredPropertyType)) {
+            return new \PHPStan\Type\MixedType();
         }
         return $resolvedType;
     }
