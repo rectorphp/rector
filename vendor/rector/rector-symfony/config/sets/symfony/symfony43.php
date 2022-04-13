@@ -1,10 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220412;
+namespace RectorPrefix20220413;
 
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
+use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -12,10 +13,9 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $services = $rectorConfig->services();
     # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
     $services->set(\Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector::class);
     $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([

@@ -13,6 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard;
 use Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,13 +33,19 @@ final class ReturnAnnotationIncorrectNullableRector extends \Rector\Core\Rector\
     private $phpDocNullableTypeHelper;
     /**
      * @readonly
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
+     */
+    private $classMethodReturnTypeOverrideGuard;
+    /**
+     * @readonly
      * @var \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard
      */
     private $phpDocNestedAnnotationGuard;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper $phpDocNullableTypeHelper, \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper $phpDocNullableTypeHelper, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocNullableTypeHelper = $phpDocNullableTypeHelper;
+        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->phpDocNestedAnnotationGuard = $phpDocNestedAnnotationGuard;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -77,11 +84,14 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param ClassMethod|Function_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $returnType = $node->getReturnType();
+        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node)) {
+            return null;
+        }
         if ($returnType === null) {
             return null;
         }

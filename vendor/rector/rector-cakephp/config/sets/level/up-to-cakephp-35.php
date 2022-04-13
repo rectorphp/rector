@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220412;
+namespace RectorPrefix20220413;
 
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $containerConfigurator->import(\Rector\CakePHP\Set\CakePHPSetList::CAKEPHP_35);
-    $containerConfigurator->import(\Rector\CakePHP\Set\CakePHPLevelSetList::UP_TO_CAKEPHP_34);
+use Rector\CakePHP\Set\CakePHPLevelSetList;
+use Rector\CakePHP\Set\CakePHPSetList;
+use Rector\Config\RectorConfig;
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->import(\Rector\CakePHP\Set\CakePHPSetList::CAKEPHP_35);
+    $rectorConfig->import(\Rector\CakePHP\Set\CakePHPLevelSetList::UP_TO_CAKEPHP_34);
 };

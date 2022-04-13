@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220412;
+namespace RectorPrefix20220413;
 
+use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 # https://github.com/symfony/symfony/blob/master/UPGRADE-4.1.md
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $services = $rectorConfig->services();
     $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([
         # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
         new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Console\\Helper\\TableStyle', 'setHorizontalBorderChar', 'setHorizontalBorderChars'),

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220412;
+namespace RectorPrefix20220413;
 
+use Rector\Config\RectorConfig;
 use Rector\Laravel\Set\LaravelSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $containerConfigurator->import(\Rector\Laravel\Set\LaravelSetList::LARAVEL_50);
-    $containerConfigurator->import(\Rector\Laravel\Set\LaravelSetList::LARAVEL_51);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->import(\Rector\Laravel\Set\LaravelSetList::LARAVEL_50);
+    $rectorConfig->import(\Rector\Laravel\Set\LaravelSetList::LARAVEL_51);
 };

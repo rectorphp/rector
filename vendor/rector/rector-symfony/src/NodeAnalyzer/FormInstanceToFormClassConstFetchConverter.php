@@ -64,8 +64,8 @@ final class FormInstanceToFormClassConstFetchConverter
             }
         }
         $currentArg = $methodCall->getArgs()[$position];
-        $classConstReference = $this->nodeFactory->createClassConstReference($formClassName);
-        $currentArg->value = $classConstReference;
+        $classConstFetch = $this->nodeFactory->createClassConstReference($formClassName);
+        $currentArg->value = $classConstFetch;
         return $methodCall;
     }
     /**

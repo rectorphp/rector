@@ -206,7 +206,7 @@ final class ValueResolver
         return $this->constExprEvaluator;
     }
     /**
-     * @return mixed[]
+     * @return mixed[]|null
      */
     private function extractConstantArrayTypeValue(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : ?array
     {

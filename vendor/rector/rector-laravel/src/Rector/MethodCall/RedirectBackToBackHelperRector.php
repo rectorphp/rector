@@ -80,12 +80,12 @@ CODE_SAMPLE
         }
         return $this->updateRedirectStaticCall($node);
     }
-    private function updateRedirectHelperCall(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node\Expr\MethodCall
+    private function updateRedirectHelperCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
-        if (!$this->isName($node->name, 'back')) {
+        if (!$this->isName($methodCall->name, 'back')) {
             return null;
         }
-        $rootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($node);
+        $rootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($methodCall);
         $parentNode = $rootExpr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
@@ -99,18 +99,18 @@ CODE_SAMPLE
         if (!$this->isName($parentNode->var->name, 'redirect')) {
             return null;
         }
-        $this->removeNode($node);
+        $this->removeNode($methodCall);
         $parentNode->var->name = new \PhpParser\Node\Name('back');
         return $parentNode;
     }
-    private function updateRedirectStaticCall(\PhpParser\Node\Expr\StaticCall $node) : ?\PhpParser\Node\Expr\FuncCall
+    private function updateRedirectStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr\FuncCall
     {
-        if (!$this->isName($node->class, 'Illuminate\\Support\\Facades\\Redirect')) {
+        if (!$this->isName($staticCall->class, 'Illuminate\\Support\\Facades\\Redirect')) {
             return null;
         }
-        if (!$this->isName($node->name, 'back')) {
+        if (!$this->isName($staticCall->name, 'back')) {
             return null;
         }
-        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('back'), $node->args);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('back'), $staticCall->args);
     }
 }

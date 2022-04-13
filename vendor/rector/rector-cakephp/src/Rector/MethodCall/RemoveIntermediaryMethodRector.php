@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220412\Webmozart\Assert\Assert;
+use RectorPrefix20220413\Webmozart\Assert\Assert;
 /**
  * @see https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#deprecated-combined-get-set-methods
  * @see https://github.com/cakephp/cakephp/commit/326292688c5e6d08945a3cafa4b6ffb33e714eea#diff-e7c0f0d636ca50a0350e9be316d8b0f9
@@ -61,14 +61,14 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $replacement = $this->matchTypeAndMethodName($node);
-        if (!$replacement instanceof \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod) {
+        $removeIntermediaryMethod = $this->matchTypeAndMethodName($node);
+        if (!$removeIntermediaryMethod instanceof \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod) {
             return null;
         }
         /** @var MethodCall $var */
         $var = $node->var;
         $target = $var->var;
-        return new \PhpParser\Node\Expr\MethodCall($target, $replacement->getFinalMethod(), $node->args);
+        return new \PhpParser\Node\Expr\MethodCall($target, $removeIntermediaryMethod->getFinalMethod(), $node->args);
     }
     /**
      * @param mixed[] $configuration
@@ -76,8 +76,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $removeIntermediaryMethods = $configuration[self::REMOVE_INTERMEDIARY_METHOD] ?? $configuration;
-        \RectorPrefix20220412\Webmozart\Assert\Assert::isArray($removeIntermediaryMethods);
-        \RectorPrefix20220412\Webmozart\Assert\Assert::allIsAOf($removeIntermediaryMethods, \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod::class);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::isArray($removeIntermediaryMethods);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::allIsAOf($removeIntermediaryMethods, \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod::class);
         $this->removeIntermediaryMethod = $removeIntermediaryMethods;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\RemoveIntermediaryMethod
@@ -97,14 +97,14 @@ CODE_SAMPLE
         if (!$methodCall->name instanceof \PhpParser\Node\Identifier || !$var->name instanceof \PhpParser\Node\Identifier) {
             return null;
         }
-        foreach ($this->removeIntermediaryMethod as $replacement) {
-            if (!$this->isName($methodCall->name, $replacement->getSecondMethod())) {
+        foreach ($this->removeIntermediaryMethod as $singleRemoveIntermediaryMethod) {
+            if (!$this->isName($methodCall->name, $singleRemoveIntermediaryMethod->getSecondMethod())) {
                 continue;
             }
-            if (!$this->isName($var->name, $replacement->getFirstMethod())) {
+            if (!$this->isName($var->name, $singleRemoveIntermediaryMethod->getFirstMethod())) {
                 continue;
             }
-            return $replacement;
+            return $singleRemoveIntermediaryMethod;
         }
         return null;
     }

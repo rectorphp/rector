@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220412\Webmozart\Assert\Assert;
+use RectorPrefix20220413\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\Class_\AddInterfaceByTraitRector\AddInterfaceByTraitRectorTest
  */
@@ -81,8 +81,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220412\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220412\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220413\Webmozart\Assert\Assert::allString($configuration);
         $this->interfaceByTrait = $configuration;
     }
 }

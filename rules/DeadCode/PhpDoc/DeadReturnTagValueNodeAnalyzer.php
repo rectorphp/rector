@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
+use Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadReturnTagValueNodeAnalyzer
 {
@@ -31,11 +32,17 @@ final class DeadReturnTagValueNodeAnalyzer
      * @var \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer
      */
     private $genericTypeNodeAnalyzer;
-    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer
+     */
+    private $mixedArrayTypeNodeAnalyzer;
+    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, \Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer)
     {
         $this->typeComparator = $typeComparator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->genericTypeNodeAnalyzer = $genericTypeNodeAnalyzer;
+        $this->mixedArrayTypeNodeAnalyzer = $mixedArrayTypeNodeAnalyzer;
     }
     public function isDead(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
@@ -57,6 +64,9 @@ final class DeadReturnTagValueNodeAnalyzer
             return $returnTagValueNode->description === '';
         }
         if ($this->genericTypeNodeAnalyzer->hasGenericType($returnTagValueNode->type)) {
+            return \false;
+        }
+        if ($this->mixedArrayTypeNodeAnalyzer->hasMixedArrayType($returnTagValueNode->type)) {
             return \false;
         }
         if ($this->hasTruePseudoType($returnTagValueNode->type)) {

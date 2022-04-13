@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220412;
+namespace RectorPrefix20220413;
 
+use Rector\Config\RectorConfig;
 use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $containerConfigurator->import(\Rector\Symfony\Set\SymfonySetList::SYMFONY_53);
-    $containerConfigurator->import(\Rector\Symfony\Set\SymfonyLevelSetList::UP_TO_SYMFONY_52);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->import(\Rector\Symfony\Set\SymfonySetList::SYMFONY_53);
+    $rectorConfig->import(\Rector\Symfony\Set\SymfonyLevelSetList::UP_TO_SYMFONY_52);
 };

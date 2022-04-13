@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220412;
+namespace RectorPrefix20220413;
 
+use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector;
 use Rector\Symfony\Rector\Class_\MakeCommandLazyRector;
 use Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $services = $rectorConfig->services();
     $services->set(\Rector\Symfony\Rector\Class_\MakeCommandLazyRector::class);
     $services->set(\Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector::class);
     $services->set(\Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector::class);

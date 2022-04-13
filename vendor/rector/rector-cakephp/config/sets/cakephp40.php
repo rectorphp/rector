@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220412;
+namespace RectorPrefix20220413;
 
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\IntegerType;
@@ -14,6 +14,7 @@ use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter;
+use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -28,10 +29,9 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 # source: https://book.cakephp.org/4/en/appendices/4-0-migration-guide.html
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $services = $rectorConfig->services();
     $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->configure(['Cake\\Database\\Type' => 'Cake\\Database\\TypeFactory', 'Cake\\Console\\ConsoleErrorHandler' => 'Cake\\Error\\ConsoleErrorHandler']);
     $services->set(\Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector::class)->configure([new \Rector\Renaming\ValueObject\RenameClassConstFetch('Cake\\View\\View', 'NAME_ELEMENT', 'TYPE_ELEMENT'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Cake\\View\\View', 'NAME_LAYOUT', 'TYPE_LAYOUT'), new \Rector\Renaming\ValueObject\RenameClassAndConstFetch('Cake\\Mailer\\Email', 'MESSAGE_HTML', 'Cake\\Mailer\\Message', 'MESSAGE_HTML'), new \Rector\Renaming\ValueObject\RenameClassAndConstFetch('Cake\\Mailer\\Email', 'MESSAGE_TEXT', 'Cake\\Mailer\\Message', 'MESSAGE_TEXT'), new \Rector\Renaming\ValueObject\RenameClassAndConstFetch('Cake\\Mailer\\Email', 'MESSAGE_BOTH', 'Cake\\Mailer\\Message', 'MESSAGE_BOTH'), new \Rector\Renaming\ValueObject\RenameClassAndConstFetch('Cake\\Mailer\\Email', 'EMAIL_PATTERN', 'Cake\\Mailer\\Message', 'EMAIL_PATTERN')]);
     $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Form\\Form', 'errors', 'getErrors'), new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Mailer\\Email', 'set', 'setViewVars'), new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\ORM\\EntityInterface', 'unsetProperty', 'unset'), new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Cache\\Cache', 'engine', 'pool'), new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Http\\Cookie\\Cookie', 'getStringValue', 'getScalarValue'), new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Validation\\Validator', 'containsNonAlphaNumeric', 'notAlphaNumeric'), new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Validation\\Validator', 'errors', 'validate')]);

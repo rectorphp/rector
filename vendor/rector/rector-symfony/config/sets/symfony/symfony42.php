@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220412;
+namespace RectorPrefix20220413;
 
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
@@ -10,6 +10,7 @@ use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
+use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\Visibility;
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
@@ -28,10 +29,9 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 # https://github.com/symfony/symfony/pull/28447
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $services = $rectorConfig->services();
     $services->set(\Rector\Transform\Rector\New_\NewToStaticCallRector::class)->configure([new \Rector\Transform\ValueObject\NewToStaticCall('Symfony\\Component\\HttpFoundation\\Cookie', 'Symfony\\Component\\HttpFoundation\\Cookie', 'create')]);
     $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->configure([
         # https://github.com/symfony/symfony/commit/a7e319d9e1316e2e18843f8ce15b67a8693e5bf9

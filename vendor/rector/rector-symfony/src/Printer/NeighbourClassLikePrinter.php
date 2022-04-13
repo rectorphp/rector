@@ -56,8 +56,8 @@ final class NeighbourClassLikePrinter
         }
         $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
         $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($nodesToPrint);
-        $addedFileWithNodes = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($fileDestination, $printedFileContent);
-        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
+        $addedFileWithContent = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($fileDestination, $printedFileContent);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
     }
     private function createClassLikeFileDestination(\PhpParser\Node\Stmt\ClassLike $classLike, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : string
     {

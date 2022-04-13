@@ -63,9 +63,9 @@ CODE_SAMPLE
         $propertyName = $this->getName($swiftMailerProperty);
         return !$this->isName($var, $propertyName);
     }
-    private function getSwiftMailerProperty(\PhpParser\Node\Expr\MethodCall $classMethod) : ?\PhpParser\Node\Stmt\Property
+    private function getSwiftMailerProperty(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Stmt\Property
     {
-        $class = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
+        $class = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }

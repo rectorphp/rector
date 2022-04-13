@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220412\React\Dns;
+namespace RectorPrefix20220413\React\Dns;
 
 final class BadServerException extends \Exception
 {

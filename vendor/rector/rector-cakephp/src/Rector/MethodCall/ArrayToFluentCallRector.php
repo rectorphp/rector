@@ -15,7 +15,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220412\Webmozart\Assert\Assert;
+use RectorPrefix20220413\Webmozart\Assert\Assert;
 /**
  * @see \Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\ArrayToFluentCallRectorTest
  */
@@ -84,11 +84,11 @@ CODE_SAMPLE
         if (!$factoryMethod instanceof \Rector\CakePHP\ValueObject\FactoryMethod) {
             return null;
         }
-        foreach ($this->arraysToFluentCalls as $arraysToFluentCall) {
-            if ($arraysToFluentCall->getClass() !== $factoryMethod->getNewClass()) {
+        foreach ($this->arraysToFluentCalls as $arrayToFluentCall) {
+            if ($arrayToFluentCall->getClass() !== $factoryMethod->getNewClass()) {
                 continue;
             }
-            return $this->replaceArrayToFluentMethodCalls($node, $factoryMethod->getPosition(), $arraysToFluentCall);
+            return $this->replaceArrayToFluentMethodCalls($node, $factoryMethod->getPosition(), $arrayToFluentCall);
         }
         return null;
     }
@@ -98,12 +98,12 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $arraysToFluentCalls = $configuration[self::ARRAYS_TO_FLUENT_CALLS] ?? [];
-        \RectorPrefix20220412\Webmozart\Assert\Assert::isArray($arraysToFluentCalls);
-        \RectorPrefix20220412\Webmozart\Assert\Assert::allIsInstanceOf($arraysToFluentCalls, \Rector\CakePHP\ValueObject\ArrayToFluentCall::class);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::isArray($arraysToFluentCalls);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::allIsInstanceOf($arraysToFluentCalls, \Rector\CakePHP\ValueObject\ArrayToFluentCall::class);
         $this->arraysToFluentCalls = $arraysToFluentCalls;
         $factoryMethods = $configuration[self::FACTORY_METHODS] ?? [];
-        \RectorPrefix20220412\Webmozart\Assert\Assert::isArray($factoryMethods);
-        \RectorPrefix20220412\Webmozart\Assert\Assert::allIsInstanceOf($factoryMethods, \Rector\CakePHP\ValueObject\FactoryMethod::class);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::isArray($factoryMethods);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::allIsInstanceOf($factoryMethods, \Rector\CakePHP\ValueObject\FactoryMethod::class);
         $this->factoryMethods = $factoryMethods;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\FactoryMethod

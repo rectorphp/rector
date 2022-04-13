@@ -70,10 +70,10 @@ final class RouteRequiredParamNameToTypesResolver
     /**
      * @return array<string, string>
      */
-    private function resolveFromAnnotation(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $routeAttrination) : array
+    private function resolveFromAnnotation(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : array
     {
         $paramsToRegexes = [];
-        $requirementsValue = $routeAttrination->getValue('requirements');
+        $requirementsValue = $doctrineAnnotationTagValueNode->getValue('requirements');
         if (!$requirementsValue instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
             return [];
         }
@@ -88,10 +88,10 @@ final class RouteRequiredParamNameToTypesResolver
     /**
      * @return array<string, string>
      */
-    private function resolveFromAttribute(\PhpParser\Node\Attribute $routeAttrination) : array
+    private function resolveFromAttribute(\PhpParser\Node\Attribute $attribute) : array
     {
         $paramsToRegexes = [];
-        foreach ($routeAttrination->args as $arg) {
+        foreach ($attribute->args as $arg) {
             if (!$this->nodeNameResolver->isName($arg, 'requirements')) {
                 continue;
             }

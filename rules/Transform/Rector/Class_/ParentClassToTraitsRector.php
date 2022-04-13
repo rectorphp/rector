@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ParentClassToTraits;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220412\Webmozart\Assert\Assert;
+use RectorPrefix20220413\Webmozart\Assert\Assert;
 /**
  * Can handle cases like:
  * - https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
@@ -93,7 +93,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220412\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\ParentClassToTraits::class);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\ParentClassToTraits::class);
         $this->parentClassToTraits = $configuration;
     }
     private function removeParentClass(\PhpParser\Node\Stmt\Class_ $class) : void

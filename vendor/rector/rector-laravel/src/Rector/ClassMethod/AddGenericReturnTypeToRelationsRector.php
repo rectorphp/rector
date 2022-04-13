@@ -80,12 +80,12 @@ CODE_SAMPLE
         if (!$this->isObjectType($methodReturnType, new \PHPStan\Type\ObjectType('Illuminate\\Database\\Eloquent\\Relations\\Relation'))) {
             return null;
         }
-        $docInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if (!$docInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return null;
         }
         // Return, if already has return type
-        if ($node->getDocComment() !== null && $docInfo->hasByName('return')) {
+        if ($node->getDocComment() !== null && $phpDocInfo->hasByName('return')) {
             return null;
         }
         $returnStatement = $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, function (\PhpParser\Node $subNode) : bool {
@@ -102,7 +102,7 @@ CODE_SAMPLE
         if ($relatedClass === null) {
             return null;
         }
-        $docInfo->addTagValueNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode(new \Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode($methodReturnTypeName), [new \Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode($relatedClass)]), ''));
+        $phpDocInfo->addTagValueNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode(new \Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode($methodReturnTypeName), [new \Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode($relatedClass)]), ''));
         return $node;
     }
     private function getRelatedModelClassFromMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?string
@@ -131,12 +131,12 @@ CODE_SAMPLE
         }
         return $modelType->getClassName();
     }
-    private function shouldSkipNode(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    private function shouldSkipNode(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if ($node->stmts === null) {
+        if ($classMethod->stmts === null) {
             return \true;
         }
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\ClassLike::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return \true;
         }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220412;
+namespace RectorPrefix20220413;
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -15,13 +15,14 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
+use Rector\Config\RectorConfig;
+use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220412\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20220413\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 // https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 // @see https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $iterableType = new \PHPStan\Type\IterableType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
     $arrayType = new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
     $nullableStringType = new \PHPStan\Type\UnionType([new \PHPStan\Type\NullType(), new \PHPStan\Type\StringType()]);
@@ -40,10 +41,10 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $unionTypeReflectionClass = new \ReflectionClass(\PHPStan\Type\UnionType::class);
     /** @var UnionType $scalarArrayObjectUnionType */
     $scalarArrayObjectUnionType = $unionTypeReflectionClass->newInstanceWithoutConstructor();
-    $privatesAccessor = new \RectorPrefix20220412\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
+    $privatesAccessor = new \RectorPrefix20220413\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
     $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
     // @see https://github.com/symfony/symfony/pull/42064
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
     $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector::class)->configure([
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Config\\Loader\\LoaderInterface', 'load', new \PHPStan\Type\MixedType()),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Config\\Loader\\Loader', 'import', new \PHPStan\Type\MixedType()),

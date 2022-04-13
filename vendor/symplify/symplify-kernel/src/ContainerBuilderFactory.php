@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220412\Symplify\SymplifyKernel;
+namespace RectorPrefix20220413\Symplify\SymplifyKernel;
 
-use RectorPrefix20220412\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20220412\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220412\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix20220412\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
-use RectorPrefix20220412\Symplify\SymplifyKernel\DependencyInjection\LoadExtensionConfigsCompilerPass;
-use RectorPrefix20220412\Webmozart\Assert\Assert;
+use RectorPrefix20220413\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20220413\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220413\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix20220413\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
+use RectorPrefix20220413\Symplify\SymplifyKernel\DependencyInjection\LoadExtensionConfigsCompilerPass;
+use RectorPrefix20220413\Webmozart\Assert\Assert;
 /**
  * @see \Symplify\SymplifyKernel\Tests\ContainerBuilderFactory\ContainerBuilderFactoryTest
  */
@@ -18,7 +18,7 @@ final class ContainerBuilderFactory
      * @var \Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface
      */
     private $loaderFactory;
-    public function __construct(\RectorPrefix20220412\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface $loaderFactory)
+    public function __construct(\RectorPrefix20220413\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface $loaderFactory)
     {
         $this->loaderFactory = $loaderFactory;
     }
@@ -27,26 +27,26 @@ final class ContainerBuilderFactory
      * @param CompilerPassInterface[] $compilerPasses
      * @param ExtensionInterface[] $extensions
      */
-    public function create(array $configFiles, array $compilerPasses, array $extensions) : \RectorPrefix20220412\Symfony\Component\DependencyInjection\ContainerBuilder
+    public function create(array $configFiles, array $compilerPasses, array $extensions) : \RectorPrefix20220413\Symfony\Component\DependencyInjection\ContainerBuilder
     {
-        \RectorPrefix20220412\Webmozart\Assert\Assert::allIsAOf($extensions, \RectorPrefix20220412\Symfony\Component\DependencyInjection\Extension\ExtensionInterface::class);
-        \RectorPrefix20220412\Webmozart\Assert\Assert::allIsAOf($compilerPasses, \RectorPrefix20220412\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface::class);
-        \RectorPrefix20220412\Webmozart\Assert\Assert::allString($configFiles);
-        \RectorPrefix20220412\Webmozart\Assert\Assert::allFile($configFiles);
-        $containerBuilder = new \RectorPrefix20220412\Symfony\Component\DependencyInjection\ContainerBuilder();
+        \RectorPrefix20220413\Webmozart\Assert\Assert::allIsAOf($extensions, \RectorPrefix20220413\Symfony\Component\DependencyInjection\Extension\ExtensionInterface::class);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::allIsAOf($compilerPasses, \RectorPrefix20220413\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface::class);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::allString($configFiles);
+        \RectorPrefix20220413\Webmozart\Assert\Assert::allFile($configFiles);
+        $containerBuilder = new \RectorPrefix20220413\Symfony\Component\DependencyInjection\ContainerBuilder();
         $this->registerExtensions($containerBuilder, $extensions);
         $this->registerConfigFiles($containerBuilder, $configFiles);
         $this->registerCompilerPasses($containerBuilder, $compilerPasses);
         // this calls load() method in every extensions
         // ensure these extensions are implicitly loaded
         $compilerPassConfig = $containerBuilder->getCompilerPassConfig();
-        $compilerPassConfig->setMergePass(new \RectorPrefix20220412\Symplify\SymplifyKernel\DependencyInjection\LoadExtensionConfigsCompilerPass());
+        $compilerPassConfig->setMergePass(new \RectorPrefix20220413\Symplify\SymplifyKernel\DependencyInjection\LoadExtensionConfigsCompilerPass());
         return $containerBuilder;
     }
     /**
      * @param ExtensionInterface[] $extensions
      */
-    private function registerExtensions(\RectorPrefix20220412\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, array $extensions) : void
+    private function registerExtensions(\RectorPrefix20220413\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, array $extensions) : void
     {
         foreach ($extensions as $extension) {
             $containerBuilder->registerExtension($extension);
@@ -55,7 +55,7 @@ final class ContainerBuilderFactory
     /**
      * @param CompilerPassInterface[] $compilerPasses
      */
-    private function registerCompilerPasses(\RectorPrefix20220412\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, array $compilerPasses) : void
+    private function registerCompilerPasses(\RectorPrefix20220413\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, array $compilerPasses) : void
     {
         foreach ($compilerPasses as $compilerPass) {
             $containerBuilder->addCompilerPass($compilerPass);
@@ -64,7 +64,7 @@ final class ContainerBuilderFactory
     /**
      * @param string[] $configFiles
      */
-    private function registerConfigFiles(\RectorPrefix20220412\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, array $configFiles) : void
+    private function registerConfigFiles(\RectorPrefix20220413\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, array $configFiles) : void
     {
         $delegatingLoader = $this->loaderFactory->create($containerBuilder, \getcwd());
         foreach ($configFiles as $configFile) {
