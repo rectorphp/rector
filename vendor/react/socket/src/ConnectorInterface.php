@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220413\React\Socket;
+namespace RectorPrefix20220414\React\Socket;
 
 /**
  * The `ConnectorInterface` is responsible for providing an interface for

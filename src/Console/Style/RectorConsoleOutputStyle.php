@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Style;
 
-use RectorPrefix20220413\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220413\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix20220413\Symfony\Component\Console\Helper\ProgressBar;
-use RectorPrefix20220413\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220413\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220413\Symfony\Component\Console\Style\SymfonyStyle;
-final class RectorConsoleOutputStyle extends \RectorPrefix20220413\Symfony\Component\Console\Style\SymfonyStyle
+use RectorPrefix20220414\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220414\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20220414\Symfony\Component\Console\Helper\ProgressBar;
+use RectorPrefix20220414\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220414\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220414\Symfony\Component\Console\Style\SymfonyStyle;
+final class RectorConsoleOutputStyle extends \RectorPrefix20220414\Symfony\Component\Console\Style\SymfonyStyle
 {
     /**
      * @var mixed|ProgressBar
@@ -19,18 +19,18 @@ final class RectorConsoleOutputStyle extends \RectorPrefix20220413\Symfony\Compo
      * @var bool|null
      */
     private $isCiDetected = null;
-    public function __construct(\RectorPrefix20220413\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220413\Symfony\Component\Console\Output\OutputInterface $output)
+    public function __construct(\RectorPrefix20220414\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220414\Symfony\Component\Console\Output\OutputInterface $output)
     {
         parent::__construct($input, $output);
         // silent output in tests
         if (\defined('PHPUNIT_COMPOSER_INSTALL')) {
-            $this->setVerbosity(\RectorPrefix20220413\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+            $this->setVerbosity(\RectorPrefix20220414\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
         }
     }
     /**
      * @see https://github.com/phpstan/phpstan-src/commit/0993d180e5a15a17631d525909356081be59ffeb
      */
-    public function createProgressBar(int $max = 0) : \RectorPrefix20220413\Symfony\Component\Console\Helper\ProgressBar
+    public function createProgressBar(int $max = 0) : \RectorPrefix20220414\Symfony\Component\Console\Helper\ProgressBar
     {
         $progressBar = parent::createProgressBar($max);
         $progressBar->setOverwrite(!$this->isCiDetected());
@@ -63,15 +63,15 @@ final class RectorConsoleOutputStyle extends \RectorPrefix20220413\Symfony\Compo
     private function isCiDetected() : bool
     {
         if ($this->isCiDetected === null) {
-            $ciDetector = new \RectorPrefix20220413\OndraM\CiDetector\CiDetector();
+            $ciDetector = new \RectorPrefix20220414\OndraM\CiDetector\CiDetector();
             $this->isCiDetected = $ciDetector->isCiDetected();
         }
         return $this->isCiDetected;
     }
-    private function getProgressBar() : \RectorPrefix20220413\Symfony\Component\Console\Helper\ProgressBar
+    private function getProgressBar() : \RectorPrefix20220414\Symfony\Component\Console\Helper\ProgressBar
     {
         if (!isset($this->progressBar)) {
-            throw new \RectorPrefix20220413\Symfony\Component\Console\Exception\RuntimeException('The ProgressBar is not started.');
+            throw new \RectorPrefix20220414\Symfony\Component\Console\Exception\RuntimeException('The ProgressBar is not started.');
         }
         return $this->progressBar;
     }
