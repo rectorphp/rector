@@ -16,13 +16,21 @@ final class VersionResolver
     /**
      * @var string
      */
-    public const PACKAGE_VERSION = 'd7590ea66c1aea99c8d10fa4a1403f7f1aa2beb2';
+    public const PACKAGE_VERSION = '451964615066aabcced75e66e4af9f13be5b5f7b';
     /**
      * @var string
      */
-    public const RELEASE_DATE = '2022-04-14 23:22:08';
+    public const RELEASE_DATE = '2022-04-14 23:50:17';
     public static function resolvePackageVersion() : string
     {
+        $pointsAtProcess = new \RectorPrefix20220414\Symfony\Component\Process\Process(['git', 'tag', '--points-at'], __DIR__);
+        if ($pointsAtProcess->run() !== \RectorPrefix20220414\Symfony\Component\Console\Command\Command::SUCCESS) {
+            throw new \Rector\Core\Exception\VersionException('You must ensure to run compile from composer git repository clone and that git binary is available.');
+        }
+        $tag = \trim($pointsAtProcess->getOutput());
+        if ($tag) {
+            return $tag;
+        }
         $process = new \RectorPrefix20220414\Symfony\Component\Process\Process(['git', 'log', '--pretty="%H"', '-n1', 'HEAD'], __DIR__);
         if ($process->run() !== \RectorPrefix20220414\Symfony\Component\Console\Command\Command::SUCCESS) {
             throw new \Rector\Core\Exception\VersionException('You must ensure to run compile from composer git repository clone and that git binary is available.');
