@@ -123,6 +123,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (count($phpDocInfo->getPhpDocNode()->children) > 1) {
+            return null;
+        }
+
         // Creating new node is the only way to enforce the "singleLined" property AFAIK
         $newPhpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
         $newPhpDocInfo->makeSingleLined();
