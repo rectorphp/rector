@@ -120,10 +120,6 @@ CODE_SAMPLE
         if ($this->isUsed($node, $variable)) {
             return $this->refactorUsedVariable($node);
         }
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node\Stmt\Expression) {
-            return null;
-        }
         if ($this->hasCallLikeInAssignExpr($node->expr)) {
             // keep the expr, can have side effect
             return $this->cleanCastedExpr($node->expr);
@@ -153,6 +149,14 @@ CODE_SAMPLE
         }
         $variable = $assign->var;
         if (!$variable instanceof \PhpParser\Node\Expr\Variable) {
+            return \true;
+        }
+        $parentNode = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\Expression) {
+            return \true;
+        }
+        $originalNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+        if (!$originalNode instanceof \PhpParser\Node) {
             return \true;
         }
         if (!$variable->name instanceof \PhpParser\Node\Expr\Variable) {
