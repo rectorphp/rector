@@ -29,7 +29,7 @@ final class ParallelProcess
      */
     private $encoder;
     /**
-     * @var resource
+     * @var resource|null
      */
     private $stdErr;
     /**
@@ -79,6 +79,9 @@ final class ParallelProcess
         $this->onData = $onData;
         $this->onError = $onError;
         $this->process->on(\RectorPrefix20220414\Symplify\EasyParallel\Enum\ReactEvent::EXIT, function ($exitCode) use($onExit) : void {
+            if ($this->stdErr === null) {
+                throw new \RectorPrefix20220414\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException();
+            }
             $this->cancelTimer();
             \rewind($this->stdErr);
             /** @var string $streamContents */
@@ -123,13 +126,13 @@ final class ParallelProcess
             $onData($json[\RectorPrefix20220414\Symplify\EasyParallel\Enum\Content::RESULT]);
         });
         $this->encoder = $encoder;
-        $decoder->on(\RectorPrefix20220414\Symplify\EasyParallel\Enum\ReactEvent::ERROR, function (\Throwable $error) : void {
+        $decoder->on(\RectorPrefix20220414\Symplify\EasyParallel\Enum\ReactEvent::ERROR, function (\Throwable $throwable) : void {
             $onError = $this->onError;
-            $onError($error);
+            $onError($throwable);
         });
-        $encoder->on(\RectorPrefix20220414\Symplify\EasyParallel\Enum\ReactEvent::ERROR, function (\Throwable $error) : void {
+        $encoder->on(\RectorPrefix20220414\Symplify\EasyParallel\Enum\ReactEvent::ERROR, function (\Throwable $throwable) : void {
             $onError = $this->onError;
-            $onError($error);
+            $onError($throwable);
         });
     }
     private function cancelTimer() : void
