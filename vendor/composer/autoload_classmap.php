@@ -1594,6 +1594,7 @@ return array(
     'Rector\\CodingStyle\\Rector\\Plus\\UseIncrementAssignRector' => $baseDir . '/rules/CodingStyle/Rector/Plus/UseIncrementAssignRector.php',
     'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => $baseDir . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
     'Rector\\CodingStyle\\Rector\\Property\\AddFalseDefaultToBoolPropertyRector' => $baseDir . '/rules/CodingStyle/Rector/Property/AddFalseDefaultToBoolPropertyRector.php',
+    'Rector\\CodingStyle\\Rector\\Property\\InlineSimplePropertyAnnotationRector' => $baseDir . '/rules/CodingStyle/Rector/Property/InlineSimplePropertyAnnotationRector.php',
     'Rector\\CodingStyle\\Rector\\Stmt\\NewlineAfterStatementRector' => $baseDir . '/rules/CodingStyle/Rector/Stmt/NewlineAfterStatementRector.php',
     'Rector\\CodingStyle\\Rector\\String_\\SymplifyQuoteEscapeRector' => $baseDir . '/rules/CodingStyle/Rector/String_/SymplifyQuoteEscapeRector.php',
     'Rector\\CodingStyle\\Rector\\String_\\UseClassKeywordForClassNameResolutionRector' => $baseDir . '/rules/CodingStyle/Rector/String_/UseClassKeywordForClassNameResolutionRector.php',
