@@ -6,6 +6,7 @@ namespace RectorPrefix20220414;
 use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ParamAnnotationIncorrectNullableRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnAnnotationIncorrectNullableRector;
@@ -28,4 +29,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $services->set(\Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector::class);
     $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\ReturnAnnotationIncorrectNullableRector::class);
     $services->set(\Rector\TypeDeclaration\Rector\Property\VarAnnotationIncorrectNullableRector::class);
+    $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\ParamAnnotationIncorrectNullableRector::class);
 };

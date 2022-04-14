@@ -17,7 +17,6 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard;
 use Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
-use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -42,20 +41,14 @@ final class ParamAnnotationIncorrectNullableRector extends \Rector\Core\Rector\A
     private $phpDocNestedAnnotationGuard;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
-     */
-    private $classMethodReturnTypeOverrideGuard;
-    /**
-     * @readonly
      * @var \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory
      */
     private $paramPhpDocNodeFactory;
-    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper $phpDocNullableTypeHelper, \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory $paramPhpDocNodeFactory)
+    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper $phpDocNullableTypeHelper, \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory $paramPhpDocNodeFactory)
     {
         $this->typeComparator = $typeComparator;
         $this->phpDocNullableTypeHelper = $phpDocNullableTypeHelper;
         $this->phpDocNestedAnnotationGuard = $phpDocNestedAnnotationGuard;
-        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -103,9 +96,6 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->getParams() === []) {
-            return null;
-        }
-        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node)) {
             return null;
         }
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {

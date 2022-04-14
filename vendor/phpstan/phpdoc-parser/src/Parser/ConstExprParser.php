@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace PHPStan\PhpDocParser\Parser;
 
-use LogicException;
 use PHPStan\PhpDocParser\Ast;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use function strtolower;
@@ -80,7 +79,7 @@ class ConstExprParser
         } elseif ($tokens->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
             return $this->parseArray($tokens, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_SQUARE_BRACKET);
         }
-        throw new \LogicException($tokens->currentTokenValue());
+        throw new \PHPStan\PhpDocParser\Parser\ParserException($tokens->currentTokenValue(), $tokens->currentTokenType(), $tokens->currentTokenOffset(), \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER);
     }
     private function parseArray(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, int $endToken) : \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprArrayNode
     {

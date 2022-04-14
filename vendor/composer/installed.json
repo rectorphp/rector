@@ -1036,17 +1036,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.4.3",
-            "version_normalized": "1.4.3.0",
+            "version": "1.4.4",
+            "version_normalized": "1.4.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "34545bb30a6f8bd86cfa371dbd42140a657bbf0d"
+                "reference": "d8e9fd97ca11f2f24fc1aafbcfb1f78bce762267"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/34545bb30a6f8bd86cfa371dbd42140a657bbf0d",
-                "reference": "34545bb30a6f8bd86cfa371dbd42140a657bbf0d",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/d8e9fd97ca11f2f24fc1aafbcfb1f78bce762267",
+                "reference": "d8e9fd97ca11f2f24fc1aafbcfb1f78bce762267",
                 "shasum": ""
             },
             "require": {
@@ -1060,7 +1060,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2022-04-08T11:30:34+00:00",
+            "time": "2022-04-14T12:24:06+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1077,23 +1077,23 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.4.3"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.4.4"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.5.4",
-            "version_normalized": "1.5.4.0",
+            "version": "1.5.5",
+            "version_normalized": "1.5.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "bbf68cae24f6dc023c607ea0f87da55dd9d55c2b"
+                "reference": "d77a607667f29ae099c0686f99664bd451fd23df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/bbf68cae24f6dc023c607ea0f87da55dd9d55c2b",
-                "reference": "bbf68cae24f6dc023c607ea0f87da55dd9d55c2b",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/d77a607667f29ae099c0686f99664bd451fd23df",
+                "reference": "d77a607667f29ae099c0686f99664bd451fd23df",
                 "shasum": ""
             },
             "require": {
@@ -1102,7 +1102,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-04-03T12:39:00+00:00",
+            "time": "2022-04-14T12:20:26+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -1121,7 +1121,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.5.4"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.5.5"
             },
             "funding": [
                 {

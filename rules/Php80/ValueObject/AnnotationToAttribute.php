@@ -11,13 +11,13 @@ final class AnnotationToAttribute
      */
     private $tag;
     /**
-     * @var class-string
+     * @var class-string|null
      * @readonly
      */
     private $attributeClass;
     /**
      * @param class-string|string $tag
-     * @param class-string $attributeClass
+     * @param class-string|null $attributeClass
      */
     public function __construct(string $tag, ?string $attributeClass = null)
     {
