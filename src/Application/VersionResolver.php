@@ -27,6 +27,18 @@ final class VersionResolver
 
     public static function resolvePackageVersion(): string
     {
+        $pointsAtProcess = new Process(['git', 'tag', '--points-at'], __DIR__);
+        if ($pointsAtProcess->run() !== Command::SUCCESS) {
+            throw new VersionException(
+                'You must ensure to run compile from composer git repository clone and that git binary is available.'
+            );
+        }
+
+        $tag = trim($pointsAtProcess->getOutput());
+        if ($tag) {
+            return $tag;
+        }
+
         $process = new Process(['git', 'log', '--pretty="%H"', '-n1', 'HEAD'], __DIR__);
         if ($process->run() !== Command::SUCCESS) {
             throw new VersionException(
