@@ -1,4 +1,4 @@
-# 510 Rules Overview
+# 511 Rules Overview
 
 <br>
 
@@ -88,7 +88,7 @@
 
 - [Transform](#transform) (36)
 
-- [TypeDeclaration](#typedeclaration) (25)
+- [TypeDeclaration](#typedeclaration) (26)
 
 - [Visibility](#visibility) (3)
 
@@ -11594,6 +11594,30 @@ Change null in argument, that is now not nullable anymore
 
      public function setValue(string $value)
      {
+     }
+ }
+```
+
+<br>
+
+### ParamAnnotationIncorrectNullableRector
+
+Add or remove null type from `@param` phpdoc typehint based on php parameter type declaration
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ParamAnnotationIncorrectNullableRector`](../rules/TypeDeclaration/Rector/ClassMethod/ParamAnnotationIncorrectNullableRector.php)
+
+```diff
+ final class SomeClass
+ {
+     /**
+-     * @param \DateTime[] $dateTimes
++     * @param \DateTime[]|null $dateTimes
+      */
+     public function setDateTimes(?array $dateTimes): self
+     {
+         $this->dateTimes = $dateTimes;
+
+         return $this;
      }
  }
 ```
