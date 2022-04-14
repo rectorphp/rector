@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ParamAnnotationIncorrectNullableRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnAnnotationIncorrectNullableRector;
@@ -28,4 +29,5 @@ return static function (RectorConfig $rectorConfig): void {
     $services->set(TypedPropertyFromAssignsRector::class);
     $services->set(ReturnAnnotationIncorrectNullableRector::class);
     $services->set(VarAnnotationIncorrectNullableRector::class);
+    $services->set(ParamAnnotationIncorrectNullableRector::class);
 };

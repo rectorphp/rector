@@ -18,7 +18,6 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard;
 use Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
-use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -31,7 +30,6 @@ final class ParamAnnotationIncorrectNullableRector extends AbstractRector
         private readonly TypeComparator $typeComparator,
         private readonly PhpDocNullableTypeHelper $phpDocNullableTypeHelper,
         private readonly PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard,
-        private readonly ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
         private readonly ParamPhpDocNodeFactory $paramPhpDocNodeFactory
     ) {
     }
@@ -94,10 +92,6 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node)) {
-            return null;
-        }
-
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             return null;
         }
@@ -131,8 +125,7 @@ CODE_SAMPLE
         Type $newType,
         Param $param,
         string $paramName
-    ): bool
-    {
+    ): bool {
         // better skip, could crash hard
         if ($phpDocInfo->hasInvalidTag('@param')) {
             return false;

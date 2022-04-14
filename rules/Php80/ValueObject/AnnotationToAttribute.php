@@ -8,7 +8,7 @@ final class AnnotationToAttribute
 {
     /**
      * @param class-string|string $tag
-     * @param class-string $attributeClass
+     * @param class-string|null $attributeClass
      */
     public function __construct(
         private readonly string $tag,
