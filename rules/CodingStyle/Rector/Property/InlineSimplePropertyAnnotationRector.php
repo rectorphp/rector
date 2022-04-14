@@ -15,6 +15,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220414\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Property\InlineSimplePropertyAnnotationRector\InlineSimplePropertyAnnotationRectorTest
+ *
+ * rector-src dev note:
+ *
+ *      Do not register to coding-style config/set/coding-style.php set
+ *      as it will always conflict with ECS use of \PhpCsFixer\Fixer\Phpdoc\PhpdocLineSpanFixer
+ *      so rectify CI will always rolled back the change
  */
 final class InlineSimplePropertyAnnotationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface
 {
