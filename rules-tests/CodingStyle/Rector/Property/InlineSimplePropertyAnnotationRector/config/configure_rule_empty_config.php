@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Rector\Tests\CodingStyle\Rector\Property\InlineSimplePropertyAnnotationRector;
 
 use Rector\CodingStyle\Rector\Property\InlineSimplePropertyAnnotationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-    $services->set(InlineSimplePropertyAnnotationRector::class);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->rule(InlineSimplePropertyAnnotationRector::class);
 };

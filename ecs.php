@@ -2,42 +2,20 @@
 
 declare(strict_types=1);
 
+use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff;
 use PhpCsFixer\Fixer\FunctionNotation\FunctionTypehintSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
-use Symplify\EasyCodingStandard\ValueObject\Option;
+use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (ECSConfig $ecsConfig): void {
+    $ecsConfig->sets([SetList::PSR_12, SetList::SYMPLIFY, SetList::COMMON, SetList::CLEAN_CODE]);
 
-    $services->set(NoSuperfluousPhpdocTagsFixer::class)
-        ->call('configure', [[
-            'allow_mixed' => true,
-        ]]);
-
-    $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
-        ->call('configure', [[
-            'annotations' => [
-                'throw',
-                'throws',
-                'author',
-                'authors',
-                'package',
-                'group',
-                'required',
-                'phpstan-ignore-line',
-                'phpstan-ignore-next-line',
-            ],
-        ]]);
-
-    $parameters = $containerConfigurator->parameters();
-
-    $parameters->set(Option::PATHS, [
+    $ecsConfig->paths([
         __DIR__ . '/bin',
         __DIR__ . '/src',
         __DIR__ . '/packages',
@@ -53,7 +31,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/scoper.php',
     ]);
 
-    $parameters->set(Option::SKIP, [
+    $ecsConfig->ruleWithConfiguration(NoSuperfluousPhpdocTagsFixer::class, [
+        'allow_mixed' => true,
+    ]);
+
+    $ecsConfig->ruleWithConfiguration(GeneralPhpdocAnnotationRemoveFixer::class, [
+        'annotations' => [
+            'throw',
+            'throws',
+            'author',
+            'authors',
+            'package',
+            'group',
+            'required',
+            'phpstan-ignore-line',
+            'phpstan-ignore-next-line',
+        ],
+    ]);
+
+    $ecsConfig->skip([
         '*/Source/*',
         '*/Fixture/*',
         '*/Expected/*',
@@ -73,14 +69,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php',
             __DIR__ . '/rules/Php70/EregToPcreTransformer.php',
         ],
+
+        AssignmentInConditionSniff::class . '.FoundInWhileCondition',
     ]);
-
-    // import SetList here in the end of ecs. is on purpose
-    // to avoid overridden by existing Skip Option in current config
-    $containerConfigurator->import(SetList::PSR_12);
-    $containerConfigurator->import(SetList::SYMPLIFY);
-    $containerConfigurator->import(SetList::COMMON);
-    $containerConfigurator->import(SetList::CLEAN_CODE);
-
-    $parameters->set(Option::LINE_ENDING, "\n");
 };
