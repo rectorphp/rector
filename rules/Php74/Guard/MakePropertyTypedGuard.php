@@ -6,12 +6,10 @@ namespace Rector\Php74\Guard;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
-use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -29,26 +27,20 @@ final class MakePropertyTypedGuard
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
-     */
-    private $astResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyAnalyzer
      */
     private $propertyAnalyzer;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeManipulator\PropertyManipulator
+     */
+    private $propertyManipulator;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->astResolver = $astResolver;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->propertyAnalyzer = $propertyAnalyzer;
+        $this->propertyManipulator = $propertyManipulator;
     }
     public function isLegal(\PhpParser\Node\Stmt\Property $property, bool $inlinePublic = \true) : bool
     {
@@ -75,7 +67,7 @@ final class MakePropertyTypedGuard
             return \false;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
-        if ($this->isModifiedByTrait($class, $propertyName)) {
+        if ($this->propertyManipulator->isUsedByTrait($class, $propertyName)) {
             return \false;
         }
         if ($inlinePublic) {
@@ -85,21 +77,6 @@ final class MakePropertyTypedGuard
             return !$this->propertyAnalyzer->hasForbiddenType($property);
         }
         return $this->isSafeProtectedProperty($property, $class);
-    }
-    private function isModifiedByTrait(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : bool
-    {
-        foreach ($class->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $traitName) {
-                $trait = $this->astResolver->resolveClassFromName($traitName->toString());
-                if (!$trait instanceof \PhpParser\Node\Stmt\Trait_) {
-                    continue;
-                }
-                if ($this->propertyFetchAnalyzer->containsLocalPropertyFetchName($trait, $propertyName)) {
-                    return \true;
-                }
-            }
-        }
-        return \false;
     }
     private function isSafeProtectedProperty(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Stmt\Class_ $class) : bool
     {

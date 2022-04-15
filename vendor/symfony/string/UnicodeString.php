@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220414\Symfony\Component\String;
+namespace RectorPrefix20220415\Symfony\Component\String;
 
-use RectorPrefix20220414\Symfony\Component\String\Exception\ExceptionInterface;
-use RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException;
+use RectorPrefix20220415\Symfony\Component\String\Exception\ExceptionInterface;
+use RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException;
 /**
  * Represents a string of Unicode grapheme clusters encoded as UTF-8.
  *
@@ -28,13 +28,13 @@ use RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentExcep
  *
  * @throws ExceptionInterface
  */
-class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\AbstractUnicodeString
+class UnicodeString extends \RectorPrefix20220415\Symfony\Component\String\AbstractUnicodeString
 {
     public function __construct(string $string = '')
     {
         $this->string = \normalizer_is_normalized($string) ? $string : \normalizer_normalize($string);
         if (\false === $this->string) {
-            throw new \RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
+            throw new \RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
         }
     }
     /**
@@ -46,14 +46,14 @@ class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\Abstr
         $str->string = $this->string . (1 >= \count($suffix) ? $suffix[0] ?? '' : \implode('', $suffix));
         \normalizer_is_normalized($str->string) ?: ($str->string = \normalizer_normalize($str->string));
         if (\false === $str->string) {
-            throw new \RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
+            throw new \RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
         }
         return $str;
     }
     public function chunk(int $length = 1) : array
     {
         if (1 > $length) {
-            throw new \RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException('The chunk length must be greater than zero.');
+            throw new \RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException('The chunk length must be greater than zero.');
         }
         if ('' === $this->string) {
             return [];
@@ -77,7 +77,7 @@ class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\Abstr
      */
     public function endsWith($suffix) : bool
     {
-        if ($suffix instanceof \RectorPrefix20220414\Symfony\Component\String\AbstractString) {
+        if ($suffix instanceof \RectorPrefix20220415\Symfony\Component\String\AbstractString) {
             $suffix = $suffix->string;
         } elseif (!\is_string($suffix)) {
             return parent::endsWith($suffix);
@@ -97,7 +97,7 @@ class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\Abstr
      */
     public function equalsTo($string) : bool
     {
-        if ($string instanceof \RectorPrefix20220414\Symfony\Component\String\AbstractString) {
+        if ($string instanceof \RectorPrefix20220415\Symfony\Component\String\AbstractString) {
             $string = $string->string;
         } elseif (!\is_string($string)) {
             return parent::equalsTo($string);
@@ -114,7 +114,7 @@ class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\Abstr
      */
     public function indexOf($needle, int $offset = 0) : ?int
     {
-        if ($needle instanceof \RectorPrefix20220414\Symfony\Component\String\AbstractString) {
+        if ($needle instanceof \RectorPrefix20220415\Symfony\Component\String\AbstractString) {
             $needle = $needle->string;
         } elseif (!\is_string($needle)) {
             return parent::indexOf($needle, $offset);
@@ -136,7 +136,7 @@ class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\Abstr
      */
     public function indexOfLast($needle, int $offset = 0) : ?int
     {
-        if ($needle instanceof \RectorPrefix20220414\Symfony\Component\String\AbstractString) {
+        if ($needle instanceof \RectorPrefix20220415\Symfony\Component\String\AbstractString) {
             $needle = $needle->string;
         } elseif (!\is_string($needle)) {
             return parent::indexOfLast($needle, $offset);
@@ -179,7 +179,7 @@ class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\Abstr
         if (\in_array($form, [self::NFC, self::NFKC], \true)) {
             \normalizer_is_normalized($str->string, $form) ?: ($str->string = \normalizer_normalize($str->string, $form));
         } elseif (!\in_array($form, [self::NFD, self::NFKD], \true)) {
-            throw new \RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException('Unsupported normalization form.');
+            throw new \RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException('Unsupported normalization form.');
         } elseif (!\normalizer_is_normalized($str->string, $form)) {
             $str->string = \normalizer_normalize($str->string, $form);
             $str->ignoreCase = null;
@@ -195,7 +195,7 @@ class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\Abstr
         $str->string = (1 >= \count($prefix) ? $prefix[0] ?? '' : \implode('', $prefix)) . $this->string;
         \normalizer_is_normalized($str->string) ?: ($str->string = \normalizer_normalize($str->string));
         if (\false === $str->string) {
-            throw new \RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
+            throw new \RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
         }
         return $str;
     }
@@ -218,7 +218,7 @@ class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\Abstr
             $str->string = $result . $tail;
             \normalizer_is_normalized($str->string) ?: ($str->string = \normalizer_normalize($str->string));
             if (\false === $str->string) {
-                throw new \RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
+                throw new \RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
             }
         }
         return $str;
@@ -253,24 +253,24 @@ class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\Abstr
         $str->string = \substr_replace($this->string, $replacement, $start, $length ?? 2147483647);
         \normalizer_is_normalized($str->string) ?: ($str->string = \normalizer_normalize($str->string));
         if (\false === $str->string) {
-            throw new \RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
+            throw new \RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
         }
         return $str;
     }
     public function split(string $delimiter, int $limit = null, int $flags = null) : array
     {
         if (1 > ($limit = $limit ?? 2147483647)) {
-            throw new \RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException('Split limit must be a positive integer.');
+            throw new \RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException('Split limit must be a positive integer.');
         }
         if ('' === $delimiter) {
-            throw new \RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException('Split delimiter is empty.');
+            throw new \RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException('Split delimiter is empty.');
         }
         if (null !== $flags) {
             return parent::split($delimiter . 'u', $limit, $flags);
         }
         \normalizer_is_normalized($delimiter) ?: ($delimiter = \normalizer_normalize($delimiter));
         if (\false === $delimiter) {
-            throw new \RectorPrefix20220414\Symfony\Component\String\Exception\InvalidArgumentException('Split delimiter is not a valid UTF-8 string.');
+            throw new \RectorPrefix20220415\Symfony\Component\String\Exception\InvalidArgumentException('Split delimiter is not a valid UTF-8 string.');
         }
         $str = clone $this;
         $tail = $this->string;
@@ -291,7 +291,7 @@ class UnicodeString extends \RectorPrefix20220414\Symfony\Component\String\Abstr
      */
     public function startsWith($prefix) : bool
     {
-        if ($prefix instanceof \RectorPrefix20220414\Symfony\Component\String\AbstractString) {
+        if ($prefix instanceof \RectorPrefix20220415\Symfony\Component\String\AbstractString) {
             $prefix = $prefix->string;
         } elseif (!\is_string($prefix)) {
             return parent::startsWith($prefix);

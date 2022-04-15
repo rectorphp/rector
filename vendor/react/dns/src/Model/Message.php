@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20220414\React\Dns\Model;
+namespace RectorPrefix20220415\React\Dns\Model;
 
-use RectorPrefix20220414\React\Dns\Query\Query;
+use RectorPrefix20220415\React\Dns\Query\Query;
 /**
  * This class represents an outgoing query message or an incoming response message
  *
@@ -77,9 +77,9 @@ final class Message
      * @param Query $query
      * @return self
      */
-    public static function createRequestForQuery(\RectorPrefix20220414\React\Dns\Query\Query $query)
+    public static function createRequestForQuery(\RectorPrefix20220415\React\Dns\Query\Query $query)
     {
-        $request = new \RectorPrefix20220414\React\Dns\Model\Message();
+        $request = new \RectorPrefix20220415\React\Dns\Model\Message();
         $request->id = self::generateId();
         $request->rd = \true;
         $request->questions[] = $query;
@@ -92,9 +92,9 @@ final class Message
      * @param Record[] $answers
      * @return self
      */
-    public static function createResponseWithAnswersForQuery(\RectorPrefix20220414\React\Dns\Query\Query $query, array $answers)
+    public static function createResponseWithAnswersForQuery(\RectorPrefix20220415\React\Dns\Query\Query $query, array $answers)
     {
-        $response = new \RectorPrefix20220414\React\Dns\Model\Message();
+        $response = new \RectorPrefix20220415\React\Dns\Model\Message();
         $response->id = self::generateId();
         $response->qr = \true;
         $response->rd = \true;
@@ -171,7 +171,7 @@ final class Message
      * @var int response code (4 bit), see self::RCODE_* constants
      * @see self::RCODE_OK
      */
-    public $rcode = \RectorPrefix20220414\React\Dns\Model\Message::RCODE_OK;
+    public $rcode = \RectorPrefix20220415\React\Dns\Model\Message::RCODE_OK;
     /**
      * An array of Query objects
      *

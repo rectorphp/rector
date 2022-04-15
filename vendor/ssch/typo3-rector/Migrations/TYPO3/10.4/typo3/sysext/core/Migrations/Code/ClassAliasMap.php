@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220414;
+namespace RectorPrefix20220415;
 
 /*
  * This file is part of the TYPO3 CMS project.

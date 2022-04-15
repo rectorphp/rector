@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220414\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220415\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220414\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220414\OndraM\CiDetector\Env;
-use RectorPrefix20220414\OndraM\CiDetector\TrinaryLogic;
-class Bamboo extends \RectorPrefix20220414\OndraM\CiDetector\Ci\AbstractCi
+use RectorPrefix20220415\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220415\OndraM\CiDetector\Env;
+use RectorPrefix20220415\OndraM\CiDetector\TrinaryLogic;
+class Bamboo extends \RectorPrefix20220415\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220414\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(\RectorPrefix20220415\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('bamboo_buildKey') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220414\OndraM\CiDetector\CiDetector::CI_BAMBOO;
+        return \RectorPrefix20220415\OndraM\CiDetector\CiDetector::CI_BAMBOO;
     }
-    public function isPullRequest() : \RectorPrefix20220414\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220415\OndraM\CiDetector\TrinaryLogic
     {
-        return \RectorPrefix20220414\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->get('bamboo_repository_pr_key') !== \false);
+        return \RectorPrefix20220415\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->get('bamboo_repository_pr_key') !== \false);
     }
     public function getBuildNumber() : string
     {
