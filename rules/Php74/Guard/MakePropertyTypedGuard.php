@@ -7,12 +7,10 @@ namespace Rector\Php74\Guard;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
-use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -22,9 +20,8 @@ final class MakePropertyTypedGuard
     public function __construct(
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly NodeNameResolver $nodeNameResolver,
-        private readonly AstResolver $astResolver,
-        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private readonly PropertyAnalyzer $propertyAnalyzer
+        private readonly PropertyAnalyzer $propertyAnalyzer,
+        private readonly PropertyManipulator $propertyManipulator
     ) {
     }
 
@@ -59,7 +56,7 @@ final class MakePropertyTypedGuard
 
         $propertyName = $this->nodeNameResolver->getName($property);
 
-        if ($this->isModifiedByTrait($class, $propertyName)) {
+        if ($this->propertyManipulator->isUsedByTrait($class, $propertyName)) {
             return false;
         }
 
@@ -72,24 +69,6 @@ final class MakePropertyTypedGuard
         }
 
         return $this->isSafeProtectedProperty($property, $class);
-    }
-
-    private function isModifiedByTrait(Class_ $class, string $propertyName): bool
-    {
-        foreach ($class->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $traitName) {
-                $trait = $this->astResolver->resolveClassFromName($traitName->toString());
-                if (! $trait instanceof Trait_) {
-                    continue;
-                }
-
-                if ($this->propertyFetchAnalyzer->containsLocalPropertyFetchName($trait, $propertyName)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     private function isSafeProtectedProperty(Property $property, Class_ $class): bool

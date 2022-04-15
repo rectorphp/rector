@@ -25,9 +25,14 @@ final class VersionResolver
      */
     public const RELEASE_DATE = '@release_date@';
 
+    /**
+     * @var string
+     */
+    private const GIT = 'git';
+
     public static function resolvePackageVersion(): string
     {
-        $pointsAtProcess = new Process(['git', 'tag', '--points-at'], __DIR__);
+        $pointsAtProcess = new Process([self::GIT, 'tag', '--points-at'], __DIR__);
         if ($pointsAtProcess->run() !== Command::SUCCESS) {
             throw new VersionException(
                 'You must ensure to run compile from composer git repository clone and that git binary is available.'
@@ -35,11 +40,11 @@ final class VersionResolver
         }
 
         $tag = trim($pointsAtProcess->getOutput());
-        if ($tag) {
+        if ($tag !== '' && $tag !== '0') {
             return $tag;
         }
 
-        $process = new Process(['git', 'log', '--pretty="%H"', '-n1', 'HEAD'], __DIR__);
+        $process = new Process([self::GIT, 'log', '--pretty="%H"', '-n1', 'HEAD'], __DIR__);
         if ($process->run() !== Command::SUCCESS) {
             throw new VersionException(
                 'You must ensure to run compile from composer git repository clone and that git binary is available.'
@@ -52,7 +57,7 @@ final class VersionResolver
 
     public static function resolverReleaseDateTime(): DateTime
     {
-        $process = new Process(['git', 'log', '-n1', '--pretty=%ci', 'HEAD'], __DIR__);
+        $process = new Process([self::GIT, 'log', '-n1', '--pretty=%ci', 'HEAD'], __DIR__);
         if ($process->run() !== Command::SUCCESS) {
             throw new VersionException(
                 'You must ensure to run compile from composer git repository clone and that git binary is available.'
