@@ -3,6 +3,10 @@ parameters:
     featureToggles:
         disableRuntimeReflectionProvider: false
 
+conditionalTags:
+	PhpParser\NodeVisitor\NodeConnectingVisitor:
+		phpstan.parser.richParserNodeVisitor: true
+
 services:
     - Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory
     - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator
