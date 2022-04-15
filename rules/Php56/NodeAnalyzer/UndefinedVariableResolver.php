@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignOp\Coalesce as AssignOpCoalesce;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Unset_ as UnsetCast;
@@ -101,9 +102,17 @@ final class UndefinedVariableResolver
         return in_array($parentNode::class, [Unset_::class, UnsetCast::class, Isset_::class, Empty_::class], true);
     }
 
-    private function isAsCoalesceLeft(Node $parentNode, Variable $variable): bool
+    private function isAsCoalesceLeftOrAssignOpCoalesceVar(Node $parentNode, Variable $variable): bool
     {
-        return $parentNode instanceof Coalesce && $parentNode->left === $variable;
+        if ($parentNode instanceof Coalesce && $parentNode->left === $variable) {
+            return true;
+        }
+
+        if (! $parentNode instanceof AssignOpCoalesce) {
+            return false;
+        }
+
+        return $parentNode->var === $variable;
     }
 
     private function isAssign(Node $parentNode): bool
@@ -125,7 +134,7 @@ final class UndefinedVariableResolver
             return true;
         }
 
-        if ($this->isAsCoalesceLeft($parentNode, $variable)) {
+        if ($this->isAsCoalesceLeftOrAssignOpCoalesceVar($parentNode, $variable)) {
             return true;
         }
 
