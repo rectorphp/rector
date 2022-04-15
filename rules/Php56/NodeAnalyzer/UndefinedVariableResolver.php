@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignOp\Coalesce as AssignOpCoalesce;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Unset_ as UnsetCast;
@@ -110,9 +111,15 @@ final class UndefinedVariableResolver
     {
         return \in_array(\get_class($parentNode), [\PhpParser\Node\Stmt\Unset_::class, \PhpParser\Node\Expr\Cast\Unset_::class, \PhpParser\Node\Expr\Isset_::class, \PhpParser\Node\Expr\Empty_::class], \true);
     }
-    private function isAsCoalesceLeft(\PhpParser\Node $parentNode, \PhpParser\Node\Expr\Variable $variable) : bool
+    private function isAsCoalesceLeftOrAssignOpCoalesceVar(\PhpParser\Node $parentNode, \PhpParser\Node\Expr\Variable $variable) : bool
     {
-        return $parentNode instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce && $parentNode->left === $variable;
+        if ($parentNode instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce && $parentNode->left === $variable) {
+            return \true;
+        }
+        if (!$parentNode instanceof \PhpParser\Node\Expr\AssignOp\Coalesce) {
+            return \false;
+        }
+        return $parentNode->var === $variable;
     }
     private function isAssign(\PhpParser\Node $parentNode) : bool
     {
@@ -129,7 +136,7 @@ final class UndefinedVariableResolver
         if ($this->issetOrUnsetOrEmptyParent($parentNode)) {
             return \true;
         }
-        if ($this->isAsCoalesceLeft($parentNode, $variable)) {
+        if ($this->isAsCoalesceLeftOrAssignOpCoalesceVar($parentNode, $variable)) {
             return \true;
         }
         // list() = | [$values] = defines variables as null

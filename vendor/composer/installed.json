@@ -1083,17 +1083,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.5.5",
-            "version_normalized": "1.5.5.0",
+            "version": "1.5.6",
+            "version_normalized": "1.5.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "d77a607667f29ae099c0686f99664bd451fd23df"
+                "reference": "799dd8c2d2c9c704bb55d2078078cb970cf0f6d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/d77a607667f29ae099c0686f99664bd451fd23df",
-                "reference": "d77a607667f29ae099c0686f99664bd451fd23df",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/799dd8c2d2c9c704bb55d2078078cb970cf0f6d1",
+                "reference": "799dd8c2d2c9c704bb55d2078078cb970cf0f6d1",
                 "shasum": ""
             },
             "require": {
@@ -1102,7 +1102,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-04-14T12:20:26+00:00",
+            "time": "2022-04-15T11:13:37+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -1121,7 +1121,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.5.5"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.5.6"
             },
             "funding": [
                 {
@@ -2627,12 +2627,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "bc1630b068c4cd0030b26728e50afcb5eb6edc5b"
+                "reference": "0d23ce9c7097c5f9d1090219fed1629b749a2d0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/bc1630b068c4cd0030b26728e50afcb5eb6edc5b",
-                "reference": "bc1630b068c4cd0030b26728e50afcb5eb6edc5b",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/0d23ce9c7097c5f9d1090219fed1629b749a2d0e",
+                "reference": "0d23ce9c7097c5f9d1090219fed1629b749a2d0e",
                 "shasum": ""
             },
             "require": {
@@ -2660,7 +2660,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-04-12T16:21:34+00:00",
+            "time": "2022-04-15T09:56:49+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
