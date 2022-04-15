@@ -164,10 +164,17 @@ CODE_SAMPLE
                 if ($callNodeClass !== $nodeClass) {
                     return \false;
                 }
+                $usedNodeOriginalNode = $callNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+                if (!$usedNodeOriginalNode instanceof \PhpParser\Node) {
+                    return \false;
+                }
+                if (\get_class($usedNodeOriginalNode) !== \get_class($callNode)) {
+                    return \false;
+                }
                 /** @var FuncCall|StaticCall|MethodCall $node */
                 $passedNode = clone $node;
-                /** @var FuncCall|StaticCall|MethodCall $callNode */
-                $usedNode = clone $callNode;
+                /** @var FuncCall|StaticCall|MethodCall $usedNodeOriginalNode */
+                $usedNode = clone $usedNodeOriginalNode;
                 /** @var FuncCall|StaticCall|MethodCall $passedNode */
                 $passedNode->args = [];
                 /** @var FuncCall|StaticCall|MethodCall $usedNode */

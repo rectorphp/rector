@@ -5,6 +5,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
@@ -17,8 +18,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://gist.github.com/mickaelandrieu/5d27a2ffafcbdd64912f549aaf2a6df9#stuck-with-forms
  * @see \Rector\Symfony\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\CascadeValidationFormBuilderRectorTest
+ *
+ * @changelog https://gist.github.com/mickaelandrieu/5d27a2ffafcbdd64912f549aaf2a6df9#stuck-with-forms
+ * @changelog https://stackoverflow.com/questions/39758392/symfony-3-validation-groups-inside-child-entity-ignored
  */
 final class CascadeValidationFormBuilderRector extends \Rector\Core\Rector\AbstractRector
 {
@@ -74,14 +77,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\ArrayItem::class];
     }
     /**
-     * @param MethodCall $node
+     * @param MethodCall|ArrayItem $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($node instanceof \PhpParser\Node\Expr\ArrayItem) {
+            return $this->refactorArrayItem($node);
+        }
+        if ($this->shouldSkipMethodCall($node)) {
             return null;
         }
         /** @var Array_ $formBuilderOptionsArrayNode */
@@ -92,7 +98,7 @@ CODE_SAMPLE
         $this->addConstraintsOptionToFollowingAddMethodCalls($node);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkipMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if (!$this->isName($methodCall->name, 'createFormBuilder')) {
             return \true;
@@ -106,7 +112,7 @@ CODE_SAMPLE
     private function isSuccessfulRemovalCascadeValidationOption(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Array_ $optionsArrayNode) : bool
     {
         foreach ($optionsArrayNode->items as $key => $arrayItem) {
-            if ($arrayItem === null) {
+            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (!$this->arrayManipulator->hasKeyName($arrayItem, 'cascade_validation')) {
@@ -126,8 +132,8 @@ CODE_SAMPLE
     }
     private function addConstraintsOptionToFollowingAddMethodCalls(\PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
-        $new = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Validator\\Constraints\\Valid'));
-        $constraintsArrayItem = new \PhpParser\Node\Expr\ArrayItem($new, new \PhpParser\Node\Scalar\String_('constraints'));
+        $array = $this->createValidConstraintsArray();
+        $constraintsArrayItem = new \PhpParser\Node\Expr\ArrayItem($array, new \PhpParser\Node\Scalar\String_('constraints'));
         $parentNode = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         while ($parentNode instanceof \PhpParser\Node\Expr\MethodCall) {
             if ($this->isName($parentNode->name, 'add')) {
@@ -138,5 +144,28 @@ CODE_SAMPLE
             }
             $parentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         }
+    }
+    private function createValidConstraintsArray() : \PhpParser\Node\Expr\Array_
+    {
+        $new = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Validator\\Constraints\\Valid'));
+        return new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($new)]);
+    }
+    /**
+     * @return \PhpParser\Node\Expr\ArrayItem|null
+     */
+    private function refactorArrayItem(\PhpParser\Node\Expr\ArrayItem $arrayItem)
+    {
+        if (!$arrayItem->key instanceof \PhpParser\Node\Expr) {
+            return null;
+        }
+        if (!$this->valueResolver->isValue($arrayItem->key, 'cascade_validation')) {
+            return null;
+        }
+        if (!$this->valueResolver->isValue($arrayItem->value, \true)) {
+            return null;
+        }
+        $arrayItem->key = new \PhpParser\Node\Scalar\String_('constraints');
+        $arrayItem->value = $this->createValidConstraintsArray();
+        return $arrayItem;
     }
 }
