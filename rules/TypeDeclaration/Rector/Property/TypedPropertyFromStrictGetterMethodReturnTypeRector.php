@@ -62,7 +62,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public ?string $name;
+    public ?string $name = null;
 
     public function getName(): string|null
     {

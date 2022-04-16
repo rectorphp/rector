@@ -12002,7 +12002,7 @@ Complete property type based on getter strict types
  final class SomeClass
  {
 -    public $name;
-+    public ?string $name;
++    public ?string $name = null;
 
      public function getName(): string|null
      {
