@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220415;
+namespace RectorPrefix20220416;
 
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;

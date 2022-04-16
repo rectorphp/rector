@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220415\Helmich\TypoScriptParser\Tokenizer;
+namespace RectorPrefix20220416\Helmich\TypoScriptParser\Tokenizer;
 
 /**
  * Exception that is thrown when an unknown operator is encountered.

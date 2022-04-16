@@ -15,7 +15,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Naming\NamespaceMatcher;
 use Rector\Renaming\ValueObject\RenamedNamespace;
-use RectorPrefix20220415\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220416\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class DocBlockNamespaceRenamer
 {
     /**
@@ -40,7 +40,7 @@ final class DocBlockNamespaceRenamer
     public function renameFullyQualifiedNamespace($node, array $oldToNewNamespaces) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $phpDocNodeTraverser = new \RectorPrefix20220415\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20220416\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $docNode) use($oldToNewNamespaces) : ?DocNode {
             if (!$docNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
                 return null;

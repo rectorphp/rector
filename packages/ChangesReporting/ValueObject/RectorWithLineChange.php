@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\ChangesReporting\ValueObject;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix20220415\Symplify\EasyParallel\Contract\SerializableInterface;
-use RectorPrefix20220415\Webmozart\Assert\Assert;
-final class RectorWithLineChange implements \RectorPrefix20220415\Symplify\EasyParallel\Contract\SerializableInterface
+use RectorPrefix20220416\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix20220416\Webmozart\Assert\Assert;
+final class RectorWithLineChange implements \RectorPrefix20220416\Symplify\EasyParallel\Contract\SerializableInterface
 {
     /**
      * @var string
@@ -52,12 +52,12 @@ final class RectorWithLineChange implements \RectorPrefix20220415\Symplify\EasyP
      * @param array<string, mixed> $json
      * @return $this
      */
-    public static function decode(array $json) : \RectorPrefix20220415\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : \RectorPrefix20220416\Symplify\EasyParallel\Contract\SerializableInterface
     {
         $rectorClass = $json[self::KEY_RECTOR_CLASS];
-        \RectorPrefix20220415\Webmozart\Assert\Assert::string($rectorClass);
+        \RectorPrefix20220416\Webmozart\Assert\Assert::string($rectorClass);
         $line = $json[self::KEY_LINE];
-        \RectorPrefix20220415\Webmozart\Assert\Assert::integer($line);
+        \RectorPrefix20220416\Webmozart\Assert\Assert::integer($line);
         return new self($rectorClass, $line);
     }
     /**

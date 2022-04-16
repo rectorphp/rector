@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220415\Symplify\Astral\TypeAnalyzer;
+namespace RectorPrefix20220416\Symplify\Astral\TypeAnalyzer;
 
 use PhpParser\Node\Expr;
 use PHPStan\Analyser\Scope;

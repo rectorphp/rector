@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220415\Symplify\Skipper\SkipVoter;
+namespace RectorPrefix20220416\Symplify\Skipper\SkipVoter;
 
-use RectorPrefix20220415\Symplify\Skipper\Contract\SkipVoterInterface;
-use RectorPrefix20220415\Symplify\Skipper\Matcher\FileInfoMatcher;
-use RectorPrefix20220415\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
+use RectorPrefix20220416\Symplify\Skipper\Contract\SkipVoterInterface;
+use RectorPrefix20220416\Symplify\Skipper\Matcher\FileInfoMatcher;
+use RectorPrefix20220416\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class PathSkipVoter implements \RectorPrefix20220415\Symplify\Skipper\Contract\SkipVoterInterface
+final class PathSkipVoter implements \RectorPrefix20220416\Symplify\Skipper\Contract\SkipVoterInterface
 {
     /**
      * @var \Symplify\Skipper\Matcher\FileInfoMatcher
@@ -17,7 +17,7 @@ final class PathSkipVoter implements \RectorPrefix20220415\Symplify\Skipper\Cont
      * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
     private $skippedPathsResolver;
-    public function __construct(\RectorPrefix20220415\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher, \RectorPrefix20220415\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver)
+    public function __construct(\RectorPrefix20220416\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher, \RectorPrefix20220416\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver)
     {
         $this->fileInfoMatcher = $fileInfoMatcher;
         $this->skippedPathsResolver = $skippedPathsResolver;
