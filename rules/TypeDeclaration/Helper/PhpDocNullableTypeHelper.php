@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\Helper;
 
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Param;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -54,10 +55,52 @@ final class PhpDocNullableTypeHelper
             $isPhpParserTypeContainingNullType = false;
         }
 
-        return $this->resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserTypeNullInfo(
+        $resolvedType = $this->resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserTypeNullInfo(
             $phpDocType,
             $isPhpParserTypeContainingNullType
         );
+
+        if ($resolvedType instanceof UnionType) {
+            return $this->cleanNullableMixed($resolvedType);
+        }
+
+        if ($resolvedType instanceof Type) {
+            return $resolvedType;
+        }
+
+        if (! $phpDocType instanceof UnionType) {
+            return null;
+        }
+
+        $cleanNullableMixed = $this->cleanNullableMixed($phpDocType);
+        if ($cleanNullableMixed === $phpDocType) {
+            return null;
+        }
+
+        return $cleanNullableMixed;
+    }
+
+    private function cleanNullableMixed(UnionType $unionType): Type
+    {
+        $types = $unionType->getTypes();
+        $isNullable = false;
+        $isMixed = false;
+
+        foreach ($types as $type) {
+            if ($type instanceof MixedType) {
+                $isMixed = true;
+            }
+
+            if ($type instanceof NullType) {
+                $isNullable = true;
+            }
+        }
+
+        if ($isMixed && $isNullable) {
+            return TypeCombinator::removeNull($unionType);
+        }
+
+        return $unionType;
     }
 
     private function isItRequiredToRemoveOrAddNullTypeToUnion(
