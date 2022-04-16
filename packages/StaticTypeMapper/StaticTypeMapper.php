@@ -8,6 +8,7 @@ use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -18,6 +19,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -30,6 +32,10 @@ use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
  */
 final class StaticTypeMapper
 {
+    /**
+     * @var array<string, string>
+     */
+    private const STANDALONE_MAPS = ['false' => 'bool'];
     /**
      * @readonly
      * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
@@ -50,12 +56,18 @@ final class StaticTypeMapper
      * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
      */
     private $phpParserNodeMapper;
-    public function __construct(\Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory, \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper, \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper $phpDocTypeMapper, \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper $phpParserNodeMapper)
+    /**
+     * @readonly
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory, \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper, \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper $phpDocTypeMapper, \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper $phpParserNodeMapper, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nameScopeFactory = $nameScopeFactory;
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->phpDocTypeMapper = $phpDocTypeMapper;
         $this->phpParserNodeMapper = $phpParserNodeMapper;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     public function mapPHPStanTypeToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $phpStanType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
@@ -66,7 +78,23 @@ final class StaticTypeMapper
      */
     public function mapPHPStanTypeToPhpParserNode(\PHPStan\Type\Type $phpStanType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
     {
-        return $this->phpStanStaticTypeMapper->mapToPhpParserNode($phpStanType, $typeKind);
+        $node = $this->phpStanStaticTypeMapper->mapToPhpParserNode($phpStanType, $typeKind);
+        if (!$node instanceof \PhpParser\Node) {
+            return null;
+        }
+        if ($node instanceof \PhpParser\Node\UnionType) {
+            return $node;
+        }
+        if (!$node instanceof \PhpParser\Node\Name) {
+            return $node;
+        }
+        $nodeName = $this->nodeNameResolver->getName($node);
+        foreach (self::STANDALONE_MAPS as $key => $type) {
+            if ($nodeName === $key) {
+                return new \PhpParser\Node\Name($type);
+            }
+        }
+        return $node;
     }
     public function mapPhpParserNodePHPStanType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
