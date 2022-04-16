@@ -82,22 +82,16 @@ final class PhpDocNullableTypeHelper
 
     private function cleanNullableMixed(UnionType $unionType): Type
     {
+        if (! TypeCombinator::containsNull($unionType)) {
+            return $unionType;
+        }
+
         $types = $unionType->getTypes();
-        $isNullable = false;
-        $isMixed = false;
 
         foreach ($types as $type) {
             if ($type instanceof MixedType) {
-                $isMixed = true;
+                return TypeCombinator::removeNull($unionType);
             }
-
-            if ($type instanceof NullType) {
-                $isNullable = true;
-            }
-        }
-
-        if ($isMixed && $isNullable) {
-            return TypeCombinator::removeNull($unionType);
         }
 
         return $unionType;
