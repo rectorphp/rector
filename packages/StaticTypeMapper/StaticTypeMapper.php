@@ -9,6 +9,7 @@ use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -19,6 +20,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -32,11 +34,19 @@ use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
  */
 final class StaticTypeMapper
 {
+    /**
+     * @var array<string, string>
+     */
+    private const STANDALONE_MAPS = [
+        'false' => 'bool',
+    ];
+
     public function __construct(
         private readonly NameScopeFactory $nameScopeFactory,
         private readonly PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
         private readonly PhpDocTypeMapper $phpDocTypeMapper,
         private readonly PhpParserNodeMapper $phpParserNodeMapper,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -50,7 +60,29 @@ final class StaticTypeMapper
      */
     public function mapPHPStanTypeToPhpParserNode(Type $phpStanType, TypeKind $typeKind): ?Node
     {
-        return $this->phpStanStaticTypeMapper->mapToPhpParserNode($phpStanType, $typeKind);
+        $node = $this->phpStanStaticTypeMapper->mapToPhpParserNode($phpStanType, $typeKind);
+
+        if (! $node instanceof Node) {
+            return null;
+        }
+
+        if ($node instanceof UnionType) {
+            return $node;
+        }
+
+        if (! $node instanceof Name) {
+            return $node;
+        }
+
+        $nodeName = $this->nodeNameResolver->getName($node);
+
+        foreach (self::STANDALONE_MAPS as $key => $type) {
+            if ($nodeName === $key) {
+                return new Name($type);
+            }
+        }
+
+        return $node;
     }
 
     public function mapPhpParserNodePHPStanType(Node $node): Type
