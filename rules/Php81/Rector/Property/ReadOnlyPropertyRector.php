@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -27,6 +28,7 @@ final class ReadOnlyPropertyRector extends AbstractRector implements MinPhpVersi
 {
     public function __construct(
         private readonly PropertyManipulator $propertyManipulator,
+        private readonly PropertyFetchAssignManipulator $propertyFetchAssignManipulator,
         private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
@@ -118,6 +120,10 @@ CODE_SAMPLE
         }
 
         if ($property->isStatic()) {
+            return null;
+        }
+
+        if ($this->propertyFetchAssignManipulator->isAssignedMultipleTimesInConstructor($property)) {
             return null;
         }
 
