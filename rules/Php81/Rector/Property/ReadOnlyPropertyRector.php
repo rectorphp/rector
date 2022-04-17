@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -30,12 +31,18 @@ final class ReadOnlyPropertyRector extends \Rector\Core\Rector\AbstractRector im
     private $propertyManipulator;
     /**
      * @readonly
+     * @var \Rector\Core\NodeManipulator\PropertyFetchAssignManipulator
+     */
+    private $propertyFetchAssignManipulator;
+    /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Core\NodeManipulator\PropertyFetchAssignManipulator $propertyFetchAssignManipulator, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
     {
         $this->propertyManipulator = $propertyManipulator;
+        $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
         $this->visibilityManipulator = $visibilityManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -110,6 +117,9 @@ CODE_SAMPLE
             return null;
         }
         if ($property->isStatic()) {
+            return null;
+        }
+        if ($this->propertyFetchAssignManipulator->isAssignedMultipleTimesInConstructor($property)) {
             return null;
         }
         $this->visibilityManipulator->makeReadonly($property);
