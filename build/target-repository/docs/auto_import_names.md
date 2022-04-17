@@ -16,7 +16,7 @@ Rector works with all class names as fully qualified by default, so it knows the
 To import FQN like these, configure `rector.php` with:
 
 ```php
-$rectorConfig->autoImportNames();
+$rectorConfig->importNames();
 ```
 
 <br>
