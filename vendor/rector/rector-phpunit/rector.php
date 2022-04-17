@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220416;
+namespace RectorPrefix20220417;
 
 use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\Option;

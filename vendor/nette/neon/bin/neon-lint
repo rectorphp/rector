@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php 
 declare (strict_types=1);
-namespace RectorPrefix20220416;
+namespace RectorPrefix20220417;
 
 if (!(\is_file($file = __DIR__ . '/../vendor/autoload.php') && (include $file)) && !(\is_file($file = __DIR__ . '/../../../autoload.php') && (include $file))) {
     \fwrite(\STDERR, "Install packages using Composer.\n");
@@ -28,7 +28,7 @@ if ($argc < 2) {
     echo "Usage: neon-lint <path>\n";
     exit(1);
 }
-$ok = \RectorPrefix20220416\scanPath($argv[1]);
+$ok = \RectorPrefix20220417\scanPath($argv[1]);
 exit($ok ? 0 : 1);
 function scanPath(string $path) : bool
 {
@@ -40,7 +40,7 @@ function scanPath(string $path) : bool
     $success = \true;
     foreach ($it as $file) {
         echo \str_pad(\str_repeat('.', $counter++ % 40), 40), "\r";
-        $success = \RectorPrefix20220416\lintFile((string) $file) && $success;
+        $success = \RectorPrefix20220417\lintFile((string) $file) && $success;
     }
     echo \str_pad('', 40), "\r";
     echo "Done.\n";
@@ -61,9 +61,9 @@ function lintFile(string $file) : bool
         $contents = \substr($s, 3);
     }
     try {
-        \RectorPrefix20220416\Nette\Neon\Neon::decode($s);
+        \RectorPrefix20220417\Nette\Neon\Neon::decode($s);
         return \true;
-    } catch (\RectorPrefix20220416\Nette\Neon\Exception $e) {
+    } catch (\RectorPrefix20220417\Nette\Neon\Exception $e) {
         \fwrite(\STDERR, "[ERROR]      {$file}    {$e->getMessage()}\n");
     } finally {
         \restore_error_handler();

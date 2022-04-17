@@ -18,10 +18,10 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
-use RectorPrefix20220416\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220417\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220416\Webmozart\Assert\Assert;
+use RectorPrefix20220417\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameClassRectorTest
  */
@@ -42,7 +42,7 @@ final class RenameClassRector extends \Rector\Core\Rector\AbstractRector impleme
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\Renaming\NodeManipulator\ClassRenamer $classRenamer, \RectorPrefix20220416\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\Renaming\NodeManipulator\ClassRenamer $classRenamer, \RectorPrefix20220417\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->classRenamer = $classRenamer;
@@ -102,7 +102,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220416\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220417\Webmozart\Assert\Assert::allString($configuration);
         $this->addOldToNewClasses($configuration);
     }
     /**
@@ -123,8 +123,8 @@ CODE_SAMPLE
      */
     private function addOldToNewClasses(array $oldToNewClasses) : void
     {
-        \RectorPrefix20220416\Webmozart\Assert\Assert::allString(\array_keys($oldToNewClasses));
-        \RectorPrefix20220416\Webmozart\Assert\Assert::allString($oldToNewClasses);
+        \RectorPrefix20220417\Webmozart\Assert\Assert::allString(\array_keys($oldToNewClasses));
+        \RectorPrefix20220417\Webmozart\Assert\Assert::allString($oldToNewClasses);
         $this->renamedClassesDataCollector->addOldToNewClasses($oldToNewClasses);
     }
 }

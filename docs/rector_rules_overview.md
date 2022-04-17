@@ -1,4 +1,4 @@
-# 511 Rules Overview
+# 512 Rules Overview
 
 <br>
 
@@ -10890,8 +10890,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'property',
                 'getProperty',
                 'setProperty',
-                [
-            ]), new PropertyFetchToMethodCall(
+                []
+            ), new PropertyFetchToMethodCall(
                 'SomeObject',
                 'bareProperty',
                 'getConfig',

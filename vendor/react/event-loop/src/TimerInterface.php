@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220416\React\EventLoop;
+namespace RectorPrefix20220417\React\EventLoop;
 
 interface TimerInterface
 {
