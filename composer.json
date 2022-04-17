@@ -141,7 +141,7 @@
         "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify --memory-limit 2G",
         "phpstan-config": "vendor/bin/phpstan analyse config --ansi --error-format symplify",
         "docs": [
-            "vendor/bin/rule-doc-generator generate packages rules --output-file build/rector_rules_overview.md --ansi --categorize --configure-method",
+            "vendor/bin/rule-doc-generator generate packages rules --output-file build/rector_rules_overview.md --ansi --categorize",
             "mv build/rector_rules_overview.md build/target-repository/docs/rector_rules_overview.md",
             "vendor/bin/ecs check-markdown build/target-repository/docs/rector_rules_overview.md --ansi --fix"
         ],
