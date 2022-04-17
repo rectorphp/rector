@@ -52,12 +52,11 @@ To remove imports, use [ECS](https://github.com/symplify/easy-coding-standard) w
 
 ```php
 // ecs.php
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
+use Symplify\EasyCodingStandard\Config\ECSConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-    $services->set(NoUnusedImportsFixer::class);
+return static function (ECSConfig $ecsConfig): void {
+    $ecsConfig->rule(NoUnusedImportsFixer::class);
 };
 ```
 
