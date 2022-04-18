@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\StringType;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -37,7 +38,8 @@ final class StringableForToStringRector extends AbstractRector implements MinPhp
 
     public function __construct(
         private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        private readonly ReturnTypeInferer $returnTypeInferer
+        private readonly ReturnTypeInferer $returnTypeInferer,
+        private readonly ClassAnalyzer $classAnalyzer
     ) {
     }
 
@@ -99,6 +101,10 @@ CODE_SAMPLE
         $classLikeAncestorNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($node);
 
         if (in_array(self::STRINGABLE, $classLikeAncestorNames, true)) {
+            return null;
+        }
+
+        if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
 
