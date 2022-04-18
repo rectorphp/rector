@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220417\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220418\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220417\OndraM\CiDetector\Env;
-use RectorPrefix20220417\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix20220418\OndraM\CiDetector\Env;
+use RectorPrefix20220418\OndraM\CiDetector\TrinaryLogic;
 interface CiInterface
 {
     /**
      * Return true if this CI was detected.
      */
-    public static function isDetected(\RectorPrefix20220417\OndraM\CiDetector\Env $env) : bool;
+    public static function isDetected(\RectorPrefix20220418\OndraM\CiDetector\Env $env) : bool;
     /**
      * Get name of the CI server type.
      */
@@ -64,5 +64,5 @@ interface CiInterface
      * Returned TrinaryLogic object's value will be true if the current build is from a pull/merge request,
      * false if it not, and maybe if we can't determine it.
      */
-    public function isPullRequest() : \RectorPrefix20220417\OndraM\CiDetector\TrinaryLogic;
+    public function isPullRequest() : \RectorPrefix20220418\OndraM\CiDetector\TrinaryLogic;
 }

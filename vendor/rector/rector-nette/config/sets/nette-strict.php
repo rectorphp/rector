@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220417;
+namespace RectorPrefix20220418;
 
 use Rector\Nette\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

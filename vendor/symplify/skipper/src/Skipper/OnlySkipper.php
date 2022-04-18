@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220417\Symplify\Skipper\Skipper;
+namespace RectorPrefix20220418\Symplify\Skipper\Skipper;
 
-use RectorPrefix20220417\Symplify\Skipper\Matcher\FileInfoMatcher;
+use RectorPrefix20220418\Symplify\Skipper\Matcher\FileInfoMatcher;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\Skipper\Tests\Skipper\Only\OnlySkipperTest
@@ -14,7 +14,7 @@ final class OnlySkipper
      * @var \Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
-    public function __construct(\RectorPrefix20220417\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
+    public function __construct(\RectorPrefix20220418\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
     {
         $this->fileInfoMatcher = $fileInfoMatcher;
     }

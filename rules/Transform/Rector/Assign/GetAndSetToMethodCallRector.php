@@ -18,7 +18,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Transform\ValueObject\GetAndSetToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220417\Webmozart\Assert\Assert;
+use RectorPrefix20220418\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\Assign\GetAndSetToMethodCallRector\GetAndSetToMethodCallRectorTest
  */
@@ -80,7 +80,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220417\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\GetAndSetToMethodCall::class);
+        \RectorPrefix20220418\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\GetAndSetToMethodCall::class);
         $this->getAndSetToMethodCalls = $configuration;
     }
     private function processMagicSet(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node

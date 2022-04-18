@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220417\Nette\Utils;
+namespace RectorPrefix20220418\Nette\Utils;
 
-use RectorPrefix20220417\Nette;
+use RectorPrefix20220418\Nette;
 /**
  * PHP type reflection.
  */
@@ -38,12 +38,12 @@ final class Type
         } elseif ($type instanceof \ReflectionNamedType) {
             $name = self::resolve($type->getName(), $reflection);
             return new self($type->allowsNull() && $type->getName() !== 'mixed' ? [$name, 'null'] : [$name]);
-        } elseif ($type instanceof \ReflectionUnionType || $type instanceof \RectorPrefix20220417\ReflectionIntersectionType) {
+        } elseif ($type instanceof \ReflectionUnionType || $type instanceof \RectorPrefix20220418\ReflectionIntersectionType) {
             return new self(\array_map(function ($t) use($reflection) {
                 return self::resolve($t->getName(), $reflection);
             }, $type->getTypes()), $type instanceof \ReflectionUnionType ? '|' : '&');
         } else {
-            throw new \RectorPrefix20220417\Nette\InvalidStateException('Unexpected type of ' . \RectorPrefix20220417\Nette\Utils\Reflection::toString($reflection));
+            throw new \RectorPrefix20220418\Nette\InvalidStateException('Unexpected type of ' . \RectorPrefix20220418\Nette\Utils\Reflection::toString($reflection));
         }
     }
     /**
@@ -55,7 +55,7 @@ final class Type
 			\\?([\\w\\\\]+)|
 			[\\w\\\\]+ (?: (&[\\w\\\\]+)* | (\\|[\\w\\\\]+)* )
 		)()$#xAD', $type, $m)) {
-            throw new \RectorPrefix20220417\Nette\InvalidArgumentException("Invalid type '{$type}'.");
+            throw new \RectorPrefix20220418\Nette\InvalidArgumentException("Invalid type '{$type}'.");
         }
         [, $nType, $iType] = $m;
         if ($nType) {
@@ -148,21 +148,21 @@ final class Type
      */
     public function isBuiltin() : bool
     {
-        return $this->single && \RectorPrefix20220417\Nette\Utils\Reflection::isBuiltinType($this->types[0]);
+        return $this->single && \RectorPrefix20220418\Nette\Utils\Reflection::isBuiltinType($this->types[0]);
     }
     /**
      * Returns true whether the type is both a single and a class name.
      */
     public function isClass() : bool
     {
-        return $this->single && !\RectorPrefix20220417\Nette\Utils\Reflection::isBuiltinType($this->types[0]);
+        return $this->single && !\RectorPrefix20220418\Nette\Utils\Reflection::isBuiltinType($this->types[0]);
     }
     /**
      * Determines if type is special class name self/parent/static.
      */
     public function isClassKeyword() : bool
     {
-        return $this->single && \RectorPrefix20220417\Nette\Utils\Reflection::isClassKeyword($this->types[0]);
+        return $this->single && \RectorPrefix20220418\Nette\Utils\Reflection::isClassKeyword($this->types[0]);
     }
     /**
      * Verifies type compatibility. For example, it checks if a value of a certain type could be passed as a parameter.
@@ -177,17 +177,17 @@ final class Type
             if (!$type->isIntersection()) {
                 return \false;
             }
-            return \RectorPrefix20220417\Nette\Utils\Arrays::every($this->types, function ($currentType) use($type) {
-                $builtin = \RectorPrefix20220417\Nette\Utils\Reflection::isBuiltinType($currentType);
-                return \RectorPrefix20220417\Nette\Utils\Arrays::some($type->types, function ($testedType) use($currentType, $builtin) {
+            return \RectorPrefix20220418\Nette\Utils\Arrays::every($this->types, function ($currentType) use($type) {
+                $builtin = \RectorPrefix20220418\Nette\Utils\Reflection::isBuiltinType($currentType);
+                return \RectorPrefix20220418\Nette\Utils\Arrays::some($type->types, function ($testedType) use($currentType, $builtin) {
                     return $builtin ? \strcasecmp($currentType, $testedType) === 0 : \is_a($testedType, $currentType, \true);
                 });
             });
         }
         $method = $type->isIntersection() ? 'some' : 'every';
-        return \RectorPrefix20220417\Nette\Utils\Arrays::$method($type->types, function ($testedType) {
-            $builtin = \RectorPrefix20220417\Nette\Utils\Reflection::isBuiltinType($testedType);
-            return \RectorPrefix20220417\Nette\Utils\Arrays::some($this->types, function ($currentType) use($testedType, $builtin) {
+        return \RectorPrefix20220418\Nette\Utils\Arrays::$method($type->types, function ($testedType) {
+            $builtin = \RectorPrefix20220418\Nette\Utils\Reflection::isBuiltinType($testedType);
+            return \RectorPrefix20220418\Nette\Utils\Arrays::some($this->types, function ($currentType) use($testedType, $builtin) {
                 return $builtin ? \strcasecmp($currentType, $testedType) === 0 : \is_a($testedType, $currentType, \true);
             });
         });
