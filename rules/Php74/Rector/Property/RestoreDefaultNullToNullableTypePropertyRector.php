@@ -80,6 +80,9 @@ CODE_SAMPLE
         if ($property->isReadonly()) {
             return \true;
         }
+        if (!$this->nodeTypeResolver->isNullableType($property)) {
+            return \true;
+        }
         // is variable assigned in constructor
         $propertyName = $this->getName($property);
         $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
@@ -87,9 +90,6 @@ CODE_SAMPLE
         // so it needs to has null default
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
-        }
-        if (!$this->nodeTypeResolver->isNullableType($property)) {
-            return \true;
         }
         return $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
     }

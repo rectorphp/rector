@@ -13,14 +13,11 @@ Add arguments to configure and executed method in Symfony Command
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddArgumentToSymfonyCommandRector::class)
-        ->call('configure', [[AddArgumentToSymfonyCommandRector::INPUT_ARGUMENTS => ['foo' => ['name' => 'foo', 'description' => 'The parameter foo', 'mode' => 1, 'default' => null]]]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(AddArgumentToSymfonyCommandRector::class, [Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector::INPUT_ARGUMENTS: ['foo' => ['name' => 'foo', 'description' => 'The parameter foo', 'mode' => 1, 'default' => null]]]);
 };
 ```
 
@@ -49,14 +46,11 @@ Add arguments to configure method in Symfony Command
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddCommandsToReturnRector::class)
-        ->call('configure', [[AddCommandsToReturnRector::COMMANDS => ['Command' => 'Command']]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(AddCommandsToReturnRector::class, [Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector::COMMANDS: ['Command' => 'Command']]);
 };
 ```
 
@@ -85,14 +79,11 @@ Add arguments to configure method in Symfony Command
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddIconsToReturnRector::class)
-        ->call('configure', [[AddIconsToReturnRector::ICON_IDENTIFIER => 'my-icon', AddIconsToReturnRector::ICON_CONFIGURATION => ['provider' => 'stdClass', 'source' => 'mysvg.svg']]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(AddIconsToReturnRector::class, [Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector::ICON_IDENTIFIER: 'my-icon', Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector::ICON_CONFIGURATION: ['provider' => 'stdClass', 'source' => 'mysvg.svg']]);
 };
 ```
 
@@ -772,14 +763,11 @@ Refactor file ext_emconf.php
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\General\ExtEmConfRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ExtEmConfRector::class)
-        ->call('configure', [[ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => ['createDirs', 'uploadfolder']]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ExtEmConfRector::class, [Ssch\TYPO3Rector\Rector\General\ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED: ['createDirs', 'uploadfolder']]);
 };
 ```
 
@@ -900,14 +888,11 @@ Convert extbase TypoScript persistence configuration to classes one
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\ExtbasePersistenceTypoScriptRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ExtbasePersistenceTypoScriptRector::class)
-        ->call('configure', [[ExtbasePersistenceTypoScriptRector::FILENAME => 'path/to/Configuration/Extbase/Persistence/Classes.php']]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ExtbasePersistenceTypoScriptRector::class, [Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\ExtbasePersistenceTypoScriptRector::FILENAME: 'path/to/Configuration/Extbase/Persistence/Classes.php']);
 };
 ```
 
@@ -943,14 +928,11 @@ Add extra extension_key in `composer.json` and add option default constraint
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ExtensionComposerRector::class)
-        ->call('configure', [[ExtensionComposerRector::TYPO3_VERSION_CONSTRAINT => '^10.4']]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ExtensionComposerRector::class, [Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector::TYPO3_VERSION_CONSTRAINT: '^10.4']);
 };
 ```
 
@@ -1429,14 +1411,11 @@ Use GeneralUtility::makeInstance instead of getInstance call
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(MethodGetInstanceToMakeInstanceCallRector::class)
-        ->call('configure', [[MethodGetInstanceToMakeInstanceCallRector::CLASSES_GET_INSTANCE_TO_MAKE_INSTANCE => ['SomeClass']]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(MethodGetInstanceToMakeInstanceCallRector::class, [Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector::CLASSES_GET_INSTANCE_TO_MAKE_INSTANCE: ['SomeClass']]);
 };
 ```
 
@@ -2623,14 +2602,11 @@ Change package name in `composer.json`
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\RemoveCmsPackageDirFromExtraComposerRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(RemoveCmsPackageDirFromExtraComposerRector::class)
-        ->call('configure', [['not_allowed' => 'not_available']]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RemoveCmsPackageDirFromExtraComposerRector::class, [not_allowed: 'not_available']);
 };
 ```
 
@@ -3391,14 +3367,11 @@ Replaces defined classes by new ones.
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(RenameClassMapAliasRector::class)
-        ->call('configure', [[RenameClassMapAliasRector::CLASS_ALIAS_MAPS => 'config/Migrations/Code/ClassAliasMap.php']]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RenameClassMapAliasRector::class, [Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::CLASS_ALIAS_MAPS: 'config/Migrations/Code/ClassAliasMap.php']);
 };
 ```
 
@@ -3494,14 +3467,11 @@ Replace old annotation by new one
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v9\v0\ReplaceAnnotationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ReplaceAnnotationRector::class)
-        ->call('configure', [[ReplaceAnnotationRector::OLD_TO_NEW_ANNOTATIONS => ['transient' => 'TYPO3\CMS\Extbase\Annotation\ORM\Transient']]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ReplaceAnnotationRector::class, [Ssch\TYPO3Rector\Rector\v9\v0\ReplaceAnnotationRector::OLD_TO_NEW_ANNOTATIONS: ['transient' => 'TYPO3\CMS\Extbase\Annotation\ORM\Transient']]);
 };
 ```
 
@@ -3982,14 +3952,11 @@ The TCA migration migrates the icon calls to the new output if used as wizard ic
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v8\v4\SubstituteOldWizardIconsRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(SubstituteOldWizardIconsRector::class)
-        ->call('configure', [[SubstituteOldWizardIconsRector::OLD_TO_NEW_FILE_LOCATIONS => ['add.gif' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_add.gif']]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(SubstituteOldWizardIconsRector::class, [Ssch\TYPO3Rector\Rector\v8\v4\SubstituteOldWizardIconsRector::OLD_TO_NEW_FILE_LOCATIONS: ['add.gif' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_add.gif']]);
 };
 ```
 

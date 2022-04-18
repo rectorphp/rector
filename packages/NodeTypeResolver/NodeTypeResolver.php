@@ -17,6 +17,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\ClassAutoloadingException;
 use PHPStan\Reflection\ReflectionProvider;
@@ -149,6 +150,9 @@ final class NodeTypeResolver
     }
     public function getType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
+        if ($node instanceof \PhpParser\Node\Stmt\Property && $node->type instanceof \PhpParser\Node\NullableType) {
+            return $this->getType($node->type);
+        }
         if ($node instanceof \PhpParser\Node\NullableType) {
             if ($node->type instanceof \PhpParser\Node\Name && $node->type->hasAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME)) {
                 $node->type = new \PhpParser\Node\Name\FullyQualified($node->type->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME));
@@ -188,6 +192,9 @@ final class NodeTypeResolver
                 if (\strtolower($name) === 'null') {
                     return new \PHPStan\Type\NullType();
                 }
+            }
+            if ($node instanceof \PhpParser\Node\Identifier) {
+                return $this->identifierTypeResolver->resolve($node);
             }
             return new \PHPStan\Type\MixedType();
         }
