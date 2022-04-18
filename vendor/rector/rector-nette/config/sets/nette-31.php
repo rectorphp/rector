@@ -9,6 +9,7 @@ use PHPStan\Type\UnionType;
 use Rector\Composer\Rector\ChangePackageVersionComposerRector;
 use Rector\Composer\Rector\RemovePackageComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
+use Rector\Config\RectorConfig;
 use Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -24,18 +25,16 @@ use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
 use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     // forms 3.1
-    $services->set(\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::class)->configure([new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Nette\\Application\\UI\\Form', 'values', 'getValues')]);
+    $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::class, [new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Nette\\Application\\UI\\Form', 'values', 'getValues')]);
     // some attributes were added in nette 3.0, but only in one of latest patch versions; it's is safer to add them in 3.1
-    $containerConfigurator->import(\Rector\Nette\Set\NetteSetList::ANNOTATIONS_TO_ATTRIBUTES);
-    $services->set(\Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector::class)->configure([
+    $rectorConfig->sets([\Rector\Nette\Set\NetteSetList::ANNOTATIONS_TO_ATTRIBUTES]);
+    $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector::class, [
         // see https://github.com/nette/caching/commit/5ffe263752af5ccf3866a28305e7b2669ab4da82
         new \Rector\Transform\ValueObject\CallableInMethodCallToVariable('Nette\\Caching\\Cache', 'save', 1),
     ]);
-    $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
         'Nette\\Bridges\\ApplicationLatte\\Template' => 'Nette\\Bridges\\ApplicationLatte\\DefaultTemplate',
         // https://github.com/nette/application/compare/v3.0.7...v3.1.0
         'Nette\\Application\\IRouter' => 'Nette\\Routing\\Router',
@@ -80,7 +79,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         'Latte\\Runtime\\IHtmlString' => 'Latte\\Runtime\\HtmlStringable',
         'Latte\\Runtime\\ISnippetBridge' => 'Latte\\Runtime\\SnippetBridge',
     ]);
-    $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
         // https://github.com/nette/caching/commit/60281abf366c4ab76e9436dc1bfe2e402db18b67
         new \Rector\Renaming\ValueObject\MethodCallRename('Nette\\Caching\\Cache', 'start', 'capture'),
         // https://github.com/nette/forms/commit/faaaf8b8fd3408a274a9de7ca3f342091010ad5d
@@ -89,15 +88,15 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         new \Rector\Renaming\ValueObject\MethodCallRename('Nette\\Utils\\Arrays', 'searchKey', 'getKeyOffset'),
         new \Rector\Renaming\ValueObject\MethodCallRename('Nette\\Configurator', 'addParameters', 'addStaticParameters'),
     ]);
-    $services->set(\Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector::class, [
         // https://github.com/nette/utils/commit/8a4b795acd00f3f6754c28a73a7e776b60350c34
         new \Rector\Renaming\ValueObject\RenameStaticMethod('Nette\\Utils\\Callback', 'closure', 'Closure', 'fromCallable'),
     ]);
-    $services->set(\Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector::class)->configure([new \Rector\Transform\ValueObject\DimFetchAssignToMethodCall('Nette\\Application\\Routers\\RouteList', 'Nette\\Application\\Routers\\Route', 'addRoute')]);
+    $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector::class, [new \Rector\Transform\ValueObject\DimFetchAssignToMethodCall('Nette\\Application\\Routers\\RouteList', 'Nette\\Application\\Routers\\Route', 'addRoute')]);
     $nullableTemplateType = new \PHPStan\Type\UnionType([new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Template'), new \PHPStan\Type\NullType()]);
-    $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector::class)->configure([new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('Nette\\Application\\UI\\Presenter', 'sendTemplate', 0, $nullableTemplateType)]);
-    $services->set(\Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector::class);
-    $services->set(\Rector\Composer\Rector\ChangePackageVersionComposerRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector::class, [new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('Nette\\Application\\UI\\Presenter', 'sendTemplate', 0, $nullableTemplateType)]);
+    $rectorConfig->rule(\Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector::class);
+    $rectorConfig->ruleWithConfiguration(\Rector\Composer\Rector\ChangePackageVersionComposerRector::class, [
         // meta package
         new \Rector\Composer\ValueObject\PackageAndVersion('nette/nette', '^3.1'),
         // https://github.com/nette/nette/blob/v3.0.0/composer.json vs https://github.com/nette/nette/blob/v3.1.0/composer.json
@@ -126,5 +125,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         new \Rector\Composer\ValueObject\PackageAndVersion('nettrine/annotations', '^0.7'),
         new \Rector\Composer\ValueObject\PackageAndVersion('nettrine/cache', '^0.3'),
     ]);
-    $services->set(\Rector\Composer\Rector\RemovePackageComposerRector::class)->configure(['nette/component-model', 'nette/neon']);
+    $rectorConfig->ruleWithConfiguration(\Rector\Composer\Rector\RemovePackageComposerRector::class, ['nette/component-model', 'nette/neon']);
 };

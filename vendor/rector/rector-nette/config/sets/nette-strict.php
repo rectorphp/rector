@@ -3,9 +3,8 @@
 declare (strict_types=1);
 namespace RectorPrefix20220418;
 
+use Rector\Config\RectorConfig;
 use Rector\Nette\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(\Rector\Nette\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector::class);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(\Rector\Nette\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector::class);
 };

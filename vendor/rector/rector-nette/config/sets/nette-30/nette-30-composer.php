@@ -8,10 +8,9 @@ use Rector\Composer\Rector\RemovePackageComposerRector;
 use Rector\Composer\Rector\ReplacePackageAndVersionComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Composer\ValueObject\ReplacePackageAndVersion;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(\Rector\Composer\Rector\ChangePackageVersionComposerRector::class)->configure([
+use Rector\Config\RectorConfig;
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->ruleWithConfiguration(\Rector\Composer\Rector\ChangePackageVersionComposerRector::class, [
         new \Rector\Composer\ValueObject\PackageAndVersion('nette/nette', '^3.0'),
         // https://github.com/nette/nette/blob/v2.4.0/composer.json vs https://github.com/nette/nette/blob/v3.0.0/composer.json
         // older versions have security issues
@@ -40,8 +39,8 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         // other packages
         new \Rector\Composer\ValueObject\PackageAndVersion('radekdostal/nette-datetimepicker', '^3.0'),
     ]);
-    $services->set(\Rector\Composer\Rector\RemovePackageComposerRector::class)->configure(['nette/deprecated', 'nette/reflection']);
-    $services->set(\Rector\Composer\Rector\ReplacePackageAndVersionComposerRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Composer\Rector\RemovePackageComposerRector::class, ['nette/deprecated', 'nette/reflection']);
+    $rectorConfig->ruleWithConfiguration(\Rector\Composer\Rector\ReplacePackageAndVersionComposerRector::class, [
         // webchemistry to contributte
         new \Rector\Composer\ValueObject\ReplacePackageAndVersion('webchemistry/forms-multiplier', 'contributte/forms-multiplier', '3.1.x-dev'),
     ]);
