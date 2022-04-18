@@ -76,7 +76,7 @@ final class ClassChildAnalyzer
     /**
      * @return PhpMethodReflection[]
      */
-    private function resolveParentClassMethods(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : array
+    public function resolveParentClassMethods(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : array
     {
         $parentClassMethods = [];
         $parents = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
