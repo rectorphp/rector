@@ -18,6 +18,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\ClassAutoloadingException;
 use PHPStan\Reflection\ReflectionProvider;
@@ -116,6 +117,10 @@ final class NodeTypeResolver
 
     public function getType(Node $node): Type
     {
+        if ($node instanceof Property && $node->type instanceof NullableType) {
+            return $this->getType($node->type);
+        }
+
         if ($node instanceof NullableType) {
             if ($node->type instanceof Name && $node->type->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
                 $node->type = new FullyQualified($node->type->getAttribute(AttributeKey::NAMESPACED_NAME));
@@ -165,6 +170,10 @@ final class NodeTypeResolver
                 if (strtolower($name) === 'null') {
                     return new NullType();
                 }
+            }
+
+            if ($node instanceof Identifier) {
+                return $this->identifierTypeResolver->resolve($node);
             }
 
             return new MixedType();
