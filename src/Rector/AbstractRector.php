@@ -40,6 +40,7 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\Skipper\Skipper\Skipper;
 
 /**
@@ -80,6 +81,8 @@ CODE_SAMPLE;
     protected NodeNameResolver $nodeNameResolver;
 
     protected NodeTypeResolver $nodeTypeResolver;
+
+    protected ParameterProvider $parameterProvider;
 
     protected PhpVersionProvider $phpVersionProvider;
 
@@ -137,6 +140,7 @@ CODE_SAMPLE;
         PhpVersionProvider $phpVersionProvider,
         ExclusionManager $exclusionManager,
         StaticTypeMapper $staticTypeMapper,
+        ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
         CurrentNodeProvider $currentNodeProvider,
         Skipper $skipper,
@@ -158,6 +162,7 @@ CODE_SAMPLE;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->exclusionManager = $exclusionManager;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
