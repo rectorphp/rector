@@ -12,9 +12,10 @@ use Rector\PHPUnit\NodeFactory\AssertCallFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/sebastianbergmann/phpunit/blob/master/ChangeLog-8.0.md
+ * @changelog https://github.com/sebastianbergmann/phpunit/blob/master/ChangeLog-8.0.md
  * @see https://github.com/sebastianbergmann/phpunit/commit/90e9e0379584bdf34220322e202617cd56d8ba65
  * @see https://github.com/sebastianbergmann/phpunit/commit/a4b60a5c625ff98a52bb3222301d223be7367483
+ *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector\AssertEqualsParameterToSpecificMethodsTypeRectorTest
  */
 final class AssertEqualsParameterToSpecificMethodsTypeRector extends \Rector\Core\Rector\AbstractRector
@@ -86,65 +87,92 @@ CODE_SAMPLE
             return null;
         }
         // 1. refactor to "assertEqualsIgnoringCase()"
-        $this->processAssertEqualsIgnoringCase($node);
+        $newMethodCall = $this->processAssertEqualsIgnoringCase($node);
+        if ($newMethodCall !== null) {
+            return $newMethodCall;
+        }
         // 2. refactor to "assertEqualsCanonicalizing()"
-        $this->processAssertEqualsCanonicalizing($node);
+        $newMethodCall = $this->processAssertEqualsCanonicalizing($node);
+        if ($newMethodCall !== null) {
+            return $newMethodCall;
+        }
         if (isset($node->args[4])) {
             // add new node only in case of non-default value
             unset($node->args[4]);
         }
-        $this->processAssertEqualsWithDelta($node);
-        return $node;
+        return $this->processAssertEqualsWithDelta($node);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
-    private function processAssertEqualsIgnoringCase($node) : void
+    private function processAssertEqualsIgnoringCase($call)
     {
-        if (isset($node->args[6])) {
-            if ($this->valueResolver->isTrue($node->args[6]->value)) {
-                $newMethodCall = $this->assertCallFactory->createCallWithName($node, 'assertEqualsIgnoringCase');
-                $newMethodCall->args[0] = $node->args[0];
-                $newMethodCall->args[1] = $node->args[1];
-                $newMethodCall->args[2] = $node->args[2];
-                $this->nodesToAddCollector->addNodeAfterNode($newMethodCall, $node);
-            }
-            unset($node->args[6]);
+        $args = $call->getArgs();
+        if (!isset($args[6])) {
+            return null;
         }
+        unset($call->args[6]);
+        if ($this->valueResolver->isFalse($args[6]->value)) {
+            return $call;
+        }
+        $newMethodCall = $this->assertCallFactory->createCallWithName($call, 'assertEqualsIgnoringCase');
+        $newMethodCall->args[0] = $call->args[0];
+        $newMethodCall->args[1] = $call->args[1];
+        if (!$this->valueResolver->isValue($args[2]->value, '')) {
+            $newMethodCall->args[2] = $args[2];
+        }
+        return $newMethodCall;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
-    private function processAssertEqualsCanonicalizing($node) : void
+    private function processAssertEqualsCanonicalizing($call)
     {
-        if (isset($node->args[5])) {
-            // add new node only in case of non-default value
-            if ($this->valueResolver->isTrue($node->args[5]->value)) {
-                $newMethodCall = $this->assertCallFactory->createCallWithName($node, 'assertEqualsCanonicalizing');
-                $newMethodCall->args[0] = $node->args[0];
-                $newMethodCall->args[1] = $node->args[1];
-                $newMethodCall->args[2] = $node->args[2];
-                $this->nodesToAddCollector->addNodeAfterNode($newMethodCall, $node);
-            }
-            unset($node->args[5]);
+        $args = $call->getArgs();
+        if (!isset($args[5])) {
+            return null;
         }
+        // add new node only in case of non-default value
+        unset($call->args[5]);
+        if (!$this->valueResolver->isTrue($args[5]->value)) {
+            return $call;
+        }
+        $newMethodCall = $this->assertCallFactory->createCallWithName($call, 'assertEqualsCanonicalizing');
+        $newMethodCall->args[0] = $args[0];
+        $newMethodCall->args[1] = $args[1];
+        // keep only non empty message
+        if (!$this->valueResolver->isValue($args[2]->value, '')) {
+            $newMethodCall->args[2] = $args[2];
+        }
+        return $newMethodCall;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
-    private function processAssertEqualsWithDelta($node) : void
+    private function processAssertEqualsWithDelta($call)
     {
-        if (isset($node->args[3])) {
-            // add new node only in case of non-default value
-            if (!$this->valueResolver->isValue($node->args[3]->value, 0.0)) {
-                $newMethodCall = $this->assertCallFactory->createCallWithName($node, 'assertEqualsWithDelta');
-                $newMethodCall->args[0] = $node->args[0];
-                $newMethodCall->args[1] = $node->args[1];
-                $newMethodCall->args[2] = $node->args[3];
-                $newMethodCall->args[3] = $node->args[2];
-                $this->nodesToAddCollector->addNodeAfterNode($newMethodCall, $node);
-            }
-            unset($node->args[3]);
+        $args = $call->getArgs();
+        if (!isset($args[3])) {
+            return null;
         }
+        // add new node only in case of non-default value
+        $thirdArg = $call->getArgs()[3];
+        unset($call->args[3]);
+        if ($this->valueResolver->isValue($thirdArg->value, 0.0)) {
+            return null;
+        }
+        $newMethodCall = $this->assertCallFactory->createCallWithName($call, 'assertEqualsWithDelta');
+        $newMethodCall->args[0] = $call->args[0];
+        $newMethodCall->args[1] = $call->args[1];
+        $newMethodCall->args[2] = $thirdArg;
+        $secondArg = $args[2];
+        // keep only non empty message
+        if (!$this->valueResolver->isValue($secondArg->value, '')) {
+            $newMethodCall->args[3] = $secondArg;
+        }
+        return $newMethodCall;
     }
 }

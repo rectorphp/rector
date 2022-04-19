@@ -28,8 +28,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->import(\Rector\Set\ValueObject\SetList::CODING_STYLE);
     $rectorConfig->import(\Rector\Set\ValueObject\SetList::EARLY_RETURN);
     $rectorConfig->import(\Rector\Set\ValueObject\SetList::NAMING);
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class, [
         // keep unprefixed to protected from downgrade
         'PHPUnit\\Framework\\Assert',
         'PHPUnit\\Framework\\MockObject\\*',

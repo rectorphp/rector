@@ -6,6 +6,5 @@ namespace RectorPrefix20220419;
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector::class);
+    $rectorConfig->rule(\Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector::class);
 };

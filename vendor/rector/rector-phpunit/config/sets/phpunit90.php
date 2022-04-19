@@ -10,11 +10,10 @@ use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\PHPUnit\Rector\Class_\TestListenerToHooksRector::class);
-    $services->set(\Rector\PHPUnit\Rector\MethodCall\ExplicitPhpErrorApiRector::class);
-    $services->set(\Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector::class);
-    $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([
+    $rectorConfig->rule(\Rector\PHPUnit\Rector\Class_\TestListenerToHooksRector::class);
+    $rectorConfig->rule(\Rector\PHPUnit\Rector\MethodCall\ExplicitPhpErrorApiRector::class);
+    $rectorConfig->rule(\Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector::class);
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
         // see https://github.com/sebastianbergmann/phpunit/issues/3957
         new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\TestCase', 'expectExceptionMessageRegExp', 'expectExceptionMessageMatches'),
     ]);
