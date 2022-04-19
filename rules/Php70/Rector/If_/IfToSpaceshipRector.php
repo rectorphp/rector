@@ -51,6 +51,10 @@ final class IfToSpaceshipRector extends \Rector\Core\Rector\AbstractRector imple
      * @var \PhpParser\Node|null
      */
     private $nextNode = null;
+    /**
+     * @var \PhpParser\Node\Expr\Ternary|null
+     */
+    private $ternary = null;
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes if/else to spaceship <=> where useful', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -98,10 +102,7 @@ CODE_SAMPLE
         }
         $this->reset();
         $this->matchOnEqualFirstValueAndSecondValue($node);
-        if ($this->firstValue === null) {
-            return null;
-        }
-        if ($this->secondValue === null) {
+        if (!isset($this->firstValue, $this->secondValue)) {
             return null;
         }
         /** @var Equal|Identical $condition */
@@ -110,13 +111,12 @@ CODE_SAMPLE
             return null;
         }
         if ([$this->onGreater, $this->onEqual, $this->onSmaller] === [1, 0, -1]) {
-            return $this->processReturnSpaceship($this->secondValue, $this->firstValue);
+            return $this->processAscendingSort($this->ternary, $this->firstValue, $this->secondValue);
         }
-        // is spaceship return values?
-        if ([$this->onGreater, $this->onEqual, $this->onSmaller] !== [-1, 0, 1]) {
-            return null;
+        if ([$this->onGreater, $this->onEqual, $this->onSmaller] === [-1, 0, 1]) {
+            return $this->processDescendingSort($this->ternary, $this->firstValue, $this->secondValue);
         }
-        return $this->processReturnSpaceship($this->firstValue, $this->secondValue);
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
@@ -147,9 +147,8 @@ CODE_SAMPLE
         } else {
             $nextNode = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
             if ($nextNode instanceof \PhpParser\Node\Stmt\Return_ && $nextNode->expr instanceof \PhpParser\Node\Expr\Ternary) {
-                /** @var Ternary $ternary */
-                $ternary = $nextNode->expr;
-                $this->processTernary($ternary, $nextNode);
+                $this->ternary = $nextNode->expr;
+                $this->processTernary($this->ternary, $nextNode);
             }
         }
     }
@@ -190,6 +189,7 @@ CODE_SAMPLE
         /** @var Return_ $returnNode */
         $returnNode = $else->stmts[0];
         if ($returnNode->expr instanceof \PhpParser\Node\Expr\Ternary) {
+            $this->ternary = $returnNode->expr;
             $this->processTernary($returnNode->expr, null);
         }
     }
@@ -212,5 +212,19 @@ CODE_SAMPLE
             $this->onSmaller = $this->valueResolver->getValue($ternary->else);
             $this->nextNode = $return;
         }
+    }
+    private function processAscendingSort(?\PhpParser\Node\Expr\Ternary $ternary, \PhpParser\Node\Expr $firstValue, \PhpParser\Node\Expr $secondValue) : \PhpParser\Node\Stmt\Return_
+    {
+        if ($ternary === null || $ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Greater) {
+            return $this->processReturnSpaceship($firstValue, $secondValue);
+        }
+        return $this->processReturnSpaceship($secondValue, $firstValue);
+    }
+    private function processDescendingSort(?\PhpParser\Node\Expr\Ternary $ternary, \PhpParser\Node\Expr $firstValue, \PhpParser\Node\Expr $secondValue) : \PhpParser\Node\Stmt\Return_
+    {
+        if ($ternary === null || $ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Smaller) {
+            return $this->processReturnSpaceship($firstValue, $secondValue);
+        }
+        return $this->processReturnSpaceship($secondValue, $firstValue);
     }
 }

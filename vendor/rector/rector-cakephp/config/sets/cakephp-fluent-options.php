@@ -8,8 +8,7 @@ use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Rector\CakePHP\ValueObject\FactoryMethod;
 use Rector\Config\RectorConfig;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::class)->configure([\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => [new \Rector\CakePHP\ValueObject\ArrayToFluentCall('Cake\\ORM\\Association', [
+    $rectorConfig->ruleWithConfiguration(\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::class, [\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => [new \Rector\CakePHP\ValueObject\ArrayToFluentCall('Cake\\ORM\\Association', [
         'bindingKey' => 'setBindingKey',
         'cascadeCallbacks' => 'setCascadeCallbacks',
         'className' => 'setClassName',

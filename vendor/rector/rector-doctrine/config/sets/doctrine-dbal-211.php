@@ -8,8 +8,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
         // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecations-in-the-wrapper-connection-class
         new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Connection', 'executeUpdate', 'executeStatement'),
         new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Connection', 'exec', 'executeStatement'),
@@ -31,7 +30,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Statement', 'fetchColumn', 'fetchOne'),
         new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Statement', 'fetchAll', 'fetchAllAssociative'),
     ]);
-    $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
         // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#pdo-related-classes-outside-of-the-pdo-namespace-are-deprecated
         'Doctrine\\DBAL\\Driver\\PDOMySql\\Driver' => 'Doctrine\\DBAL\\Driver\\PDO\\MySQL\\Driver',
         'Doctrine\\DBAL\\Driver\\PDOOracle\\Driver' => 'Doctrine\\DBAL\\Driver\\PDO\\OCI\\Driver',

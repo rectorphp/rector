@@ -17,8 +17,7 @@ use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::class, [
         // source: https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html
         new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Cake\\Network\\Request', 'params', 'getAttribute', null, ['params']),
         new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Cake\\Network\\Request', 'data', 'getData'),
@@ -28,8 +27,8 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Cake\\Network\\Request', 'webroot', 'getAttribute', null, ['webroot']),
         new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Cake\\Network\\Request', 'here', 'getAttribute', null, ['here']),
     ]);
-    $services->set(\Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector::class)->configure([new \Rector\Renaming\ValueObject\RenameProperty('Cake\\Network\\Request', '_session', 'session')]);
-    $services->set(\Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector::class, [new \Rector\Renaming\ValueObject\RenameProperty('Cake\\Network\\Request', '_session', 'session')]);
+    $rectorConfig->ruleWithConfiguration(\Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector::class, [
         new \Rector\CakePHP\ValueObject\ModalToGetSet('Cake\\Core\\InstanceConfigTrait', 'config', null, null, 2, 'array'),
         new \Rector\CakePHP\ValueObject\ModalToGetSet('Cake\\Core\\StaticConfigTrait', 'config', null, null, 2, 'array'),
         new \Rector\CakePHP\ValueObject\ModalToGetSet('Cake\\Console\\ConsoleOptionParser', 'command'),
@@ -130,7 +129,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         new \Rector\CakePHP\ValueObject\ModalToGetSet('Cake\\View\\ViewBuilder', 'className'),
         new \Rector\CakePHP\ValueObject\ModalToGetSet('Cake\\View\\ViewBuilder', 'autoLayout', 'isAutoLayoutEnabled', 'enableAutoLayout'),
     ]);
-    $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
         new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Network\\Request', 'param', 'getParam'),
         new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Network\\Request', 'data', 'getData'),
         new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Network\\Request', 'query', 'getQuery'),
@@ -171,6 +170,6 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Routing\\Route\\Route', 'parse', 'parseRequest'),
         new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Routing\\Router', 'parse', 'parseRequest'),
     ]);
-    $services->set(\Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector::class)->configure([new \Rector\Visibility\ValueObject\ChangeMethodVisibility('Cake\\Mailer\\MailerAwareTrait', 'getMailer', \Rector\Core\ValueObject\Visibility::PROTECTED), new \Rector\Visibility\ValueObject\ChangeMethodVisibility('Cake\\View\\CellTrait', 'cell', \Rector\Core\ValueObject\Visibility::PROTECTED)]);
-    $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->configure(['Cake\\Database\\Schema\\Table' => 'Cake\\Database\\Schema\\TableSchema']);
+    $rectorConfig->ruleWithConfiguration(\Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector::class, [new \Rector\Visibility\ValueObject\ChangeMethodVisibility('Cake\\Mailer\\MailerAwareTrait', 'getMailer', \Rector\Core\ValueObject\Visibility::PROTECTED), new \Rector\Visibility\ValueObject\ChangeMethodVisibility('Cake\\View\\CellTrait', 'cell', \Rector\Core\ValueObject\Visibility::PROTECTED)]);
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, ['Cake\\Database\\Schema\\Table' => 'Cake\\Database\\Schema\\TableSchema']);
 };

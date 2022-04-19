@@ -7,8 +7,7 @@ use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Php80\Rector\Class_\AnnotationToAttributeRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Php80\Rector\Class_\AnnotationToAttributeRector::class, [
         // class
         new \Rector\Php80\ValueObject\AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Table'),
         new \Rector\Php80\ValueObject\AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Entity'),
