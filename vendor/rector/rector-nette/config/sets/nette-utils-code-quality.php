@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220418;
+namespace RectorPrefix20220419;
 
 use Rector\Config\RectorConfig;
 use Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector;
