@@ -50,6 +50,8 @@ final class IfToSpaceshipRector extends AbstractRector implements MinPhpVersionI
 
     private Node|null $nextNode = null;
 
+    private Ternary|null $ternary = null;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -108,11 +110,7 @@ CODE_SAMPLE
         $this->reset();
 
         $this->matchOnEqualFirstValueAndSecondValue($node);
-        if ($this->firstValue === null) {
-            return null;
-        }
-
-        if ($this->secondValue === null) {
+        if (! isset($this->firstValue, $this->secondValue)) {
             return null;
         }
 
@@ -124,15 +122,14 @@ CODE_SAMPLE
         }
 
         if ([$this->onGreater, $this->onEqual, $this->onSmaller] === [1, 0, -1]) {
-            return $this->processReturnSpaceship($this->secondValue, $this->firstValue);
+            return $this->processAscendingSort($this->ternary, $this->firstValue, $this->secondValue);
         }
 
-        // is spaceship return values?
-        if ([$this->onGreater, $this->onEqual, $this->onSmaller] !== [-1, 0, 1]) {
-            return null;
+        if ([$this->onGreater, $this->onEqual, $this->onSmaller] === [-1, 0, 1]) {
+            return $this->processDescendingSort($this->ternary, $this->firstValue, $this->secondValue);
         }
 
-        return $this->processReturnSpaceship($this->firstValue, $this->secondValue);
+        return null;
     }
 
     public function provideMinPhpVersion(): int
@@ -171,9 +168,8 @@ CODE_SAMPLE
         } else {
             $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
             if ($nextNode instanceof Return_ && $nextNode->expr instanceof Ternary) {
-                /** @var Ternary $ternary */
-                $ternary = $nextNode->expr;
-                $this->processTernary($ternary, $nextNode);
+                $this->ternary = $nextNode->expr;
+                $this->processTernary($this->ternary, $nextNode);
             }
         }
     }
@@ -224,6 +220,7 @@ CODE_SAMPLE
         /** @var Return_ $returnNode */
         $returnNode = $else->stmts[0];
         if ($returnNode->expr instanceof Ternary) {
+            $this->ternary = $returnNode->expr;
             $this->processTernary($returnNode->expr, null);
         }
     }
@@ -251,5 +248,23 @@ CODE_SAMPLE
             $this->onSmaller = $this->valueResolver->getValue($ternary->else);
             $this->nextNode = $return;
         }
+    }
+
+    private function processAscendingSort(?Ternary $ternary, Expr $firstValue, Expr $secondValue): Return_
+    {
+        if ($ternary === null || $ternary->cond instanceof Greater) {
+            return $this->processReturnSpaceship($firstValue, $secondValue);
+        }
+
+        return $this->processReturnSpaceship($secondValue, $firstValue);
+    }
+
+    private function processDescendingSort(?Ternary $ternary, Expr $firstValue, Expr $secondValue): Return_
+    {
+        if ($ternary === null || $ternary->cond instanceof Smaller) {
+            return $this->processReturnSpaceship($firstValue, $secondValue);
+        }
+
+        return $this->processReturnSpaceship($secondValue, $firstValue);
     }
 }

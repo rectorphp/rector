@@ -41,7 +41,7 @@ class SideEffect {
 	}
 
 	private static function rsort( $a, $b ) {
-		return $a['bar'] <=> $b['bar'];
+		return $b['bar'] <=> $a['bar'];
 	}
 
 }
