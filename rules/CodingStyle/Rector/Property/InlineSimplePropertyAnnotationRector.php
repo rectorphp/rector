@@ -105,6 +105,11 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
+        if (count($phpDocInfo->getPhpDocNode()->children) > 1) {
+            return null;
+        }
+
         $phpDocNode = $phpDocInfo->getPhpDocNode();
 
         $tags = $phpDocNode->getTags();
@@ -112,7 +117,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $tag = $tags[0];
+        // The first value may not be at index 0
+        $tag = reset($tags);
 
         if (! in_array($tag->name, $this->annotationsToConsiderForInlining, true)) {
             return null;
@@ -126,10 +132,6 @@ CODE_SAMPLE
         /** @var Doc $comment */
         $comment = $comments[0];
         if (! str_contains($comment->getText(), (string) $tag)) {
-            return null;
-        }
-
-        if (count($phpDocInfo->getPhpDocNode()->children) > 1) {
             return null;
         }
 
