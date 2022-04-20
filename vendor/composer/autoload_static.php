@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6f71e4087747ab68470221dd9fd618ae
+class ComposerStaticInit09afb76b48dfed1b2a031423216a4206
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2325,7 +2325,8 @@ class ComposerStaticInit6f71e4087747ab68470221dd9fd618ae
         'Rector\\Doctrine\\ValueObject\\PropertyNameAndPhpDocInfo' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/PropertyNameAndPhpDocInfo.php',
         'Rector\\Doctrine\\ValueObject\\PropertyNamesAndPhpDocInfos' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/PropertyNamesAndPhpDocInfos.php',
         'Rector\\DogFood\\NodeAnalyzer\\ContainerConfiguratorCallAnalyzer' => __DIR__ . '/../..' . '/rules/DogFood/NodeAnalyzer/ContainerConfiguratorCallAnalyzer.php',
-        'Rector\\DogFood\\NodeManipulator\\EmptyAssignRemover' => __DIR__ . '/../..' . '/rules/DogFood/NodeManipulator/EmptyAssignRemover.php',
+        'Rector\\DogFood\\NodeManipulator\\ContainerConfiguratorEmptyAssignRemover' => __DIR__ . '/../..' . '/rules/DogFood/NodeManipulator/ContainerConfiguratorEmptyAssignRemover.php',
+        'Rector\\DogFood\\NodeManipulator\\ContainerConfiguratorImportsMerger' => __DIR__ . '/../..' . '/rules/DogFood/NodeManipulator/ContainerConfiguratorImportsMerger.php',
         'Rector\\DogFood\\Rector\\Closure\\UpgradeRectorConfigRector' => __DIR__ . '/../..' . '/rules/DogFood/Rector/Closure/UpgradeRectorConfigRector.php',
         'Rector\\DowngradePhp53\\Rector\\Dir\\DirConstToFileConstRector' => __DIR__ . '/../..' . '/rules/DowngradePhp53/Rector/Dir/DirConstToFileConstRector.php',
         'Rector\\DowngradePhp54\\Rector\\Array_\\ShortArrayToLongArrayRector' => __DIR__ . '/../..' . '/rules/DowngradePhp54/Rector/Array_/ShortArrayToLongArrayRector.php',
@@ -3868,9 +3869,9 @@ class ComposerStaticInit6f71e4087747ab68470221dd9fd618ae
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6f71e4087747ab68470221dd9fd618ae::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6f71e4087747ab68470221dd9fd618ae::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6f71e4087747ab68470221dd9fd618ae::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit09afb76b48dfed1b2a031423216a4206::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit09afb76b48dfed1b2a031423216a4206::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit09afb76b48dfed1b2a031423216a4206::$classMap;
 
         }, null, ClassLoader::class);
     }
