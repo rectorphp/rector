@@ -23,6 +23,7 @@ final class Option
     public const AUTOLOAD_FILE = 'autoload-file';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::bootstrapFiles() instead
      * @var string
      */
     public const BOOTSTRAP_FILES = 'bootstrap_files';
@@ -48,11 +49,13 @@ final class Option
     public const NO_PROGRESS_BAR = 'no-progress-bar';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::phpVersion() instead
      * @var string
      */
     public const PHP_VERSION_FEATURES = 'php_version_features';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::importNames() instead
      * @var string
      */
     public const AUTO_IMPORT_NAMES = 'auto_import_names';
@@ -63,6 +66,7 @@ final class Option
     public const IMPORT_SHORT_CLASSES = 'import_short_classes';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::symfonyContainerXml() instead
      * @var string
      */
     public const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
@@ -73,21 +77,25 @@ final class Option
     public const CLEAR_CACHE = 'clear-cache';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::parallel() instead
      * @var string
      */
     public const PARALLEL = 'parallel';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::paths() instead
      * @var string
      */
     public const PATHS = 'paths';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::autoloadPaths() instead
      * @var string
      */
     public const AUTOLOAD_PATHS = 'autoload_paths';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::skip() instead
      * @var string
      */
     public const SKIP = SkipperOption::SKIP;
@@ -131,6 +139,7 @@ final class Option
     public const CONFIG = 'config';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::phpstanConfig() instead
      * @var string
      */
     public const PHPSTAN_FOR_RECTOR_PATH = 'phpstan_for_rector_path';
