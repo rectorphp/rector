@@ -6,8 +6,7 @@ namespace RectorPrefix20220420;
 use Rector\Config\RectorConfig;
 use Rector\Removing\Rector\Class_\RemoveTraitUseRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Removing\Rector\Class_\RemoveTraitUseRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Removing\Rector\Class_\RemoveTraitUseRector::class, [
         # see https://laravel.com/docs/5.3/upgrade
         'Illuminate\\Foundation\\Auth\\Access\\AuthorizesResources',
     ]);

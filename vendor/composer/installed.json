@@ -1083,17 +1083,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.5.6",
-            "version_normalized": "1.5.6.0",
+            "version": "1.5.7",
+            "version_normalized": "1.5.7.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "799dd8c2d2c9c704bb55d2078078cb970cf0f6d1"
+                "reference": "7fb7e2e1e9f3d59a26a413b2d3d5e47f0edb75ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/799dd8c2d2c9c704bb55d2078078cb970cf0f6d1",
-                "reference": "799dd8c2d2c9c704bb55d2078078cb970cf0f6d1",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/7fb7e2e1e9f3d59a26a413b2d3d5e47f0edb75ac",
+                "reference": "7fb7e2e1e9f3d59a26a413b2d3d5e47f0edb75ac",
                 "shasum": ""
             },
             "require": {
@@ -1102,7 +1102,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-04-15T11:13:37+00:00",
+            "time": "2022-04-20T12:20:27+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -1121,7 +1121,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.5.6"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.5.7"
             },
             "funding": [
                 {
@@ -2348,12 +2348,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-laravel.git",
-                "reference": "48a1f3458dc9536a32dae0507ba53fc2d3d28f01"
+                "reference": "b7941717d23855e627ed2b77e69d49da9997fc53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/48a1f3458dc9536a32dae0507ba53fc2d3d28f01",
-                "reference": "48a1f3458dc9536a32dae0507ba53fc2d3d28f01",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/b7941717d23855e627ed2b77e69d49da9997fc53",
+                "reference": "b7941717d23855e627ed2b77e69d49da9997fc53",
                 "shasum": ""
             },
             "require": {
@@ -2377,7 +2377,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-04-13T07:25:59+00:00",
+            "time": "2022-04-20T14:13:04+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2627,12 +2627,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "99f5e983a17c5cde4a6bd81789f70d5c20991879"
+                "reference": "7dd7cdf3850ff4b0a7839fcf24bb4c26138044de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/99f5e983a17c5cde4a6bd81789f70d5c20991879",
-                "reference": "99f5e983a17c5cde4a6bd81789f70d5c20991879",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/7dd7cdf3850ff4b0a7839fcf24bb4c26138044de",
+                "reference": "7dd7cdf3850ff4b0a7839fcf24bb4c26138044de",
                 "shasum": ""
             },
             "require": {
@@ -2660,7 +2660,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-04-18T14:25:18+00:00",
+            "time": "2022-04-20T14:22:36+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

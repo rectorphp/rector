@@ -10,11 +10,10 @@ use Rector\Symfony\Rector\Class_\MakeCommandLazyRector;
 use Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Symfony\Rector\Class_\MakeCommandLazyRector::class);
-    $services->set(\Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector::class);
-    $services->set(\Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\Class_\MakeCommandLazyRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector::class);
     // int and string literals to const fetches
-    $services->set(\Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector::class);
-    $services->set(\Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector::class);
 };

@@ -43,9 +43,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $scalarArrayObjectUnionType = $unionTypeReflectionClass->newInstanceWithoutConstructor();
     $privatesAccessor = new \RectorPrefix20220420\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
     $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
-    // @see https://github.com/symfony/symfony/pull/42064
-    $services = $rectorConfig->services();
-    $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector::class, [
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Config\\Loader\\LoaderInterface', 'load', new \PHPStan\Type\MixedType()),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Config\\Loader\\Loader', 'import', new \PHPStan\Type\MixedType()),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\HttpKernel\\KernelInterface', 'registerBundles', $iterableType),

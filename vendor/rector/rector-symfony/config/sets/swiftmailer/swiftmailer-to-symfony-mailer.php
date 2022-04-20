@@ -8,9 +8,8 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
 // @see https://symfony.com/blog/the-end-of-swiftmailer
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector::class);
-    $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->configure([
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector::class);
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
         'Swift_Mailer' => 'Symfony\\Component\\Mailer\\MailerInterface',
         'Swift_Message' => 'Symfony\\Component\\Mime\\Email',
         // message

@@ -6,6 +6,5 @@ namespace RectorPrefix20220420;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\Property\JMSInjectPropertyToConstructorInjectionRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Symfony\Rector\Property\JMSInjectPropertyToConstructorInjectionRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\Property\JMSInjectPropertyToConstructorInjectionRector::class);
 };

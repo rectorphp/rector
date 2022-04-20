@@ -6,5 +6,5 @@ namespace RectorPrefix20220420;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Set\SymfonySetList;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->import(\Rector\Symfony\Set\SymfonySetList::SYMFONY_26);
+    $rectorConfig->sets([\Rector\Symfony\Set\SymfonySetList::SYMFONY_26]);
 };

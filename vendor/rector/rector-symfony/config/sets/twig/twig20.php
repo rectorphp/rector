@@ -6,8 +6,7 @@ namespace RectorPrefix20220420;
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
         #filters
         # see https://twig.symfony.com/doc/1.x/deprecated.html
         'Twig_SimpleFilter' => 'Twig_Filter',

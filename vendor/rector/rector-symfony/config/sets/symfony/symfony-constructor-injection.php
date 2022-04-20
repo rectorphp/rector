@@ -8,8 +8,7 @@ use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector;
 use Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector::class);
-    $services->set(\Rector\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector::class);
-    $services->set(\Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector::class);
 };

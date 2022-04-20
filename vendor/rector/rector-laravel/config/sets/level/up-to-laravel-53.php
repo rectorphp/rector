@@ -7,6 +7,5 @@ use Rector\Config\RectorConfig;
 use Rector\Laravel\Set\LaravelLevelSetList;
 use Rector\Laravel\Set\LaravelSetList;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->import(\Rector\Laravel\Set\LaravelSetList::LARAVEL_53);
-    $rectorConfig->import(\Rector\Laravel\Set\LaravelLevelSetList::UP_TO_LARAVEL_52);
+    $rectorConfig->sets([\Rector\Laravel\Set\LaravelSetList::LARAVEL_53, \Rector\Laravel\Set\LaravelLevelSetList::UP_TO_LARAVEL_52]);
 };

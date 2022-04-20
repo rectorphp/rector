@@ -6,6 +6,5 @@ namespace RectorPrefix20220420;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\MethodCall\RedirectToRouteRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Symfony\Rector\MethodCall\RedirectToRouteRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\RedirectToRouteRector::class);
 };
