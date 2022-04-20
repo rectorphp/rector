@@ -4,12 +4,12 @@ declare (strict_types=1);
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\NodeAbstract;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\Type\NullType;
 use function count;
 use function strtolower;
 /**
@@ -34,8 +34,11 @@ class AssertSameNullExpectedRule implements \PHPStan\Rules\Rule
         if (!$node->name instanceof \PhpParser\Node\Identifier || \strtolower($node->name->name) !== 'assertsame') {
             return [];
         }
-        $leftType = $scope->getType($node->getArgs()[0]->value);
-        if ($leftType instanceof \PHPStan\Type\NullType) {
+        $expectedArgumentValue = $node->getArgs()[0]->value;
+        if (!$expectedArgumentValue instanceof \PhpParser\Node\Expr\ConstFetch) {
+            return [];
+        }
+        if ($expectedArgumentValue->name->toLowerString() === 'null') {
             return ['You should use assertNull() instead of assertSame(null, $actual).'];
         }
         return [];

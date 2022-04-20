@@ -3,10 +3,9 @@
 declare (strict_types=1);
 namespace RectorPrefix20220420;
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $containerConfigurator->import(__DIR__ . '/config.php');
-    $services = $containerConfigurator->services();
-    $services->set(\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::class)->configure([__DIR__ . '/../Migrations/Code/ClassAliasMap.php']);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->import(__DIR__ . '/config.php');
+    $rectorConfig->ruleWithConfiguration(\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::class, [__DIR__ . '/../Migrations/Code/ClassAliasMap.php']);
 };

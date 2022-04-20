@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220420;
 
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\ApplicationContextConditionMatcher;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\BrowserConditionMatcher;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\CompatVersionConditionMatcher;
@@ -19,10 +20,9 @@ use Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\TreeLevelConditionMatch
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\UsergroupConditionMatcherMatcher;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\VersionConditionMatcher;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\OldConditionToExpressionLanguageTypoScriptRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $containerConfigurator->import(__DIR__ . '/../config.php');
-    $services = $containerConfigurator->services();
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->import(__DIR__ . '/../config.php');
+    $services = $rectorConfig->services();
     $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\ApplicationContextConditionMatcher::class);
     $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\BrowserConditionMatcher::class);
     $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\CompatVersionConditionMatcher::class);
@@ -38,5 +38,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\TreeLevelConditionMatcher::class);
     $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\UsergroupConditionMatcherMatcher::class);
     $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\VersionConditionMatcher::class);
-    $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\OldConditionToExpressionLanguageTypoScriptRector::class);
+    $rectorConfig->rule(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\OldConditionToExpressionLanguageTypoScriptRector::class);
 };

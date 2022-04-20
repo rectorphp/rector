@@ -40,14 +40,12 @@ It adds an extension-key if it is missing. You can configure this Processor in y
 ```php
 # rector.php configuration file
 use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(__DIR__ . '/config/config.php');
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->import(__DIR__ . '/config/config.php');
 
-    $services = $containerConfigurator->services();
-
-    $services->set(ExtensionComposerRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(ExtensionComposerRector::class, [
         ExtensionComposerRector::TYPO3_VERSION_CONSTRAINT => '^10.4'
     ]);
 };
@@ -57,8 +55,8 @@ Also you can update all your core packages and third party packages (that are on
 ```php
 use Ssch\TYPO3Rector\Set\Typo3SetList;
 ...
-$containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_104_CORE);
-$containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_104_EXTENSIONS);
+$rectorConfig->import(Typo3SetList::COMPOSER_PACKAGES_104_CORE);
+$rectorConfig->import(Typo3SetList::COMPOSER_PACKAGES_104_EXTENSIONS);
 ```
 
 ## FormYamlProcessor
@@ -71,19 +69,20 @@ This is also configurable in your rector.php configuration file:
 
 ```php
 # rector.php configuration file
+use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\TypoScriptFileProcessor;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(__DIR__ . '/config/config.php');
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->import(__DIR__ . '/config/config.php');
 
-    $services = $containerConfigurator->services();
+    $rectorConfig = $containerConfigurator->services();
 
-    $services->set(TypoScriptFileProcessor::class)->configure([
+    $rectorConfig->set(TypoScriptFileProcessor::class)
+        ->call('configure', [[
             TypoScriptFileProcessor::ALLOWED_FILE_EXTENSIONS => [
                 'special',
             ],
-    ]);
+        ]]);
 };
 ```
 # Special Cases

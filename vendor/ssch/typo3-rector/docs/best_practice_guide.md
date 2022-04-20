@@ -55,8 +55,8 @@ We got your back with the version constraints of your packages though! For core 
 ```php
 use Ssch\TYPO3Rector\Set\Typo3SetList;
 ...
-$containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_95_CORE);
-$containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_95_EXTENSIONS);
+$rectorConfig->import(Typo3SetList::COMPOSER_PACKAGES_95_CORE);
+$rectorConfig->import(Typo3SetList::COMPOSER_PACKAGES_95_EXTENSIONS);
 ```
 
 This will add the fitting constraints for each package available on packagist - **Be aware:** The list is based on extensions that got a dependency against *typo3/cms-core*
@@ -76,7 +76,7 @@ TCA changes are often not that big in their impact but necessary. Also custom pa
 Both of that is reason to gather multiple packages for a combined TCA run with the following config:
 
 ```php
-    $containerConfigurator->import(Typo3SetList::TCA_95);
+    $rectorConfig->import(Typo3SetList::TCA_95);
 
     $parameters->set(Option::PATHS, [
         __DIR__ . '/packages/package_numberone',

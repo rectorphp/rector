@@ -1145,17 +1145,17 @@
         },
         {
             "name": "phpstan\/phpstan-phpunit",
-            "version": "1.1.0",
-            "version_normalized": "1.1.0.0",
+            "version": "1.1.1",
+            "version_normalized": "1.1.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan-phpunit.git",
-                "reference": "09133ce914f1388a8bb8c7f8573aaa3723cff52a"
+                "reference": "4a3c437c09075736285d1cabb5c75bf27ed0bc84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/09133ce914f1388a8bb8c7f8573aaa3723cff52a",
-                "reference": "09133ce914f1388a8bb8c7f8573aaa3723cff52a",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/4a3c437c09075736285d1cabb5c75bf27ed0bc84",
+                "reference": "4a3c437c09075736285d1cabb5c75bf27ed0bc84",
                 "shasum": ""
             },
             "require": {
@@ -1171,7 +1171,7 @@
                 "phpstan\/phpstan-strict-rules": "^1.0",
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2022-03-28T09:20:49+00:00",
+            "time": "2022-04-20T15:24:25+00:00",
             "type": "phpstan-extension",
             "extra": {
                 "phpstan": {
@@ -1194,7 +1194,7 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/1.1.0"
+                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/1.1.1"
             },
             "install-path": "..\/phpstan\/phpstan-phpunit"
         },
@@ -2767,12 +2767,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "af3367c8088909a4b9ccbe71c325464c54a128d9"
+                "reference": "7b11cdde3478a77e70f1350de64c61d7a4d2fcd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/af3367c8088909a4b9ccbe71c325464c54a128d9",
-                "reference": "af3367c8088909a4b9ccbe71c325464c54a128d9",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/7b11cdde3478a77e70f1350de64c61d7a4d2fcd4",
+                "reference": "7b11cdde3478a77e70f1350de64c61d7a4d2fcd4",
                 "shasum": ""
             },
             "require": {
@@ -2802,7 +2802,7 @@
                 "symplify\/vendor-patches": "^10.1",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-04-20T04:43:13+00:00",
+            "time": "2022-04-20T15:02:18+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
