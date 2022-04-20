@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Php70\Rector\If_\IfToSpaceshipRector;
+use Rector\DogFood\Rector\Closure\UpgradeRectorConfigRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rule(IfToSpaceshipRector::class);
+    $rectorConfig->rule(UpgradeRectorConfigRector::class);
 };

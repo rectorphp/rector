@@ -89,6 +89,7 @@ parameters:
                 - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
                 - rules/Renaming/NodeManipulator/ClassRenamer.php
+                - rules/DogFood/Rector/Closure/UpgradeRectorConfigRector.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 10$#"
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 10#'
@@ -202,6 +203,7 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\If_\:\:\$stmts#'
 
         - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\Isset_\\IssetOnPropertyObjectToPropertyExistsRector\:\:refactor\(\)" is \d+, keep it under 10#'
+        - '#Cognitive complexity for "Rector\\DogFood\\Rector\\Closure\\UpgradeRectorConfigRector\:\:refactor\(\)" is \d+, keep it under 10#'
 
         - '#(.*?) class\-string, string given#'
 
@@ -249,6 +251,7 @@ parameters:
             paths:
                 - packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php
                 - rules/Php80/Rector/FunctionLike/UnionTypesRector.php
+                - rules/Php70/Rector/If_/IfToSpaceshipRector.php
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'

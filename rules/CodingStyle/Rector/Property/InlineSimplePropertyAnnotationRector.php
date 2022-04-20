@@ -118,20 +118,20 @@ CODE_SAMPLE
         }
 
         // The first value may not be at index 0
-        $tag = reset($tags);
+        $phpDocTagNode = reset($tags);
 
-        if (! in_array($tag->name, $this->annotationsToConsiderForInlining, true)) {
+        if (! in_array($phpDocTagNode->name, $this->annotationsToConsiderForInlining, true)) {
             return null;
         }
 
-        if (str_contains((string) $tag, "\n")) {
+        if (str_contains((string) $phpDocTagNode, "\n")) {
             return null;
         }
 
         // Handle edge cases where stringified tag is not same as it was originally
         /** @var Doc $comment */
         $comment = $comments[0];
-        if (! str_contains($comment->getText(), (string) $tag)) {
+        if (! str_contains($comment->getText(), (string) $phpDocTagNode)) {
             return null;
         }
 
@@ -140,7 +140,7 @@ CODE_SAMPLE
         $newPhpDocInfo->makeSingleLined();
 
         $newPhpDocNode = $newPhpDocInfo->getPhpDocNode();
-        $newPhpDocNode->children = [$tag];
+        $newPhpDocNode->children = [$phpDocTagNode];
 
         return $node;
     }

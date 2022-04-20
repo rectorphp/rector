@@ -252,19 +252,19 @@ CODE_SAMPLE
 
     private function processAscendingSort(?Ternary $ternary, Expr $firstValue, Expr $secondValue): Return_
     {
-        if ($ternary === null || $ternary->cond instanceof Greater) {
-            return $this->processReturnSpaceship($firstValue, $secondValue);
+        if ($ternary instanceof Ternary && ! $ternary->cond instanceof Greater) {
+            return $this->processReturnSpaceship($secondValue, $firstValue);
         }
 
-        return $this->processReturnSpaceship($secondValue, $firstValue);
+        return $this->processReturnSpaceship($firstValue, $secondValue);
     }
 
     private function processDescendingSort(?Ternary $ternary, Expr $firstValue, Expr $secondValue): Return_
     {
-        if ($ternary === null || $ternary->cond instanceof Smaller) {
-            return $this->processReturnSpaceship($firstValue, $secondValue);
+        if ($ternary instanceof Ternary && ! $ternary->cond instanceof Smaller) {
+            return $this->processReturnSpaceship($secondValue, $firstValue);
         }
 
-        return $this->processReturnSpaceship($secondValue, $firstValue);
+        return $this->processReturnSpaceship($firstValue, $secondValue);
     }
 }
