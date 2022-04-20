@@ -15,6 +15,7 @@ use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Symfony\Set\SymfonySetList;
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.4.md
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->sets([\Rector\Symfony\Set\SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
     // @see https://symfony.com/blog/new-in-symfony-5-4-nested-validation-attributes
     // @see https://github.com/symfony/symfony/pull/41994
     $rectorConfig->ruleWithConfiguration(\Rector\Php80\Rector\Class_\AnnotationToAttributeRector::class, [new \Rector\Php80\ValueObject\AnnotationToAttribute('Symfony\\Component\\Validator\\Constraints\\All'), new \Rector\Php80\ValueObject\AnnotationToAttribute('Symfony\\Component\\Validator\\Constraints\\Collection'), new \Rector\Php80\ValueObject\AnnotationToAttribute('Symfony\\Component\\Validator\\Constraints\\AtLeastOneOf'), new \Rector\Php80\ValueObject\AnnotationToAttribute('Symfony\\Component\\Validator\\Constraints\\Sequentially')]);
@@ -33,5 +34,4 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         // @see https://github.com/symfony/symfony/pull/42050
         'Symfony\\Component\\Security\\Http\\Event\\DeauthenticatedEvent' => 'Symfony\\Component\\Security\\Http\\Event\\TokenDeauthenticatedEvent',
     ]);
-    $rectorConfig->sets([\Rector\Symfony\Set\SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };

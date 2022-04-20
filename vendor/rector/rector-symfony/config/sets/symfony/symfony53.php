@@ -15,6 +15,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 # https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.3.md
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->sets([\Rector\Symfony\Set\SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
     $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/40536
         new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\HttpFoundation\\RequestStack', 'getMasterRequest', 'getMainRequest'),
@@ -48,5 +49,4 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         // @see https://github.com/symfony/symfony/pull/40536
         new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\HttpKernel\\HttpKernelInterface', 'MASTER_REQUEST', 'MAIN_REQUEST'),
     ]);
-    $rectorConfig->sets([\Rector\Symfony\Set\SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };

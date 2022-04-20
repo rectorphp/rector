@@ -18,6 +18,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 # https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->sets([\Rector\Symfony\Set\SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
     $rectorConfig->import(__DIR__ . '/symfony6/symfony-return-types.php');
     $rectorConfig->ruleWithConfiguration(\Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector::class, [new \Rector\Symfony\ValueObject\ReplaceServiceArgument('Psr\\Container\\ContainerInterface', new \PhpParser\Node\Scalar\String_('service_container')), new \Rector\Symfony\ValueObject\ReplaceServiceArgument('Symfony\\Component\\DependencyInjection\\ContainerInterface', new \PhpParser\Node\Scalar\String_('service_container'))]);
     $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
@@ -32,5 +33,4 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Security\\Core\\User\\UserInterface', 'getUsername', 'getUserIdentifier'),
     ]);
     $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\GetHelperControllerToServiceRector::class);
-    $rectorConfig->sets([\Rector\Symfony\Set\SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };
