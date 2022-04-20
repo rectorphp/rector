@@ -13,11 +13,10 @@ use Rector\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector;
 use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_71);
-    $services = $rectorConfig->services();
-    $services->set(\Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector::class);
-    $services->set(\Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector::class);
-    $services->set(\Rector\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector::class);
-    $services->set(\Rector\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector::class);
-    $services->set(\Rector\DowngradePhp72\Rector\FuncCall\DowngradeJsonDecodeNullAssociativeArgRector::class);
-    $services->set(\Rector\DowngradePhp72\Rector\ConstFetch\DowngradePhp72JsonConstRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp72\Rector\FuncCall\DowngradeJsonDecodeNullAssociativeArgRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp72\Rector\ConstFetch\DowngradePhp72JsonConstRector::class);
 };

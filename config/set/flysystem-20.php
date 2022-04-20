@@ -7,8 +7,7 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
         // Rename is now move, specific for files.
         new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'rename', 'move'),
         // No arbitrary abbreviations

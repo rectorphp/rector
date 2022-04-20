@@ -11,11 +11,10 @@ use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector::class);
-    $services->set(\Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector::class);
-    $services->set(\Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector::class);
-    $services->set(\Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector::class);
-    $services->set(\Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class);
-    $services->set(\Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector::class);
+    $rectorConfig->rule(\Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector::class);
+    $rectorConfig->rule(\Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector::class);
+    $rectorConfig->rule(\Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector::class);
+    $rectorConfig->rule(\Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector::class);
+    $rectorConfig->rule(\Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class);
+    $rectorConfig->rule(\Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector::class);
 };

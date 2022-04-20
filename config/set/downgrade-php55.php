@@ -11,9 +11,8 @@ use Rector\DowngradePhp55\Rector\FuncCall\DowngradeBoolvalRector;
 use Rector\DowngradePhp55\Rector\Isset_\DowngradeArbitraryExpressionArgsToEmptyAndIssetRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_54);
-    $services = $rectorConfig->services();
-    $services->set(\Rector\DowngradePhp55\Rector\ClassConstFetch\DowngradeClassConstantToStringRector::class);
-    $services->set(\Rector\DowngradePhp55\Rector\Foreach_\DowngradeForeachListRector::class);
-    $services->set(\Rector\DowngradePhp55\Rector\FuncCall\DowngradeBoolvalRector::class);
-    $services->set(\Rector\DowngradePhp55\Rector\Isset_\DowngradeArbitraryExpressionArgsToEmptyAndIssetRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp55\Rector\ClassConstFetch\DowngradeClassConstantToStringRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp55\Rector\Foreach_\DowngradeForeachListRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp55\Rector\FuncCall\DowngradeBoolvalRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp55\Rector\Isset_\DowngradeArbitraryExpressionArgsToEmptyAndIssetRector::class);
 };

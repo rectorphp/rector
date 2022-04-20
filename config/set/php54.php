@@ -8,8 +8,7 @@ use Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector;
 use Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class)->configure(['mysqli_param_count' => 'mysqli_stmt_param_count']);
-    $services->set(\Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector::class);
-    $services->set(\Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector::class);
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class, ['mysqli_param_count' => 'mysqli_stmt_param_count']);
+    $rectorConfig->rule(\Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector::class);
+    $rectorConfig->rule(\Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector::class);
 };
