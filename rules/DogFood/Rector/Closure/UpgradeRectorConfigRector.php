@@ -30,11 +30,14 @@ final class UpgradeRectorConfigRector extends AbstractRector
      * @var array<string, string>
      */
     private const PARAMETER_NAME_TO_METHOD_CALL_MAP = [
+        Option::PATHS => 'paths',
+        Option::SKIP => 'skip',
         Option::AUTOLOAD_PATHS => 'autoloadPaths',
         Option::BOOTSTRAP_FILES => 'bootstrapFiles',
         Option::AUTO_IMPORT_NAMES => 'importNames',
         Option::PARALLEL => 'parallel',
         Option::PHPSTAN_FOR_RECTOR_PATH => 'phpstanConfig',
+        Option::PHP_VERSION_FEATURES => 'phpVersion',
     ];
 
     /**
@@ -187,13 +190,13 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function isOptionWithTrue(array $args, string $optionName): bool
+    private function isNonFalseOption(array $args, string $optionName): bool
     {
         if (! $this->valueResolver->isValue($args[0]->value, $optionName)) {
             return false;
         }
 
-        return $this->valueResolver->isTrue($args[1]->value);
+        return ! $this->valueResolver->isFalse($args[1]->value);
     }
 
     private function refactorConfigureRuleMethodCall(MethodCall $methodCall): null|MethodCall
@@ -219,19 +222,15 @@ CODE_SAMPLE
     private function refactorParameterName(MethodCall $methodCall): ?MethodCall
     {
         $args = $methodCall->getArgs();
-        if ($this->valueResolver->isValue($args[0]->value, Option::PHP_VERSION_FEATURES)) {
-            $methodCall->var = new Variable(self::RECTOR_CONFIG_VARIABLE);
-            $methodCall->name = new Identifier('phpVersion');
-            $methodCall->args = [$args[1]];
-            return $methodCall;
-        }
 
         foreach (self::PARAMETER_NAME_TO_METHOD_CALL_MAP as $parameterName => $methodName) {
-            if (! $this->isOptionWithTrue($args, $parameterName)) {
+            if (! $this->isNonFalseOption($args, $parameterName)) {
                 continue;
             }
 
-            return new MethodCall(new Variable(self::RECTOR_CONFIG_VARIABLE), $methodName);
+            $args = $this->valueResolver->isTrueOrFalse($args[1]->value) ? [] : [$args[1]];
+
+            return new MethodCall(new Variable(self::RECTOR_CONFIG_VARIABLE), $methodName, $args);
         }
 
         return null;

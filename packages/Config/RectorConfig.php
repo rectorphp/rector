@@ -143,4 +143,10 @@ final class RectorConfig extends ContainerConfigurator
         $parameters = $this->parameters();
         $parameters->set(Option::BOOTSTRAP_FILES, $bootstrapFiles);
     }
+
+    public function symfonyContainerXml(string $filePath): void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, $filePath);
+    }
 }
