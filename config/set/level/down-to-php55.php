@@ -7,6 +7,5 @@ use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\Set\ValueObject\DowngradeSetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(DowngradeLevelSetList::DOWN_TO_PHP_56);
-    $rectorConfig->import(DowngradeSetList::PHP_56);
+    $rectorConfig->sets([DowngradeLevelSetList::DOWN_TO_PHP_56, DowngradeSetList::PHP_56]);
 };

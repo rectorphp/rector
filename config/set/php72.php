@@ -16,17 +16,16 @@ use Rector\Php72\Rector\While_\WhileEachToForeachRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(WhileEachToForeachRector::class);
+    $rectorConfig->rule(WhileEachToForeachRector::class);
 
-    $services->set(ListEachRector::class);
+    $rectorConfig->rule(ListEachRector::class);
 
-    $services->set(ReplaceEachAssignmentWithKeyCurrentRector::class);
+    $rectorConfig->rule(ReplaceEachAssignmentWithKeyCurrentRector::class);
 
-    $services->set(UnsetCastRector::class);
+    $rectorConfig->rule(UnsetCastRector::class);
 
-    $services->set(RenameFunctionRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameFunctionRector::class, [
             # and imagewbmp
             'jpeg2wbmp' => 'imagecreatefromjpeg',
             # or imagewbmp
@@ -38,15 +37,15 @@ return static function (RectorConfig $rectorConfig): void {
             'read_exif_data' => 'exif_read_data',
         ]);
 
-    $services->set(GetClassOnNullRector::class);
+    $rectorConfig->rule(GetClassOnNullRector::class);
 
-    $services->set(IsObjectOnIncompleteClassRector::class);
+    $rectorConfig->rule(IsObjectOnIncompleteClassRector::class);
 
-    $services->set(ParseStrWithResultArgumentRector::class);
+    $rectorConfig->rule(ParseStrWithResultArgumentRector::class);
 
-    $services->set(StringsAssertNakedRector::class);
+    $rectorConfig->rule(StringsAssertNakedRector::class);
 
-    $services->set(CreateFunctionToAnonymousFunctionRector::class);
+    $rectorConfig->rule(CreateFunctionToAnonymousFunctionRector::class);
 
-    $services->set(StringifyDefineRector::class);
+    $rectorConfig->rule(StringifyDefineRector::class);
 };

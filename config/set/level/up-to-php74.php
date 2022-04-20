@@ -8,9 +8,8 @@ use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(SetList::PHP_74);
-    $rectorConfig->import(LevelSetList::UP_TO_PHP_73);
+    $rectorConfig->sets([SetList::PHP_74, LevelSetList::UP_TO_PHP_73]);
 
-    // parameter must be defined after import, to override impored param version
+    // parameter must be defined after import, to override imported param version
     $rectorConfig->phpVersion(PhpVersion::PHP_74);
 };

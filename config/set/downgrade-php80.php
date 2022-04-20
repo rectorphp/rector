@@ -37,48 +37,46 @@ use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_74);
-
-    $services = $rectorConfig->services();
-    $services->set(RemoveInterfacesRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RemoveInterfacesRector::class, [
             // @see https://wiki.php.net/rfc/stringable
             'Stringable',
         ]);
 
-    $services->set(DowngradeNamedArgumentRector::class);
+    $rectorConfig->rule(DowngradeNamedArgumentRector::class);
 
-    $services->set(DowngradeAttributeToAnnotationRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(DowngradeAttributeToAnnotationRector::class, [
             // Symfony
             new DowngradeAttributeToAnnotation('Symfony\Contracts\Service\Attribute\Required', 'required'),
             // Nette
             new DowngradeAttributeToAnnotation('Nette\DI\Attributes\Inject', 'inject'),
         ]);
 
-    $services->set(DowngradeDereferenceableOperationRector::class);
-    $services->set(DowngradeUnionTypeTypedPropertyRector::class);
-    $services->set(DowngradeUnionTypeDeclarationRector::class);
-    $services->set(DowngradeMixedTypeDeclarationRector::class);
-    $services->set(DowngradeStaticTypeDeclarationRector::class);
-    $services->set(DowngradeAbstractPrivateMethodInTraitRector::class);
-    $services->set(DowngradePropertyPromotionRector::class);
-    $services->set(DowngradeNonCapturingCatchesRector::class);
-    $services->set(DowngradeStrContainsRector::class);
-    $services->set(DowngradeMatchToSwitchRector::class);
-    $services->set(DowngradeClassOnObjectToGetClassRector::class);
-    $services->set(DowngradeArbitraryExpressionsSupportRector::class);
-    $services->set(DowngradeNullsafeToTernaryOperatorRector::class);
-    $services->set(DowngradeTrailingCommasInParamUseRector::class);
-    $services->set(DowngradeStrStartsWithRector::class);
-    $services->set(DowngradeStrEndsWithRector::class);
-    $services->set(DowngradePhpTokenRector::class);
-    $services->set(DowngradeThrowExprRector::class);
-    $services->set(DowngradePhp80ResourceReturnToObjectRector::class);
-    $services->set(DowngradeReflectionGetAttributesRector::class);
-    $services->set(DowngradeRecursiveDirectoryIteratorHasChildrenRector::class);
-    $services->set(DowngradeReflectionPropertyGetDefaultValueRector::class);
-    $services->set(DowngradeReflectionClassGetConstantsFilterRector::class);
-    $services->set(DowngradeArrayFilterNullableCallbackRector::class);
-    $services->set(DowngradeNumberFormatNoFourthArgRector::class);
-    $services->set(DowngradeStringReturnTypeOnToStringRector::class);
+    $rectorConfig->rule(DowngradeDereferenceableOperationRector::class);
+    $rectorConfig->rule(DowngradeUnionTypeTypedPropertyRector::class);
+    $rectorConfig->rule(DowngradeUnionTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeMixedTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeStaticTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeAbstractPrivateMethodInTraitRector::class);
+    $rectorConfig->rule(DowngradePropertyPromotionRector::class);
+    $rectorConfig->rule(DowngradeNonCapturingCatchesRector::class);
+    $rectorConfig->rule(DowngradeStrContainsRector::class);
+    $rectorConfig->rule(DowngradeMatchToSwitchRector::class);
+    $rectorConfig->rule(DowngradeClassOnObjectToGetClassRector::class);
+    $rectorConfig->rule(DowngradeArbitraryExpressionsSupportRector::class);
+    $rectorConfig->rule(DowngradeNullsafeToTernaryOperatorRector::class);
+    $rectorConfig->rule(DowngradeTrailingCommasInParamUseRector::class);
+    $rectorConfig->rule(DowngradeStrStartsWithRector::class);
+    $rectorConfig->rule(DowngradeStrEndsWithRector::class);
+    $rectorConfig->rule(DowngradePhpTokenRector::class);
+    $rectorConfig->rule(DowngradeThrowExprRector::class);
+    $rectorConfig->rule(DowngradePhp80ResourceReturnToObjectRector::class);
+    $rectorConfig->rule(DowngradeReflectionGetAttributesRector::class);
+    $rectorConfig->rule(DowngradeRecursiveDirectoryIteratorHasChildrenRector::class);
+    $rectorConfig->rule(DowngradeReflectionPropertyGetDefaultValueRector::class);
+    $rectorConfig->rule(DowngradeReflectionClassGetConstantsFilterRector::class);
+    $rectorConfig->rule(DowngradeArrayFilterNullableCallbackRector::class);
+    $rectorConfig->rule(DowngradeNumberFormatNoFourthArgRector::class);
+    $rectorConfig->rule(DowngradeStringReturnTypeOnToStringRector::class);
 };

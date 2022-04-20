@@ -20,11 +20,10 @@ use Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(TypedPropertyRector::class);
+    $rectorConfig->rule(TypedPropertyRector::class);
 
-    $services->set(RenameFunctionRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameFunctionRector::class, [
             #the_real_type
             # https://wiki.php.net/rfc/deprecations_php_7_4
             'is_real' => 'is_float',
@@ -34,29 +33,29 @@ return static function (RectorConfig $rectorConfig): void {
             //'hebrevc' => ['nl2br', 'hebrev'],
         ]);
 
-    $services->set(ArrayKeyExistsOnPropertyRector::class);
+    $rectorConfig->rule(ArrayKeyExistsOnPropertyRector::class);
 
-    $services->set(FilterVarToAddSlashesRector::class);
+    $rectorConfig->rule(FilterVarToAddSlashesRector::class);
 
-    $services->set(ExportToReflectionFunctionRector::class);
+    $rectorConfig->rule(ExportToReflectionFunctionRector::class);
 
-    $services->set(MbStrrposEncodingArgumentPositionRector::class);
+    $rectorConfig->rule(MbStrrposEncodingArgumentPositionRector::class);
 
-    $services->set(RealToFloatTypeCastRector::class);
+    $rectorConfig->rule(RealToFloatTypeCastRector::class);
 
-    $services->set(NullCoalescingOperatorRector::class);
+    $rectorConfig->rule(NullCoalescingOperatorRector::class);
 
-    $services->set(ClosureToArrowFunctionRector::class);
+    $rectorConfig->rule(ClosureToArrowFunctionRector::class);
 
-    $services->set(ArraySpreadInsteadOfArrayMergeRector::class);
+    $rectorConfig->rule(ArraySpreadInsteadOfArrayMergeRector::class);
 
-    $services->set(AddLiteralSeparatorToNumberRector::class);
+    $rectorConfig->rule(AddLiteralSeparatorToNumberRector::class);
 
-    $services->set(ChangeReflectionTypeToStringToGetNameRector::class);
+    $rectorConfig->rule(ChangeReflectionTypeToStringToGetNameRector::class);
 
-    $services->set(RestoreDefaultNullToNullableTypePropertyRector::class);
+    $rectorConfig->rule(RestoreDefaultNullToNullableTypePropertyRector::class);
 
-    $services->set(CurlyToSquareBracketArrayStringRector::class);
+    $rectorConfig->rule(CurlyToSquareBracketArrayStringRector::class);
 
-    $services->set(ReservedFnFunctionRector::class);
+    $rectorConfig->rule(ReservedFnFunctionRector::class);
 };

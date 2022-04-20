@@ -16,35 +16,33 @@ use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
     # https://stackoverflow.com/a/1390625/1348344
     # https://github.com/philip/MySQLConverterTool/blob/master/Converter.php
     # https://www.phpclasses.org/blog/package/9199/post/3-Smoothly-Migrate-your-PHP-Code-using-the-Old-MySQL-extension-to-MySQLi.html
-    $services->set(MysqlAssignToMysqliRector::class);
+    $rectorConfig->rule(MysqlAssignToMysqliRector::class);
 
-    $services->set(MysqlFuncCallToMysqliRector::class);
+    $rectorConfig->rule(MysqlFuncCallToMysqliRector::class);
 
-    $services->set(RemoveFuncCallArgRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RemoveFuncCallArgRector::class, [
             new RemoveFuncCallArg('mysql_pconnect', 3),
             new RemoveFuncCallArg('mysql_connect', 3),
             new RemoveFuncCallArg('mysql_connect', 4),
         ]);
 
-    $services->set(MysqlPConnectToMysqliConnectRector::class);
+    $rectorConfig->rule(MysqlPConnectToMysqliConnectRector::class);
 
     # first swap arguments, then rename
-    $services->set(SwapFuncCallArgumentsRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(SwapFuncCallArgumentsRector::class, [
             new SwapFuncCallArguments('mysql_query', [1, 0]),
             new SwapFuncCallArguments('mysql_real_escape_string', [1, 0]),
             new SwapFuncCallArguments('mysql_select_db', [1, 0]),
             new SwapFuncCallArguments('mysql_set_charset', [1, 0]),
         ]);
 
-    $services->set(RenameFunctionRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameFunctionRector::class, [
             'mysql_connect' => 'mysqli_connect',
             'mysql_data_seek' => 'mysqli_data_seek',
             'mysql_fetch_array' => 'mysqli_fetch_array',
@@ -62,8 +60,8 @@ return static function (RectorConfig $rectorConfig): void {
         ]);
 
     # http://php.net/manual/en/mysql.constants.php → http://php.net/manual/en/mysqli.constants.php
-    $services->set(RenameConstantRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameConstantRector::class, [
             'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
             'MYSQL_BOTH' => 'MYSQLI_BOTH',
             'MYSQL_CLIENT_COMPRESS' => 'MYSQLI_CLIENT_COMPRESS',
@@ -74,5 +72,5 @@ return static function (RectorConfig $rectorConfig): void {
             'MYSQL_PRIMARY_KEY_FLAG' => 'MYSQLI_PRI_KEY_FLAG',
         ]);
 
-    $services->set(MysqlQueryMysqlErrorWithLinkRector::class);
+    $rectorConfig->rule(MysqlQueryMysqlErrorWithLinkRector::class);
 };

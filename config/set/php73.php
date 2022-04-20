@@ -16,15 +16,14 @@ use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(IsCountableRector::class);
-    $services->set(ArrayKeyFirstLastRector::class);
-    $services->set(SensitiveDefineRector::class);
-    $services->set(SensitiveConstantNameRector::class);
-    $services->set(SensitiveHereNowDocRector::class);
+    $rectorConfig->rule(IsCountableRector::class);
+    $rectorConfig->rule(ArrayKeyFirstLastRector::class);
+    $rectorConfig->rule(SensitiveDefineRector::class);
+    $rectorConfig->rule(SensitiveConstantNameRector::class);
+    $rectorConfig->rule(SensitiveHereNowDocRector::class);
 
-    $services->set(RenameFunctionRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameFunctionRector::class, [
             # https://wiki.php.net/rfc/deprecations_php_7_3
             'image2wbmp' => 'imagewbmp',
             'mbregex_encoding' => 'mb_regex_encoding',
@@ -42,9 +41,9 @@ return static function (RectorConfig $rectorConfig): void {
             'mbereg_search_getpos' => 'mb_ereg_search_getpos',
         ]);
 
-    $services->set(StringifyStrNeedlesRector::class);
-    $services->set(JsonThrowOnErrorRector::class);
-    $services->set(RegexDashEscapeRector::class);
-    $services->set(ContinueToBreakInSwitchRector::class);
-    $services->set(SetCookieRector::class);
+    $rectorConfig->rule(StringifyStrNeedlesRector::class);
+    $rectorConfig->rule(JsonThrowOnErrorRector::class);
+    $rectorConfig->rule(RegexDashEscapeRector::class);
+    $rectorConfig->rule(ContinueToBreakInSwitchRector::class);
+    $rectorConfig->rule(SetCookieRector::class);
 };

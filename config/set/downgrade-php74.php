@@ -19,18 +19,16 @@ use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_73);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeTypedPropertyRector::class);
-    $services->set(ArrowFunctionToAnonymousFunctionRector::class);
-    $services->set(DowngradeCovariantReturnTypeRector::class);
-    $services->set(DowngradeContravariantArgumentTypeRector::class);
-    $services->set(DowngradeNullCoalescingOperatorRector::class);
-    $services->set(DowngradeNumericLiteralSeparatorRector::class);
-    $services->set(DowngradeStripTagsCallWithArrayRector::class);
-    $services->set(DowngradeArraySpreadRector::class);
-    $services->set(DowngradeArrayMergeCallWithoutArgumentsRector::class);
-    $services->set(DowngradeFreadFwriteFalsyToNegationRector::class);
-    $services->set(DowngradePreviouslyImplementedInterfaceRector::class);
-    $services->set(DowngradeReflectionGetTypeRector::class);
+    $rectorConfig->rule(DowngradeTypedPropertyRector::class);
+    $rectorConfig->rule(ArrowFunctionToAnonymousFunctionRector::class);
+    $rectorConfig->rule(DowngradeCovariantReturnTypeRector::class);
+    $rectorConfig->rule(DowngradeContravariantArgumentTypeRector::class);
+    $rectorConfig->rule(DowngradeNullCoalescingOperatorRector::class);
+    $rectorConfig->rule(DowngradeNumericLiteralSeparatorRector::class);
+    $rectorConfig->rule(DowngradeStripTagsCallWithArrayRector::class);
+    $rectorConfig->rule(DowngradeArraySpreadRector::class);
+    $rectorConfig->rule(DowngradeArrayMergeCallWithoutArgumentsRector::class);
+    $rectorConfig->rule(DowngradeFreadFwriteFalsyToNegationRector::class);
+    $rectorConfig->rule(DowngradePreviouslyImplementedInterfaceRector::class);
+    $rectorConfig->rule(DowngradeReflectionGetTypeRector::class);
 };

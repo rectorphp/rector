@@ -14,13 +14,11 @@ use Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_72);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeFlexibleHeredocSyntaxRector::class);
-    $services->set(DowngradeListReferenceAssignmentRector::class);
-    $services->set(DowngradeTrailingCommasInFunctionCallsRector::class);
-    $services->set(DowngradeArrayKeyFirstLastRector::class);
-    $services->set(SetCookieOptionsArrayToArgumentsRector::class);
-    $services->set(DowngradeIsCountableRector::class);
-    $services->set(DowngradePhp73JsonConstRector::class);
+    $rectorConfig->rule(DowngradeFlexibleHeredocSyntaxRector::class);
+    $rectorConfig->rule(DowngradeListReferenceAssignmentRector::class);
+    $rectorConfig->rule(DowngradeTrailingCommasInFunctionCallsRector::class);
+    $rectorConfig->rule(DowngradeArrayKeyFirstLastRector::class);
+    $rectorConfig->rule(SetCookieOptionsArrayToArgumentsRector::class);
+    $rectorConfig->rule(DowngradeIsCountableRector::class);
+    $rectorConfig->rule(DowngradePhp73JsonConstRector::class);
 };
