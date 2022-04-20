@@ -27,7 +27,7 @@ final class UpgradeRectorConfigRector extends \Rector\Core\Rector\AbstractRector
     /**
      * @var array<string, string>
      */
-    private const PARAMETER_NAME_TO_METHOD_CALL_MAP = [\Rector\Core\Configuration\Option::AUTOLOAD_PATHS => 'autoloadPaths', \Rector\Core\Configuration\Option::BOOTSTRAP_FILES => 'bootstrapFiles', \Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES => 'importNames', \Rector\Core\Configuration\Option::PARALLEL => 'parallel', \Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH => 'phpstanConfig', \Rector\Core\Configuration\Option::PHP_VERSION_FEATURES => 'phpVersion'];
+    private const PARAMETER_NAME_TO_METHOD_CALL_MAP = [\Rector\Core\Configuration\Option::AUTOLOAD_PATHS => 'autoloadPaths', \Rector\Core\Configuration\Option::BOOTSTRAP_FILES => 'bootstrapFiles', \Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES => 'importNames', \Rector\Core\Configuration\Option::PARALLEL => 'parallel', \Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH => 'phpstanConfig'];
     /**
      * @var string
      */
@@ -40,6 +40,10 @@ final class UpgradeRectorConfigRector extends \Rector\Core\Rector\AbstractRector
      * @var string
      */
     private const PARAMETERS_VARIABLE = 'parameters';
+    /**
+     * @var string
+     */
+    private const CONTAINER_CONFIGURATOR_CLASS = 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator';
     /**
      * @readonly
      * @var \Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer
@@ -111,13 +115,16 @@ CODE_SAMPLE
         if (!$paramType instanceof \PhpParser\Node\Name) {
             return null;
         }
-        if (!$this->isNames($paramType, ['Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator', self::RECTOR_CONFIG_CLASS])) {
+        if (!$this->isNames($paramType, [self::CONTAINER_CONFIGURATOR_CLASS, self::RECTOR_CONFIG_CLASS])) {
             return null;
         }
         $this->updateClosureParam($onlyParam);
         // 1. change import of sets to single sets() method call
         $this->containerConfiguratorImportsMerger->merge($node);
-        $this->traverseNodesWithCallable($node->getStmts(), function (\PhpParser\Node $node) : ?MethodCall {
+        $this->traverseNodesWithCallable($node->getStmts(), function (\PhpParser\Node $node) : ?Node {
+            if ($node instanceof \PhpParser\Node\Expr\Variable && $this->isName($node, 'containerConfigurator')) {
+                return new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE);
+            }
             // 2. call on rule
             if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
                 if ($this->containerConfiguratorCallAnalyzer->isMethodCallWithServicesSetConfiguredRectorRule($node)) {
@@ -180,8 +187,15 @@ CODE_SAMPLE
     }
     private function refactorParameterName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
+        $args = $methodCall->getArgs();
+        if ($this->valueResolver->isValue($args[0]->value, \Rector\Core\Configuration\Option::PHP_VERSION_FEATURES)) {
+            $methodCall->var = new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE);
+            $methodCall->name = new \PhpParser\Node\Identifier('phpVersion');
+            $methodCall->args = [$args[1]];
+            return $methodCall;
+        }
         foreach (self::PARAMETER_NAME_TO_METHOD_CALL_MAP as $parameterName => $methodName) {
-            if (!$this->isOptionWithTrue($methodCall->getArgs(), $parameterName)) {
+            if (!$this->isOptionWithTrue($args, $parameterName)) {
                 continue;
             }
             return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE), $methodName);
