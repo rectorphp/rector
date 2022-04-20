@@ -35,7 +35,6 @@ final class UpgradeRectorConfigRector extends AbstractRector
         Option::AUTO_IMPORT_NAMES => 'importNames',
         Option::PARALLEL => 'parallel',
         Option::PHPSTAN_FOR_RECTOR_PATH => 'phpstanConfig',
-        Option::PHP_VERSION_FEATURES => 'phpVersion',
     ];
 
     /**
@@ -52,6 +51,11 @@ final class UpgradeRectorConfigRector extends AbstractRector
      * @var string
      */
     private const PARAMETERS_VARIABLE = 'parameters';
+
+    /**
+     * @var string
+     */
+    private const CONTAINER_CONFIGURATOR_CLASS = 'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator';
 
     public function __construct(
         private readonly ContainerConfiguratorCallAnalyzer $containerConfiguratorCallAnalyzer,
@@ -119,10 +123,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isNames($paramType, [
-            'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
-            self::RECTOR_CONFIG_CLASS,
-        ])) {
+        if (! $this->isNames($paramType, [self::CONTAINER_CONFIGURATOR_CLASS, self::RECTOR_CONFIG_CLASS])) {
             return null;
         }
 
@@ -131,7 +132,11 @@ CODE_SAMPLE
         // 1. change import of sets to single sets() method call
         $this->containerConfiguratorImportsMerger->merge($node);
 
-        $this->traverseNodesWithCallable($node->getStmts(), function (Node $node): ?MethodCall {
+        $this->traverseNodesWithCallable($node->getStmts(), function (Node $node): ?Node {
+            if ($node instanceof Variable && $this->isName($node, 'containerConfigurator')) {
+                return new Variable(self::RECTOR_CONFIG_VARIABLE);
+            }
+
             // 2. call on rule
             if ($node instanceof MethodCall) {
                 if ($this->containerConfiguratorCallAnalyzer->isMethodCallWithServicesSetConfiguredRectorRule($node)) {
@@ -213,8 +218,16 @@ CODE_SAMPLE
 
     private function refactorParameterName(MethodCall $methodCall): ?MethodCall
     {
+        $args = $methodCall->getArgs();
+        if ($this->valueResolver->isValue($args[0]->value, Option::PHP_VERSION_FEATURES)) {
+            $methodCall->var = new Variable(self::RECTOR_CONFIG_VARIABLE);
+            $methodCall->name = new Identifier('phpVersion');
+            $methodCall->args = [$args[1]];
+            return $methodCall;
+        }
+
         foreach (self::PARAMETER_NAME_TO_METHOD_CALL_MAP as $parameterName => $methodName) {
-            if (! $this->isOptionWithTrue($methodCall->getArgs(), $parameterName)) {
+            if (! $this->isOptionWithTrue($args, $parameterName)) {
                 continue;
             }
 
