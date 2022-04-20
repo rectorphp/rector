@@ -8,7 +8,9 @@ use Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector;
 use Rector\Transform\ValueObject\CallableInMethodCallToVariable;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(CallableInMethodCallToVariableRector::class)
-        ->configure([new CallableInMethodCallToVariable(DummyCache::class, 'save', 1)]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            CallableInMethodCallToVariableRector::class,
+            [new CallableInMethodCallToVariable(DummyCache::class, 'save', 1)]
+        );
 };

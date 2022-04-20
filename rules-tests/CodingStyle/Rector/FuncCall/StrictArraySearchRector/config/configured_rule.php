@@ -6,6 +6,5 @@ use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(StrictArraySearchRector::class);
+    $rectorConfig->rule(StrictArraySearchRector::class);
 };

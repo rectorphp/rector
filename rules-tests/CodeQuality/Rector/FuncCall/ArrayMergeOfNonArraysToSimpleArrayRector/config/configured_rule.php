@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ArrayMergeOfNonArraysToSimpleArrayRector::class);
+    $rectorConfig->rule(ArrayMergeOfNonArraysToSimpleArrayRector::class);
 };

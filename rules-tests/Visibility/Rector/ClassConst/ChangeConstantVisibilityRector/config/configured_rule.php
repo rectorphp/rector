@@ -9,9 +9,8 @@ use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Visibility\ValueObject\ChangeConstantVisibility;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ChangeConstantVisibilityRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ChangeConstantVisibilityRector::class, [
             new ChangeConstantVisibility(ParentObject::class, 'TO_BE_PUBLIC_CONSTANT', Visibility::PUBLIC),
             new ChangeConstantVisibility(ParentObject::class, 'TO_BE_PROTECTED_CONSTANT', Visibility::PROTECTED),
             new ChangeConstantVisibility(ParentObject::class, 'TO_BE_PRIVATE_CONSTANT', Visibility::PRIVATE),

@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Restoration\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(MissingClassConstantReferenceToStringRector::class);
+    $rectorConfig->rule(MissingClassConstantReferenceToStringRector::class);
 };

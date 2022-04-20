@@ -8,10 +8,9 @@ use Rector\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradeGeneratedScalarTypesRector::class);
+    $rectorConfig->rule(DowngradeGeneratedScalarTypesRector::class);
 
     // dependendent rules
-    $services->set(DowngradeScalarTypeDeclarationRector::class);
-    $services->set(DowngradeVoidTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeScalarTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeVoidTypeDeclarationRector::class);
 };

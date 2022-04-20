@@ -11,10 +11,8 @@ use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddPropertyTypeDeclaration;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(AddPropertyTypeDeclarationRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddPropertyTypeDeclarationRector::class, [
             new AddPropertyTypeDeclaration(ParentClassWithProperty::class, 'name', new StringType()),
             new AddPropertyTypeDeclaration(SomeTraitWithProperty::class, 'value', new IntegerType()),
         ]);

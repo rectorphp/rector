@@ -8,10 +8,8 @@ use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRecto
 use Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Fixture\SomeContainerInterface;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(DowngradeParameterTypeWideningRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(DowngradeParameterTypeWideningRector::class, [
             ContainerInterface::class => ['set', 'get', 'has', 'initialized'],
             SomeContainerInterface::class => ['set', 'has'],
         ]);

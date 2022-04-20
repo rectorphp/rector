@@ -7,7 +7,5 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
-
-    $services = $rectorConfig->services();
-    $services->set(RenameClassRector::class);
+    $rectorConfig->rule(RenameClassRector::class);
 };

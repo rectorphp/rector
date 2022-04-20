@@ -9,9 +9,8 @@ use Rector\Tests\Arguments\Rector\MethodCall\RemoveMethodCallParamRector\Source\
 use Rector\Tests\Arguments\Rector\MethodCall\RemoveMethodCallParamRector\Source\StaticCaller;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveMethodCallParamRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RemoveMethodCallParamRector::class, [
             new RemoveMethodCallParam(MethodCaller::class, 'process', 1),
             new RemoveMethodCallParam(StaticCaller::class, 'remove', 3),
         ]);

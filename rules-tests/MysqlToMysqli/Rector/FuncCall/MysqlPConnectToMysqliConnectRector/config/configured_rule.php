@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(MysqlPConnectToMysqliConnectRector::class);
+    $rectorConfig->rule(MysqlPConnectToMysqliConnectRector::class);
 };

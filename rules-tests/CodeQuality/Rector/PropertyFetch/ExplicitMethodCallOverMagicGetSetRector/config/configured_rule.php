@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRec
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ExplicitMethodCallOverMagicGetSetRector::class);
+    $rectorConfig->rule(ExplicitMethodCallOverMagicGetSetRector::class);
 };

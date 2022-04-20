@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\ArrayDimFetch\CurlyToSquareBracketArrayStringRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(CurlyToSquareBracketArrayStringRector::class);
+    $rectorConfig->rule(CurlyToSquareBracketArrayStringRector::class);
 };

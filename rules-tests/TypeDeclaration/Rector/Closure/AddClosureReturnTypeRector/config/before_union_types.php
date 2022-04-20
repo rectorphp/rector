@@ -8,7 +8,5 @@ use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::UNION_TYPES - 1);
-
-    $services = $rectorConfig->services();
-    $services->set(AddClosureReturnTypeRector::class);
+    $rectorConfig->rule(AddClosureReturnTypeRector::class);
 };

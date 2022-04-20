@@ -6,7 +6,6 @@ use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(StringClassNameToClassConstantRector::class)
-        ->configure(['Nette\*', 'Error', 'Exception']);
+    $rectorConfig
+        ->ruleWithConfiguration(StringClassNameToClassConstantRector::class, ['Nette\*', 'Error', 'Exception']);
 };

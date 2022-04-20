@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(PrivatizeLocalGetterToPropertyRector::class);
+    $rectorConfig->rule(PrivatizeLocalGetterToPropertyRector::class);
 };

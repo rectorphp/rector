@@ -8,7 +8,5 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::TYPED_PROPERTIES);
-
-    $services = $rectorConfig->services();
-    $services->set(IssetOnPropertyObjectToPropertyExistsRector::class);
+    $rectorConfig->rule(IssetOnPropertyObjectToPropertyExistsRector::class);
 };

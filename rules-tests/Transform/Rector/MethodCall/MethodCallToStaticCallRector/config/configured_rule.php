@@ -8,10 +8,8 @@ use Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector;
 use Rector\Transform\ValueObject\MethodCallToStaticCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(MethodCallToStaticCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(MethodCallToStaticCallRector::class, [
             new MethodCallToStaticCall(AnotherDependency::class, 'process', 'StaticCaller', 'anotherMethod'),
 
         ]);

@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradeArrayMergeCallWithoutArgumentsRector::class);
+    $rectorConfig->rule(DowngradeArrayMergeCallWithoutArgumentsRector::class);
 };

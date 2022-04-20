@@ -7,9 +7,8 @@ use Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(FunctionArgumentDefaultValueReplacerRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(FunctionArgumentDefaultValueReplacerRector::class, [
             new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'lte', 'le'),
             new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, '', '!='),
             new ReplaceFuncCallArgumentDefaultValue(

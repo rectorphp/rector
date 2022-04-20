@@ -8,10 +8,8 @@ use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgument
 use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(MethodCallToAnotherMethodCallWithArgumentsRector::class, [
             new MethodCallToAnotherMethodCallWithArguments(
                 NetteServiceDefinition::class,
                 'setInject',

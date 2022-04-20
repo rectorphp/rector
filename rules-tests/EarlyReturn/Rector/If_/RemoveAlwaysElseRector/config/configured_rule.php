@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveAlwaysElseRector::class);
+    $rectorConfig->rule(RemoveAlwaysElseRector::class);
 };

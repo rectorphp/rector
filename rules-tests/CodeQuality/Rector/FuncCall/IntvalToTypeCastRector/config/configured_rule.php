@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(IntvalToTypeCastRector::class);
+    $rectorConfig->rule(IntvalToTypeCastRector::class);
 };

@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveEmptyMethodCallRector::class);
+    $rectorConfig->rule(RemoveEmptyMethodCallRector::class);
 };

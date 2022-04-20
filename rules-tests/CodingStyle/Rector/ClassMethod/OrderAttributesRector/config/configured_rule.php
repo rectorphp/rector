@@ -8,7 +8,6 @@ use Rector\Tests\CodingStyle\Rector\ClassMethod\OrderAttributesRector\Source\Fir
 use Rector\Tests\CodingStyle\Rector\ClassMethod\OrderAttributesRector\Source\SecondAttribute;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(OrderAttributesRector::class)
-        ->configure([FirstAttribute::class, SecondAttribute::class]);
+    $rectorConfig
+        ->ruleWithConfiguration(OrderAttributesRector::class, [FirstAttribute::class, SecondAttribute::class]);
 };

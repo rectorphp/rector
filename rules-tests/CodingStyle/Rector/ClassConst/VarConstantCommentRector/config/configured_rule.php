@@ -6,6 +6,5 @@ use Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(VarConstantCommentRector::class);
+    $rectorConfig->rule(VarConstantCommentRector::class);
 };

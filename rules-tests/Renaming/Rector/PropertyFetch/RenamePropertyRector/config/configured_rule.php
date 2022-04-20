@@ -8,9 +8,8 @@ use Rector\Renaming\ValueObject\RenameProperty;
 use Rector\Tests\Renaming\Rector\PropertyFetch\RenamePropertyRector\Source\ClassWithProperties;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RenamePropertyRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenamePropertyRector::class, [
 
             new RenameProperty(ClassWithProperties::class, 'oldProperty', 'newProperty'),
             new RenameProperty(ClassWithProperties::class, 'anotherOldProperty', 'anotherNewProperty'),

@@ -6,6 +6,5 @@ use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(PostIncDecToPreIncDecRector::class);
+    $rectorConfig->rule(PostIncDecToPreIncDecRector::class);
 };

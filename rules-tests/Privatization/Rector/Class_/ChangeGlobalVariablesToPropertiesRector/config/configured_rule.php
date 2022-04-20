@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ChangeGlobalVariablesToPropertiesRector::class);
+    $rectorConfig->rule(ChangeGlobalVariablesToPropertiesRector::class);
 };

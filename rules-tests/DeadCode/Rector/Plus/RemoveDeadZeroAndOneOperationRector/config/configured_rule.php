@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveDeadZeroAndOneOperationRector::class);
+    $rectorConfig->rule(RemoveDeadZeroAndOneOperationRector::class);
 };

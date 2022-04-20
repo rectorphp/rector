@@ -9,9 +9,8 @@ use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector
 use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ServiceGetterToConstructorInjectionRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ServiceGetterToConstructorInjectionRector::class, [
             new ServiceGetterToConstructorInjection(FirstService::class, 'getAnotherService', AnotherService::class),
         ]);
 };

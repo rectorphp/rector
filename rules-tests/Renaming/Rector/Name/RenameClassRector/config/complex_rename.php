@@ -11,13 +11,14 @@ use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClassWithMetho
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
-
-    $services = $rectorConfig->services();
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             OldClassWithMethod::class => NewClassWithNewMethod::class,
         ]);
 
-    $services->set(RenameMethodRector::class)
-        ->configure([new MethodCallRename(NewClassWithNewMethod::class, 'someMethod', 'someNewMethod')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            RenameMethodRector::class,
+            [new MethodCallRename(NewClassWithNewMethod::class, 'someMethod', 'someNewMethod')]
+        );
 };

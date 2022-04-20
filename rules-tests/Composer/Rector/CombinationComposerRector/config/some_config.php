@@ -9,10 +9,15 @@ use Rector\Composer\ValueObject\ReplacePackageAndVersion;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ReplacePackageAndVersionComposerRector::class)
-        ->configure([new ReplacePackageAndVersion('vendor1/package2', 'vendor2/package1', '^3.0')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            ReplacePackageAndVersionComposerRector::class,
+            [new ReplacePackageAndVersion('vendor1/package2', 'vendor2/package1', '^3.0')]
+        );
 
-    $services->set(ChangePackageVersionComposerRector::class)
-        ->configure([new PackageAndVersion('vendor1/package3', '~3.0.0')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            ChangePackageVersionComposerRector::class,
+            [new PackageAndVersion('vendor1/package3', '~3.0.0')]
+        );
 };

@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRec
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ForeachItemsAssignToEmptyArrayToAssignRector::class);
+    $rectorConfig->rule(ForeachItemsAssignToEmptyArrayToAssignRector::class);
 };

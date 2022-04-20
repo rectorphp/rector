@@ -8,7 +8,5 @@ use Rector\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::SCALAR_TYPES - 1);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeNullCoalesceRector::class);
+    $rectorConfig->rule(DowngradeNullCoalesceRector::class);
 };

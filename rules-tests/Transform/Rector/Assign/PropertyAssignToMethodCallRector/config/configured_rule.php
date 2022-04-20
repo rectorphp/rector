@@ -8,9 +8,8 @@ use Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector;
 use Rector\Transform\ValueObject\PropertyAssignToMethodCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(PropertyAssignToMethodCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(PropertyAssignToMethodCallRector::class, [
             new PropertyAssignToMethodCall(ChoiceControl::class, 'checkAllowedValues', 'checkDefaultValue'),
         ]);
 };

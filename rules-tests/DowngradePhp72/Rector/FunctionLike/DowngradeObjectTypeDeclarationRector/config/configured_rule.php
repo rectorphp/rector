@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradeObjectTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeObjectTypeDeclarationRector::class);
 };

@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(SimplifyArraySearchRector::class);
+    $rectorConfig->rule(SimplifyArraySearchRector::class);
 };

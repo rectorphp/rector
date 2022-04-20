@@ -6,9 +6,8 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveUnusedPrivatePropertyRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RemoveUnusedPrivatePropertyRector::class, [
             RemoveUnusedPrivatePropertyRector::REMOVE_ASSIGN_SIDE_EFFECT => false,
         ]);
 };

@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ReturnTypeFromStrictTypedPropertyRector::class);
+    $rectorConfig->rule(ReturnTypeFromStrictTypedPropertyRector::class);
 };

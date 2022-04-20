@@ -8,7 +8,5 @@ use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::PROPERTY_PROMOTION);
-
-    $services = $rectorConfig->services();
-    $services->set(RenamePropertyToMatchTypeRector::class);
+    $rectorConfig->rule(RenamePropertyToMatchTypeRector::class);
 };

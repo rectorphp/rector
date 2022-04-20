@@ -12,10 +12,8 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericS
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::NEW_INITIALIZERS - 1);
 
-    $services = $rectorConfig->services();
-
-    $services->set(AnnotationToAttributeRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AnnotationToAttributeRector::class, [
             // use always this annotation to test inner part of annotation - arguments, arrays, calls...
             new AnnotationToAttribute(GenericAnnotation::class),
             new AnnotationToAttribute(GenericSingleImplicitAnnotation::class),

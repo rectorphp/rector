@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeRecursiveDirectoryIteratorHasChildrenRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradeRecursiveDirectoryIteratorHasChildrenRector::class);
+    $rectorConfig->rule(DowngradeRecursiveDirectoryIteratorHasChildrenRector::class);
 };

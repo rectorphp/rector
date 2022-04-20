@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(SplitGroupedUseImportsRector::class);
+    $rectorConfig->rule(SplitGroupedUseImportsRector::class);
 };

@@ -7,9 +7,8 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(TypedPropertyRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(TypedPropertyRector::class, [
             TypedPropertyRector::INLINE_PUBLIC => true,
         ]);
 

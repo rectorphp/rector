@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradePhpTokenRector::class);
+    $rectorConfig->rule(DowngradePhpTokenRector::class);
 };

@@ -7,9 +7,8 @@ use Rector\Transform\Rector\String_\ToStringToMethodCallRector;
 use Symfony\Component\Config\ConfigCache;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ToStringToMethodCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ToStringToMethodCallRector::class, [
             ConfigCache::class => 'getPath',
         ]);
 };

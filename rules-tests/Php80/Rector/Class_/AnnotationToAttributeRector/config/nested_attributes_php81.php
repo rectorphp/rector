@@ -15,10 +15,8 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81\Not
 return static function (RectorConfig $rectorConfig): void {
     // covers https://wiki.php.net/rfc/new_in_initializers#nested_attributes
     $rectorConfig->phpVersion(PhpVersionFeature::NEW_INITIALIZERS);
-
-    $services = $rectorConfig->services();
-    $services->set(AnnotationToAttributeRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AnnotationToAttributeRector::class, [
             new AnnotationToAttribute(All::class),
             new AnnotationToAttribute(Length::class),
             new AnnotationToAttribute(NotNull::class),

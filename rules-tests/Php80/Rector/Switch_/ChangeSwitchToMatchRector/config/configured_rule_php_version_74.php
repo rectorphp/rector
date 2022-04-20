@@ -8,7 +8,5 @@ use Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_74);
-
-    $services = $rectorConfig->services();
-    $services->set(ChangeSwitchToMatchRector::class);
+    $rectorConfig->rule(ChangeSwitchToMatchRector::class);
 };

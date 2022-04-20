@@ -6,6 +6,5 @@ use Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRect
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
+    $rectorConfig->rule(RemoveDoubleUnderscoreInMethodNameRector::class);
 };

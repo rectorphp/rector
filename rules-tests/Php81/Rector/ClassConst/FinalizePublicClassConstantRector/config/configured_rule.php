@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(FinalizePublicClassConstantRector::class);
+    $rectorConfig->rule(FinalizePublicClassConstantRector::class);
 };

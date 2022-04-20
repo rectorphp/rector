@@ -8,7 +8,9 @@ use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(StaticCallToFuncCallRector::class)
-        ->configure([new StaticCallToFuncCall(SomeOldStaticClass::class, 'render', 'view')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            StaticCallToFuncCallRector::class,
+            [new StaticCallToFuncCall(SomeOldStaticClass::class, 'render', 'view')]
+        );
 };

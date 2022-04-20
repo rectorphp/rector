@@ -11,9 +11,8 @@ use Rector\Transform\Rector\Class_\ParentClassToTraitsRector;
 use Rector\Transform\ValueObject\ParentClassToTraits;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ParentClassToTraitsRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ParentClassToTraitsRector::class, [
             new ParentClassToTraits(ParentObject::class, [SomeTrait::class]),
             new ParentClassToTraits(AnotherParentObject::class, [SomeTrait::class, SecondTrait::class]),
         ]);

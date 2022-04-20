@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradeNumericLiteralSeparatorRector::class);
+    $rectorConfig->rule(DowngradeNumericLiteralSeparatorRector::class);
 };

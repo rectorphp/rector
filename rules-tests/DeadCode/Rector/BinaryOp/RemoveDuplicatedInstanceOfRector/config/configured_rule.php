@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveDuplicatedInstanceOfRector::class);
+    $rectorConfig->rule(RemoveDuplicatedInstanceOfRector::class);
 };

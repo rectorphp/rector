@@ -6,6 +6,5 @@ use Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(PHPStormVarAnnotationRector::class);
+    $rectorConfig->rule(PHPStormVarAnnotationRector::class);
 };

@@ -8,9 +8,8 @@ use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
 use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ReplaceParentCallByPropertyCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ReplaceParentCallByPropertyCallRector::class, [
             new ReplaceParentCallByPropertyCall(TypeClassToReplaceMethodCallBy::class, 'someMethod', 'someProperty'),
         ]);
 };

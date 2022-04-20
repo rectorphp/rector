@@ -7,7 +7,9 @@ use Rector\Composer\ValueObject\RenamePackage;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RenamePackageComposerRector::class)
-        ->configure([new RenamePackage('foo/bar', 'baz/bar'), new RenamePackage('foo/baz', 'baz/baz')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            RenamePackageComposerRector::class,
+            [new RenamePackage('foo/bar', 'baz/bar'), new RenamePackage('foo/baz', 'baz/baz')]
+        );
 };

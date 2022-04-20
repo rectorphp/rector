@@ -8,7 +8,5 @@ use Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRect
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::TYPED_PROPERTIES);
-
-    $services = $rectorConfig->services();
-    $services->set(RemoveNullPropertyInitializationRector::class);
+    $rectorConfig->rule(RemoveNullPropertyInitializationRector::class);
 };

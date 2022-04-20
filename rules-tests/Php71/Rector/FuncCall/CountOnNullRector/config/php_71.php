@@ -8,7 +8,5 @@ use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::COUNT_ON_NULL);
-
-    $services = $rectorConfig->services();
-    $services->set(CountOnNullRector::class);
+    $rectorConfig->rule(CountOnNullRector::class);
 };

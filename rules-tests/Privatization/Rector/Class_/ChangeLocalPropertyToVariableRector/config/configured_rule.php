@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ChangeLocalPropertyToVariableRector::class);
+    $rectorConfig->rule(ChangeLocalPropertyToVariableRector::class);
 };

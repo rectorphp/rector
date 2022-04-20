@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(UpdateFileNameByClassNameFileSystemRector::class);
+    $rectorConfig->rule(UpdateFileNameByClassNameFileSystemRector::class);
 };

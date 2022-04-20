@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\NotIdentical\StrContainsRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(StrContainsRector::class);
+    $rectorConfig->rule(StrContainsRector::class);
 };

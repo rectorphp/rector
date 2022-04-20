@@ -7,8 +7,7 @@ use Rector\Core\ValueObject\PhpVersion;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ReturnTypeFromStrictTypedCallRector::class);
+    $rectorConfig->rule(ReturnTypeFromStrictTypedCallRector::class);
 
     $rectorConfig->phpVersion(PhpVersion::PHP_80);
 };

@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\For_\RemoveDeadLoopRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveDeadLoopRector::class);
+    $rectorConfig->rule(RemoveDeadLoopRector::class);
 };

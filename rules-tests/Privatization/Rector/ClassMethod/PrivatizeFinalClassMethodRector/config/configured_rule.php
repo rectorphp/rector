@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(PrivatizeFinalClassMethodRector::class);
+    $rectorConfig->rule(PrivatizeFinalClassMethodRector::class);
 };

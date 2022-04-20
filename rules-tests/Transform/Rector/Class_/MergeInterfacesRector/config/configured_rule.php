@@ -8,9 +8,8 @@ use Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector\Source\SomeOldInt
 use Rector\Transform\Rector\Class_\MergeInterfacesRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(MergeInterfacesRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(MergeInterfacesRector::class, [
             SomeOldInterface::class => SomeInterface::class,
         ]);
 };

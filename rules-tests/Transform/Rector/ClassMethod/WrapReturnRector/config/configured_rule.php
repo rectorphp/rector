@@ -8,7 +8,6 @@ use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
 use Rector\Transform\ValueObject\WrapReturn;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(WrapReturnRector::class)
-        ->configure([new WrapReturn(SomeReturnClass::class, 'getItem', true)]);
+    $rectorConfig
+        ->ruleWithConfiguration(WrapReturnRector::class, [new WrapReturn(SomeReturnClass::class, 'getItem', true)]);
 };

@@ -8,7 +8,5 @@ use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_74);
-
-    $services = $rectorConfig->services();
-    $services->set(RemoveParentCallWithoutParentRector::class);
+    $rectorConfig->rule(RemoveParentCallWithoutParentRector::class);
 };

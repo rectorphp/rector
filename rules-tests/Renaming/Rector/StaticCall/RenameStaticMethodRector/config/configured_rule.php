@@ -9,9 +9,8 @@ use Rector\Renaming\ValueObject\RenameStaticMethod;
 use Rector\Tests\Renaming\Rector\StaticCall\RenameStaticMethodRector\Source\FormMacros;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RenameStaticMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameStaticMethodRector::class, [
 
             new RenameStaticMethod(Html::class, 'add', Html::class, 'addHtml'),
             new RenameStaticMethod(

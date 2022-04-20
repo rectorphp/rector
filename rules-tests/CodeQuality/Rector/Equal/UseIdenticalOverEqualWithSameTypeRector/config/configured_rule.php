@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(UseIdenticalOverEqualWithSameTypeRector::class);
+    $rectorConfig->rule(UseIdenticalOverEqualWithSameTypeRector::class);
 };

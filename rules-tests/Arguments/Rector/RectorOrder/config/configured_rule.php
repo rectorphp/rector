@@ -8,8 +8,7 @@ use Rector\PHPUnit\Rector\MethodCall\AssertFalseStrposToContainsRector;
 use Rector\PHPUnit\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(AssertComparisonToSpecificMethodRector::class);
-    $services->set(AssertSameBoolNullToSpecificMethodRector::class);
-    $services->set(AssertFalseStrposToContainsRector::class);
+    $rectorConfig->rule(AssertComparisonToSpecificMethodRector::class);
+    $rectorConfig->rule(AssertSameBoolNullToSpecificMethodRector::class);
+    $rectorConfig->rule(AssertFalseStrposToContainsRector::class);
 };

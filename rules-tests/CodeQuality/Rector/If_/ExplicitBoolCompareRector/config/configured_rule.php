@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ExplicitBoolCompareRector::class);
+    $rectorConfig->rule(ExplicitBoolCompareRector::class);
 };

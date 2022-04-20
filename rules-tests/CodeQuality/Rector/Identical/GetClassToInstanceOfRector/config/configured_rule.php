@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(GetClassToInstanceOfRector::class);
+    $rectorConfig->rule(GetClassToInstanceOfRector::class);
 };

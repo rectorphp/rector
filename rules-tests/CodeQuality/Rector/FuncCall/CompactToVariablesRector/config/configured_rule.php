@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(CompactToVariablesRector::class);
+    $rectorConfig->rule(CompactToVariablesRector::class);
 };

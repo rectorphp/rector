@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(MysqlAssignToMysqliRector::class);
+    $rectorConfig->rule(MysqlAssignToMysqliRector::class);
 };

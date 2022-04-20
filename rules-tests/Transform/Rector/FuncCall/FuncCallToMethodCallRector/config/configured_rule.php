@@ -8,10 +8,8 @@ use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
 use Rector\Transform\ValueObject\FuncCallToMethodCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(FuncCallToMethodCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(FuncCallToMethodCallRector::class, [
             new FuncCallToMethodCall('view', 'Namespaced\SomeRenderer', 'render'),
 
             new FuncCallToMethodCall('translate', SomeTranslator::class, 'translateMethod'),

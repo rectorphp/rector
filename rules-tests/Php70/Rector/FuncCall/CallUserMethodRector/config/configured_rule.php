@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php70\Rector\FuncCall\CallUserMethodRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(CallUserMethodRector::class);
+    $rectorConfig->rule(CallUserMethodRector::class);
 };

@@ -8,7 +8,5 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::UNION_TYPES - 1);
-
-    $services = $rectorConfig->services();
-    $services->set(CompleteDynamicPropertiesRector::class);
+    $rectorConfig->rule(CompleteDynamicPropertiesRector::class);
 };

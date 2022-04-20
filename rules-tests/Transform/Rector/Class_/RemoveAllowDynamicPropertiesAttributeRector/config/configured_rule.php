@@ -6,7 +6,6 @@ use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\Class_\RemoveAllowDynamicPropertiesAttributeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveAllowDynamicPropertiesAttributeRector::class)
-        ->configure(['*\Fixture\Process\*']);
+    $rectorConfig
+        ->ruleWithConfiguration(RemoveAllowDynamicPropertiesAttributeRector::class, ['*\Fixture\Process\*']);
 };

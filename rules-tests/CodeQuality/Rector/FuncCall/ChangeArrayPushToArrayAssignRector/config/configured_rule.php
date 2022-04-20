@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ChangeArrayPushToArrayAssignRector::class);
+    $rectorConfig->rule(ChangeArrayPushToArrayAssignRector::class);
 };

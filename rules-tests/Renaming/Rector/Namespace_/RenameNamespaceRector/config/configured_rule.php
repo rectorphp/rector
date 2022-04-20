@@ -6,9 +6,8 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Namespace_\RenameNamespaceRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RenameNamespaceRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameNamespaceRector::class, [
             'OldNamespace' => 'NewNamespace',
             'OldNamespaceWith\OldSplitNamespace' => 'NewNamespaceWith\NewSplitNamespace',
             'Old\Long\AnyNamespace' => 'Short\AnyNamespace',

@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(SimplifyConditionsRector::class);
+    $rectorConfig->rule(SimplifyConditionsRector::class);
 };

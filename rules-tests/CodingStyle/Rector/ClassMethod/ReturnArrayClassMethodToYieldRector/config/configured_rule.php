@@ -10,9 +10,8 @@ use Rector\Tests\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRec
 use Rector\Tests\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Source\ParentTestCase;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ReturnArrayClassMethodToYieldRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ReturnArrayClassMethodToYieldRector::class, [
             new ReturnArrayClassMethodToYield(EventSubscriberInterface::class, 'getSubscribedEvents'),
             new ReturnArrayClassMethodToYield(ParentTestCase::class, 'provide*'),
             new ReturnArrayClassMethodToYield(ParentTestCase::class, 'dataProvider*'),

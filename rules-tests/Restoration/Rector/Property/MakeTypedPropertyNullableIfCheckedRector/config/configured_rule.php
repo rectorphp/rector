@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(MakeTypedPropertyNullableIfCheckedRector::class);
+    $rectorConfig->rule(MakeTypedPropertyNullableIfCheckedRector::class);
 };

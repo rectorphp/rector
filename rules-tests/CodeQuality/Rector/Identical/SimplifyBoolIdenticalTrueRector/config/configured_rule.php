@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(SimplifyBoolIdenticalTrueRector::class);
+    $rectorConfig->rule(SimplifyBoolIdenticalTrueRector::class);
 };

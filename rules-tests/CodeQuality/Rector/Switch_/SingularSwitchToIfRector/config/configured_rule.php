@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(SingularSwitchToIfRector::class);
+    $rectorConfig->rule(SingularSwitchToIfRector::class);
 };

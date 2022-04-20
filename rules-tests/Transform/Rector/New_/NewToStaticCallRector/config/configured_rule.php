@@ -9,7 +9,9 @@ use Rector\Transform\Rector\New_\NewToStaticCallRector;
 use Rector\Transform\ValueObject\NewToStaticCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(NewToStaticCallRector::class)
-        ->configure([new NewToStaticCall(FromNewClass::class, IntoStaticClass::class, 'run')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            NewToStaticCallRector::class,
+            [new NewToStaticCall(FromNewClass::class, IntoStaticClass::class, 'run')]
+        );
 };

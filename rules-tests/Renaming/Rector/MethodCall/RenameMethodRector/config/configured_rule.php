@@ -12,9 +12,8 @@ use Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Source\Foo;
 use Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Source\SomeSubscriber;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             new MethodCallRename(AbstractType::class, 'setDefaultOptions', 'configureOptions'),
             new MethodCallRename('Nette\Utils\Html', 'add', 'addHtml'),
             new MethodCallRename(CustomType::class, 'notify', '__invoke'),

@@ -6,6 +6,5 @@ use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRecto
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(UseClassKeywordForClassNameResolutionRector::class);
+    $rectorConfig->rule(UseClassKeywordForClassNameResolutionRector::class);
 };

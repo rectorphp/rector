@@ -7,9 +7,8 @@ use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
 use Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(AddMethodParentCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddMethodParentCallRector::class, [
             ParentClassWithNewConstructor::class => '__construct',
         ]);
 };

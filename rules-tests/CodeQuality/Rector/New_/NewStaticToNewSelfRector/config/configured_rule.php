@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(NewStaticToNewSelfRector::class);
+    $rectorConfig->rule(NewStaticToNewSelfRector::class);
 };

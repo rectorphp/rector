@@ -13,10 +13,8 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(AddReturnTypeDeclarationRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
             new AddReturnTypeDeclaration(PHPUnitTestCase::class, 'tearDown', new VoidType()),
             new AddReturnTypeDeclaration(ReturnTheMixed::class, 'create', new MixedType(true)),
             new AddReturnTypeDeclaration(

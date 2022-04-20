@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\If_\CombineIfRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(CombineIfRector::class);
+    $rectorConfig->rule(CombineIfRector::class);
 };

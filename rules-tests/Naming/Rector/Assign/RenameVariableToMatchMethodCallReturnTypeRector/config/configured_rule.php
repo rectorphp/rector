@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RenameVariableToMatchMethodCallReturnTypeRector::class);
+    $rectorConfig->rule(RenameVariableToMatchMethodCallReturnTypeRector::class);
 };

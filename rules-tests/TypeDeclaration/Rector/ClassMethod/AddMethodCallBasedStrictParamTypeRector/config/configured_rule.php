@@ -8,7 +8,5 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeR
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::UNION_TYPES - 1);
-
-    $services = $rectorConfig->services();
-    $services->set(AddMethodCallBasedStrictParamTypeRector::class);
+    $rectorConfig->rule(AddMethodCallBasedStrictParamTypeRector::class);
 };

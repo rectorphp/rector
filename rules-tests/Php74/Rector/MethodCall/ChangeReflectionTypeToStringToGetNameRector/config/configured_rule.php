@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ChangeReflectionTypeToStringToGetNameRector::class);
+    $rectorConfig->rule(ChangeReflectionTypeToStringToGetNameRector::class);
 };

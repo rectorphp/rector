@@ -8,7 +8,5 @@ use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_81);
-
-    $services = $rectorConfig->services();
-    $services->set(ReturnTypeDeclarationRector::class);
+    $rectorConfig->rule(ReturnTypeDeclarationRector::class);
 };

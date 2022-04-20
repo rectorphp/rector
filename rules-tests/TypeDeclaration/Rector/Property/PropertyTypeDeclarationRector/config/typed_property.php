@@ -8,7 +8,5 @@ use Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::UNION_TYPES);
-
-    $services = $rectorConfig->services();
-    $services->set(PropertyTypeDeclarationRector::class);
+    $rectorConfig->rule(PropertyTypeDeclarationRector::class);
 };

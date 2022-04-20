@@ -7,9 +7,8 @@ use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ReplaceArgumentDefaultValueRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ReplaceArgumentDefaultValueRector::class, [
 
             new ReplaceArgumentDefaultValue(
                 'Symfony\Component\DependencyInjection\Definition',

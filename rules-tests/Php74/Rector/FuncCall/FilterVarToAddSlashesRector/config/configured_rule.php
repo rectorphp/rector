@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(FilterVarToAddSlashesRector::class);
+    $rectorConfig->rule(FilterVarToAddSlashesRector::class);
 };

@@ -9,15 +9,12 @@ use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\S
 use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\NormalReturnClass;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->importNames();
-
     $parameters = $rectorConfig->parameters();
+    $rectorConfig->importNames();
     $parameters->set(Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY, true);
 
-    $services = $rectorConfig->services();
-
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             NormalParamClass::class => NormalReturnClass::class,
         ]);
 };

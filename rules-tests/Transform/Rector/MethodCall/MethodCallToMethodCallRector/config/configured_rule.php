@@ -9,8 +9,9 @@ use Rector\Transform\Rector\MethodCall\MethodCallToMethodCallRector;
 use Rector\Transform\ValueObject\MethodCallToMethodCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(MethodCallToMethodCallRector::class)
-        ->configure([new MethodCallToMethodCall(FirstDependency::class, 'go', SecondDependency::class, 'away')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            MethodCallToMethodCallRector::class,
+            [new MethodCallToMethodCall(FirstDependency::class, 'go', SecondDependency::class, 'away')]
+        );
 };

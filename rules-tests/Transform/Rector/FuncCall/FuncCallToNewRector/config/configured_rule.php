@@ -6,9 +6,8 @@ use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\FuncCall\FuncCallToNewRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(FuncCallToNewRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(FuncCallToNewRector::class, [
             'collection' => 'Collection',
         ]);
 };

@@ -8,7 +8,5 @@ use Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_74);
-
-    $services = $rectorConfig->services();
-    $services->set(ArraySpreadInsteadOfArrayMergeRector::class);
+    $rectorConfig->rule(ArraySpreadInsteadOfArrayMergeRector::class);
 };

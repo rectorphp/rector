@@ -7,9 +7,8 @@ use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(StaticCallToMethodCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(StaticCallToMethodCallRector::class, [
             new StaticCallToMethodCall(
                 'Nette\Utils\FileSystem',
                 'write',

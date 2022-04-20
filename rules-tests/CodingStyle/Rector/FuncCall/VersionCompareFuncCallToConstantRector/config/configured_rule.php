@@ -6,6 +6,5 @@ use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(VersionCompareFuncCallToConstantRector::class);
+    $rectorConfig->rule(VersionCompareFuncCallToConstantRector::class);
 };

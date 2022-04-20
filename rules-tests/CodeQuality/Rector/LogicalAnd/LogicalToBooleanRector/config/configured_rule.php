@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(LogicalToBooleanRector::class);
+    $rectorConfig->rule(LogicalToBooleanRector::class);
 };

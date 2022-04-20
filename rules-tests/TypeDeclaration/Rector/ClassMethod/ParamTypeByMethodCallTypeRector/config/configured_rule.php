@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ParamTypeByMethodCallTypeRector::class);
+    $rectorConfig->rule(ParamTypeByMethodCallTypeRector::class);
 };

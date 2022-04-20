@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradeFreadFwriteFalsyToNegationRector::class);
+    $rectorConfig->rule(DowngradeFreadFwriteFalsyToNegationRector::class);
 };

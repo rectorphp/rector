@@ -8,7 +8,5 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_72);
-
-    $services = $rectorConfig->services();
-    $services->set(ReturnNeverTypeRector::class);
+    $rectorConfig->rule(ReturnNeverTypeRector::class);
 };

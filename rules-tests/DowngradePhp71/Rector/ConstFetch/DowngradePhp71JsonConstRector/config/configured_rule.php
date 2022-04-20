@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp71\Rector\ConstFetch\DowngradePhp71JsonConstRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradePhp71JsonConstRector::class);
+    $rectorConfig->rule(DowngradePhp71JsonConstRector::class);
 };

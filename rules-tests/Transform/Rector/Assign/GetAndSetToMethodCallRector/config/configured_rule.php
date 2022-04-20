@@ -9,9 +9,8 @@ use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
 use Rector\Transform\ValueObject\GetAndSetToMethodCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(GetAndSetToMethodCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(GetAndSetToMethodCallRector::class, [
             new GetAndSetToMethodCall(SomeContainer::class, 'getService', 'addService'),
             new GetAndSetToMethodCall(Klarka::class, 'get', 'set'),
         ]);

@@ -8,7 +8,5 @@ use Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::SCALAR_TYPES - 1);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeDefineArrayConstantRector::class);
+    $rectorConfig->rule(DowngradeDefineArrayConstantRector::class);
 };

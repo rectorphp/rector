@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ShortArrayToLongArrayRector::class);
+    $rectorConfig->rule(ShortArrayToLongArrayRector::class);
 };

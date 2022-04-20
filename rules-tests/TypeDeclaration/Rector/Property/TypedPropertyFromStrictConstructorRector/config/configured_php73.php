@@ -7,8 +7,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(TypedPropertyFromStrictConstructorRector::class);
+    $rectorConfig->rule(TypedPropertyFromStrictConstructorRector::class);
 
     $rectorConfig->phpVersion(PhpVersionFeature::TYPED_PROPERTIES - 1);
 };

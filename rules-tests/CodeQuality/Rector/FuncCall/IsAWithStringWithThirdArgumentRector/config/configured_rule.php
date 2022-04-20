@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(IsAWithStringWithThirdArgumentRector::class);
+    $rectorConfig->rule(IsAWithStringWithThirdArgumentRector::class);
 };

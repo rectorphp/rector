@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php72\Rector\FuncCall\StringsAssertNakedRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(StringsAssertNakedRector::class);
+    $rectorConfig->rule(StringsAssertNakedRector::class);
 };

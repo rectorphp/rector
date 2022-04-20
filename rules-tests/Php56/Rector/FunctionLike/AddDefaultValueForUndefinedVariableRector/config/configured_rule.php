@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(AddDefaultValueForUndefinedVariableRector::class);
+    $rectorConfig->rule(AddDefaultValueForUndefinedVariableRector::class);
 };

@@ -9,7 +9,9 @@ use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
 use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DimFetchAssignToMethodCallRector::class)
-        ->configure([new DimFetchAssignToMethodCall(SomeRouteList::class, SomeRoute::class, 'addRoute')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            DimFetchAssignToMethodCallRector::class,
+            [new DimFetchAssignToMethodCall(SomeRouteList::class, SomeRoute::class, 'addRoute')]
+        );
 };

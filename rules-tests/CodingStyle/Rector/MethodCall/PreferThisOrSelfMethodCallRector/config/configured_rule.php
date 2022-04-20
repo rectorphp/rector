@@ -11,9 +11,8 @@ use Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\
 use Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\SomeAbstractTestCase;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(PreferThisOrSelfMethodCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(PreferThisOrSelfMethodCallRector::class, [
             SomeAbstractTestCase::class => PreferenceSelfThis::PREFER_SELF(),
             BeLocalClass::class => PreferenceSelfThis::PREFER_THIS(),
             TestCase::class => PreferenceSelfThis::PREFER_SELF(),

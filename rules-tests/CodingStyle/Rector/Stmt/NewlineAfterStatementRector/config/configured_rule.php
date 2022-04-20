@@ -6,6 +6,5 @@ use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(NewlineAfterStatementRector::class);
+    $rectorConfig->rule(NewlineAfterStatementRector::class);
 };

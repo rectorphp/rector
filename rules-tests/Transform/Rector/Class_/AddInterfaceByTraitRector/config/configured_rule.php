@@ -8,9 +8,8 @@ use Rector\Tests\Transform\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTr
 use Rector\Transform\Rector\Class_\AddInterfaceByTraitRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(AddInterfaceByTraitRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddInterfaceByTraitRector::class, [
             SomeTrait::class => SomeInterface::class,
         ]);
 };

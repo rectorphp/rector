@@ -11,7 +11,5 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->phpstanConfig(__DIR__ . '/../../../../../../phpstan-for-rector.neon');
     $rectorConfig->importNames();
-
-    $services = $rectorConfig->services();
-    $services->set(ReturnTypeDeclarationRector::class);
+    $rectorConfig->rule(ReturnTypeDeclarationRector::class);
 };

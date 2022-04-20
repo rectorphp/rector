@@ -7,10 +7,8 @@ use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
-
-    $services = $rectorConfig->services();
-    $services->set(RenameFunctionRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameFunctionRector::class, [
             'service' => 'Symfony\Component\DependencyInjection\Loader\Configurator\service',
         ]);
 };

@@ -7,9 +7,8 @@ use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(PseudoNamespaceToNamespaceRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(PseudoNamespaceToNamespaceRector::class, [
             new PseudoNamespaceToNamespace('PHPUnit_', ['PHPUnit_Framework_MockObject_MockObject']),
             new PseudoNamespaceToNamespace('ChangeMe_', ['KeepMe_']),
             new PseudoNamespaceToNamespace(

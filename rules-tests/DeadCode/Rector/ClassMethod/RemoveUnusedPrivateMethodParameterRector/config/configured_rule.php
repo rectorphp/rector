@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveUnusedPrivateMethodParameterRector::class);
+    $rectorConfig->rule(RemoveUnusedPrivateMethodParameterRector::class);
 };

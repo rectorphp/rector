@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(InlineIfToExplicitIfRector::class);
+    $rectorConfig->rule(InlineIfToExplicitIfRector::class);
 };

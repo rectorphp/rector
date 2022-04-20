@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(UnnecessaryTernaryExpressionRector::class);
+    $rectorConfig->rule(UnnecessaryTernaryExpressionRector::class);
 };

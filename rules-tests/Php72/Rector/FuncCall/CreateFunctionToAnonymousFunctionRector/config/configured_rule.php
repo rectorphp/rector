@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(CreateFunctionToAnonymousFunctionRector::class);
+    $rectorConfig->rule(CreateFunctionToAnonymousFunctionRector::class);
 };

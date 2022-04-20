@@ -6,6 +6,5 @@ use Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(SetTypeToCastRector::class);
+    $rectorConfig->rule(SetTypeToCastRector::class);
 };

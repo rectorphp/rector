@@ -7,11 +7,8 @@ use Rector\Core\Configuration\Option;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->importNames();
-
     $parameters = $rectorConfig->parameters();
+    $rectorConfig->importNames();
     $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
-
-    $services = $rectorConfig->services();
-    $services->set(RenameClassRector::class);
+    $rectorConfig->rule(RenameClassRector::class);
 };

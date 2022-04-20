@@ -8,7 +8,5 @@ use Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersionFeature::SCALAR_TYPES - 1);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeStrictTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeStrictTypeDeclarationRector::class);
 };

@@ -7,9 +7,8 @@ use Rector\Removing\Rector\FuncCall\RemoveFuncCallRector;
 use Rector\Removing\ValueObject\RemoveFuncCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveFuncCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RemoveFuncCallRector::class, [
             new RemoveFuncCall('ini_get', [
                 0 => ['y2k_compliance', 'safe_mode', 'magic_quotes_runtime'],
             ]),

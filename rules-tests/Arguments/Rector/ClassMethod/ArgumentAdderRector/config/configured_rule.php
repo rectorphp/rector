@@ -16,12 +16,10 @@ use Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\Source\SomeMul
 use Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\Source\SomeParentClient;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
     $arrayType = new ArrayType(new MixedType(), new MixedType());
 
-    $services->set(ArgumentAdderRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ArgumentAdderRector::class, [
             // covers https://github.com/rectorphp/rector/issues/4267
             new ArgumentAdder(
                 SomeContainerBuilder::class,

@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(TokenGetAllToObjectRector::class);
+    $rectorConfig->rule(TokenGetAllToObjectRector::class);
 };

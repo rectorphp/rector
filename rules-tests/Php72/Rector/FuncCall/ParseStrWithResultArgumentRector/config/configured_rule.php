@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ParseStrWithResultArgumentRector::class);
+    $rectorConfig->rule(ParseStrWithResultArgumentRector::class);
 };

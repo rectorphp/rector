@@ -10,9 +10,8 @@ use Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\Source\Remove
 use Symfony\Component\Yaml\Yaml;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ArgumentRemoverRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ArgumentRemoverRector::class, [
             new ArgumentRemover(Persister::class, 'getSelectJoinColumnSQL', 4, null), new ArgumentRemover(
                 Yaml::class,
                 'parse',

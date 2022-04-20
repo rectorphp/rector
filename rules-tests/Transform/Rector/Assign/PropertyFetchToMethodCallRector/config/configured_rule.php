@@ -9,9 +9,8 @@ use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
 use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(PropertyFetchToMethodCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(PropertyFetchToMethodCallRector::class, [
 
             new PropertyFetchToMethodCall(Translator::class, 'locale', 'getLocale', 'setLocale'),
             new PropertyFetchToMethodCall(Generator::class, 'word', 'word'),

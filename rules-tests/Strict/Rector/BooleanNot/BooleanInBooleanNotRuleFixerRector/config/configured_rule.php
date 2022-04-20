@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(BooleanInBooleanNotRuleFixerRector::class);
+    $rectorConfig->rule(BooleanInBooleanNotRuleFixerRector::class);
 };

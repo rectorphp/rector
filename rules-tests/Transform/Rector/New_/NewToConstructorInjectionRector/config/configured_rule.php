@@ -7,7 +7,6 @@ use Rector\Tests\Transform\Rector\New_\NewToConstructorInjectionRector\Source\Du
 use Rector\Transform\Rector\New_\NewToConstructorInjectionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(NewToConstructorInjectionRector::class)
-        ->configure([DummyValidator::class]);
+    $rectorConfig
+        ->ruleWithConfiguration(NewToConstructorInjectionRector::class, [DummyValidator::class]);
 };
