@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220419\Webmozart\Assert\Assert;
+use RectorPrefix20220420\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Property\InlineSimplePropertyAnnotationRector\InlineSimplePropertyAnnotationRectorTest
  *
@@ -68,7 +68,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220419\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220420\Webmozart\Assert\Assert::allString($configuration);
         $this->annotationsToConsiderForInlining = \array_map(function (string $annotation) : string {
             return '@' . \ltrim($annotation, '@');
         }, $configuration);
@@ -95,24 +95,24 @@ CODE_SAMPLE
             return null;
         }
         // The first value may not be at index 0
-        $tag = \reset($tags);
-        if (!\in_array($tag->name, $this->annotationsToConsiderForInlining, \true)) {
+        $phpDocTagNode = \reset($tags);
+        if (!\in_array($phpDocTagNode->name, $this->annotationsToConsiderForInlining, \true)) {
             return null;
         }
-        if (\strpos((string) $tag, "\n") !== \false) {
+        if (\strpos((string) $phpDocTagNode, "\n") !== \false) {
             return null;
         }
         // Handle edge cases where stringified tag is not same as it was originally
         /** @var Doc $comment */
         $comment = $comments[0];
-        if (\strpos($comment->getText(), (string) $tag) === \false) {
+        if (\strpos($comment->getText(), (string) $phpDocTagNode) === \false) {
             return null;
         }
         // Creating new node is the only way to enforce the "singleLined" property AFAIK
         $newPhpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
         $newPhpDocInfo->makeSingleLined();
         $newPhpDocNode = $newPhpDocInfo->getPhpDocNode();
-        $newPhpDocNode->children = [$tag];
+        $newPhpDocNode->children = [$phpDocTagNode];
         return $node;
     }
     /**

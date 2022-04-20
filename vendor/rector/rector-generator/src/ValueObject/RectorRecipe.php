@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\RectorGenerator\ValueObject;
 
-use RectorPrefix20220419\Nette\Utils\Json;
-use RectorPrefix20220419\Nette\Utils\Strings;
+use RectorPrefix20220420\Nette\Utils\Json;
+use RectorPrefix20220420\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\RectorGenerator\Exception\ConfigurationException;
@@ -213,7 +213,7 @@ final class RectorRecipe
      */
     private function resolveCategory(array $nodeTypes) : void
     {
-        $this->category = (string) \RectorPrefix20220419\Nette\Utils\Strings::after($nodeTypes[0], '\\', -1);
+        $this->category = (string) \RectorPrefix20220420\Nette\Utils\Strings::after($nodeTypes[0], '\\', -1);
     }
     private function normalizeCode(string $code) : string
     {
@@ -233,7 +233,7 @@ final class RectorRecipe
             if ($composerJsonContent === \false) {
                 continue;
             }
-            $composerJson = \RectorPrefix20220419\Nette\Utils\Json::decode($composerJsonContent, \RectorPrefix20220419\Nette\Utils\Json::FORCE_ARRAY);
+            $composerJson = \RectorPrefix20220420\Nette\Utils\Json::decode($composerJsonContent, \RectorPrefix20220420\Nette\Utils\Json::FORCE_ARRAY);
             if (!isset($composerJson['name'])) {
                 continue;
             }

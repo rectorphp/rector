@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220419\Idiosyncratic\EditorConfig\Exception;
+namespace RectorPrefix20220420\Idiosyncratic\EditorConfig\Exception;
 
 use DomainException;
 use function sprintf;

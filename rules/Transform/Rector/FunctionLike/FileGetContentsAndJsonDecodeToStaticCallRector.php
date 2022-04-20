@@ -17,7 +17,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\StaticCallRecipe;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220419\Webmozart\Assert\Assert;
+use RectorPrefix20220420\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\FunctionLike\FileGetContentsAndJsonDecodeToStaticCallRector\FileGetContentsAndJsonDecodeToStaticCallRectorTest
  */
@@ -87,7 +87,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $staticCallRecipe = $configuration[0] ?? null;
-        \RectorPrefix20220419\Webmozart\Assert\Assert::isInstanceOf($staticCallRecipe, \Rector\Transform\ValueObject\StaticCallRecipe::class);
+        \RectorPrefix20220420\Webmozart\Assert\Assert::isInstanceOf($staticCallRecipe, \Rector\Transform\ValueObject\StaticCallRecipe::class);
         $this->staticCallRecipe = $staticCallRecipe;
     }
     private function createStaticCall(\PhpParser\Node\Expr\FuncCall $fileGetContentsFuncCall) : \PhpParser\Node\Expr\StaticCall

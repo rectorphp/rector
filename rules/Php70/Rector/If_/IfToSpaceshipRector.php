@@ -215,16 +215,16 @@ CODE_SAMPLE
     }
     private function processAscendingSort(?\PhpParser\Node\Expr\Ternary $ternary, \PhpParser\Node\Expr $firstValue, \PhpParser\Node\Expr $secondValue) : \PhpParser\Node\Stmt\Return_
     {
-        if ($ternary === null || $ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Greater) {
-            return $this->processReturnSpaceship($firstValue, $secondValue);
+        if ($ternary instanceof \PhpParser\Node\Expr\Ternary && !$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Greater) {
+            return $this->processReturnSpaceship($secondValue, $firstValue);
         }
-        return $this->processReturnSpaceship($secondValue, $firstValue);
+        return $this->processReturnSpaceship($firstValue, $secondValue);
     }
     private function processDescendingSort(?\PhpParser\Node\Expr\Ternary $ternary, \PhpParser\Node\Expr $firstValue, \PhpParser\Node\Expr $secondValue) : \PhpParser\Node\Stmt\Return_
     {
-        if ($ternary === null || $ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Smaller) {
-            return $this->processReturnSpaceship($firstValue, $secondValue);
+        if ($ternary instanceof \PhpParser\Node\Expr\Ternary && !$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Smaller) {
+            return $this->processReturnSpaceship($secondValue, $firstValue);
         }
-        return $this->processReturnSpaceship($secondValue, $firstValue);
+        return $this->processReturnSpaceship($firstValue, $secondValue);
     }
 }

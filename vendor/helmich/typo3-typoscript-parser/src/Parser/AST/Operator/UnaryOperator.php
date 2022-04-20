@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220419\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20220420\Helmich\TypoScriptParser\Parser\AST\Operator;
 
-use RectorPrefix20220419\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
+use RectorPrefix20220420\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Abstract base class for statements with unary operators.
@@ -25,7 +25,7 @@ abstract class UnaryOperator extends \Helmich\TypoScriptParser\Parser\AST\Statem
      * @param ObjectPath $object     The object to operate on.
      * @param int        $sourceLine The original source line.
      */
-    public function __construct(\RectorPrefix20220419\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, int $sourceLine)
+    public function __construct(\RectorPrefix20220420\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;
