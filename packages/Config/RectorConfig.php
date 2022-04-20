@@ -120,4 +120,9 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES, $bootstrapFiles);
     }
+    public function symfonyContainerXml(string $filePath) : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, $filePath);
+    }
 }

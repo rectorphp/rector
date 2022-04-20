@@ -27,7 +27,7 @@ final class UpgradeRectorConfigRector extends \Rector\Core\Rector\AbstractRector
     /**
      * @var array<string, string>
      */
-    private const PARAMETER_NAME_TO_METHOD_CALL_MAP = [\Rector\Core\Configuration\Option::AUTOLOAD_PATHS => 'autoloadPaths', \Rector\Core\Configuration\Option::BOOTSTRAP_FILES => 'bootstrapFiles', \Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES => 'importNames', \Rector\Core\Configuration\Option::PARALLEL => 'parallel', \Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH => 'phpstanConfig'];
+    private const PARAMETER_NAME_TO_METHOD_CALL_MAP = [\Rector\Core\Configuration\Option::PATHS => 'paths', \Rector\Core\Configuration\Option::SKIP => 'skip', \Rector\Core\Configuration\Option::AUTOLOAD_PATHS => 'autoloadPaths', \Rector\Core\Configuration\Option::BOOTSTRAP_FILES => 'bootstrapFiles', \Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES => 'importNames', \Rector\Core\Configuration\Option::PARALLEL => 'parallel', \Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH => 'phpstanConfig', \Rector\Core\Configuration\Option::PHP_VERSION_FEATURES => 'phpVersion'];
     /**
      * @var string
      */
@@ -161,12 +161,12 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function isOptionWithTrue(array $args, string $optionName) : bool
+    private function isNonFalseOption(array $args, string $optionName) : bool
     {
         if (!$this->valueResolver->isValue($args[0]->value, $optionName)) {
             return \false;
         }
-        return $this->valueResolver->isTrue($args[1]->value);
+        return !$this->valueResolver->isFalse($args[1]->value);
     }
     /**
      * @return \PhpParser\Node\Expr\MethodCall|null
@@ -188,17 +188,12 @@ CODE_SAMPLE
     private function refactorParameterName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         $args = $methodCall->getArgs();
-        if ($this->valueResolver->isValue($args[0]->value, \Rector\Core\Configuration\Option::PHP_VERSION_FEATURES)) {
-            $methodCall->var = new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE);
-            $methodCall->name = new \PhpParser\Node\Identifier('phpVersion');
-            $methodCall->args = [$args[1]];
-            return $methodCall;
-        }
         foreach (self::PARAMETER_NAME_TO_METHOD_CALL_MAP as $parameterName => $methodName) {
-            if (!$this->isOptionWithTrue($args, $parameterName)) {
+            if (!$this->isNonFalseOption($args, $parameterName)) {
                 continue;
             }
-            return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE), $methodName);
+            $args = $this->valueResolver->isTrueOrFalse($args[1]->value) ? [] : [$args[1]];
+            return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE), $methodName, $args);
         }
         return null;
     }
