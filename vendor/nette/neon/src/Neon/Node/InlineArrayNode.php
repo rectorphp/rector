@@ -12,10 +12,9 @@ final class InlineArrayNode extends \RectorPrefix20220420\Nette\Neon\Node\ArrayN
 {
     /** @var string */
     public $bracket;
-    public function __construct(string $bracket, int $pos = null)
+    public function __construct(string $bracket)
     {
         $this->bracket = $bracket;
-        $this->startPos = $this->endPos = $pos;
     }
     public function toString() : string
     {

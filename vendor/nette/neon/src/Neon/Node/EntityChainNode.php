@@ -14,11 +14,9 @@ final class EntityChainNode extends \RectorPrefix20220420\Nette\Neon\Node
 {
     /** @var EntityNode[] */
     public $chain = [];
-    public function __construct(array $chain = [], int $startPos = null, int $endPos = null)
+    public function __construct(array $chain = [])
     {
         $this->chain = $chain;
-        $this->startPos = $startPos;
-        $this->endPos = $endPos ?? $startPos;
     }
     public function toValue() : \RectorPrefix20220420\Nette\Neon\Entity
     {
@@ -26,7 +24,7 @@ final class EntityChainNode extends \RectorPrefix20220420\Nette\Neon\Node
         foreach ($this->chain as $item) {
             $entities[] = $item->toValue();
         }
-        return new \RectorPrefix20220420\Nette\Neon\Entity(\RectorPrefix20220420\Nette\Neon\Neon::CHAIN, $entities);
+        return new \RectorPrefix20220420\Nette\Neon\Entity(\RectorPrefix20220420\Nette\Neon\Neon::Chain, $entities);
     }
     public function toString() : string
     {
@@ -34,12 +32,10 @@ final class EntityChainNode extends \RectorPrefix20220420\Nette\Neon\Node
             return $entity->toString();
         }, $this->chain));
     }
-    public function getSubNodes() : array
+    public function &getIterator() : \Generator
     {
-        $res = [];
         foreach ($this->chain as &$item) {
-            $res[] =& $item;
+            (yield $item);
         }
-        return $res;
     }
 }

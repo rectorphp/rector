@@ -22,7 +22,7 @@ final class StringFormTypeToClassRector extends \Rector\Core\Rector\AbstractRect
     /**
      * @var string
      */
-    private const DESCRIPTION = 'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"';
+    private const DESCRIPTION = 'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$rectorConfig->symfonyContainerXml(...)"';
     /**
      * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer

@@ -31,7 +31,7 @@ final class Encoder
     {
         if ($val instanceof \DateTimeInterface) {
             return new \RectorPrefix20220420\Nette\Neon\Node\LiteralNode($val);
-        } elseif ($val instanceof \RectorPrefix20220420\Nette\Neon\Entity && $val->value === \RectorPrefix20220420\Nette\Neon\Neon::CHAIN) {
+        } elseif ($val instanceof \RectorPrefix20220420\Nette\Neon\Entity && $val->value === \RectorPrefix20220420\Nette\Neon\Neon::Chain) {
             $node = new \RectorPrefix20220420\Nette\Neon\Node\EntityChainNode();
             foreach ($val->attributes as $entity) {
                 $node->chain[] = $this->valueToNode($entity);
@@ -54,6 +54,7 @@ final class Encoder
             return new \RectorPrefix20220420\Nette\Neon\Node\LiteralNode($val);
         }
     }
+    /** @return Node\ArrayItemNode[] */
     private function arrayToNodes($val, bool $blockMode = \false) : array
     {
         $res = [];

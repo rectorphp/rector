@@ -54,7 +54,7 @@ final class NeonNodeTraverser
                 $neonRector->enterNode($node);
             }
             // traverse all children
-            foreach ($node->getSubNodes() as $subnode) {
+            foreach ($node->getIterator() as $subnode) {
                 $this->traverse($subnode);
             }
         }

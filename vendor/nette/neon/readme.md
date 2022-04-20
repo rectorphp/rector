@@ -362,7 +362,7 @@ Which is parsed in PHP as follows:
 
 ```php
 // PHP
-new Nette\Neon\Entity(Nette\Neon\Neon::CHAIN, [
+new Nette\Neon\Entity(Nette\Neon\Neon::Chain, [
 	new Nette\Neon\Entity('Column', ['type' => 'int', 'nulls' => true]),
 	new Nette\Neon\Entity('Field', ['id' => 1]),
 ])

@@ -14,7 +14,8 @@ namespace RectorPrefix20220420\Nette\Neon;
 final class Neon
 {
     public const BLOCK = \RectorPrefix20220420\Nette\Neon\Encoder::BLOCK;
-    public const CHAIN = '!!chain';
+    public const Chain = '!!chain';
+    public const CHAIN = self::Chain;
     /**
      * Returns value converted to NEON.
      */

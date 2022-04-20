@@ -12,10 +12,9 @@ final class BlockArrayNode extends \RectorPrefix20220420\Nette\Neon\Node\ArrayNo
 {
     /** @var string */
     public $indentation;
-    public function __construct(string $indentation = '', int $pos = null)
+    public function __construct(string $indentation = '')
     {
         $this->indentation = $indentation;
-        $this->startPos = $this->endPos = $pos;
     }
     public function toString() : string
     {

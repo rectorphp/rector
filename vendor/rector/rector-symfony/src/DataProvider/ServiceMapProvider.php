@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\DataProvider;
 
+use Rector\Core\Configuration\Option;
 use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 use Rector\Symfony\ValueObjectFactory\ServiceMapFactory;
 use RectorPrefix20220420\Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -11,10 +12,6 @@ use RectorPrefix20220420\Symplify\PackageBuilder\Parameter\ParameterProvider;
  */
 final class ServiceMapProvider
 {
-    /**
-     * @var string
-     */
-    private const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
     /**
      * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
@@ -32,7 +29,7 @@ final class ServiceMapProvider
     }
     public function provide() : \Rector\Symfony\ValueObject\ServiceMap\ServiceMap
     {
-        $symfonyContainerXmlPath = (string) $this->parameterProvider->provideParameter(self::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
+        $symfonyContainerXmlPath = (string) $this->parameterProvider->provideParameter(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
         if ($symfonyContainerXmlPath === '') {
             return $this->serviceMapFactory->createEmpty();
         }

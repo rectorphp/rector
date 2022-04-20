@@ -737,17 +737,17 @@
         },
         {
             "name": "nette\/neon",
-            "version": "v3.3.2",
-            "version_normalized": "3.3.2.0",
+            "version": "v3.3.3",
+            "version_normalized": "3.3.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/neon.git",
-                "reference": "54b287d8c2cdbe577b02e28ca1713e275b05ece2"
+                "reference": "22e384da162fab42961d48eb06c06d3ad0c11b95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/neon\/zipball\/54b287d8c2cdbe577b02e28ca1713e275b05ece2",
-                "reference": "54b287d8c2cdbe577b02e28ca1713e275b05ece2",
+                "url": "https:\/\/api.github.com\/repos\/nette\/neon\/zipball\/22e384da162fab42961d48eb06c06d3ad0c11b95",
+                "reference": "22e384da162fab42961d48eb06c06d3ad0c11b95",
                 "shasum": ""
             },
             "require": {
@@ -759,7 +759,7 @@
                 "phpstan\/phpstan": "^0.12",
                 "tracy\/tracy": "^2.7"
             },
-            "time": "2021-11-25T15:57:41+00:00",
+            "time": "2022-03-10T02:04:26+00:00",
             "bin": [
                 "bin\/neon-lint"
             ],
@@ -802,7 +802,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/neon\/issues",
-                "source": "https:\/\/github.com\/nette\/neon\/tree\/v3.3.2"
+                "source": "https:\/\/github.com\/nette\/neon\/tree\/v3.3.3"
             },
             "install-path": "..\/nette\/neon"
         },
@@ -2415,21 +2415,21 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "2fc8a27a25adaf00169b85347dedd9d0efcb6e10"
+                "reference": "0b5a94c5611aa3130b6dc0cce4028f7ad0184923"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/2fc8a27a25adaf00169b85347dedd9d0efcb6e10",
-                "reference": "2fc8a27a25adaf00169b85347dedd9d0efcb6e10",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/0b5a94c5611aa3130b6dc0cce4028f7ad0184923",
+                "reference": "0b5a94c5611aa3130b6dc0cce4028f7ad0184923",
                 "shasum": ""
             },
             "require": {
                 "ext-xml": "*",
-                "nette\/neon": "3.3.2",
+                "nette\/neon": "^3.3.3",
                 "php": ">=8.1",
                 "rector\/rector-phpunit": "^0.11.15",
                 "symfony\/string": "^6.0",
-                "symplify\/vendor-patches": "^10.0"
+                "symplify\/vendor-patches": "^10.2"
             },
             "conflict": {
                 "rector\/rector": "<0.11"
@@ -2443,16 +2443,16 @@
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
-                "rector\/phpstan-rules": "^0.4.7",
+                "rector\/phpstan-rules": "^0.4.24",
                 "rector\/rector-src": "dev-main",
-                "symplify\/easy-coding-standard": "^10.0",
-                "symplify\/monorepo-builder": "^10.0",
-                "symplify\/phpstan-extensions": "^10.0",
-                "symplify\/phpstan-rules": "^10.0",
-                "symplify\/rule-doc-generator": "^10.0",
-                "symplify\/vendor-patches": "^10.0"
+                "symplify\/easy-coding-standard": "^10.2",
+                "symplify\/monorepo-builder": "^10.2",
+                "symplify\/phpstan-extensions": "^10.2",
+                "symplify\/phpstan-rules": "^10.2",
+                "symplify\/rule-doc-generator": "^10.2",
+                "symplify\/vendor-patches": "^10.2"
             },
-            "time": "2022-04-18T13:39:53+00:00",
+            "time": "2022-04-20T19:02:05+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2481,7 +2481,7 @@
             ],
             "description": "Rector upgrades rules for Nette Framework",
             "support": {
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.58"
             },
             "install-path": "..\/rector\/rector-nette"
         },
@@ -2627,12 +2627,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "7dd7cdf3850ff4b0a7839fcf24bb4c26138044de"
+                "reference": "d554e4e242f165bf71c07b5ac7bff895d987ebc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/7dd7cdf3850ff4b0a7839fcf24bb4c26138044de",
-                "reference": "7dd7cdf3850ff4b0a7839fcf24bb4c26138044de",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d554e4e242f165bf71c07b5ac7bff895d987ebc4",
+                "reference": "d554e4e242f165bf71c07b5ac7bff895d987ebc4",
                 "shasum": ""
             },
             "require": {
@@ -2660,7 +2660,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-04-20T14:22:36+00:00",
+            "time": "2022-04-20T19:12:09+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

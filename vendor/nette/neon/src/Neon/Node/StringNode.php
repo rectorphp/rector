@@ -12,13 +12,12 @@ use RectorPrefix20220420\Nette\Neon\Node;
 /** @internal */
 final class StringNode extends \RectorPrefix20220420\Nette\Neon\Node
 {
-    private const ESCAPE_SEQUENCES = ['t' => "\t", 'n' => "\n", 'r' => "\r", 'f' => "\f", 'b' => "\10", '"' => '"', '\\' => '\\', '/' => '/', '_' => " "];
+    private const EscapeSequences = ['t' => "\t", 'n' => "\n", 'r' => "\r", 'f' => "\f", 'b' => "\10", '"' => '"', '\\' => '\\', '/' => '/', '_' => " "];
     /** @var string */
     public $value;
-    public function __construct(string $value, int $pos = null)
+    public function __construct(string $value)
     {
         $this->value = $value;
-        $this->startPos = $this->endPos = $pos;
     }
     public function toValue() : string
     {
@@ -42,8 +41,8 @@ final class StringNode extends \RectorPrefix20220420\Nette\Neon\Node
         }
         return \preg_replace_callback('#\\\\(?:ud[89ab][0-9a-f]{2}\\\\ud[c-f][0-9a-f]{2}|u[0-9a-f]{4}|x[0-9a-f]{2}|.)#i', function (array $m) : string {
             $sq = $m[0];
-            if (isset(self::ESCAPE_SEQUENCES[$sq[1]])) {
-                return self::ESCAPE_SEQUENCES[$sq[1]];
+            if (isset(self::EscapeSequences[$sq[1]])) {
+                return self::EscapeSequences[$sq[1]];
             } elseif ($sq[1] === 'u' && \strlen($sq) >= 6) {
                 if (($res = \json_decode('"' . $sq . '"')) !== null) {
                     return $res;
@@ -59,16 +58,20 @@ final class StringNode extends \RectorPrefix20220420\Nette\Neon\Node
     }
     public function toString() : string
     {
-        $res = \json_encode($this->value, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
-        if ($res === \false) {
-            throw new \RectorPrefix20220420\Nette\Neon\Exception('Invalid UTF-8 sequence: ' . $this->value);
+        if (\strpos($this->value, "\n") === \false) {
+            return "'" . \str_replace("'", "''", $this->value) . "'";
+        } elseif (\preg_match('~\\n[\\t ]+\'{3}~', $this->value)) {
+            $s = \json_encode($this->value, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
+            $s = \preg_replace_callback('#[^\\\\]|\\\\(.)#s', function ($m) {
+                return ['n' => "\n", 't' => "\t", '"' => '"'][$m[1] ?? ''] ?? $m[0];
+            }, \substr($s, 1, -1));
+            $s = \str_replace('"""', '""\\"', $s);
+            $delim = '"""';
+        } else {
+            $s = $this->value;
+            $delim = "'''";
         }
-        if (\strpos($this->value, "\n") !== \false) {
-            $res = \preg_replace_callback('#[^\\\\]|\\\\(.)#s', function ($m) {
-                return ['n' => "\n\t", 't' => "\t", '"' => '"'][$m[1] ?? ''] ?? $m[0];
-            }, $res);
-            $res = '"""' . "\n\t" . \substr($res, 1, -1) . "\n" . '"""';
-        }
-        return $res;
+        $s = \preg_replace('#^(?=.)#m', "\t", $s);
+        return $delim . "\n" . $s . "\n" . $delim;
     }
 }

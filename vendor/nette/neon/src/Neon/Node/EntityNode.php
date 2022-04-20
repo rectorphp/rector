@@ -15,13 +15,11 @@ final class EntityNode extends \RectorPrefix20220420\Nette\Neon\Node
     /** @var Node */
     public $value;
     /** @var ArrayItemNode[] */
-    public $attributes = [];
-    public function __construct(\RectorPrefix20220420\Nette\Neon\Node $value, array $attributes, int $startPos = null, int $endPos = null)
+    public $attributes;
+    public function __construct(\RectorPrefix20220420\Nette\Neon\Node $value, array $attributes = [])
     {
         $this->value = $value;
         $this->attributes = $attributes;
-        $this->startPos = $startPos;
-        $this->endPos = $endPos ?? $startPos;
     }
     public function toValue() : \RectorPrefix20220420\Nette\Neon\Entity
     {
@@ -31,12 +29,11 @@ final class EntityNode extends \RectorPrefix20220420\Nette\Neon\Node
     {
         return $this->value->toString() . '(' . ($this->attributes ? \RectorPrefix20220420\Nette\Neon\Node\ArrayItemNode::itemsToInlineString($this->attributes) : '') . ')';
     }
-    public function getSubNodes() : array
+    public function &getIterator() : \Generator
     {
-        $res = [&$this->value];
+        (yield $this->value);
         foreach ($this->attributes as &$item) {
-            $res[] =& $item;
+            (yield $item);
         }
-        return $res;
     }
 }

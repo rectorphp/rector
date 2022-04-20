@@ -60,15 +60,16 @@ final class Service_ extends \Rector\Nette\NeonParser\Node\AbstractVirtualNode
     /**
      * @return Node[]
      */
-    public function getSubNodes() : array
+    public function &getIterator() : \Generator
     {
-        $subNodes = [];
         if ($this->classLiteralNode instanceof \RectorPrefix20220420\Nette\Neon\Node\LiteralNode) {
-            $subNodes[] = $this->classLiteralNode;
+            (yield $this->classLiteralNode);
         }
         if ($this->factoryLiteralNode instanceof \RectorPrefix20220420\Nette\Neon\Node\LiteralNode) {
-            $subNodes[] = $this->factoryLiteralNode;
+            (yield $this->factoryLiteralNode);
         }
-        return \array_merge($subNodes, $this->setupMethodCalls);
+        foreach ($this->setupMethodCalls as $setupMethodCall) {
+            (yield $setupMethodCall);
+        }
     }
 }

@@ -15,11 +15,10 @@ final class ArrayItemNode extends \RectorPrefix20220420\Nette\Neon\Node
     public $key;
     /** @var Node */
     public $value;
-    public function __construct(int $pos = null)
-    {
-        $this->startPos = $this->endPos = $pos;
-    }
-    /** @param  self[]  $items */
+    /**
+     * @param  self[]  $items
+     * @return mixed[]
+     */
     public static function itemsToArray(array $items) : array
     {
         $res = [];
@@ -59,8 +58,11 @@ final class ArrayItemNode extends \RectorPrefix20220420\Nette\Neon\Node
     {
         throw new \LogicException();
     }
-    public function getSubNodes() : array
+    public function &getIterator() : \Generator
     {
-        return $this->key ? [&$this->key, &$this->value] : [&$this->value];
+        if ($this->key) {
+            (yield $this->key);
+        }
+        (yield $this->value);
     }
 }
