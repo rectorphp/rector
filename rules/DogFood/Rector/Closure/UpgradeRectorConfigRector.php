@@ -6,7 +6,6 @@ namespace Rector\DogFood\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -14,11 +13,11 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer;
-use Rector\DogFood\NodeManipulator\EmptyAssignRemover;
+use Rector\DogFood\NodeManipulator\ContainerConfiguratorEmptyAssignRemover;
+use Rector\DogFood\NodeManipulator\ContainerConfiguratorImportsMerger;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -56,7 +55,8 @@ final class UpgradeRectorConfigRector extends AbstractRector
 
     public function __construct(
         private readonly ContainerConfiguratorCallAnalyzer $containerConfiguratorCallAnalyzer,
-        private readonly EmptyAssignRemover $emptyAssignRemover
+        private readonly ContainerConfiguratorEmptyAssignRemover $containerConfiguratorEmptyAssignRemover,
+        private readonly ContainerConfiguratorImportsMerger $containerConfiguratorImportsMerger
     ) {
     }
 
@@ -129,7 +129,7 @@ CODE_SAMPLE
         $this->updateClosureParam($onlyParam);
 
         // 1. change import of sets to single sets() method call
-        $this->refactorSetImportMethodCalls($node);
+        $this->containerConfiguratorImportsMerger->merge($node);
 
         $this->traverseNodesWithCallable($node->getStmts(), function (Node $node): ?MethodCall {
             // 2. call on rule
@@ -158,7 +158,7 @@ CODE_SAMPLE
             return null;
         });
 
-        $this->emptyAssignRemover->removeFromClosure($node);
+        $this->containerConfiguratorEmptyAssignRemover->removeFromClosure($node);
 
         return $node;
     }
@@ -222,45 +222,5 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    private function refactorSetImportMethodCalls(Closure $closure): void
-    {
-        $setConstantFetches = [];
-        $lastImportKey = null;
-
-        foreach ($closure->getStmts() as $key => $stmt) {
-            if (! $stmt instanceof Expression) {
-                continue;
-            }
-
-            $expr = $stmt->expr;
-            if (! $expr instanceof MethodCall) {
-                continue;
-            }
-
-            if (! $this->isName($expr->name, 'import')) {
-                continue;
-            }
-
-            $importArg = $expr->getArgs();
-            $argValue = $importArg[0]->value;
-            if (! $argValue instanceof ClassConstFetch) {
-                continue;
-            }
-
-            $setConstantFetches[] = $argValue;
-            unset($closure->stmts[$key]);
-            $lastImportKey = $key;
-        }
-
-        if ($setConstantFetches === []) {
-            return;
-        }
-
-        $args = $this->nodeFactory->createArgs([$setConstantFetches]);
-
-        $setsMethodCall = new MethodCall(new Variable(self::RECTOR_CONFIG_VARIABLE), 'sets', $args);
-        $closure->stmts[$lastImportKey] = new Expression($setsMethodCall);
     }
 }
