@@ -5,16 +5,19 @@ namespace Rector\DogFood\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer;
+use Rector\DogFood\NodeManipulator\EmptyAssignRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -39,17 +42,19 @@ final class UpgradeRectorConfigRector extends \Rector\Core\Rector\AbstractRector
      */
     private const PARAMETERS_VARIABLE = 'parameters';
     /**
-     * @var string
-     */
-    private const CONTAINER_CONFIGURATOR_VARIABLE = 'containerConfigurator';
-    /**
      * @readonly
      * @var \Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer
      */
     private $containerConfiguratorCallAnalyzer;
-    public function __construct(\Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer $containerConfiguratorCallAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\DogFood\NodeManipulator\EmptyAssignRemover
+     */
+    private $emptyAssignRemover;
+    public function __construct(\Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer $containerConfiguratorCallAnalyzer, \Rector\DogFood\NodeManipulator\EmptyAssignRemover $emptyAssignRemover)
     {
         $this->containerConfiguratorCallAnalyzer = $containerConfiguratorCallAnalyzer;
+        $this->emptyAssignRemover = $emptyAssignRemover;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -104,15 +109,11 @@ CODE_SAMPLE
         if (!$this->isNames($paramType, ['Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator', self::RECTOR_CONFIG_CLASS])) {
             return null;
         }
-        // update closure params
-        if (!$this->nodeNameResolver->isName($paramType, self::RECTOR_CONFIG_CLASS)) {
-            $onlyParam->type = new \PhpParser\Node\Name\FullyQualified(self::RECTOR_CONFIG_CLASS);
-        }
-        if (!$this->nodeNameResolver->isName($onlyParam->var, self::RECTOR_CONFIG_VARIABLE)) {
-            $onlyParam->var = new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE);
-        }
+        $this->updateClosureParam($onlyParam);
+        // 1. change import of sets to single sets() method call
+        $this->refactorSetImportMethodCalls($node);
         $this->traverseNodesWithCallable($node->getStmts(), function (\PhpParser\Node $node) : ?MethodCall {
-            // 1. call on rule
+            // 2. call on rule
             if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
                 if ($this->containerConfiguratorCallAnalyzer->isMethodCallWithServicesSetConfiguredRectorRule($node)) {
                     return $this->refactorConfigureRuleMethodCall($node);
@@ -127,34 +128,22 @@ CODE_SAMPLE
                     return $this->refactorParameterName($node);
                 }
             }
-            // look for "$services = $containerConfigurator->services()"
-            $this->removeHelperAssigns($node);
             return null;
         });
-        // change the node
+        $this->emptyAssignRemover->removeFromClosure($node);
         return $node;
     }
-    /**
-     * Remove helper methods calls like:
-     * $services = $containerConfigurator->services();
-     * $parameters = $containerConfigurator->parameters();
-     */
-    public function removeHelperAssigns(\PhpParser\Node $node) : void
+    public function updateClosureParam(\PhpParser\Node\Param $param) : void
     {
-        if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$param->type instanceof \PhpParser\Node\Name) {
             return;
         }
-        if ($this->containerConfiguratorCallAnalyzer->isMethodCallNamed($node->expr, self::CONTAINER_CONFIGURATOR_VARIABLE, 'services')) {
-            $this->removeNode($node);
+        // update closure params
+        if (!$this->nodeNameResolver->isName($param->type, self::RECTOR_CONFIG_CLASS)) {
+            $param->type = new \PhpParser\Node\Name\FullyQualified(self::RECTOR_CONFIG_CLASS);
         }
-        if ($this->containerConfiguratorCallAnalyzer->isMethodCallNamed($node->expr, self::RECTOR_CONFIG_VARIABLE, 'services')) {
-            $this->removeNode($node);
-        }
-        if ($this->containerConfiguratorCallAnalyzer->isMethodCallNamed($node->expr, self::CONTAINER_CONFIGURATOR_VARIABLE, self::PARAMETERS_VARIABLE)) {
-            $this->removeNode($node);
-        }
-        if ($this->containerConfiguratorCallAnalyzer->isMethodCallNamed($node->expr, self::RECTOR_CONFIG_VARIABLE, self::PARAMETERS_VARIABLE)) {
-            $this->removeNode($node);
+        if (!$this->nodeNameResolver->isName($param->var, self::RECTOR_CONFIG_VARIABLE)) {
+            $param->var = new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE);
         }
     }
     /**
@@ -193,5 +182,36 @@ CODE_SAMPLE
             return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE), $methodName);
         }
         return null;
+    }
+    private function refactorSetImportMethodCalls(\PhpParser\Node\Expr\Closure $closure) : void
+    {
+        $setConstantFetches = [];
+        $lastImportKey = null;
+        foreach ($closure->getStmts() as $key => $stmt) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+                continue;
+            }
+            $expr = $stmt->expr;
+            if (!$expr instanceof \PhpParser\Node\Expr\MethodCall) {
+                continue;
+            }
+            if (!$this->isName($expr->name, 'import')) {
+                continue;
+            }
+            $importArg = $expr->getArgs();
+            $argValue = $importArg[0]->value;
+            if (!$argValue instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+                continue;
+            }
+            $setConstantFetches[] = $argValue;
+            unset($closure->stmts[$key]);
+            $lastImportKey = $key;
+        }
+        if ($setConstantFetches === []) {
+            return;
+        }
+        $args = $this->nodeFactory->createArgs([$setConstantFetches]);
+        $setsMethodCall = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE), 'sets', $args);
+        $closure->stmts[$lastImportKey] = new \PhpParser\Node\Stmt\Expression($setsMethodCall);
     }
 }
