@@ -9,8 +9,7 @@ use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
-    $services = $rectorConfig->services();
-    $services->set(SimplifyIfElseToTernaryRector::class);
-    $services->set(InlineSimplePropertyAnnotationRector::class);
-    $services->set(RemoveUnusedVariableAssignRector::class);
+    $rectorConfig->rule(SimplifyIfElseToTernaryRector::class);
+    $rectorConfig->rule(InlineSimplePropertyAnnotationRector::class);
+    $rectorConfig->rule(RemoveUnusedVariableAssignRector::class);
 };

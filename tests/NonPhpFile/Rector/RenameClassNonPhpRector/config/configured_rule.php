@@ -8,10 +8,8 @@ use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(RenameClassNonPhpRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassNonPhpRector::class, [
             'Session' => 'Illuminate\Support\Facades\Session',
             OldClass::class => NewClass::class,
             // Laravel

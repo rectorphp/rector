@@ -8,10 +8,9 @@ use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(AddArrayParamDocTypeRector::class);
-    $services->set(RemoveUnusedPrivateMethodParameterRector::class);
-    $services->set(RemoveUnreachableStatementRector::class);
+    $rectorConfig->rule(AddArrayParamDocTypeRector::class);
+    $rectorConfig->rule(RemoveUnusedPrivateMethodParameterRector::class);
+    $rectorConfig->rule(RemoveUnreachableStatementRector::class);
 
     $rectorConfig->importNames();
 };

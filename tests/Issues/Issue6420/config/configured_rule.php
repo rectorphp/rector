@@ -7,12 +7,10 @@ use Rector\DeadCode\Rector\Expression\RemoveDeadStmtRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
+    $rectorConfig->rule(RemoveDeadStmtRector::class);
 
-    $services->set(RemoveDeadStmtRector::class);
-
-    $services->set(RenameFunctionRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameFunctionRector::class, [
             'preg_replace' => 'Safe\preg_replace',
         ]);
 };

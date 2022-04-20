@@ -7,9 +7,8 @@ use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ExplicitBoolCompareRector::class);
-    $services->set(ReturnTypeDeclarationRector::class);
+    $rectorConfig->rule(ExplicitBoolCompareRector::class);
+    $rectorConfig->rule(ReturnTypeDeclarationRector::class);
 
     $rectorConfig->importNames();
 };

@@ -8,8 +8,6 @@ use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRecto
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeTypedPropertyRector::class);
-    $services->set(DowngradeMixedTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeTypedPropertyRector::class);
+    $rectorConfig->rule(DowngradeMixedTypeDeclarationRector::class);
 };

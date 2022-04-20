@@ -7,8 +7,9 @@ use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(AnnotationToAttributeRector::class)
-        ->configure([new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            AnnotationToAttributeRector::class,
+            [new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route')]
+        );
 };

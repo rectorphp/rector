@@ -7,7 +7,6 @@ use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ReturnTypeDeclarationRector::class);
-    $services->set(ReadOnlyPropertyRector::class);
+    $rectorConfig->rule(ReturnTypeDeclarationRector::class);
+    $rectorConfig->rule(ReadOnlyPropertyRector::class);
 };

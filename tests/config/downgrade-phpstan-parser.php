@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp72\Rector\FuncCall\DowngradeJsonDecodeNullAssociativeArgRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradeJsonDecodeNullAssociativeArgRector::class);
+    $rectorConfig->rule(DowngradeJsonDecodeNullAssociativeArgRector::class);
 };

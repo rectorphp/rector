@@ -7,7 +7,6 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveEmptyClassMethodRector::class);
-    $services->set(RemoveDeadZeroAndOneOperationRector::class);
+    $rectorConfig->rule(RemoveEmptyClassMethodRector::class);
+    $rectorConfig->rule(RemoveDeadZeroAndOneOperationRector::class);
 };

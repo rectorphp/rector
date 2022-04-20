@@ -7,7 +7,6 @@ use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationR
 use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ArrowFunctionToAnonymousFunctionRector::class);
-    $services->set(DowngradeThrowableTypeDeclarationRector::class);
+    $rectorConfig->rule(ArrowFunctionToAnonymousFunctionRector::class);
+    $rectorConfig->rule(DowngradeThrowableTypeDeclarationRector::class);
 };

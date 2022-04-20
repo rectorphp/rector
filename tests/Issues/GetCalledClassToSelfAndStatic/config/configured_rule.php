@@ -7,7 +7,6 @@ use Rector\Php55\Rector\FuncCall\GetCalledClassToSelfClassRector;
 use Rector\Php55\Rector\FuncCall\GetCalledClassToStaticClassRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(GetCalledClassToSelfClassRector::class);
-    $services->set(GetCalledClassToStaticClassRector::class);
+    $rectorConfig->rule(GetCalledClassToSelfClassRector::class);
+    $rectorConfig->rule(GetCalledClassToStaticClassRector::class);
 };

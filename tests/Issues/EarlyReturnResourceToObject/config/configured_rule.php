@@ -7,8 +7,6 @@ use Rector\Php80\Rector\FuncCall\Php8ResourceReturnToObjectRector;
 use Rector\Set\ValueObject\SetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(SetList::EARLY_RETURN);
-
-    $services = $rectorConfig->services();
-    $services->set(Php8ResourceReturnToObjectRector::class);
+    $rectorConfig->rule(Php8ResourceReturnToObjectRector::class);
+    $rectorConfig->sets([SetList::EARLY_RETURN]);
 };

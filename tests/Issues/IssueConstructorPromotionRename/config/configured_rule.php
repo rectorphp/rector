@@ -7,7 +7,6 @@ use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
-    $services->set(RenamePropertyToMatchTypeRector::class);
+    $rectorConfig->rule(ClassPropertyAssignToConstructorPromotionRector::class);
+    $rectorConfig->rule(RenamePropertyToMatchTypeRector::class);
 };

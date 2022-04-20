@@ -7,7 +7,6 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RemoveUnusedConstructorParamRector::class);
-    $services->set(RemoveUnusedPrivatePropertyRector::class);
+    $rectorConfig->rule(RemoveUnusedConstructorParamRector::class);
+    $rectorConfig->rule(RemoveUnusedPrivatePropertyRector::class);
 };

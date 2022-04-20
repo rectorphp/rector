@@ -7,7 +7,6 @@ use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ExplicitBoolCompareRector::class);
-    $services->set(CountArrayToEmptyArrayComparisonRector::class);
+    $rectorConfig->rule(ExplicitBoolCompareRector::class);
+    $rectorConfig->rule(CountArrayToEmptyArrayComparisonRector::class);
 };

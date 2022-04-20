@@ -7,8 +7,6 @@ use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
-    $services->set(AnnotationToAttributeRector::class);
+    $rectorConfig->rule(ClassPropertyAssignToConstructorPromotionRector::class);
+    $rectorConfig->rule(AnnotationToAttributeRector::class);
 };

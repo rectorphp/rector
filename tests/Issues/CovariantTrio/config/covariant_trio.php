@@ -10,9 +10,7 @@ use Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_70);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeArrayKeyFirstLastRector::class);
-    $services->set(DowngradeScalarTypeDeclarationRector::class);
-    $services->set(DowngradeNullCoalesceRector::class);
+    $rectorConfig->rule(DowngradeArrayKeyFirstLastRector::class);
+    $rectorConfig->rule(DowngradeScalarTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeNullCoalesceRector::class);
 };

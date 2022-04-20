@@ -7,7 +7,6 @@ use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 use Rector\Privatization\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
-    $services->set(CountOnNullRector::class);
+    $rectorConfig->rule(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
+    $rectorConfig->rule(CountOnNullRector::class);
 };

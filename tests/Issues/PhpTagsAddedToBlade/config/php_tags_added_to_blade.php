@@ -8,13 +8,11 @@ use Rector\Core\Configuration\Option;
 use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(TernaryToNullCoalescingRector::class);
+    $rectorConfig->rule(TernaryToNullCoalescingRector::class);
 
     $rectorConfig->disableParallel();
 
     $parameters = $rectorConfig->parameters();
-
     // to invalidate cache and change file everytime
     $parameters->set(Option::CACHE_CLASS, MemoryCacheStorage::class);
 };

@@ -8,8 +8,7 @@ use Rector\Config\RectorConfig;
 use Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ChangeAndIfToEarlyReturnRector::class);
-    $services->set(CompleteDynamicPropertiesRector::class);
-    $services->set(SimplifyDeMorganBinaryRector::class);
+    $rectorConfig->rule(ChangeAndIfToEarlyReturnRector::class);
+    $rectorConfig->rule(CompleteDynamicPropertiesRector::class);
+    $rectorConfig->rule(SimplifyDeMorganBinaryRector::class);
 };

@@ -7,7 +7,6 @@ use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
-    $services->set(NewlineAfterStatementRector::class);
+    $rectorConfig->rule(ClassPropertyAssignToConstructorPromotionRector::class);
+    $rectorConfig->rule(NewlineAfterStatementRector::class);
 };

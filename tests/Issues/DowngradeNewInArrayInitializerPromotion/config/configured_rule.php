@@ -8,8 +8,7 @@ use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector;
 use Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNewInInitializerRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradeNewInInitializerRector::class);
-    $services->set(DowngradePropertyPromotionRector::class);
-    $services->set(DowngradeTypedPropertyRector::class);
+    $rectorConfig->rule(DowngradeNewInInitializerRector::class);
+    $rectorConfig->rule(DowngradePropertyPromotionRector::class);
+    $rectorConfig->rule(DowngradeTypedPropertyRector::class);
 };

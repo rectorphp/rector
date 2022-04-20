@@ -7,7 +7,6 @@ use Rector\Config\RectorConfig;
 use Rector\EarlyReturn\Rector\If_\ChangeOrIfReturnToEarlyReturnRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ExplicitBoolCompareRector::class);
-    $services->set(ChangeOrIfReturnToEarlyReturnRector::class);
+    $rectorConfig->rule(ExplicitBoolCompareRector::class);
+    $rectorConfig->rule(ChangeOrIfReturnToEarlyReturnRector::class);
 };

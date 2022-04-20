@@ -7,7 +7,6 @@ use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRect
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStringReturnTypeOnToStringRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradeStringReturnTypeOnToStringRector::class);
-    $services->set(DowngradeScalarTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeStringReturnTypeOnToStringRector::class);
+    $rectorConfig->rule(DowngradeScalarTypeDeclarationRector::class);
 };

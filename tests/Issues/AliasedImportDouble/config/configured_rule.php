@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Core\Tests\Issues\AliasedImportDouble\Rector\ClassMethod\AddAliasImportRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(AddAliasImportRector::class);
+    $rectorConfig->rule(AddAliasImportRector::class);
 };

@@ -7,7 +7,6 @@ use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RenameParamToMatchTypeRector::class);
-    $services->set(AddDefaultValueForUndefinedVariableRector::class);
+    $rectorConfig->rule(RenameParamToMatchTypeRector::class);
+    $rectorConfig->rule(AddDefaultValueForUndefinedVariableRector::class);
 };

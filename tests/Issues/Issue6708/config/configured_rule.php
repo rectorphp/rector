@@ -7,7 +7,6 @@ use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(DowngradeMatchToSwitchRector::class);
-    $services->set(DowngradeArraySpreadRector::class);
+    $rectorConfig->rule(DowngradeMatchToSwitchRector::class);
+    $rectorConfig->rule(DowngradeArraySpreadRector::class);
 };

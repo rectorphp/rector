@@ -7,7 +7,5 @@ use Rector\Symfony\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRec
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
-
-    $services = $rectorConfig->services();
-    $services->set(ReplaceSensioRouteAnnotationWithSymfonyRector::class);
+    $rectorConfig->rule(ReplaceSensioRouteAnnotationWithSymfonyRector::class);
 };
