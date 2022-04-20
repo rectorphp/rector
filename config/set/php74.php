@@ -20,9 +20,8 @@ use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Php74\Rector\Property\TypedPropertyRector::class);
-    $services->set(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class)->configure([
+    $rectorConfig->rule(\Rector\Php74\Rector\Property\TypedPropertyRector::class);
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class, [
         #the_real_type
         # https://wiki.php.net/rfc/deprecations_php_7_4
         'is_real' => 'is_float',
@@ -30,17 +29,17 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         # https://wiki.php.net/rfc/deprecations_php_7_4
         'apache_request_headers' => 'getallheaders',
     ]);
-    $services->set(\Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector::class);
-    $services->set(\Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector::class);
-    $services->set(\Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector::class);
-    $services->set(\Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector::class);
-    $services->set(\Rector\Php74\Rector\Double\RealToFloatTypeCastRector::class);
-    $services->set(\Rector\Php74\Rector\Assign\NullCoalescingOperatorRector::class);
-    $services->set(\Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector::class);
-    $services->set(\Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector::class);
-    $services->set(\Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector::class);
-    $services->set(\Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector::class);
-    $services->set(\Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector::class);
-    $services->set(\Rector\Php74\Rector\ArrayDimFetch\CurlyToSquareBracketArrayStringRector::class);
-    $services->set(\Rector\Php74\Rector\Function_\ReservedFnFunctionRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\Double\RealToFloatTypeCastRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\Assign\NullCoalescingOperatorRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\ArrayDimFetch\CurlyToSquareBracketArrayStringRector::class);
+    $rectorConfig->rule(\Rector\Php74\Rector\Function_\ReservedFnFunctionRector::class);
 };

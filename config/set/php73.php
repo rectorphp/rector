@@ -16,13 +16,12 @@ use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
 use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $services = $rectorConfig->services();
-    $services->set(\Rector\Php73\Rector\BooleanOr\IsCountableRector::class);
-    $services->set(\Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector::class);
-    $services->set(\Rector\Php73\Rector\FuncCall\SensitiveDefineRector::class);
-    $services->set(\Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector::class);
-    $services->set(\Rector\Php73\Rector\String_\SensitiveHereNowDocRector::class);
-    $services->set(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class)->configure([
+    $rectorConfig->rule(\Rector\Php73\Rector\BooleanOr\IsCountableRector::class);
+    $rectorConfig->rule(\Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector::class);
+    $rectorConfig->rule(\Rector\Php73\Rector\FuncCall\SensitiveDefineRector::class);
+    $rectorConfig->rule(\Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector::class);
+    $rectorConfig->rule(\Rector\Php73\Rector\String_\SensitiveHereNowDocRector::class);
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class, [
         # https://wiki.php.net/rfc/deprecations_php_7_3
         'image2wbmp' => 'imagewbmp',
         'mbregex_encoding' => 'mb_regex_encoding',
@@ -39,9 +38,9 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         'mbereg_search_getregs' => 'mb_ereg_search_getregs',
         'mbereg_search_getpos' => 'mb_ereg_search_getpos',
     ]);
-    $services->set(\Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector::class);
-    $services->set(\Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector::class);
-    $services->set(\Rector\Php73\Rector\FuncCall\RegexDashEscapeRector::class);
-    $services->set(\Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector::class);
-    $services->set(\Rector\Php73\Rector\FuncCall\SetCookieRector::class);
+    $rectorConfig->rule(\Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector::class);
+    $rectorConfig->rule(\Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector::class);
+    $rectorConfig->rule(\Rector\Php73\Rector\FuncCall\RegexDashEscapeRector::class);
+    $rectorConfig->rule(\Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector::class);
+    $rectorConfig->rule(\Rector\Php73\Rector\FuncCall\SetCookieRector::class);
 };
