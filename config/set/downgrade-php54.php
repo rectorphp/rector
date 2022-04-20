@@ -14,13 +14,11 @@ use Rector\DowngradePhp54\Rector\MethodCall\DowngradeInstanceMethodCallRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_53);
-
-    $services = $rectorConfig->services();
-    $services->set(ShortArrayToLongArrayRector::class);
-    $services->set(DowngradeStaticClosureRector::class);
-    $services->set(DowngradeIndirectCallByArrayRector::class);
-    $services->set(DowngradeCallableTypeDeclarationRector::class);
-    $services->set(DowngradeBinaryNotationRector::class);
-    $services->set(DowngradeInstanceMethodCallRector::class);
-    $services->set(DowngradeThisInClosureRector::class);
+    $rectorConfig->rule(ShortArrayToLongArrayRector::class);
+    $rectorConfig->rule(DowngradeStaticClosureRector::class);
+    $rectorConfig->rule(DowngradeIndirectCallByArrayRector::class);
+    $rectorConfig->rule(DowngradeCallableTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeBinaryNotationRector::class);
+    $rectorConfig->rule(DowngradeInstanceMethodCallRector::class);
+    $rectorConfig->rule(DowngradeThisInClosureRector::class);
 };

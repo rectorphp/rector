@@ -30,37 +30,39 @@ use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(UnionTypesRector::class);
+    $rectorConfig->rule(UnionTypesRector::class);
 
-    $services->set(StrContainsRector::class);
-    $services->set(StrStartsWithRector::class);
-    $services->set(StrEndsWithRector::class);
+    $rectorConfig->rule(StrContainsRector::class);
+    $rectorConfig->rule(StrStartsWithRector::class);
+    $rectorConfig->rule(StrEndsWithRector::class);
 
-    $services->set(StaticCallToFuncCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(StaticCallToFuncCallRector::class, [
             new StaticCallToFuncCall('Nette\Utils\Strings', 'startsWith', 'str_starts_with'),
             new StaticCallToFuncCall('Nette\Utils\Strings', 'endsWith', 'str_ends_with'),
             new StaticCallToFuncCall('Nette\Utils\Strings', 'contains', 'str_contains'),
         ]);
 
-    $services->set(StringableForToStringRector::class);
-    $services->set(ClassOnObjectRector::class);
-    $services->set(GetDebugTypeRector::class);
-    $services->set(TokenGetAllToObjectRector::class);
-    $services->set(RemoveUnusedVariableInCatchRector::class);
-    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
-    $services->set(ChangeSwitchToMatchRector::class);
+    $rectorConfig->rule(StringableForToStringRector::class);
+    $rectorConfig->rule(ClassOnObjectRector::class);
+    $rectorConfig->rule(GetDebugTypeRector::class);
+    $rectorConfig->rule(TokenGetAllToObjectRector::class);
+    $rectorConfig->rule(RemoveUnusedVariableInCatchRector::class);
+    $rectorConfig->rule(ClassPropertyAssignToConstructorPromotionRector::class);
+    $rectorConfig->rule(ChangeSwitchToMatchRector::class);
 
     // nette\utils and Strings::replace()
-    $services->set(ArgumentAdderRector::class)
-        ->configure([new ArgumentAdder('Nette\Utils\Strings', 'replace', 2, 'replacement', '')]);
-    $services->set(RemoveParentCallWithoutParentRector::class);
-    $services->set(SetStateToStaticRector::class);
-    $services->set(FinalPrivateToPrivateVisibilityRector::class);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            ArgumentAdderRector::class,
+            [new ArgumentAdder('Nette\Utils\Strings', 'replace', 2, 'replacement', '')]
+        );
+    $rectorConfig->rule(RemoveParentCallWithoutParentRector::class);
+    $rectorConfig->rule(SetStateToStaticRector::class);
+    $rectorConfig->rule(FinalPrivateToPrivateVisibilityRector::class);
     // @see https://php.watch/versions/8.0/pgsql-aliases-deprecated
-    $services->set(RenameFunctionRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameFunctionRector::class, [
             'pg_clientencoding' => 'pg_client_encoding',
             'pg_cmdtuples' => 'pg_affected_rows',
             'pg_errormessage' => 'pg_last_error',
@@ -86,10 +88,10 @@ return static function (RectorConfig $rectorConfig): void {
             'pg_result' => 'pg_fetch_result',
             'pg_setclientencoding' => 'pg_set_client_encoding',
         ]);
-    $services->set(OptionalParametersAfterRequiredRector::class);
+    $rectorConfig->rule(OptionalParametersAfterRequiredRector::class);
 
-    $services->set(FunctionArgumentDefaultValueReplacerRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(FunctionArgumentDefaultValueReplacerRector::class, [
             new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge'),
             new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'lte', 'le'),
             new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, '', '!='),
@@ -101,6 +103,6 @@ return static function (RectorConfig $rectorConfig): void {
             new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'n', 'ne'),
         ]);
 
-    $services->set(Php8ResourceReturnToObjectRector::class);
-    $services->set(AddParamBasedOnParentClassMethodRector::class);
+    $rectorConfig->rule(Php8ResourceReturnToObjectRector::class);
+    $rectorConfig->rule(AddParamBasedOnParentClassMethodRector::class);
 };

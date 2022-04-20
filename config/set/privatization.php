@@ -14,15 +14,14 @@ use Rector\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueT
 use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(FinalizeClassesWithoutChildrenRector::class);
-    $services->set(ChangeGlobalVariablesToPropertiesRector::class);
-    $services->set(ChangeReadOnlyPropertyWithDefaultValueToConstantRector::class);
-    $services->set(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
-    $services->set(RepeatedLiteralToClassConstantRector::class);
-    $services->set(PrivatizeLocalGetterToPropertyRector::class);
-    $services->set(PrivatizeFinalClassPropertyRector::class);
-    $services->set(PrivatizeFinalClassMethodRector::class);
+    $rectorConfig->rule(FinalizeClassesWithoutChildrenRector::class);
+    $rectorConfig->rule(ChangeGlobalVariablesToPropertiesRector::class);
+    $rectorConfig->rule(ChangeReadOnlyPropertyWithDefaultValueToConstantRector::class);
+    $rectorConfig->rule(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
+    $rectorConfig->rule(RepeatedLiteralToClassConstantRector::class);
+    $rectorConfig->rule(PrivatizeLocalGetterToPropertyRector::class);
+    $rectorConfig->rule(PrivatizeFinalClassPropertyRector::class);
+    $rectorConfig->rule(PrivatizeFinalClassMethodRector::class);
 
     // buggy, requires more work
     // $services->set(ChangeLocalPropertyToVariableRector::class);

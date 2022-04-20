@@ -11,24 +11,22 @@ use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
     $configuration = [
         new FuncCallToMethodCall('GuzzleHttp\json_decode', 'GuzzleHttp\Utils', 'jsonDecode'),
         new FuncCallToMethodCall('GuzzleHttp\get_path', 'GuzzleHttp\Utils', 'getPath'),
     ];
 
-    $services->set(FuncCallToMethodCallRector::class)
-        ->configure($configuration);
+    $rectorConfig
+        ->ruleWithConfiguration(FuncCallToMethodCallRector::class, $configuration);
 
-    $services->set(StaticCallToFuncCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(StaticCallToFuncCallRector::class, [
             new StaticCallToFuncCall('GuzzleHttp\Utils', 'setPath', 'GuzzleHttp\set_path'),
             new StaticCallToFuncCall('GuzzleHttp\Pool', 'batch', 'GuzzleHttp\Pool\batch'),
         ]);
 
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             new MethodCallRename('GuzzleHttp\Message\MessageInterface', 'getHeaderLines', 'getHeaderAsArray'),
         ]);
 };

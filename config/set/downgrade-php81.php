@@ -16,15 +16,13 @@ use Rector\DowngradePhp81\Rector\Property\DowngradeReadonlyPropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_80);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeFinalizePublicClassConstantRector::class);
-    $services->set(DowngradeFirstClassCallableSyntaxRector::class);
-    $services->set(DowngradeNeverTypeDeclarationRector::class);
-    $services->set(DowngradePureIntersectionTypeRector::class);
-    $services->set(DowngradeNewInInitializerRector::class);
-    $services->set(DowngradePhp81ResourceReturnToObjectRector::class);
-    $services->set(DowngradeReadonlyPropertyRector::class);
-    $services->set(DowngradeArraySpreadStringKeyRector::class);
-    $services->set(DowngradeArrayIsListRector::class);
+    $rectorConfig->rule(DowngradeFinalizePublicClassConstantRector::class);
+    $rectorConfig->rule(DowngradeFirstClassCallableSyntaxRector::class);
+    $rectorConfig->rule(DowngradeNeverTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradePureIntersectionTypeRector::class);
+    $rectorConfig->rule(DowngradeNewInInitializerRector::class);
+    $rectorConfig->rule(DowngradePhp81ResourceReturnToObjectRector::class);
+    $rectorConfig->rule(DowngradeReadonlyPropertyRector::class);
+    $rectorConfig->rule(DowngradeArraySpreadStringKeyRector::class);
+    $rectorConfig->rule(DowngradeArrayIsListRector::class);
 };

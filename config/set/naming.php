@@ -11,11 +11,10 @@ use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableR
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RenameParamToMatchTypeRector::class);
-    $services->set(RenamePropertyToMatchTypeRector::class);
-    $services->set(RenameVariableToMatchNewTypeRector::class);
-    $services->set(RenameVariableToMatchMethodCallReturnTypeRector::class);
-    $services->set(RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class);
-    $services->set(RenameForeachValueVariableToMatchExprVariableRector::class);
+    $rectorConfig->rule(RenameParamToMatchTypeRector::class);
+    $rectorConfig->rule(RenamePropertyToMatchTypeRector::class);
+    $rectorConfig->rule(RenameVariableToMatchNewTypeRector::class);
+    $rectorConfig->rule(RenameVariableToMatchMethodCallReturnTypeRector::class);
+    $rectorConfig->rule(RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class);
+    $rectorConfig->rule(RenameForeachValueVariableToMatchExprVariableRector::class);
 };

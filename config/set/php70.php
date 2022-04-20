@@ -24,43 +24,42 @@ use Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector;
 use Rector\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(Php4ConstructorRector::class);
+    $rectorConfig->rule(Php4ConstructorRector::class);
 
-    $services->set(TernaryToNullCoalescingRector::class);
+    $rectorConfig->rule(TernaryToNullCoalescingRector::class);
 
-    $services->set(RandomFunctionRector::class);
+    $rectorConfig->rule(RandomFunctionRector::class);
 
-    $services->set(ExceptionHandlerTypehintRector::class);
+    $rectorConfig->rule(ExceptionHandlerTypehintRector::class);
 
-    $services->set(MultiDirnameRector::class);
+    $rectorConfig->rule(MultiDirnameRector::class);
 
-    $services->set(ListSplitStringRector::class);
+    $rectorConfig->rule(ListSplitStringRector::class);
 
-    $services->set(EmptyListRector::class);
+    $rectorConfig->rule(EmptyListRector::class);
 
     # be careful, run this just once, since it can keep swapping order back and forth
-    $services->set(ListSwapArrayOrderRector::class);
+    $rectorConfig->rule(ListSwapArrayOrderRector::class);
 
-    $services->set(CallUserMethodRector::class);
+    $rectorConfig->rule(CallUserMethodRector::class);
 
-    $services->set(EregToPregMatchRector::class);
+    $rectorConfig->rule(EregToPregMatchRector::class);
 
-    $services->set(ReduceMultipleDefaultSwitchRector::class);
+    $rectorConfig->rule(ReduceMultipleDefaultSwitchRector::class);
 
-    $services->set(TernaryToSpaceshipRector::class);
+    $rectorConfig->rule(TernaryToSpaceshipRector::class);
 
-    $services->set(WrapVariableVariableNameInCurlyBracesRector::class);
+    $rectorConfig->rule(WrapVariableVariableNameInCurlyBracesRector::class);
 
-    $services->set(IfToSpaceshipRector::class);
+    $rectorConfig->rule(IfToSpaceshipRector::class);
 
-    $services->set(StaticCallOnNonStaticToInstanceCallRector::class);
+    $rectorConfig->rule(StaticCallOnNonStaticToInstanceCallRector::class);
 
-    $services->set(ThisCallOnStaticMethodToStaticCallRector::class);
+    $rectorConfig->rule(ThisCallOnStaticMethodToStaticCallRector::class);
 
-    $services->set(BreakNotInLoopOrSwitchToReturnRector::class);
+    $rectorConfig->rule(BreakNotInLoopOrSwitchToReturnRector::class);
 
-    $services->set(RenameMktimeWithoutArgsToTimeRector::class);
+    $rectorConfig->rule(RenameMktimeWithoutArgsToTimeRector::class);
 
-    $services->set(NonVariableToVariableOnFunctionCallRector::class);
+    $rectorConfig->rule(NonVariableToVariableOnFunctionCallRector::class);
 };

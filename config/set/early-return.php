@@ -16,16 +16,15 @@ use Rector\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ChangeNestedForeachIfsToEarlyContinueRector::class);
-    $services->set(ChangeAndIfToEarlyReturnRector::class);
-    $services->set(ChangeIfElseValueAssignToEarlyReturnRector::class);
-    $services->set(ChangeNestedIfsToEarlyReturnRector::class);
-    $services->set(RemoveAlwaysElseRector::class);
-    $services->set(ReturnBinaryAndToEarlyReturnRector::class);
-    $services->set(ChangeOrIfReturnToEarlyReturnRector::class);
-    $services->set(ChangeOrIfContinueToMultiContinueRector::class);
-    $services->set(ReturnAfterToEarlyOnBreakRector::class);
-    $services->set(PreparedValueToEarlyReturnRector::class);
-    $services->set(ReturnBinaryOrToEarlyReturnRector::class);
+    $rectorConfig->rule(ChangeNestedForeachIfsToEarlyContinueRector::class);
+    $rectorConfig->rule(ChangeAndIfToEarlyReturnRector::class);
+    $rectorConfig->rule(ChangeIfElseValueAssignToEarlyReturnRector::class);
+    $rectorConfig->rule(ChangeNestedIfsToEarlyReturnRector::class);
+    $rectorConfig->rule(RemoveAlwaysElseRector::class);
+    $rectorConfig->rule(ReturnBinaryAndToEarlyReturnRector::class);
+    $rectorConfig->rule(ChangeOrIfReturnToEarlyReturnRector::class);
+    $rectorConfig->rule(ChangeOrIfContinueToMultiContinueRector::class);
+    $rectorConfig->rule(ReturnAfterToEarlyOnBreakRector::class);
+    $rectorConfig->rule(PreparedValueToEarlyReturnRector::class);
+    $rectorConfig->rule(ReturnBinaryOrToEarlyReturnRector::class);
 };

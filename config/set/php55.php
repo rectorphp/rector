@@ -10,10 +10,9 @@ use Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(StringClassNameToClassConstantRector::class);
-    $services->set(ClassConstantToSelfClassRector::class);
-    $services->set(PregReplaceEModifierRector::class);
-    $services->set(GetCalledClassToSelfClassRector::class);
-    $services->set(GetCalledClassToStaticClassRector::class);
+    $rectorConfig->rule(StringClassNameToClassConstantRector::class);
+    $rectorConfig->rule(ClassConstantToSelfClassRector::class);
+    $rectorConfig->rule(PregReplaceEModifierRector::class);
+    $rectorConfig->rule(GetCalledClassToSelfClassRector::class);
+    $rectorConfig->rule(GetCalledClassToStaticClassRector::class);
 };

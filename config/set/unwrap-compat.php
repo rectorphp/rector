@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(UnwrapFutureCompatibleIfFunctionExistsRector::class);
+    $rectorConfig->rule(UnwrapFutureCompatibleIfFunctionExistsRector::class);
 };

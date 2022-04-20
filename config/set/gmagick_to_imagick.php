@@ -9,15 +9,14 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 
 # https://www.php.net/manual/en/book.gmagick.php → https://www.php.net/manual/en/book.imagick.php
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             'Gmagick' => 'Imagick',
             'GmagickPixel' => 'ImagickPixel',
         ]);
 
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             new MethodCallRename('Gmagick', 'addimage', 'addImage'),
             new MethodCallRename('Gmagick', 'addnoiseimage', 'addNoiseImage'),
             new MethodCallRename('Gmagick', 'annotateimage', 'annotateImage'),

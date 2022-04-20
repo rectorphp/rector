@@ -7,7 +7,6 @@ use Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAuto
 use Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(NormalizeNamespaceByPSR4ComposerAutoloadRector::class);
-    $services->set(MultipleClassFileToPsr4ClassesRector::class);
+    $rectorConfig->rule(NormalizeNamespaceByPSR4ComposerAutoloadRector::class);
+    $rectorConfig->rule(MultipleClassFileToPsr4ClassesRector::class);
 };

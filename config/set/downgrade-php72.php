@@ -13,12 +13,10 @@ use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRect
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_71);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeObjectTypeDeclarationRector::class);
-    $services->set(DowngradeParameterTypeWideningRector::class);
-    $services->set(DowngradePregUnmatchedAsNullConstantRector::class);
-    $services->set(DowngradeStreamIsattyRector::class);
-    $services->set(DowngradeJsonDecodeNullAssociativeArgRector::class);
-    $services->set(DowngradePhp72JsonConstRector::class);
+    $rectorConfig->rule(DowngradeObjectTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeParameterTypeWideningRector::class);
+    $rectorConfig->rule(DowngradePregUnmatchedAsNullConstantRector::class);
+    $rectorConfig->rule(DowngradeStreamIsattyRector::class);
+    $rectorConfig->rule(DowngradeJsonDecodeNullAssociativeArgRector::class);
+    $rectorConfig->rule(DowngradePhp72JsonConstRector::class);
 };

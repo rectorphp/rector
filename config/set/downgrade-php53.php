@@ -8,7 +8,5 @@ use Rector\DowngradePhp53\Rector\Dir\DirConstToFileConstRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_52);
-
-    $services = $rectorConfig->services();
-    $services->set(DirConstToFileConstRector::class);
+    $rectorConfig->rule(DirConstToFileConstRector::class);
 };

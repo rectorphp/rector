@@ -12,11 +12,9 @@ use Rector\DowngradePhp56\Rector\Use_\DowngradeUseFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_55);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeArgumentUnpackingRector::class);
-    $services->set(DowngradeUseFunctionRector::class);
-    $services->set(DowngradeExponentialAssignmentOperatorRector::class);
-    $services->set(DowngradeExponentialOperatorRector::class);
-    $services->set(DowngradeArrayFilterUseConstantRector::class);
+    $rectorConfig->rule(DowngradeArgumentUnpackingRector::class);
+    $rectorConfig->rule(DowngradeUseFunctionRector::class);
+    $rectorConfig->rule(DowngradeExponentialAssignmentOperatorRector::class);
+    $rectorConfig->rule(DowngradeExponentialOperatorRector::class);
+    $rectorConfig->rule(DowngradeArrayFilterUseConstantRector::class);
 };

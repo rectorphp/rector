@@ -8,11 +8,10 @@ use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(PowToExpRector::class);
+    $rectorConfig->rule(PowToExpRector::class);
 
-    $services->set(RenameFunctionRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameFunctionRector::class, [
             'mcrypt_generic_end' => 'mcrypt_generic_deinit',
             'set_socket_blocking' => 'stream_set_blocking',
             'ocibindbyname' => 'oci_bind_by_name',
@@ -51,5 +50,5 @@ return static function (RectorConfig $rectorConfig): void {
         ]);
 
     # inspired by level in psalm - https://github.com/vimeo/psalm/blob/82e0bcafac723fdf5007a31a7ae74af1736c9f6f/tests/FileManipulationTest.php#L1063
-    $services->set(AddDefaultValueForUndefinedVariableRector::class);
+    $rectorConfig->rule(AddDefaultValueForUndefinedVariableRector::class);
 };

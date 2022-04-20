@@ -15,15 +15,14 @@ use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRec
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(AddClosureReturnTypeRector::class);
-    $services->set(ReturnTypeFromStrictTypedPropertyRector::class);
-    $services->set(TypedPropertyFromStrictConstructorRector::class);
-    $services->set(ParamTypeFromStrictTypedPropertyRector::class);
-    $services->set(ReturnTypeFromStrictTypedCallRector::class);
-    $services->set(AddVoidReturnTypeWhereNoReturnRector::class);
-    $services->set(ReturnTypeFromReturnNewRector::class);
-    $services->set(TypedPropertyFromStrictGetterMethodReturnTypeRector::class);
-    $services->set(AddMethodCallBasedStrictParamTypeRector::class);
-    $services->set(ArrayShapeFromConstantArrayReturnRector::class);
+    $rectorConfig->rule(AddClosureReturnTypeRector::class);
+    $rectorConfig->rule(ReturnTypeFromStrictTypedPropertyRector::class);
+    $rectorConfig->rule(TypedPropertyFromStrictConstructorRector::class);
+    $rectorConfig->rule(ParamTypeFromStrictTypedPropertyRector::class);
+    $rectorConfig->rule(ReturnTypeFromStrictTypedCallRector::class);
+    $rectorConfig->rule(AddVoidReturnTypeWhereNoReturnRector::class);
+    $rectorConfig->rule(ReturnTypeFromReturnNewRector::class);
+    $rectorConfig->rule(TypedPropertyFromStrictGetterMethodReturnTypeRector::class);
+    $rectorConfig->rule(AddMethodCallBasedStrictParamTypeRector::class);
+    $rectorConfig->rule(ArrayShapeFromConstantArrayReturnRector::class);
 };

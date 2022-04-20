@@ -34,39 +34,38 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(PHPStormVarAnnotationRector::class);
-    $services->set(NullableCompareToNullRector::class);
-    $services->set(BinarySwitchToIfElseRector::class);
-    $services->set(ConsistentImplodeRector::class);
-    $services->set(TernaryConditionVariableAssignmentRector::class);
-    $services->set(SymplifyQuoteEscapeRector::class);
-    $services->set(SplitGroupedConstantsAndPropertiesRector::class);
-    $services->set(StringClassNameToClassConstantRector::class);
-    $services->set(ConsistentPregDelimiterRector::class);
-    $services->set(CatchExceptionNameMatchingTypeRector::class);
-    $services->set(UseIncrementAssignRector::class);
-    $services->set(SplitDoubleAssignRector::class);
-    $services->set(VarConstantCommentRector::class);
-    $services->set(EncapsedStringsToSprintfRector::class);
-    $services->set(WrapEncapsedVariableInCurlyBracesRector::class);
-    $services->set(NewlineBeforeNewAssignSetRector::class);
-    $services->set(AddArrayDefaultToArrayPropertyRector::class);
-    $services->set(AddFalseDefaultToBoolPropertyRector::class);
-    $services->set(MakeInheritedMethodVisibilitySameAsParentRector::class);
-    $services->set(CallUserFuncArrayToVariadicRector::class);
-    $services->set(VersionCompareFuncCallToConstantRector::class);
+    $rectorConfig->rule(PHPStormVarAnnotationRector::class);
+    $rectorConfig->rule(NullableCompareToNullRector::class);
+    $rectorConfig->rule(BinarySwitchToIfElseRector::class);
+    $rectorConfig->rule(ConsistentImplodeRector::class);
+    $rectorConfig->rule(TernaryConditionVariableAssignmentRector::class);
+    $rectorConfig->rule(SymplifyQuoteEscapeRector::class);
+    $rectorConfig->rule(SplitGroupedConstantsAndPropertiesRector::class);
+    $rectorConfig->rule(StringClassNameToClassConstantRector::class);
+    $rectorConfig->rule(ConsistentPregDelimiterRector::class);
+    $rectorConfig->rule(CatchExceptionNameMatchingTypeRector::class);
+    $rectorConfig->rule(UseIncrementAssignRector::class);
+    $rectorConfig->rule(SplitDoubleAssignRector::class);
+    $rectorConfig->rule(VarConstantCommentRector::class);
+    $rectorConfig->rule(EncapsedStringsToSprintfRector::class);
+    $rectorConfig->rule(WrapEncapsedVariableInCurlyBracesRector::class);
+    $rectorConfig->rule(NewlineBeforeNewAssignSetRector::class);
+    $rectorConfig->rule(AddArrayDefaultToArrayPropertyRector::class);
+    $rectorConfig->rule(AddFalseDefaultToBoolPropertyRector::class);
+    $rectorConfig->rule(MakeInheritedMethodVisibilitySameAsParentRector::class);
+    $rectorConfig->rule(CallUserFuncArrayToVariadicRector::class);
+    $rectorConfig->rule(VersionCompareFuncCallToConstantRector::class);
 
-    $services->set(FuncCallToConstFetchRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(FuncCallToConstFetchRector::class, [
             'php_sapi_name' => 'PHP_SAPI',
             'pi' => 'M_PI',
         ]);
 
-    $services->set(SeparateMultiUseImportsRector::class);
-    $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
-    $services->set(PostIncDecToPreIncDecRector::class);
-    $services->set(UnSpreadOperatorRector::class);
-    $services->set(NewlineAfterStatementRector::class);
-    $services->set(RemoveFinalFromConstRector::class);
+    $rectorConfig->rule(SeparateMultiUseImportsRector::class);
+    $rectorConfig->rule(RemoveDoubleUnderscoreInMethodNameRector::class);
+    $rectorConfig->rule(PostIncDecToPreIncDecRector::class);
+    $rectorConfig->rule(UnSpreadOperatorRector::class);
+    $rectorConfig->rule(NewlineAfterStatementRector::class);
+    $rectorConfig->rule(RemoveFinalFromConstRector::class);
 };

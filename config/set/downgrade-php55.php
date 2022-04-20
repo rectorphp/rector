@@ -11,10 +11,8 @@ use Rector\DowngradePhp55\Rector\Isset_\DowngradeArbitraryExpressionArgsToEmptyA
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_54);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeClassConstantToStringRector::class);
-    $services->set(DowngradeForeachListRector::class);
-    $services->set(DowngradeBoolvalRector::class);
-    $services->set(DowngradeArbitraryExpressionArgsToEmptyAndIssetRector::class);
+    $rectorConfig->rule(DowngradeClassConstantToStringRector::class);
+    $rectorConfig->rule(DowngradeForeachListRector::class);
+    $rectorConfig->rule(DowngradeBoolvalRector::class);
+    $rectorConfig->rule(DowngradeArbitraryExpressionArgsToEmptyAndIssetRector::class);
 };

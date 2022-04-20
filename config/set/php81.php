@@ -15,15 +15,14 @@ use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(ReturnNeverTypeRector::class);
-    $services->set(MyCLabsClassToEnumRector::class);
-    $services->set(MyCLabsMethodCallToEnumConstRector::class);
-    $services->set(FinalizePublicClassConstantRector::class);
-    $services->set(ReadOnlyPropertyRector::class);
-    $services->set(SpatieEnumClassToEnumRector::class);
-    $services->set(Php81ResourceReturnToObjectRector::class);
-    $services->set(NewInInitializerRector::class);
-    $services->set(IntersectionTypesRector::class);
-    $services->set(NullToStrictStringFuncCallArgRector::class);
+    $rectorConfig->rule(ReturnNeverTypeRector::class);
+    $rectorConfig->rule(MyCLabsClassToEnumRector::class);
+    $rectorConfig->rule(MyCLabsMethodCallToEnumConstRector::class);
+    $rectorConfig->rule(FinalizePublicClassConstantRector::class);
+    $rectorConfig->rule(ReadOnlyPropertyRector::class);
+    $rectorConfig->rule(SpatieEnumClassToEnumRector::class);
+    $rectorConfig->rule(Php81ResourceReturnToObjectRector::class);
+    $rectorConfig->rule(NewInInitializerRector::class);
+    $rectorConfig->rule(IntersectionTypesRector::class);
+    $rectorConfig->rule(NullToStrictStringFuncCallArgRector::class);
 };

@@ -8,9 +8,7 @@ use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
 use Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(TernaryToElvisRector::class);
-    $services->set(DirNameFileConstantToDirConstantRector::class);
-    $services->set(ReplaceHttpServerVarsByServerRector::class);
+    $rectorConfig->rule(TernaryToElvisRector::class);
+    $rectorConfig->rule(DirNameFileConstantToDirConstantRector::class);
+    $rectorConfig->rule(ReplaceHttpServerVarsByServerRector::class);
 };

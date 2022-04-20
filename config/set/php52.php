@@ -9,12 +9,11 @@ use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Removing\ValueObject\RemoveFuncCallArg;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(VarToPublicPropertyRector::class);
-    $services->set(ContinueToBreakInSwitchRector::class);
+    $rectorConfig->rule(VarToPublicPropertyRector::class);
+    $rectorConfig->rule(ContinueToBreakInSwitchRector::class);
 
-    $services->set(RemoveFuncCallArgRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RemoveFuncCallArgRector::class, [
             // see https://www.php.net/manual/en/function.ldap-first-attribute.php
             new RemoveFuncCallArg('ldap_first_attribute', 2),
         ]);

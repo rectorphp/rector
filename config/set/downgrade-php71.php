@@ -18,17 +18,15 @@ use Rector\DowngradePhp71\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRect
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_70);
-
-    $services = $rectorConfig->services();
-    $services->set(DowngradeNullableTypeDeclarationRector::class);
-    $services->set(DowngradeVoidTypeDeclarationRector::class);
-    $services->set(DowngradeClassConstantVisibilityRector::class);
-    $services->set(DowngradePipeToMultiCatchExceptionRector::class);
-    $services->set(SymmetricArrayDestructuringToListRector::class);
-    $services->set(DowngradeNegativeStringOffsetToStrlenRector::class);
-    $services->set(DowngradeKeysInListRector::class);
-    $services->set(DowngradeIterablePseudoTypeDeclarationRector::class);
-    $services->set(DowngradeIsIterableRector::class);
-    $services->set(DowngradeClosureFromCallableRector::class);
-    $services->set(DowngradePhp71JsonConstRector::class);
+    $rectorConfig->rule(DowngradeNullableTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeVoidTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeClassConstantVisibilityRector::class);
+    $rectorConfig->rule(DowngradePipeToMultiCatchExceptionRector::class);
+    $rectorConfig->rule(SymmetricArrayDestructuringToListRector::class);
+    $rectorConfig->rule(DowngradeNegativeStringOffsetToStrlenRector::class);
+    $rectorConfig->rule(DowngradeKeysInListRector::class);
+    $rectorConfig->rule(DowngradeIterablePseudoTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradeIsIterableRector::class);
+    $rectorConfig->rule(DowngradeClosureFromCallableRector::class);
+    $rectorConfig->rule(DowngradePhp71JsonConstRector::class);
 };
