@@ -9,9 +9,7 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(PHPUnitSetList::PHPUNIT_60);
 
-    $services = $rectorConfig->services();
-    $services->set(RenameClassRector::class)
-        ->configure([
-            'Old' => 'New',
-        ]);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'Old' => 'New',
+    ]);
 };

@@ -11,9 +11,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(PHPUnitSetList::PHPUNIT_60);
     $rectorConfig->import(TwigSetList::TWIG_20);
 
-    $services = $rectorConfig->services();
-    $services->set(RenameClassRector::class)
-        ->call('configure', [[
-            'Old' => 'New',
-        ]]);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'Old' => 'New',
+    ]);
 };

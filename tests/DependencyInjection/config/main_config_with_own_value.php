@@ -6,14 +6,10 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(RenameClassRector::class)
-        ->call('configure', [[
-            'old_3' => 'new_3',
-        ]])
-        ->call('configure', [[
-            'old_4' => 'new_4',
-        ]]);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'old_3' => 'new_3',
+        'old_4' => 'new_4',
+    ]);
 
     $rectorConfig->import(__DIR__ . '/first_config.php');
     $rectorConfig->import(__DIR__ . '/second_config.php');
