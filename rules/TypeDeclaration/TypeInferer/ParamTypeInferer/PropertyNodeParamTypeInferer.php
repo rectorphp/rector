@@ -12,11 +12,14 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
@@ -28,7 +31,9 @@ final class PropertyNodeParamTypeInferer implements ParamTypeInfererInterface
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private readonly NodeTypeResolver $nodeTypeResolver,
         private readonly TypeFactory $typeFactory,
-        private readonly BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 
@@ -58,7 +63,16 @@ final class PropertyNodeParamTypeInferer implements ParamTypeInfererInterface
                 return null;
             }
 
-            $propertyStaticTypes[] = $this->nodeTypeResolver->getType($node->var);
+            $exprType = $this->nodeTypeResolver->getType($node->expr);
+            $nodeExprType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($exprType, TypeKind::PARAM());
+            $varType = $this->nodeTypeResolver->getType($node->var);
+            $nodeVarType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::ANY());
+
+            if ($nodeExprType instanceof Node && ! $this->nodeComparator->areNodesEqual($nodeExprType, $nodeVarType)) {
+                return null;
+            }
+
+            $propertyStaticTypes[] = $varType;
 
             return null;
         });
