@@ -5,6 +5,7 @@ namespace Rector\DogFood\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -14,9 +15,11 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer;
 use Rector\DogFood\NodeManipulator\ContainerConfiguratorEmptyAssignRemover;
 use Rector\DogFood\NodeManipulator\ContainerConfiguratorImportsMerger;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -45,6 +48,10 @@ final class UpgradeRectorConfigRector extends \Rector\Core\Rector\AbstractRector
      */
     private const CONTAINER_CONFIGURATOR_CLASS = 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator';
     /**
+     * @var string
+     */
+    private const SERVICE_CONFIGURATOR_CLASS = 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServicesConfigurator';
+    /**
      * @readonly
      * @var \Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer
      */
@@ -59,11 +66,17 @@ final class UpgradeRectorConfigRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\DogFood\NodeManipulator\ContainerConfiguratorImportsMerger
      */
     private $containerConfiguratorImportsMerger;
-    public function __construct(\Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer $containerConfiguratorCallAnalyzer, \Rector\DogFood\NodeManipulator\ContainerConfiguratorEmptyAssignRemover $containerConfiguratorEmptyAssignRemover, \Rector\DogFood\NodeManipulator\ContainerConfiguratorImportsMerger $containerConfiguratorImportsMerger)
+    /**
+     * @readonly
+     * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
+     */
+    private $fluentChainMethodCallNodeAnalyzer;
+    public function __construct(\Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer $containerConfiguratorCallAnalyzer, \Rector\DogFood\NodeManipulator\ContainerConfiguratorEmptyAssignRemover $containerConfiguratorEmptyAssignRemover, \Rector\DogFood\NodeManipulator\ContainerConfiguratorImportsMerger $containerConfiguratorImportsMerger, \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
     {
         $this->containerConfiguratorCallAnalyzer = $containerConfiguratorCallAnalyzer;
         $this->containerConfiguratorEmptyAssignRemover = $containerConfiguratorEmptyAssignRemover;
         $this->containerConfiguratorImportsMerger = $containerConfiguratorImportsMerger;
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -118,6 +131,19 @@ CODE_SAMPLE
             }
             // 2. call on rule
             if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+                $nodeVarType = $this->nodeTypeResolver->getType($node->var);
+                if ($nodeVarType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && $nodeVarType->getClassName() === self::SERVICE_CONFIGURATOR_CLASS) {
+                    $isPossiblyServiceDefinition = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $node) : bool {
+                        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+                            return \false;
+                        }
+                        $methodCall = $this->fluentChainMethodCallNodeAnalyzer->resolveRootMethodCall($node);
+                        return $methodCall instanceof \PhpParser\Node\Expr;
+                    });
+                    if ($isPossiblyServiceDefinition) {
+                        return null;
+                    }
+                }
                 if ($this->containerConfiguratorCallAnalyzer->isMethodCallWithServicesSetConfiguredRectorRule($node)) {
                     return $this->refactorConfigureRuleMethodCall($node);
                 }
