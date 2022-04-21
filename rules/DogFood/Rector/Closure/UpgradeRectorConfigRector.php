@@ -5,7 +5,6 @@ namespace Rector\DogFood\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -133,12 +132,11 @@ CODE_SAMPLE
             if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
                 $nodeVarType = $this->nodeTypeResolver->getType($node->var);
                 if ($nodeVarType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && $nodeVarType->getClassName() === self::SERVICE_CONFIGURATOR_CLASS) {
+                    if ($this->isFoundFluentServiceCall($node)) {
+                        return null;
+                    }
                     $isPossiblyServiceDefinition = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $node) : bool {
-                        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
-                            return \false;
-                        }
-                        $methodCall = $this->fluentChainMethodCallNodeAnalyzer->resolveRootMethodCall($node);
-                        return $methodCall instanceof \PhpParser\Node\Expr;
+                        return $this->isFoundFluentServiceCall($node);
                     });
                     if ($isPossiblyServiceDefinition) {
                         return null;
@@ -188,6 +186,14 @@ CODE_SAMPLE
             return \false;
         }
         return $this->isNames($paramType, [self::CONTAINER_CONFIGURATOR_CLASS, self::RECTOR_CONFIG_CLASS]);
+    }
+    private function isFoundFluentServiceCall(\PhpParser\Node $node) : bool
+    {
+        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+            return \false;
+        }
+        $chains = $this->fluentChainMethodCallNodeAnalyzer->collectMethodCallNamesInChain($node);
+        return \count($chains) > 1;
     }
     /**
      * @param Arg[] $args
