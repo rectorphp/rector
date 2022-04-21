@@ -106,19 +106,10 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $params = $node->getParams();
-        if (\count($params) !== 1) {
+        if (!$this->isConfigClosure($node)) {
             return null;
         }
-        $onlyParam = $params[0];
-        $paramType = $onlyParam->type;
-        if (!$paramType instanceof \PhpParser\Node\Name) {
-            return null;
-        }
-        if (!$this->isNames($paramType, [self::CONTAINER_CONFIGURATOR_CLASS, self::RECTOR_CONFIG_CLASS])) {
-            return null;
-        }
-        $this->updateClosureParam($onlyParam);
+        $this->updateClosureParam($node);
         // 1. change import of sets to single sets() method call
         $this->containerConfiguratorImportsMerger->merge($node);
         $this->traverseNodesWithCallable($node->getStmts(), function (\PhpParser\Node $node) : ?Node {
@@ -145,8 +136,9 @@ CODE_SAMPLE
         $this->containerConfiguratorEmptyAssignRemover->removeFromClosure($node);
         return $node;
     }
-    public function updateClosureParam(\PhpParser\Node\Param $param) : void
+    public function updateClosureParam(\PhpParser\Node\Expr\Closure $closure) : void
     {
+        $param = $closure->params[0];
         if (!$param->type instanceof \PhpParser\Node\Name) {
             return;
         }
@@ -157,6 +149,19 @@ CODE_SAMPLE
         if (!$this->nodeNameResolver->isName($param->var, self::RECTOR_CONFIG_VARIABLE)) {
             $param->var = new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE);
         }
+    }
+    public function isConfigClosure(\PhpParser\Node\Expr\Closure $closure) : bool
+    {
+        $params = $closure->getParams();
+        if (\count($params) !== 1) {
+            return \false;
+        }
+        $onlyParam = $params[0];
+        $paramType = $onlyParam->type;
+        if (!$paramType instanceof \PhpParser\Node\Name) {
+            return \false;
+        }
+        return $this->isNames($paramType, [self::CONTAINER_CONFIGURATOR_CLASS, self::RECTOR_CONFIG_CLASS]);
     }
     /**
      * @param Arg[] $args

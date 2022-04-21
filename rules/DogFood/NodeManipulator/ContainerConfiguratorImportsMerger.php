@@ -61,5 +61,6 @@ final class ContainerConfiguratorImportsMerger
         $args = $this->nodeFactory->createArgs([$setConstantFetches]);
         $setsMethodCall = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE), 'sets', $args);
         $closure->stmts[$lastImportKey] = new \PhpParser\Node\Stmt\Expression($setsMethodCall);
+        \ksort($closure->stmts);
     }
 }
