@@ -115,22 +115,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $params = $node->getParams();
-        if (count($params) !== 1) {
+        if (! $this->isConfigClosure($node)) {
             return null;
         }
 
-        $onlyParam = $params[0];
-        $paramType = $onlyParam->type;
-        if (! $paramType instanceof Name) {
-            return null;
-        }
-
-        if (! $this->isNames($paramType, [self::CONTAINER_CONFIGURATOR_CLASS, self::RECTOR_CONFIG_CLASS])) {
-            return null;
-        }
-
-        $this->updateClosureParam($onlyParam);
+        $this->updateClosureParam($node);
 
         // 1. change import of sets to single sets() method call
         $this->containerConfiguratorImportsMerger->merge($node);
@@ -171,8 +160,9 @@ CODE_SAMPLE
         return $node;
     }
 
-    public function updateClosureParam(Param $param): void
+    public function updateClosureParam(Closure $closure): void
     {
+        $param = $closure->params[0];
         if (! $param->type instanceof Name) {
             return;
         }
@@ -185,6 +175,22 @@ CODE_SAMPLE
         if (! $this->nodeNameResolver->isName($param->var, self::RECTOR_CONFIG_VARIABLE)) {
             $param->var = new Variable(self::RECTOR_CONFIG_VARIABLE);
         }
+    }
+
+    public function isConfigClosure(Closure $closure): bool
+    {
+        $params = $closure->getParams();
+        if (count($params) !== 1) {
+            return false;
+        }
+
+        $onlyParam = $params[0];
+        $paramType = $onlyParam->type;
+        if (! $paramType instanceof Name) {
+            return false;
+        }
+
+        return $this->isNames($paramType, [self::CONTAINER_CONFIGURATOR_CLASS, self::RECTOR_CONFIG_CLASS]);
     }
 
     /**

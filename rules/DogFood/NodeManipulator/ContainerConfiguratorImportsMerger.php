@@ -63,5 +63,7 @@ final class ContainerConfiguratorImportsMerger
 
         $setsMethodCall = new MethodCall(new Variable(self::RECTOR_CONFIG_VARIABLE), 'sets', $args);
         $closure->stmts[$lastImportKey] = new Expression($setsMethodCall);
+
+        ksort($closure->stmts);
     }
 }
