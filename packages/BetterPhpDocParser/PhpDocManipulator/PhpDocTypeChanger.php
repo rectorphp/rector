@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
@@ -34,6 +35,10 @@ final class PhpDocTypeChanger
      * @var array<class-string<Node>>
      */
     public const ALLOWED_TYPES = [\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode::class, \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode::class, \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode::class, \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode::class];
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_IDENTIFIER_TYPENODE_TYPES = ['class-string'];
     /**
      * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
@@ -156,7 +161,13 @@ final class PhpDocTypeChanger
                 }
             }
         }
-        return \in_array(\get_class($typeNode), self::ALLOWED_TYPES, \true);
+        if (\in_array(\get_class($typeNode), self::ALLOWED_TYPES, \true)) {
+            return \true;
+        }
+        if (!$typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+            return \false;
+        }
+        return \in_array((string) $typeNode, self::ALLOWED_IDENTIFIER_TYPENODE_TYPES, \true);
     }
     public function copyPropertyDocToParam(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Param $param) : void
     {

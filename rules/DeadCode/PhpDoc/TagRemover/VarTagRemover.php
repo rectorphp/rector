@@ -53,6 +53,9 @@ final class VarTagRemover
         if (!$isVarTagValueDead) {
             return;
         }
+        if ($this->phpDocTypeChanger->isAllowed($varTagValueNode->type)) {
+            return;
+        }
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
