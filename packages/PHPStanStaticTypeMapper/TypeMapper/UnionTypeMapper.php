@@ -13,7 +13,9 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PhpParser\NodeAbstract;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -225,7 +227,23 @@ final class UnionTypeMapper implements TypeMapperInterface
             return new Name('bool');
         }
 
-        return $this->processResolveCompatibleObjectCandidates($unionType);
+        $compatibleObjectType = $this->processResolveCompatibleObjectCandidates($unionType);
+        if ($compatibleObjectType instanceof NullableType || $compatibleObjectType instanceof FullyQualified) {
+            return $compatibleObjectType;
+        }
+
+        return $this->processResolveCompatibleStringCandidates($unionType);
+    }
+
+    private function processResolveCompatibleStringCandidates(UnionType $unionType): ?Name
+    {
+        foreach ($unionType->getTypes() as $type) {
+            if (! in_array($type::class, [ClassStringType::class, GenericClassStringType::class], true)) {
+                return null;
+            }
+        }
+
+        return new Name('string');
     }
 
     private function processResolveCompatibleObjectCandidates(UnionType $unionType): ?Node

@@ -7,6 +7,7 @@ namespace Rector\Php74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
@@ -14,7 +15,6 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
-use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -24,6 +24,7 @@ use Rector\Php74\Guard\MakePropertyTypedGuard;
 use Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -60,10 +61,10 @@ final class TypedPropertyRector extends AbstractRector implements AllowEmptyConf
         private readonly VendorLockResolver $vendorLockResolver,
         private readonly DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         private readonly VarTagRemover $varTagRemover,
-        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
         private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer,
         private readonly ObjectTypeAnalyzer $objectTypeAnalyzer,
-        private readonly MakePropertyTypedGuard $makePropertyTypedGuard
+        private readonly MakePropertyTypedGuard $makePropertyTypedGuard,
+        private readonly ConstructorAssignDetector $constructorAssignDetector
     ) {
     }
 
@@ -213,7 +214,13 @@ CODE_SAMPLE
             return;
         }
 
-        if ($this->propertyFetchAnalyzer->isFilledByConstructParam($property)) {
+        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return;
+        }
+
+        $propertyName = $this->nodeNameResolver->getName($property);
+        if ($this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName)) {
             return;
         }
 

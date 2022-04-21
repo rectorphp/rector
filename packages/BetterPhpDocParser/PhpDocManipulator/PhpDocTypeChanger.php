@@ -12,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
@@ -41,6 +42,11 @@ final class PhpDocTypeChanger
         SpacingAwareCallableTypeNode::class,
         ArrayShapeNode::class,
     ];
+
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_IDENTIFIER_TYPENODE_TYPES = ['class-string'];
 
     public function __construct(
         private readonly StaticTypeMapper $staticTypeMapper,
@@ -163,7 +169,15 @@ final class PhpDocTypeChanger
             }
         }
 
-        return in_array($typeNode::class, self::ALLOWED_TYPES, true);
+        if (in_array($typeNode::class, self::ALLOWED_TYPES, true)) {
+            return true;
+        }
+
+        if (! $typeNode instanceof IdentifierTypeNode) {
+            return false;
+        }
+
+        return in_array((string) $typeNode, self::ALLOWED_IDENTIFIER_TYPENODE_TYPES, true);
     }
 
     public function copyPropertyDocToParam(Property $property, Param $param): void

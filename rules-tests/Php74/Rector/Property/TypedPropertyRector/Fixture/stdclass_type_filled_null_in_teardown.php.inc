@@ -5,7 +5,7 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-final class ArrayTypeFilledDefaultNullInTearDownTest extends TestCase
+final class StdClassTypeFilledNullInTearDownTest extends TestCase
 {
     /**
      * @var stdClass
@@ -32,9 +32,9 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-final class ArrayTypeFilledDefaultNullInTearDownTest extends TestCase
+final class StdClassTypeFilledNullInTearDownTest extends TestCase
 {
-    private ?\stdClass $property = null;
+    private ?\stdClass $property;
 
     protected function setUp(): void
     {

@@ -30,8 +30,8 @@ final class BinaryOpManipulator
      */
     public function matchFirstAndSecondConditionNode(
         BinaryOp $binaryOp,
-        $firstCondition,
-        $secondCondition
+        callable|string $firstCondition,
+        callable|string $secondCondition
     ): ?TwoNodeMatch {
         $this->validateCondition($firstCondition);
         $this->validateCondition($secondCondition);
@@ -114,7 +114,7 @@ final class BinaryOpManipulator
     /**
      * @param callable(Node $firstNode, Node $secondNode=): bool|class-string<Node> $firstCondition
      */
-    private function validateCondition($firstCondition): void
+    private function validateCondition(callable|string $firstCondition): void
     {
         if (is_callable($firstCondition)) {
             return;
@@ -131,7 +131,7 @@ final class BinaryOpManipulator
      * @param callable(Node $firstNode, Node $secondNode=): bool|class-string<Node> $condition
      * @return callable(Node $firstNode, Node $secondNode=): bool
      */
-    private function normalizeCondition($condition): callable
+    private function normalizeCondition(callable|string $condition): callable
     {
         if (is_callable($condition)) {
             return $condition;

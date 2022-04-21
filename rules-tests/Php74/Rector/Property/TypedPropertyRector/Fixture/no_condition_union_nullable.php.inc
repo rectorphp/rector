@@ -25,7 +25,7 @@ use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ReturnString;
 
 class NoConditionUnionNullable
 {
-    private ?string $nullOrString = null;
+    private ?string $nullOrString;
 
     public function __construct(?ReturnString $returnString = null)
     {

@@ -38,6 +38,10 @@ final class VarTagRemover
             return;
         }
 
+        if ($this->phpDocTypeChanger->isAllowed($varTagValueNode->type)) {
+            return;
+        }
+
         $phpDocInfo->removeByType(VarTagValueNode::class);
     }
 

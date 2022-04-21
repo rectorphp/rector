@@ -24,10 +24,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsR
 
 final class HasMethodType
 {
-    /**
-     * @var class-string|object|null
-     */
-    public $obj;
+    public string|object|null $obj = null;
 
     public function loader($obj)
     {
