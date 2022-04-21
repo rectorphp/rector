@@ -6,6 +6,7 @@ namespace Rector\DogFood\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -15,9 +16,11 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer;
 use Rector\DogFood\NodeManipulator\ContainerConfiguratorEmptyAssignRemover;
 use Rector\DogFood\NodeManipulator\ContainerConfiguratorImportsMerger;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -60,10 +63,16 @@ final class UpgradeRectorConfigRector extends AbstractRector
      */
     private const CONTAINER_CONFIGURATOR_CLASS = 'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator';
 
+    /**
+     * @var string
+     */
+    private const SERVICE_CONFIGURATOR_CLASS = 'Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator';
+
     public function __construct(
         private readonly ContainerConfiguratorCallAnalyzer $containerConfiguratorCallAnalyzer,
         private readonly ContainerConfiguratorEmptyAssignRemover $containerConfiguratorEmptyAssignRemover,
-        private readonly ContainerConfiguratorImportsMerger $containerConfiguratorImportsMerger
+        private readonly ContainerConfiguratorImportsMerger $containerConfiguratorImportsMerger,
+        private readonly FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
     ) {
     }
 
@@ -131,6 +140,26 @@ CODE_SAMPLE
 
             // 2. call on rule
             if ($node instanceof MethodCall) {
+                $nodeVarType = $this->nodeTypeResolver->getType($node->var);
+
+                if ($nodeVarType instanceof FullyQualifiedObjectType && $nodeVarType->getClassName() === self::SERVICE_CONFIGURATOR_CLASS) {
+                    $isPossiblyServiceDefinition = (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
+                        $node,
+                        function (Node $node): bool {
+                            if (! $node instanceof MethodCall) {
+                                return false;
+                            }
+
+                            $methodCall = $this->fluentChainMethodCallNodeAnalyzer->resolveRootMethodCall($node);
+                            return $methodCall instanceof Expr;
+                        }
+                    );
+
+                    if ($isPossiblyServiceDefinition) {
+                        return null;
+                    }
+                }
+
                 if ($this->containerConfiguratorCallAnalyzer->isMethodCallWithServicesSetConfiguredRectorRule($node)) {
                     return $this->refactorConfigureRuleMethodCall($node);
                 }
