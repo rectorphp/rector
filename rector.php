@@ -7,6 +7,7 @@ use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
@@ -61,6 +62,11 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         StringClassNameToClassConstantRector::class,
+
+        // phpstan false positive unreachable
+        RemoveUnreachableStatementRector::class => [
+            __DIR__ . '/rules/Php70/Rector/FuncCall/MultiDirnameRector.php',
+        ],
 
         FinalizeClassesWithoutChildrenRector::class => [
             __DIR__ . '/rules/DowngradePhp74/Rector/Array_/DowngradeArraySpreadRector.php',

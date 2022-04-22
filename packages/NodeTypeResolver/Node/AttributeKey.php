@@ -79,11 +79,15 @@ final class AttributeKey
     public const NEXT_NODE = 'next';
 
     /**
+     * @deprecated Instead of tree climbing without context, hook into parent node that contains the stmts directly.
+     * E.g. FunctionLike, If_, While_ etc.
      * @var string
      */
     public const PREVIOUS_STATEMENT = 'previousExpression';
 
     /**
+     * @deprecated Instead of tree climbing without context, hook into parent node that contains the stmts directly.
+     * E.g. FunctionLike, If_, While_ etc.
      * @var string
      */
     public const CURRENT_STATEMENT = 'currentExpression';
