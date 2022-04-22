@@ -23,6 +23,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\TypeDeclaration\TypeNormalizer;
@@ -58,7 +59,12 @@ final class TypeComparator
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\TypeHasher $typeHasher, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
+    /**
+     * @readonly
+     * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
+     */
+    private $unionTypeAnalyzer;
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\TypeHasher $typeHasher, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer)
     {
         $this->typeHasher = $typeHasher;
         $this->typeNormalizer = $typeNormalizer;
@@ -66,6 +72,7 @@ final class TypeComparator
         $this->arrayTypeComparator = $arrayTypeComparator;
         $this->scalarTypeComparator = $scalarTypeComparator;
         $this->typeFactory = $typeFactory;
+        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
     public function areTypesEqual(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
@@ -142,9 +149,13 @@ final class TypeComparator
         if (!$exactType instanceof \PHPStan\Type\UnionType) {
             return \true;
         }
-        $assumpionTypeTypes = $assumptionType->getTypes();
-        $exactTypeTypes = $exactType->getTypes();
-        return \count($assumpionTypeTypes) > \count($exactTypeTypes);
+        $countAssumpionTypeTypes = \count($assumptionType->getTypes());
+        $countExactTypeTypes = \count($exactType->getTypes());
+        if ($countAssumpionTypeTypes === $countExactTypeTypes) {
+            $unionType = $this->unionTypeAnalyzer->mapGenericToClassStringType($exactType);
+            return $this->areTypesEqual($assumptionType, $unionType);
+        }
+        return $countAssumpionTypeTypes > $countExactTypeTypes;
     }
     private function areAliasedObjectMatchingFqnObject(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
@@ -198,13 +209,14 @@ final class TypeComparator
     }
     private function normalizeSingleUnionType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        if ($type instanceof \PHPStan\Type\UnionType) {
-            $uniqueTypes = $this->typeFactory->uniquateTypes($type->getTypes());
-            if (\count($uniqueTypes) === 1) {
-                return $uniqueTypes[0];
-            }
+        if (!$type instanceof \PHPStan\Type\UnionType) {
+            return $type;
         }
-        return $type;
+        $uniqueTypes = $this->typeFactory->uniquateTypes($type->getTypes());
+        if (\count($uniqueTypes) !== 1) {
+            return $type;
+        }
+        return $uniqueTypes[0];
     }
     private function areArrayUnionConstantEqualTypes(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {

@@ -5,8 +5,10 @@ namespace Rector\PHPStanStaticTypeMapper\TypeAnalyzer;
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
+use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
@@ -118,5 +120,15 @@ final class UnionTypeAnalyzer
             }
         }
         return \false;
+    }
+    public function mapGenericToClassStringType(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\UnionType
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $key => $type) {
+            if ($type instanceof \PHPStan\Type\Generic\GenericClassStringType) {
+                $types[$key] = new \PHPStan\Type\ClassStringType();
+            }
+        }
+        return new \PHPStan\Type\UnionType($types);
     }
 }
