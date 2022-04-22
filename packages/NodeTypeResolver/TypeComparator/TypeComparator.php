@@ -24,6 +24,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\TypeDeclaration\TypeNormalizer;
@@ -37,6 +38,7 @@ final class TypeComparator
         private readonly ArrayTypeComparator $arrayTypeComparator,
         private readonly ScalarTypeComparator $scalarTypeComparator,
         private readonly TypeFactory $typeFactory,
+        private readonly UnionTypeAnalyzer $unionTypeAnalyzer
     ) {
     }
 
@@ -150,10 +152,15 @@ final class TypeComparator
             return true;
         }
 
-        $assumpionTypeTypes = $assumptionType->getTypes();
-        $exactTypeTypes = $exactType->getTypes();
+        $countAssumpionTypeTypes = count($assumptionType->getTypes());
+        $countExactTypeTypes = count($exactType->getTypes());
 
-        return count($assumpionTypeTypes) > count($exactTypeTypes);
+        if ($countAssumpionTypeTypes === $countExactTypeTypes) {
+            $unionType = $this->unionTypeAnalyzer->mapGenericToClassStringType($exactType);
+            return $this->areTypesEqual($assumptionType, $unionType);
+        }
+
+        return $countAssumpionTypeTypes > $countExactTypeTypes;
     }
 
     private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType): bool
@@ -222,14 +229,16 @@ final class TypeComparator
 
     private function normalizeSingleUnionType(Type $type): Type
     {
-        if ($type instanceof UnionType) {
-            $uniqueTypes = $this->typeFactory->uniquateTypes($type->getTypes());
-            if (count($uniqueTypes) === 1) {
-                return $uniqueTypes[0];
-            }
+        if (! $type instanceof UnionType) {
+            return $type;
         }
 
-        return $type;
+        $uniqueTypes = $this->typeFactory->uniquateTypes($type->getTypes());
+        if (count($uniqueTypes) !== 1) {
+            return $type;
+        }
+
+        return $uniqueTypes[0];
     }
 
     private function areArrayUnionConstantEqualTypes(Type $firstType, Type $secondType): bool
