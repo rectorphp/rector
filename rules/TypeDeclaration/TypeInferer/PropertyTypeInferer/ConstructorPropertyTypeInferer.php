@@ -20,6 +20,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -28,9 +29,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 use RectorPrefix20220422\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ConstructorPropertyTypeInferer
 {
@@ -79,7 +82,17 @@ final class ConstructorPropertyTypeInferer
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220422\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer
+     */
+    private $assignToPropertyTypeInferer;
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     */
+    private $typeComparator;
+    public function __construct(\Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220422\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer $assignToPropertyTypeInferer, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
     {
         $this->classMethodPropertyFetchManipulator = $classMethodPropertyFetchManipulator;
         $this->reflectionProvider = $reflectionProvider;
@@ -90,6 +103,8 @@ final class ConstructorPropertyTypeInferer
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->paramAnalyzer = $paramAnalyzer;
+        $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
+        $this->typeComparator = $typeComparator;
     }
     public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
     {
@@ -105,10 +120,11 @@ final class ConstructorPropertyTypeInferer
         // 1. direct property = param assign
         $param = $this->classMethodPropertyFetchManipulator->findParamAssignToPropertyName($classMethod, $propertyName);
         if ($param instanceof \PhpParser\Node\Param) {
-            if ($param->type !== null) {
-                return $this->resolveFromParamType($param, $classMethod, $propertyName);
+            if ($param->type === null) {
+                return null;
             }
-            return null;
+            $resolvedType = $this->resolveFromParamType($param, $classMethod, $propertyName);
+            return $this->resolveType($property, $propertyName, $classLike, $resolvedType);
         }
         // 2. different assign
         /** @var Expr[] $assignedExprs */
@@ -120,10 +136,22 @@ final class ConstructorPropertyTypeInferer
         if ($resolvedTypes === []) {
             return null;
         }
-        if (\count($resolvedTypes) === 1) {
-            return $resolvedTypes[0];
+        $resolvedType = \count($resolvedTypes) === 1 ? $resolvedTypes[0] : \PHPStan\Type\TypeCombinator::union(...$resolvedTypes);
+        return $this->resolveType($property, $propertyName, $classLike, $resolvedType);
+    }
+    private function resolveType(\PhpParser\Node\Stmt\Property $property, string $propertyName, \PhpParser\Node\Stmt\ClassLike $classLike, ?\PHPStan\Type\Type $resolvedType) : ?\PHPStan\Type\Type
+    {
+        if (!$resolvedType instanceof \PHPStan\Type\Type) {
+            return null;
         }
-        return \PHPStan\Type\TypeCombinator::union(...$resolvedTypes);
+        $exactType = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($property, $propertyName, $classLike);
+        if (!$exactType instanceof \PHPStan\Type\UnionType) {
+            return $resolvedType;
+        }
+        if ($this->typeComparator->areTypesEqual($resolvedType, $exactType)) {
+            return $resolvedType;
+        }
+        return null;
     }
     private function resolveFromParamType(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : \PHPStan\Type\Type
     {
