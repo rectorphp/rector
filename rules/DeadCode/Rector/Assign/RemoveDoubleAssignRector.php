@@ -5,17 +5,17 @@ namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
-use Rector\NodeNestingScope\ScopeNestingComparator;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -25,17 +25,11 @@ final class RemoveDoubleAssignRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeNestingScope\ScopeNestingComparator
-     */
-    private $scopeNestingComparator;
-    /**
-     * @readonly
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;
-    public function __construct(\Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector)
+    public function __construct(\Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector)
     {
-        $this->scopeNestingComparator = $scopeNestingComparator;
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -51,62 +45,69 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [\PhpParser\Node\Stmt\Foreach_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class, \PhpParser\Node\FunctionLike::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Namespace_::class];
     }
     /**
-     * @param Assign $node
+     * @param Foreach_|FileWithoutNamespace|FunctionLike|If_|Namespace_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->var instanceof \PhpParser\Node\Expr\Variable && !$node->var instanceof \PhpParser\Node\Expr\PropertyFetch && !$node->var instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+        $stmts = $node->stmts;
+        $hasChanged = \false;
+        $previousStmt = null;
+        foreach ($stmts as $key => $stmt) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+                $previousStmt = $stmt;
+                continue;
+            }
+            $expr = $stmt->expr;
+            if (!$expr instanceof \PhpParser\Node\Expr\Assign) {
+                $previousStmt = $stmt;
+                continue;
+            }
+            if (!$expr->var instanceof \PhpParser\Node\Expr\Variable && !$expr->var instanceof \PhpParser\Node\Expr\PropertyFetch && !$expr->var instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+                $previousStmt = $stmt;
+                continue;
+            }
+            if (!$previousStmt instanceof \PhpParser\Node\Stmt\Expression) {
+                $previousStmt = $stmt;
+                continue;
+            }
+            if (!$previousStmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+                $previousStmt = $stmt;
+                continue;
+            }
+            $previousAssign = $previousStmt->expr;
+            if (!$this->nodeComparator->areNodesEqual($previousAssign->var, $expr->var)) {
+                $previousStmt = $stmt;
+                continue;
+            }
+            // early check self referencing, ensure that variable not re-used
+            if ($this->isSelfReferencing($expr)) {
+                $previousStmt = $stmt;
+                continue;
+            }
+            // detect call expression has side effect
+            // no calls on right, could hide e.g. array_pop()|array_shift()
+            if ($this->sideEffectNodeDetector->detectCallExpr($previousAssign->expr)) {
+                $previousStmt = $stmt;
+                continue;
+            }
+            // remove previous stmt, not current one as the current one is the override
+            unset($stmts[$key - 1]);
+            $hasChanged = \true;
+        }
+        if (!$hasChanged) {
             return null;
         }
-        $previousStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT);
-        if (!$previousStatement instanceof \PhpParser\Node\Stmt\Expression) {
-            return null;
-        }
-        if (!$previousStatement->expr instanceof \PhpParser\Node\Expr\Assign) {
-            return null;
-        }
-        if (!$this->nodeComparator->areNodesEqual($previousStatement->expr->var, $node->var)) {
-            return null;
-        }
-        // early check self referencing, ensure that variable not re-used
-        if ($this->isSelfReferencing($node)) {
-            return null;
-        }
-        // detect call expression has side effect
-        if ($this->sideEffectNodeDetector->detectCallExpr($previousStatement->expr->expr)) {
-            return null;
-        }
-        // check scoping variable
-        if ($this->shouldSkipForDifferentScope($node, $previousStatement)) {
-            return null;
-        }
-        // no calls on right, could hide e.g. array_pop()|array_shift()
-        $this->removeNode($previousStatement);
+        \ksort($stmts);
+        $node->stmts = $stmts;
         return $node;
-    }
-    private function shouldSkipForDifferentScope(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\Expression $expression) : bool
-    {
-        if (!$this->areInSameClassMethod($assign, $expression)) {
-            return \true;
-        }
-        if (!$this->scopeNestingComparator->areScopeNestingEqual($assign, $expression)) {
-            return \true;
-        }
-        return (bool) $this->betterNodeFinder->findParentByTypes($assign, [\PhpParser\Node\Expr\Ternary::class, \PhpParser\Node\Expr\BinaryOp\Coalesce::class]);
     }
     private function isSelfReferencing(\PhpParser\Node\Expr\Assign $assign) : bool
     {
         return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (\PhpParser\Node $subNode) use($assign) : bool {
             return $this->nodeComparator->areNodesEqual($assign->var, $subNode);
         });
-    }
-    private function areInSameClassMethod(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\Expression $previousExpression) : bool
-    {
-        $assignClassMethod = $this->betterNodeFinder->findParentType($assign, \PhpParser\Node\Stmt\ClassMethod::class);
-        $previousExpressionClassMethod = $this->betterNodeFinder->findParentType($previousExpression, \PhpParser\Node\Stmt\ClassMethod::class);
-        return $this->nodeComparator->areNodesEqual($assignClassMethod, $previousExpressionClassMethod);
     }
 }
