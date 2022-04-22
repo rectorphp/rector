@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
@@ -19,9 +20,11 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 
 final class CountableAnalyzer
 {
@@ -29,7 +32,9 @@ final class CountableAnalyzer
         private readonly NodeTypeResolver $nodeTypeResolver,
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly ReflectionProvider $reflectionProvider,
-        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ConstructorAssignDetector $constructorAssignDetector
     ) {
     }
 
@@ -79,7 +84,7 @@ final class CountableAnalyzer
         }
 
         $nativeType = $phpPropertyReflection->getNativeType();
-        if ($this->isIterableOrFilledByConstructParam($nativeType, $expr)) {
+        if ($this->isIterableOrFilledAtConstruct($nativeType, $expr)) {
             return false;
         }
 
@@ -100,13 +105,23 @@ final class CountableAnalyzer
         return is_a($typeWithClassName->getClassName(), Array_::class, true);
     }
 
-    private function isIterableOrFilledByConstructParam(Type $nativeType, PropertyFetch $propertyFetch): bool
+    private function isIterableOrFilledAtConstruct(Type $nativeType, PropertyFetch $propertyFetch): bool
     {
         if ($nativeType->isIterable()->yes()) {
             return true;
         }
 
-        return $this->propertyFetchAnalyzer->isFilledByConstructParam($propertyFetch);
+        $classLike = $this->betterNodeFinder->findParentType($propertyFetch, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return false;
+        }
+
+        if ($propertyFetch->name instanceof Expr) {
+            return false;
+        }
+
+        $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch->name);
+        return $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
     }
 
     private function resolveProperty(

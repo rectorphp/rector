@@ -11,10 +11,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -131,44 +129,6 @@ final class PropertyFetchAnalyzer
         return $this->isLocalPropertyFetch($node->var);
     }
 
-    public function isFilledByConstructParam(Property|PropertyFetch|StaticPropertyFetch $property): bool
-    {
-        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
-        if (! $class instanceof Class_) {
-            return false;
-        }
-
-        $classMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (! $classMethod instanceof ClassMethod) {
-            return false;
-        }
-
-        $params = $classMethod->params;
-        if ($params === []) {
-            return false;
-        }
-
-        $stmts = (array) $classMethod->stmts;
-        if ($stmts === []) {
-            return false;
-        }
-
-        /** @var string $propertyName */
-        $propertyName = $property instanceof Property
-            ? $this->nodeNameResolver->getName($property->props[0]->name)
-            : $this->nodeNameResolver->getName($property);
-
-        if ($property instanceof Property) {
-            $kindPropertyFetch = $property->isStatic()
-                ? StaticPropertyFetch::class
-                : PropertyFetch::class;
-        } else {
-            $kindPropertyFetch = $property::class;
-        }
-
-        return $this->isParamFilledStmts($params, $stmts, $propertyName, $kindPropertyFetch);
-    }
-
     public function isFilledViaMethodCallInConstructStmts(PropertyFetch $propertyFetch): bool
     {
         $class = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
@@ -241,45 +201,5 @@ final class PropertyFetchAnalyzer
                 return $this->nodeComparator->areNodesEqual($propertyFetch, $subNode->var);
             }
         );
-    }
-
-    /**
-     * @param Param[] $params
-     * @param Stmt[] $stmts
-     */
-    private function isParamFilledStmts(
-        array $params,
-        array $stmts,
-        string $propertyName,
-        string $kindPropertyFetch
-    ): bool {
-        foreach ($params as $param) {
-            $paramVariable = $param->var;
-            $isAssignWithParamVarName = $this->betterNodeFinder->findFirst($stmts, function (Node $node) use (
-                $propertyName,
-                $paramVariable,
-                $kindPropertyFetch
-            ): bool {
-                if (! $node instanceof Assign) {
-                    return false;
-                }
-
-                if ($kindPropertyFetch !== $node->var::class) {
-                    return false;
-                }
-
-                if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
-                    return false;
-                }
-
-                return $this->nodeComparator->areNodesEqual($node->expr, $paramVariable);
-            });
-
-            if ($isAssignWithParamVarName !== null) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
