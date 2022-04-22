@@ -2,12 +2,12 @@
 
 namespace Rector\Nette\NeonParser\Contract;
 
-use RectorPrefix20220421\Nette\Neon\Node;
+use RectorPrefix20220422\Nette\Neon\Node;
 interface NeonNodeVisitorInterface
 {
     /**
      * @return class-string<\PhpParser\Node>
      */
     public function getNodeType() : string;
-    public function enterNode(\RectorPrefix20220421\Nette\Neon\Node $node) : \RectorPrefix20220421\Nette\Neon\Node;
+    public function enterNode(\RectorPrefix20220422\Nette\Neon\Node $node) : \RectorPrefix20220422\Nette\Neon\Node;
 }

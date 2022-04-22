@@ -7,6 +7,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
@@ -18,9 +19,11 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 final class CountableAnalyzer
 {
     /**
@@ -43,12 +46,24 @@ final class CountableAnalyzer
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
+     */
+    private $constructorAssignDetector;
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->constructorAssignDetector = $constructorAssignDetector;
     }
     public function isCastableArrayType(\PhpParser\Node\Expr $expr, \PHPStan\Type\ArrayType $arrayType) : bool
     {
@@ -84,7 +99,7 @@ final class CountableAnalyzer
             return \false;
         }
         $nativeType = $phpPropertyReflection->getNativeType();
-        if ($this->isIterableOrFilledByConstructParam($nativeType, $expr)) {
+        if ($this->isIterableOrFilledAtConstruct($nativeType, $expr)) {
             return \false;
         }
         if ($this->propertyFetchAnalyzer->isFilledViaMethodCallInConstructStmts($expr)) {
@@ -100,12 +115,20 @@ final class CountableAnalyzer
         }
         return \is_a($typeWithClassName->getClassName(), \PhpParser\Node\Expr\Array_::class, \true);
     }
-    private function isIterableOrFilledByConstructParam(\PHPStan\Type\Type $nativeType, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
+    private function isIterableOrFilledAtConstruct(\PHPStan\Type\Type $nativeType, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
         if ($nativeType->isIterable()->yes()) {
             return \true;
         }
-        return $this->propertyFetchAnalyzer->isFilledByConstructParam($propertyFetch);
+        $classLike = $this->betterNodeFinder->findParentType($propertyFetch, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+            return \false;
+        }
+        if ($propertyFetch->name instanceof \PhpParser\Node\Expr) {
+            return \false;
+        }
+        $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch->name);
+        return $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
     }
     private function resolveProperty(\PhpParser\Node\Expr\PropertyFetch $propertyFetch, \PHPStan\Reflection\ClassReflection $classReflection, string $propertyName) : ?\PHPStan\Reflection\PropertyReflection
     {
