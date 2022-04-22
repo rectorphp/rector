@@ -577,8 +577,10 @@ parameters:
         - '#Method "refactorReturnAndAssign\(\)" returns bool type, so the name should start with is/has/was#'
 
         # move later in BC break release
-        - '#Class "Rector\\DeadCode\\Rector\\Stmt\\RemoveUnreachableStatementRector" has invalid namespace category "Stmt"\. Pick one of\: "Foreach_", FunctionLike", Else_", If_"#'
+        - '#Class "(Rector\\DeadCode\\Rector\\(.*?)\\(RemoveUnreachableStatementRector|RemoveDoubleAssignRector))" has invalid namespace category "(.*?)"\. Pick one of\: "(.*?)"#'
 
         # by child generics, this property is always available
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\Else_\|PhpParser\\Node\\Stmt\\Foreach_\|PhpParser\\Node\\Stmt\\If_\:\:\$stmts#'
-
+        - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\Foreach_\|PhpParser\\Node\\Stmt\\If_\|PhpParser\\Node\\Stmt\\Namespace_\|Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace\:\:\$stmts#'
+        # stmts refactoring
+        - '#Cognitive complexity for "Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleAssignRector\:\:refactor\(\)" is 13, keep it under 10#'

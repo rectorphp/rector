@@ -6,17 +6,17 @@ namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
-use Rector\NodeNestingScope\ScopeNestingComparator;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,7 +26,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDoubleAssignRector extends AbstractRector
 {
     public function __construct(
-        private readonly ScopeNestingComparator $scopeNestingComparator,
         private readonly SideEffectNodeDetector $sideEffectNodeDetector,
     ) {
     }
@@ -50,63 +49,79 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Assign::class];
+        return [Foreach_::class, FileWithoutNamespace::class, FunctionLike::class, If_::class, Namespace_::class];
     }
 
     /**
-     * @param Assign $node
+     * @param Foreach_|FileWithoutNamespace|FunctionLike|If_|Namespace_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->var instanceof Variable && ! $node->var instanceof PropertyFetch && ! $node->var instanceof StaticPropertyFetch) {
+        $stmts = $node->stmts;
+        $hasChanged = false;
+
+        $previousStmt = null;
+
+        foreach ($stmts as $key => $stmt) {
+            if (! $stmt instanceof Expression) {
+                $previousStmt = $stmt;
+                continue;
+            }
+
+            $expr = $stmt->expr;
+            if (! $expr instanceof Assign) {
+                $previousStmt = $stmt;
+                continue;
+            }
+
+            if (! $expr->var instanceof Variable && ! $expr->var instanceof PropertyFetch && ! $expr->var instanceof StaticPropertyFetch) {
+                $previousStmt = $stmt;
+                continue;
+            }
+
+            if (! $previousStmt instanceof Expression) {
+                $previousStmt = $stmt;
+                continue;
+            }
+
+            if (! $previousStmt->expr instanceof Assign) {
+                $previousStmt = $stmt;
+                continue;
+            }
+
+            $previousAssign = $previousStmt->expr;
+            if (! $this->nodeComparator->areNodesEqual($previousAssign->var, $expr->var)) {
+                $previousStmt = $stmt;
+                continue;
+            }
+
+            // early check self referencing, ensure that variable not re-used
+            if ($this->isSelfReferencing($expr)) {
+                $previousStmt = $stmt;
+                continue;
+            }
+
+            // detect call expression has side effect
+            // no calls on right, could hide e.g. array_pop()|array_shift()
+            if ($this->sideEffectNodeDetector->detectCallExpr($previousAssign->expr)) {
+                $previousStmt = $stmt;
+                continue;
+            }
+
+            // remove previous stmt, not current one as the current one is the override
+            unset($stmts[$key - 1]);
+
+            $hasChanged = true;
+        }
+
+        if (! $hasChanged) {
             return null;
         }
 
-        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if (! $previousStatement instanceof Expression) {
-            return null;
-        }
+        ksort($stmts);
 
-        if (! $previousStatement->expr instanceof Assign) {
-            return null;
-        }
-
-        if (! $this->nodeComparator->areNodesEqual($previousStatement->expr->var, $node->var)) {
-            return null;
-        }
-
-        // early check self referencing, ensure that variable not re-used
-        if ($this->isSelfReferencing($node)) {
-            return null;
-        }
-
-        // detect call expression has side effect
-        if ($this->sideEffectNodeDetector->detectCallExpr($previousStatement->expr->expr)) {
-            return null;
-        }
-
-        // check scoping variable
-        if ($this->shouldSkipForDifferentScope($node, $previousStatement)) {
-            return null;
-        }
-
-        // no calls on right, could hide e.g. array_pop()|array_shift()
-        $this->removeNode($previousStatement);
-
+        $node->stmts = $stmts;
         return $node;
-    }
-
-    private function shouldSkipForDifferentScope(Assign $assign, Expression $expression): bool
-    {
-        if (! $this->areInSameClassMethod($assign, $expression)) {
-            return true;
-        }
-
-        if (! $this->scopeNestingComparator->areScopeNestingEqual($assign, $expression)) {
-            return true;
-        }
-
-        return (bool) $this->betterNodeFinder->findParentByTypes($assign, [Ternary::class, Coalesce::class]);
     }
 
     private function isSelfReferencing(Assign $assign): bool
@@ -115,16 +130,5 @@ CODE_SAMPLE
             $assign->expr,
             fn (Node $subNode): bool => $this->nodeComparator->areNodesEqual($assign->var, $subNode)
         );
-    }
-
-    private function areInSameClassMethod(Assign $assign, Expression $previousExpression): bool
-    {
-        $assignClassMethod = $this->betterNodeFinder->findParentType($assign, ClassMethod::class);
-        $previousExpressionClassMethod = $this->betterNodeFinder->findParentType(
-            $previousExpression,
-            ClassMethod::class
-        );
-
-        return $this->nodeComparator->areNodesEqual($assignClassMethod, $previousExpressionClassMethod);
     }
 }
