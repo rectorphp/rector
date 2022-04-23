@@ -11,7 +11,6 @@ final class Setfixture
         $sql = 'SELECT';
 
         $connection = mysql_connect('host', 'user', 'pass', true, MYSQL_CLIENT_IGNORE_SPACE);
-        $connection2 = mysql_pconnect('host2', 'user2', 'pass2', MYSQL_CLIENT_COMPRESS | MYSQL_CLIENT_INTERACTIVE);
 
         mysql_get_client_info();
 
@@ -59,7 +58,6 @@ final class Setfixture
         $sql = 'SELECT';
 
         $connection = mysql_connect('host', 'user', 'pass', true, MYSQL_CLIENT_IGNORE_SPACE);
-        $connection2 = mysql_pconnect('host2', 'user2', 'pass2', MYSQL_CLIENT_COMPRESS | MYSQL_CLIENT_INTERACTIVE);
 
         mysql_get_client_info();
 
@@ -118,55 +116,6 @@ final class Setfixture
         $sql = 'SELECT';
 
         $connection = mysqli_connect('host', 'user', 'pass');
-        $connection2 = mysqli_connect('p:host2', 'user2', 'pass2');
-
-        mysqli_get_client_info();
-
-        mysqli_set_charset($connection2, 'utf8');
-        mysqli_select_db($connection2, 'db_name');
-
-        mysqli_error($connection2);
-        mysqli_get_host_info($connection2);
-        mysqli_get_proto_info($connection2);
-        mysqli_get_server_info($connection2);
-        mysqli_info($connection2);
-        mysqli_insert_id($connection2);
-        mysqli_ping($connection2);
-        mysqli_stat($connection2);
-        mysqli_thread_id($connection2);
-
-        $result = mysqli_query($connection2, $sql);
-        $result2 = mysqli_query($connection2, $sql);
-
-        mysqli_errno($connection2);
-
-        mysqli_num_fields($result);
-        mysqli_num_rows($result);
-        mysqli_field_seek($result, 3);
-        mysqli_data_seek($result, 42);
-        mysqli_fetch_array($result, MYSQLI_ASSOC);
-        mysqli_fetch_assoc($result);
-        mysqli_fetch_lengths($result);
-        mysqli_fetch_object($result);
-        mysqli_fetch_row($result);
-
-        mysqli_free_result($result);
-
-        mysqli_real_escape_string($connection2, "Howdy -- Mr. O'Neil");
-        mysqli_real_escape_string($connection2, "Howdy -- Mr. O'Neil");
-
-        echo mysqli_affected_rows($connection2);
-        mysqli_character_set_name($connection2);
-
-        return mysqli_close($connection2);
-    }
-
-    public function run_with_connection()
-    {
-        $sql = 'SELECT';
-
-        $connection = mysqli_connect('host', 'user', 'pass');
-        $connection2 = mysqli_connect('p:host2', 'user2', 'pass2');
 
         mysqli_get_client_info();
 
@@ -200,7 +149,54 @@ final class Setfixture
 
         mysqli_free_result($result);
 
-        mysqli_real_escape_string($connection2, "Howdy -- Mr. O'Neil");
+        mysqli_real_escape_string($connection, "Howdy -- Mr. O'Neil");
+        mysqli_real_escape_string($connection, "Howdy -- Mr. O'Neil");
+
+        echo mysqli_affected_rows($connection);
+        mysqli_character_set_name($connection);
+
+        return mysqli_close($connection);
+    }
+
+    public function run_with_connection()
+    {
+        $sql = 'SELECT';
+
+        $connection = mysqli_connect('host', 'user', 'pass');
+
+        mysqli_get_client_info();
+
+        mysqli_set_charset($connection, 'utf8');
+        mysqli_select_db($connection, 'db_name');
+
+        mysqli_error($connection);
+        mysqli_get_host_info($connection);
+        mysqli_get_proto_info($connection);
+        mysqli_get_server_info($connection);
+        mysqli_info($connection);
+        mysqli_insert_id($connection);
+        mysqli_ping($connection);
+        mysqli_stat($connection);
+        mysqli_thread_id($connection);
+
+        $result = mysqli_query($connection, $sql);
+        $result2 = mysqli_query($connection, $sql);
+
+        mysqli_errno($connection);
+
+        mysqli_num_fields($result);
+        mysqli_num_rows($result);
+        mysqli_field_seek($result, 3);
+        mysqli_data_seek($result, 42);
+        mysqli_fetch_array($result, MYSQLI_ASSOC);
+        mysqli_fetch_assoc($result);
+        mysqli_fetch_lengths($result);
+        mysqli_fetch_object($result);
+        mysqli_fetch_row($result);
+
+        mysqli_free_result($result);
+
+        mysqli_real_escape_string($connection, "Howdy -- Mr. O'Neil");
         mysqli_real_escape_string($connection, "Howdy -- Mr. O'Neil");
 
         echo mysqli_affected_rows($connection);

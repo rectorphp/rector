@@ -27,6 +27,7 @@ use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -60,7 +61,7 @@ final class ClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    public function renameNode(Node $node, array $oldToNewClasses): ?Node
+    public function renameNode(Node $node, array $oldToNewClasses, ?File $file = null): ?Node
     {
         $oldToNewTypes = [];
         foreach ($oldToNewClasses as $oldClass => $newClass) {
@@ -70,7 +71,7 @@ final class ClassRenamer
         $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses);
 
         if ($node instanceof Name) {
-            return $this->refactorName($node, $oldToNewClasses);
+            return $this->refactorName($node, $oldToNewClasses, $file);
         }
 
         if ($node instanceof Namespace_) {
@@ -145,7 +146,7 @@ final class ClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function refactorName(Name $name, array $oldToNewClasses): ?Name
+    private function refactorName(Name $name, array $oldToNewClasses, ?File $file = null): ?Name
     {
         $stringName = $this->nodeNameResolver->getName($name);
 
@@ -178,17 +179,18 @@ final class ClassRenamer
         $importNames = $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES);
 
         if ($this->shouldRemoveUseName($last, $newNameLastName, $importNames)) {
-            $this->removeUseName($name);
+            $this->removeUseName($name, $file);
         }
 
         return new FullyQualified($newName);
     }
 
-    private function removeUseName(Name $oldName): void
+    private function removeUseName(Name $oldName, ?File $file = null): void
     {
         $uses = $this->betterNodeFinder->findFirstPrevious(
             $oldName,
-            fn (Node $node): bool => $node instanceof UseUse && $this->nodeNameResolver->areNamesEqual($node, $oldName)
+            fn (Node $node): bool => $node instanceof UseUse && $this->nodeNameResolver->areNamesEqual($node, $oldName),
+            $file
         );
 
         if (! $uses instanceof UseUse) {

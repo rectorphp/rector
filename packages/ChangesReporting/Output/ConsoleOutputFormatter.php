@@ -28,7 +28,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
     public function __construct(
         private readonly OutputStyleInterface $rectorOutputStyle,
-        private readonly RectorsChangelogResolver $rectorsChangelogResolver
+        private readonly RectorsChangelogResolver $rectorsChangelogResolver,
     ) {
     }
 

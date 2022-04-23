@@ -133,7 +133,8 @@ CODE_SAMPLE
             }
 
             $readOnlyVariableAssignScalarVariables = $this->classMethodAssignManipulator->collectReadyOnlyAssignScalarVariables(
-                $classMethod
+                $classMethod,
+                $this->file
             );
             $readOnlyVariables = array_merge($readOnlyVariables, $readOnlyVariableAssignScalarVariables);
         }

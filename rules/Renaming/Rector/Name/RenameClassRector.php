@@ -96,7 +96,7 @@ CODE_SAMPLE
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
 
         if (! $node instanceof Use_) {
-            return $this->classRenamer->renameNode($node, $oldToNewClasses);
+            return $this->classRenamer->renameNode($node, $oldToNewClasses, $this->file);
         }
 
         if (! $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {

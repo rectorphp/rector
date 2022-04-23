@@ -165,7 +165,7 @@ CODE_SAMPLE
     private function printNewNodes(ClassLike $classLike, Namespace_ | FileWithoutNamespace $mainNode): void
     {
         $smartFileInfo = $this->file->getSmartFileInfo();
-        $this->neighbourClassLikePrinter->printClassLike($classLike, $mainNode, $smartFileInfo);
+        $this->neighbourClassLikePrinter->printClassLike($classLike, $mainNode, $smartFileInfo, $this->file);
     }
 
     /**

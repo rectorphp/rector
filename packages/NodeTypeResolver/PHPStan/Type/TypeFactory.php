@@ -157,9 +157,8 @@ final class TypeFactory
         $flattenItemTypes = TypeUtils::flattenTypes($constantArrayType->getItemType());
 
         foreach ($flattenItemTypes as $position => $nestedFlattenItemType) {
-            /** @var Type|null $nestedFlattenKeyType */
             $nestedFlattenKeyType = $flattenKeyTypes[$position] ?? null;
-            if ($nestedFlattenKeyType === null) {
+            if (! $nestedFlattenKeyType instanceof Type) {
                 $nestedFlattenKeyType = new MixedType();
             }
 
