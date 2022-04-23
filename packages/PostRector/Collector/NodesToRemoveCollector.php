@@ -18,7 +18,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Provider\CurrentFileProvider;
-use Rector\NodeCollector\NodeResolver\CurrentStmtResolver;
 use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
@@ -36,8 +35,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
         private readonly BreakingRemovalGuard $breakingRemovalGuard,
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly NodeComparator $nodeComparator,
-        private readonly CurrentFileProvider $currentFileProvider,
-        private readonly CurrentStmtResolver $currentStmtResolver
+        private readonly CurrentFileProvider $currentFileProvider
     ) {
     }
 
@@ -72,16 +70,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
 
     public function isNodeRemoved(Node $node): bool
     {
-        if (in_array($node, $this->nodesToRemove, true)) {
-            return true;
-        }
-
-        if ($node instanceof Stmt) {
-            $currentStatement = $this->currentStmtResolver->resolve($node);
-            return in_array($currentStatement, $this->nodesToRemove, true);
-        }
-
-        return false;
+        return in_array($node, $this->nodesToRemove, true);
     }
 
     public function isActive(): bool
