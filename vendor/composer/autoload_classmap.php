@@ -2534,7 +2534,6 @@ return array(
     'Rector\\PHPUnit\\Rector\\MethodCall\\SpecificAssertContainsWithoutIdentityRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\SpecificAssertInternalTypeRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/SpecificAssertInternalTypeRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\UseSpecificWillMethodRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/UseSpecificWillMethodRector.php',
-    'Rector\\PHPUnit\\Rector\\MethodCall\\WithConsecutiveArgToArrayRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/WithConsecutiveArgToArrayRector.php',
     'Rector\\PHPUnit\\Rector\\StaticCall\\GetMockRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/StaticCall/GetMockRector.php',
     'Rector\\PHPUnit\\Set\\PHPUnitLevelSetList' => $vendorDir . '/rector/rector-phpunit/src/Set/PHPUnitLevelSetList.php',
     'Rector\\PHPUnit\\Set\\PHPUnitSetList' => $vendorDir . '/rector/rector-phpunit/src/Set/PHPUnitSetList.php',

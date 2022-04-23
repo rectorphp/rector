@@ -18,7 +18,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         '*/Source/*',
         '*/Fixture/*',
         // object types
-        \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class => [__DIR__ . '/src/Rector/MethodCall/WithConsecutiveArgToArrayRector.php', __DIR__ . '/src/Rector/MethodCall/UseSpecificWillMethodRector.php', __DIR__ . '/src/Rector/Class_/TestListenerToHooksRector.php', __DIR__ . '/src/NodeFactory/ConsecutiveAssertionFactory.php', __DIR__ . '/src/NodeAnalyzer/TestsNodeAnalyzer.php', __DIR__ . '/src/NodeFactory/DataProviderClassMethodFactory.php', __DIR__ . '/config'],
+        \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class => [__DIR__ . '/src/Rector/MethodCall/UseSpecificWillMethodRector.php', __DIR__ . '/src/Rector/Class_/TestListenerToHooksRector.php', __DIR__ . '/src/NodeFactory/ConsecutiveAssertionFactory.php', __DIR__ . '/src/NodeAnalyzer/TestsNodeAnalyzer.php', __DIR__ . '/src/NodeFactory/DataProviderClassMethodFactory.php', __DIR__ . '/config'],
     ]);
     // needed for DEAD_CODE list, just in split package like this
     $rectorConfig->import(__DIR__ . '/config/config.php');
