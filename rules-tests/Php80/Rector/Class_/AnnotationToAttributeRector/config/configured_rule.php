@@ -34,6 +34,9 @@ return static function (RectorConfig $rectorConfig): void {
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\All'),
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Length'),
 
+            // JMS
+            new AnnotationToAttribute('JMS\Serializer\Annotation\AccessType'),
+
             // test for alias used
             new AnnotationToAttribute(
                 'Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\UseAlias\TestSmth'
