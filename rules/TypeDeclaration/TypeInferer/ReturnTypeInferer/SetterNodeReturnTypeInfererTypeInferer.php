@@ -52,6 +52,10 @@ final class SetterNodeReturnTypeInfererTypeInferer implements ReturnTypeInfererI
 
         $types = [];
         foreach ($returnedPropertyNames as $returnedPropertyName) {
+            if (! $classReflection->hasProperty($returnedPropertyName)) {
+                continue;
+            }
+
             $propertyReflection = $classReflection->getProperty($returnedPropertyName, $scope);
             if (! $propertyReflection instanceof PhpPropertyReflection) {
                 continue;
