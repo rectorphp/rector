@@ -17,7 +17,6 @@ use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -145,9 +144,6 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($previousNode->var, $variable)) {
             return \true;
         }
-        if ($this->isPreviousExpressionVisuallySimilar($previousStmt, $previousNode)) {
-            return \true;
-        }
         if ($this->variableAnalyzer->isStaticOrGlobal($variable)) {
             return \true;
         }
@@ -167,19 +163,5 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($return);
         return !$phpDocInfo->getVarType() instanceof \PHPStan\Type\MixedType;
-    }
-    /**
-     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $previousNode
-     */
-    private function isPreviousExpressionVisuallySimilar(\PhpParser\Node\Stmt\Expression $previousExpression, $previousNode) : bool
-    {
-        $prePreviousExpression = $previousExpression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT);
-        if (!$prePreviousExpression instanceof \PhpParser\Node\Stmt\Expression) {
-            return \false;
-        }
-        if (!$prePreviousExpression->expr instanceof \PhpParser\Node\Expr\AssignOp) {
-            return \false;
-        }
-        return $this->nodeComparator->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var);
     }
 }

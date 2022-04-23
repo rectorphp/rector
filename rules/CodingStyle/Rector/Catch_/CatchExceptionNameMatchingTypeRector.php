@@ -104,8 +104,7 @@ CODE_SAMPLE
             $output = '';
             $output .= isset($matches[1]) ? \strtolower($matches[1]) : '';
             $output .= $matches[2] ?? '';
-            $output .= $matches[3] ?? '';
-            return $output;
+            return $output . ($matches[3] ?? '');
         });
         $objectType = new \PHPStan\Type\ObjectType($newVariableName);
         $newVariableName = $this->propertyNaming->fqnToVariableName($objectType);
