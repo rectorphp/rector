@@ -70,6 +70,9 @@ final class SetterNodeReturnTypeInfererTypeInferer implements \Rector\TypeDeclar
         }
         $types = [];
         foreach ($returnedPropertyNames as $returnedPropertyName) {
+            if (!$classReflection->hasProperty($returnedPropertyName)) {
+                continue;
+            }
             $propertyReflection = $classReflection->getProperty($returnedPropertyName, $scope);
             if (!$propertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
                 continue;
