@@ -1,8 +1,0 @@
-<?php
-
-namespace
-{
-    class NullNamespace
-    {
-    }
-}

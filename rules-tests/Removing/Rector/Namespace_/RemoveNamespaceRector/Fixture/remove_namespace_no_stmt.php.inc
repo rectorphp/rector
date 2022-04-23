@@ -1,7 +1,0 @@
-<?php
-
-namespace App;
-
-?>
------
-<?php
