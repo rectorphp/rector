@@ -23,6 +23,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\Application\File;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -86,7 +87,7 @@ final class ClassMethodAssignManipulator
     /**
      * @return Assign[]
      */
-    public function collectReadyOnlyAssignScalarVariables(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function collectReadyOnlyAssignScalarVariables(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\Core\ValueObject\Application\File $file) : array
     {
         $assignsOfScalarOrArrayToVariable = $this->variableManipulator->collectScalarOrArrayAssignsOfVariable($classMethod);
         // filter out [$value] = $array, array destructing
@@ -225,7 +226,7 @@ final class ClassMethodAssignManipulator
     private function findParentForeach(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Stmt\Foreach_
     {
         /** @var Foreach_|FunctionLike|null $foundNode */
-        $foundNode = $this->betterNodeFinder->findFirstPreviousOfTypes($assign, [\PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\FunctionLike::class]);
+        $foundNode = $this->betterNodeFinder->findParentByTypes($assign, [\PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\FunctionLike::class]);
         if (!$foundNode instanceof \PhpParser\Node\Stmt\Foreach_) {
             return null;
         }

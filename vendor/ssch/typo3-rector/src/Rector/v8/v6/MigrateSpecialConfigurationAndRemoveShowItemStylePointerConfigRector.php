@@ -121,12 +121,12 @@ CODE_SAMPLE
                 $newDefaultExtras = \implode(':', $newDefaultExtras);
                 if ('' !== $newDefaultExtras) {
                     $columnsOverrides = $this->extractSubArrayByKey($typeConfiguration, 'columnsOverrides');
-                    if (null === $columnsOverrides) {
+                    if (!$columnsOverrides instanceof \PhpParser\Node\Expr\Array_) {
                         $columnsOverrides = new \PhpParser\Node\Expr\Array_([]);
                         $typeConfiguration->items[] = new \PhpParser\Node\Expr\ArrayItem($columnsOverrides, new \PhpParser\Node\Scalar\String_('columnsOverrides'));
                     }
                     $columnOverride = $this->extractSubArrayByKey($columnsOverrides, $fieldName);
-                    if (null === $columnOverride) {
+                    if (!$columnOverride instanceof \PhpParser\Node\Expr\Array_) {
                         $columnOverride = new \PhpParser\Node\Expr\Array_([]);
                         $columnsOverrides->items[] = new \PhpParser\Node\Expr\ArrayItem($columnOverride, new \PhpParser\Node\Scalar\String_($fieldName));
                     }

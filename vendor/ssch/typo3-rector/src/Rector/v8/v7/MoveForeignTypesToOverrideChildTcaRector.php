@@ -123,7 +123,7 @@ CODE_SAMPLE
                 continue;
             }
             $foreignSelector = null !== $foreignSelectorNode ? $foreignSelectorNode->value : null;
-            if (null === $overrideChildTcaNode) {
+            if (!$overrideChildTcaNode instanceof \PhpParser\Node\Expr\Array_) {
                 $overrideChildTcaNode = new \PhpParser\Node\Expr\Array_();
                 $columnConfig->items[] = new \PhpParser\Node\Expr\ArrayItem($overrideChildTcaNode, new \PhpParser\Node\Scalar\String_(self::OVERRIDE_CHILD_TCA));
             }
@@ -176,7 +176,7 @@ CODE_SAMPLE
     private function injectOverrideChildTca(\PhpParser\Node\Expr\Array_ $overrideChildTcaNode, string $overrideKey, \PhpParser\Node\Expr\Array_ $overrideValue) : void
     {
         $newOverrideChildTcaSetting = $this->extractArrayItemByKey($overrideChildTcaNode, $overrideKey);
-        if (null === $newOverrideChildTcaSetting) {
+        if (!$newOverrideChildTcaSetting instanceof \PhpParser\Node\Expr\ArrayItem) {
             $newOverrideChildTcaSetting = new \PhpParser\Node\Expr\ArrayItem($overrideValue, new \PhpParser\Node\Scalar\String_($overrideKey));
             $overrideChildTcaNode->items[] = $newOverrideChildTcaSetting;
         } else {

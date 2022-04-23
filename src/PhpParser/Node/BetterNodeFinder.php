@@ -21,8 +21,10 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20220423\Symplify\PackageBuilder\Php\TypeChecker;
@@ -294,37 +296,40 @@ final class BetterNodeFinder
     /**
      * @param callable(Node $node): bool $filter
      */
-    public function findFirstPrevious(\PhpParser\Node $node, callable $filter) : ?\PhpParser\Node
+    public function findFirstPrevious(\PhpParser\Node $node, callable $filter, ?\Rector\Core\ValueObject\Application\File $file = null) : ?\PhpParser\Node
     {
-        $node = $node instanceof \PhpParser\Node\Stmt\Expression ? $node : $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if (!$node instanceof \PhpParser\Node) {
+        $currentStmt = $this->resolveCurrentStatement($node);
+        if (!$currentStmt instanceof \PhpParser\Node) {
             return null;
         }
-        $foundNode = $this->findFirst([$node], $filter);
-        // we found what we need
-        if ($foundNode instanceof \PhpParser\Node) {
-            return $foundNode;
+        $parentStmtIterator = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        // @todo add root virtual node for namespace-less nodes
+        if ($parentStmtIterator instanceof \PhpParser\Node) {
+            // @todo assert iteratble interface that will be added in vendor patch
+            $parentStmts = $parentStmtIterator->stmts;
+        } else {
+            // fallback to parent stmts iterator
+            if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
+                $errorMessage = \sprintf('File argument is missing in "%s()" method', __METHOD__);
+                throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
+            }
+            $parentStmts = $file->getNewStmts();
         }
-        // move to previous expression
-        $previousStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT);
-        if ($previousStatement instanceof \PhpParser\Node) {
-            return $this->findFirstPrevious($previousStatement, $filter);
-        }
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node) {
+        if ($parentStmts === null) {
             return null;
         }
-        return $this->findFirstPrevious($parent, $filter);
+        // @todo we don't need the first one; maybe find first above current node... check for positions...?
+        return $this->findFirst($parentStmts, $filter);
     }
     /**
      * @template T of Node
      * @param array<class-string<T>> $types
      */
-    public function findFirstPreviousOfTypes(\PhpParser\Node $mainNode, array $types) : ?\PhpParser\Node
+    public function findFirstPreviousOfTypes(\PhpParser\Node $mainNode, array $types, ?\Rector\Core\ValueObject\Application\File $file = null) : ?\PhpParser\Node
     {
         return $this->findFirstPrevious($mainNode, function (\PhpParser\Node $node) use($types) : bool {
             return $this->typeChecker->isInstanceOf($node, $types);
-        });
+        }, $file);
     }
     /**
      * @param callable(Node $node): bool $filter
@@ -457,6 +462,22 @@ final class BetterNodeFinder
             return null;
         }
         return $foundNode;
+    }
+    private function resolveCurrentStatement(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt
+    {
+        if ($node instanceof \PhpParser\Node\Stmt) {
+            return $node;
+        }
+        $currentStmt = $node;
+        while ($currentStmt = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE)) {
+            if ($currentStmt instanceof \PhpParser\Node\Stmt) {
+                return $currentStmt;
+            }
+            if (!$currentStmt instanceof \PhpParser\Node) {
+                return null;
+            }
+        }
+        return null;
     }
     /**
      * @template T of Node

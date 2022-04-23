@@ -200,7 +200,7 @@ CODE_SAMPLE
             if ([] !== $additionalConfigItems) {
                 $this->hasAstBeenChanged = \true;
                 $config = $this->extractArrayItemByKey($columnItem->value, 'config');
-                if (null === $config) {
+                if (!$config instanceof \PhpParser\Node\Expr\ArrayItem) {
                     $config = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Array_(), new \PhpParser\Node\Scalar\String_('config'));
                     $columnItem->value->items[] = $config;
                 }

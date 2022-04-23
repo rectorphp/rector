@@ -83,7 +83,7 @@ CODE_SAMPLE
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         if (!$node instanceof \PhpParser\Node\Stmt\Use_) {
-            return $this->classRenamer->renameNode($node, $oldToNewClasses);
+            return $this->classRenamer->renameNode($node, $oldToNewClasses, $this->file);
         }
         if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES)) {
             return null;

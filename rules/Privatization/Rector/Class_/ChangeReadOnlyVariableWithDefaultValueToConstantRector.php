@@ -132,7 +132,7 @@ CODE_SAMPLE
             if ($this->isFoundByRefParam($classMethod)) {
                 return [];
             }
-            $readOnlyVariableAssignScalarVariables = $this->classMethodAssignManipulator->collectReadyOnlyAssignScalarVariables($classMethod);
+            $readOnlyVariableAssignScalarVariables = $this->classMethodAssignManipulator->collectReadyOnlyAssignScalarVariables($classMethod, $this->file);
             $readOnlyVariables = \array_merge($readOnlyVariables, $readOnlyVariableAssignScalarVariables);
         }
         return $readOnlyVariables;

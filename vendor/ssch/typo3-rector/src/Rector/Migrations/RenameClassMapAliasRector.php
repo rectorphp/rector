@@ -104,7 +104,7 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Scalar\String_) {
             return $this->stringClassNameToClassConstantRectorIfPossible($node);
         }
-        return $this->classRenamer->renameNode($node, $this->oldToNewClasses);
+        return $this->classRenamer->renameNode($node, $this->oldToNewClasses, $this->file);
     }
     /**
      * @param mixed[] $configuration

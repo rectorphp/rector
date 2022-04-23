@@ -33,9 +33,7 @@ final class ImportExtbaseAnnotationIfMissingFactory
     }
     public function addExtbaseAliasAnnotationIfMissing(\PhpParser\Node $node) : void
     {
-        $namespace = $this->betterNodeFinder->findFirstPrevious($node, function (\PhpParser\Node $node) : bool {
-            return $node instanceof \PhpParser\Node\Stmt\Namespace_;
-        });
+        $namespace = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);
         $completeImportForPartialAnnotation = new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('TYPO3\\CMS\\Extbase\\Annotation', 'Extbase');
         if ($namespace instanceof \PhpParser\Node\Stmt\Namespace_ && $this->isImportMissing($namespace, $completeImportForPartialAnnotation)) {
             $this->useNodesToAddCollector->addUseImport(new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType('Extbase', 'TYPO3\\CMS\\Extbase\\Annotation'));
