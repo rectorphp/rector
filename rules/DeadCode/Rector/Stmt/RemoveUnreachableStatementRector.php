@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -103,7 +104,7 @@ CODE_SAMPLE
 
             $previousStmt = $stmts[$key - 1];
 
-            if ($this->shouldRemove($previousStmt)) {
+            if ($this->shouldRemove($previousStmt, $stmt)) {
                 unset($stmts[$key]);
                 break;
             }
@@ -117,7 +118,7 @@ CODE_SAMPLE
         return $this->processCleanUpUnreachabelStmts($stmts);
     }
 
-    private function shouldRemove(Stmt $previousStmt): bool
+    private function shouldRemove(Stmt $previousStmt, Stmt $currentStmt): bool
     {
         if ($previousStmt instanceof Throw_) {
             return true;
@@ -131,7 +132,12 @@ CODE_SAMPLE
             return true;
         }
 
-        return $previousStmt instanceof TryCatch && $previousStmt->finally instanceof Finally_ && $this->cleanNop(
+        if (! $previousStmt instanceof TryCatch) {
+            return false;
+        }
+
+        $isUnreachable = $currentStmt->getAttribute(AttributeKey::IS_UNREACHABLE);
+        return $isUnreachable === true && $previousStmt->finally instanceof Finally_ && $this->cleanNop(
             $previousStmt->finally->stmts
         ) !== [];
     }

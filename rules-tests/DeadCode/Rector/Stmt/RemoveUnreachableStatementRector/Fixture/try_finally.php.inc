@@ -8,7 +8,7 @@ class TryFinally
     public function setMultiple($values, $ttl = null): bool
     {
         try {
-            return true;
+            throw new Exception();
         } finally {
             echo 3;
         }
@@ -29,7 +29,7 @@ class TryFinally
     public function setMultiple($values, $ttl = null): bool
     {
         try {
-            return true;
+            throw new Exception();
         } finally {
             echo 3;
         }
