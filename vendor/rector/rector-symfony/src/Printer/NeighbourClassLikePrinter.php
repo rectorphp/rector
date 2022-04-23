@@ -10,6 +10,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
@@ -44,9 +45,9 @@ final class NeighbourClassLikePrinter
     /**
      * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $mainNode
      */
-    public function printClassLike(\PhpParser\Node\Stmt\ClassLike $classLike, $mainNode, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : void
+    public function printClassLike(\PhpParser\Node\Stmt\ClassLike $classLike, $mainNode, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, ?\Rector\Core\ValueObject\Application\File $file = null) : void
     {
-        $declares = $this->resolveDeclares($mainNode);
+        $declares = $this->resolveDeclares($mainNode, $file);
         if ($mainNode instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
             $nodesToPrint = \array_merge($declares, [$classLike]);
         } else {
@@ -68,9 +69,9 @@ final class NeighbourClassLikePrinter
      * @return Declare_[]
      * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $mainNode
      */
-    private function resolveDeclares($mainNode) : array
+    private function resolveDeclares($mainNode, ?\Rector\Core\ValueObject\Application\File $file = null) : array
     {
-        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [\PhpParser\Node\Stmt\Declare_::class]);
+        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [\PhpParser\Node\Stmt\Declare_::class], $file);
         if ($declare instanceof \PhpParser\Node\Stmt\Declare_) {
             return [$declare];
         }

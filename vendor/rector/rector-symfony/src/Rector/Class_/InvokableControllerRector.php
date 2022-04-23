@@ -134,7 +134,7 @@ CODE_SAMPLE
             if (!$parentNamespace instanceof \PhpParser\Node) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException('Missing parent namespace or without namespace node');
             }
-            $this->neighbourClassLikePrinter->printClassLike($invokableControllerClass, $parentNamespace, $this->file->getSmartFileInfo());
+            $this->neighbourClassLikePrinter->printClassLike($invokableControllerClass, $parentNamespace, $this->file->getSmartFileInfo(), $this->file);
         }
         // remove original file
         $smartFileInfo = $this->file->getSmartFileInfo();

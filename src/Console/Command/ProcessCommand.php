@@ -24,6 +24,7 @@ use RectorPrefix20220423\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220423\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220423\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20220423\Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\SmartFileSystem\SmartFileInfo;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**
@@ -134,7 +135,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $processResult = $this->processResultFactory->create($systemErrorsAndFileDiffs);
         $outputFormatter->report($processResult, $configuration);
         // invalidate affected files
-        $this->invalidateCacheChangedFiles($processResult);
+        $this->invalidateCacheForChangedAndErroredFiles($processResult);
         return $this->resolveReturnCode($processResult, $configuration);
     }
     protected function initialize(\RectorPrefix20220423\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220423\Symfony\Component\Console\Output\OutputInterface $output) : void
@@ -153,10 +154,18 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
             $this->changedFilesDetector->clear();
         }
     }
-    private function invalidateCacheChangedFiles(\Rector\Core\ValueObject\ProcessResult $processResult) : void
+    private function invalidateCacheForChangedAndErroredFiles(\Rector\Core\ValueObject\ProcessResult $processResult) : void
     {
         foreach ($processResult->getChangedFileInfos() as $changedFileInfo) {
             $this->changedFilesDetector->invalidateFile($changedFileInfo);
+        }
+        foreach ($processResult->getErrors() as $systemError) {
+            $errorFile = $systemError->getFile();
+            if (!\is_string($errorFile)) {
+                continue;
+            }
+            $errorFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($errorFile);
+            $this->changedFilesDetector->invalidateFile($errorFileInfo);
         }
     }
     private function resolveReturnCode(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : int
