@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
-use RectorPrefix20220423\Doctrine\Common\Annotations\Annotation\Attributes;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
