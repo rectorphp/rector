@@ -6,20 +6,18 @@ namespace Rector\DeadCode\Rector\Stmt;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Exit_;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -30,10 +28,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnreachableStatementRector extends AbstractRector
 {
-    public function __construct(private readonly SideEffectNodeDetector $sideEffectNodeDetector)
-    {
-    }
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unreachable statements', [
@@ -76,113 +70,78 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $stmts = $node->stmts;
-
-        $isPassedTheUnreachable = false;
-        $toBeRemovedKeys = [];
-
-        foreach ($stmts as $key => $stmt) {
-            if ($this->shouldSkipNode($stmt)) {
-                continue;
-            }
-
-            if ($this->isUnreachable($stmt)) {
-                $isPassedTheUnreachable = true;
-            }
-
-            if ($this->isAfterMarkTestSkippedMethodCall($stmt)) {
-                // keep for test case temporary ignored
-                break;
-            }
-
-            if (! $isPassedTheUnreachable) {
-                continue;
-            }
-
-            $toBeRemovedKeys[] = $key;
-        }
-
-        if ($toBeRemovedKeys === []) {
+        if ($node->stmts === null) {
             return null;
         }
 
-        $start = reset($toBeRemovedKeys);
-        if (! isset($stmts[$start - 1])) {
+        $originalStmts = $node->stmts;
+        $cleanedStmts = $this->processCleanUpUnreachabelStmts($node->stmts);
+
+        if ($cleanedStmts === $originalStmts) {
             return null;
         }
 
-        $previousFirstUnreachable = $stmts[$start - 1];
-        if (in_array($previousFirstUnreachable::class, [Throw_::class, Return_::class, Exit_::class], true)) {
-            return $this->processCleanUpUnreachabelStmts($node, $toBeRemovedKeys);
-        }
-
-        // check previous side effect can check against start jump key - 2
-        // as previously already checked as reachable part
-        if (! $this->hasPreviousSideEffect($start - 2, $stmts)) {
-            return $this->processCleanUpUnreachabelStmts($node, $toBeRemovedKeys);
-        }
-
-        return null;
+        $node->stmts = $cleanedStmts;
+        return $node;
     }
 
     /**
      * @param Stmt[] $stmts
+     * @return Stmt[]
      */
-    private function hasPreviousSideEffect(int $start, array $stmts): bool
+    private function processCleanUpUnreachabelStmts(array $stmts): array
     {
-        for ($key = $start; $key > 0; --$key) {
-            $previousStmt = $stmts[$key];
-            $hasSideEffect = (bool) $this->betterNodeFinder->findFirst(
-                $previousStmt,
-                fn (Node $node): bool => $this->sideEffectNodeDetector->detectCallExpr($node)
-            );
+        $originalStmts = $stmts;
+        foreach ($stmts as $key => $stmt) {
+            if (! isset($stmts[$key - 1])) {
+                continue;
+            }
 
-            if ($hasSideEffect) {
-                return true;
+            if ($stmt instanceof Nop) {
+                continue;
+            }
+
+            $previousStmt = $stmts[$key - 1];
+
+            if ($this->shouldRemove($previousStmt)) {
+                unset($stmts[$key]);
+                break;
             }
         }
 
-        return false;
+        if ($originalStmts === $stmts) {
+            return $originalStmts;
+        }
+
+        $stmts = array_values($stmts);
+        return $this->processCleanUpUnreachabelStmts($stmts);
+    }
+
+    private function shouldRemove(Stmt $previousStmt): bool
+    {
+        if ($previousStmt instanceof Throw_) {
+            return true;
+        }
+
+        if ($previousStmt instanceof Expression && $previousStmt->expr instanceof Exit_) {
+            return true;
+        }
+
+        if ($previousStmt instanceof Return_) {
+            return true;
+        }
+
+        return $previousStmt instanceof TryCatch && $previousStmt->finally instanceof Finally_ && $this->cleanNop(
+            $previousStmt->finally->stmts
+        ) !== [];
     }
 
     /**
-     * @param int[] $toBeRemovedKeys
+     * @param Stmt[] $stmts
+     * @return Stmt[]
      */
-    private function processCleanUpUnreachabelStmts(Foreach_|FunctionLike|Else_|If_ $node, array $toBeRemovedKeys): Node
+    private function cleanNop(array $stmts): array
     {
-        foreach ($toBeRemovedKeys as $toBeRemovedKey) {
-            unset($node->stmts[$toBeRemovedKey]);
-        }
-
-        return $node;
-    }
-
-    private function shouldSkipNode(Stmt $stmt): bool
-    {
-        return $stmt instanceof Nop;
-    }
-
-    private function isUnreachable(Stmt $stmt): bool
-    {
-        $isUnreachable = $stmt->getAttribute(AttributeKey::IS_UNREACHABLE);
-
-        return $isUnreachable === true;
-    }
-
-    /**
-     * Keep content after markTestSkipped(), intentional temporary
-     */
-    private function isAfterMarkTestSkippedMethodCall(Stmt $stmt): bool
-    {
-        if (! $stmt instanceof Expression) {
-            return false;
-        }
-
-        $expr = $stmt->expr;
-        if ($expr instanceof MethodCall || $expr instanceof StaticCall) {
-            return $this->isNames($expr->name, ['markTestSkipped', 'markTestIncomplete']);
-        }
-
-        return false;
+        return array_filter($stmts, fn (Stmt $stmt): bool => ! $stmt instanceof Nop);
     }
 }
