@@ -8,9 +8,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -19,7 +21,10 @@ use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Goto_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\InlineHTML;
+use PhpParser\Node\Stmt\Label;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
@@ -143,6 +148,10 @@ CODE_SAMPLE
 
     private function shouldRemove(Stmt $previousStmt, Stmt $currentStmt): bool
     {
+        if ($currentStmt instanceof InlineHTML) {
+            return false;
+        }
+
         if ($previousStmt instanceof Throw_) {
             return true;
         }
@@ -151,7 +160,11 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($previousStmt instanceof Return_) {
+        if ($previousStmt instanceof Goto_ && $currentStmt instanceof Label) {
+            return false;
+        }
+
+        if (in_array($previousStmt::class, [Return_::class, Break_::class, Continue_::class, Goto_::class], true)) {
             return true;
         }
 
