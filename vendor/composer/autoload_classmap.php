@@ -2661,6 +2661,7 @@ return array(
     'Rector\\Php80\\NodeFactory\\MatchArmsFactory' => $baseDir . '/rules/Php80/NodeFactory/MatchArmsFactory.php',
     'Rector\\Php80\\NodeFactory\\MatchFactory' => $baseDir . '/rules/Php80/NodeFactory/MatchFactory.php',
     'Rector\\Php80\\NodeFactory\\StrStartsWithFuncCallFactory' => $baseDir . '/rules/Php80/NodeFactory/StrStartsWithFuncCallFactory.php',
+    'Rector\\Php80\\NodeManipulator\\AttributeGroupNamedArgumentManipulator' => $baseDir . '/rules/Php80/NodeManipulator/AttributeGroupNamedArgumentManipulator.php',
     'Rector\\Php80\\NodeManipulator\\ResourceReturnToObject' => $baseDir . '/rules/Php80/NodeManipulator/ResourceReturnToObject.php',
     'Rector\\Php80\\NodeManipulator\\TokenManipulator' => $baseDir . '/rules/Php80/NodeManipulator/TokenManipulator.php',
     'Rector\\Php80\\NodeResolver\\ArgumentSorter' => $baseDir . '/rules/Php80/NodeResolver/ArgumentSorter.php',

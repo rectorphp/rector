@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
+use RectorPrefix20220423\Doctrine\Common\Annotations\Annotation\Attributes;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
@@ -22,6 +23,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeFactory\AttrGroupsFactory;
+use Rector\Php80\NodeManipulator\AttributeGroupNamedArgumentManipulator;
 use Rector\Php80\PhpDoc\PhpDocNodeFinder;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
@@ -74,7 +76,12 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\PhpAttribute\RemovableAnnotationAnalyzer
      */
     private $removableAnnotationAnalyzer;
-    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\PhpDoc\PhpDocNodeFinder $phpDocNodeFinder, \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer, \Rector\PhpAttribute\RemovableAnnotationAnalyzer $removableAnnotationAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Php80\NodeManipulator\AttributeGroupNamedArgumentManipulator
+     */
+    private $attributeGroupNamedArgumentManipulator;
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\PhpDoc\PhpDocNodeFinder $phpDocNodeFinder, \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer, \Rector\PhpAttribute\RemovableAnnotationAnalyzer $removableAnnotationAnalyzer, \Rector\Php80\NodeManipulator\AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->attrGroupsFactory = $attrGroupsFactory;
@@ -82,6 +89,7 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
         $this->phpDocNodeFinder = $phpDocNodeFinder;
         $this->unwrapableAnnotationAnalyzer = $unwrapableAnnotationAnalyzer;
         $this->removableAnnotationAnalyzer = $removableAnnotationAnalyzer;
+        $this->attributeGroupNamedArgumentManipulator = $attributeGroupNamedArgumentManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -135,6 +143,7 @@ CODE_SAMPLE
         if ($attributeGroups === []) {
             return null;
         }
+        $attributeGroups = $this->attributeGroupNamedArgumentManipulator->processSpecialClassTypes($attributeGroups);
         $node->attrGroups = \array_merge($node->attrGroups, $attributeGroups);
         return $node;
     }
