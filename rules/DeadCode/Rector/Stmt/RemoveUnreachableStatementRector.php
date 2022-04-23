@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -88,7 +89,7 @@ CODE_SAMPLE
                 continue;
             }
             $previousStmt = $stmts[$key - 1];
-            if ($this->shouldRemove($previousStmt)) {
+            if ($this->shouldRemove($previousStmt, $stmt)) {
                 unset($stmts[$key]);
                 break;
             }
@@ -99,7 +100,7 @@ CODE_SAMPLE
         $stmts = \array_values($stmts);
         return $this->processCleanUpUnreachabelStmts($stmts);
     }
-    private function shouldRemove(\PhpParser\Node\Stmt $previousStmt) : bool
+    private function shouldRemove(\PhpParser\Node\Stmt $previousStmt, \PhpParser\Node\Stmt $currentStmt) : bool
     {
         if ($previousStmt instanceof \PhpParser\Node\Stmt\Throw_) {
             return \true;
@@ -110,7 +111,11 @@ CODE_SAMPLE
         if ($previousStmt instanceof \PhpParser\Node\Stmt\Return_) {
             return \true;
         }
-        return $previousStmt instanceof \PhpParser\Node\Stmt\TryCatch && $previousStmt->finally instanceof \PhpParser\Node\Stmt\Finally_ && $this->cleanNop($previousStmt->finally->stmts) !== [];
+        if (!$previousStmt instanceof \PhpParser\Node\Stmt\TryCatch) {
+            return \false;
+        }
+        $isUnreachable = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE);
+        return $isUnreachable === \true && $previousStmt->finally instanceof \PhpParser\Node\Stmt\Finally_ && $this->cleanNop($previousStmt->finally->stmts) !== [];
     }
     /**
      * @param Stmt[] $stmts
