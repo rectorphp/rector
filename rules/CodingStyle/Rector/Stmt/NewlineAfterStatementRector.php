@@ -27,7 +27,6 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeCollector\NodeResolver\CurrentStmtResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -44,15 +43,6 @@ final class NewlineAfterStatementRector extends \Rector\Core\Rector\AbstractRect
      * @var array<string, true>
      */
     private $stmtsHashed = [];
-    /**
-     * @readonly
-     * @var \Rector\NodeCollector\NodeResolver\CurrentStmtResolver
-     */
-    private $currentStmtResolver;
-    public function __construct(\Rector\NodeCollector\NodeResolver\CurrentStmtResolver $currentStmtResolver)
-    {
-        $this->currentStmtResolver = $currentStmtResolver;
-    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add new line after statements to tidify code', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -92,7 +82,6 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $node = $this->currentStmtResolver->resolve($node);
         if (!\in_array(\get_class($node), self::STMTS_TO_HAVE_NEXT_NEWLINE, \true)) {
             return null;
         }
