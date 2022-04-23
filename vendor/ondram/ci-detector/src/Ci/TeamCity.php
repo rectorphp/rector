@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220422\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220423\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220422\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220422\OndraM\CiDetector\Env;
-use RectorPrefix20220422\OndraM\CiDetector\TrinaryLogic;
-class TeamCity extends \RectorPrefix20220422\OndraM\CiDetector\Ci\AbstractCi
+use RectorPrefix20220423\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220423\OndraM\CiDetector\Env;
+use RectorPrefix20220423\OndraM\CiDetector\TrinaryLogic;
+class TeamCity extends \RectorPrefix20220423\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220422\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(\RectorPrefix20220423\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('TEAMCITY_VERSION') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220422\OndraM\CiDetector\CiDetector::CI_TEAMCITY;
+        return \RectorPrefix20220423\OndraM\CiDetector\CiDetector::CI_TEAMCITY;
     }
-    public function isPullRequest() : \RectorPrefix20220422\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220423\OndraM\CiDetector\TrinaryLogic
     {
-        return \RectorPrefix20220422\OndraM\CiDetector\TrinaryLogic::createMaybe();
+        return \RectorPrefix20220423\OndraM\CiDetector\TrinaryLogic::createMaybe();
     }
     public function getBuildNumber() : string
     {

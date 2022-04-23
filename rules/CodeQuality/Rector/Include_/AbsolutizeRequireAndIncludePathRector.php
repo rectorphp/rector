@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Include_;
 
-use RectorPrefix20220422\Nette\Utils\Strings;
+use RectorPrefix20220423\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Include_;
@@ -82,7 +82,7 @@ CODE_SAMPLE
         }
         // add preslash to string
         if (\strncmp($includeValue, './', \strlen('./')) === 0) {
-            $node->expr->value = \RectorPrefix20220422\Nette\Utils\Strings::substring($includeValue, 1);
+            $node->expr->value = \RectorPrefix20220423\Nette\Utils\Strings::substring($includeValue, 1);
         } else {
             $node->expr->value = '/' . $includeValue;
         }
@@ -107,7 +107,7 @@ CODE_SAMPLE
         if (\strncmp($string->value, './', \strlen('./')) !== 0) {
             return;
         }
-        $string->value = \RectorPrefix20220422\Nette\Utils\Strings::replace($string->value, '#^\\.\\/#', '/');
+        $string->value = \RectorPrefix20220423\Nette\Utils\Strings::replace($string->value, '#^\\.\\/#', '/');
     }
     private function prependSlashIfMissing(\PhpParser\Node\Scalar\String_ $string) : void
     {

@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220422\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20220423\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20220422\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220422\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220422\Symfony\Component\DependencyInjection\Reference;
-final class AliasDeprecatedPublicServicesPass extends \RectorPrefix20220422\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+use RectorPrefix20220423\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220423\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220423\Symfony\Component\DependencyInjection\Reference;
+final class AliasDeprecatedPublicServicesPass extends \RectorPrefix20220423\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
      * @var mixed[]
@@ -26,22 +26,22 @@ final class AliasDeprecatedPublicServicesPass extends \RectorPrefix20220422\Symf
      */
     protected function processValue($value, bool $isRoot = \false)
     {
-        if ($value instanceof \RectorPrefix20220422\Symfony\Component\DependencyInjection\Reference && isset($this->aliases[$id = (string) $value])) {
-            return new \RectorPrefix20220422\Symfony\Component\DependencyInjection\Reference($this->aliases[$id], $value->getInvalidBehavior());
+        if ($value instanceof \RectorPrefix20220423\Symfony\Component\DependencyInjection\Reference && isset($this->aliases[$id = (string) $value])) {
+            return new \RectorPrefix20220423\Symfony\Component\DependencyInjection\Reference($this->aliases[$id], $value->getInvalidBehavior());
         }
         return parent::processValue($value, $isRoot);
     }
     /**
      * {@inheritdoc}
      */
-    public function process(\RectorPrefix20220422\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(\RectorPrefix20220423\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         foreach ($container->findTaggedServiceIds('container.private') as $id => $tags) {
             if (null === ($package = $tags[0]['package'] ?? null)) {
-                throw new \RectorPrefix20220422\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "package" attribute is mandatory for the "container.private" tag on the "%s" service.', $id));
+                throw new \RectorPrefix20220423\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "package" attribute is mandatory for the "container.private" tag on the "%s" service.', $id));
             }
             if (null === ($version = $tags[0]['version'] ?? null)) {
-                throw new \RectorPrefix20220422\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "version" attribute is mandatory for the "container.private" tag on the "%s" service.', $id));
+                throw new \RectorPrefix20220423\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "version" attribute is mandatory for the "container.private" tag on the "%s" service.', $id));
             }
             $definition = $container->getDefinition($id);
             if (!$definition->isPublic() || $definition->isPrivate()) {

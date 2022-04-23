@@ -13,7 +13,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220422\TYPO3\CMS\Core\Utility\PhpOptionsUtility;
+use RectorPrefix20220423\TYPO3\CMS\Core\Utility\PhpOptionsUtility;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.3/Deprecation-85102-PhpOptionsUtility.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v3\PhpOptionsUtilityRector\PhpOptionsUtilityRectorTest

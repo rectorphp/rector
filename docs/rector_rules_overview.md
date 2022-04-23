@@ -18,6 +18,8 @@
 
 - [DependencyInjection](#dependencyinjection) (2)
 
+- [DogFood](#dogfood) (1)
+
 - [DowngradePhp53](#downgradephp53) (1)
 
 - [DowngradePhp54](#downgradephp54) (7)
@@ -76,7 +78,7 @@
 
 - [Privatization](#privatization) (10)
 
-- [Removing](#removing) (7)
+- [Removing](#removing) (6)
 
 - [RemovingStatic](#removingstatic) (1)
 
@@ -3748,6 +3750,36 @@ return static function (RectorConfig $rectorConfig): void {
 +        parent::__construct();
      }
  }
+```
+
+<br>
+
+## DogFood
+
+### UpgradeRectorConfigRector
+
+Upgrade rector.php config to use of RectorConfig
+
+- class: [`Rector\DogFood\Rector\Closure\UpgradeRectorConfigRector`](../rules/DogFood/Rector/Closure/UpgradeRectorConfigRector.php)
+
+```diff
+-use Rector\Core\Configuration\Option;
+ use Rector\Php74\Rector\Property\TypedPropertyRector;
+-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
++use Rector\Config\RectorConfig;
+
+-return static function (ContainerConfigurator $containerConfigurator): void {
+-    $parameters = $containerConfigurator->parameters();
+-    $parameters->set(Option::PARALLEL, true);
+-    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
++return static function (RectorConfig $rectorConfig): void {
++    $rectorConfig->parallel();
++    $rectorConfig->importNames();
+
+-    $services = $containerConfigurator->services();
+-    $services->set(TypedPropertyRector::class);
++    $rectorConfig->rule(TypedPropertyRector::class);
+ };
 ```
 
 <br>
@@ -9069,34 +9101,6 @@ return static function (RectorConfig $rectorConfig): void {
 ```diff
 -class SomeClass implements SomeInterface
 +class SomeClass
- {
- }
-```
-
-<br>
-
-### RemoveNamespaceRector
-
-Remove namespace by configured namespace names
-
-:wrench: **configure it!**
-
-- class: [`Rector\Removing\Rector\Namespace_\RemoveNamespaceRector`](../rules/Removing/Rector/Namespace_/RemoveNamespaceRector.php)
-
-```php
-use Rector\Config\RectorConfig;
-use Rector\Removing\Rector\Namespace_\RemoveNamespaceRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveNamespaceRector::class, ['App']);
-};
-```
-
-↓
-
-```diff
--namespace App;
- class SomeClass
  {
  }
 ```

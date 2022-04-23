@@ -10,19 +10,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use RectorPrefix20220422\Symfony\Polyfill\Intl\Normalizer as p;
+use RectorPrefix20220423\Symfony\Polyfill\Intl\Normalizer as p;
 if (\PHP_VERSION_ID >= 80000) {
     return require __DIR__ . '/bootstrap80.php';
 }
 if (!\function_exists('normalizer_is_normalized')) {
-    function normalizer_is_normalized($string, $form = \RectorPrefix20220422\Symfony\Polyfill\Intl\Normalizer\Normalizer::FORM_C)
+    function normalizer_is_normalized($string, $form = \RectorPrefix20220423\Symfony\Polyfill\Intl\Normalizer\Normalizer::FORM_C)
     {
-        return \RectorPrefix20220422\Symfony\Polyfill\Intl\Normalizer\Normalizer::isNormalized($string, $form);
+        return \RectorPrefix20220423\Symfony\Polyfill\Intl\Normalizer\Normalizer::isNormalized($string, $form);
     }
 }
 if (!\function_exists('normalizer_normalize')) {
-    function normalizer_normalize($string, $form = \RectorPrefix20220422\Symfony\Polyfill\Intl\Normalizer\Normalizer::FORM_C)
+    function normalizer_normalize($string, $form = \RectorPrefix20220423\Symfony\Polyfill\Intl\Normalizer\Normalizer::FORM_C)
     {
-        return \RectorPrefix20220422\Symfony\Polyfill\Intl\Normalizer\Normalizer::normalize($string, $form);
+        return \RectorPrefix20220423\Symfony\Polyfill\Intl\Normalizer\Normalizer::normalize($string, $form);
     }
 }
