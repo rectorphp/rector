@@ -11,19 +11,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class StatementNodeVisitor extends NodeVisitorAbstract
 {
-    private ?Stmt $previousStmt = null;
-
-    /**
-     * @param Node[] $nodes
-     * @return Node[]|null
-     */
-    public function beforeTraverse(array $nodes): ?array
-    {
-        $this->previousStmt = null;
-
-        return null;
-    }
-
     public function enterNode(Node $node): ?Node
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -32,35 +19,29 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
                 return null;
             }
 
-            $node->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $this->previousStmt);
             $node->setAttribute(AttributeKey::CURRENT_STATEMENT, $node);
-            $this->previousStmt = $node;
         }
 
         if (property_exists($node, 'stmts')) {
-            $previous = $node;
             foreach ((array) $node->stmts as $stmt) {
                 /** @var Stmt $stmt */
-                $stmt->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $previous);
                 $stmt->setAttribute(AttributeKey::CURRENT_STATEMENT, $stmt);
-                $previous = $stmt;
             }
         }
 
         $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-
-        if ($parent instanceof Node && ! $currentStmt instanceof Node) {
-            $node->setAttribute(
-                AttributeKey::PREVIOUS_STATEMENT,
-                $parent->getAttribute(AttributeKey::PREVIOUS_STATEMENT)
-            );
-
-            $node->setAttribute(
-                AttributeKey::CURRENT_STATEMENT,
-                $parent->getAttribute(AttributeKey::CURRENT_STATEMENT)
-            );
+        if (! $parent instanceof Node) {
+            return null;
         }
 
+        if ($currentStmt instanceof Node) {
+            return null;
+        }
+
+        $node->setAttribute(
+            AttributeKey::CURRENT_STATEMENT,
+            $parent->getAttribute(AttributeKey::CURRENT_STATEMENT)
+        );
         return null;
     }
 }

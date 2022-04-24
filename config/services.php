@@ -157,8 +157,8 @@ return static function (RectorConfig $rectorConfig): void {
     $services->set(DynamicSourceLocatorProvider::class)
         ->factory([service(PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
 
+    $services->set(EditorConfig::class);
+
     $services->set(Printer::class);
     $services->alias(PrinterInterface::class, Printer::class);
-
-    $services->set(EditorConfig::class);
 };
