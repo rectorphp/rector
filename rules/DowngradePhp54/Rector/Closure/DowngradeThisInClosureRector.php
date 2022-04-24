@@ -15,10 +15,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -30,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeThisInClosureRector extends AbstractRector
 {
     public function __construct(
-        private readonly VariableNaming $variableNaming,
+        private readonly NamedVariableFactory $namedVariableFactory,
         private readonly ReflectionResolver $reflectionResolver
     ) {
     }
@@ -101,12 +100,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        $selfVariable = new Variable($this->variableNaming->createCountedValueName('self', $scope));
+        $selfVariable = $this->namedVariableFactory->createVariable($node, 'self');
+
         $expression = new Expression(new Assign($selfVariable, new Variable('this')));
 
-        $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
 
         $this->traverseNodesWithCallable($node, function (Node $subNode) use ($selfVariable): ?Closure {
             if (! $subNode instanceof Closure) {

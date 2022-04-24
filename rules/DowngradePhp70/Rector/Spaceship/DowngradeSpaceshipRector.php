@@ -18,11 +18,9 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -33,7 +31,7 @@ final class DowngradeSpaceshipRector extends AbstractRector
 {
     public function __construct(
         private readonly IfManipulator $ifManipulator,
-        private readonly VariableNaming $variableNaming
+        private readonly NamedVariableFactory $namedVariableFactory,
     ) {
     }
 
@@ -94,19 +92,12 @@ CODE_SAMPLE
         $ternary = new Ternary($smaller, $ternaryIf, $ternaryElse);
         $anonymousFunction->stmts[1] = new Return_($ternary);
 
-        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (! $currentStatement instanceof Node) {
-            throw new ShouldNotHappenException();
-        }
+        $assignVariable = $this->namedVariableFactory->createVariable($node, 'battleShipcompare');
 
-        $scope = $currentStatement->getAttribute(AttributeKey::SCOPE);
+        $assignExpression = $this->getAssignExpression($anonymousFunction, $assignVariable);
+        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node);
 
-        $variableAssignName = $this->variableNaming->createCountedValueName('battleShipcompare', $scope);
-        $variableAssign = new Variable($variableAssignName);
-        $assignExpression = $this->getAssignExpression($anonymousFunction, $variableAssign);
-        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $currentStatement);
-
-        return new FuncCall($variableAssign, [new Arg($node->left), new Arg($node->right)]);
+        return new FuncCall($assignVariable, [new Arg($node->left), new Arg($node->right)]);
     }
 
     private function getAssignExpression(Closure $closure, Variable $variable): Expression

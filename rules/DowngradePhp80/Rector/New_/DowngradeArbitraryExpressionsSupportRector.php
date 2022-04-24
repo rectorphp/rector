@@ -15,9 +15,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeArbitraryExpressionsSupportRector extends AbstractRector
 {
     public function __construct(
-        private readonly VariableNaming $variableNaming
+        private readonly NamedVariableFactory $namedVariableFactory,
     ) {
     }
 
@@ -93,13 +92,7 @@ CODE_SAMPLE
             $assign = $node->class;
             $variable = $assign->var;
         } else {
-            $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-            if (! $currentStmt instanceof Node) {
-                throw new ShouldNotHappenException();
-            }
-
-            $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
-            $variable = new Variable($this->variableNaming->createCountedValueName('className', $scope));
+            $variable = $this->namedVariableFactory->createVariable($node, 'className');
             $assign = new Assign($variable, $node->class);
         }
 

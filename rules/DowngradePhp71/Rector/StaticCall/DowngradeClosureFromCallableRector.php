@@ -11,12 +11,10 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -28,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeClosureFromCallableRector extends AbstractRector
 {
     public function __construct(
-        private readonly VariableNaming $variableNaming
+        private readonly NamedVariableFactory $namedVariableFactory,
     ) {
     }
 
@@ -78,17 +76,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $tempVariableName = $this->variableNaming->createCountedValueName(
-            'callable',
-            $node->getAttribute(AttributeKey::SCOPE)
-        );
-
-        $tempVariable = new Variable($tempVariableName);
-
+        $tempVariable = $this->namedVariableFactory->createVariable($node, 'callable');
         $expression = new Expression(new Assign($tempVariable, $node->args[0]->value));
 
-        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
 
         $closure = new Closure();
         $closure->uses[] = new ClosureUse($tempVariable);

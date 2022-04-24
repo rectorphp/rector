@@ -17,7 +17,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -123,15 +122,10 @@ CODE_SAMPLE
     /**
      * @param string[] $classConstFetchNames
      */
-    private function processClassConstFetches(MethodCall $methodCall, array $classConstFetchNames): ?Variable
+    private function processClassConstFetches(MethodCall $methodCall, array $classConstFetchNames): Variable
     {
         $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
         $reflectionClassConstants = $this->variableNaming->createCountedValueName('reflectionClassConstants', $scope);
-
-        $currentStmt = $methodCall->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (! $currentStmt instanceof Stmt) {
-            return null;
-        }
 
         $variableReflectionClassConstants = new Variable($this->variableNaming->createCountedValueName(
             $reflectionClassConstants,
@@ -141,12 +135,12 @@ CODE_SAMPLE
             $variableReflectionClassConstants,
             new MethodCall($methodCall->var, 'getReflectionConstants')
         );
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $methodCall);
 
         $result = $this->variableNaming->createCountedValueName('result', $scope);
         $variableResult = new Variable($result);
         $assignVariableResult = new Assign($variableResult, new Array_());
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assignVariableResult), $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assignVariableResult), $methodCall);
 
         $ifs = [];
         $valueVariable = new Variable('value');
@@ -174,7 +168,7 @@ CODE_SAMPLE
             'array_walk',
             [$variableReflectionClassConstants, $closure]
         );
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($funcCall), $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($funcCall), $methodCall);
 
         return $variableResult;
     }

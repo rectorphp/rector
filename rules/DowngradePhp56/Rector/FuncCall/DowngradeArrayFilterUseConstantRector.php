@@ -106,17 +106,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $currentStatement = $funcCall->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (! $currentStatement instanceof Stmt) {
-            return null;
-        }
-
         $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
         $variable = new Variable($this->variableNaming->createCountedValueName('result', $scope));
 
         $this->nodesToAddCollector->addNodeBeforeNode(
             new Expression(new Assign($variable, new Array_([]))),
-            $currentStatement
+            $funcCall
         );
 
         /** @var ConstFetch $constant */
@@ -125,7 +120,7 @@ CODE_SAMPLE
             ? $this->applyArrayFilterUseKey($args, $closure, $variable)
             : $this->applyArrayFilterUseBoth($args, $closure, $variable);
 
-        $this->nodesToAddCollector->addNodeBeforeNode($foreach, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($foreach, $funcCall);
 
         return $variable;
     }

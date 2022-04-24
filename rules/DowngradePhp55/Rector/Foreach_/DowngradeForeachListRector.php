@@ -7,25 +7,22 @@ namespace Rector\DowngradePhp55\Rector\Foreach_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @changelog https://wiki.php.net/rfc/foreachlist
  *
- * @see Rector\Tests\DowngradePhp55\Rector\Foreach_\DowngradeForeachListRector\DowngradeForeachListRectorTest
+ * @see \Rector\Tests\DowngradePhp55\Rector\Foreach_\DowngradeForeachListRector\DowngradeForeachListRectorTest
  */
 final class DowngradeForeachListRector extends AbstractRector
 {
     public function __construct(
-        private readonly VariableNaming $variableNaming
+        private readonly NamedVariableFactory $namedVariableFactory
     ) {
     }
 
@@ -69,23 +66,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $variable = $this->createVariable($node);
+        $variable = $this->namedVariableFactory->createVariable($node, 'arrayItem');
+
         $expression = new Expression(new Assign($node->valueVar, $variable));
         $node->valueVar = $variable;
         $node->stmts = array_merge([$expression], $node->stmts);
 
         return $node;
-    }
-
-    private function createVariable(Foreach_ $foreach): Variable
-    {
-        $currentStmt = $foreach->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (! $currentStmt instanceof Node) {
-            throw new ShouldNotHappenException();
-        }
-
-        $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
-
-        return new Variable($this->variableNaming->createCountedValueName('arrayItem', $scope));
     }
 }

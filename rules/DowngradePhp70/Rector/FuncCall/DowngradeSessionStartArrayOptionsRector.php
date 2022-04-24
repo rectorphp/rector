@@ -13,7 +13,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -60,8 +59,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-
         if (! isset($node->args[0])) {
             return null;
         }
@@ -90,7 +87,7 @@ CODE_SAMPLE
             $funcName = new Name('ini_set');
             $iniSet = new FuncCall($funcName, [new Arg($sessionKey), new Arg($option->value)]);
 
-            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($iniSet), $currentStatement);
+            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($iniSet), $node);
         }
 
         unset($node->args[0]);

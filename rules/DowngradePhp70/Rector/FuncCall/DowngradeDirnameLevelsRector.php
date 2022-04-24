@@ -20,10 +20,8 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\While_;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -40,7 +38,7 @@ final class DowngradeDirnameLevelsRector extends AbstractRector
     private const DIRNAME = 'dirname';
 
     public function __construct(
-        private readonly VariableNaming $variableNaming
+        private readonly NamedVariableFactory $namedVariableFactory,
     ) {
     }
 
@@ -128,14 +126,7 @@ CODE_SAMPLE
 
     private function refactorForVariableLevels(FuncCall $funcCall): FuncCall
     {
-        $currentStmt = $funcCall->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (! $currentStmt instanceof Node) {
-            throw new ShouldNotHappenException();
-        }
-
-        $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
-
-        $funcVariable = new Variable($this->variableNaming->createCountedValueName('dirnameFunc', $scope));
+        $funcVariable = $this->namedVariableFactory->createVariable($funcCall, 'dirnameFunc');
 
         $closure = $this->createClosure();
         $exprAssignClosure = $this->createExprAssign($funcVariable, $closure);

@@ -11,10 +11,8 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeCollector\BinaryOpConditionsCollector;
 use Rector\NodeCollector\BinaryOpTreeRootLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -29,9 +27,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeInstanceofThrowableRector extends AbstractRector
 {
     public function __construct(
-        private readonly VariableNaming $variableNaming,
         private readonly BinaryOpConditionsCollector $binaryOpConditionsCollector,
         private readonly BinaryOpTreeRootLocator $binaryOpTreeRootLocator,
+        private readonly NamedVariableFactory $namedVariableFactory,
     ) {
     }
 
@@ -77,23 +75,12 @@ CODE_SAMPLE
 
         // Store the value into a temporary variable to prevent running possible side-effects twice
         // when the expression is e.g. function.
-        $variable = $this->createVariable($node);
+        $variable = $this->namedVariableFactory->createVariable($node, 'throwable');
+
         $instanceof = new Instanceof_(new Assign($variable, $node->expr), $node->class);
         $exceptionFallbackCheck = $this->createFallbackCheck($variable);
 
         return new BooleanOr($instanceof, $exceptionFallbackCheck);
-    }
-
-    private function createVariable(Instanceof_ $instanceof): Variable
-    {
-        $currentStmt = $instanceof->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (! $currentStmt instanceof Stmt) {
-            throw new ShouldNotHappenException();
-        }
-
-        $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
-
-        return new Variable($this->variableNaming->createCountedValueName('throwable', $scope));
     }
 
     /**

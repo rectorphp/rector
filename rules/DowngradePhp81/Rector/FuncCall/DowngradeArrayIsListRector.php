@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
@@ -82,18 +81,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (! $currentStmt instanceof Stmt) {
-            return null;
-        }
-
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         $variable = new Variable($this->variableNaming->createCountedValueName('arrayIsList', $scope));
 
         $function = $this->createClosure();
         $expression = new Expression(new Assign($variable, $function));
 
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
 
         return new FuncCall($variable, $node->args);
     }

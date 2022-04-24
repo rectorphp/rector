@@ -215,8 +215,7 @@ CODE_SAMPLE
 
     private function processInAssign(Assign $assign, FuncCall $funcCall, FuncCall $replaceEmptyStringToNull): FuncCall
     {
-        $currentStatement = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $this->nodesToAddCollector->addNodeAfterNode(new Expression($replaceEmptyStringToNull), $currentStatement);
+        $this->nodesToAddCollector->addNodeAfterNode(new Expression($replaceEmptyStringToNull), $assign);
 
         return $funcCall;
     }
