@@ -84,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
         $checkRequirementsClassMethod = $node->getMethod('checkRequirements');
-        if ($checkRequirementsClassMethod === null) {
+        if (!$checkRequirementsClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $checkRequirementsClassMethod = $this->checkRequirementsClassMethodFactory->create((array) $getUserClassMethod->stmts);
             $this->classInsertManipulator->addAsFirstMethod($node, $checkRequirementsClassMethod);
         } else {

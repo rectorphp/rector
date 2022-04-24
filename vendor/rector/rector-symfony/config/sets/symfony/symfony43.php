@@ -12,11 +12,11 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
-use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
+use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
-    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector::class);
     $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
         new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\BrowserKit\\Response', 'getStatus', 'getStatusCode'),
         new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Security\\Http\\Firewall', 'handleRequest', 'callListeners'),

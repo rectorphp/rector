@@ -10,6 +10,6 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $services = $rectorConfig->services();
     $services->defaults()->public()->autowire()->autoconfigure();
     $services->load('Rector\\Symfony\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/{Rector,ValueObject}']);
-    $services->set(\Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector::class);
+    $rectorConfig->rule(\Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector::class);
     $services->set(\RectorPrefix20220424\Symplify\SmartFileSystem\SmartFileSystem::class);
 };

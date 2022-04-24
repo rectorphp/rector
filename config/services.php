@@ -96,7 +96,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $services->set(\PHPStan\Analyser\ScopeFactory::class)->factory([\RectorPrefix20220424\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createScopeFactory']);
     $services->set(\PHPStan\PhpDoc\TypeNodeResolver::class)->factory([\RectorPrefix20220424\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createTypeNodeResolver']);
     $services->set(\Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider::class)->factory([\RectorPrefix20220424\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
+    $services->set(\RectorPrefix20220424\Idiosyncratic\EditorConfig\EditorConfig::class);
     $services->set(\RectorPrefix20220424\Ergebnis\Json\Printer\Printer::class);
     $services->alias(\RectorPrefix20220424\Ergebnis\Json\Printer\PrinterInterface::class, \RectorPrefix20220424\Ergebnis\Json\Printer\Printer::class);
-    $services->set(\RectorPrefix20220424\Idiosyncratic\EditorConfig\EditorConfig::class);
 };

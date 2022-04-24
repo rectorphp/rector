@@ -1,4 +1,4 @@
-# 60 Rules Overview
+# 62 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -144,17 +144,11 @@ Change XML loader to YAML in Bundle Extension
 - class: [`Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector`](../src/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector.php)
 
 ```php
+use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ChangeFileLoaderInExtensionAndKernelRector::class)
-        ->configure([
-            ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml',
-            ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml',
-        ]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ChangeFileLoaderInExtensionAndKernelRector::class, [Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector::FROM: 'xml', Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector::TO: 'yaml']);
 };
 ```
 
@@ -870,13 +864,15 @@ Complete strict param type declaration based on route annotation
 
 ## ParseFileRector
 
-session > use_strict_mode is true by default and can be removed
+Replaces deprecated `Yaml::parse()` of file argument with file contents
 
 - class: [`Rector\Symfony\Rector\StaticCall\ParseFileRector`](../src/Rector/StaticCall/ParseFileRector.php)
 
 ```diff
--session > use_strict_mode: true
-+session:
+ use Symfony\Component\Yaml\Yaml;
+
+-$parsedFile = Yaml::parse('someFile.yml');
++$parsedFile = Yaml::parse(file_get_contents('someFile.yml'));
 ```
 
 <br>
@@ -1106,15 +1102,15 @@ Replace defined `service()` argument in Symfony PHP config
 
 ```php
 use PhpParser\Node\Scalar\String_;
+use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ReplaceServiceArgumentRector::class)
-        ->configure([new ReplaceServiceArgument('ContainerInterface', new String_('service_container', []))]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(
+        ReplaceServiceArgumentRector::class,
+        [new ReplaceServiceArgument('ContainerInterface', new String_('service_container', []))]
+    );
 };
 ```
 
@@ -1255,43 +1251,9 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
 
 <br>
 
-## SimplifyWebTestCaseAssertionsRector
-
-Simplify use of assertions in WebTestCase
-
-- class: [`Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector`](../src/Rector/MethodCall/SimplifyWebTestCaseAssertionsRector.php)
-
-```diff
- use PHPUnit\Framework\TestCase;
-
- class SomeClass extends TestCase
- {
-     public function test()
-     {
--        $this->assertSame(200, $client->getResponse()->getStatusCode());
-+         $this->assertResponseIsSuccessful();
-     }
-
-     public function testUrl()
-     {
--        $this->assertSame(301, $client->getResponse()->getStatusCode());
--        $this->assertSame('https://example.com', $client->getResponse()->headers->get('Location'));
-+        $this->assertResponseRedirects('https://example.com', 301);
-     }
-
-     public function testContains()
-     {
--        $this->assertContains('Hello World', $crawler->filter('h1')->text());
-+        $this->assertSelectorTextContains('h1', 'Hello World');
-     }
- }
-```
-
-<br>
-
 ## StringFormTypeToClassRector
 
-Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"
+Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$rectorConfig->symfonyContainerXml(...)"
 
 - class: [`Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector`](../src/Rector/MethodCall/StringFormTypeToClassRector.php)
 
@@ -1406,6 +1368,75 @@ Adds a new `$filter` argument in `VarDumperTestTrait->assertDumpEquals()` and `V
 ```diff
 -$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $message = "");
 +$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $filter = 0, $message = "");
+```
+
+<br>
+
+## WebTestCaseAssertIsSuccessfulRector
+
+Simplify use of assertions in WebTestCase
+
+- class: [`Rector\Symfony\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector`](../src/Rector/MethodCall/WebTestCaseAssertIsSuccessfulRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ class SomeClass extends TestCase
+ {
+     public function test()
+     {
+-        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
++         $this->assertResponseIsSuccessful();
+     }
+ }
+```
+
+<br>
+
+## WebTestCaseAssertResponseCodeRector
+
+Simplify use of assertions in WebTestCase
+
+- class: [`Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector`](../src/Rector/MethodCall/WebTestCaseAssertResponseCodeRector.php)
+
+```diff
+ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+ final class SomeClass extends WebTestCase
+ {
+     public function test()
+     {
+-        $response = self::getClient()->getResponse();
+-
+-        $this->assertSame(301, $response->getStatusCode());
+-        $this->assertSame('https://example.com', $response->headers->get('Location'));
++        $this->assertResponseStatusCodeSame(301);
++        $this->assertResponseRedirects('https://example.com');
+     }
+ }
+```
+
+<br>
+
+## WebTestCaseAssertSelectorTextContainsRector
+
+Simplify use of assertions in WebTestCase to `assertSelectorTextContains()`
+
+- class: [`Rector\Symfony\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector`](../src/Rector/MethodCall/WebTestCaseAssertSelectorTextContainsRector.php)
+
+```diff
+ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+ use Symfony\Component\DomCrawler\Crawler;
+
+ final class SomeTest extends WebTestCase
+ {
+     public function testContains()
+     {
+         $crawler = new Symfony\Component\DomCrawler\Crawler();
+-        $this->assertContains('Hello World', $crawler->filter('h1')->text());
++        $this->assertSelectorTextContains('h1', 'Hello World');
+     }
+ }
 ```
 
 <br>
