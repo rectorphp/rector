@@ -36,6 +36,10 @@ final class MatchSwitchAnalyzer
             return true;
         }
 
+        if ($this->switchAnalyzer->hasDifferentTypeCases($switch->cases)) {
+            return true;
+        }
+
         if (! $this->switchAnalyzer->hasEachCaseSingleStmt($switch)) {
             return false;
         }
