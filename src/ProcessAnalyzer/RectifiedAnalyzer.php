@@ -45,8 +45,8 @@ final class RectifiedAnalyzer
         if ($node instanceof \PhpParser\Node\Stmt) {
             return \true;
         }
-        $stmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if ($stmt instanceof \PhpParser\Node\Stmt) {
+        $originalNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+        if ($originalNode instanceof \PhpParser\Node) {
             return \true;
         }
         $startTokenPos = $node->getStartTokenPos();
