@@ -135,7 +135,7 @@ CODE_SAMPLE
 
     private function isOverrideAbstractMethod(ClassMethod $classMethod): bool
     {
-        $classReflection = $this->reflectionResolver->resolveClassReflectionFromClassMethod($classMethod);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
         return $classReflection instanceof ClassReflection && $this->classChildAnalyzer->hasAbstractParentClassMethod(
