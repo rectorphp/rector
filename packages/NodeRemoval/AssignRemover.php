@@ -4,8 +4,10 @@ declare (strict_types=1);
 namespace Rector\NodeRemoval;
 
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToReplaceCollector;
@@ -31,16 +33,25 @@ final class AssignRemover
      * @var \Rector\DeadCode\NodeManipulator\LivingCodeManipulator
      */
     private $livingCodeManipulator;
-    public function __construct(\Rector\PostRector\Collector\NodesToReplaceCollector $nodesToReplaceCollector, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\DeadCode\NodeManipulator\LivingCodeManipulator $livingCodeManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\PostRector\Collector\NodesToReplaceCollector $nodesToReplaceCollector, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\DeadCode\NodeManipulator\LivingCodeManipulator $livingCodeManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodesToReplaceCollector = $nodesToReplaceCollector;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->nodeRemover = $nodeRemover;
         $this->livingCodeManipulator = $livingCodeManipulator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function removeAssignNode(\PhpParser\Node\Expr\Assign $assign) : void
     {
-        $currentStatement = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $currentStatement = $this->betterNodeFinder->resolveCurrentStatement($assign);
+        if (!$currentStatement instanceof \PhpParser\Node\Stmt) {
+            return;
+        }
         $this->livingCodeManipulator->addLivingCodeBeforeNode($assign->var, $currentStatement);
         /** @var Assign $assign */
         $parent = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);

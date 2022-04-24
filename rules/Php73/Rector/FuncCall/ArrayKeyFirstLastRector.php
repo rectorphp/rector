@@ -116,7 +116,7 @@ CODE_SAMPLE
     }
     private function getNextExpression(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node
     {
-        $currentExpression = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $currentExpression = $this->betterNodeFinder->resolveCurrentStatement($funcCall);
         if (!$currentExpression instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }

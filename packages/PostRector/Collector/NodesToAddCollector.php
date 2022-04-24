@@ -123,7 +123,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         if ($node instanceof \PhpParser\Node\Stmt) {
             return \spl_object_hash($node);
         }
-        $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
         if ($currentStmt instanceof \PhpParser\Node\Stmt) {
             return \spl_object_hash($currentStmt);
         }

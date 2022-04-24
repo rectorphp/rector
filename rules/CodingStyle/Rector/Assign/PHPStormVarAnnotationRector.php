@@ -60,7 +60,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $expression = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $expression = $this->betterNodeFinder->resolveCurrentStatement($node);
         // unable to analyze
         if (!$expression instanceof \PhpParser\Node\Stmt\Expression) {
             return null;

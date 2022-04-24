@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
@@ -115,6 +116,10 @@ CODE_SAMPLE
         if (!$assignScope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
+        $currentStatement = $this->betterNodeFinder->resolveCurrentStatement($funcCall);
+        if (!$currentStatement instanceof \PhpParser\Node\Stmt) {
+            return null;
+        }
         $isCompactOfUndefinedVariables = $this->arrayItemsAnalyzer->hasArrayExclusiveDefinedVariableNames($array, $assignScope);
         if ($isCompactOfUndefinedVariables) {
             $funcCallScope = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
@@ -133,7 +138,6 @@ CODE_SAMPLE
         $firstArg = $funcCall->args[0];
         $assignVariable = $firstArg->value;
         $preAssign = new \PhpParser\Node\Expr\Assign($assignVariable, $array);
-        $currentStatement = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
         $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStatement);
         return $expr;
     }

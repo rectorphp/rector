@@ -117,7 +117,7 @@ final class VariableRenamer
      */
     private function resolvePhpDocInfo(\PhpParser\Node\Expr\Variable $variable) : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
-        $expression = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $expression = $this->betterNodeFinder->resolveCurrentStatement($variable);
         if ($expression instanceof \PhpParser\Node) {
             return $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);
         }

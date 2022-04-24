@@ -17,11 +17,11 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
@@ -108,9 +108,11 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
                 continue;
             }
             $replacements = $this->getReplacementsFor($argument, $currentScope, $scopeNode);
-            $current = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-            $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-            $this->nodesToAddCollector->addNodeBeforeNode($replacements->getAssign(), $current instanceof \PhpParser\Node\Stmt\Return_ ? $current : $currentStatement);
+            $currentStatement = $this->betterNodeFinder->resolveCurrentStatement($node);
+            if (!$currentStatement instanceof \PhpParser\Node\Stmt) {
+                continue;
+            }
+            $this->nodesToAddCollector->addNodeBeforeNode($replacements->getAssign(), $currentStatement);
             $node->args[$key]->value = $replacements->getVariable();
             // add variable name to scope, so we prevent duplication of new variable of the same name
             $currentScope = $currentScope->assignExpression($replacements->getVariable(), $currentScope->getType($replacements->getVariable()));

@@ -57,7 +57,7 @@ CODE_SAMPLE
         }
         $resultVariable = new \PhpParser\Node\Expr\Variable('result');
         $node->args[1] = new \PhpParser\Node\Arg($resultVariable);
-        $expression = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $expression = $this->betterNodeFinder->resolveCurrentStatement($node);
         if (!$expression instanceof \PhpParser\Node\Stmt) {
             return null;
         }
