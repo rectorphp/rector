@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -366,7 +367,10 @@ final class BetterNodeFinder
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
         if ($next instanceof Node) {
             if ($next instanceof Return_ && $next->expr === null) {
-                return null;
+                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+                if (! $parent instanceof Case_) {
+                    return null;
+                }
             }
 
             $found = $this->findFirst($next, $filter);
