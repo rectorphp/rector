@@ -13,6 +13,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
@@ -77,7 +78,10 @@ final class ReflectionResolver
         $className = (string) $this->nodeNameResolver->getName($classLike);
         return $this->reflectionProvider->getClass($className);
     }
-    public function resolveClassReflectionFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\ClassReflection
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $classMethod
+     */
+    public function resolveClassReflection($classMethod) : ?\PHPStan\Reflection\ClassReflection
     {
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

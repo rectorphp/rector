@@ -2741,6 +2741,7 @@ return array(
     'Rector\\PostRector\\Rector\\PropertyAddingPostRector' => $baseDir . '/packages/PostRector/Rector/PropertyAddingPostRector.php',
     'Rector\\PostRector\\Rector\\UseAddingPostRector' => $baseDir . '/packages/PostRector/Rector/UseAddingPostRector.php',
     'Rector\\PostRector\\ValueObject\\PropertyMetadata' => $baseDir . '/packages/PostRector/ValueObject/PropertyMetadata.php',
+    'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => $baseDir . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
     'Rector\\Privatization\\Naming\\ConstantNaming' => $baseDir . '/rules/Privatization/Naming/ConstantNaming.php',
     'Rector\\Privatization\\NodeAnalyzer\\PropertyFetchByMethodAnalyzer' => $baseDir . '/rules/Privatization/NodeAnalyzer/PropertyFetchByMethodAnalyzer.php',
     'Rector\\Privatization\\NodeFactory\\ClassConstantFactory' => $baseDir . '/rules/Privatization/NodeFactory/ClassConstantFactory.php',

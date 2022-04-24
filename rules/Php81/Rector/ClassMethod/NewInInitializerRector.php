@@ -130,7 +130,7 @@ CODE_SAMPLE
     }
     private function isOverrideAbstractMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        $classReflection = $this->reflectionResolver->resolveClassReflectionFromClassMethod($classMethod);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         $methodName = $this->nodeNameResolver->getName($classMethod);
         return $classReflection instanceof \PHPStan\Reflection\ClassReflection && $this->classChildAnalyzer->hasAbstractParentClassMethod($classReflection, $methodName);
     }
