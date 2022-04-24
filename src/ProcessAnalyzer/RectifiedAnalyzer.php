@@ -54,8 +54,8 @@ final class RectifiedAnalyzer
             return true;
         }
 
-        $stmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if ($stmt instanceof Stmt) {
+        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if ($originalNode instanceof Node) {
             return true;
         }
 
