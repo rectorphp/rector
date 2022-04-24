@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\RectorGenerator\Generator;
 
-use RectorPrefix20220423\Nette\Utils\Strings;
+use RectorPrefix20220424\Nette\Utils\Strings;
 use Rector\RectorGenerator\FileSystem\TemplateFileSystem;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20220423\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220424\Symplify\SmartFileSystem\SmartFileSystem;
 final class FileGenerator
 {
     /**
@@ -36,7 +36,7 @@ final class FileGenerator
      * @var \Rector\RectorGenerator\FileSystem\TemplateFileSystem
      */
     private $templateFileSystem;
-    public function __construct(\RectorPrefix20220423\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\RectorGenerator\TemplateFactory $templateFactory, \Rector\RectorGenerator\FileSystem\TemplateFileSystem $templateFileSystem)
+    public function __construct(\RectorPrefix20220424\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\RectorGenerator\TemplateFactory $templateFactory, \Rector\RectorGenerator\FileSystem\TemplateFileSystem $templateFileSystem)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->templateFactory = $templateFactory;
@@ -64,8 +64,8 @@ final class FileGenerator
         $content = $this->templateFactory->create($smartFileInfo->getContents(), $templateVariables);
         // replace "Rector\Utils\" with "Utils\Rector\" for 3rd party packages
         if (!$rectorRecipe->isRectorRepository()) {
-            $content = \RectorPrefix20220423\Nette\Utils\Strings::replace($content, self::RECTOR_UTILS_REGEX, 'Utils\\Rector');
-            $content = \RectorPrefix20220423\Nette\Utils\Strings::replace($content, self::RECTOR_UTILS_TESTS_REGEX, 'Utils\\Rector\\Tests');
+            $content = \RectorPrefix20220424\Nette\Utils\Strings::replace($content, self::RECTOR_UTILS_REGEX, 'Utils\\Rector');
+            $content = \RectorPrefix20220424\Nette\Utils\Strings::replace($content, self::RECTOR_UTILS_TESTS_REGEX, 'Utils\\Rector\\Tests');
         }
         $this->smartFileSystem->dumpFile($targetFilePath, $content);
         return $targetFilePath;

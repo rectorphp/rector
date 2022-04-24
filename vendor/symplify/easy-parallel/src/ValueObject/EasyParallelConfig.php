@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220423\Symplify\EasyParallel\ValueObject;
+namespace RectorPrefix20220424\Symplify\EasyParallel\ValueObject;
 
 final class EasyParallelConfig
 {

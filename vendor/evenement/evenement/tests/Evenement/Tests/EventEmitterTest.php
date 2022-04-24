@@ -9,17 +9,17 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220423\Evenement\Tests;
+namespace RectorPrefix20220424\Evenement\Tests;
 
-use RectorPrefix20220423\Evenement\EventEmitter;
+use RectorPrefix20220424\Evenement\EventEmitter;
 use InvalidArgumentException;
-use RectorPrefix20220423\PHPUnit\Framework\TestCase;
-class EventEmitterTest extends \RectorPrefix20220423\PHPUnit\Framework\TestCase
+use RectorPrefix20220424\PHPUnit\Framework\TestCase;
+class EventEmitterTest extends \RectorPrefix20220424\PHPUnit\Framework\TestCase
 {
     private $emitter;
     public function setUp()
     {
-        $this->emitter = new \RectorPrefix20220423\Evenement\EventEmitter();
+        $this->emitter = new \RectorPrefix20220424\Evenement\EventEmitter();
     }
     public function testAddListenerWithLambda()
     {
@@ -28,12 +28,12 @@ class EventEmitterTest extends \RectorPrefix20220423\PHPUnit\Framework\TestCase
     }
     public function testAddListenerWithMethod()
     {
-        $listener = new \RectorPrefix20220423\Evenement\Tests\Listener();
+        $listener = new \RectorPrefix20220424\Evenement\Tests\Listener();
         $this->emitter->on('foo', [$listener, 'onFoo']);
     }
     public function testAddListenerWithStaticMethod()
     {
-        $this->emitter->on('bar', ['RectorPrefix20220423\\Evenement\\Tests\\Listener', 'onBar']);
+        $this->emitter->on('bar', ['RectorPrefix20220424\\Evenement\\Tests\\Listener', 'onBar']);
     }
     public function testAddListenerWithInvalidListener()
     {
@@ -191,14 +191,14 @@ class EventEmitterTest extends \RectorPrefix20220423\PHPUnit\Framework\TestCase
     }
     public function testCallablesClass()
     {
-        $listener = new \RectorPrefix20220423\Evenement\Tests\Listener();
+        $listener = new \RectorPrefix20220424\Evenement\Tests\Listener();
         $this->emitter->on('foo', [$listener, 'onFoo']);
         $this->emitter->emit('foo', ['bar']);
         self::assertSame(['bar'], $listener->getData());
     }
     public function testCallablesClassInvoke()
     {
-        $listener = new \RectorPrefix20220423\Evenement\Tests\Listener();
+        $listener = new \RectorPrefix20220424\Evenement\Tests\Listener();
         $this->emitter->on('foo', $listener);
         $this->emitter->emit('foo', ['bar']);
         self::assertSame(['bar'], $listener->getMagicData());
@@ -207,11 +207,11 @@ class EventEmitterTest extends \RectorPrefix20220423\PHPUnit\Framework\TestCase
     {
         $this->emitter->on('foo', '\\Evenement\\Tests\\Listener::onBar');
         $this->emitter->emit('foo', ['bar']);
-        self::assertSame(['bar'], \RectorPrefix20220423\Evenement\Tests\Listener::getStaticData());
+        self::assertSame(['bar'], \RectorPrefix20220424\Evenement\Tests\Listener::getStaticData());
     }
     public function testCallablesFunction()
     {
-        $this->emitter->on('foo', 'RectorPrefix20220423\\Evenement\\Tests\\setGlobalTestData');
+        $this->emitter->on('foo', 'RectorPrefix20220424\\Evenement\\Tests\\setGlobalTestData');
         $this->emitter->emit('foo', ['bar']);
         self::assertSame('bar', $GLOBALS['evenement-evenement-test-data']);
         unset($GLOBALS['evenement-evenement-test-data']);

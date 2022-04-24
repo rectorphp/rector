@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220423\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220424\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220423\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220423\OndraM\CiDetector\Env;
-use RectorPrefix20220423\OndraM\CiDetector\TrinaryLogic;
-class GitHubActions extends \RectorPrefix20220423\OndraM\CiDetector\Ci\AbstractCi
+use RectorPrefix20220424\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220424\OndraM\CiDetector\Env;
+use RectorPrefix20220424\OndraM\CiDetector\TrinaryLogic;
+class GitHubActions extends \RectorPrefix20220424\OndraM\CiDetector\Ci\AbstractCi
 {
     public const GITHUB_BASE_URL = 'https://github.com';
-    public static function isDetected(\RectorPrefix20220423\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(\RectorPrefix20220424\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('GITHUB_ACTIONS') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220423\OndraM\CiDetector\CiDetector::CI_GITHUB_ACTIONS;
+        return \RectorPrefix20220424\OndraM\CiDetector\CiDetector::CI_GITHUB_ACTIONS;
     }
-    public function isPullRequest() : \RectorPrefix20220423\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220424\OndraM\CiDetector\TrinaryLogic
     {
-        return \RectorPrefix20220423\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('GITHUB_EVENT_NAME') === 'pull_request');
+        return \RectorPrefix20220424\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('GITHUB_EVENT_NAME') === 'pull_request');
     }
     public function getBuildNumber() : string
     {
