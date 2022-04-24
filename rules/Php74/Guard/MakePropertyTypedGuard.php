@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php74\Guard;
 
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
@@ -13,6 +12,7 @@ use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\Guard\ParentPropertyLookupGuard;
 final class MakePropertyTypedGuard
 {
     /**
@@ -35,12 +35,18 @@ final class MakePropertyTypedGuard
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Privatization\Guard\ParentPropertyLookupGuard
+     */
+    private $parentPropertyLookupGuard;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Privatization\Guard\ParentPropertyLookupGuard $parentPropertyLookupGuard)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyAnalyzer = $propertyAnalyzer;
         $this->propertyManipulator = $propertyManipulator;
+        $this->parentPropertyLookupGuard = $parentPropertyLookupGuard;
     }
     public function isLegal(\PhpParser\Node\Stmt\Property $property, bool $inlinePublic = \true) : bool
     {
@@ -86,6 +92,6 @@ final class MakePropertyTypedGuard
         if (!$class->isFinal()) {
             return \false;
         }
-        return !$class->extends instanceof \PhpParser\Node\Name\FullyQualified;
+        return $this->parentPropertyLookupGuard->isLegal($property);
     }
 }
