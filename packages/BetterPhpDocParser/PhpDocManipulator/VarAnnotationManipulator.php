@@ -13,13 +13,14 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
 final class VarAnnotationManipulator
 {
     public function __construct(
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
-        private readonly PhpDocTypeChanger $phpDocTypeChanger
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -54,7 +55,7 @@ final class VarAnnotationManipulator
 
     private function resolvePhpDocInfo(Node $node): PhpDocInfo
     {
-        $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
         if ($currentStmt instanceof Expression) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($currentStmt);
         } else {

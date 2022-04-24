@@ -128,7 +128,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
             return spl_object_hash($node);
         }
 
-        $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
 
         if ($currentStmt instanceof Stmt) {
             return spl_object_hash($currentStmt);

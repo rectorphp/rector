@@ -149,7 +149,7 @@ CODE_SAMPLE
 
     private function getNextExpression(FuncCall $funcCall): ?Node
     {
-        $currentExpression = $funcCall->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $currentExpression = $this->betterNodeFinder->resolveCurrentStatement($funcCall);
         if (! $currentExpression instanceof Expression) {
             return null;
         }

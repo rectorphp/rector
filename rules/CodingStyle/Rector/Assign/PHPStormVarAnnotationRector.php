@@ -74,7 +74,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $expression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $expression = $this->betterNodeFinder->resolveCurrentStatement($node);
 
         // unable to analyze
         if (! $expression instanceof Expression) {

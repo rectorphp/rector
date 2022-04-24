@@ -72,7 +72,7 @@ CODE_SAMPLE
         $resultVariable = new Variable('result');
         $node->args[1] = new Arg($resultVariable);
 
-        $expression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $expression = $this->betterNodeFinder->resolveCurrentStatement($node);
         if (! $expression instanceof Stmt) {
             return null;
         }

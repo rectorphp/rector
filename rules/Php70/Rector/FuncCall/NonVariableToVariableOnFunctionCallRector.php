@@ -18,11 +18,11 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
@@ -102,14 +102,13 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
 
             $replacements = $this->getReplacementsFor($argument, $currentScope, $scopeNode);
 
-            $current = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+            $currentStatement = $this->betterNodeFinder->resolveCurrentStatement($node);
 
-            $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+            if (! $currentStatement instanceof Stmt) {
+                continue;
+            }
 
-            $this->nodesToAddCollector->addNodeBeforeNode(
-                $replacements->getAssign(),
-                $current instanceof Return_ ? $current : $currentStatement
-            );
+            $this->nodesToAddCollector->addNodeBeforeNode($replacements->getAssign(), $currentStatement);
 
             $node->args[$key]->value = $replacements->getVariable();
 
