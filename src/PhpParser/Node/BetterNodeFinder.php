@@ -467,7 +467,7 @@ final class BetterNodeFinder
         }
         return $foundNode;
     }
-    private function resolveCurrentStatement(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt
+    public function resolveCurrentStatement(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt
     {
         if ($node instanceof \PhpParser\Node\Stmt) {
             return $node;

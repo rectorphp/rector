@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit21b63c9ce54f32c028e665f0ead689ff
+class ComposerStaticInit83d461fdbf9b02675b6ca6d968a6226f
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2116,6 +2116,7 @@ class ComposerStaticInit21b63c9ce54f32c028e665f0ead689ff
         'Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap' => __DIR__ . '/../..' . '/src/PhpParser/Node/AssignAndBinaryMap.php',
         'Rector\\Core\\PhpParser\\Node\\BetterNodeFinder' => __DIR__ . '/../..' . '/src/PhpParser/Node/BetterNodeFinder.php',
         'Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace' => __DIR__ . '/../..' . '/src/PhpParser/Node/CustomNode/FileWithoutNamespace.php',
+        'Rector\\Core\\PhpParser\\Node\\NamedVariableFactory' => __DIR__ . '/../..' . '/src/PhpParser/Node/NamedVariableFactory.php',
         'Rector\\Core\\PhpParser\\Node\\NodeFactory' => __DIR__ . '/../..' . '/src/PhpParser/Node/NodeFactory.php',
         'Rector\\Core\\PhpParser\\Node\\Value\\TernaryBracketWrapper' => __DIR__ . '/../..' . '/src/PhpParser/Node/Value/TernaryBracketWrapper.php',
         'Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver' => __DIR__ . '/../..' . '/src/PhpParser/Node/Value/ValueResolver.php',
@@ -3870,9 +3871,9 @@ class ComposerStaticInit21b63c9ce54f32c028e665f0ead689ff
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit21b63c9ce54f32c028e665f0ead689ff::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit21b63c9ce54f32c028e665f0ead689ff::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit21b63c9ce54f32c028e665f0ead689ff::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit83d461fdbf9b02675b6ca6d968a6226f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit83d461fdbf9b02675b6ca6d968a6226f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit83d461fdbf9b02675b6ca6d968a6226f::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -17,11 +17,9 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -36,13 +34,13 @@ final class DowngradeSpaceshipRector extends \Rector\Core\Rector\AbstractRector
     private $ifManipulator;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
+     * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
-    private $variableNaming;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Naming\Naming\VariableNaming $variableNaming)
+    private $namedVariableFactory;
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
     {
         $this->ifManipulator = $ifManipulator;
-        $this->variableNaming = $variableNaming;
+        $this->namedVariableFactory = $namedVariableFactory;
     }
     /**
      * @return array<class-string<Node>>
@@ -85,16 +83,10 @@ CODE_SAMPLE
         $ternaryElse = new \PhpParser\Node\Scalar\LNumber(1);
         $ternary = new \PhpParser\Node\Expr\Ternary($smaller, $ternaryIf, $ternaryElse);
         $anonymousFunction->stmts[1] = new \PhpParser\Node\Stmt\Return_($ternary);
-        $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if (!$currentStatement instanceof \PhpParser\Node) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
-        }
-        $scope = $currentStatement->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        $variableAssignName = $this->variableNaming->createCountedValueName('battleShipcompare', $scope);
-        $variableAssign = new \PhpParser\Node\Expr\Variable($variableAssignName);
-        $assignExpression = $this->getAssignExpression($anonymousFunction, $variableAssign);
-        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $currentStatement);
-        return new \PhpParser\Node\Expr\FuncCall($variableAssign, [new \PhpParser\Node\Arg($node->left), new \PhpParser\Node\Arg($node->right)]);
+        $assignVariable = $this->namedVariableFactory->createVariable($node, 'battleShipcompare');
+        $assignExpression = $this->getAssignExpression($anonymousFunction, $assignVariable);
+        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node);
+        return new \PhpParser\Node\Expr\FuncCall($assignVariable, [new \PhpParser\Node\Arg($node->left), new \PhpParser\Node\Arg($node->right)]);
     }
     private function getAssignExpression(\PhpParser\Node\Expr\Closure $closure, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Stmt\Expression
     {

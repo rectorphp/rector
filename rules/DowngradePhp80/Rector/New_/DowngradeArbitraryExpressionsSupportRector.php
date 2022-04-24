@@ -14,9 +14,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,12 +28,12 @@ final class DowngradeArbitraryExpressionsSupportRector extends \Rector\Core\Rect
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
+     * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
-    private $variableNaming;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
+    private $namedVariableFactory;
+    public function __construct(\Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
     {
-        $this->variableNaming = $variableNaming;
+        $this->namedVariableFactory = $namedVariableFactory;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -85,12 +84,7 @@ CODE_SAMPLE
             $assign = $node->class;
             $variable = $assign->var;
         } else {
-            $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-            if (!$currentStmt instanceof \PhpParser\Node) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
-            }
-            $scope = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-            $variable = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('className', $scope));
+            $variable = $this->namedVariableFactory->createVariable($node, 'className');
             $assign = new \PhpParser\Node\Expr\Assign($variable, $node->class);
         }
         $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);

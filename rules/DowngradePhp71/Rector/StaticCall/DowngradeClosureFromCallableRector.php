@@ -10,12 +10,10 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -27,12 +25,12 @@ final class DowngradeClosureFromCallableRector extends \Rector\Core\Rector\Abstr
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
+     * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
-    private $variableNaming;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
+    private $namedVariableFactory;
+    public function __construct(\Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
     {
-        $this->variableNaming = $variableNaming;
+        $this->namedVariableFactory = $namedVariableFactory;
     }
     /**
      * @return array<class-string<Node>>
@@ -68,11 +66,9 @@ CODE_SAMPLE
         if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
-        $tempVariableName = $this->variableNaming->createCountedValueName('callable', $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));
-        $tempVariable = new \PhpParser\Node\Expr\Variable($tempVariableName);
+        $tempVariable = $this->namedVariableFactory->createVariable($node, 'callable');
         $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($tempVariable, $node->args[0]->value));
-        $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
         $closure = new \PhpParser\Node\Expr\Closure();
         $closure->uses[] = new \PhpParser\Node\Expr\ClosureUse($tempVariable);
         $innerFuncCall = new \PhpParser\Node\Expr\FuncCall($tempVariable, [new \PhpParser\Node\Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);

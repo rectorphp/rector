@@ -12,7 +12,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -48,7 +47,6 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
         if (!isset($node->args[0])) {
             return null;
         }
@@ -70,7 +68,7 @@ CODE_SAMPLE
             $sessionKey = new \PhpParser\Node\Scalar\String_('session.' . $option->key->value);
             $funcName = new \PhpParser\Node\Name('ini_set');
             $iniSet = new \PhpParser\Node\Expr\FuncCall($funcName, [new \PhpParser\Node\Arg($sessionKey), new \PhpParser\Node\Arg($option->value)]);
-            $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($iniSet), $currentStatement);
+            $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($iniSet), $node);
         }
         unset($node->args[0]);
         return $node;

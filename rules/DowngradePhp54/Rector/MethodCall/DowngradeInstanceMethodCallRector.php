@@ -10,12 +10,9 @@ use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,12 +25,12 @@ final class DowngradeInstanceMethodCallRector extends \Rector\Core\Rector\Abstra
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
+     * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
-    private $variableNaming;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
+    private $namedVariableFactory;
+    public function __construct(\Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
     {
-        $this->variableNaming = $variableNaming;
+        $this->namedVariableFactory = $namedVariableFactory;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -61,7 +58,7 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $variable = $this->createVariable($node);
+        $variable = $this->namedVariableFactory->createVariable($node, 'object');
         $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $node->var));
         $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
         $node->var = $variable;
@@ -78,14 +75,5 @@ CODE_SAMPLE
             return \false;
         }
         return !$node->var instanceof \PhpParser\Node\Expr\Clone_;
-    }
-    private function createVariable(\PhpParser\Node $node) : \PhpParser\Node\Expr\Variable
-    {
-        $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
-        }
-        $scope = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        return new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('object', $scope));
     }
 }

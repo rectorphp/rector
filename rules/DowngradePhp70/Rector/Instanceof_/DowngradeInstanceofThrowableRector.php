@@ -10,10 +10,8 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeCollector\BinaryOpConditionsCollector;
 use Rector\NodeCollector\BinaryOpTreeRootLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -28,11 +26,6 @@ final class DowngradeInstanceofThrowableRector extends \Rector\Core\Rector\Abstr
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
-     */
-    private $variableNaming;
-    /**
-     * @readonly
      * @var \Rector\NodeCollector\BinaryOpConditionsCollector
      */
     private $binaryOpConditionsCollector;
@@ -41,11 +34,16 @@ final class DowngradeInstanceofThrowableRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\NodeCollector\BinaryOpTreeRootLocator
      */
     private $binaryOpTreeRootLocator;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\NodeCollector\BinaryOpConditionsCollector $binaryOpConditionsCollector, \Rector\NodeCollector\BinaryOpTreeRootLocator $binaryOpTreeRootLocator)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
+     */
+    private $namedVariableFactory;
+    public function __construct(\Rector\NodeCollector\BinaryOpConditionsCollector $binaryOpConditionsCollector, \Rector\NodeCollector\BinaryOpTreeRootLocator $binaryOpTreeRootLocator, \Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
     {
-        $this->variableNaming = $variableNaming;
         $this->binaryOpConditionsCollector = $binaryOpConditionsCollector;
         $this->binaryOpTreeRootLocator = $binaryOpTreeRootLocator;
+        $this->namedVariableFactory = $namedVariableFactory;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -78,19 +76,10 @@ CODE_SAMPLE
         }
         // Store the value into a temporary variable to prevent running possible side-effects twice
         // when the expression is e.g. function.
-        $variable = $this->createVariable($node);
+        $variable = $this->namedVariableFactory->createVariable($node, 'throwable');
         $instanceof = new \PhpParser\Node\Expr\Instanceof_(new \PhpParser\Node\Expr\Assign($variable, $node->expr), $node->class);
         $exceptionFallbackCheck = $this->createFallbackCheck($variable);
         return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($instanceof, $exceptionFallbackCheck);
-    }
-    private function createVariable(\PhpParser\Node\Expr\Instanceof_ $instanceof) : \PhpParser\Node\Expr\Variable
-    {
-        $currentStmt = $instanceof->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
-        }
-        $scope = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        return new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('throwable', $scope));
     }
     /**
      * Also checks similar manual transformations.

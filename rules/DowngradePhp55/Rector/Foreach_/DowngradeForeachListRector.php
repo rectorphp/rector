@@ -6,30 +6,27 @@ namespace Rector\DowngradePhp55\Rector\Foreach_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/foreachlist
  *
- * @see Rector\Tests\DowngradePhp55\Rector\Foreach_\DowngradeForeachListRector\DowngradeForeachListRectorTest
+ * @see \Rector\Tests\DowngradePhp55\Rector\Foreach_\DowngradeForeachListRector\DowngradeForeachListRectorTest
  */
 final class DowngradeForeachListRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
+     * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
-    private $variableNaming;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
+    private $namedVariableFactory;
+    public function __construct(\Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
     {
-        $this->variableNaming = $variableNaming;
+        $this->namedVariableFactory = $namedVariableFactory;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -61,19 +58,10 @@ CODE_SAMPLE
         if (!$node->valueVar instanceof \PhpParser\Node\Expr\List_) {
             return null;
         }
-        $variable = $this->createVariable($node);
+        $variable = $this->namedVariableFactory->createVariable($node, 'arrayItem');
         $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($node->valueVar, $variable));
         $node->valueVar = $variable;
         $node->stmts = \array_merge([$expression], $node->stmts);
         return $node;
-    }
-    private function createVariable(\PhpParser\Node\Stmt\Foreach_ $foreach) : \PhpParser\Node\Expr\Variable
-    {
-        $currentStmt = $foreach->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if (!$currentStmt instanceof \PhpParser\Node) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
-        }
-        $scope = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        return new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('arrayItem', $scope));
     }
 }

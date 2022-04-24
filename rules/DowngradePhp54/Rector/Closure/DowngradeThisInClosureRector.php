@@ -14,10 +14,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -29,17 +28,17 @@ final class DowngradeThisInClosureRector extends \Rector\Core\Rector\AbstractRec
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
+     * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
-    private $variableNaming;
+    private $namedVariableFactory;
     /**
      * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
-        $this->variableNaming = $variableNaming;
+        $this->namedVariableFactory = $namedVariableFactory;
         $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -95,11 +94,9 @@ CODE_SAMPLE
         if ($propertyFetches === []) {
             return null;
         }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        $selfVariable = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('self', $scope));
+        $selfVariable = $this->namedVariableFactory->createVariable($node, 'self');
         $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($selfVariable, new \PhpParser\Node\Expr\Variable('this')));
-        $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
         $this->traverseNodesWithCallable($node, function (\PhpParser\Node $subNode) use($selfVariable) : ?Closure {
             if (!$subNode instanceof \PhpParser\Node\Expr\Closure) {
                 return null;

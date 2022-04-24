@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
@@ -64,10 +63,6 @@ CODE_SAMPLE
                 return null;
             }
         }
-        $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if (!$currentStatement instanceof \PhpParser\Node\Stmt) {
-            return null;
-        }
         if ($isFoundCloneInAssign) {
             /** @var Assign $assign */
             $assign = $node->var;
@@ -78,7 +73,7 @@ CODE_SAMPLE
             $variable = new \PhpParser\Node\Expr\Variable($newVariableName);
             $assign = new \PhpParser\Node\Expr\Assign($variable, $node->var);
         }
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assign), $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assign), $node);
         $node->var = $variable;
         $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         return $node;

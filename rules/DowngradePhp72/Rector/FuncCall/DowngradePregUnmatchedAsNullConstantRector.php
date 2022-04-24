@@ -185,8 +185,7 @@ CODE_SAMPLE
     }
     private function processInAssign(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\FuncCall $replaceEmptyStringToNull) : \PhpParser\Node\Expr\FuncCall
     {
-        $currentStatement = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Expression($replaceEmptyStringToNull), $currentStatement);
+        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Expression($replaceEmptyStringToNull), $assign);
         return $funcCall;
     }
     private function processInIf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\FuncCall $replaceEmptyStringToNull) : \PhpParser\Node\Expr\FuncCall

@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
@@ -87,15 +86,11 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
-            return null;
-        }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $variable = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('arrayIsList', $scope));
         $function = $this->createClosure();
         $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $function));
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
         return new \PhpParser\Node\Expr\FuncCall($variable, $node->args);
     }
     private function createClosure() : \PhpParser\Node\Expr\Closure
