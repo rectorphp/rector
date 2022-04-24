@@ -26,6 +26,7 @@ final class ExtensionComposerRector implements \Rector\Composer\Contract\Rector\
      */
     private $defaultTypo3VersionConstraint = '';
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;

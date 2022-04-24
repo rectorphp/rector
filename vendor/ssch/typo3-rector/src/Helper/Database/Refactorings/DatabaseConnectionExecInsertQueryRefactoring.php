@@ -12,10 +12,12 @@ use Ssch\TYPO3Rector\Contract\Helper\Database\Refactorings\DatabaseConnectionToD
 final class DatabaseConnectionExecInsertQueryRefactoring implements \Ssch\TYPO3Rector\Contract\Helper\Database\Refactorings\DatabaseConnectionToDbalRefactoring
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Database\Refactorings\ConnectionCallFactory
      */
     private $connectionCallFactory;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

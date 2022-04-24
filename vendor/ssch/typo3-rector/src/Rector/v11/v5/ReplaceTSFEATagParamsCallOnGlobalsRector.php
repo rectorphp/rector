@@ -23,6 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceTSFEATagParamsCallOnGlobalsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -61,19 +62,19 @@ $foo = $GLOBALS['TSFE']->config['config']['ATagParams'] ?? '';
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // Check if we have an assigment to the property, if so do not change it
         if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \true;
         }
-        if (!$this->isName($node->name, 'ATagParams')) {
+        if (!$this->isName($propertyFetch->name, 'ATagParams')) {
             return \true;
         }
-        if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
+        if ($this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
+        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
     }
 }

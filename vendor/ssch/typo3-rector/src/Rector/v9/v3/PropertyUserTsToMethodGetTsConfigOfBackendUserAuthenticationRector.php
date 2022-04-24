@@ -17,6 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PropertyUserTsToMethodGetTsConfigOfBackendUserAuthenticationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -61,11 +62,11 @@ if(is_array($GLOBALS['BE_USER']->getTSConfig()['tx_news.']) && $GLOBALS['BE_USER
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
-        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::BACKEND_USER)) {
+        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::BACKEND_USER)) {
             return \false;
         }
-        return !$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication'));
+        return !$this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication'));
     }
 }

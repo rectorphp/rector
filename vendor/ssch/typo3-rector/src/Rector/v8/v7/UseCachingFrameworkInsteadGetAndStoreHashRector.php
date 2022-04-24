@@ -21,6 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseCachingFrameworkInsteadGetAndStoreHashRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;

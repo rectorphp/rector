@@ -25,6 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseGetMenuInsteadOfGetFirstWebPageRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -85,12 +86,12 @@ if (!empty($rootLevelPages)) {
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Page\\PageRepository'))) {
+        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Page\\PageRepository'))) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'sys_page');
+        return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'sys_page');
     }
     private function addRootLevelPagesAssignment(\PhpParser\Node\Expr\Variable $rootLevelPagesVariable, \PhpParser\Node\Expr\MethodCall $node) : void
     {

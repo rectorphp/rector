@@ -76,16 +76,16 @@ CODE_SAMPLE
         \RectorPrefix20220424\Webmozart\Assert\Assert::allString($classes);
         $this->classes = $classes;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\StaticCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
         if ([] === $this->classes) {
             return \true;
         }
-        if (!$this->isName($node->name, 'getInstance')) {
+        if (!$this->isName($staticCall->name, 'getInstance')) {
             return \true;
         }
         foreach ($this->classes as $class) {
-            if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType($class))) {
+            if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new \PHPStan\Type\ObjectType($class))) {
                 return \false;
             }
         }

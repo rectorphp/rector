@@ -19,10 +19,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveLanguageModeMethodsFromTypo3QuerySettingsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer
      */
     private $sameClassMethodCallAnalyzer;
@@ -68,14 +70,14 @@ $querySettings->setLanguageUid(0);
 CODE_SAMPLE
 )]);
     }
-    private function removeMethodCall(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function removeMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         try {
             // If it is the only method call, we can safely delete the node here.
-            $this->removeNode($node);
-            return $node;
+            $this->removeNode($methodCall);
+            return $methodCall;
         } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
-            $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($node);
+            $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
             if (!$this->sameClassMethodCallAnalyzer->haveSingleClass($chainMethodCalls)) {
                 return null;
             }
@@ -83,9 +85,9 @@ CODE_SAMPLE
                 if ($this->isNames($chainMethodCall->name, ['setLanguageMode', 'getLanguageMode'])) {
                     continue;
                 }
-                $node->var = new \PhpParser\Node\Expr\MethodCall($chainMethodCall->var, $chainMethodCall->name, $chainMethodCall->args);
+                $methodCall->var = new \PhpParser\Node\Expr\MethodCall($chainMethodCall->var, $chainMethodCall->name, $chainMethodCall->args);
             }
-            return $node->var;
+            return $methodCall->var;
         }
     }
 }

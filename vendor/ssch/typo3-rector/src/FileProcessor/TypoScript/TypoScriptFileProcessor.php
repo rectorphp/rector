@@ -48,43 +48,53 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      */
     private $fileDiffs = [];
     /**
+     * @readonly
      * @var \Helmich\TypoScriptParser\Parser\ParserInterface
      */
     private $typoscriptParser;
     /**
+     * @readonly
      * @var \Symfony\Component\Console\Output\BufferedOutput
      */
     private $output;
     /**
+     * @readonly
      * @var \Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface
      */
     private $typoscriptPrinter;
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
+     * @readonly
      * @var \Rector\FileFormatter\EditorConfig\EditorConfigParser
      */
     private $editorConfigParser;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
     /**
+     * @readonly
      * @var \Rector\Core\Console\Output\RectorOutputStyle
      */
     private $rectorOutputStyle;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
     private $fileDiffFactory;
     /**
      * @var TypoScriptRectorInterface[]
+     * @readonly
      */
     private $typoScriptRectors = [];
     /**
      * @var TypoScriptPostRectorInterface[]
+     * @readonly
      */
     private $typoScriptPostRectors = [];
     /**

@@ -21,6 +21,7 @@ use RectorPrefix20220424\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendControl
 final class RefactorProcessOutputRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -76,12 +77,12 @@ $tsfe->processContentForOutput();
 CODE_SAMPLE
 )]);
     }
-    private function refactorToNewMethodCalls(\PhpParser\Node\Expr\MethodCall $node) : void
+    private function refactorToNewMethodCalls(\PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
-        $node->name = new \PhpParser\Node\Identifier('applyHttpHeadersToResponse');
+        $methodCall->name = new \PhpParser\Node\Identifier('applyHttpHeadersToResponse');
         $response = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('TYPO3\\CMS\\Core\\Http\\Response'));
-        $node->args[0] = $this->nodeFactory->createArg($response);
-        $newNode = $this->nodeFactory->createMethodCall($node->var, 'processContentForOutput');
-        $this->nodesToAddCollector->addNodeAfterNode($newNode, $node);
+        $methodCall->args[0] = $this->nodeFactory->createArg($response);
+        $newNode = $this->nodeFactory->createMethodCall($methodCall->var, 'processContentForOutput');
+        $this->nodesToAddCollector->addNodeAfterNode($newNode, $methodCall);
     }
 }

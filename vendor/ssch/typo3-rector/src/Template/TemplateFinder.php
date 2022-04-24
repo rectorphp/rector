@@ -7,6 +7,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class TemplateFinder
 {
     /**
+     * @readonly
      * @var string
      */
     private $templateDirectory;

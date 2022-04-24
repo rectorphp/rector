@@ -117,19 +117,19 @@ CODE_SAMPLE
             $controllerActions->key = $this->nodeFactory->createClassConstReference($this->getControllerClassName($vendorName, $extensionName, '', $controllerClassName));
         }
     }
-    private function refactorConfigurePluginMethod(\PhpParser\Node\Expr\StaticCall $node, string $vendorName, string $extensionName) : void
+    private function refactorConfigurePluginMethod(\PhpParser\Node\Expr\StaticCall $staticCall, string $vendorName, string $extensionName) : void
     {
-        if (isset($node->args[2]) && $node->args[2]->value instanceof \PhpParser\Node\Expr\Array_) {
-            $this->createNewControllerActionsArray($node->args[2]->value, $vendorName, $extensionName);
+        if (isset($staticCall->args[2]) && $staticCall->args[2]->value instanceof \PhpParser\Node\Expr\Array_) {
+            $this->createNewControllerActionsArray($staticCall->args[2]->value, $vendorName, $extensionName);
         }
-        if (isset($node->args[3]) && $node->args[3]->value instanceof \PhpParser\Node\Expr\Array_) {
-            $this->createNewControllerActionsArray($node->args[3]->value, $vendorName, $extensionName);
+        if (isset($staticCall->args[3]) && $staticCall->args[3]->value instanceof \PhpParser\Node\Expr\Array_) {
+            $this->createNewControllerActionsArray($staticCall->args[3]->value, $vendorName, $extensionName);
         }
     }
-    private function refactorRegisterPluginMethod(\PhpParser\Node\Expr\StaticCall $node, string $vendorName, string $extensionName) : void
+    private function refactorRegisterPluginMethod(\PhpParser\Node\Expr\StaticCall $staticCall, string $vendorName, string $extensionName) : void
     {
-        if (isset($node->args[4]) && $node->args[4]->value instanceof \PhpParser\Node\Expr\Array_) {
-            $this->createNewControllerActionsArray($node->args[4]->value, $vendorName, $extensionName);
+        if (isset($staticCall->args[4]) && $staticCall->args[4]->value instanceof \PhpParser\Node\Expr\Array_) {
+            $this->createNewControllerActionsArray($staticCall->args[4]->value, $vendorName, $extensionName);
         }
     }
     private function isPotentiallyUndefinedExtensionKeyVariable(\PhpParser\Node\Expr\BinaryOp\Concat $extensionNameArgumentValue) : bool

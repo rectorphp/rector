@@ -17,6 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseSignalAfterExtensionInstallInsteadOfHasInstalledExtensionsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\NodeAnalyzer\ClassConstAnalyzer
      */
     private $classConstAnalyzer;

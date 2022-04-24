@@ -16,14 +16,17 @@ use RectorPrefix20220424\Symplify\SmartFileSystem\SmartFileSystem;
 final class IconsRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface
 {
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;

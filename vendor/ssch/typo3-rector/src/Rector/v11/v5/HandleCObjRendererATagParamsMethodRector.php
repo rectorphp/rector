@@ -55,11 +55,11 @@ $bar = $cObjRenderer->getATagParams([]);
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
             return \true;
         }
-        return !$this->isName($node->name, 'getATagParams');
+        return !$this->isName($methodCall->name, 'getATagParams');
     }
 }

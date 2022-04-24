@@ -26,26 +26,32 @@ use RectorPrefix20220424\Symplify\Skipper\Matcher\FileInfoMatcher;
 final class FullQualifiedNamePostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeRemoval\NodeRemover
      */
     private $nodeRemover;
     /**
+     * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
      */
     private $classNameImportSkipper;
     /**
+     * @readonly
      * @var \Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;

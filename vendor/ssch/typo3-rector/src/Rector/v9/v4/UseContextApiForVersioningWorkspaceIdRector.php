@@ -20,6 +20,7 @@ use RectorPrefix20220424\TYPO3\CMS\Frontend\Page\PageRepository;
 final class UseContextApiForVersioningWorkspaceIdRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -73,15 +74,15 @@ $GLOBALS['TSFE']->sys_page->versioningWorkspaceId = 1;
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
-        $node->var->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO));
-        if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Page\\PageRepository'))) {
+        $propertyFetch->var->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO));
+        if ($this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Page\\PageRepository'))) {
             return \false;
         }
-        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($node->var, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch->var, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isPropertyFetchOnParentVariableOfTypePageRepository($node);
+        return !$this->typo3NodeResolver->isPropertyFetchOnParentVariableOfTypePageRepository($propertyFetch);
     }
 }

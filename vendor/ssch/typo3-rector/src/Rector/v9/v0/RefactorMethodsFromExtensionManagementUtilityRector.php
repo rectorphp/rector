@@ -59,21 +59,21 @@ GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->flushCa
 CODE_SAMPLE
 )]);
     }
-    private function createNewMethodCallForSiteRelPath(\PhpParser\Node\Expr\StaticCall $node) : \PhpParser\Node\Expr\StaticCall
+    private function createNewMethodCallForSiteRelPath(\PhpParser\Node\Expr\StaticCall $staticCall) : \PhpParser\Node\Expr\StaticCall
     {
-        $firstArgument = $node->args[0];
+        $firstArgument = $staticCall->args[0];
         return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\PathUtility', 'stripPathSitePrefix', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility', 'extPath', [$firstArgument])]);
     }
     private function createNewMethodCallForRemoveCacheFiles() : \PhpParser\Node\Expr\MethodCall
     {
         return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Cache\\CacheManager')]), 'flushCachesInGroup', [$this->nodeFactory->createArg('system')]);
     }
-    private function removeSecondArgumentFromMethodIsLoaded(\PhpParser\Node\Expr\StaticCall $node) : \PhpParser\Node
+    private function removeSecondArgumentFromMethodIsLoaded(\PhpParser\Node\Expr\StaticCall $staticCall) : \PhpParser\Node
     {
-        $numberOfArguments = \count($node->args);
+        $numberOfArguments = \count($staticCall->args);
         if ($numberOfArguments > 1) {
-            unset($node->args[1]);
+            unset($staticCall->args[1]);
         }
-        return $node;
+        return $staticCall;
     }
 }

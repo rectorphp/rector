@@ -53,18 +53,18 @@ $preferredLanguage = GeneralUtility::makeInstance(Locales::class)->getPreferredC
 CODE_SAMPLE
 )]);
     }
-    private function isCharsetConverterMethodCall(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function isCharsetConverterMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
             return \false;
         }
-        return $this->isName($node->name, self::GET_PREFERRED_CLIENT_LANGUAGE);
+        return $this->isName($methodCall->name, self::GET_PREFERRED_CLIENT_LANGUAGE);
     }
-    private function isCallFromTypoScriptFrontendController(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function isCallFromTypoScriptFrontendController(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$methodCall->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \false;
         }
-        return $this->isName($node->name, self::GET_PREFERRED_CLIENT_LANGUAGE);
+        return $this->isName($methodCall->name, self::GET_PREFERRED_CLIENT_LANGUAGE);
     }
 }

@@ -24,6 +24,7 @@ final class UseContextApiRector extends \Rector\Core\Rector\AbstractRector
      */
     private const REFACTOR_PROPERTIES = ['loginUser', 'gr_list', 'beUserLogin', 'showHiddenPage', 'showHiddenRecords'];
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -92,19 +93,19 @@ $showHiddenRecords = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // Check if we have an assigment to the property, if so do not change it
         if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \true;
         }
-        if (!$this->isNames($node->name, self::REFACTOR_PROPERTIES)) {
+        if (!$this->isNames($propertyFetch->name, self::REFACTOR_PROPERTIES)) {
             return \true;
         }
-        if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
+        if ($this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
+        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
     }
 }

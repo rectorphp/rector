@@ -12,6 +12,7 @@ use Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver;
 final class ObjectManagerDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver
      */
     private $argumentTypeResolver;

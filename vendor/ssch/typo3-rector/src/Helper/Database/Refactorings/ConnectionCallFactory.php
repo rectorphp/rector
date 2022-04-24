@@ -10,6 +10,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 final class ConnectionCallFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

@@ -14,14 +14,17 @@ use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 final class ImportExtbaseAnnotationIfMissingFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
     private $useNodesToAddCollector;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

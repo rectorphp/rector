@@ -30,6 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RefactorTsConfigRelatedMethodsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;

@@ -24,6 +24,7 @@ final class RefactorTypeInternalTypeFileAndFileReferenceToFalRector extends \Rec
      */
     private const MESSAGE = 'You have to migrate the legacy file field to FAL';
     /**
+     * @readonly
      * @var \Rector\Core\Console\Output\RectorOutputStyle
      */
     private $rectorOutputStyle;

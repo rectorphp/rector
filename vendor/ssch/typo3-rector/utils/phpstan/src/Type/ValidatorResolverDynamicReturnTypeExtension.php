@@ -12,6 +12,7 @@ use Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver;
 final class ValidatorResolverDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver
      */
     private $argumentTypeResolver;

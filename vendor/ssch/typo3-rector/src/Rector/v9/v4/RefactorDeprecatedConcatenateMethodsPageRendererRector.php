@@ -59,20 +59,20 @@ $files = array_merge($this->getConcatenateCss(), $this->getConcatenateJavascript
 CODE_SAMPLE
 )]);
     }
-    private function createArrayMergeCall(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\FuncCall
+    private function createArrayMergeCall(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\FuncCall
     {
-        $node1 = clone $node;
-        $node2 = clone $node;
+        $node1 = clone $methodCall;
+        $node2 = clone $methodCall;
         $node1->name = new \PhpParser\Node\Identifier('getConcatenateCss');
         $node2->name = new \PhpParser\Node\Identifier('getConcatenateJavascript');
         return $this->nodeFactory->createFuncCall('array_merge', [new \PhpParser\Node\Arg($node1), new \PhpParser\Node\Arg($node2)]);
     }
-    private function splitMethodCall(\PhpParser\Node\Expr\MethodCall $node, string $firstMethod, string $secondMethod) : \PhpParser\Node\Expr\MethodCall
+    private function splitMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall, string $firstMethod, string $secondMethod) : \PhpParser\Node\Expr\MethodCall
     {
-        $node->name = new \PhpParser\Node\Identifier($firstMethod);
-        $node1 = clone $node;
+        $methodCall->name = new \PhpParser\Node\Identifier($firstMethod);
+        $node1 = clone $methodCall;
         $node1->name = new \PhpParser\Node\Identifier($secondMethod);
-        $this->nodesToAddCollector->addNodeAfterNode($node1, $node);
-        return $node;
+        $this->nodesToAddCollector->addNodeAfterNode($node1, $methodCall);
+        return $methodCall;
     }
 }

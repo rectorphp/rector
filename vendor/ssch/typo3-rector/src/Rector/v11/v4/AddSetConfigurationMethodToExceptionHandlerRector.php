@@ -27,6 +27,7 @@ final class AddSetConfigurationMethodToExceptionHandlerRector extends \Rector\Co
      */
     private const SET_CONFIGURATION = 'setConfiguration';
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

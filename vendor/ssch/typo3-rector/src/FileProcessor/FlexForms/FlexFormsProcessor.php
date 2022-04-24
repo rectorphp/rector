@@ -21,9 +21,11 @@ final class FlexFormsProcessor implements \Rector\Core\Contract\Processor\FilePr
 {
     /**
      * @var FlexFormRectorInterface[]
+     * @readonly
      */
     private $flexFormRectors;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
     private $fileDiffFactory;

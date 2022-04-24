@@ -19,6 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ExcludeServiceKeysToArrayRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
@@ -72,11 +73,11 @@ ExtensionManagementUtility::findService('serviceType', 'serviceSubType', ['key1'
 CODE_SAMPLE
 )]);
     }
-    private function isExpectedObjectType(\PhpParser\Node\Expr\StaticCall $node) : bool
+    private function isExpectedObjectType(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
-        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
+        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
             return \true;
         }
-        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'));
+        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'));
     }
 }

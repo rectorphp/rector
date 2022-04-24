@@ -55,9 +55,9 @@ final class RegisterPluginWithVendorNameRector extends \Rector\Core\Rector\Abstr
    \'content-form\',
 );')]);
     }
-    private function removeVendorNameIfNeeded(\PhpParser\Node\Expr\StaticCall $node) : ?\PhpParser\Node
+    private function removeVendorNameIfNeeded(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node
     {
-        $extensionNameArgumentValue = $node->args[0]->value;
+        $extensionNameArgumentValue = $staticCall->getArgs()[0]->value;
         $extensionName = $this->valueResolver->getValue($extensionNameArgumentValue);
         $fileInfo = $this->file->getSmartFileInfo();
         if ($extensionNameArgumentValue instanceof \PhpParser\Node\Expr\BinaryOp\Concat && $this->isPotentiallyUndefinedExtensionKeyVariable($extensionNameArgumentValue)) {
@@ -71,8 +71,8 @@ final class RegisterPluginWithVendorNameRector extends \Rector\Core\Rector\Abstr
             return null;
         }
         $extensionName = \Ssch\TYPO3Rector\Helper\StringUtility::prepareExtensionName($extensionName, $delimiterPosition);
-        $node->args[0] = $this->nodeFactory->createArg($extensionName);
-        return $node;
+        $staticCall->args[0] = $this->nodeFactory->createArg($extensionName);
+        return $staticCall;
     }
     private function isPotentiallyUndefinedExtensionKeyVariable(\PhpParser\Node\Expr\BinaryOp\Concat $extensionNameArgumentValue) : bool
     {

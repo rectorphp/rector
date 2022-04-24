@@ -75,15 +75,15 @@ echo $taskLayoutController->content;
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if ($this->isPageLayoutControllerClass($node)) {
+        if ($this->isPageLayoutControllerClass($methodCall)) {
             return \false;
         }
-        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Taskcenter\\Controller\\TaskModuleController'));
+        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Taskcenter\\Controller\\TaskModuleController'));
     }
-    private function isPageLayoutControllerClass(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function isPageLayoutControllerClass(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Controller\\PageLayoutController'));
+        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Controller\\PageLayoutController'));
     }
 }

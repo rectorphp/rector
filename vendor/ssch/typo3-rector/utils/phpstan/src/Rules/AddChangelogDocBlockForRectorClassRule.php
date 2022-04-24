@@ -34,10 +34,12 @@ final class AddChangelogDocBlockForRectorClassRule implements \PHPStan\Rules\Rul
      */
     private const ALLOWED_CLASSES_WITH_NON_CHANGELOG_DOC_BLOCK = [\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::class, \Ssch\TYPO3Rector\Rules\Rector\Misc\AddCodeCoverageIgnoreToMethodRectorDefinitionRector::class, \Ssch\TYPO3Rector\Rector\General\ConvertImplicitVariablesToExplicitGlobalsRector::class, \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector::class, \Ssch\TYPO3Rector\ComposerPackages\Rector\AddPackageVersionRector::class, \Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector::class];
     /**
+     * @readonly
      * @var \PHPStan\Broker\Broker
      */
     private $broker;
     /**
+     * @readonly
      * @var \PHPStan\Type\FileTypeMapper
      */
     private $fileTypeMapper;

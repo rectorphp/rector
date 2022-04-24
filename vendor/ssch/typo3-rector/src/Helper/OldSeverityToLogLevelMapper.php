@@ -8,6 +8,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 final class OldSeverityToLogLevelMapper
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

@@ -93,13 +93,13 @@ $rows = $queryBuilder->execute()->fetchAll();
 CODE_SAMPLE
 )]);
     }
-    private function addQueryBuilderNode(\PhpParser\Node\Expr\StaticCall $node, \PhpParser\Node $positionNode) : void
+    private function addQueryBuilderNode(\PhpParser\Node\Expr\StaticCall $staticCall, \PhpParser\Node $positionNode) : void
     {
-        $queryBuilderArgument = $node->args[8] ?? null;
+        $queryBuilderArgument = $staticCall->args[8] ?? null;
         if ($this->isVariable($queryBuilderArgument)) {
             return;
         }
-        $tableArgument = $node->args[0];
+        $tableArgument = $staticCall->args[0];
         if (!$queryBuilderArgument instanceof \PhpParser\Node\Arg || 'null' === $this->valueResolver->getValue($queryBuilderArgument->value)) {
             $table = $this->valueResolver->getValue($tableArgument->value);
             if (null === $table) {
@@ -116,9 +116,9 @@ CODE_SAMPLE
     {
         return null !== $queryBuilderArgument && $queryBuilderArgument->value instanceof \PhpParser\Node\Expr\Variable;
     }
-    private function extractQueryBuilderVariableName(\PhpParser\Node\Expr\StaticCall $node) : string
+    private function extractQueryBuilderVariableName(\PhpParser\Node\Expr\StaticCall $staticCall) : string
     {
-        $queryBuilderArgument = $node->args[8] ?? null;
+        $queryBuilderArgument = $staticCall->getArgs()[8] ?? null;
         $queryBuilderVariableName = 'queryBuilder';
         if (null !== $queryBuilderArgument && $this->isVariable($queryBuilderArgument)) {
             $queryBuilderVariableName = $this->getName($queryBuilderArgument->value);

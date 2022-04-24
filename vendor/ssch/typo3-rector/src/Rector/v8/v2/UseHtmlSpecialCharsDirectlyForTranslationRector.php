@@ -17,6 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseHtmlSpecialCharsDirectlyForTranslationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -79,51 +80,51 @@ CODE_SAMPLE
         }
         return $this->refactorAbstractPluginCall($node);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if ($this->isLanguageServiceCall($node)) {
+        if ($this->isLanguageServiceCall($methodCall)) {
             return \false;
         }
-        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Plugin\\AbstractPlugin'));
+        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Plugin\\AbstractPlugin'));
     }
-    private function isLanguageServiceCall(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function isLanguageServiceCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Lang\\LanguageService'))) {
+        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Lang\\LanguageService'))) {
             return \true;
         }
-        return $this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::LANG);
+        return $this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::LANG);
     }
-    private function refactorAbstractPluginCall(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function refactorAbstractPluginCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
-        if (!$this->isName($node->name, 'pi_getLL')) {
+        if (!$this->isName($methodCall->name, 'pi_getLL')) {
             return null;
         }
-        return $this->refactorToHtmlSpecialChars($node, 2);
+        return $this->refactorToHtmlSpecialChars($methodCall, 2);
     }
-    private function refactorLanguageServiceCall(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function refactorLanguageServiceCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
-        if (!$this->isNames($node->name, ['sL', 'getLL', 'getLLL'])) {
+        if (!$this->isNames($methodCall->name, ['sL', 'getLL', 'getLLL'])) {
             return null;
         }
-        if ($this->isName($node->name, 'getLLL')) {
-            return $this->refactorToHtmlSpecialChars($node, 2);
+        if ($this->isName($methodCall->name, 'getLLL')) {
+            return $this->refactorToHtmlSpecialChars($methodCall, 2);
         }
-        return $this->refactorToHtmlSpecialChars($node, 1);
+        return $this->refactorToHtmlSpecialChars($methodCall, 1);
     }
-    private function refactorToHtmlSpecialChars(\PhpParser\Node\Expr\MethodCall $node, int $argumentPosition) : ?\PhpParser\Node
+    private function refactorToHtmlSpecialChars(\PhpParser\Node\Expr\MethodCall $methodCall, int $argumentPosition) : ?\PhpParser\Node
     {
-        if (!isset($node->args[$argumentPosition])) {
+        if (!isset($methodCall->args[$argumentPosition])) {
             return null;
         }
-        $hsc = $this->valueResolver->getValue($node->args[$argumentPosition]->value);
+        $hsc = $this->valueResolver->getValue($methodCall->args[$argumentPosition]->value);
         if (null === $hsc) {
             return null;
         }
         // If you don´t unset it you will end up in an infinite loop here
-        unset($node->args[$argumentPosition]);
+        unset($methodCall->args[$argumentPosition]);
         if (\false === $hsc) {
             return null;
         }
-        return $this->nodeFactory->createFuncCall('htmlspecialchars', [$node]);
+        return $this->nodeFactory->createFuncCall('htmlspecialchars', [$methodCall]);
     }
 }

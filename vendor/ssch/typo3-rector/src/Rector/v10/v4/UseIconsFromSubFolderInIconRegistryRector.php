@@ -82,9 +82,9 @@ CODE_SAMPLE
 CODE_SAMPLE
 )]);
     }
-    private function isSvgIconProvider(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function isSvgIconProvider(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        $iconProviderClassName = $this->valueResolver->getValue($node->args[1]->value);
+        $iconProviderClassName = $this->valueResolver->getValue($methodCall->args[1]->value);
         if (null === $iconProviderClassName) {
             return \false;
         }

@@ -25,6 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseExtensionConfigurationApiRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\Console\Output\RectorOutputStyle
      */
     private $rectorOutputStyle;

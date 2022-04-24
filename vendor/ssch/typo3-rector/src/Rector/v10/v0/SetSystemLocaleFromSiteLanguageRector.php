@@ -18,6 +18,7 @@ use RectorPrefix20220424\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendControl
 final class SetSystemLocaleFromSiteLanguageRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;

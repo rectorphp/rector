@@ -23,6 +23,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ReplaceExtKeyWithExtensionKeyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;

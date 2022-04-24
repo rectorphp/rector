@@ -50,10 +50,12 @@ final class RenameClassMapAliasRector extends \Rector\Core\Rector\AbstractRector
         'template',
     ];
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
+     * @readonly
      * @var \Rector\Renaming\NodeManipulator\ClassRenamer
      */
     private $classRenamer;

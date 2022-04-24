@@ -98,28 +98,28 @@ CODE_SAMPLE
     {
         return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Cache\\CacheManager')]);
     }
-    private function getCacheMethod(\PhpParser\Node\Expr\StaticCall $node) : void
+    private function getCacheMethod(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
-        $this->addCacheManagerNode($node);
-        $cacheEntryNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY), $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(self::CACHE_MANAGER, 'getCache', ['cache_hash']), 'get', [$node->args[0]]));
-        $this->nodesToAddCollector->addNodeAfterNode($cacheEntryNode, $node);
+        $this->addCacheManagerNode($staticCall);
+        $cacheEntryNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY), $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(self::CACHE_MANAGER, 'getCache', ['cache_hash']), 'get', [$staticCall->args[0]]));
+        $this->nodesToAddCollector->addNodeAfterNode($cacheEntryNode, $staticCall);
         $hashContentNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT), $this->nodeFactory->createNull());
-        $this->nodesToAddCollector->addNodeAfterNode($hashContentNode, $node);
+        $this->nodesToAddCollector->addNodeAfterNode($hashContentNode, $staticCall);
         $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY));
         $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT), new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY)));
-        $this->nodesToAddCollector->addNodeAfterNode($ifNode, $node);
-        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('content'), new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT)), $node);
+        $this->nodesToAddCollector->addNodeAfterNode($ifNode, $staticCall);
+        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('content'), new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT)), $staticCall);
     }
-    private function addCacheManagerNode(\PhpParser\Node\Expr\StaticCall $node) : void
+    private function addCacheManagerNode(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
         $cacheManagerNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CACHE_MANAGER), $this->createCacheManager());
-        $this->nodesToAddCollector->addNodeAfterNode($cacheManagerNode, $node);
+        $this->nodesToAddCollector->addNodeAfterNode($cacheManagerNode, $staticCall);
     }
-    private function setCacheMethod(\PhpParser\Node\Expr\StaticCall $node) : void
+    private function setCacheMethod(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
-        $this->addCacheManagerNode($node);
-        $arguments = [$node->args[0], $node->args[1], new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Scalar\String_('ident_'), $node->args[2]->value))]), $this->nodeFactory->createArg(0)];
+        $this->addCacheManagerNode($staticCall);
+        $arguments = [$staticCall->args[0], $staticCall->args[1], new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Scalar\String_('ident_'), $staticCall->args[2]->value))]), $this->nodeFactory->createArg(0)];
         $cacheEntryNode = $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(self::CACHE_MANAGER, 'getCache', ['cache_hash']), 'set', $arguments);
-        $this->nodesToAddCollector->addNodeAfterNode($cacheEntryNode, $node);
+        $this->nodesToAddCollector->addNodeAfterNode($cacheEntryNode, $staticCall);
     }
 }

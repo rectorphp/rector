@@ -34,6 +34,7 @@ final class InjectEnvironmentServiceIfNeededInResponseRector extends \Rector\Cor
      */
     private const ENVIRONMENT_SERVICE = 'environmentService';
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;

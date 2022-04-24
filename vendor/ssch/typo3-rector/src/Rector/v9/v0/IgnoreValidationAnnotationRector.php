@@ -28,10 +28,12 @@ final class IgnoreValidationAnnotationRector extends \Rector\Core\Rector\Abstrac
      */
     private const VERY_OLD_ANNOTATION = 'dontvalidate';
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory
      */
     private $importExtbaseAnnotationIfMissingFactory;

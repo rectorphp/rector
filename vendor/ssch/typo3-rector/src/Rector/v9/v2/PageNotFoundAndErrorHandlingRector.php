@@ -39,6 +39,7 @@ final class PageNotFoundAndErrorHandlingRector extends \Rector\Core\Rector\Abstr
      */
     private const METHODS = ['pageNotFoundAndExit', 'pageUnavailableAndExit', 'checkPageUnavailableHandler', 'pageUnavailableHandler', 'pageNotFoundHandler', 'pageErrorHandler'];
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -100,12 +101,10 @@ CODE_SAMPLE
         if ($this->isName($node->name, 'checkPageUnavailableHandler')) {
             return $this->refactorCheckPageUnavailableHandlerMethod();
         }
-        $currentStmts = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        $positionNode = $currentStmts ?? $node;
         if ($this->isNames($node->name, ['pageUnavailableHandler', 'pageNotFoundHandler', 'pageErrorHandler'])) {
             $newNode = $this->refactorPageErrorHandlerIfPossible($node);
             if (null !== $newNode) {
-                $this->nodesToAddCollector->addNodeBeforeNode($newNode, $positionNode);
+                $this->nodesToAddCollector->addNodeBeforeNode($newNode, $node);
                 $this->removeNodeOrParentNode($node);
             }
             return null;
@@ -114,17 +113,17 @@ CODE_SAMPLE
         if (!$responseNode instanceof \PhpParser\Node) {
             return null;
         }
-        $this->nodesToAddCollector->addNodeBeforeNode($responseNode, $positionNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($this->throwException(), $positionNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($responseNode, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($this->throwException(), $node);
         $this->removeNodeOrParentNode($node);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if ($this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if ($this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \false;
         }
-        return !$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
+        return !$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
     }
     private function createResponse(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
     {
@@ -150,27 +149,27 @@ CODE_SAMPLE
         $pageUnavailableHandling = new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::GLOBALS), new \PhpParser\Node\Scalar\String_('TYPO3_CONF_VARS')), new \PhpParser\Node\Scalar\String_('FE')), new \PhpParser\Node\Scalar\String_('pageUnavailable_handling'));
         return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($pageUnavailableHandling, new \PhpParser\Node\Expr\BooleanNot($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'cmpIP', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [new \PhpParser\Node\Scalar\String_('REMOTE_ADDR')]), $devIpMask])));
     }
-    private function refactorPageErrorHandlerIfPossible(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function refactorPageErrorHandlerIfPossible(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
-        if (!isset($node->args[0])) {
+        if (!isset($methodCall->args[0])) {
             return null;
         }
-        $code = $this->valueResolver->getValue($node->args[0]->value);
+        $code = $this->valueResolver->getValue($methodCall->args[0]->value);
         if (null === $code) {
             return null;
         }
         $message = null;
         if ('1' === (string) $code || \is_bool($code) || 'true' === \strtolower($code)) {
             $message = new \PhpParser\Node\Scalar\String_('The page did not exist or was inaccessible.');
-            if (isset($node->args[2])) {
-                $reason = $node->args[2]->value;
+            if (isset($methodCall->args[2])) {
+                $reason = $methodCall->args[2]->value;
                 $message = $this->nodeFactory->createConcat([$message, new \PhpParser\Node\Expr\Ternary($reason, $this->nodeFactory->createConcat([new \PhpParser\Node\Scalar\String_(' Reason: '), $reason]), new \PhpParser\Node\Scalar\String_(''))]);
             }
         }
         if ('' === $code) {
             $message = new \PhpParser\Node\Scalar\String_('Page cannot be found.');
-            if (isset($node->args[2])) {
-                $reason = $node->args[2]->value;
+            if (isset($methodCall->args[2])) {
+                $reason = $methodCall->args[2]->value;
                 $message = new \PhpParser\Node\Expr\Ternary($reason, $this->nodeFactory->createConcat([new \PhpParser\Node\Scalar\String_('Reason: '), $reason]), $message);
             }
         }

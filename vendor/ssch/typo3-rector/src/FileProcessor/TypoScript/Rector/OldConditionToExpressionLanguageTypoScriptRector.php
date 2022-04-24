@@ -19,11 +19,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
      * @var TyposcriptConditionMatcher[]
+     * @readonly
      */
     private $conditionMatchers = [];
     /**

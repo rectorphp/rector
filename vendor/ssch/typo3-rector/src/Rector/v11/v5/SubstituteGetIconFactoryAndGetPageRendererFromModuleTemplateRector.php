@@ -20,10 +20,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\NodesToReplaceCollector
      */
     private $nodesToReplaceCollector;

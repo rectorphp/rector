@@ -66,16 +66,16 @@ CODE_SAMPLE
 CODE_SAMPLE
 )]);
     }
-    private function removeSecondArgumentFromMethod(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node
+    private function removeSecondArgumentFromMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
     {
-        $numberOfArguments = \count($node->args);
+        $numberOfArguments = \count($methodCall->args);
         if ($numberOfArguments > 1) {
-            unset($node->args[1]);
+            unset($methodCall->args[1]);
         }
-        return $node;
+        return $methodCall;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Html\\RteHtmlParser'));
+        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Html\\RteHtmlParser'));
     }
 }

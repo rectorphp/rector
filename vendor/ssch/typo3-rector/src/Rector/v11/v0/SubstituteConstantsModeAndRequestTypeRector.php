@@ -26,6 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SubstituteConstantsModeAndRequestTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;

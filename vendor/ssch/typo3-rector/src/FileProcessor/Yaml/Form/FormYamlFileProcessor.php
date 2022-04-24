@@ -24,19 +24,23 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
      */
     private const ALLOWED_FILE_EXTENSIONS = ['yaml'];
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
     private $fileDiffFactory;
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\FileProcessor\Yaml\YamlIndentResolver
      */
     private $yamlIndentResolver;
     /**
      * @var FormYamlRectorInterface[]
+     * @readonly
      */
     private $transformer;
     /**

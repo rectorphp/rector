@@ -21,10 +21,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ObjectManagerGetToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;

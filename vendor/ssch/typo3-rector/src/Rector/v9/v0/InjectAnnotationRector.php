@@ -26,10 +26,12 @@ final class InjectAnnotationRector extends \Rector\Core\Rector\AbstractRector
      */
     private const NEW_ANNOTATION = 'TYPO3\\CMS\\Extbase\\Annotation\\Inject';
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory
      */
     private $injectMethodFactory;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer
      */
     private $docBlockTagReplacer;

@@ -82,27 +82,27 @@ CODE_SAMPLE
         }
         return [];
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        return !$this->isMethodAddMetaTag($node) && !$this->isMethodXUaCompatible($node);
+        return !$this->isMethodAddMetaTag($methodCall) && !$this->isMethodXUaCompatible($methodCall);
     }
-    private function isMethodAddMetaTag(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function isMethodAddMetaTag(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Page\\PageRenderer'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Page\\PageRenderer'))) {
             return \false;
         }
-        return $this->isName($node->name, 'addMetaTag');
+        return $this->isName($methodCall->name, 'addMetaTag');
     }
-    private function isMethodXUaCompatible(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function isMethodXUaCompatible(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate'))) {
             return \false;
         }
-        return $this->isName($node->name, 'xUaCompatible');
+        return $this->isName($methodCall->name, 'xUaCompatible');
     }
-    private function createSetMetaTagMethod(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node\Expr\MethodCall
+    private function createSetMetaTagMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
-        $arg = $node->args[0];
+        $arg = $methodCall->args[0];
         if (!$arg->value instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
@@ -111,9 +111,9 @@ CODE_SAMPLE
         if (!\array_key_exists('type', $arguments) || !\array_key_exists('name', $arguments) || !\array_key_exists('content', $arguments)) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Identifier('setMetaTag');
-        $node->args = $this->nodeFactory->createArgs(\array_values($arguments));
-        return $node;
+        $methodCall->name = new \PhpParser\Node\Identifier('setMetaTag');
+        $methodCall->args = $this->nodeFactory->createArgs(\array_values($arguments));
+        return $methodCall;
     }
     private function createXUCompatibleMetaTag(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
     {

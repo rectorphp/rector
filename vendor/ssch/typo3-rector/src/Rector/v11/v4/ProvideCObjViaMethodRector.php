@@ -28,6 +28,7 @@ final class ProvideCObjViaMethodRector extends \Rector\Core\Rector\AbstractRecto
      */
     private const COBJ = 'cObj';
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

@@ -32,22 +32,27 @@ final class RegisterIconToIconFileRector extends \Rector\Core\Rector\AbstractRec
      */
     private const REMOVE_EMPTY_LINES = '/^[ \\t]*[\\r\\n]+/m';
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector
      */
     private $addIconsToReturnRector;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
     private $simplePhpParser;
     /**
+     * @readonly
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;

@@ -41,10 +41,12 @@ final class SubstituteBackendTemplateViewWithModuleTemplateRector extends \Recto
      */
     private const MODULE_TEMPLATE = 'moduleTemplate';
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\NodesToReplaceCollector
      */
     private $nodesToReplaceCollector;

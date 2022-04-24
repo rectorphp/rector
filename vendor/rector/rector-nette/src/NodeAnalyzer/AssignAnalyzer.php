@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Nette\NodeAdding\FunctionLikeFirstLevelStatementResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToAddCollector;
 final class AssignAnalyzer
@@ -20,11 +19,6 @@ final class AssignAnalyzer
      * @var string[]
      */
     private $alreadyInitializedAssignsClassMethodObjectHashes = [];
-    /**
-     * @readonly
-     * @var \Rector\Nette\NodeAdding\FunctionLikeFirstLevelStatementResolver
-     */
-    private $functionLikeFirstLevelStatementResolver;
     /**
      * @readonly
      * @var \Rector\PostRector\Collector\NodesToAddCollector
@@ -40,9 +34,8 @@ final class AssignAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Nette\NodeAdding\FunctionLikeFirstLevelStatementResolver $functionLikeFirstLevelStatementResolver, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator $varAnnotationManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator $varAnnotationManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
-        $this->functionLikeFirstLevelStatementResolver = $functionLikeFirstLevelStatementResolver;
         $this->nodesToAddCollector = $nodesToAddCollector;
         $this->varAnnotationManipulator = $varAnnotationManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -53,8 +46,7 @@ final class AssignAnalyzer
             return;
         }
         $assignExpression = $this->createAnnotatedAssignExpression($variableName, $arrayDimFetch, $controlObjectType);
-        $currentStatement = $this->functionLikeFirstLevelStatementResolver->resolveFirstLevelStatement($arrayDimFetch);
-        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $arrayDimFetch);
     }
     private function shouldSkipForAlreadyAddedInCurrentClassMethod(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, string $variableName) : bool
     {

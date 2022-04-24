@@ -25,15 +25,18 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
      */
     private const EXT_ICON_NAME = 'ext_icon';
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
      * @var IconRectorInterface[]
+     * @readonly
      */
     private $iconsRector;
     /**

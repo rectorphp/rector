@@ -20,10 +20,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveAddQueryStringMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer
      */
     private $sameClassMethodCallAnalyzer;
@@ -73,49 +75,49 @@ $this->uriBuilder->setUseCacheHash(true)
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if ($this->isMethodCallOnUriBuilder($node)) {
+        if ($this->isMethodCallOnUriBuilder($methodCall)) {
             return \false;
         }
-        return !$this->isMethodCallOnContentObjectRenderer($node);
+        return !$this->isMethodCallOnContentObjectRenderer($methodCall);
     }
-    private function isMethodCallOnUriBuilder(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function isMethodCallOnUriBuilder(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder'))) {
             return \false;
         }
-        return $this->isName($node->name, 'setAddQueryStringMethod');
+        return $this->isName($methodCall->name, 'setAddQueryStringMethod');
     }
-    private function isMethodCallOnContentObjectRenderer(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function isMethodCallOnContentObjectRenderer(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
             return \false;
         }
-        return $this->isName($node->name, 'getQueryArguments');
+        return $this->isName($methodCall->name, 'getQueryArguments');
     }
-    private function refactorSetAddQueryStringMethodCall(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function refactorSetAddQueryStringMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         try {
             // If it is the only method call, we can safely delete the node here.
-            $this->removeNode($node);
-            return $node;
+            $this->removeNode($methodCall);
+            return $methodCall;
         } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
-            $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($node);
+            $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
             if (!$this->sameClassMethodCallAnalyzer->haveSingleClass($chainMethodCalls)) {
                 return null;
             }
             foreach ($chainMethodCalls as $chainMethodCall) {
-                if ($this->isName($node->name, 'setAddQueryStringMethod')) {
+                if ($this->isName($methodCall->name, 'setAddQueryStringMethod')) {
                     continue;
                 }
-                $node->var = new \PhpParser\Node\Expr\MethodCall($chainMethodCall->var, $chainMethodCall->name, $chainMethodCall->args);
+                $methodCall->var = new \PhpParser\Node\Expr\MethodCall($chainMethodCall->var, $chainMethodCall->name, $chainMethodCall->args);
             }
-            return $node->var;
+            return $methodCall->var;
         }
     }
-    private function refactorGetQueryArgumentsMethodCall(\PhpParser\Node\Expr\MethodCall $node) : void
+    private function refactorGetQueryArgumentsMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
-        unset($node->args[1], $node->args[2]);
+        unset($methodCall->args[1], $methodCall->args[2]);
     }
 }

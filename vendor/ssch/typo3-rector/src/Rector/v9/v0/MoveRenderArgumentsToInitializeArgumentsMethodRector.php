@@ -20,14 +20,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveRenderArgumentsToInitializeArgumentsMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\NodeFactory\HelperArgumentAssignFactory
      */
     private $helperArgumentAssignFactory;
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\NodeFactory\InitializeArgumentsClassMethodFactory
      */
     private $initializeArgumentsClassMethodFactory;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;

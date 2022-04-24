@@ -23,6 +23,7 @@ final class UseLanguageAspectForTsfeLanguagePropertiesRector extends \Rector\Cor
      */
     private const NODE_NAME_MAPPING = ['sys_language_uid' => 'id', 'sys_language_content' => 'contentId', 'sys_language_contentOL' => 'legacyOverlayType', 'sys_language_mode' => 'legacyLanguageMode'];
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -75,14 +76,14 @@ $languageUid = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspe
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
-        if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
+        if ($this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return \false;
         }
-        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isPropertyFetchOnParentVariableOfTypeTypoScriptFrontendController($node);
+        return !$this->typo3NodeResolver->isPropertyFetchOnParentVariableOfTypeTypoScriptFrontendController($propertyFetch);
     }
 }

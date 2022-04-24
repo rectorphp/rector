@@ -2256,7 +2256,6 @@ return array(
     'Rector\\Nette\\NeonParser\\Node\\Service_\\SetupMethodCall' => $vendorDir . '/rector/rector-nette/packages/NeonParser/Node/Service_/SetupMethodCall.php',
     'Rector\\Nette\\NeonParser\\Printer\\FormatPreservingNeonPrinter' => $vendorDir . '/rector/rector-nette/packages/NeonParser/Printer/FormatPreservingNeonPrinter.php',
     'Rector\\Nette\\NeonParser\\Services\\ServiceTypeResolver' => $vendorDir . '/rector/rector-nette/packages/NeonParser/Services/ServiceTypeResolver.php',
-    'Rector\\Nette\\NodeAdding\\FunctionLikeFirstLevelStatementResolver' => $vendorDir . '/rector/rector-nette/src/NodeAdding/FunctionLikeFirstLevelStatementResolver.php',
     'Rector\\Nette\\NodeAnalyzer\\ArrayDimFetchAnalyzer' => $vendorDir . '/rector/rector-nette/src/NodeAnalyzer/ArrayDimFetchAnalyzer.php',
     'Rector\\Nette\\NodeAnalyzer\\ArrayDimFetchRenamer' => $vendorDir . '/rector/rector-nette/src/NodeAnalyzer/ArrayDimFetchRenamer.php',
     'Rector\\Nette\\NodeAnalyzer\\AssignAnalyzer' => $vendorDir . '/rector/rector-nette/src/NodeAnalyzer/AssignAnalyzer.php',

@@ -30,10 +30,12 @@ final class ReplaceAnnotationRector extends \Rector\Core\Rector\AbstractRector i
      */
     private $oldToNewAnnotations = [];
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory
      */
     private $importExtbaseAnnotationIfMissingFactory;

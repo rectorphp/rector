@@ -14,6 +14,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class HelperArgumentAssignFactory
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

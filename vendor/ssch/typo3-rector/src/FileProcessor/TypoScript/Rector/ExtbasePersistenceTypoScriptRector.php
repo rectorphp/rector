@@ -51,14 +51,17 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
      */
     private static $persistenceArray = [];
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

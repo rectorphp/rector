@@ -23,6 +23,7 @@ final class AddCodeCoverageIgnoreForRectorDefinitionRule implements \PHPStan\Rul
      */
     public const ERROR_MESSAGE = 'Provide @codeCoverageIgnore doc block for "%s" RectorDefinition method';
     /**
+     * @readonly
      * @var \PHPStan\Type\FileTypeMapper
      */
     private $fileTypeMapper;

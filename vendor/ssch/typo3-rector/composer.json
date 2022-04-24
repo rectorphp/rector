@@ -32,12 +32,12 @@
         "rector\/rector-generator": "dev-main",
         "rector\/rector-src": "dev-main",
         "symfony\/console": "^6.0",
-        "symplify\/coding-standard": "^10.1",
-        "symplify\/easy-coding-standard": "^10.1",
-        "symplify\/phpstan-extensions": "^10.1",
-        "symplify\/phpstan-rules": "^10.1",
-        "symplify\/rule-doc-generator": "^10.1",
-        "symplify\/vendor-patches": "^10.1",
+        "symplify\/coding-standard": "^10.2",
+        "symplify\/easy-coding-standard": "^10.2",
+        "symplify\/phpstan-extensions": "^10.2",
+        "symplify\/phpstan-rules": "^10.2",
+        "symplify\/rule-doc-generator": "^10.2",
+        "symplify\/vendor-patches": "^10.2",
         "tracy\/tracy": "^2.8"
     },
     "autoload": {

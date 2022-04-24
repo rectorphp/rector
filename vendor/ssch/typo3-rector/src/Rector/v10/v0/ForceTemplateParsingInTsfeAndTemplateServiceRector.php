@@ -31,6 +31,7 @@ final class ForceTemplateParsingInTsfeAndTemplateServiceRector extends \Rector\C
      */
     private const TYPOSCRIPT = 'typoscript';
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;

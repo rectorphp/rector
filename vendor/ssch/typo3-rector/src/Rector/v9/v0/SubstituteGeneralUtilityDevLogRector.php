@@ -19,6 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SubstituteGeneralUtilityDevLogRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\OldSeverityToLogLevelMapper
      */
     private $oldSeverityToLogLevelMapper;

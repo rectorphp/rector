@@ -19,6 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -105,8 +106,8 @@ CODE_SAMPLE
         } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
         }
     }
-    private function delegateToFrontendUserProperty(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\MethodCall
+    private function delegateToFrontendUserProperty(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
     {
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch($node->var, 'fe_user'), (string) $this->getName($node->name));
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch($methodCall->var, 'fe_user'), (string) $this->getName($methodCall->name));
     }
 }

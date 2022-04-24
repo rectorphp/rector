@@ -39,38 +39,47 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
      */
     private const REMOVE_EMPTY_LINES = '/^[ \\t]*[\\r\\n]+/m';
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
     private $rectorParser;
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector
      */
     private $addArgumentToSymfonyCommandRector;
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector
      */
     private $addCommandsToReturnRector;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
     private $simplePhpParser;
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Template\TemplateFinder
      */
     private $templateFinder;
     /**
+     * @readonly
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;

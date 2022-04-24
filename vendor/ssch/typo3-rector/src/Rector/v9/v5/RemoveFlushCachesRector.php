@@ -16,6 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveFlushCachesRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;

@@ -102,18 +102,18 @@ class MyController extends ActionController
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($classMethod, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
             return \true;
         }
-        if (!$node->isPublic()) {
+        if (!$classMethod->isPublic()) {
             return \true;
         }
-        if ($node->isAbstract()) {
+        if ($classMethod->isAbstract()) {
             return \true;
         }
-        $methodName = $this->getName($node->name);
+        $methodName = $this->getName($classMethod->name);
         if (null === $methodName) {
             return \true;
         }
@@ -123,19 +123,19 @@ CODE_SAMPLE
         if (\strncmp($methodName, 'initialize', \strlen('initialize')) === 0) {
             return \true;
         }
-        if ($this->lastStatementIsExitCall($node)) {
+        if ($this->lastStatementIsExitCall($classMethod)) {
             return \true;
         }
-        if ($this->hasRedirectCall($node)) {
+        if ($this->hasRedirectCall($classMethod)) {
             return \true;
         }
-        if ($this->lastStatementIsForwardCall($node)) {
+        if ($this->lastStatementIsForwardCall($classMethod)) {
             return \true;
         }
-        if ($this->hasExceptionCall($node)) {
+        if ($this->hasExceptionCall($classMethod)) {
             return \true;
         }
-        return $this->isAlreadyResponseReturnType($node);
+        return $this->isAlreadyResponseReturnType($classMethod);
     }
     /**
      * @return Return_[]
@@ -144,9 +144,9 @@ CODE_SAMPLE
     {
         return $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, \PhpParser\Node\Stmt\Return_::class);
     }
-    private function hasRedirectCall(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    private function hasRedirectCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        return (bool) $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $node) : bool {
+        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return \false;
             }
@@ -156,18 +156,18 @@ CODE_SAMPLE
             return $this->isNames($node->name, ['redirect', 'redirectToUri']);
         });
     }
-    private function lastStatementIsExitCall(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    private function lastStatementIsExitCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if (null === $node->stmts) {
+        if (null === $classMethod->stmts) {
             return \false;
         }
-        $statements = $node->stmts;
+        $statements = $classMethod->stmts;
         $lastStatement = \array_pop($statements);
         return $lastStatement instanceof \PhpParser\Node\Stmt\Expression && $lastStatement->expr instanceof \PhpParser\Node\Expr\Exit_;
     }
-    private function isAlreadyResponseReturnType(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    private function isAlreadyResponseReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        $returns = $this->findReturns($node);
+        $returns = $this->findReturns($classMethod);
         $responseObjectType = new \PHPStan\Type\ObjectType('Psr\\Http\\Message\\ResponseInterface');
         foreach ($returns as $return) {
             if (null === $return->expr) {
@@ -183,12 +183,12 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function hasExceptionCall(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    private function hasExceptionCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if (null === $node->stmts) {
+        if (null === $classMethod->stmts) {
             return \false;
         }
-        $statements = $node->stmts;
+        $statements = $classMethod->stmts;
         $lastStatement = \array_pop($statements);
         if (!$lastStatement instanceof \PhpParser\Node\Stmt\Throw_) {
             return \false;
@@ -196,12 +196,12 @@ CODE_SAMPLE
         $propagateResponseException = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Http\\PropagateResponseException');
         return $this->getType($lastStatement->expr)->isSuperTypeOf($propagateResponseException)->yes();
     }
-    private function lastStatementIsForwardCall(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    private function lastStatementIsForwardCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if (null === $node->stmts) {
+        if (null === $classMethod->stmts) {
             return \false;
         }
-        $statements = $node->stmts;
+        $statements = $classMethod->stmts;
         $lastStatement = \array_pop($statements);
         if (!$lastStatement instanceof \PhpParser\Node\Stmt\Expression) {
             return \false;

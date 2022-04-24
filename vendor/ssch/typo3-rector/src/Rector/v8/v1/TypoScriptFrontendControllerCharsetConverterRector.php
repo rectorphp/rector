@@ -28,6 +28,7 @@ final class TypoScriptFrontendControllerCharsetConverterRector extends \Rector\C
      */
     private const CS_CONV = 'csConv';
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -74,37 +75,37 @@ $output = $charsetConverter->conv_case('utf-8', 'foobar', 'lower');
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if ($this->typo3NodeResolver->isMethodCallOnGlobals($node, self::CS_CONV, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if ($this->typo3NodeResolver->isMethodCallOnGlobals($methodCall, self::CS_CONV, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \false;
         }
-        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
+        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'csConvObj');
+        return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'csConvObj');
     }
-    private function refactorMethodCsConv(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node
+    private function refactorMethodCsConv(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
     {
-        $from = isset($node->args[1]) ? $this->valueResolver->getValue($node->args[1]->value) : null;
+        $from = isset($methodCall->args[1]) ? $this->valueResolver->getValue($methodCall->args[1]->value) : null;
         if ('' === $from || 'null' === $from || null === $from) {
-            return $node->args[0]->value;
+            return $methodCall->args[0]->value;
         }
-        $this->addCharsetConverterNode($node);
-        return $this->nodeFactory->createMethodCall(self::CHARSET_CONVERTER, 'conv', [$node->args[0], $this->nodeFactory->createMethodCall(self::CHARSET_CONVERTER, 'parse_charset', [$node->args[1]]), 'utf-8']);
+        $this->addCharsetConverterNode($methodCall);
+        return $this->nodeFactory->createMethodCall(self::CHARSET_CONVERTER, 'conv', [$methodCall->args[0], $this->nodeFactory->createMethodCall(self::CHARSET_CONVERTER, 'parse_charset', [$methodCall->args[1]]), 'utf-8']);
     }
-    private function addCharsetConverterNode(\PhpParser\Node\Expr\MethodCall $node) : void
+    private function addCharsetConverterNode(\PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
         $charsetConverterNode = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CHARSET_CONVERTER), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Charset\\CharsetConverter')])));
-        $this->nodesToAddCollector->addNodeBeforeNode($charsetConverterNode, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($charsetConverterNode, $methodCall);
     }
-    private function refactorCsConvObj(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function refactorCsConvObj(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
-        $this->addCharsetConverterNode($node);
-        $methodName = $this->getName($node->name);
+        $this->addCharsetConverterNode($methodCall);
+        $methodName = $this->getName($methodCall->name);
         if (null === $methodName) {
             return null;
         }
-        return $this->nodeFactory->createMethodCall(self::CHARSET_CONVERTER, $methodName, $node->args);
+        return $this->nodeFactory->createMethodCall(self::CHARSET_CONVERTER, $methodName, $methodCall->args);
     }
 }

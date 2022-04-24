@@ -87,21 +87,21 @@ CODE_SAMPLE
         $commandInputArguments = $configuration[self::INPUT_ARGUMENTS] ?? [];
         $this->commandInputArguments = $commandInputArguments;
     }
-    private function addArgumentsToConfigureMethod(\PhpParser\Node\Stmt\ClassMethod $node) : \PhpParser\Node\Stmt\ClassMethod
+    private function addArgumentsToConfigureMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : \PhpParser\Node\Stmt\ClassMethod
     {
         foreach ($this->commandInputArguments as $commandInputArgument) {
             $mode = $this->createMode((int) $commandInputArgument['mode']);
             $name = new \PhpParser\Node\Scalar\String_($commandInputArgument[self::NAME]);
             $description = new \PhpParser\Node\Scalar\String_($commandInputArgument['description']);
             $defaultValue = $commandInputArgument['default'];
-            $node->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall('this', 'addArgument', [$name, $mode, $description, $defaultValue]));
+            $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall('this', 'addArgument', [$name, $mode, $description, $defaultValue]));
         }
-        return $node;
+        return $classMethod;
     }
-    private function addArgumentsToExecuteMethod(\PhpParser\Node\Stmt\ClassMethod $node) : \PhpParser\Node\Stmt\ClassMethod
+    private function addArgumentsToExecuteMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : \PhpParser\Node\Stmt\ClassMethod
     {
-        if (null === $node->stmts) {
-            return $node;
+        if (null === $classMethod->stmts) {
+            return $classMethod;
         }
         $argumentStatements = [];
         foreach ($this->commandInputArguments as $commandInputArgument) {
@@ -111,8 +111,8 @@ CODE_SAMPLE
             $assignment = new \PhpParser\Node\Expr\Assign($variable, $inputMethodCall);
             $argumentStatements[] = new \PhpParser\Node\Stmt\Expression($assignment);
         }
-        \array_unshift($node->stmts, ...$argumentStatements);
-        return $node;
+        \array_unshift($classMethod->stmts, ...$argumentStatements);
+        return $classMethod;
     }
     private function createMode(int $mode) : \PhpParser\Node\Expr\ClassConstFetch
     {

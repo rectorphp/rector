@@ -35,6 +35,7 @@ final class EmailFinisherRector implements \Ssch\TYPO3Rector\Contract\FileProces
      */
     private const VARIANTS = 'variants';
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;

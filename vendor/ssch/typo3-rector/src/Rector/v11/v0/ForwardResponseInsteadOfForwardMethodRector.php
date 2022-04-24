@@ -94,9 +94,9 @@ CODE_SAMPLE
     /**
      * @return MethodCall[]
      */
-    private function extractForwardMethodCalls(\PhpParser\Node\Stmt\ClassMethod $node) : array
+    private function extractForwardMethodCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
-        return $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $node) : bool {
+        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return \false;
             }

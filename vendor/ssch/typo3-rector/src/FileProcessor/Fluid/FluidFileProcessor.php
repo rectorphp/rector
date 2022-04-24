@@ -18,9 +18,11 @@ final class FluidFileProcessor implements \Rector\Core\Contract\Processor\FilePr
 {
     /**
      * @var FluidRectorInterface[]
+     * @readonly
      */
     private $fluidRectors;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
     private $fileDiffFactory;

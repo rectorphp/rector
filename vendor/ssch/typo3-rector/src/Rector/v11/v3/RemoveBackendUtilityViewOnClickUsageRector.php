@@ -24,6 +24,7 @@ final class RemoveBackendUtilityViewOnClickUsageRector extends \Rector\Core\Rect
      */
     private const MESSAGE = 'Rector changed the BackendUtility::viewOnClick call, but further argument resolving is necessary. See Deprecation-91806-BackendUtilityViewOnClick.html and Important-91123-AvoidUsingBackendUtilityViewOnClick.html';
     /**
+     * @readonly
      * @var \Rector\Core\Console\Output\RectorOutputStyle
      */
     private $rectorOutputStyle;
@@ -88,11 +89,11 @@ $onclick = PreviewUriBuilder::create($pageId, $viewUri)
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\StaticCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return \true;
         }
-        return !$this->isName($node->name, 'viewOnClick');
+        return !$this->isName($staticCall->name, 'viewOnClick');
     }
 }

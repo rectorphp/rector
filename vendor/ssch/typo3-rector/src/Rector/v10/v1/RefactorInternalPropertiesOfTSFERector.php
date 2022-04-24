@@ -44,6 +44,7 @@ final class RefactorInternalPropertiesOfTSFERector extends \Rector\Core\Rector\A
      */
     private const QUERY_PARAMS = 'queryParams';
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
@@ -94,9 +95,9 @@ CODE_SAMPLE
         }
         return $this->refactorDomainStartPage();
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
-        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
+        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
     }
     private function initializeEmptyArray() : \PhpParser\Node
     {
@@ -117,14 +118,9 @@ CODE_SAMPLE
         $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::RELEVANT_PARAMETERS_FOR_CACHING_FROM_PAGE_ARGUMENTS), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Page\\CacheHashCalculator')]), 'getRelevantParameters', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\HttpUtility', 'buildQueryString', [new \PhpParser\Node\Expr\Variable(self::QUERY_PARAMS)])])));
         return $ifNode;
     }
-    private function refactorCacheHashArray(\PhpParser\Node\Expr\PropertyFetch $node) : \PhpParser\Node
+    private function refactorCacheHashArray(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \PhpParser\Node
     {
-        $currentStmts = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        $positionNode = $currentStmts ?? $node;
-        $this->nodesToAddCollector->addNodeBeforeNode($this->initializeEmptyArray(), $positionNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($this->initializePageArguments(), $positionNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($this->initializeQueryParams(), $positionNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($this->getRelevantParametersFromCacheHashCalculator(), $positionNode);
+        $this->nodesToAddCollector->addNodesBeforeNode([$this->initializeEmptyArray(), $this->initializePageArguments(), $this->initializeQueryParams(), $this->getRelevantParametersFromCacheHashCalculator()], $propertyFetch);
         return new \PhpParser\Node\Expr\Variable(self::RELEVANT_PARAMETERS_FOR_CACHING_FROM_PAGE_ARGUMENTS);
     }
     private function refactorCacheHash() : \PhpParser\Node

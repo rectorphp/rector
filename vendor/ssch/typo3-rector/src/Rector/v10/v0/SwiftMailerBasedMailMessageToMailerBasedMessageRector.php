@@ -85,16 +85,16 @@ $mail
 CODE_SAMPLE
 )]);
     }
-    private function refactorMethodSetBody(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node\Expr\MethodCall
+    private function refactorMethodSetBody(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
-        if (!isset($node->args[0])) {
+        if (!isset($methodCall->args[0])) {
             return null;
         }
-        if (!$node->args[0]->value instanceof \PhpParser\Node) {
+        if (!$methodCall->args[0]->value instanceof \PhpParser\Node) {
             return null;
         }
-        $bodyType = $this->nodeTypeResolver->getType($node->args[0]->value);
-        $contentType = isset($node->args[1]) ? $this->valueResolver->getValue($node->args[1]->value) : null;
+        $bodyType = $this->nodeTypeResolver->getType($methodCall->args[0]->value);
+        $contentType = isset($methodCall->args[1]) ? $this->valueResolver->getValue($methodCall->args[1]->value) : null;
         if (!$bodyType instanceof \PHPStan\Type\StringType) {
             return null;
         }
@@ -103,28 +103,28 @@ CODE_SAMPLE
             $methodIdentifier = 'html';
         }
         if (null !== $contentType) {
-            unset($node->args[1]);
+            unset($methodCall->args[1]);
         }
-        $node->name = new \PhpParser\Node\Identifier($methodIdentifier);
-        return $node;
+        $methodCall->name = new \PhpParser\Node\Identifier($methodIdentifier);
+        return $methodCall;
     }
-    private function refactorMethodAddPart(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function refactorMethodAddPart(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
-        $contentType = isset($node->args[1]) ? $this->valueResolver->getValue($node->args[1]->value) : null;
-        $node->name = new \PhpParser\Node\Identifier('text');
+        $contentType = isset($methodCall->args[1]) ? $this->valueResolver->getValue($methodCall->args[1]->value) : null;
+        $methodCall->name = new \PhpParser\Node\Identifier('text');
         if (!\is_string($contentType)) {
             return null;
         }
-        unset($node->args[1]);
+        unset($methodCall->args[1]);
         if ('text/html' === $contentType) {
-            $node->name = new \PhpParser\Node\Identifier('html');
-            return $node;
+            $methodCall->name = new \PhpParser\Node\Identifier('html');
+            return $methodCall;
         }
-        return $node;
+        return $methodCall;
     }
-    private function refactorAttachMethod(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function refactorAttachMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
-        $firstArgument = $node->args[0]->value;
+        $firstArgument = $methodCall->args[0]->value;
         if (!$firstArgument instanceof \PhpParser\Node\Expr\StaticCall) {
             return null;
         }
@@ -134,13 +134,13 @@ CODE_SAMPLE
         if (!$this->isName($firstArgument->name, 'fromPath')) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Identifier('attachFromPath');
-        $node->args = $this->nodeFactory->createArgs($firstArgument->args);
-        return $node;
+        $methodCall->name = new \PhpParser\Node\Identifier('attachFromPath');
+        $methodCall->args = $this->nodeFactory->createArgs($firstArgument->args);
+        return $methodCall;
     }
-    private function refactorEmbedMethod(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function refactorEmbedMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
-        $firstArgument = $node->args[0]->value;
+        $firstArgument = $methodCall->args[0]->value;
         if (!$firstArgument instanceof \PhpParser\Node\Expr\StaticCall) {
             return null;
         }
@@ -150,8 +150,8 @@ CODE_SAMPLE
         if (!$this->isName($firstArgument->name, 'fromPath')) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Identifier('embedFromPath');
-        $node->args = $this->nodeFactory->createArgs($firstArgument->args);
-        return $node;
+        $methodCall->name = new \PhpParser\Node\Identifier('embedFromPath');
+        $methodCall->args = $this->nodeFactory->createArgs($firstArgument->args);
+        return $methodCall;
     }
 }

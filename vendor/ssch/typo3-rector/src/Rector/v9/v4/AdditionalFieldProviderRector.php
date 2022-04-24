@@ -118,14 +118,14 @@ CODE_SAMPLE
         $methodCall = $this->nodeFactory->createMethodCall($node->var, 'getCurrentAction');
         return new \PhpParser\Node\Expr\Cast\String_($methodCall);
     }
-    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Scheduler\\Controller\\SchedulerModuleController'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Scheduler\\Controller\\SchedulerModuleController'))) {
             return null;
         }
-        if (!$this->isName($node->name, 'addMessage')) {
+        if (!$this->isName($methodCall->name, 'addMessage')) {
             return null;
         }
-        return $this->nodeFactory->createMethodCall('this', 'addMessage', $node->args);
+        return $this->nodeFactory->createMethodCall('this', 'addMessage', $methodCall->args);
     }
 }

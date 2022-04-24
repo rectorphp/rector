@@ -73,22 +73,22 @@ mb_strlen('string', 'utf-8');
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
             return \true;
         }
-        return !$this->isNames($node->name, ['strlen', 'convCapitalize', 'substr', 'conv_case', 'utf8_strpos', 'utf8_strrpos']);
+        return !$this->isNames($methodCall->name, ['strlen', 'convCapitalize', 'substr', 'conv_case', 'utf8_strpos', 'utf8_strrpos']);
     }
-    private function toMultiByteConvertCase(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\FuncCall
+    private function toMultiByteConvertCase(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\FuncCall
     {
-        return $this->nodeFactory->createFuncCall('mb_convert_case', [$node->args[1], new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('MB_CASE_TITLE')), $node->args[0]]);
+        return $this->nodeFactory->createFuncCall('mb_convert_case', [$methodCall->args[1], new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('MB_CASE_TITLE')), $methodCall->args[0]]);
     }
-    private function toMultiByteSubstr(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\FuncCall
+    private function toMultiByteSubstr(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\FuncCall
     {
-        $start = $node->args[2] ?? $this->nodeFactory->createArg(0);
-        $length = $node->args[3] ?? $this->nodeFactory->createNull();
-        return $this->nodeFactory->createFuncCall('mb_substr', [$node->args[1], $start, $length, $node->args[0]]);
+        $start = $methodCall->args[2] ?? $this->nodeFactory->createArg(0);
+        $length = $methodCall->args[3] ?? $this->nodeFactory->createNull();
+        return $this->nodeFactory->createFuncCall('mb_substr', [$methodCall->args[1], $start, $length, $methodCall->args[0]]);
     }
     private function toMultiByteLowerUpperCase(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\FuncCall
     {
@@ -100,12 +100,12 @@ CODE_SAMPLE
         $offset = $node->args[2] ?? $this->nodeFactory->createArg(0);
         return $this->nodeFactory->createFuncCall('mb_strpos', [$node->args[0], $node->args[1], $offset, $this->nodeFactory->createArg('utf-8')]);
     }
-    private function toMultiByteStrrPos(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\FuncCall
+    private function toMultiByteStrrPos(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\FuncCall
     {
-        return $this->nodeFactory->createFuncCall('mb_strrpos', [$node->args[0], $node->args[1], $this->nodeFactory->createArg('utf-8')]);
+        return $this->nodeFactory->createFuncCall('mb_strrpos', [$methodCall->args[0], $methodCall->args[1], $this->nodeFactory->createArg('utf-8')]);
     }
-    private function toMultiByteStrlen(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\FuncCall
+    private function toMultiByteStrlen(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\FuncCall
     {
-        return $this->nodeFactory->createFuncCall('mb_strlen', \array_reverse($node->args));
+        return $this->nodeFactory->createFuncCall('mb_strlen', \array_reverse($methodCall->args));
     }
 }

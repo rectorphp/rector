@@ -23,7 +23,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -86,18 +85,11 @@ final class SendNotifyEmailToMailApiRector extends \Rector\Core\Rector\AbstractR
         if (!$this->isName($node->name, 'sendNotifyEmail')) {
             return null;
         }
-        $currentStmts = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        $positionNode = $currentStmts ?? $node;
-        $this->nodesToAddCollector->addNodeBeforeNode($this->initializeSuccessVariable(), $positionNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($this->initializeMailClass(), $positionNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($this->trimMessage($node), $positionNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($this->trimSenderName($node), $positionNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($this->trimSenderAddress($node), $positionNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($this->ifSenderAddress(), $positionNode);
+        $this->nodesToAddCollector->addNodesBeforeNode([$this->initializeSuccessVariable(), $this->initializeMailClass(), $this->trimMessage($node), $this->trimSenderName($node), $this->trimSenderAddress($node), $this->ifSenderAddress()], $node);
         $replyTo = isset($node->args[5]) ? $node->args[5]->value : null;
         if (null !== $replyTo) {
-            $this->nodesToAddCollector->addNodeBeforeNode($this->parsedReplyTo($replyTo), $positionNode);
-            $this->nodesToAddCollector->addNodeBeforeNode($this->methodReplyTo(), $positionNode);
+            $this->nodesToAddCollector->addNodeBeforeNode($this->parsedReplyTo($replyTo), $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($this->methodReplyTo(), $node);
         }
         $ifMessageNotEmpty = $this->messageNotEmpty();
         $ifMessageNotEmpty->stmts[] = $this->messageParts();
@@ -106,7 +98,7 @@ final class SendNotifyEmailToMailApiRector extends \Rector\Core\Rector\AbstractR
         $ifMessageNotEmpty->stmts[] = $this->parsedRecipients($node);
         $ifMessageNotEmpty->stmts[] = $this->ifParsedRecipients();
         $ifMessageNotEmpty->stmts[] = $this->createSuccessTrue();
-        $this->nodesToAddCollector->addNodeBeforeNode($ifMessageNotEmpty, $positionNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($ifMessageNotEmpty, $node);
         return new \PhpParser\Node\Expr\Variable(self::SUCCESS);
     }
     /**
@@ -154,17 +146,17 @@ CODE_SAMPLE
     {
         return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::MAIL), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Mail\\MailMessage')])));
     }
-    private function trimMessage(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node
+    private function trimMessage(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
     {
-        return new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::MESSAGE), $this->nodeFactory->createFuncCall(self::TRIM, [$node->args[0]]));
+        return new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::MESSAGE), $this->nodeFactory->createFuncCall(self::TRIM, [$methodCall->args[0]]));
     }
     private function trimSenderName(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
     {
         return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('senderName'), $this->nodeFactory->createFuncCall(self::TRIM, [$methodCall->args[4] ?? new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null'))])));
     }
-    private function trimSenderAddress(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node
+    private function trimSenderAddress(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::SENDER_ADDRESS), $this->nodeFactory->createFuncCall(self::TRIM, [$node->args[3]])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::SENDER_ADDRESS), $this->nodeFactory->createFuncCall(self::TRIM, [$methodCall->args[3]])));
     }
     private function mailFromMethodCall() : \PhpParser\Node\Expr\MethodCall
     {
@@ -193,9 +185,9 @@ CODE_SAMPLE
     {
         return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('plainMessage'), $this->nodeFactory->createFuncCall(self::TRIM, [new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::MESSAGE_PARTS), new \PhpParser\Node\Scalar\LNumber(1))])));
     }
-    private function parsedRecipients(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Stmt\Expression
+    private function parsedRecipients(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Stmt\Expression
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARSED_RECIPIENTS), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\MailUtility', 'parseAddresses', [$node->args[1]])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARSED_RECIPIENTS), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\MailUtility', 'parseAddresses', [$methodCall->args[1]])));
     }
     private function ifParsedRecipients() : \PhpParser\Node\Stmt\If_
     {

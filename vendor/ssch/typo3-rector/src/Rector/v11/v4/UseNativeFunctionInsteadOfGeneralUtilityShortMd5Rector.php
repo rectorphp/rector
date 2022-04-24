@@ -18,6 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
@@ -71,12 +72,12 @@ CODE_SAMPLE
     /**
      * @return mixed
      */
-    private function extractLengthValue(\PhpParser\Node\Expr\StaticCall $node)
+    private function extractLengthValue(\PhpParser\Node\Expr\StaticCall $staticCall)
     {
-        $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
+        $classMethod = $this->astResolver->resolveClassMethodFromCall($staticCall);
         $lengthValue = 10;
-        if (isset($node->args[1])) {
-            $lengthValue = $node->args[1]->value;
+        if (isset($staticCall->args[1])) {
+            $lengthValue = $staticCall->args[1]->value;
         } elseif ($classMethod instanceof \PhpParser\Node\Stmt\ClassMethod && null !== $classMethod->params[1]->default) {
             $lengthValue = $this->valueResolver->getValue($classMethod->params[1]->default);
         }

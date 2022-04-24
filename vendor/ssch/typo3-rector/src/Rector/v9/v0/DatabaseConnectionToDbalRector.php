@@ -18,11 +18,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DatabaseConnectionToDbalRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     /**
      * @var DatabaseConnectionToDbalRefactoring[]
+     * @readonly
      */
     private $databaseConnectionRefactorings;
     /**
@@ -90,8 +92,8 @@ $connectionPool = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CM
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        return !$this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO3_DB);
+        return !$this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO3_DB);
     }
 }

@@ -24,10 +24,12 @@ final class ValidateAnnotationRector extends \Rector\Core\Rector\AbstractRector
      */
     private const OLD_ANNOTATION = 'validate';
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
+     * @readonly
      * @var \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory
      */
     private $importExtbaseAnnotationIfMissingFactory;
