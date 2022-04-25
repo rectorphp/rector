@@ -24,6 +24,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -39,9 +40,15 @@ final class ObjectTypeSpecifier
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\UseImportsResolver
+     */
+    private $useImportsResolver;
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
+        $this->useImportsResolver = $useImportsResolver;
     }
     /**
      * @param \PHPStan\Analyser\Scope|null $scope
@@ -86,9 +93,8 @@ final class ObjectTypeSpecifier
     }
     private function matchAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : ?\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType
     {
-        /** @var Use_[]|null $uses */
-        $uses = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
-        if ($uses === null) {
+        $uses = $this->useImportsResolver->resolveForNode($node);
+        if ($uses === []) {
             return null;
         }
         $className = $objectType->getClassName();
