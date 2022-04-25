@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\StaticTypeMapper\PhpDocParser;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\NameScope;
@@ -23,6 +24,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
@@ -82,7 +84,13 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
             return new IterableType(new MixedType(), new MixedType());
         }
 
-        $objectType = new ObjectType($typeNode->name);
+        if (str_starts_with($typeNode->name, '\\')) {
+            $type = $typeNode->name;
+            $typeWithoutPreslash = Strings::substring($type, 1);
+            $objectType = new FullyQualifiedObjectType($typeWithoutPreslash);
+        } else {
+            $objectType = new ObjectType($typeNode->name);
+        }
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType, $scope);

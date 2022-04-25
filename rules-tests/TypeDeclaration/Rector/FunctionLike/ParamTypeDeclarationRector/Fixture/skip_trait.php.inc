@@ -2,15 +2,12 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
-trait SkipTrait
-{
-
-}
+use Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Source\SimpleTrait;
 
 class SomeClass
 {
     /**
-     * @param SkipTrait $param
+     * @param SimpleTrait $param
      */
     function someFunction($param)
     {

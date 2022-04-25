@@ -4,18 +4,14 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
-final class SkipParentAbstractClassWithoutType extends AbstractAccountingRefGenerator
+use Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Source\AbstractClassWithoutParamType;
+use Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Source\PremiumDependency;
+
+final class SkipParentAbstractClassWithoutType extends AbstractClassWithoutParamType
 {
     /**
-     * @param CreditNote $entity
+     * @param PremiumDependency $entity
      */
-    public function getReferenceDate($entity): \DateTime
-    {
-    }
-}
-
-abstract class AbstractAccountingRefGenerator
-{
     public function getReferenceDate($entity): \DateTime
     {
     }
