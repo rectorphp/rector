@@ -125,7 +125,6 @@ CODE_SAMPLE
         }
         /** @var PropertyFetch|StaticPropertyFetch $expr */
         $variableType = $expr instanceof \PhpParser\Node\Expr\PropertyFetch ? $this->nodeTypeResolver->getType($expr->var) : $this->nodeTypeResolver->getType($expr->class);
-        //        dump($variableType);die;
         if ($variableType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
             $currentClassLike = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\ClassLike::class);
             if ($currentClassLike instanceof \PhpParser\Node\Stmt\ClassLike) {

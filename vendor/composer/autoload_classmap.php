@@ -2389,7 +2389,6 @@ return array(
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\TraitTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/TraitTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\VariableTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/VariableTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeVisitor\\FunctionLikeParamArgPositionNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/NodeVisitor/FunctionLikeParamArgPositionNodeVisitor.php',
-    'Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/NodeVisitor/NamespaceNodeVisitor.php',
     'Rector\\NodeTypeResolver\\Node\\AttributeKey' => $baseDir . '/packages/NodeTypeResolver/Node/AttributeKey.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\RemoveDeepChainMethodCallNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
