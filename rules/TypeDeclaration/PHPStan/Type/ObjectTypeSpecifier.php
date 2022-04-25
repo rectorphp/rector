@@ -25,6 +25,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -37,7 +38,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class ObjectTypeSpecifier
 {
     public function __construct(
-        private readonly ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly UseImportsResolver $useImportsResolver,
     ) {
     }
 
@@ -93,9 +95,8 @@ final class ObjectTypeSpecifier
 
     private function matchAliasedObjectType(Node $node, ObjectType $objectType): ?AliasedObjectType
     {
-        /** @var Use_[]|null $uses */
-        $uses = $node->getAttribute(AttributeKey::USE_NODES);
-        if ($uses === null) {
+        $uses = $this->useImportsResolver->resolveForNode($node);
+        if ($uses === []) {
             return null;
         }
 
