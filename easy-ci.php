@@ -27,6 +27,7 @@ use Rector\Set\Contract\SetListInterface;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\Testing\PHPUnit\AbstractTestCase;
+use Rector\TypeDeclaration\Contract\PHPStan\TypeWithClassTypeSpecifierInterface;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Symfony\Component\Console\Application;
@@ -70,5 +71,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         FileInfoParser::class,
         SameClassMethodCallAnalyzer::class,
         AnnotationToAttributeMapperInterface::class,
+        TypeWithClassTypeSpecifierInterface::class,
     ]);
 };
