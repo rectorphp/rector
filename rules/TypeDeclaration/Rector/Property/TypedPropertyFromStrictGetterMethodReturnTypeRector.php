@@ -7,8 +7,6 @@ namespace Rector\TypeDeclaration\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -16,8 +14,8 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\Privatization\Guard\ParentPropertyLookupGuard;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,7 +28,8 @@ final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends Abstract
     public function __construct(
         private readonly GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
-        private readonly VarTagRemover $varTagRemover
+        private readonly VarTagRemover $varTagRemover,
+        private readonly ParentPropertyLookupGuard $parentPropertyLookupGuard
     ) {
     }
 
@@ -84,7 +83,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isGuardedByParentProperty($node)) {
+        if (! $this->parentPropertyLookupGuard->isLegal($node)) {
             return null;
         }
 
@@ -139,28 +138,5 @@ CODE_SAMPLE
         }
 
         $propertyProperty->default = $this->nodeFactory->createNull();
-    }
-
-    private function isGuardedByParentProperty(Property $property): bool
-    {
-        $propertyName = $this->getName($property);
-
-        $scope = $property->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return false;
-        }
-
-        foreach ($classReflection->getParents() as $parentClassReflection) {
-            if ($parentClassReflection->hasProperty($propertyName)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
