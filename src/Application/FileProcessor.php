@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Application;
 
 use Rector\ChangesReporting\Collector\AffectedFilesCollector;
+use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
@@ -17,7 +18,8 @@ final class FileProcessor
         private readonly AffectedFilesCollector $affectedFilesCollector,
         private readonly NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         private readonly RectorParser $rectorParser,
-        private readonly RectorNodeTraverser $rectorNodeTraverser
+        private readonly RectorNodeTraverser $rectorNodeTraverser,
+        private readonly FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser,
     ) {
     }
 
@@ -36,7 +38,9 @@ final class FileProcessor
 
     public function refactor(File $file, Configuration $configuration): void
     {
-        $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
+        $newStmts = $this->fileWithoutNamespaceNodeTraverser->traverse($file->getNewStmts());
+        $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
+
         $file->changeNewStmts($newStmts);
 
         $this->affectedFilesCollector->removeFromList($file);
