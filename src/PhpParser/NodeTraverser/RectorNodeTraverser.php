@@ -4,12 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\PhpVersionedFilter;
 final class RectorNodeTraverser extends \PhpParser\NodeTraverser
 {
@@ -24,21 +20,15 @@ final class RectorNodeTraverser extends \PhpParser\NodeTraverser
     private $phpRectors;
     /**
      * @readonly
-     * @var \PhpParser\NodeFinder
-     */
-    private $nodeFinder;
-    /**
-     * @readonly
      * @var \Rector\VersionBonding\PhpVersionedFilter
      */
     private $phpVersionedFilter;
     /**
      * @param PhpRectorInterface[] $phpRectors
      */
-    public function __construct(array $phpRectors, \PhpParser\NodeFinder $nodeFinder, \Rector\VersionBonding\PhpVersionedFilter $phpVersionedFilter)
+    public function __construct(array $phpRectors, \Rector\VersionBonding\PhpVersionedFilter $phpVersionedFilter)
     {
         $this->phpRectors = $phpRectors;
-        $this->nodeFinder = $nodeFinder;
         $this->phpVersionedFilter = $phpVersionedFilter;
     }
     /**
@@ -49,17 +39,7 @@ final class RectorNodeTraverser extends \PhpParser\NodeTraverser
     public function traverse(array $nodes) : array
     {
         $this->prepareNodeVisitors();
-        $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, \PhpParser\Node\Stmt\Namespace_::class);
-        if (!$hasNamespace && $nodes !== []) {
-            $fileWithoutNamespace = new \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace($nodes);
-            foreach ($nodes as $node) {
-                $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, $fileWithoutNamespace);
-            }
-            $nodesToTraverse = [$fileWithoutNamespace];
-        } else {
-            $nodesToTraverse = $nodes;
-        }
-        return parent::traverse($nodesToTraverse);
+        return parent::traverse($nodes);
     }
     /**
      * This must happen after $this->configuration is set after ProcessCommand::execute() is run,
