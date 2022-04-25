@@ -11,7 +11,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Naming\Naming\UseImportsResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,6 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeUseFunctionRector extends AbstractRector
 {
+    public function __construct(
+        private readonly UseImportsResolver $useImportsResolver,
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -64,7 +69,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $name = $this->getFullyQualifiedName($node->getAttribute(AttributeKey::USE_NODES), $node);
+        $uses = $this->useImportsResolver->resolveForNode($node);
+
+        $name = $this->getFullyQualifiedName($uses, $node);
         if ($name === null) {
             return null;
         }

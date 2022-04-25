@@ -589,3 +589,6 @@ parameters:
         -
             message: '#Access to an undefined property PhpParser\\Node\:\:\$stmts#'
             path: src/PhpParser/Node/BetterNodeFinder.php
+
+        # empty parent construct
+        - '#Rector\\Core\\PhpParser\\NodeTraverser\\FileWithoutNamespaceNodeTraverser\:\:__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'

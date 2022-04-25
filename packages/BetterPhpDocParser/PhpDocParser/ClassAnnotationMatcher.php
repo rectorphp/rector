@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Use_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -24,6 +25,7 @@ final class ClassAnnotationMatcher
 
     public function __construct(
         private readonly UseImportNameMatcher $useImportNameMatcher,
+        private readonly UseImportsResolver $useImportsResolver,
         private readonly ReflectionProvider $reflectionProvider
     ) {
     }
@@ -37,8 +39,7 @@ final class ClassAnnotationMatcher
 
         $tag = ltrim($tag, '@');
 
-        /** @var Use_[] $uses */
-        $uses = (array) $node->getAttribute(AttributeKey::USE_NODES);
+        $uses = $this->useImportsResolver->resolveForNode($node);
         $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag);
 
         $this->fullyQualifiedNameByHash[$uniqueHash] = $fullyQualifiedClass;

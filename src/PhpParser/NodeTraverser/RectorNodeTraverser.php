@@ -10,6 +10,7 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\PhpVersionedFilter;
 
 final class RectorNodeTraverser extends NodeTraverser
@@ -38,10 +39,16 @@ final class RectorNodeTraverser extends NodeTraverser
         $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if (! $hasNamespace && $nodes !== []) {
             $fileWithoutNamespace = new FileWithoutNamespace($nodes);
-            return parent::traverse([$fileWithoutNamespace]);
+            foreach ($nodes as $node) {
+                $node->setAttribute(AttributeKey::PARENT_NODE, $fileWithoutNamespace);
+            }
+
+            $nodesToTraverse = [$fileWithoutNamespace];
+        } else {
+            $nodesToTraverse = $nodes;
         }
 
-        return parent::traverse($nodes);
+        return parent::traverse($nodesToTraverse);
     }
 
     /**
