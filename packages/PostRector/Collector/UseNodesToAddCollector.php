@@ -4,10 +4,9 @@ declare (strict_types=1);
 namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -27,9 +26,15 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(\Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\UseImportsResolver
+     */
+    private $useImportsResolver;
+    public function __construct(\Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver)
     {
         $this->currentFileProvider = $currentFileProvider;
+        $this->useImportsResolver = $useImportsResolver;
     }
     public function isActive() : bool
     {
@@ -57,10 +62,9 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
     {
         $filePath = $file->getFilePath();
         $objectTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
-        /** @var Use_[] $useNodes */
-        $useNodes = (array) $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
-        foreach ($useNodes as $useNode) {
-            foreach ($useNode->uses as $useUse) {
+        $uses = $this->useImportsResolver->resolveForNode($node);
+        foreach ($uses as $use) {
+            foreach ($use->uses as $useUse) {
                 if ($useUse->alias !== null) {
                     $objectTypes[] = new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($useUse->alias->toString(), (string) $useUse->name);
                 } else {

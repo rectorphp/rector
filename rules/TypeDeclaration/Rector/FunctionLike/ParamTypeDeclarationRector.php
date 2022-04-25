@@ -231,11 +231,6 @@ CODE_SAMPLE
             }
         }
         // no type → check it
-        if ($param->type === null) {
-            return \false;
-        }
-        // already set → skip
-        $hasNewInheritedType = (bool) $param->type->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_NEW_INHERITED_TYPE, \false);
-        return !$hasNewInheritedType;
+        return $param->type !== null;
     }
 }
