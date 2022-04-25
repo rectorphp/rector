@@ -69,17 +69,20 @@ return [
 CODE_SAMPLE
 )]);
     }
+    /**
+     * @param Array_ $node
+     */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->hasAstBeenChanged = \false;
         if (!$this->isFullTcaDefinition($node)) {
             return null;
         }
-        $ctrl = $this->extractSubArrayByKey($node, 'ctrl');
-        if (!$ctrl instanceof \PhpParser\Node\Expr\Array_) {
+        $ctrlArray = $this->extractSubArrayByKey($node, 'ctrl');
+        if (!$ctrlArray instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
-        $value = $this->extractArrayValueByKey($ctrl, 'languageField');
+        $value = $this->extractArrayValueByKey($ctrlArray, 'languageField');
         if (!$value instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
@@ -88,9 +91,9 @@ CODE_SAMPLE
             return null;
         }
         // we found a tca definition of a full table. Process it as a whole:
-        $columns = $this->extractSubArrayByKey($node, 'columns');
-        if (null !== $columns) {
-            $this->refactorColumnList($columns);
+        $columnsArray = $this->extractSubArrayByKey($node, 'columns');
+        if (null !== $columnsArray) {
+            $this->refactorColumnList($columnsArray);
         }
         return $this->hasAstBeenChanged ? $node : null;
     }

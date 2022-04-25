@@ -11,11 +11,11 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\Return_;
 trait TcaHelperTrait
 {
-    protected function isFullTca(\PhpParser\Node\Stmt\Return_ $node) : bool
+    protected function isFullTca(\PhpParser\Node\Stmt\Return_ $return) : bool
     {
-        $ctrl = $this->extractCtrl($node);
-        $columns = $this->extractColumns($node);
-        return null !== $ctrl && null !== $columns;
+        $ctrlArrayItem = $this->extractCtrl($return);
+        $columnsArrayItem = $this->extractColumns($return);
+        return null !== $ctrlArrayItem && null !== $columnsArrayItem;
     }
     protected function extractArrayItemByKey(?\PhpParser\Node $node, string $key) : ?\PhpParser\Node\Expr\ArrayItem
     {
@@ -58,9 +58,9 @@ trait TcaHelperTrait
     {
         return ($extractArrayItemByKey = $this->extractArrayItemByKey($node, $key)) ? $extractArrayItemByKey->value : null;
     }
-    protected function hasKey(\PhpParser\Node\Expr\Array_ $configValue, string $configKey) : bool
+    protected function hasKey(\PhpParser\Node\Expr\Array_ $configValuesArray, string $configKey) : bool
     {
-        foreach ($configValue->items as $configItemValue) {
+        foreach ($configValuesArray->items as $configItemValue) {
             if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
@@ -73,9 +73,9 @@ trait TcaHelperTrait
         }
         return \false;
     }
-    protected function hasKeyValuePair(\PhpParser\Node\Expr\Array_ $configValue, string $configKey, string $expectedValue) : bool
+    protected function hasKeyValuePair(\PhpParser\Node\Expr\Array_ $configValueArray, string $configKey, string $expectedValue) : bool
     {
-        foreach ($configValue->items as $configItemValue) {
+        foreach ($configValueArray->items as $configItemValue) {
             if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
@@ -88,34 +88,34 @@ trait TcaHelperTrait
         }
         return \false;
     }
-    private function isInlineType(\PhpParser\Node\Expr\Array_ $columnItemConfiguration) : bool
+    private function isInlineType(\PhpParser\Node\Expr\Array_ $columnItemConfigurationArray) : bool
     {
-        return $this->isConfigType($columnItemConfiguration, 'inline');
+        return $this->isConfigType($columnItemConfigurationArray, 'inline');
     }
-    private function isConfigType(\PhpParser\Node\Expr\Array_ $columnItemConfiguration, string $type) : bool
+    private function isConfigType(\PhpParser\Node\Expr\Array_ $columnItemConfigurationArray, string $type) : bool
     {
-        return $this->hasKeyValuePair($columnItemConfiguration, 'type', $type);
+        return $this->hasKeyValuePair($columnItemConfigurationArray, 'type', $type);
     }
-    private function hasRenderType(\PhpParser\Node\Expr\Array_ $columnItemConfiguration) : bool
+    private function hasRenderType(\PhpParser\Node\Expr\Array_ $columnItemConfigurationArray) : bool
     {
-        $renderTypeItem = $this->extractArrayItemByKey($columnItemConfiguration, 'renderType');
+        $renderTypeItem = $this->extractArrayItemByKey($columnItemConfigurationArray, 'renderType');
         return null !== $renderTypeItem;
     }
-    private function extractColumns(\PhpParser\Node\Stmt\Return_ $node) : ?\PhpParser\Node\Expr\ArrayItem
+    private function extractColumns(\PhpParser\Node\Stmt\Return_ $return) : ?\PhpParser\Node\Expr\ArrayItem
     {
-        return $this->extractArrayItemByKey($node->expr, 'columns');
+        return $this->extractArrayItemByKey($return->expr, 'columns');
     }
-    private function extractTypes(\PhpParser\Node\Stmt\Return_ $node) : ?\PhpParser\Node\Expr\ArrayItem
+    private function extractTypes(\PhpParser\Node\Stmt\Return_ $return) : ?\PhpParser\Node\Expr\ArrayItem
     {
-        return $this->extractArrayItemByKey($node->expr, 'types');
+        return $this->extractArrayItemByKey($return->expr, 'types');
     }
-    private function extractCtrl(\PhpParser\Node\Stmt\Return_ $node) : ?\PhpParser\Node\Expr\ArrayItem
+    private function extractCtrl(\PhpParser\Node\Stmt\Return_ $return) : ?\PhpParser\Node\Expr\ArrayItem
     {
-        return $this->extractArrayItemByKey($node->expr, 'ctrl');
+        return $this->extractArrayItemByKey($return->expr, 'ctrl');
     }
-    private function extractInterface(\PhpParser\Node\Stmt\Return_ $node) : ?\PhpParser\Node\Expr\ArrayItem
+    private function extractInterface(\PhpParser\Node\Stmt\Return_ $return) : ?\PhpParser\Node\Expr\ArrayItem
     {
-        return $this->extractArrayItemByKey($node->expr, 'interface');
+        return $this->extractArrayItemByKey($return->expr, 'interface');
     }
     /**
      * @return Generator<ArrayItem>
@@ -136,20 +136,20 @@ trait TcaHelperTrait
         }
         return null;
     }
-    private function configIsOfInternalType(\PhpParser\Node\Expr\Array_ $configValue, string $expectedType) : bool
+    private function configIsOfInternalType(\PhpParser\Node\Expr\Array_ $configValueArray, string $expectedType) : bool
     {
-        return $this->hasKeyValuePair($configValue, 'internal_type', $expectedType);
+        return $this->hasKeyValuePair($configValueArray, 'internal_type', $expectedType);
     }
-    private function configIsOfRenderType(\PhpParser\Node\Expr\Array_ $configValue, string $expectedRenderType) : bool
+    private function configIsOfRenderType(\PhpParser\Node\Expr\Array_ $configValueArray, string $expectedRenderType) : bool
     {
-        return $this->hasKeyValuePair($configValue, 'renderType', $expectedRenderType);
+        return $this->hasKeyValuePair($configValueArray, 'renderType', $expectedRenderType);
     }
     /**
      * @return Generator<string, Node>
      */
-    private function extractColumnConfig(\PhpParser\Node\Expr\Array_ $items, string $keyName = 'config') : \Generator
+    private function extractColumnConfig(\PhpParser\Node\Expr\Array_ $array, string $keyName = 'config') : \Generator
     {
-        foreach ($items->items as $columnConfig) {
+        foreach ($array->items as $columnConfig) {
             if (!$columnConfig instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }

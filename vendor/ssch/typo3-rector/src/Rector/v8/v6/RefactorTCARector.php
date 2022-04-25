@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v8\v6;
 
-use RectorPrefix20220424\Nette\Utils\Strings;
+use RectorPrefix20220425\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -114,9 +114,9 @@ CODE_SAMPLE
         $this->addFieldControlInsteadOfWizardsAddListEdit($items);
         return $node;
     }
-    private function addFieldControlInsteadOfWizardsAddListEdit(\PhpParser\Node\Expr\Array_ $items) : void
+    private function addFieldControlInsteadOfWizardsAddListEdit(\PhpParser\Node\Expr\Array_ $itemsArray) : void
     {
-        foreach ($items->items as $fieldValue) {
+        foreach ($itemsArray->items as $fieldValue) {
             if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
@@ -171,7 +171,7 @@ CODE_SAMPLE
                         /** @var Expr $wizardItemValueKey */
                         $wizardItemValueKey = $wizardItemValue->key;
                         $validWizard = $this->isValidWizard($wizardItemValue);
-                        if ($validWizard || \RectorPrefix20220424\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($wizardItemValueKey), '_')) {
+                        if ($validWizard || \RectorPrefix20220425\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($wizardItemValueKey), '_')) {
                             --$remainingWizards;
                         }
                         if (!$validWizard) {
@@ -270,12 +270,12 @@ CODE_SAMPLE
             }
         }
     }
-    private function refactorRenderTypeInputDateTime(\PhpParser\Node\Expr\ArrayItem $configValue) : void
+    private function refactorRenderTypeInputDateTime(\PhpParser\Node\Expr\ArrayItem $configValueArrayItem) : void
     {
-        if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$configValueArrayItem->value instanceof \PhpParser\Node\Expr\Array_) {
             return;
         }
-        foreach ($configValue->value->items as $configItemValue) {
+        foreach ($configValueArrayItem->value->items as $configItemValue) {
             if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
@@ -291,7 +291,7 @@ CODE_SAMPLE
             }
             $eval = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $eval, \true);
             if (\in_array('date', $eval, \true) || \in_array('datetime', $eval, \true) || \in_array('time', $eval, \true) || \in_array('timesec', $eval, \true)) {
-                $configValue->value->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('inputDateTime'), new \PhpParser\Node\Scalar\String_('renderType'));
+                $configValueArrayItem->value->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('inputDateTime'), new \PhpParser\Node\Scalar\String_('renderType'));
             }
         }
     }

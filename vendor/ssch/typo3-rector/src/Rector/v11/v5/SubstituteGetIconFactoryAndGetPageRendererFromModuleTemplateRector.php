@@ -121,9 +121,9 @@ CODE_SAMPLE
     /**
      * @return Node[]
      */
-    private function findModuleTemplateMethodCallsByName(\PhpParser\Node\Stmt\Class_ $node, string $methodCallName) : array
+    private function findModuleTemplateMethodCallsByName(\PhpParser\Node\Stmt\Class_ $class, string $methodCallName) : array
     {
-        return $this->betterNodeFinder->find($node->stmts, function (\PhpParser\Node $node) use($methodCallName) {
+        return $this->betterNodeFinder->find($class->stmts, function (\PhpParser\Node $node) use($methodCallName) {
             if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return \false;
             }
@@ -133,12 +133,12 @@ CODE_SAMPLE
             return $this->nodeNameResolver->isName($node->name, $methodCallName);
         });
     }
-    private function addIconFactoryToConstructor(\PhpParser\Node\Stmt\Class_ $node) : void
+    private function addIconFactoryToConstructor(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        $this->classDependencyManipulator->addConstructorDependency($node, new \Rector\PostRector\ValueObject\PropertyMetadata('iconFactory', new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Imaging\\IconFactory'), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE));
+        $this->classDependencyManipulator->addConstructorDependency($class, new \Rector\PostRector\ValueObject\PropertyMetadata('iconFactory', new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Imaging\\IconFactory'), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE));
     }
-    private function addPageRendererToConstructor(\PhpParser\Node\Stmt\Class_ $node) : void
+    private function addPageRendererToConstructor(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        $this->classDependencyManipulator->addConstructorDependency($node, new \Rector\PostRector\ValueObject\PropertyMetadata('pageRenderer', new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Page\\PageRenderer'), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE));
+        $this->classDependencyManipulator->addConstructorDependency($class, new \Rector\PostRector\ValueObject\PropertyMetadata('pageRenderer', new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Page\\PageRenderer'), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE));
     }
 }

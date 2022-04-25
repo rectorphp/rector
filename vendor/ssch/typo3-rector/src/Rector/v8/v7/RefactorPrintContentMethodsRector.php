@@ -37,9 +37,9 @@ final class RefactorPrintContentMethodsRector extends \Rector\Core\Rector\Abstra
             return null;
         }
         if ($this->isPageLayoutControllerClass($node)) {
-            $newNode = new \PhpParser\Node\Stmt\Echo_([$this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($node->var, 'getModuleTemplate'), 'renderContent')]);
+            $echo = new \PhpParser\Node\Stmt\Echo_([$this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($node->var, 'getModuleTemplate'), 'renderContent')]);
         } else {
-            $newNode = new \PhpParser\Node\Stmt\Echo_([$this->nodeFactory->createPropertyFetch($node->var, 'content')]);
+            $echo = new \PhpParser\Node\Stmt\Echo_([$this->nodeFactory->createPropertyFetch($node->var, 'content')]);
         }
         try {
             $this->removeNode($node);
@@ -47,7 +47,7 @@ final class RefactorPrintContentMethodsRector extends \Rector\Core\Rector\Abstra
             $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             $this->removeNode($parentNode);
         }
-        $this->nodesToAddCollector->addNodeBeforeNode($newNode, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($echo, $node);
         return $node;
     }
     /**

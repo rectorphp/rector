@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v9\v0;
 
+use RectorPrefix20220425\Nette\Utils\Json;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -12,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Ssch\TYPO3Rector\Helper\FilesFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220424\Symplify\SmartFileSystem\Exception\FileNotFoundException;
+use RectorPrefix20220425\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Important-82692-GuidelinesForExtensionFiles.html
@@ -106,15 +107,15 @@ CODE_SAMPLE
     {
         try {
             $composerJson = new \Symplify\SmartFileSystem\SmartFileInfo($extEmConf->getRealPathDirectory() . '/composer.json');
-            $json = \json_decode($composerJson->getContents(), \true);
+            $json = \RectorPrefix20220425\Nette\Utils\Json::decode($composerJson->getContents(), \RectorPrefix20220425\Nette\Utils\Json::FORCE_ARRAY);
             if (isset($json['extra']['typo3/cms']['extension-key'])) {
                 return $json['extra']['typo3/cms']['extension-key'];
             }
             if (isset($json['name'])) {
-                [, $extensionKey] = \explode('/', $json['name'], 2);
+                [, $extensionKey] = \explode('/', (string) $json['name'], 2);
                 return \str_replace('-', '_', $extensionKey);
             }
-        } catch (\RectorPrefix20220424\Symplify\SmartFileSystem\Exception\FileNotFoundException $exception) {
+        } catch (\RectorPrefix20220425\Symplify\SmartFileSystem\Exception\FileNotFoundException $exception) {
             return null;
         }
         return null;

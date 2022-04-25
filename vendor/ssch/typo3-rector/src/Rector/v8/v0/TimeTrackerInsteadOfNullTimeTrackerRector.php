@@ -94,9 +94,9 @@ CODE_SAMPLE
         }
         return $this->isName($node->name, 'get');
     }
-    private function renameClassIfNeeded(\PhpParser\Node\Expr\New_ $node) : ?\PhpParser\Node
+    private function renameClassIfNeeded(\PhpParser\Node\Expr\New_ $new) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\TimeTracker\\NullTimeTracker'))) {
+        if (!$this->isObjectType($new, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\TimeTracker\\NullTimeTracker'))) {
             return null;
         }
         $arguments = $this->nodeFactory->createArgs([$this->nodeFactory->createFalse()]);

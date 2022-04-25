@@ -62,9 +62,9 @@ class MyViewHelperAccessingControllerContext extends AbstractViewHelper
 CODE_SAMPLE
 )]);
     }
-    private function replaceWithRenderingContextGetControllerContext(\PhpParser\Node\Stmt\Class_ $node) : void
+    private function replaceWithRenderingContextGetControllerContext(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        foreach ($node->getMethods() as $classMethod) {
+        foreach ($class->getMethods() as $classMethod) {
             $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (\PhpParser\Node $node) {
                 if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
                     return null;

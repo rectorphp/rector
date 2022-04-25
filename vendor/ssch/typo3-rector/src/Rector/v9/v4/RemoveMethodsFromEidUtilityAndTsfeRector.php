@@ -73,21 +73,21 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function shouldSkip($node) : bool
+    private function shouldSkip($call) : bool
     {
-        if ($this->isEidUtilityMethodCall($node)) {
+        if ($this->isEidUtilityMethodCall($call)) {
             return \false;
         }
-        return !$this->isMethodCallOnTsfe($node);
+        return !$this->isMethodCallOnTsfe($call);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function isEidUtilityMethodCall($node) : bool
+    private function isEidUtilityMethodCall($call) : bool
     {
-        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Utility\\EidUtility'));
+        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Utility\\EidUtility'));
     }
     private function isMethodCallOnTsfe(\PhpParser\Node $node) : bool
     {

@@ -52,11 +52,11 @@ CODE_SAMPLE
     }
     protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
     {
-        $config = $this->extractSubArrayByKey($columnTca, self::CONFIG);
-        if (!$config instanceof \PhpParser\Node\Expr\Array_) {
+        $configArray = $this->extractSubArrayByKey($columnTca, self::CONFIG);
+        if (!$configArray instanceof \PhpParser\Node\Expr\Array_) {
             return;
         }
-        $item = $this->extractArrayItemByKey($config, 'iconsInOptionTags');
+        $item = $this->extractArrayItemByKey($configArray, 'iconsInOptionTags');
         if (null !== $item) {
             $this->removeNode($item);
             $this->hasAstBeenChanged = \true;

@@ -122,9 +122,9 @@ class MyController extends ActionController
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $node) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
-        $defaultViewObjectNameProperty = $node->getProperty('defaultViewObjectName');
+        $defaultViewObjectNameProperty = $class->getProperty('defaultViewObjectName');
         if (!$defaultViewObjectNameProperty instanceof \PhpParser\Node\Stmt\Property) {
             return \true;
         }
@@ -134,21 +134,21 @@ CODE_SAMPLE
         }
         return !$this->valueResolver->isValue($defaultViewObjectName, 'TYPO3\\CMS\\Backend\\View\\BackendTemplateView');
     }
-    private function addModuleTemplateFactoryToConstructor(\PhpParser\Node\Stmt\Class_ $node) : void
+    private function addModuleTemplateFactoryToConstructor(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        $this->classDependencyManipulator->addConstructorDependency($node, new \Rector\PostRector\ValueObject\PropertyMetadata(self::MODULE_TEMPLATE_FACTORY, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Template\\ModuleTemplateFactory'), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE));
+        $this->classDependencyManipulator->addConstructorDependency($class, new \Rector\PostRector\ValueObject\PropertyMetadata(self::MODULE_TEMPLATE_FACTORY, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Template\\ModuleTemplateFactory'), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE));
     }
-    private function removePropertyDefaultViewObjectName(\PhpParser\Node\Stmt\Class_ $node) : void
+    private function removePropertyDefaultViewObjectName(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        $defaultViewObjectNameProperty = $node->getProperty('defaultViewObjectName');
+        $defaultViewObjectNameProperty = $class->getProperty('defaultViewObjectName');
         if (!$defaultViewObjectNameProperty instanceof \PhpParser\Node\Stmt\Property) {
             return;
         }
         $this->nodeRemover->removeNode($defaultViewObjectNameProperty);
     }
-    private function removePropertyViewIfNeeded(\PhpParser\Node\Stmt\Class_ $node) : void
+    private function removePropertyViewIfNeeded(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        $viewProperty = $node->getProperty('view');
+        $viewProperty = $class->getProperty('view');
         if (!$viewProperty instanceof \PhpParser\Node\Stmt\Property) {
             return;
         }
@@ -191,11 +191,11 @@ CODE_SAMPLE
         $callSetContentOnModuleTemplateVariable = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall(self::MODULE_TEMPLATE, 'setContent', [$viewRenderMethodCall]));
         $moduleTemplateRenderContentMethodCall = $this->nodeFactory->createMethodCall(self::MODULE_TEMPLATE, 'renderContent');
         $htmlResponseMethodCall = $this->nodeFactory->createMethodCall(self::THIS, 'htmlResponse', [$moduleTemplateRenderContentMethodCall]);
-        $returnHtmlResponseMethodCall = new \PhpParser\Node\Stmt\Return_($htmlResponseMethodCall);
+        $htmlResponseMethodCallReturn = new \PhpParser\Node\Stmt\Return_($htmlResponseMethodCall);
         if (null === $classMethod->stmts) {
             $classMethod->stmts[] = $this->createModuleTemplateAssignment();
             $classMethod->stmts[] = $callSetContentOnModuleTemplateVariable;
-            $classMethod->stmts[] = $returnHtmlResponseMethodCall;
+            $classMethod->stmts[] = $htmlResponseMethodCallReturn;
             return;
         }
         $this->callModuleTemplateFactoryCreateIfNeeded($classMethod);
@@ -211,7 +211,7 @@ CODE_SAMPLE
         });
         if ([] === $existingHtmlResponseMethodCallNodes) {
             $classMethod->stmts[] = $callSetContentOnModuleTemplateVariable;
-            $classMethod->stmts[] = $returnHtmlResponseMethodCall;
+            $classMethod->stmts[] = $htmlResponseMethodCallReturn;
             return;
         }
         foreach ($existingHtmlResponseMethodCallNodes as $existingHtmlResponseMethodCallNode) {

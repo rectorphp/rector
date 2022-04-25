@@ -101,19 +101,19 @@ CODE_SAMPLE
     private function getCacheMethod(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
         $this->addCacheManagerNode($staticCall);
-        $cacheEntryNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY), $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(self::CACHE_MANAGER, 'getCache', ['cache_hash']), 'get', [$staticCall->args[0]]));
-        $this->nodesToAddCollector->addNodeAfterNode($cacheEntryNode, $staticCall);
-        $hashContentNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT), $this->nodeFactory->createNull());
-        $this->nodesToAddCollector->addNodeAfterNode($hashContentNode, $staticCall);
-        $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY));
-        $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT), new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY)));
-        $this->nodesToAddCollector->addNodeAfterNode($ifNode, $staticCall);
+        $cacheEntryAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY), $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(self::CACHE_MANAGER, 'getCache', ['cache_hash']), 'get', [$staticCall->args[0]]));
+        $this->nodesToAddCollector->addNodeAfterNode($cacheEntryAssign, $staticCall);
+        $hashContentAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT), $this->nodeFactory->createNull());
+        $this->nodesToAddCollector->addNodeAfterNode($hashContentAssign, $staticCall);
+        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY));
+        $if->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT), new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY)));
+        $this->nodesToAddCollector->addNodeAfterNode($if, $staticCall);
         $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('content'), new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT)), $staticCall);
     }
     private function addCacheManagerNode(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
-        $cacheManagerNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CACHE_MANAGER), $this->createCacheManager());
-        $this->nodesToAddCollector->addNodeAfterNode($cacheManagerNode, $staticCall);
+        $cacheManagerAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CACHE_MANAGER), $this->createCacheManager());
+        $this->nodesToAddCollector->addNodeAfterNode($cacheManagerAssign, $staticCall);
     }
     private function setCacheMethod(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {

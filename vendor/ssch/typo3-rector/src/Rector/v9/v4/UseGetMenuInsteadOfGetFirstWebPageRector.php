@@ -58,10 +58,10 @@ final class UseGetMenuInsteadOfGetFirstWebPageRector extends \Rector\Core\Rector
         $rootLevelPagesVariable = new \PhpParser\Node\Expr\Variable('rootLevelPages');
         $this->addRootLevelPagesAssignment($rootLevelPagesVariable, $node);
         $resetRootLevelPagesNode = $this->nodeFactory->createFuncCall('reset', [$rootLevelPagesVariable]);
-        $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Empty_($rootLevelPagesVariable)));
+        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Empty_($rootLevelPagesVariable)));
         $parentNode->expr = $resetRootLevelPagesNode;
-        $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression($parentNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($ifNode, $node);
+        $if->stmts[] = new \PhpParser\Node\Stmt\Expression($parentNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
         try {
             $this->removeNode($node);
         } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
@@ -93,9 +93,9 @@ CODE_SAMPLE
         }
         return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'sys_page');
     }
-    private function addRootLevelPagesAssignment(\PhpParser\Node\Expr\Variable $rootLevelPagesVariable, \PhpParser\Node\Expr\MethodCall $node) : void
+    private function addRootLevelPagesAssignment(\PhpParser\Node\Expr\Variable $rootLevelPagesVariable, \PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
-        $rootLevelPagesNode = new \PhpParser\Node\Expr\Assign($rootLevelPagesVariable, $this->nodeFactory->createMethodCall($node->var, 'getMenu', [$node->args[0], 'uid', 'sorting', '', \false]));
-        $this->nodesToAddCollector->addNodeBeforeNode($rootLevelPagesNode, $node);
+        $rootLevelPagesAssign = new \PhpParser\Node\Expr\Assign($rootLevelPagesVariable, $this->nodeFactory->createMethodCall($methodCall->var, 'getMenu', [$methodCall->args[0], 'uid', 'sorting', '', \false]));
+        $this->nodesToAddCollector->addNodeBeforeNode($rootLevelPagesAssign, $methodCall);
     }
 }

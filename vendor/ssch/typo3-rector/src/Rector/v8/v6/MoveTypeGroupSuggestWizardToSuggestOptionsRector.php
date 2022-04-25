@@ -93,13 +93,13 @@ CODE_SAMPLE
         if (!$this->isFullTca($node)) {
             return null;
         }
-        $columns = $this->extractSubArrayByKey($node->expr, 'columns');
-        if (!$columns instanceof \PhpParser\Node\Expr\Array_) {
+        $columnsArray = $this->extractSubArrayByKey($node->expr, 'columns');
+        if (!$columnsArray instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $columnNamesWithTypeGroupAndInternalTypeDb = [];
         $this->hasAstBeenChanged = \false;
-        foreach ($this->extractColumnConfig($columns) as $columnName => $config) {
+        foreach ($this->extractColumnConfig($columnsArray) as $columnName => $config) {
             if (!$config instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
@@ -113,25 +113,25 @@ CODE_SAMPLE
             $this->refactorWizards($config);
         }
         // now check columnsOverrides of all type=group, internal_type=db fields:
-        $types = $this->extractSubArrayByKey($node->expr, 'types');
-        if (!$types instanceof \PhpParser\Node\Expr\Array_) {
+        $typesArray = $this->extractSubArrayByKey($node->expr, 'types');
+        if (!$typesArray instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
-        foreach ($this->extractColumnConfig($types, 'columnsOverrides') as $columnOverride) {
+        foreach ($this->extractColumnConfig($typesArray, 'columnsOverrides') as $columnOverride) {
             if (!$columnOverride instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             foreach ($columnNamesWithTypeGroupAndInternalTypeDb as $columnName => $columnConfig) {
-                $overrideForColumn = $this->extractSubArrayByKey($columnOverride, $columnName);
-                if (!$overrideForColumn instanceof \PhpParser\Node\Expr\Array_) {
+                $overrideForColumnArray = $this->extractSubArrayByKey($columnOverride, $columnName);
+                if (!$overrideForColumnArray instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
-                $configOverride = $this->extractSubArrayByKey($overrideForColumn, 'config');
-                if (!$configOverride instanceof \PhpParser\Node\Expr\Array_) {
+                $configOverrideArray = $this->extractSubArrayByKey($overrideForColumnArray, 'config');
+                if (!$configOverrideArray instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
-                if ($this->refactorWizards($configOverride)) {
-                    $configOverride->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('false')), new \PhpParser\Node\Scalar\String_('hideSuggest'));
+                if ($this->refactorWizards($configOverrideArray)) {
+                    $configOverrideArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('false')), new \PhpParser\Node\Scalar\String_('hideSuggest'));
                     $columnConfig->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('true')), new \PhpParser\Node\Scalar\String_('hideSuggest'));
                     $this->hasAstBeenChanged = \true;
                 }
@@ -139,9 +139,9 @@ CODE_SAMPLE
         }
         return $this->hasAstBeenChanged ? $node : null;
     }
-    private function refactorWizards(\PhpParser\Node\Expr\Array_ $config) : bool
+    private function refactorWizards(\PhpParser\Node\Expr\Array_ $configArray) : bool
     {
-        $wizardsArrayItem = $this->extractArrayItemByKey($config, 'wizards');
+        $wizardsArrayItem = $this->extractArrayItemByKey($configArray, 'wizards');
         if (!$wizardsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return \false;
         }
@@ -159,7 +159,7 @@ CODE_SAMPLE
                 $this->removeNode($typeItem);
             }
             if (!$this->isEmpty($wizardConfig)) {
-                $config->items[] = new \PhpParser\Node\Expr\ArrayItem($wizardConfig, new \PhpParser\Node\Scalar\String_('suggestOptions'));
+                $configArray->items[] = new \PhpParser\Node\Expr\ArrayItem($wizardConfig, new \PhpParser\Node\Scalar\String_('suggestOptions'));
             }
             $this->removeNode($wizard);
             $this->hasAstBeenChanged = \true;

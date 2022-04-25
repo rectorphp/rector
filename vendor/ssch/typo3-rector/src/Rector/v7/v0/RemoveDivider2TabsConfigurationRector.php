@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v7\v0;
 
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
 use Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -45,11 +46,11 @@ return [
 CODE_SAMPLE
 )]);
     }
-    protected function refactorCtrl(\PhpParser\Node\Expr\Array_ $ctrl) : void
+    protected function refactorCtrl(\PhpParser\Node\Expr\Array_ $ctrlArray) : void
     {
-        $nodeToRemove = $this->extractArrayItemByKey($ctrl, 'dividers2tabs');
-        if (null !== $nodeToRemove) {
-            $this->removeNode($nodeToRemove);
+        $toRemoveArrayItem = $this->extractArrayItemByKey($ctrlArray, 'dividers2tabs');
+        if ($toRemoveArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            $this->removeNode($toRemoveArrayItem);
             $this->hasAstBeenChanged = \true;
         }
     }

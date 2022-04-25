@@ -67,8 +67,8 @@ final class TemplateGetFileNameToFilePathSanitizerRector extends \Rector\Core\Re
         $assignmentNode = $this->createSanitizeMethod($parentNode, $filePath);
         $assignmentNodeNull = $this->createNullAssignment($parentNode);
         $catches = [$this->createCatchBlockToIgnore($assignmentNodeNull), $this->createCatchBlockToLog([$assignmentNodeNull, $this->createIfLog()])];
-        $tryCatchNode = new \PhpParser\Node\Stmt\TryCatch([$assignmentNode], $catches);
-        $this->nodesToAddCollector->addNodeBeforeNode($tryCatchNode, $node);
+        $tryCatch = new \PhpParser\Node\Stmt\TryCatch([$assignmentNode], $catches);
+        $this->nodesToAddCollector->addNodeBeforeNode($tryCatch, $node);
         return $node;
     }
     /**
@@ -126,8 +126,8 @@ CODE_SAMPLE
     }
     private function createIfLog() : \PhpParser\Node\Stmt\If_
     {
-        $ifNode = new \PhpParser\Node\Stmt\If_($this->nodeFactory->createPropertyFetch($this->nodeFactory->createPropertyFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)), 'tmpl'), 'tt_track'));
-        $ifNode->stmts[] = $this->createTimeTrackerLogMessage();
-        return $ifNode;
+        $if = new \PhpParser\Node\Stmt\If_($this->nodeFactory->createPropertyFetch($this->nodeFactory->createPropertyFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)), 'tmpl'), 'tt_track'));
+        $if->stmts[] = $this->createTimeTrackerLogMessage();
+        return $if;
     }
 }

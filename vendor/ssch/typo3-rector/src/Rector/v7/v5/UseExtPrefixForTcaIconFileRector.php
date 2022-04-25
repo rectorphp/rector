@@ -58,11 +58,11 @@ CODE_SAMPLE
         if (!$this->isFullTca($node)) {
             return null;
         }
-        $ctrl = $this->extractCtrl($node);
-        if (!$ctrl instanceof \PhpParser\Node\Expr\ArrayItem) {
+        $ctrlArrayItem = $this->extractCtrl($node);
+        if (!$ctrlArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        $ctrlItems = $ctrl->value;
+        $ctrlItems = $ctrlArrayItem->value;
         if (!$ctrlItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
@@ -120,7 +120,7 @@ CODE_SAMPLE
         if (null === $pathToFile) {
             return;
         }
-        if (\strpos($pathToFile, '/') !== \false) {
+        if (\strpos((string) $pathToFile, '/') !== \false) {
             return;
         }
         $fieldValue->value = new \PhpParser\Node\Scalar\String_(\sprintf('EXT:t3skin/icons/gfx/i/%s', $pathToFile));

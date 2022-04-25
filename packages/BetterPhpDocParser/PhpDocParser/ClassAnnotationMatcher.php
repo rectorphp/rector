@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Use_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * Matches "@ORM\Entity" to FQN names based on use imports in the file
@@ -26,12 +27,18 @@ final class ClassAnnotationMatcher
     private $useImportNameMatcher;
     /**
      * @readonly
+     * @var \Rector\Naming\Naming\UseImportsResolver
+     */
+    private $useImportsResolver;
+    /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher $useImportNameMatcher, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher $useImportNameMatcher, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->useImportNameMatcher = $useImportNameMatcher;
+        $this->useImportsResolver = $useImportsResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
     public function resolveTagFullyQualifiedName(string $tag, \PhpParser\Node $node) : string
@@ -41,8 +48,7 @@ final class ClassAnnotationMatcher
             return $this->fullyQualifiedNameByHash[$uniqueHash];
         }
         $tag = \ltrim($tag, '@');
-        /** @var Use_[] $uses */
-        $uses = (array) $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
+        $uses = $this->useImportsResolver->resolveForNode($node);
         $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag);
         $this->fullyQualifiedNameByHash[$uniqueHash] = $fullyQualifiedClass;
         return $fullyQualifiedClass;

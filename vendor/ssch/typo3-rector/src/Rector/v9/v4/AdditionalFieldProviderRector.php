@@ -83,29 +83,29 @@ class FileCleanupTaskAdditionalFields extends AbstractAdditionalFieldProvider
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $node) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
-        foreach ($node->implements as $implement) {
+        foreach ($class->implements as $implement) {
             if ($this->isName($implement, 'TYPO3\\CMS\\Scheduler\\AdditionalFieldProviderInterface')) {
                 return \false;
             }
         }
         return \true;
     }
-    private function refactorClass(\PhpParser\Node\Stmt\Class_ $node) : ?\PhpParser\Node
+    private function refactorClass(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkip($class)) {
             return null;
         }
-        $node->extends = new \PhpParser\Node\Name\FullyQualified('TYPO3\\CMS\\Scheduler\\AbstractAdditionalFieldProvider');
+        $class->extends = new \PhpParser\Node\Name\FullyQualified('TYPO3\\CMS\\Scheduler\\AbstractAdditionalFieldProvider');
         $implements = [];
-        foreach ($node->implements as $implement) {
+        foreach ($class->implements as $implement) {
             if (!$this->isName($implement, 'TYPO3\\CMS\\Scheduler\\AdditionalFieldProviderInterface')) {
                 $implements[] = $implement;
             }
         }
-        $node->implements = $implements;
-        return $node;
+        $class->implements = $implements;
+        return $class;
     }
     private function refactorPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $node) : ?\PhpParser\Node
     {

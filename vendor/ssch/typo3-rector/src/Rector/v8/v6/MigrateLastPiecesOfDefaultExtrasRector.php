@@ -39,11 +39,11 @@ final class MigrateLastPiecesOfDefaultExtrasRector extends \Rector\Core\Rector\A
         if (!$this->isFullTca($node)) {
             return null;
         }
-        $columns = $this->extractColumns($node);
-        if (!$columns instanceof \PhpParser\Node\Expr\ArrayItem) {
+        $columnsArrayItem = $this->extractColumns($node);
+        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        $columnItems = $columns->value;
+        $columnItems = $columnsArrayItem->value;
         if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
@@ -157,9 +157,9 @@ return [
 CODE_SAMPLE
 )]);
     }
-    private function refactorDefaultExtras(\PhpParser\Node\Expr\Array_ $columnItems) : void
+    private function refactorDefaultExtras(\PhpParser\Node\Expr\Array_ $columnItemsArray) : void
     {
-        foreach ($columnItems->items as $columnItem) {
+        foreach ($columnItemsArray->items as $columnItem) {
             if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }

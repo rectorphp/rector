@@ -96,8 +96,8 @@ CODE_SAMPLE
     }
     private function addCharsetConverterNode(\PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
-        $charsetConverterNode = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CHARSET_CONVERTER), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Charset\\CharsetConverter')])));
-        $this->nodesToAddCollector->addNodeBeforeNode($charsetConverterNode, $methodCall);
+        $charsetConverterAssignExpression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CHARSET_CONVERTER), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Charset\\CharsetConverter')])));
+        $this->nodesToAddCollector->addNodeBeforeNode($charsetConverterAssignExpression, $methodCall);
     }
     private function refactorCsConvObj(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {

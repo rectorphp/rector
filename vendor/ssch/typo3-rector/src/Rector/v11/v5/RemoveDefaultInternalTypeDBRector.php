@@ -5,6 +5,7 @@ namespace Ssch\TYPO3Rector\Rector\v11\v5;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
 use Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -52,16 +53,16 @@ CODE_SAMPLE
     }
     protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
     {
-        $config = $this->extractSubArrayByKey($columnTca, self::CONFIG);
-        if (!$config instanceof \PhpParser\Node\Expr\Array_) {
+        $configArray = $this->extractSubArrayByKey($columnTca, self::CONFIG);
+        if (!$configArray instanceof \PhpParser\Node\Expr\Array_) {
             return;
         }
-        if (!$this->configIsOfInternalType($config, 'db')) {
+        if (!$this->configIsOfInternalType($configArray, 'db')) {
             return;
         }
-        $nodeToRemove = $this->extractArrayItemByKey($config, 'internal_type');
-        if (null !== $nodeToRemove) {
-            $this->removeNode($nodeToRemove);
+        $toRemoveArrayItem = $this->extractArrayItemByKey($configArray, 'internal_type');
+        if ($toRemoveArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            $this->removeNode($toRemoveArrayItem);
             $this->hasAstBeenChanged = \true;
         }
     }

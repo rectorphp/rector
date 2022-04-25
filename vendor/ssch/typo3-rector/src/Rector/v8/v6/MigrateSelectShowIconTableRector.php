@@ -38,11 +38,11 @@ final class MigrateSelectShowIconTableRector extends \Rector\Core\Rector\Abstrac
         if (!$this->isFullTca($node)) {
             return null;
         }
-        $columns = $this->extractColumns($node);
-        if (!$columns instanceof \PhpParser\Node\Expr\ArrayItem) {
+        $columnsArrayItem = $this->extractColumns($node);
+        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        $columnItems = $columns->value;
+        $columnItems = $columnsArrayItem->value;
         if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
@@ -84,9 +84,9 @@ final class MigrateSelectShowIconTableRector extends \Rector\Core\Rector\Abstrac
                         $fieldWizard = $this->extractArrayItemByKey($configValue->value, 'fieldWizard');
                         if (!$fieldWizard instanceof \PhpParser\Node\Expr\ArrayItem) {
                             $configValue->value->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray(['selectIcons' => [self::DISABLED => \false]]), new \PhpParser\Node\Scalar\String_('fieldWizard'));
-                        } elseif (($selectIcons = $this->extractSubArrayByKey($fieldWizard->value, 'selectIcons')) !== null) {
-                            if (null === $this->extractArrayItemByKey($selectIcons, self::DISABLED)) {
-                                $selectIcons->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createFalse(), new \PhpParser\Node\Scalar\String_(self::DISABLED));
+                        } elseif (($selectIconsArray = $this->extractSubArrayByKey($fieldWizard->value, 'selectIcons')) !== null) {
+                            if (null === $this->extractArrayItemByKey($selectIconsArray, self::DISABLED)) {
+                                $selectIconsArray->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createFalse(), new \PhpParser\Node\Scalar\String_(self::DISABLED));
                             }
                         }
                     }
@@ -147,14 +147,14 @@ return [
 CODE_SAMPLE
 )]);
     }
-    private function shouldAddFieldWizard(\PhpParser\Node\Expr\ArrayItem $configItemValue) : bool
+    private function shouldAddFieldWizard(\PhpParser\Node\Expr\ArrayItem $configValueArrayItem) : bool
     {
-        if (null === $configItemValue->key) {
+        if (null === $configValueArrayItem->key) {
             return \false;
         }
-        if (!$this->valueResolver->isValue($configItemValue->key, 'showIconTable')) {
+        if (!$this->valueResolver->isValue($configValueArrayItem->key, 'showIconTable')) {
             return \false;
         }
-        return $this->valueResolver->isTrue($configItemValue->value);
+        return $this->valueResolver->isTrue($configValueArrayItem->value);
     }
 }

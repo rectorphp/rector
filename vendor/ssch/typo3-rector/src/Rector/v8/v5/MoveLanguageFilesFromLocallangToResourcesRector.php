@@ -32,7 +32,7 @@ final class MoveLanguageFilesFromLocallangToResourcesRector extends \Rector\Core
     {
         $value = $this->valueResolver->getValue($node);
         foreach (self::MAPPING_OLD_TO_NEW_PATHS as $oldPath => $newPath) {
-            if (\strpos($value, $oldPath) !== \false) {
+            if (\strpos((string) $value, $oldPath) !== \false) {
                 return new \PhpParser\Node\Scalar\String_(\str_replace($oldPath, $newPath, $value));
             }
         }

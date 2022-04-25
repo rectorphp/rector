@@ -10,7 +10,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Naming\Naming\UseImportsResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -20,6 +20,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeUseFunctionRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\UseImportsResolver
+     */
+    private $useImportsResolver;
+    public function __construct(\Rector\Naming\Naming\UseImportsResolver $useImportsResolver)
+    {
+        $this->useImportsResolver = $useImportsResolver;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace imports of functions and constants', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -51,7 +60,8 @@ CODE_SAMPLE
         if ($this->isAlreadyFullyQualified($node)) {
             return null;
         }
-        $name = $this->getFullyQualifiedName($node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES), $node);
+        $uses = $this->useImportsResolver->resolveForNode($node);
+        $name = $this->getFullyQualifiedName($uses, $node);
         if ($name === null) {
             return null;
         }

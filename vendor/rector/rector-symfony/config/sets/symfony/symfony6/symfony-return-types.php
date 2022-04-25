@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220424;
+namespace RectorPrefix20220425;
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -19,7 +19,7 @@ use Rector\Config\RectorConfig;
 use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
-use RectorPrefix20220424\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20220425\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 // https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 // @see https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
@@ -41,7 +41,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $unionTypeReflectionClass = new \ReflectionClass(\PHPStan\Type\UnionType::class);
     /** @var UnionType $scalarArrayObjectUnionType */
     $scalarArrayObjectUnionType = $unionTypeReflectionClass->newInstanceWithoutConstructor();
-    $privatesAccessor = new \RectorPrefix20220424\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
+    $privatesAccessor = new \RectorPrefix20220425\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
     $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
     $rectorConfig->ruleWithConfiguration(\Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector::class, [
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Config\\Loader\\LoaderInterface', 'load', new \PHPStan\Type\MixedType()),

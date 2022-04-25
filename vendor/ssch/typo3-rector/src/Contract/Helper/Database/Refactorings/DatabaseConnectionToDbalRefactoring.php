@@ -10,6 +10,6 @@ interface DatabaseConnectionToDbalRefactoring
     /**
      * @return Expr[]
      */
-    public function refactor(\PhpParser\Node\Expr\MethodCall $oldNode) : array;
+    public function refactor(\PhpParser\Node\Expr\MethodCall $oldMethodCall) : array;
     public function canHandle(string $methodName) : bool;
 }

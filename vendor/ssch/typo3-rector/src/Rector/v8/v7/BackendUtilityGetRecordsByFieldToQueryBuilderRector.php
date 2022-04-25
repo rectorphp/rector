@@ -109,8 +109,8 @@ CODE_SAMPLE
         } else {
             $queryBuilder = $queryBuilderArgument->value;
         }
-        $queryBuilderNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('queryBuilder'), $queryBuilder);
-        $this->nodesToAddCollector->addNodeBeforeNode($queryBuilderNode, $positionNode);
+        $queryBuilderAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('queryBuilder'), $queryBuilder);
+        $this->nodesToAddCollector->addNodeBeforeNode($queryBuilderAssign, $positionNode);
     }
     private function isVariable(?\PhpParser\Node\Arg $queryBuilderArgument) : bool
     {
@@ -145,9 +145,9 @@ CODE_SAMPLE
         if (!$useDeleteClauseArgument instanceof \PhpParser\Node\Arg) {
             return;
         }
-        $ifNode = new \PhpParser\Node\Stmt\If_($useDeleteClauseArgument->value);
-        $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression($deletedRestrictionNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($ifNode, $positionNode);
+        $if = new \PhpParser\Node\Stmt\If_($useDeleteClauseArgument->value);
+        $if->stmts[] = new \PhpParser\Node\Stmt\Expression($deletedRestrictionNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($if, $positionNode);
     }
     private function addQueryBuilderSelectNode(string $queryBuilderVariableName, \PhpParser\Node\Expr\StaticCall $node, \PhpParser\Node $positionNode) : void
     {
@@ -155,14 +155,14 @@ CODE_SAMPLE
         $queryBuilderWhereNode = $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'select', ['*']), 'from', [$node->args[0]->value]), 'where', [$queryBuilderWhereExpressionNode]);
         $this->nodesToAddCollector->addNodeBeforeNode($queryBuilderWhereNode, $positionNode);
     }
-    private function addQueryWhereNode(string $queryBuilderVariableName, \PhpParser\Node\Expr\StaticCall $node, \PhpParser\Node $positionNode) : void
+    private function addQueryWhereNode(string $queryBuilderVariableName, \PhpParser\Node\Expr\StaticCall $staticCall, \PhpParser\Node $positionNode) : void
     {
-        $whereClauseArgument = $node->args[3] ?? null;
+        $whereClauseArgument = $staticCall->args[3] ?? null;
         $whereClause = null !== $whereClauseArgument ? $this->valueResolver->getValue($whereClauseArgument->value) : '';
         if ('' === $whereClause) {
             return;
         }
-        $whereClauseNode = $this->nodeFactory->createMethodCall($queryBuilderVariableName, 'andWhere', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'stripLogicalOperatorPrefix', [$node->args[3]])]);
+        $whereClauseNode = $this->nodeFactory->createMethodCall($queryBuilderVariableName, 'andWhere', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'stripLogicalOperatorPrefix', [$staticCall->args[3]])]);
         if ($whereClause) {
             $this->nodesToAddCollector->addNodeBeforeNode($whereClauseNode, $positionNode);
             return;
@@ -170,18 +170,18 @@ CODE_SAMPLE
         if (!$whereClauseArgument instanceof \PhpParser\Node\Arg) {
             return;
         }
-        $ifNode = new \PhpParser\Node\Stmt\If_($whereClauseArgument->value);
-        $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression($whereClauseNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($ifNode, $positionNode);
+        $if = new \PhpParser\Node\Stmt\If_($whereClauseArgument->value);
+        $if->stmts[] = new \PhpParser\Node\Stmt\Expression($whereClauseNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($if, $positionNode);
     }
-    private function addQueryGroupByNode(string $queryBuilderVariableName, \PhpParser\Node\Expr\StaticCall $node, \PhpParser\Node $positionNode) : void
+    private function addQueryGroupByNode(string $queryBuilderVariableName, \PhpParser\Node\Expr\StaticCall $staticCall, \PhpParser\Node $positionNode) : void
     {
-        $groupByArgument = $node->args[4] ?? null;
+        $groupByArgument = $staticCall->args[4] ?? null;
         $groupBy = null !== $groupByArgument ? $this->valueResolver->getValue($groupByArgument->value) : '';
         if ('' === $groupBy) {
             return;
         }
-        $groupByNode = $this->nodeFactory->createMethodCall($queryBuilderVariableName, 'groupBy', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'parseGroupBy', [$node->args[4]])]);
+        $groupByNode = $this->nodeFactory->createMethodCall($queryBuilderVariableName, 'groupBy', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'parseGroupBy', [$staticCall->args[4]])]);
         if ($groupBy) {
             $this->nodesToAddCollector->addNodeBeforeNode($groupByNode, $positionNode);
             return;
@@ -189,13 +189,13 @@ CODE_SAMPLE
         if (!$groupByArgument instanceof \PhpParser\Node\Arg) {
             return;
         }
-        $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\NotIdentical($groupByArgument->value, new \PhpParser\Node\Scalar\String_('')));
-        $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression($groupByNode);
-        $this->nodesToAddCollector->addNodeBeforeNode($ifNode, $positionNode);
+        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\NotIdentical($groupByArgument->value, new \PhpParser\Node\Scalar\String_('')));
+        $if->stmts[] = new \PhpParser\Node\Stmt\Expression($groupByNode);
+        $this->nodesToAddCollector->addNodeBeforeNode($if, $positionNode);
     }
-    private function addOrderByNode(string $queryBuilderVariableName, \PhpParser\Node\Expr\StaticCall $node, \PhpParser\Node $positionNode) : void
+    private function addOrderByNode(string $queryBuilderVariableName, \PhpParser\Node\Expr\StaticCall $staticCall, \PhpParser\Node $positionNode) : void
     {
-        $orderByArgument = $node->args[5] ?? null;
+        $orderByArgument = $staticCall->args[5] ?? null;
         $orderBy = null !== $orderByArgument ? $this->valueResolver->getValue($orderByArgument->value) : '';
         if ('' === $orderBy || 'null' === $orderBy) {
             return;
@@ -203,20 +203,20 @@ CODE_SAMPLE
         if (!$orderByArgument instanceof \PhpParser\Node\Arg) {
             return;
         }
-        $orderByNode = new \PhpParser\Node\Stmt\Foreach_($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'parseOrderBy', [$orderByArgument->value]), new \PhpParser\Node\Expr\Variable('orderPair'));
-        $orderByNode->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($this->nodeFactory->createFuncCall('list', [new \PhpParser\Node\Expr\Variable('fieldName'), new \PhpParser\Node\Expr\Variable('order')]), new \PhpParser\Node\Expr\Variable('orderPair')));
-        $orderByNode->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'addOrderBy', [new \PhpParser\Node\Expr\Variable('fieldName'), new \PhpParser\Node\Expr\Variable('order')]));
+        $orderByForeach = new \PhpParser\Node\Stmt\Foreach_($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'parseOrderBy', [$orderByArgument->value]), new \PhpParser\Node\Expr\Variable('orderPair'));
+        $orderByForeach->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($this->nodeFactory->createFuncCall('list', [new \PhpParser\Node\Expr\Variable('fieldName'), new \PhpParser\Node\Expr\Variable('order')]), new \PhpParser\Node\Expr\Variable('orderPair')));
+        $orderByForeach->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'addOrderBy', [new \PhpParser\Node\Expr\Variable('fieldName'), new \PhpParser\Node\Expr\Variable('order')]));
         if ($orderBy) {
-            $this->nodesToAddCollector->addNodeBeforeNode($orderByNode, $positionNode);
+            $this->nodesToAddCollector->addNodeBeforeNode($orderByForeach, $positionNode);
             return;
         }
-        $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\NotIdentical($orderByArgument->value, new \PhpParser\Node\Scalar\String_('')));
-        $ifNode->stmts[] = $orderByNode;
-        $this->nodesToAddCollector->addNodeBeforeNode($ifNode, $positionNode);
+        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\NotIdentical($orderByArgument->value, new \PhpParser\Node\Scalar\String_('')));
+        $if->stmts[] = $orderByForeach;
+        $this->nodesToAddCollector->addNodeBeforeNode($if, $positionNode);
     }
-    private function addLimitNode(string $queryBuilderVariableName, \PhpParser\Node\Expr\StaticCall $node, \PhpParser\Node $positionNode) : void
+    private function addLimitNode(string $queryBuilderVariableName, \PhpParser\Node\Expr\StaticCall $staticCall, \PhpParser\Node $positionNode) : void
     {
-        $limitArgument = $node->args[6] ?? null;
+        $limitArgument = $staticCall->args[6] ?? null;
         $limit = null !== $limitArgument ? $this->valueResolver->getValue($limitArgument->value) : '';
         if ('' === $limit) {
             return;
@@ -224,18 +224,18 @@ CODE_SAMPLE
         if (!$limitArgument instanceof \PhpParser\Node\Arg) {
             return;
         }
-        $limitNode = new \PhpParser\Node\Stmt\If_($this->nodeFactory->createFuncCall('strpos', [$limitArgument->value, ',']));
-        $limitNode->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::LIMIT_OFFSET_AND_MAX), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'intExplode', [new \PhpParser\Node\Scalar\String_(','), new \PhpParser\Node\Expr\Variable('limit')])));
-        $limitNode->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'setFirstResult', [new \PhpParser\Node\Expr\Cast\Int_(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::LIMIT_OFFSET_AND_MAX), new \PhpParser\Node\Scalar\LNumber(0)))]));
-        $limitNode->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'setMaxResults', [new \PhpParser\Node\Expr\Cast\Int_(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::LIMIT_OFFSET_AND_MAX), new \PhpParser\Node\Scalar\LNumber(1)))]));
-        $limitNode->else = new \PhpParser\Node\Stmt\Else_();
-        $limitNode->else->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'setMaxResults', [new \PhpParser\Node\Expr\Cast\Int_(new \PhpParser\Node\Expr\Variable('limit'))]));
+        $limitIf = new \PhpParser\Node\Stmt\If_($this->nodeFactory->createFuncCall('strpos', [$limitArgument->value, ',']));
+        $limitIf->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::LIMIT_OFFSET_AND_MAX), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'intExplode', [new \PhpParser\Node\Scalar\String_(','), new \PhpParser\Node\Expr\Variable('limit')])));
+        $limitIf->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'setFirstResult', [new \PhpParser\Node\Expr\Cast\Int_(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::LIMIT_OFFSET_AND_MAX), new \PhpParser\Node\Scalar\LNumber(0)))]));
+        $limitIf->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'setMaxResults', [new \PhpParser\Node\Expr\Cast\Int_(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::LIMIT_OFFSET_AND_MAX), new \PhpParser\Node\Scalar\LNumber(1)))]));
+        $limitIf->else = new \PhpParser\Node\Stmt\Else_();
+        $limitIf->else->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'setMaxResults', [new \PhpParser\Node\Expr\Cast\Int_(new \PhpParser\Node\Expr\Variable('limit'))]));
         if ($limit) {
-            $this->nodesToAddCollector->addNodeBeforeNode($limitNode, $positionNode);
+            $this->nodesToAddCollector->addNodeBeforeNode($limitIf, $positionNode);
             return;
         }
-        $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\NotIdentical($limitArgument->value, new \PhpParser\Node\Scalar\String_('')));
-        $ifNode->stmts[] = $limitNode;
-        $this->nodesToAddCollector->addNodeBeforeNode($ifNode, $positionNode);
+        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\NotIdentical($limitArgument->value, new \PhpParser\Node\Scalar\String_('')));
+        $if->stmts[] = $limitIf;
+        $this->nodesToAddCollector->addNodeBeforeNode($if, $positionNode);
     }
 }

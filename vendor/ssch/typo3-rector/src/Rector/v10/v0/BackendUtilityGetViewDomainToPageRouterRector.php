@@ -35,8 +35,8 @@ final class BackendUtilityGetViewDomainToPageRouterRector extends \Rector\Core\R
         if (!$this->isName($node->name, 'getViewDomain')) {
             return null;
         }
-        $siteNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('site'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Site\\SiteFinder')]), 'getSiteByPageId', $node->args));
-        $this->nodesToAddCollector->addNodeBeforeNode($siteNode, $node);
+        $siteAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('site'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Site\\SiteFinder')]), 'getSiteByPageId', $node->args));
+        $this->nodesToAddCollector->addNodeBeforeNode($siteAssign, $node);
         return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable('site'), 'getRouter'), 'generateUri', [$node->args[0]]);
     }
     /**

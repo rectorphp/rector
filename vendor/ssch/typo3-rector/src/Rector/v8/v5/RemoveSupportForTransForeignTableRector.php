@@ -33,11 +33,11 @@ final class RemoveSupportForTransForeignTableRector extends \Rector\Core\Rector\
         if (!$this->isFullTca($node)) {
             return null;
         }
-        $ctrl = $this->extractCtrl($node);
-        if (!$ctrl instanceof \PhpParser\Node\Expr\ArrayItem) {
+        $ctrlArrayItem = $this->extractCtrl($node);
+        if (!$ctrlArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        $items = $ctrl->value;
+        $items = $ctrlArrayItem->value;
         if (!$items instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }

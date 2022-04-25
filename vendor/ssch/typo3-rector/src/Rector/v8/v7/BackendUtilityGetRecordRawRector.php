@@ -46,9 +46,9 @@ final class BackendUtilityGetRecordRawRector extends \Rector\Core\Rector\Abstrac
         /** @var Arg[] $args */
         $args = $node->args;
         [$firstArgument, $secondArgument, $thirdArgument] = $args;
-        $queryBuilderAssignment = $this->createQueryBuilderCall($firstArgument);
+        $queryBuilderAssign = $this->createQueryBuilderCall($firstArgument);
         $queryBuilderRemoveRestrictions = $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable(self::QUERY_BUILDER), 'getRestrictions'), 'removeAll');
-        $this->nodesToAddCollector->addNodesBeforeNode([new \PhpParser\Node\Stmt\Nop(), $queryBuilderAssignment, $queryBuilderRemoveRestrictions, new \PhpParser\Node\Stmt\Nop()], $node);
+        $this->nodesToAddCollector->addNodesBeforeNode([new \PhpParser\Node\Stmt\Nop(), $queryBuilderAssign, $queryBuilderRemoveRestrictions, new \PhpParser\Node\Stmt\Nop()], $node);
         return $this->fetchQueryBuilderResults($firstArgument, $secondArgument, $thirdArgument);
     }
     /**

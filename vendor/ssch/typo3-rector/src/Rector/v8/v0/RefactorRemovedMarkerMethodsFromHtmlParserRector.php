@@ -118,56 +118,56 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    public function removeMethods($node) : void
+    public function removeMethods($call) : void
     {
-        if ($this->isNames($node->name, self::REMOVED_METHODS)) {
-            $methodName = $this->getName($node->name);
+        if ($this->isNames($call->name, self::REMOVED_METHODS)) {
+            $methodName = $this->getName($call->name);
             if (null !== $methodName) {
                 try {
-                    $this->removeNode($node);
+                    $this->removeNode($call);
                 } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
-                    $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+                    $parentNode = $call->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
                     $this->removeNode($parentNode);
                 }
             }
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    public function renameMethod($node) : void
+    public function renameMethod($call) : void
     {
-        if ($this->isName($node->name, self::RENAMED_METHOD)) {
-            $methodName = $this->getName($node->name);
+        if ($this->isName($call->name, self::RENAMED_METHOD)) {
+            $methodName = $this->getName($call->name);
             if (null !== $methodName) {
-                $node->name = new \PhpParser\Node\Identifier('HTMLcleaner');
+                $call->name = new \PhpParser\Node\Identifier('HTMLcleaner');
             }
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function migrateMethodsToMarkerBasedTemplateService($node) : ?\PhpParser\Node
+    private function migrateMethodsToMarkerBasedTemplateService($call) : ?\PhpParser\Node
     {
-        if ($this->isNames($node->name, self::MOVED_METHODS_TO_MARKER_BASED_TEMPLATES)) {
-            $methodName = $this->getName($node->name);
+        if ($this->isNames($call->name, self::MOVED_METHODS_TO_MARKER_BASED_TEMPLATES)) {
+            $methodName = $this->getName($call->name);
             if (null !== $methodName) {
                 $classConstant = $this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Service\\MarkerBasedTemplateService');
                 $staticCall = $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$classConstant]);
-                return $this->nodeFactory->createMethodCall($staticCall, $methodName, $node->args);
+                return $this->nodeFactory->createMethodCall($staticCall, $methodName, $call->args);
             }
         }
         return null;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function shouldSkip($node) : bool
+    private function shouldSkip($call) : bool
     {
         $skip = \false;
-        if (!$this->isNames($node->name, self::MOVED_METHODS_TO_MARKER_BASED_TEMPLATES) && !$this->isNames($node->name, self::REMOVED_METHODS) && !$this->isName($node->name, self::RENAMED_METHOD)) {
+        if (!$this->isNames($call->name, self::MOVED_METHODS_TO_MARKER_BASED_TEMPLATES) && !$this->isNames($call->name, self::REMOVED_METHODS) && !$this->isName($call->name, self::RENAMED_METHOD)) {
             $skip = \true;
         }
         return $skip;

@@ -115,23 +115,23 @@ CODE_SAMPLE
         }
         return $this->hasAstBeenChanged ? $node : null;
     }
-    private function isRichtextInDefaultExtras(\PhpParser\Node\Expr\ArrayItem $configValue) : bool
+    private function isRichtextInDefaultExtras(\PhpParser\Node\Expr\ArrayItem $configValueArrayItem) : bool
     {
-        if (null === $configValue->key) {
+        if (null === $configValueArrayItem->key) {
             return \false;
         }
-        if (!$this->valueResolver->isValue($configValue->key, 'defaultExtras')) {
+        if (!$this->valueResolver->isValue($configValueArrayItem->key, 'defaultExtras')) {
             return \false;
         }
-        $defaultExtras = $this->valueResolver->getValue($configValue->value);
+        $defaultExtras = $this->valueResolver->getValue($configValueArrayItem->value);
         if (!\is_string($defaultExtras)) {
             return \false;
         }
         return \strncmp($defaultExtras, 'richtext', \strlen('richtext')) === 0;
     }
-    private function refactorRichtextColumns(\PhpParser\Node\Expr\Array_ $columnItems) : void
+    private function refactorRichtextColumns(\PhpParser\Node\Expr\Array_ $columnItemsArray) : void
     {
-        foreach ($columnItems->items as $columnItem) {
+        foreach ($columnItemsArray->items as $columnItem) {
             if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }

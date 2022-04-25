@@ -81,12 +81,12 @@ CODE_SAMPLE
             if (isset($forwardMethodCall->args[3])) {
                 $forwardResponse = $this->nodeFactory->createMethodCall($forwardResponse, 'withArguments', [$forwardMethodCall->args[3]->value]);
             }
-            $returnForwardResponse = new \PhpParser\Node\Stmt\Return_($forwardResponse);
-            $this->nodesToAddCollector->addNodeBeforeNode($returnForwardResponse, $forwardMethodCall);
+            $forwardResponseReturn = new \PhpParser\Node\Stmt\Return_($forwardResponse);
+            $this->nodesToAddCollector->addNodeBeforeNode($forwardResponseReturn, $forwardMethodCall);
             $this->removeNode($forwardMethodCall);
         }
         // Add returnType only if it is the only statement, otherwise it is not reliable
-        if ((\is_array($node->stmts) || $node->stmts instanceof \Countable) && 1 === \count($node->stmts)) {
+        if ((\is_array($node->stmts) || $node->stmts instanceof \Countable) && 1 === \count((array) $node->stmts)) {
             $node->returnType = new \PhpParser\Node\Name\FullyQualified('Psr\\Http\\Message\\ResponseInterface');
         }
         return $node;

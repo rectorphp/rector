@@ -80,16 +80,16 @@ CODE_SAMPLE
             return null;
         }
         $configuration = $this->createConfiguration($value);
-        $newNode = $this->nodeFactory->createMethodCall($node->var, 'getTSConfig');
+        $newArrayDimFetch = $this->nodeFactory->createMethodCall($node->var, 'getTSConfig');
         $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         $defaultValueNode = $this->nodeFactory->createNull();
         if ($parentNode instanceof \PhpParser\Node\Expr\Cast) {
             $defaultValueNode = $this->transformToSpecificCast($parentNode);
         }
         foreach ($configuration as $key) {
-            $newNode = new \PhpParser\Node\Expr\ArrayDimFetch($newNode, new \PhpParser\Node\Scalar\String_(\sprintf('%s.', $key)));
+            $newArrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($newArrayDimFetch, new \PhpParser\Node\Scalar\String_(\sprintf('%s.', $key)));
         }
-        return new \PhpParser\Node\Expr\BinaryOp\Coalesce($newNode, $defaultValueNode);
+        return new \PhpParser\Node\Expr\BinaryOp\Coalesce($newArrayDimFetch, $defaultValueNode);
     }
     public function provideMinPhpVersion() : int
     {

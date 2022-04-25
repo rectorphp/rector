@@ -63,11 +63,11 @@ CODE_SAMPLE
         if (!$this->isFullTca($node)) {
             return null;
         }
-        $ctrl = $this->extractCtrl($node);
-        if (!$ctrl instanceof \PhpParser\Node\Expr\ArrayItem) {
+        $ctrlArrayItem = $this->extractCtrl($node);
+        if (!$ctrlArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        $ctrlItems = $ctrl->value;
+        $ctrlItems = $ctrlArrayItem->value;
         if (!$ctrlItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
@@ -91,11 +91,11 @@ CODE_SAMPLE
         if ([] === $requestUpdateFields) {
             return null;
         }
-        $columns = $this->extractColumns($node);
-        if (!$columns instanceof \PhpParser\Node\Expr\ArrayItem) {
+        $columnsArrayItem = $this->extractColumns($node);
+        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        $columnItems = $columns->value;
+        $columnItems = $columnsArrayItem->value;
         if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }

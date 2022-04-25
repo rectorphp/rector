@@ -106,7 +106,7 @@ CODE_SAMPLE
             // Unpack the field definition, migrate and remove as much as possible
             // Keep empty parameters in trimExplode here (third parameter FALSE), so position is not changed
             $fieldArray = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(';', $fieldString);
-            $fieldArray = [self::FIELD_NAME => isset($fieldArray[0]) ? $fieldArray[0] : '', self::FIELD_LABEL => isset($fieldArray[1]) ? $fieldArray[1] : null, self::PALETTE_NAME => isset($fieldArray[2]) ? $fieldArray[2] : null, self::FIELD_EXTRA => isset($fieldArray[3]) ? $fieldArray[3] : null];
+            $fieldArray = [self::FIELD_NAME => $fieldArray[0] ?? '', self::FIELD_LABEL => $fieldArray[1] ?? null, self::PALETTE_NAME => $fieldArray[2] ?? null, self::FIELD_EXTRA => $fieldArray[3] ?? null];
             $fieldName = (string) $fieldArray[self::FIELD_NAME];
             if (null !== $fieldArray[self::FIELD_EXTRA]) {
                 // Move fieldExtra "specConf" to columnsOverrides "defaultExtras"
@@ -120,17 +120,17 @@ CODE_SAMPLE
                 $newDefaultExtras[] = $fieldArray[self::FIELD_EXTRA];
                 $newDefaultExtras = \implode(':', $newDefaultExtras);
                 if ('' !== $newDefaultExtras) {
-                    $columnsOverrides = $this->extractSubArrayByKey($typeConfiguration, 'columnsOverrides');
-                    if (!$columnsOverrides instanceof \PhpParser\Node\Expr\Array_) {
-                        $columnsOverrides = new \PhpParser\Node\Expr\Array_([]);
-                        $typeConfiguration->items[] = new \PhpParser\Node\Expr\ArrayItem($columnsOverrides, new \PhpParser\Node\Scalar\String_('columnsOverrides'));
+                    $columnsOverridesArray = $this->extractSubArrayByKey($typeConfiguration, 'columnsOverrides');
+                    if (!$columnsOverridesArray instanceof \PhpParser\Node\Expr\Array_) {
+                        $columnsOverridesArray = new \PhpParser\Node\Expr\Array_([]);
+                        $typeConfiguration->items[] = new \PhpParser\Node\Expr\ArrayItem($columnsOverridesArray, new \PhpParser\Node\Scalar\String_('columnsOverrides'));
                     }
-                    $columnOverride = $this->extractSubArrayByKey($columnsOverrides, $fieldName);
-                    if (!$columnOverride instanceof \PhpParser\Node\Expr\Array_) {
-                        $columnOverride = new \PhpParser\Node\Expr\Array_([]);
-                        $columnsOverrides->items[] = new \PhpParser\Node\Expr\ArrayItem($columnOverride, new \PhpParser\Node\Scalar\String_($fieldName));
+                    $columnOverrideArray = $this->extractSubArrayByKey($columnsOverridesArray, $fieldName);
+                    if (!$columnOverrideArray instanceof \PhpParser\Node\Expr\Array_) {
+                        $columnOverrideArray = new \PhpParser\Node\Expr\Array_([]);
+                        $columnsOverridesArray->items[] = new \PhpParser\Node\Expr\ArrayItem($columnOverrideArray, new \PhpParser\Node\Scalar\String_($fieldName));
                     }
-                    $columnOverride->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_($newDefaultExtras), new \PhpParser\Node\Scalar\String_('defaultExtras'));
+                    $columnOverrideArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_($newDefaultExtras), new \PhpParser\Node\Scalar\String_('defaultExtras'));
                     $this->hasAstBeenChanged = \true;
                 }
             }

@@ -70,11 +70,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * Process Node of matched type
+     * @param Class_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        /** @var Class_ $node */
         if ($this->shouldSkip($node)) {
             return null;
         }

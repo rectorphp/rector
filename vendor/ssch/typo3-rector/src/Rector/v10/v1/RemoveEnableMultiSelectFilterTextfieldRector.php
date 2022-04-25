@@ -45,20 +45,20 @@ CODE_SAMPLE
     }
     protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
     {
-        $config = $this->extractSubArrayByKey($columnTca, self::CONFIG);
-        if (!$config instanceof \PhpParser\Node\Expr\Array_) {
+        $configArray = $this->extractSubArrayByKey($columnTca, self::CONFIG);
+        if (!$configArray instanceof \PhpParser\Node\Expr\Array_) {
             return;
         }
-        if (!$this->configIsOfRenderType($config, 'selectMultipleSideBySide')) {
+        if (!$this->configIsOfRenderType($configArray, 'selectMultipleSideBySide')) {
             return;
         }
-        $nodeToRemove = $this->extractArrayItemByKey($config, 'enableMultiSelectFilterTextfield');
-        if (!$nodeToRemove instanceof \PhpParser\Node\Expr\ArrayItem || null === $nodeToRemove->value) {
+        $toRemoveArrayItem = $this->extractArrayItemByKey($configArray, 'enableMultiSelectFilterTextfield');
+        if (!$toRemoveArrayItem instanceof \PhpParser\Node\Expr\ArrayItem || null === $toRemoveArrayItem->value) {
             return;
         }
-        $nodeValue = $this->valueResolver->getValue($nodeToRemove->value);
+        $nodeValue = $this->valueResolver->getValue($toRemoveArrayItem->value);
         if (\true === $nodeValue) {
-            $this->removeNode($nodeToRemove);
+            $this->removeNode($toRemoveArrayItem);
             $this->hasAstBeenChanged = \true;
         }
     }

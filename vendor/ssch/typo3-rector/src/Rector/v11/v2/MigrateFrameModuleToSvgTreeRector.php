@@ -83,9 +83,9 @@ CODE_SAMPLE
         }
         return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility')) && !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'));
     }
-    private function migrateNavigationFrameModule(\PhpParser\Node\Expr\Array_ $moduleConfig) : bool
+    private function migrateNavigationFrameModule(\PhpParser\Node\Expr\Array_ $moduleConfigArray) : bool
     {
-        foreach ($moduleConfig->items as $item) {
+        foreach ($moduleConfigArray->items as $item) {
             if (null === $item) {
                 continue;
             }

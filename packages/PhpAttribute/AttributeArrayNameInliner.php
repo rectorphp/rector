@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Exception\NotImplementedYetException;
-use RectorPrefix20220424\Webmozart\Assert\Assert;
+use RectorPrefix20220425\Webmozart\Assert\Assert;
 final class AttributeArrayNameInliner
 {
     /**
@@ -48,7 +48,7 @@ final class AttributeArrayNameInliner
      */
     private function inlineArray(array $args) : array
     {
-        \RectorPrefix20220424\Webmozart\Assert\Assert::allIsAOf($args, \PhpParser\Node\Arg::class);
+        \RectorPrefix20220425\Webmozart\Assert\Assert::allIsAOf($args, \PhpParser\Node\Arg::class);
         $newArgs = [];
         foreach ($args as $arg) {
             // matching top root array key

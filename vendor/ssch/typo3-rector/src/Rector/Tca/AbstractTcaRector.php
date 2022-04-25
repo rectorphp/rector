@@ -57,17 +57,17 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
         $this->hasAstBeenChanged = \false;
         if ($this->isFullTcaDefinition($node)) {
             // we found a tca definition of a full table. Process it as a whole:
-            $columns = $this->extractSubArrayByKey($node, 'columns');
-            if (null !== $columns) {
-                $this->refactorColumnList($columns);
+            $columnsArray = $this->extractSubArrayByKey($node, 'columns');
+            if ($columnsArray instanceof \PhpParser\Node\Expr\Array_) {
+                $this->refactorColumnList($columnsArray);
             }
-            $types = $this->extractSubArrayByKey($node, 'types');
-            if (null !== $types) {
-                $this->refactorTypes($types);
+            $typesArray = $this->extractSubArrayByKey($node, 'types');
+            if ($typesArray instanceof \PhpParser\Node\Expr\Array_) {
+                $this->refactorTypes($typesArray);
             }
-            $ctrl = $this->extractSubArrayByKey($node, 'ctrl');
-            if (null !== $ctrl) {
-                $this->refactorCtrl($ctrl);
+            $ctrlArray = $this->extractSubArrayByKey($node, 'ctrl');
+            if ($ctrlArray instanceof \PhpParser\Node\Expr\Array_) {
+                $this->refactorCtrl($ctrlArray);
             }
             return $this->hasAstBeenChanged ? $node : null;
         }
@@ -94,11 +94,11 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
      * refactors an TCA array such as [ 'column_1' => [ 'label' => 'column 1', 'config' => ... ], 'column_2' => [
      * 'label' => 'column 2', 'config' => ... ] ]
      *
-     * @param Array_ $columns a list of TCA definitions for columns
+     * @param Array_ $columnsArray a list of TCA definitions for columns
      */
-    protected function refactorColumnList(\PhpParser\Node\Expr\Array_ $columns) : void
+    protected function refactorColumnList(\PhpParser\Node\Expr\Array_ $columnsArray) : void
     {
-        foreach ($columns->items as $columnArrayItem) {
+        foreach ($columnsArray->items as $columnArrayItem) {
             if (!$columnArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
@@ -115,9 +115,9 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
      */
     protected function isFullTcaDefinition(\PhpParser\Node\Expr\Array_ $possibleTcaArray) : bool
     {
-        $columns = $this->extractSubArrayByKey($possibleTcaArray, 'columns');
+        $columnsArray = $this->extractSubArrayByKey($possibleTcaArray, 'columns');
         $ctrl = $this->extractArrayItemByKey($possibleTcaArray, 'ctrl');
-        return null !== $columns && null !== $ctrl;
+        return null !== $columnsArray && null !== $ctrl;
     }
     /**
      * @return bool whether the given array item is the TCA definition of a single column
@@ -151,9 +151,9 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
      * refactors an TCA types array such as [ '0' => [ 'showitem' => 'field_a,field_b' ], '1' => [ 'showitem' =>
      * 'field_a'] ]
      */
-    protected function refactorTypes(\PhpParser\Node\Expr\Array_ $types) : void
+    protected function refactorTypes(\PhpParser\Node\Expr\Array_ $typesArray) : void
     {
-        foreach ($types->items as $typeItem) {
+        foreach ($typesArray->items as $typeItem) {
             if (!$typeItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
@@ -176,7 +176,7 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
     /**
      * refactors an TCA ctrl section such as ['label' => 'foo', 'tstamp' => 'tstamp', 'crdate' => 'crdate']
      */
-    protected function refactorCtrl(\PhpParser\Node\Expr\Array_ $ctrl) : void
+    protected function refactorCtrl(\PhpParser\Node\Expr\Array_ $ctrlArray) : void
     {
         // override this as needed in child-classes
     }

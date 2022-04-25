@@ -43,7 +43,7 @@ final class UseFileGetContentsForGetUrlRector extends \Rector\Core\Rector\Abstra
             return null;
         }
         // Cannot rewrite for external urls
-        if (\preg_match('#^(?:http|ftp)s?|s(?:ftp|cp):#', $urlValue)) {
+        if (\preg_match('#^(?:http|ftp)s?|s(?:ftp|cp):#', (string) $urlValue)) {
             return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Http\\RequestFactory')]), 'request', $node->args), 'getBody'), 'getContents');
         }
         return new \PhpParser\Node\Expr\ErrorSuppress($this->nodeFactory->createFuncCall('file_get_contents', $node->args));

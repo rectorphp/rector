@@ -14,7 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220424\TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use RectorPrefix20220425\TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80000-InlineOverrideChildTca.html?highlight=foreign_types
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\MoveForeignTypesToOverrideChildTcaRector\MoveForeignTypesToOverrideChildTcaRectorTest
@@ -114,41 +114,41 @@ CODE_SAMPLE
                 continue;
             }
             $foreignTypesArrayItem = $this->extractArrayItemByKey($columnConfig, self::FOREIGN_TYPES);
-            $foreignRecordDefaults = $this->extractArrayItemByKey($columnConfig, self::FOREIGN_RECORD_DEFAULTS);
-            $foreignSelectorNode = $this->extractArrayItemByKey($columnConfig, self::FOREIGN_SELECTOR);
-            $overrideChildTcaNode = $this->extractSubArrayByKey($columnConfig, self::OVERRIDE_CHILD_TCA);
-            $foreignSelectorOverrideNode = $this->extractArrayItemByKey($columnConfig, self::FOREIGN_SELECTOR_FIELDTCAOVERRIDE);
+            $foreignRecordDefaultsArrayItem = $this->extractArrayItemByKey($columnConfig, self::FOREIGN_RECORD_DEFAULTS);
+            $foreignSelectorArrayItem = $this->extractArrayItemByKey($columnConfig, self::FOREIGN_SELECTOR);
+            $overrideChildTcaArray = $this->extractSubArrayByKey($columnConfig, self::OVERRIDE_CHILD_TCA);
+            $foreignSelectorOverrideArrayItem = $this->extractArrayItemByKey($columnConfig, self::FOREIGN_SELECTOR_FIELDTCAOVERRIDE);
             // don't search further if no foreign_types is configured
-            if (!$foreignSelectorOverrideNode instanceof \PhpParser\Node\Expr\ArrayItem && !$foreignTypesArrayItem instanceof \PhpParser\Node\Expr\ArrayItem && !$foreignRecordDefaults instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$foreignSelectorOverrideArrayItem instanceof \PhpParser\Node\Expr\ArrayItem && !$foreignTypesArrayItem instanceof \PhpParser\Node\Expr\ArrayItem && !$foreignRecordDefaultsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
-            $foreignSelector = null !== $foreignSelectorNode ? $foreignSelectorNode->value : null;
-            if (!$overrideChildTcaNode instanceof \PhpParser\Node\Expr\Array_) {
-                $overrideChildTcaNode = new \PhpParser\Node\Expr\Array_();
-                $columnConfig->items[] = new \PhpParser\Node\Expr\ArrayItem($overrideChildTcaNode, new \PhpParser\Node\Scalar\String_(self::OVERRIDE_CHILD_TCA));
+            $foreignSelector = null !== $foreignSelectorArrayItem ? $foreignSelectorArrayItem->value : null;
+            if (!$overrideChildTcaArray instanceof \PhpParser\Node\Expr\Array_) {
+                $overrideChildTcaArray = new \PhpParser\Node\Expr\Array_();
+                $columnConfig->items[] = new \PhpParser\Node\Expr\ArrayItem($overrideChildTcaArray, new \PhpParser\Node\Scalar\String_(self::OVERRIDE_CHILD_TCA));
             }
             if (null !== $foreignTypesArrayItem && $foreignTypesArrayItem->value instanceof \PhpParser\Node\Expr\Array_) {
-                $this->injectOverrideChildTca($overrideChildTcaNode, 'types', $foreignTypesArrayItem->value);
+                $this->injectOverrideChildTca($overrideChildTcaArray, 'types', $foreignTypesArrayItem->value);
                 $this->removeNode($foreignTypesArrayItem);
                 $hasAstBeenChanged = \true;
             }
-            if (null !== $foreignSelectorOverrideNode && $foreignSelectorOverrideNode->value instanceof \PhpParser\Node\Expr\Array_ && $foreignSelector instanceof \PhpParser\Node\Scalar\String_) {
-                $columnItem = new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($foreignSelectorOverrideNode->value, new \PhpParser\Node\Scalar\String_($foreignSelector->value))]);
-                $this->injectOverrideChildTca($overrideChildTcaNode, 'columns', $columnItem);
-                $this->removeNode($foreignSelectorOverrideNode);
+            if (null !== $foreignSelectorOverrideArrayItem && $foreignSelectorOverrideArrayItem->value instanceof \PhpParser\Node\Expr\Array_ && $foreignSelector instanceof \PhpParser\Node\Scalar\String_) {
+                $columnItem = new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($foreignSelectorOverrideArrayItem->value, new \PhpParser\Node\Scalar\String_($foreignSelector->value))]);
+                $this->injectOverrideChildTca($overrideChildTcaArray, 'columns', $columnItem);
+                $this->removeNode($foreignSelectorOverrideArrayItem);
                 $hasAstBeenChanged = \true;
             }
-            if (null !== $foreignRecordDefaults && $foreignRecordDefaults->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (null !== $foreignRecordDefaultsArrayItem && $foreignRecordDefaultsArrayItem->value instanceof \PhpParser\Node\Expr\Array_) {
                 $newOverrideColumns = new \PhpParser\Node\Expr\Array_();
-                foreach ($foreignRecordDefaults->value->items as $item) {
+                foreach ($foreignRecordDefaultsArrayItem->value->items as $item) {
                     if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
                         continue;
                     }
                     $value = new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($item->value, new \PhpParser\Node\Scalar\String_('default'))]), new \PhpParser\Node\Scalar\String_('config'))]);
                     $newOverrideColumns->items[] = new \PhpParser\Node\Expr\ArrayItem($value, $item->key);
                 }
-                $this->injectOverrideChildTca($overrideChildTcaNode, 'columns', $newOverrideColumns);
-                $this->removeNode($foreignRecordDefaults);
+                $this->injectOverrideChildTca($overrideChildTcaArray, 'columns', $newOverrideColumns);
+                $this->removeNode($foreignRecordDefaultsArrayItem);
                 $hasAstBeenChanged = \true;
             }
         }

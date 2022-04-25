@@ -125,19 +125,19 @@ CODE_SAMPLE
         }
         return !$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
     }
-    private function createResponse(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
+    private function createResponse(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
-        $methodCall = $this->getName($node->name);
-        if (null === $methodCall) {
+        $methodCallName = $this->getName($methodCall->name);
+        if (null === $methodCallName) {
             return null;
         }
-        if (!\array_key_exists($methodCall, self::MAP_METHODS)) {
+        if (!\array_key_exists($methodCallName, self::MAP_METHODS)) {
             return null;
         }
         $arguments = [new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::GLOBALS), new \PhpParser\Node\Scalar\String_('TYPO3_REQUEST'))];
         // Message
-        $arguments[] = isset($node->args[0]) ? $node->args[0]->value : new \PhpParser\Node\Scalar\String_('');
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('response'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Controller\\ErrorController')]), self::MAP_METHODS[$methodCall], $arguments)));
+        $arguments[] = isset($methodCall->args[0]) ? $methodCall->args[0]->value : new \PhpParser\Node\Scalar\String_('');
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('response'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Controller\\ErrorController')]), self::MAP_METHODS[$methodCallName], $arguments)));
     }
     private function throwException() : \PhpParser\Node
     {

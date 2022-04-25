@@ -25,9 +25,9 @@ final class DatabaseConnectionExecTruncateTableRefactoring implements \Ssch\TYPO
         $this->connectionCallFactory = $connectionCallFactory;
         $this->nodeFactory = $nodeFactory;
     }
-    public function refactor(\PhpParser\Node\Expr\MethodCall $oldNode) : array
+    public function refactor(\PhpParser\Node\Expr\MethodCall $oldMethodCall) : array
     {
-        $tableArgument = \array_shift($oldNode->args);
+        $tableArgument = \array_shift($oldMethodCall->args);
         if (!$tableArgument instanceof \PhpParser\Node\Arg) {
             return [];
         }

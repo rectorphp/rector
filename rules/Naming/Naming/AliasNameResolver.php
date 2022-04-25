@@ -5,9 +5,7 @@ namespace Rector\Naming\Naming;
 
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Use_;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 final class AliasNameResolver
 {
     /**
@@ -15,17 +13,22 @@ final class AliasNameResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\UseImportsResolver
+     */
+    private $useImportsResolver;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->useImportsResolver = $useImportsResolver;
     }
     public function resolveByName(\PhpParser\Node\Name $name) : ?string
     {
-        /** @var Use_[] $useNodes */
-        $useNodes = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
+        $uses = $this->useImportsResolver->resolveForNode($name);
         $nameString = $name->toString();
-        foreach ($useNodes as $useNode) {
-            $useUses = $useNode->uses;
+        foreach ($uses as $use) {
+            $useUses = $use->uses;
             if (\count($useUses) > 1) {
                 continue;
             }

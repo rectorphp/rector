@@ -206,8 +206,8 @@ CODE_SAMPLE
     }
     private function methodReplyTo() : \PhpParser\Node
     {
-        $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Empty_(new \PhpParser\Node\Expr\Variable(self::PARSED_REPLY_TO))));
-        $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall(self::MAIL, 'setReplyTo', [new \PhpParser\Node\Expr\Variable(self::PARSED_REPLY_TO)]));
-        return $ifNode;
+        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Empty_(new \PhpParser\Node\Expr\Variable(self::PARSED_REPLY_TO))));
+        $if->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall(self::MAIL, 'setReplyTo', [new \PhpParser\Node\Expr\Variable(self::PARSED_REPLY_TO)]));
+        return $if;
     }
 }

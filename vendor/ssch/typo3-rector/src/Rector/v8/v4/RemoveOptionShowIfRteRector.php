@@ -71,11 +71,11 @@ CODE_SAMPLE
         if (!$this->isFullTca($node)) {
             return null;
         }
-        $columns = $this->extractColumns($node);
-        if (!$columns instanceof \PhpParser\Node\Expr\ArrayItem) {
+        $columnsArrayItem = $this->extractColumns($node);
+        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        $columnItems = $columns->value;
+        $columnItems = $columnsArrayItem->value;
         if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
@@ -118,9 +118,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isRenderTypeCheck(\PhpParser\Node\Expr\Array_ $configValue) : bool
+    private function isRenderTypeCheck(\PhpParser\Node\Expr\Array_ $configValueArray) : bool
     {
-        foreach ($configValue->items as $configItemValue) {
+        foreach ($configValueArray->items as $configItemValue) {
             if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }

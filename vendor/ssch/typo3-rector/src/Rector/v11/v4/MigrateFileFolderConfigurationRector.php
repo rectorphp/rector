@@ -49,36 +49,36 @@ CODE_SAMPLE
     }
     protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
     {
-        $config = $this->extractSubArrayByKey($columnTca, self::CONFIG);
-        if (!$config instanceof \PhpParser\Node\Expr\Array_) {
+        $configArray = $this->extractSubArrayByKey($columnTca, self::CONFIG);
+        if (!$configArray instanceof \PhpParser\Node\Expr\Array_) {
             return;
         }
-        if (!$this->hasKeyValuePair($config, self::TYPE, 'select') || !$this->hasKey($config, 'fileFolder')) {
+        if (!$this->hasKeyValuePair($configArray, self::TYPE, 'select') || !$this->hasKey($configArray, 'fileFolder')) {
             return;
         }
         $fileFolderConfig = new \PhpParser\Node\Expr\Array_();
-        $fileFolder = $this->extractArrayItemByKey($config, 'fileFolder');
+        $fileFolder = $this->extractArrayItemByKey($configArray, 'fileFolder');
         if (null !== $fileFolder) {
             $fileFolderConfig->items[] = new \PhpParser\Node\Expr\ArrayItem($fileFolder->value, new \PhpParser\Node\Scalar\String_('folder'));
             $this->removeNode($fileFolder);
             $this->hasAstBeenChanged = \true;
         }
-        if ($this->hasKey($config, 'fileFolder_extList')) {
-            $fileFolderExtList = $this->extractArrayItemByKey($config, 'fileFolder_extList');
+        if ($this->hasKey($configArray, 'fileFolder_extList')) {
+            $fileFolderExtList = $this->extractArrayItemByKey($configArray, 'fileFolder_extList');
             if (null !== $fileFolderExtList) {
                 $fileFolderConfig->items[] = new \PhpParser\Node\Expr\ArrayItem($fileFolderExtList->value, new \PhpParser\Node\Scalar\String_('allowedExtensions'));
                 $this->removeNode($fileFolderExtList);
                 $this->hasAstBeenChanged = \true;
             }
         }
-        if ($this->hasKey($config, 'fileFolder_recursions')) {
-            $fileFolderRecursions = $this->extractArrayItemByKey($config, 'fileFolder_recursions');
+        if ($this->hasKey($configArray, 'fileFolder_recursions')) {
+            $fileFolderRecursions = $this->extractArrayItemByKey($configArray, 'fileFolder_recursions');
             if (null !== $fileFolderRecursions) {
                 $fileFolderConfig->items[] = new \PhpParser\Node\Expr\ArrayItem($fileFolderRecursions->value, new \PhpParser\Node\Scalar\String_('depth'));
                 $this->removeNode($fileFolderRecursions);
                 $this->hasAstBeenChanged = \true;
             }
         }
-        $config->items[] = new \PhpParser\Node\Expr\ArrayItem($fileFolderConfig, new \PhpParser\Node\Scalar\String_('fileFolderConfig'));
+        $configArray->items[] = new \PhpParser\Node\Expr\ArrayItem($fileFolderConfig, new \PhpParser\Node\Scalar\String_('fileFolderConfig'));
     }
 }

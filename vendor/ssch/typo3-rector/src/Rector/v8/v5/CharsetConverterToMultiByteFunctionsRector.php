@@ -90,15 +90,15 @@ CODE_SAMPLE
         $length = $methodCall->args[3] ?? $this->nodeFactory->createNull();
         return $this->nodeFactory->createFuncCall('mb_substr', [$methodCall->args[1], $start, $length, $methodCall->args[0]]);
     }
-    private function toMultiByteLowerUpperCase(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\FuncCall
+    private function toMultiByteLowerUpperCase(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\FuncCall
     {
-        $methodCall = 'toLower' === $this->valueResolver->getValue($node->args[2]->value) ? 'mb_strtolower' : 'mb_strtoupper';
-        return $this->nodeFactory->createFuncCall($methodCall, [$node->args[1], $node->args[0]]);
+        $mbMethodCall = 'toLower' === $this->valueResolver->getValue($methodCall->args[2]->value) ? 'mb_strtolower' : 'mb_strtoupper';
+        return $this->nodeFactory->createFuncCall($mbMethodCall, [$methodCall->args[1], $methodCall->args[0]]);
     }
-    private function toMultiByteStrPos(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\FuncCall
+    private function toMultiByteStrPos(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\FuncCall
     {
-        $offset = $node->args[2] ?? $this->nodeFactory->createArg(0);
-        return $this->nodeFactory->createFuncCall('mb_strpos', [$node->args[0], $node->args[1], $offset, $this->nodeFactory->createArg('utf-8')]);
+        $offset = $methodCall->args[2] ?? $this->nodeFactory->createArg(0);
+        return $this->nodeFactory->createFuncCall('mb_strpos', [$methodCall->args[0], $methodCall->args[1], $offset, $this->nodeFactory->createArg('utf-8')]);
     }
     private function toMultiByteStrrPos(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\FuncCall
     {

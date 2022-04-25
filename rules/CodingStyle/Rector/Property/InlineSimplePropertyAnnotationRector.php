@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220424\Webmozart\Assert\Assert;
+use RectorPrefix20220425\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Property\InlineSimplePropertyAnnotationRector\InlineSimplePropertyAnnotationRectorTest
  *
@@ -68,7 +68,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220424\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220425\Webmozart\Assert\Assert::allString($configuration);
         $this->annotationsToConsiderForInlining = \array_map(function (string $annotation) : string {
             return '@' . \ltrim($annotation, '@');
         }, $configuration);
