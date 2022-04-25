@@ -65,10 +65,6 @@ final class NameScopeFactory
         $templateTypeMap = $this->templateTemplateTypeMap($node);
         return new \PHPStan\Analyser\NameScope($nameScope->getNamespace(), $nameScope->getUses(), $nameScope->getClassName(), null, $templateTypeMap);
     }
-    //    public function setStaticTypeMapper(StaticTypeMapper $staticTypeMapper): void
-    //    {
-    //        $this->staticTypeMapper = $staticTypeMapper;
-    //    }
     /**
      * @param Use_[] $useNodes
      * @return array<string, string>

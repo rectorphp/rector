@@ -61,8 +61,6 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        //        $changedNode = null;
-        //        $previousNode = $node;
         if ($node instanceof \PhpParser\Node\Expr\AssignOp) {
             return $this->processAssignOp($node);
         }
