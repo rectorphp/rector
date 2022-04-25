@@ -11,7 +11,6 @@ use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 
 final class NodeScopeAndMetadataDecorator
@@ -20,7 +19,6 @@ final class NodeScopeAndMetadataDecorator
         private readonly CloningVisitor $cloningVisitor,
         private readonly NamespaceNodeVisitor $namespaceNodeVisitor,
         private readonly PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
-        private readonly StatementNodeVisitor $statementNodeVisitor,
         private readonly NodeConnectingVisitor $nodeConnectingVisitor,
         private readonly FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor
     ) {
@@ -35,23 +33,17 @@ final class NodeScopeAndMetadataDecorator
         $smartFileInfo = $file->getSmartFileInfo();
         $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $smartFileInfo);
 
-        $nodeTraverserForFormatPreservePrinting = new NodeTraverser();
+        $nodeTraverser = new NodeTraverser();
         // needed also for format preserving printing
-        $nodeTraverserForFormatPreservePrinting->addVisitor($this->cloningVisitor);
+        $nodeTraverser->addVisitor($this->cloningVisitor);
 
         // this one has to be run again to re-connect nodes with new attributes
-        $nodeTraverserForFormatPreservePrinting->addVisitor($this->nodeConnectingVisitor);
+        $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
 
-        $nodeTraverserForFormatPreservePrinting->addVisitor($this->namespaceNodeVisitor);
-        $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
+        $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
+        $nodeTraverser->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
 
-        $stmts = $nodeTraverserForFormatPreservePrinting->traverse($stmts);
-
-        // this split is needed, so nodes have names, classes and namespaces
-        $nodeTraverserForStmtNodeVisitor = new NodeTraverser();
-        $nodeTraverserForStmtNodeVisitor->addVisitor($this->statementNodeVisitor);
-
-        return $nodeTraverserForStmtNodeVisitor->traverse($stmts);
+        return $nodeTraverser->traverse($stmts);
     }
 
     /**
@@ -62,7 +54,6 @@ final class NodeScopeAndMetadataDecorator
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
-        $nodeTraverser->addVisitor($this->statementNodeVisitor);
 
         return $nodeTraverser->traverse($stmts);
     }
