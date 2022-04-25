@@ -6,8 +6,6 @@ namespace Rector\TypeDeclaration\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -15,8 +13,8 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\Privatization\Guard\ParentPropertyLookupGuard;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -40,11 +38,17 @@ final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends \Rector\
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover)
+    /**
+     * @readonly
+     * @var \Rector\Privatization\Guard\ParentPropertyLookupGuard
+     */
+    private $parentPropertyLookupGuard;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Privatization\Guard\ParentPropertyLookupGuard $parentPropertyLookupGuard)
     {
         $this->getterTypeDeclarationPropertyTypeInferer = $getterTypeDeclarationPropertyTypeInferer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->varTagRemover = $varTagRemover;
+        $this->parentPropertyLookupGuard = $parentPropertyLookupGuard;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -87,7 +91,7 @@ CODE_SAMPLE
         if ($node->type !== null) {
             return null;
         }
-        if ($this->isGuardedByParentProperty($node)) {
+        if (!$this->parentPropertyLookupGuard->isLegal($node)) {
             return null;
         }
         $getterReturnType = $this->getterTypeDeclarationPropertyTypeInferer->inferProperty($node);
@@ -130,23 +134,5 @@ CODE_SAMPLE
             return;
         }
         $propertyProperty->default = $this->nodeFactory->createNull();
-    }
-    private function isGuardedByParentProperty(\PhpParser\Node\Stmt\Property $property) : bool
-    {
-        $propertyName = $this->getName($property);
-        $scope = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return \false;
-        }
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            return \false;
-        }
-        foreach ($classReflection->getParents() as $parentClassReflection) {
-            if ($parentClassReflection->hasProperty($propertyName)) {
-                return \true;
-            }
-        }
-        return \false;
     }
 }

@@ -104,7 +104,7 @@ return static function (RectorConfig $rectorConfig): void {
     // Rewrite your extbase persistence class mapping from typoscript into php according to official docs.
     // This processor will create a summarized file with all of the typoscript rewrites combined into a single file.
     // The filename can be passed as argument, "Configuration_Extbase_Persistence_Classes.php" is default.
-    // $services->set(ExtbasePersistenceTypoScriptRector::class);
+    // $rectorConfig->ruleWithConfiguration(ExtbasePersistenceTypoScriptRector::class, []);
     // Add some general TYPO3 rules
     $rectorConfig->rule(ConvertImplicitVariablesToExplicitGlobalsRector::class);
     $rectorConfig->rule(ExtEmConfRector::class)->configure([
