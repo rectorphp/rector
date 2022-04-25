@@ -81,7 +81,7 @@ final class ConfigureCallValuesCollector
                             }
 
                             $warningMessage = sprintf(
-                                'The constant for "%s::%s" is deprecated.%sUse "->configure()" directly instead.',
+                                'The constant for "%s::%s" is deprecated.%sUse "$rectorConfig->ruleWithConfiguration()" instead.',
                                 $rectorClass,
                                 $constantName,
                                 PHP_EOL

@@ -81,9 +81,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-//        $changedNode = null;
-//        $previousNode = $node;
-
         if ($node instanceof AssignOp) {
             return $this->processAssignOp($node);
         }

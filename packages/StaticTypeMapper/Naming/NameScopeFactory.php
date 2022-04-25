@@ -76,11 +76,6 @@ final class NameScopeFactory
         );
     }
 
-//    public function setStaticTypeMapper(StaticTypeMapper $staticTypeMapper): void
-//    {
-//        $this->staticTypeMapper = $staticTypeMapper;
-//    }
-
     /**
      * @param Use_[] $useNodes
      * @return array<string, string>

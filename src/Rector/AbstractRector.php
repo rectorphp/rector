@@ -43,9 +43,6 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\Skipper\Skipper\Skipper;
 
-/**
- * @see \Rector\Testing\PHPUnit\AbstractRectorTestCase
- */
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
     /**
@@ -62,9 +59,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var string
      */
     private const MESSAGE = <<<CODE_SAMPLE
-
-
-Array of nodes must not be empty, ensure %s->refactor() returns non-empty array for Nodes.
+Array of nodes must not be empty, ensure "%s->refactor()" returns non-empty array for Nodes.
 
 You can also either return null for no change:
 

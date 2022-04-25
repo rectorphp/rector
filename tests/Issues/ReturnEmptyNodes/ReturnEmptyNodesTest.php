@@ -18,7 +18,7 @@ final class ReturnEmptyNodesTest extends AbstractRectorTestCase
     {
         $this->expectExceptionMessage(
             <<<CODE_SAMPLE
-Array of nodes must not be empty, ensure Rector\Core\Tests\Issues\ReturnEmptyNodes\Source\ReturnEmptyStmtsRector->refactor() returns non-empty array for Nodes.
+Array of nodes must not be empty, ensure "Rector\Core\Tests\Issues\ReturnEmptyNodes\Source\ReturnEmptyStmtsRector->refactor()" returns non-empty array for Nodes.
 
 You can also either return null for no change:
 
