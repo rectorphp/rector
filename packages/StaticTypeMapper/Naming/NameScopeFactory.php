@@ -15,6 +15,7 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -30,6 +31,8 @@ final class NameScopeFactory
 
     private BetterNodeFinder $betterNodeFinder;
 
+    private UseImportsResolver $useImportsResolver;
+
     // This is needed to avoid circular references
 
     #[Required]
@@ -37,10 +40,12 @@ final class NameScopeFactory
         PhpDocInfoFactory $phpDocInfoFactory,
         StaticTypeMapper $staticTypeMapper,
         BetterNodeFinder $betterNodeFinder,
+        UseImportsResolver $useImportsResolver,
     ): void {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->useImportsResolver = $useImportsResolver;
     }
 
     public function createNameScopeFromNodeWithoutTemplateTypes(Node $node): NameScope
@@ -48,9 +53,8 @@ final class NameScopeFactory
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         $namespace = $scope instanceof Scope ? $scope->getNamespace() : null;
 
-        /** @var Use_[] $useNodes */
-        $useNodes = (array) $node->getAttribute(AttributeKey::USE_NODES);
-        $uses = $this->resolveUseNamesByAlias($useNodes);
+        $uses = $this->useImportsResolver->resolveForNode($node);
+        $usesAliasesToNames = $this->resolveUseNamesByAlias($uses);
 
         if ($scope instanceof Scope && $scope->getClassReflection() instanceof ClassReflection) {
             $classReflection = $scope->getClassReflection();
@@ -59,7 +63,7 @@ final class NameScopeFactory
             $className = null;
         }
 
-        return new NameScope($namespace, $uses, $className);
+        return new NameScope($namespace, $usesAliasesToNames, $className);
     }
 
     public function createNameScopeFromNode(Node $node): NameScope
