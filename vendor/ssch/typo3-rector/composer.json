@@ -30,7 +30,7 @@
         "phpunit\/phpunit": "^9.5",
         "rector\/phpstan-rules": "^0.4.20",
         "rector\/rector-generator": "dev-main",
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-main#b96e692",
         "symfony\/console": "^6.0",
         "symplify\/coding-standard": "^10.2",
         "symplify\/easy-coding-standard": "^10.2",

@@ -7,7 +7,6 @@ use RectorPrefix20220425\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -56,7 +55,7 @@ final class ObjectTypeSpecifier
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, $scope)
     {
-        /** @var Use_[]|null $uses */
+        // this change will break \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ParamTypeResolver\ParamTypeResolverTest
         $uses = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
         if ($uses === null) {
             return $objectType;
@@ -136,9 +135,8 @@ final class ObjectTypeSpecifier
      */
     private function matchShortenedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType)
     {
-        /** @var Use_[]|null $uses */
-        $uses = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
-        if ($uses === null) {
+        $uses = $this->useImportsResolver->resolveForNode($node);
+        if ($uses === []) {
             return null;
         }
         foreach ($uses as $use) {
