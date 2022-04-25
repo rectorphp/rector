@@ -27,6 +27,7 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -91,7 +92,12 @@ final class ClassRenamer
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20220425\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer $phpDocClassRenamer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer $docBlockClassRenamer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeRemoval\NodeRemover $nodeRemover, \RectorPrefix20220425\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\UseImportsResolver
+     */
+    private $useImportsResolver;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20220425\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer $phpDocClassRenamer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer $docBlockClassRenamer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeRemoval\NodeRemover $nodeRemover, \RectorPrefix20220425\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -103,6 +109,7 @@ final class ClassRenamer
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeRemover = $nodeRemover;
         $this->parameterProvider = $parameterProvider;
+        $this->useImportsResolver = $useImportsResolver;
     }
     /**
      * @param array<string, string> $oldToNewClasses
@@ -380,13 +387,12 @@ final class ClassRenamer
     }
     private function isValidUseImportChange(string $newName, \PhpParser\Node\Stmt\UseUse $useUse) : bool
     {
-        /** @var Use_[]|null $useNodes */
-        $useNodes = $useUse->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
-        if ($useNodes === null) {
+        $uses = $this->useImportsResolver->resolveForNode($useUse);
+        if ($uses === []) {
             return \true;
         }
-        foreach ($useNodes as $useNode) {
-            if ($this->nodeNameResolver->isName($useNode, $newName)) {
+        foreach ($uses as $use) {
+            if ($this->nodeNameResolver->isName($use, $newName)) {
                 // name already exists
                 return \false;
             }
