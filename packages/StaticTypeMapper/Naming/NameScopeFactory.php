@@ -14,6 +14,7 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20220425\Symfony\Contracts\Service\Attribute\Required;
@@ -34,30 +35,34 @@ final class NameScopeFactory
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
+    /**
+     * @var \Rector\Naming\Naming\UseImportsResolver
+     */
+    private $useImportsResolver;
     // This is needed to avoid circular references
     /**
      * @required
      */
-    public function autowire(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder) : void
+    public function autowire(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver) : void
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->useImportsResolver = $useImportsResolver;
     }
     public function createNameScopeFromNodeWithoutTemplateTypes(\PhpParser\Node $node) : \PHPStan\Analyser\NameScope
     {
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $namespace = $scope instanceof \PHPStan\Analyser\Scope ? $scope->getNamespace() : null;
-        /** @var Use_[] $useNodes */
-        $useNodes = (array) $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
-        $uses = $this->resolveUseNamesByAlias($useNodes);
+        $uses = $this->useImportsResolver->resolveForNode($node);
+        $usesAliasesToNames = $this->resolveUseNamesByAlias($uses);
         if ($scope instanceof \PHPStan\Analyser\Scope && $scope->getClassReflection() instanceof \PHPStan\Reflection\ClassReflection) {
             $classReflection = $scope->getClassReflection();
             $className = $classReflection->getName();
         } else {
             $className = null;
         }
-        return new \PHPStan\Analyser\NameScope($namespace, $uses, $className);
+        return new \PHPStan\Analyser\NameScope($namespace, $usesAliasesToNames, $className);
     }
     public function createNameScopeFromNode(\PhpParser\Node $node) : \PHPStan\Analyser\NameScope
     {
