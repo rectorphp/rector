@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbcdaeabab37a18d9a0720998e454d54d
+class ComposerStaticInitf49fae9c470dbb7188ccce702cb8ad9c
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3455,6 +3455,7 @@ class ComposerStaticInitbcdaeabab37a18d9a0720998e454d54d
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\NullTypeAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/NullTypeAssignDetector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\PropertyDefaultAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/PropertyDefaultAssignDetector.php',
+        'Rector\\TypeDeclaration\\Contract\\PHPStan\\TypeWithClassTypeSpecifierInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/PHPStan/TypeWithClassTypeSpecifierInterface.php',
         'Rector\\TypeDeclaration\\Contract\\PriorityAwareInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/PriorityAwareInterface.php',
         'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ParamTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ParamTypeInfererInterface.php',
         'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ReturnTypeInfererInterface.php',
@@ -3476,6 +3477,7 @@ class ComposerStaticInitbcdaeabab37a18d9a0720998e454d54d
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\DetailedTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/DetailedTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/PropertyTypeDecorator.php',
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\TraitTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/TraitTypeAnalyzer.php',
+        'Rector\\TypeDeclaration\\PHPStan\\TypeSpecifier\\SelfStaticParentTypeSpecifier' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PHPStan/TypeSpecifier/SelfStaticParentTypeSpecifier.php',
         'Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PHPStan/Type/ObjectTypeSpecifier.php',
         'Rector\\TypeDeclaration\\PhpDocParser\\NonInformativeReturnTagRemover' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PhpDocParser/NonInformativeReturnTagRemover.php',
         'Rector\\TypeDeclaration\\PhpDocParser\\ParamPhpDocNodeFactory' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PhpDocParser/ParamPhpDocNodeFactory.php',
@@ -3871,9 +3873,9 @@ class ComposerStaticInitbcdaeabab37a18d9a0720998e454d54d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbcdaeabab37a18d9a0720998e454d54d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbcdaeabab37a18d9a0720998e454d54d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbcdaeabab37a18d9a0720998e454d54d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf49fae9c470dbb7188ccce702cb8ad9c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf49fae9c470dbb7188ccce702cb8ad9c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf49fae9c470dbb7188ccce702cb8ad9c::$classMap;
 
         }, null, ClassLoader::class);
     }

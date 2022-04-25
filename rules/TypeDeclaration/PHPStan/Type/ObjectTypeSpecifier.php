@@ -9,26 +9,21 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
-use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use Rector\TypeDeclaration\Contract\PHPStan\TypeWithClassTypeSpecifierInterface;
 final class ObjectTypeSpecifier
 {
     /**
@@ -41,26 +36,35 @@ final class ObjectTypeSpecifier
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver)
+    /**
+     * @var TypeWithClassTypeSpecifierInterface[]
+     * @readonly
+     */
+    private $typeWithClassTypeSpecifiers;
+    /**
+     * @param TypeWithClassTypeSpecifierInterface[] $typeWithClassTypeSpecifiers
+     */
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver, array $typeWithClassTypeSpecifiers)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->useImportsResolver = $useImportsResolver;
+        $this->typeWithClassTypeSpecifiers = $typeWithClassTypeSpecifiers;
     }
     /**
      * @param \PHPStan\Analyser\Scope|null $scope
-     * @return \PHPStan\Type\MixedType|\PHPStan\Type\TypeWithClassName|\PHPStan\Type\UnionType
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\TypeWithClassName|\PHPStan\Type\UnionType|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, $scope)
     {
-        $sameNamespacedObjectType = $this->matchSameNamespacedObjectType($node, $objectType);
-        if ($sameNamespacedObjectType !== null) {
-            return $sameNamespacedObjectType;
+        $sameNamespacedFullyQualifiedObjectType = $this->matchSameNamespacedObjectType($node, $objectType);
+        if ($sameNamespacedFullyQualifiedObjectType !== null) {
+            return $sameNamespacedFullyQualifiedObjectType;
         }
         if ($scope instanceof \PHPStan\Analyser\Scope) {
-            $className = \ltrim($objectType->getClassName(), '\\');
-            $objectReferenceType = $this->resolveObjectReferenceType($scope, $className);
-            if ($objectReferenceType instanceof \PHPStan\Type\Type) {
-                return $objectReferenceType;
+            foreach ($this->typeWithClassTypeSpecifiers as $typeWithClassTypeSpecifier) {
+                if ($typeWithClassTypeSpecifier->match($objectType, $scope)) {
+                    return $typeWithClassTypeSpecifier->resolveObjectReferenceType($objectType, $scope);
+                }
             }
         }
         $uses = $this->useImportsResolver->resolveForNode($node);
@@ -79,15 +83,6 @@ final class ObjectTypeSpecifier
             return $shortenedObjectType;
         }
         $className = \ltrim($objectType->getClassName(), '\\');
-        if (\Rector\Core\Enum\ObjectReference::isValid($className)) {
-            if (!$scope instanceof \PHPStan\Analyser\Scope) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
-            }
-            $resolvedType = $this->resolveObjectReferenceType($scope, $className);
-            if ($resolvedType instanceof \PHPStan\Type\Type) {
-                return $resolvedType;
-            }
-        }
         if ($this->reflectionProvider->hasClass($className)) {
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
         }
@@ -167,7 +162,7 @@ final class ObjectTypeSpecifier
         }
         return null;
     }
-    private function matchSameNamespacedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : ?\PHPStan\Type\ObjectType
+    private function matchSameNamespacedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : ?\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType
     {
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
@@ -214,29 +209,5 @@ final class ObjectTypeSpecifier
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($objectType->getClassName());
         }
         return new \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType($objectType->getClassName(), $useUse->name->toString());
-    }
-    /**
-     * @return \PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType|null
-     */
-    private function resolveObjectReferenceType(\PHPStan\Analyser\Scope $scope, string $classReferenceValue)
-    {
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            return null;
-        }
-        if (\Rector\Core\Enum\ObjectReference::STATIC()->getValue() === $classReferenceValue) {
-            return new \PHPStan\Type\StaticType($classReflection);
-        }
-        if (\Rector\Core\Enum\ObjectReference::SELF()->getValue() === $classReferenceValue) {
-            return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($classReferenceValue, null, $classReflection);
-        }
-        if (\Rector\Core\Enum\ObjectReference::PARENT()->getValue() === $classReferenceValue) {
-            $parentClassReflection = $classReflection->getParentClass();
-            if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
-            }
-            return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($parentClassReflection);
-        }
-        return null;
     }
 }
