@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-final class ClassStringType
+final class ClassStringTypeAsString
 {
     /**
      * @var class-string
@@ -16,7 +16,7 @@ final class ClassStringType
 
 namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-final class ClassStringType
+final class ClassStringTypeAsString
 {
     /**
      * @var class-string

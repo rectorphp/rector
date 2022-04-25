@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
+use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -28,6 +29,7 @@ final class ScalarStringToTypeMapper
      */
     private const SCALAR_NAME_BY_TYPE = [
         StringType::class => ['string'],
+        ClassStringType::class => ['class-string'],
         FloatType::class => ['float', 'real', 'double'],
         IntegerType::class => ['int', 'integer'],
         BooleanType::class => ['bool', 'boolean'],

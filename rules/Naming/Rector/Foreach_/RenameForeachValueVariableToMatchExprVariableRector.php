@@ -132,6 +132,8 @@ CODE_SAMPLE
             ? $this->nodeTypeResolver->getType($expr->var)
             : $this->nodeTypeResolver->getType($expr->class);
 
+//        dump($variableType);die;
+
         if ($variableType instanceof FullyQualifiedObjectType) {
             $currentClassLike = $this->betterNodeFinder->findParentType($expr, ClassLike::class);
             if ($currentClassLike instanceof ClassLike) {

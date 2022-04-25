@@ -592,3 +592,10 @@ parameters:
 
         # empty parent construct
         - '#Rector\\Core\\PhpParser\\NodeTraverser\\FileWithoutNamespaceNodeTraverser\:\:__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
+
+        # resolve later to collector
+        -
+            message: '#Class cognitive complexity is 55, keep it under 50#'
+            path: rules/TypeDeclaration/PHPStan/Type/ObjectTypeSpecifier.php
+
+        - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier\:\:narrowToFullyQualifiedOrAliasedObjectType\(\)" is 14, keep it under 10#'

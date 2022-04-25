@@ -12,12 +12,16 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ClassStringType;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -63,11 +67,6 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         }
 
         $loweredName = strtolower($typeNode->name);
-
-        if ($loweredName === 'class-string') {
-            return new ClassStringType();
-        }
-
         if ($loweredName === ObjectReference::SELF()->getValue()) {
             return $this->mapSelf($node);
         }
@@ -89,6 +88,12 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
             $typeWithoutPreslash = Strings::substring($type, 1);
             $objectType = new FullyQualifiedObjectType($typeWithoutPreslash);
         } else {
+            if ($typeNode->name === 'scalar') {
+                // pseudo type, see https://www.php.net/manual/en/language.types.intro.php
+                $scalarTypes = [new BooleanType(), new StringType(), new IntegerType(), new FloatType()];
+                return new UnionType($scalarTypes);
+            }
+
             $objectType = new ObjectType($typeNode->name);
         }
 

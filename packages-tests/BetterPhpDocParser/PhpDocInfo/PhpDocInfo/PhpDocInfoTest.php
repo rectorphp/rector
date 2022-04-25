@@ -7,11 +7,11 @@ namespace Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Nop;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
-use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
+use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -44,14 +44,14 @@ final class PhpDocInfoTest extends AbstractTestCase
 
     public function testGetVarType(): void
     {
-        $expectedObjectType = new ObjectType('SomeType');
-        $this->assertEquals($expectedObjectType, $this->phpDocInfo->getVarType());
+        $nonExistingObjectType = new NonExistingObjectType('SomeType');
+        $this->assertEquals($nonExistingObjectType, $this->phpDocInfo->getVarType());
     }
 
     public function testGetReturnType(): void
     {
-        $expectedObjectType = new ObjectType('SomeType');
-        $this->assertEquals($expectedObjectType, $this->phpDocInfo->getReturnType());
+        $nonExistingObjectType = new NonExistingObjectType('SomeType');
+        $this->assertEquals($nonExistingObjectType, $this->phpDocInfo->getReturnType());
     }
 
     public function testReplaceTagByAnother(): void

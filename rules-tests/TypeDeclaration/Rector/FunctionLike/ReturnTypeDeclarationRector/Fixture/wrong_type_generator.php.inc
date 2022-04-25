@@ -12,6 +12,7 @@ final class WrongTypeGenerator
         yield 5;
     }
 }
+
 ?>
 -----
 <?php
@@ -28,4 +29,5 @@ final class WrongTypeGenerator
         yield 5;
     }
 }
+
 ?>
