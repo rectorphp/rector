@@ -10,14 +10,12 @@ use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 
 final class NodeScopeAndMetadataDecorator
 {
     public function __construct(
         private readonly CloningVisitor $cloningVisitor,
-        private readonly NamespaceNodeVisitor $namespaceNodeVisitor,
         private readonly PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         private readonly NodeConnectingVisitor $nodeConnectingVisitor,
         private readonly FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor
@@ -39,8 +37,6 @@ final class NodeScopeAndMetadataDecorator
 
         // this one has to be run again to re-connect nodes with new attributes
         $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
-
-        $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
         $nodeTraverser->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
 
         return $nodeTraverser->traverse($stmts);
