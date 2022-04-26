@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt;
@@ -152,10 +156,13 @@ CODE_SAMPLE
         } elseif ($node instanceof Echo_) {
             $stmts[] = new Echo_([$matchArm->body]);
             $stmts[] = new Break_();
+        } else if ($node->expr instanceof MethodCall || $node->expr instanceof FuncCall) {
+            $call = clone $node->expr;
+            $call->args = [new Arg($matchArm->body)];
+            $stmts[] = new Expression($call);
+            $stmts[] = new Break_();
         } elseif ($node->expr instanceof Assign) {
-            /** @var Assign $assign */
-            $assign = $node->expr;
-            $stmts[] = new Expression(new Assign($assign->var, $matchArm->body));
+            $stmts[] = new Expression(new Assign($node->expr->var, $matchArm->body));
             $stmts[] = new Break_();
         } elseif ($node->expr instanceof Match_) {
             $stmts[] = new Expression($matchArm->body);
