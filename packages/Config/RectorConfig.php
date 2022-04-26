@@ -59,6 +59,16 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \true);
     }
+    public function importShortClasses() : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES, \true);
+    }
+    public function disableImportShortClasses() : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES, \false);
+    }
     public function disableImportNames() : void
     {
         $parameters = $this->parameters();

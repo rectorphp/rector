@@ -50,6 +50,7 @@ final class Option
      */
     public const AUTO_IMPORT_NAMES = 'auto_import_names';
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::importShortClasses() instead
      * @var string
      */
     public const IMPORT_SHORT_CLASSES = 'import_short_classes';

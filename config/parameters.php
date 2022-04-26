@@ -22,7 +22,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_TIMEOUT_IN_SECONDS, 120);
     // FQN class importing
     $rectorConfig->disableImportNames();
-    $parameters->set(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES, \true);
+    $rectorConfig->importShortClasses();
     $parameters->set(\Rector\Core\Configuration\Option::NESTED_CHAIN_METHOD_CALL_LIMIT, 60);
     $rectorConfig->skip([]);
     $parameters->set(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH, null);
