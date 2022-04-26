@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
@@ -14,6 +13,7 @@ use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
+use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
@@ -77,60 +77,41 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Expression::class, Return_::class];
+        return [Echo_::class, Expression::class, Return_::class];
     }
 
     /**
-     * @param Expression|Return_ $node
+     * @param Echo_|Expression|Return_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        /** @var Match_|null $match */
+        $match = $this->betterNodeFinder->findFirst(
+            $node,
+            fn (Node $subNode): bool => $subNode instanceof Match_
+        );
+
+        if ($match === null || $this->shouldSkip($match)) {
             return null;
-        }
-
-        if ($node instanceof Expression) {
-            if (! $node->expr instanceof Assign) {
-                return null;
-            }
-
-            $assign = $node->expr;
-            if (! $assign->expr instanceof Match_) {
-                return null;
-            }
-
-            /** @var Match_ $match */
-            $match = $assign->expr;
-        } else {
-            if (! $node->expr instanceof Match_) {
-                return null;
-            }
-
-            /** @var Match_ $match */
-            $match = $node->expr;
         }
 
         $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
         return new Switch_($match->cond, $switchCases);
     }
 
-    private function shouldSkip(Expression|Return_ $node): bool
+    private function shouldSkip(Match_ $node): bool
     {
-        if ($node->expr instanceof Expr) {
-            return (bool) $this->betterNodeFinder->findFirst(
-                $node->expr,
-                fn (Node $subNode): bool => $subNode instanceof ArrayItem && $subNode->unpack
-            );
-        }
-
-        return false;
+        return (bool) $this->betterNodeFinder->findFirst(
+            $node,
+            fn (Node $subNode): bool => $subNode instanceof ArrayItem && $subNode->unpack
+        );
     }
 
     /**
      * @param MatchArm[] $matchArms
      * @return Case_[]
      */
-    private function createSwitchCasesFromMatchArms(Expression | Return_ $node, array $matchArms): array
+    private function createSwitchCasesFromMatchArms(Echo_ | Expression | Return_ $node, array $matchArms): array
     {
         $switchCases = [];
 
@@ -160,19 +141,25 @@ CODE_SAMPLE
     /**
      * @return Stmt[]
      */
-    private function createSwitchStmts(Expression | Return_ $node, MatchArm $matchArm): array
+    private function createSwitchStmts(Echo_ | Expression | Return_ $node, MatchArm $matchArm): array
     {
         $stmts = [];
 
         if ($matchArm->body instanceof Throw_) {
             $stmts[] = new Expression($matchArm->body);
-        } elseif ($node instanceof Expression) {
+        } elseif ($node instanceof Return_) {
+            $stmts[] = new Return_($matchArm->body);
+        } elseif ($node instanceof Echo_) {
+            $stmts[] = new Echo_([$matchArm->body]);
+            $stmts[] = new Break_();
+        } elseif ($node->expr instanceof Assign) {
             /** @var Assign $assign */
             $assign = $node->expr;
             $stmts[] = new Expression(new Assign($assign->var, $matchArm->body));
             $stmts[] = new Break_();
-        } else {
-            $stmts[] = new Return_($matchArm->body);
+        } elseif ($node->expr instanceof Match_) {
+            $stmts[] = new Expression($matchArm->body);
+            $stmts[] = new Break_();
         }
 
         return $stmts;
