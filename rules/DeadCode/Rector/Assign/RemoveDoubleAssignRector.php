@@ -6,12 +6,14 @@ namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
@@ -49,15 +51,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Foreach_::class, FileWithoutNamespace::class, FunctionLike::class, If_::class, Namespace_::class];
+        return [
+            Foreach_::class,
+            FileWithoutNamespace::class,
+            ClassMethod::class,
+            Function_::class,
+            Closure::class,
+            If_::class,
+            Namespace_::class,
+        ];
     }
 
     /**
-     * @param Foreach_|FileWithoutNamespace|FunctionLike|If_|Namespace_ $node
+     * @param Foreach_|FileWithoutNamespace|If_|Namespace_|ClassMethod|Function_|Closure $node
      */
     public function refactor(Node $node): ?Node
     {
         $stmts = $node->stmts;
+        if ($stmts === null) {
+            return null;
+        }
+
         $hasChanged = false;
 
         $previousStmt = null;

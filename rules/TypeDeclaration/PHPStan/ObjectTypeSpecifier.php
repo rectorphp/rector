@@ -19,6 +19,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
@@ -34,7 +35,8 @@ final class ObjectTypeSpecifier
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
         private readonly UseImportsResolver $useImportsResolver,
-        private readonly array $typeWithClassTypeSpecifiers
+        private readonly array $typeWithClassTypeSpecifiers,
+        private readonly NameScopeFactory $nameScopeFactory
     ) {
     }
 
@@ -43,6 +45,9 @@ final class ObjectTypeSpecifier
         ObjectType $objectType,
         Scope|null $scope
     ): TypeWithClassName | NonExistingObjectType | UnionType | MixedType {
+        $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
+        // @todo reuse name scope
+
         if ($scope instanceof Scope) {
             foreach ($this->typeWithClassTypeSpecifiers as $typeWithClassTypeSpecifier) {
                 if ($typeWithClassTypeSpecifier->match($objectType, $scope)) {

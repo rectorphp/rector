@@ -582,7 +582,7 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\Else_\|PhpParser\\Node\\Stmt\\Foreach_\|PhpParser\\Node\\Stmt\\If_\:\:\$stmts#'
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\Foreach_\|PhpParser\\Node\\Stmt\\If_\|PhpParser\\Node\\Stmt\\Namespace_\|Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace\:\:\$stmts#'
         # stmts refactoring
-        - '#Cognitive complexity for "Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleAssignRector\:\:refactor\(\)" is 13, keep it under 10#'
+        - '#Cognitive complexity for "Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleAssignRector\:\:refactor\(\)" is \d+, keep it under 10#'
 
         # todo add custom stmts aware interface
         -
