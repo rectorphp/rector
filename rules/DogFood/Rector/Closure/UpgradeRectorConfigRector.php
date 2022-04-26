@@ -36,6 +36,7 @@ final class UpgradeRectorConfigRector extends AbstractRector
         Option::SKIP => 'skip',
         Option::AUTOLOAD_PATHS => 'autoloadPaths',
         Option::BOOTSTRAP_FILES => 'bootstrapFiles',
+        Option::IMPORT_SHORT_CLASSES => 'importShortClasses',
         Option::AUTO_IMPORT_NAMES => 'importNames',
         Option::PARALLEL => 'parallel',
         Option::PHPSTAN_FOR_RECTOR_PATH => 'phpstanConfig',
