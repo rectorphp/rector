@@ -39,7 +39,7 @@ final class OverridenExistingNamesResolver
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function hasNameInClassMethodForNew(string $variableName, $functionLike) : bool
     {
@@ -47,7 +47,7 @@ final class OverridenExistingNamesResolver
         return \in_array($variableName, $overridenVariableNames, \true);
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $classMethod
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $classMethod
      */
     public function hasNameInFunctionLikeForParam(string $expectedName, $classMethod) : bool
     {
@@ -68,7 +68,7 @@ final class OverridenExistingNamesResolver
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function resolveOveriddenNamesForNew($functionLike) : array
     {

@@ -94,7 +94,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function refactorParamType(\PhpParser\Node\Param $param, $functionLike) : bool
     {
@@ -106,7 +106,7 @@ CODE_SAMPLE
         return \true;
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function decorateWithDocBlock($functionLike, \PhpParser\Node\Param $param) : void
     {

@@ -73,7 +73,7 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
     private function shouldSkip($call) : bool
     {
@@ -83,7 +83,7 @@ CODE_SAMPLE
         return !$this->isMethodCallOnTsfe($call);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
     private function isEidUtilityMethodCall($call) : bool
     {
@@ -97,7 +97,7 @@ CODE_SAMPLE
         return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
     }
     /**
-     * @param \PhpParser\Node|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node $node
      */
     private function removeMethodCall($node) : void
     {

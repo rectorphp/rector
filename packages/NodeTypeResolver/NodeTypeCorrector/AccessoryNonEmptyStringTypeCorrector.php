@@ -9,7 +9,7 @@ use PHPStan\Type\Type;
 final class AccessoryNonEmptyStringTypeCorrector
 {
     /**
-     * @return \PHPStan\Type\IntersectionType|\PHPStan\Type\Type
+     * @return \PHPStan\Type\Type|\PHPStan\Type\IntersectionType
      */
     public function correct(\PHPStan\Type\Type $mainType)
     {

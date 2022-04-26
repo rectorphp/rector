@@ -75,7 +75,7 @@ final class ForbiddenPropertyRemovalAnalyzer
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr\Clone_|\PhpParser\Node\Expr\New_ $expr
+     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\Clone_ $expr
      */
     private function isPropertyNameUsedAfterNewOrClone($expr, \PhpParser\Node\Stmt\ClassLike $classLike, string $propertyName) : bool
     {

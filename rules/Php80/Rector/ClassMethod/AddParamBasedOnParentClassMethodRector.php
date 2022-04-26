@@ -185,7 +185,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|null
+     * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\ComplexType
      */
     private function resolveParamType(\PhpParser\Node\Param $param)
     {

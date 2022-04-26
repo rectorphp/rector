@@ -154,7 +154,7 @@ CODE_SAMPLE
         return !$this->nodeComparator->areNodesEqual($if->cond->vars[0], $firstElseStmt->expr->var);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Else_|\PhpParser\Node\Stmt\If_ $node
+     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Else_ $node
      */
     private function hasOnlyStatementAssign($node) : bool
     {

@@ -45,7 +45,7 @@ final class PropertyTypeDecorator
         $this->nodeFactory = $nodeFactory;
     }
     /**
-     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Name $typeNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType $typeNode
      */
     public function decoratePropertyUnionType(\PHPStan\Type\UnionType $unionType, $typeNode, \PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {

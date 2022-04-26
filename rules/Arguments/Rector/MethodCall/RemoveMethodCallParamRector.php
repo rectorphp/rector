@@ -11,7 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220425\Webmozart\Assert\Assert;
+use RectorPrefix20220426\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\MethodCall\RemoveMethodCallParamRector\RemoveMethodCallParamRectorTest
  */
@@ -80,11 +80,11 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220425\Webmozart\Assert\Assert::allIsInstanceOf($configuration, \Rector\Arguments\ValueObject\RemoveMethodCallParam::class);
+        \RectorPrefix20220426\Webmozart\Assert\Assert::allIsInstanceOf($configuration, \Rector\Arguments\ValueObject\RemoveMethodCallParam::class);
         $this->removeMethodCallParams = $configuration;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
     private function isCallerObjectType($call, \Rector\Arguments\ValueObject\RemoveMethodCallParam $removeMethodCallParam) : bool
     {

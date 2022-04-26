@@ -17,11 +17,11 @@ final class DefaultAnnotationArgValue
     private $argName;
     /**
      * @readonly
-     * @var bool|int|string
+     * @var string|bool|int
      */
     private $defaultValue;
     /**
-     * @param bool|int|string $defaultValue
+     * @param string|bool|int $defaultValue
      */
     public function __construct(string $annotationClass, string $argName, $defaultValue)
     {

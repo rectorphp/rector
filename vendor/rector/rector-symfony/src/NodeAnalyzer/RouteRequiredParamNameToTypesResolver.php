@@ -55,7 +55,7 @@ final class RouteRequiredParamNameToTypesResolver
     }
     /**
      * @return array<string, string>
-     * @param \PhpParser\Node\Attribute|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|null $routeAttrination
+     * @param \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|\PhpParser\Node\Attribute|null $routeAttrination
      */
     private function resolveParamsToRegexes($routeAttrination) : array
     {

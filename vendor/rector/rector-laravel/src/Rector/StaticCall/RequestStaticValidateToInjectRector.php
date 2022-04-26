@@ -91,7 +91,7 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\MethodCall($variable, new \PhpParser\Node\Identifier($methodName), $node->args);
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $node
      */
     private function shouldSkip($node) : bool
     {

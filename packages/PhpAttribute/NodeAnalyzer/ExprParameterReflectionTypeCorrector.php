@@ -70,7 +70,7 @@ final class ExprParameterReflectionTypeCorrector
         return $items;
     }
     /**
-     * @param int|string $name
+     * @param string|int $name
      * @return \PhpParser\Node\Expr|null
      * @param mixed $item
      */

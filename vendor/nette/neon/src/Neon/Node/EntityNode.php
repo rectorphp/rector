@@ -5,29 +5,29 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220425\Nette\Neon\Node;
+namespace RectorPrefix20220426\Nette\Neon\Node;
 
-use RectorPrefix20220425\Nette\Neon\Entity;
-use RectorPrefix20220425\Nette\Neon\Node;
+use RectorPrefix20220426\Nette\Neon\Entity;
+use RectorPrefix20220426\Nette\Neon\Node;
 /** @internal */
-final class EntityNode extends \RectorPrefix20220425\Nette\Neon\Node
+final class EntityNode extends \RectorPrefix20220426\Nette\Neon\Node
 {
     /** @var Node */
     public $value;
     /** @var ArrayItemNode[] */
     public $attributes;
-    public function __construct(\RectorPrefix20220425\Nette\Neon\Node $value, array $attributes = [])
+    public function __construct(\RectorPrefix20220426\Nette\Neon\Node $value, array $attributes = [])
     {
         $this->value = $value;
         $this->attributes = $attributes;
     }
-    public function toValue() : \RectorPrefix20220425\Nette\Neon\Entity
+    public function toValue() : \RectorPrefix20220426\Nette\Neon\Entity
     {
-        return new \RectorPrefix20220425\Nette\Neon\Entity($this->value->toValue(), \RectorPrefix20220425\Nette\Neon\Node\ArrayItemNode::itemsToArray($this->attributes));
+        return new \RectorPrefix20220426\Nette\Neon\Entity($this->value->toValue(), \RectorPrefix20220426\Nette\Neon\Node\ArrayItemNode::itemsToArray($this->attributes));
     }
     public function toString() : string
     {
-        return $this->value->toString() . '(' . ($this->attributes ? \RectorPrefix20220425\Nette\Neon\Node\ArrayItemNode::itemsToInlineString($this->attributes) : '') . ')';
+        return $this->value->toString() . '(' . ($this->attributes ? \RectorPrefix20220426\Nette\Neon\Node\ArrayItemNode::itemsToInlineString($this->attributes) : '') . ')';
     }
     public function &getIterator() : \Generator
     {

@@ -57,7 +57,7 @@ final class UnionTypeCommonTypeNarrower
         return null;
     }
     /**
-     * @return \PHPStan\Type\Generic\GenericClassStringType|\PHPStan\Type\UnionType
+     * @return \PHPStan\Type\UnionType|\PHPStan\Type\Generic\GenericClassStringType
      */
     public function narrowToGenericClassStringType(\PHPStan\Type\UnionType $unionType)
     {

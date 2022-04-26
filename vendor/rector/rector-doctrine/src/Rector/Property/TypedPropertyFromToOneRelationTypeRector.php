@@ -101,7 +101,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Name $typeNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType $typeNode
      */
     private function completePropertyTypeOrVarDoc(\PHPStan\Type\Type $propertyType, $typeNode, \PhpParser\Node\Stmt\Property $property) : void
     {

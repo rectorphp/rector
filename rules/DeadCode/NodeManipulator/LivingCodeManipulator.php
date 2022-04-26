@@ -58,7 +58,7 @@ final class LivingCodeManipulator
     }
     /**
      * @return Expr[]|mixed[]
-     * @param int|\PhpParser\Node|string|null $expr
+     * @param \PhpParser\Node|int|string|null $expr
      */
     public function keepLivingCodeFromExpr($expr) : array
     {

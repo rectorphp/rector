@@ -67,7 +67,7 @@ final class NeighbourClassLikePrinter
     }
     /**
      * @return Declare_[]
-     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $mainNode
+     * @param \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_ $mainNode
      */
     private function resolveDeclares($mainNode, ?\Rector\Core\ValueObject\Application\File $file = null) : array
     {

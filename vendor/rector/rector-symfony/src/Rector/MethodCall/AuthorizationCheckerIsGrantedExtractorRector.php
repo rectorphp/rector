@@ -50,7 +50,7 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall $node
-     * @return \PhpParser\Node\Expr\BinaryOp\BooleanOr|\PhpParser\Node\Expr\MethodCall|null
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\BinaryOp\BooleanOr|null
      */
     public function refactor(\PhpParser\Node $node)
     {
@@ -80,7 +80,7 @@ CODE_SAMPLE
     }
     /**
      * @param Arg[] $args
-     * @return \PhpParser\Node\Expr\BinaryOp\BooleanOr|\PhpParser\Node\Expr\MethodCall|null
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\BinaryOp\BooleanOr|null
      */
     private function processExtractIsGranted(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Array_ $array, array $args)
     {

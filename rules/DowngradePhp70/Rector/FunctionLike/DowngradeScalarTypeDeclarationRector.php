@@ -98,7 +98,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function resolveRecastAssign(\PhpParser\Node\Param $param, $functionLike) : ?\PhpParser\Node\Stmt\Expression
     {

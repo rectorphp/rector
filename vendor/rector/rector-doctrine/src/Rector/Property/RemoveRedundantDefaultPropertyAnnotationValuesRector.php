@@ -119,7 +119,7 @@ CODE_SAMPLE
     }
     /**
      * @param class-string $annotationClass
-     * @param bool|int|string $defaultValue
+     * @param string|bool|int $defaultValue
      */
     private function refactorAnnotation(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, string $annotationClass, string $argName, $defaultValue) : void
     {

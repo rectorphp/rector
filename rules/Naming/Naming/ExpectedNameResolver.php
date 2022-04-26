@@ -105,7 +105,7 @@ final class ExpectedNameResolver
         return $expectedName->getName();
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
     public function resolveForCall($expr) : ?string
     {
@@ -138,7 +138,7 @@ final class ExpectedNameResolver
         return null;
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
     public function resolveForForeach($expr) : ?string
     {
@@ -178,7 +178,7 @@ final class ExpectedNameResolver
         return $returnedType instanceof \PHPStan\Type\ArrayType && $expectedName !== null;
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
     private function isDynamicNameCall($expr) : bool
     {

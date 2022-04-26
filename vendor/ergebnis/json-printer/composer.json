@@ -42,12 +42,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220425\\Ergebnis\\Json\\Printer\\": "src\/"
+            "RectorPrefix20220426\\Ergebnis\\Json\\Printer\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220425\\Ergebnis\\Json\\Printer\\Test\\": "test\/"
+            "RectorPrefix20220426\\Ergebnis\\Json\\Printer\\Test\\": "test\/"
         }
     },
     "support": {

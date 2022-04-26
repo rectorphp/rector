@@ -9,7 +9,7 @@ use PhpParser\NodeVisitor\NameResolver;
 final class NamespacedNameDecorator
 {
     /**
-     * @param mixed[]|\PhpParser\Node $node
+     * @param \PhpParser\Node|mixed[] $node
      */
     public function decorate($node) : void
     {

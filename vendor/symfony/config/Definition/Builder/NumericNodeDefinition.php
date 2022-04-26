@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220425\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20220426\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220425\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
+use RectorPrefix20220426\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
 /**
  * Abstract class that contains common code of integer and float node definitions.
  *
  * @author David Jeanmonod <david.jeanmonod@gmail.com>
  */
-abstract class NumericNodeDefinition extends \RectorPrefix20220425\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
+abstract class NumericNodeDefinition extends \RectorPrefix20220426\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
 {
     protected $min;
     protected $max;
@@ -26,7 +26,7 @@ abstract class NumericNodeDefinition extends \RectorPrefix20220425\Symfony\Compo
      * @return $this
      *
      * @throws \InvalidArgumentException when the constraint is inconsistent
-     * @param float|int $max
+     * @param int|float $max
      */
     public function max($max)
     {
@@ -42,7 +42,7 @@ abstract class NumericNodeDefinition extends \RectorPrefix20220425\Symfony\Compo
      * @return $this
      *
      * @throws \InvalidArgumentException when the constraint is inconsistent
-     * @param float|int $min
+     * @param int|float $min
      */
     public function min($min)
     {
@@ -60,6 +60,6 @@ abstract class NumericNodeDefinition extends \RectorPrefix20220425\Symfony\Compo
      */
     public function cannotBeEmpty()
     {
-        throw new \RectorPrefix20220425\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException('->cannotBeEmpty() is not applicable to NumericNodeDefinition.');
+        throw new \RectorPrefix20220426\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException('->cannotBeEmpty() is not applicable to NumericNodeDefinition.');
     }
 }

@@ -206,7 +206,7 @@ CODE_SAMPLE
         return !$this->valueResolver->isFalse($args[1]->value);
     }
     /**
-     * @return \PhpParser\Node\Expr\MethodCall|null
+     * @return null|\PhpParser\Node\Expr\MethodCall
      */
     private function refactorConfigureRuleMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall)
     {

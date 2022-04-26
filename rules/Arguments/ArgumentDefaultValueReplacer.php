@@ -34,7 +34,7 @@ final class ArgumentDefaultValueReplacer
         $this->valueResolver = $valueResolver;
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\FuncCall $node
      */
     public function processReplaces($node, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?\PhpParser\Node
     {
@@ -77,7 +77,7 @@ final class ArgumentDefaultValueReplacer
         return $classMethod;
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
     private function processArgs($expr, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?\PhpParser\Node\Expr
     {
@@ -105,7 +105,7 @@ final class ArgumentDefaultValueReplacer
     }
     /**
      * @param mixed $value
-     * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\ClassConstFetch
+     * @return \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr
      */
     private function normalizeValue($value)
     {

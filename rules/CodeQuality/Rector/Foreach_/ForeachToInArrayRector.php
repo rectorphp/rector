@@ -169,7 +169,7 @@ CODE_SAMPLE
         return $this->valueResolver->isTrueOrFalse($ifStatment->expr);
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\Identical $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\Equal $binaryOp
      */
     private function createInArrayFunction(\PhpParser\Node\Expr $expr, $binaryOp, \PhpParser\Node\Stmt\Foreach_ $foreach) : \PhpParser\Node\Expr\FuncCall
     {

@@ -59,7 +59,7 @@ final class VarTagRemover
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
-     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
     public function removeVarPhpTagValueNodeIfNotComment($node, \PHPStan\Type\Type $type) : void
     {

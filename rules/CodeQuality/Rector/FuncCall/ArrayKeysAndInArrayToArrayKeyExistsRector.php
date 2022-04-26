@@ -91,7 +91,7 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_key_exists'), $arguments);
     }
     /**
-     * @return \PhpParser\Node|\PhpParser\Node\FunctionLike|null
+     * @return null|\PhpParser\Node|\PhpParser\Node\FunctionLike
      */
     private function findPreviousAssignToArrayKeys(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr)
     {

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220425\Symfony\Component\Console\Input;
+namespace RectorPrefix20220426\Symfony\Component\Console\Input;
 
-use RectorPrefix20220425\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20220425\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix20220426\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20220426\Symfony\Component\Console\Exception\LogicException;
 /**
  * Represents a command line argument.
  *
@@ -31,7 +31,7 @@ class InputArgument
      */
     private $mode;
     /**
-     * @var mixed[]|bool|float|int|string|null
+     * @var string|int|bool|mixed[]|null|float
      */
     private $default;
     /**
@@ -42,7 +42,7 @@ class InputArgument
      * @param string                           $name        The argument name
      * @param int|null                         $mode        The argument mode: self::REQUIRED or self::OPTIONAL
      * @param string                           $description A description text
-     * @param mixed[]|bool|float|int|string $default The default value (for self::OPTIONAL mode only)
+     * @param string|bool|int|float|mixed[] $default The default value (for self::OPTIONAL mode only)
      *
      * @throws InvalidArgumentException When argument mode is not valid
      */
@@ -51,7 +51,7 @@ class InputArgument
         if (null === $mode) {
             $mode = self::OPTIONAL;
         } elseif ($mode > 7 || $mode < 1) {
-            throw new \RectorPrefix20220425\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Argument mode "%s" is not valid.', $mode));
+            throw new \RectorPrefix20220426\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Argument mode "%s" is not valid.', $mode));
         }
         $this->name = $name;
         $this->mode = $mode;
@@ -87,25 +87,25 @@ class InputArgument
      * Sets the default value.
      *
      * @throws LogicException When incorrect default value is given
-     * @param mixed[]|bool|float|int|string $default
+     * @param string|bool|int|float|mixed[] $default
      */
     public function setDefault($default = null)
     {
         if (self::REQUIRED === $this->mode && null !== $default) {
-            throw new \RectorPrefix20220425\Symfony\Component\Console\Exception\LogicException('Cannot set a default value except for InputArgument::OPTIONAL mode.');
+            throw new \RectorPrefix20220426\Symfony\Component\Console\Exception\LogicException('Cannot set a default value except for InputArgument::OPTIONAL mode.');
         }
         if ($this->isArray()) {
             if (null === $default) {
                 $default = [];
             } elseif (!\is_array($default)) {
-                throw new \RectorPrefix20220425\Symfony\Component\Console\Exception\LogicException('A default value for an array argument must be an array.');
+                throw new \RectorPrefix20220426\Symfony\Component\Console\Exception\LogicException('A default value for an array argument must be an array.');
             }
         }
         $this->default = $default;
     }
     /**
      * Returns the default value.
-     * @return mixed[]|bool|float|int|string|null
+     * @return string|bool|int|float|mixed[]|null
      */
     public function getDefault()
     {

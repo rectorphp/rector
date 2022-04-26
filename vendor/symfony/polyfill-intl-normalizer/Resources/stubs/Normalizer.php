@@ -2,7 +2,7 @@
 
 
 
-class Normalizer extends \RectorPrefix20220425\Symfony\Polyfill\Intl\Normalizer\Normalizer
+class Normalizer extends \RectorPrefix20220426\Symfony\Polyfill\Intl\Normalizer\Normalizer
 {
     /**
      * @deprecated since ICU 56 and removed in PHP 8

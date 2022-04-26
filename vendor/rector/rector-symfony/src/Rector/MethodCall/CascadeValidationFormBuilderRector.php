@@ -151,7 +151,7 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($new)]);
     }
     /**
-     * @return \PhpParser\Node\Expr\ArrayItem|null
+     * @return null|\PhpParser\Node\Expr\ArrayItem
      */
     private function refactorArrayItem(\PhpParser\Node\Expr\ArrayItem $arrayItem)
     {

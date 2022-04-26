@@ -189,7 +189,7 @@ CODE_SAMPLE
         });
     }
     /**
-     * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\CallLike $expr
+     * @param \PhpParser\Node\Expr\CallLike|\PhpParser\Node\Expr $expr
      */
     private function isUsedInAssignExpr($expr, \PhpParser\Node\Expr\Assign $assign) : bool
     {
@@ -218,7 +218,7 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @return \PhpParser\Node\Expr|null
+     * @return null|\PhpParser\Node\Expr
      */
     private function refactorUsedVariable(\PhpParser\Node\Expr\Assign $assign)
     {

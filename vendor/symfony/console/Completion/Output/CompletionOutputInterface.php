@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220425\Symfony\Component\Console\Completion\Output;
+namespace RectorPrefix20220426\Symfony\Component\Console\Completion\Output;
 
-use RectorPrefix20220425\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix20220425\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220426\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix20220426\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Transforms the {@see CompletionSuggestions} object into output readable by the shell completion.
  *
@@ -19,5 +19,5 @@ use RectorPrefix20220425\Symfony\Component\Console\Output\OutputInterface;
  */
 interface CompletionOutputInterface
 {
-    public function write(\RectorPrefix20220425\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions, \RectorPrefix20220425\Symfony\Component\Console\Output\OutputInterface $output) : void;
+    public function write(\RectorPrefix20220426\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions, \RectorPrefix20220426\Symfony\Component\Console\Output\OutputInterface $output) : void;
 }

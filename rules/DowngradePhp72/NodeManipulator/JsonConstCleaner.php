@@ -32,8 +32,8 @@ final class JsonConstCleaner
     }
     /**
      * @param string[] $constants
-     * @param \PhpParser\Node\Expr\BinaryOp\BitwiseOr|\PhpParser\Node\Expr\ConstFetch $node
-     * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\ConstFetch|null
+     * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\BinaryOp\BitwiseOr $node
+     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr|null
      */
     public function clean($node, array $constants)
     {
@@ -44,7 +44,7 @@ final class JsonConstCleaner
     }
     /**
      * @param string[] $constants
-     * @param \PhpParser\Node\Expr\BinaryOp\BitwiseOr|\PhpParser\Node\Expr\ConstFetch $node
+     * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\BinaryOp\BitwiseOr $node
      */
     private function hasDefinedCheck($node, array $constants) : bool
     {

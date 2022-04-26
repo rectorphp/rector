@@ -22,7 +22,7 @@ final class ParentScopeFinder
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Namespace_|null
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Namespace_|\PhpParser\Node\Expr\Closure|null
      */
     public function find(\PhpParser\Node $node)
     {

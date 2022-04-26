@@ -96,7 +96,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return mixed[]|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\If_|null
+     * @return \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Expression|null|mixed[]
      */
     private function refactorAssign(\PhpParser\Node\Stmt\Expression $expression, \PhpParser\Node\Expr\Assign $assign)
     {
@@ -115,7 +115,7 @@ CODE_SAMPLE
         return $expression;
     }
     /**
-     * @return mixed[]|\PhpParser\Node\Stmt\If_|null
+     * @return \PhpParser\Node\Stmt\If_|null|mixed[]
      */
     private function refactorTernary(\PhpParser\Node\Expr\Ternary $ternary, ?\PhpParser\Node\Expr\Assign $assign)
     {
@@ -131,7 +131,7 @@ CODE_SAMPLE
         return [$if, new \PhpParser\Node\Stmt\Expression($assign)];
     }
     /**
-     * @return mixed[]|\PhpParser\Node\Stmt\If_|null
+     * @return \PhpParser\Node\Stmt\If_|null|mixed[]
      */
     private function refactorCoalesce(\PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce, ?\PhpParser\Node\Expr\Assign $assign)
     {
@@ -180,7 +180,7 @@ CODE_SAMPLE
         return new \PhpParser\Node\Stmt\If_($booleanNot, ['stmts' => [new \PhpParser\Node\Stmt\Expression($throw)]]);
     }
     /**
-     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BooleanNot
+     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\BinaryOp\Identical
      */
     private function createCondExpr(\PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce)
     {

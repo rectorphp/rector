@@ -83,8 +83,8 @@ CODE_SAMPLE
         return $node instanceof \PhpParser\Node\Stmt\Expression;
     }
     /**
-     * @param \PhpParser\Node\Expr\PostDec|\PhpParser\Node\Expr\PostInc $node
-     * @return \PhpParser\Node\Expr\PreDec|\PhpParser\Node\Expr\PreInc
+     * @param \PhpParser\Node\Expr\PostInc|\PhpParser\Node\Expr\PostDec $node
+     * @return \PhpParser\Node\Expr\PreInc|\PhpParser\Node\Expr\PreDec
      */
     private function processPrePost($node)
     {
@@ -94,7 +94,7 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\PreDec($node->var);
     }
     /**
-     * @param \PhpParser\Node\Expr\PostDec|\PhpParser\Node\Expr\PostInc $node
+     * @param \PhpParser\Node\Expr\PostInc|\PhpParser\Node\Expr\PostDec $node
      */
     private function processPreArray($node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : ?\PhpParser\Node\Expr
     {
@@ -107,7 +107,7 @@ CODE_SAMPLE
         return $arrayDimFetch->dim;
     }
     /**
-     * @param \PhpParser\Node\Expr\PostDec|\PhpParser\Node\Expr\PostInc $node
+     * @param \PhpParser\Node\Expr\PostInc|\PhpParser\Node\Expr\PostDec $node
      * @return \PhpParser\Node\Expr\PreDec|\PhpParser\Node\Expr\PreInc
      */
     private function processPreFor($node, \PhpParser\Node\Stmt\For_ $for)

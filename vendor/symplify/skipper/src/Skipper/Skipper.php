@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220425\Symplify\Skipper\Skipper;
+namespace RectorPrefix20220426\Symplify\Skipper\Skipper;
 
-use RectorPrefix20220425\Symplify\Skipper\Contract\SkipVoterInterface;
+use RectorPrefix20220426\Symplify\Skipper\Contract\SkipVoterInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @api
@@ -27,7 +27,7 @@ final class Skipper
         $this->skipVoters = $skipVoters;
     }
     /**
-     * @param object|string $element
+     * @param string|object $element
      */
     public function shouldSkipElement($element) : bool
     {
@@ -39,7 +39,7 @@ final class Skipper
         return $this->shouldSkipElementAndFileInfo(self::FILE_ELEMENT, $smartFileInfo);
     }
     /**
-     * @param object|string $element
+     * @param string|object $element
      */
     public function shouldSkipElementAndFileInfo($element, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
     {

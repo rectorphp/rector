@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php72\NodeFactory;
 
-use RectorPrefix20220425\Nette\Utils\Strings;
+use RectorPrefix20220426\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
@@ -49,8 +49,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use ReflectionParameter;
-use RectorPrefix20220425\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix20220425\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20220426\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220426\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class AnonymousFunctionFactory
 {
     /**
@@ -108,7 +108,7 @@ final class AnonymousFunctionFactory
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20220425\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \RectorPrefix20220425\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20220426\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \RectorPrefix20220426\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -124,7 +124,7 @@ final class AnonymousFunctionFactory
     /**
      * @param Param[] $params
      * @param Stmt[] $stmts
-     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null $returnTypeNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType|null $returnTypeNode
      */
     public function create(array $params, array $stmts, $returnTypeNode, bool $static = \false) : \PhpParser\Node\Expr\Closure
     {
@@ -184,7 +184,7 @@ final class AnonymousFunctionFactory
             if (!$node instanceof \PhpParser\Node\Scalar\String_) {
                 return $node;
             }
-            $match = \RectorPrefix20220425\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
+            $match = \RectorPrefix20220426\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
             if ($match === null) {
                 return $node;
             }
@@ -364,7 +364,7 @@ final class AnonymousFunctionFactory
         return $innerMethodCall;
     }
     /**
-     * @return \PhpParser\Node\Expr|\PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified|null
+     * @return null|\PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Expr
      */
     private function normalizeClassConstFetchForStatic(\PhpParser\Node\Expr $expr)
     {
@@ -383,7 +383,7 @@ final class AnonymousFunctionFactory
         return $name->isSpecialClassName() ? $name : new \PhpParser\Node\Name\FullyQualified($className);
     }
     /**
-     * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\New_|null
+     * @return \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr|null
      */
     private function resolveExpr(\PhpParser\Node\Expr $expr)
     {

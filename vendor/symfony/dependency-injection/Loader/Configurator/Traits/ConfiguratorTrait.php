@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220425\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
+namespace RectorPrefix20220426\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
 
-use RectorPrefix20220425\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
+use RectorPrefix20220426\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 trait ConfiguratorTrait
 {
     /**
      * Sets a configurator to call after the service is fully initialized.
      *
      * @return $this
-     * @param mixed[]|string|\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator $configurator
+     * @param string|mixed[]|\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator $configurator
      */
     public final function configurator($configurator)
     {

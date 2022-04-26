@@ -29,7 +29,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220425\Webmozart\Assert\Assert;
+use RectorPrefix20220426\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\ArgumentAdderRectorTest
  */
@@ -129,7 +129,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220425\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ArgumentAdder::class);
+        \RectorPrefix20220426\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ArgumentAdder::class);
         $this->addedArguments = $configuration;
     }
     /**
@@ -150,7 +150,7 @@ CODE_SAMPLE
         return $this->isObjectType($classLike, $objectType);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function processPositionWithDefaultValues($node, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : void
     {
@@ -209,7 +209,7 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function shouldSkipParameter($node, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : bool
     {

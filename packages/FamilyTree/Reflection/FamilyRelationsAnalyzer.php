@@ -27,7 +27,7 @@ use Rector\FamilyTree\ValueObject\PropertyType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20220425\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20220426\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class FamilyRelationsAnalyzer
 {
     /**
@@ -60,7 +60,7 @@ final class FamilyRelationsAnalyzer
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20220425\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\AstResolver $astResolver)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20220426\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->privatesAccessor = $privatesAccessor;
@@ -86,7 +86,7 @@ final class FamilyRelationsAnalyzer
         return $childrenClassReflections;
     }
     /**
-     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Name|null $propertyTypeNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $propertyTypeNode
      */
     public function getPossibleUnionPropertyType(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $varType, ?\PHPStan\Analyser\Scope $scope, $propertyTypeNode) : \Rector\FamilyTree\ValueObject\PropertyType
     {
@@ -123,7 +123,7 @@ final class FamilyRelationsAnalyzer
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classOrName
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Name $classOrName
      */
     public function getClassLikeAncestorNames($classOrName) : array
     {

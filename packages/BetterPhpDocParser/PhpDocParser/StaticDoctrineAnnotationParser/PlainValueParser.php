@@ -17,7 +17,7 @@ use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220425\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220426\Symfony\Contracts\Service\Attribute\Required;
 final class PlainValueParser
 {
     /**
@@ -52,7 +52,7 @@ final class PlainValueParser
         $this->arrayParser = $arrayParser;
     }
     /**
-     * @return mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|string
+     * @return string|mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
      */
     public function parseValue(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $tokenIterator)
     {

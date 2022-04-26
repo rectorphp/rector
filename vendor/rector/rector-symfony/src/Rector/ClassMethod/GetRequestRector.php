@@ -186,7 +186,7 @@ CODE_SAMPLE
         return $this->requestVariableAndParamName;
     }
     /**
-     * @return \PhpParser\Node\Stmt\ClassMethod|null
+     * @return null|\PhpParser\Node\Stmt\ClassMethod
      */
     private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod)
     {

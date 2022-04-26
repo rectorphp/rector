@@ -55,7 +55,7 @@ final class PropertyPresenceChecker
         return $propertyOrParam !== null;
     }
     /**
-     * @return \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property|null
+     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
      */
     public function getClassContextProperty(\PhpParser\Node\Stmt\Class_ $class, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata)
     {
@@ -101,7 +101,7 @@ final class PropertyPresenceChecker
         return $propertyReflections;
     }
     /**
-     * @return \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property|null
+     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
      */
     private function matchPropertyByType(\Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata, \PHPStan\Reflection\Php\PhpPropertyReflection $phpPropertyReflection)
     {
@@ -121,7 +121,7 @@ final class PropertyPresenceChecker
         return $this->astResolver->resolvePropertyFromPropertyReflection($phpPropertyReflection);
     }
     /**
-     * @return \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property|null
+     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
      */
     private function matchPropertyByParentNonPrivateProperties(string $className, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata)
     {

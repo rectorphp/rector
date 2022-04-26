@@ -47,12 +47,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220425\\React\\Socket\\": "src"
+            "RectorPrefix20220426\\React\\Socket\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220425\\React\\Tests\\Socket\\": "tests"
+            "RectorPrefix20220426\\React\\Tests\\Socket\\": "tests"
         }
     }
 }

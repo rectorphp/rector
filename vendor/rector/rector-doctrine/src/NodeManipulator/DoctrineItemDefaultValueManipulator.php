@@ -11,7 +11,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 final class DoctrineItemDefaultValueManipulator
 {
     /**
-     * @param bool|int|string $defaultValue
+     * @param string|bool|int $defaultValue
      */
     public function remove(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, string $item, $defaultValue) : void
     {
@@ -22,7 +22,7 @@ final class DoctrineItemDefaultValueManipulator
         $phpDocInfo->markAsChanged();
     }
     /**
-     * @param bool|int|string $defaultValue
+     * @param string|bool|int $defaultValue
      */
     private function hasItemWithDefaultValue(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, string $itemKey, $defaultValue) : bool
     {

@@ -54,7 +54,7 @@ final class ForeachMatcher
         return new \Rector\Naming\ValueObject\VariableAndCallForeach($foreach->valueVar, $call, $variableName, $functionLike);
     }
     /**
-     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
      */
     private function getFunctionLike(\PhpParser\Node\Stmt\Foreach_ $foreach)
     {

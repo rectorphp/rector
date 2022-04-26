@@ -140,7 +140,7 @@ CODE_SAMPLE
         return $this->phpAttributeAnalyzer->hasPhpAttributes($classMethod, self::ALLOWED_ATTRIBUTES);
     }
     /**
-     * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt|null
+     * @return null|\PhpParser\Node\Stmt|\PhpParser\Node\Expr
      */
     private function matchClassMethodOnlyStmt(\PhpParser\Node\Stmt\ClassMethod $classMethod)
     {

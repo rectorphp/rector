@@ -59,7 +59,7 @@ final class CompactFuncCallAnalyzer
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Arg|\PhpParser\Node\Expr\ArrayItem|\PhpParser\Node\VariadicPlaceholder|null $node
+     * @param \PhpParser\Node\Arg|\PhpParser\Node\VariadicPlaceholder|\PhpParser\Node\Expr\ArrayItem|null $node
      */
     private function shouldSkip($node) : bool
     {

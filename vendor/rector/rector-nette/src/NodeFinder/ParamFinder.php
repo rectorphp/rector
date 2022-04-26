@@ -27,7 +27,7 @@ final class ParamFinder
         $this->nodeComparator = $nodeComparator;
     }
     /**
-     * @param mixed[]|\PhpParser\Node $nodeHaystack
+     * @param \PhpParser\Node|mixed[] $nodeHaystack
      */
     public function isInAssign($nodeHaystack, \PhpParser\Node\Param $param) : bool
     {

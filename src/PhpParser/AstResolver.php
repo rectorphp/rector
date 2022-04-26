@@ -31,7 +31,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220425\Symplify\Astral\PhpParser\SmartPhpParser;
+use RectorPrefix20220426\Symplify\Astral\PhpParser\SmartPhpParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * The nodes provided by this resolver is for read-only analysis only!
@@ -93,7 +93,7 @@ final class AstResolver
      * @var \Rector\Core\PhpParser\ClassLikeAstResolver
      */
     private $classLikeAstResolver;
-    public function __construct(\RectorPrefix20220425\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver)
+    public function __construct(\RectorPrefix20220426\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver)
     {
         $this->smartPhpParser = $smartPhpParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
@@ -105,7 +105,7 @@ final class AstResolver
         $this->classLikeAstResolver = $classLikeAstResolver;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
     public function resolveClassFromName(string $className)
     {
@@ -116,7 +116,7 @@ final class AstResolver
         return $this->resolveClassFromClassReflection($classReflection, $className);
     }
     /**
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
     public function resolveClassFromObjectType(\PHPStan\Type\TypeWithClassName $typeWithClassName)
     {
@@ -148,7 +148,7 @@ final class AstResolver
         return $classMethod;
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
      */
     public function resolveClassMethodOrFunctionFromCall($call, \PHPStan\Analyser\Scope $scope)
@@ -224,7 +224,7 @@ final class AstResolver
         return $this->resolveClassMethod($callerStaticType->getClassName(), $methodName);
     }
     /**
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
+     * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
     public function resolveClassFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection, string $className)
     {
@@ -259,7 +259,7 @@ final class AstResolver
         return $traits;
     }
     /**
-     * @return \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property|null
+     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
      */
     public function resolvePropertyFromPropertyReflection(\PHPStan\Reflection\Php\PhpPropertyReflection $phpPropertyReflection)
     {

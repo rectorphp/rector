@@ -11,7 +11,7 @@ use Rector\Php80\ValueObject\StrStartsWith;
 final class StrStartsWithFuncCallFactory
 {
     /**
-     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\FuncCall
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot
      */
     public function createStrStartsWith(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith)
     {

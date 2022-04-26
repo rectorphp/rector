@@ -129,7 +129,7 @@ CODE_SAMPLE
         return new \PhpParser\Node\Stmt\If_($expr, ['stmts' => [$return]]);
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp|\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr
+     * @param \PhpParser\Node\Expr\BinaryOp\BooleanOr|\PhpParser\Node\Expr\BinaryOp $booleanOr
      */
     private function isInstanceofCondOnly($booleanOr) : bool
     {

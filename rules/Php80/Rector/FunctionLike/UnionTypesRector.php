@@ -137,7 +137,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES;
     }
     /**
-     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
     private function refactorParamTypes($functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
@@ -181,7 +181,7 @@ CODE_SAMPLE
         $this->hasChanged = \true;
     }
     /**
-     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
     private function refactorReturnType($functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
@@ -209,7 +209,7 @@ CODE_SAMPLE
         $this->hasChanged = \true;
     }
     /**
-     * @return \PHPStan\Type\Type|\PHPStan\Type\UnionType
+     * @return \PHPStan\Type\UnionType|\PHPStan\Type\Type
      */
     private function filterOutDuplicatedArrayTypes(\PHPStan\Type\UnionType $unionType)
     {
@@ -233,8 +233,8 @@ CODE_SAMPLE
         return $this->typeFactory->createMixedPassedOrUnionType($singleArrayTypes);
     }
     /**
-     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|null $type
-     * @param \PhpParser\Node|\PhpParser\Node\ComplexType|\PhpParser\Node\Name|null $phpParserUnionType
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType|null $type
+     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|\PhpParser\Node|null $phpParserUnionType
      */
     private function shouldSkipParamTypeRefactor($type, $phpParserUnionType) : bool
     {

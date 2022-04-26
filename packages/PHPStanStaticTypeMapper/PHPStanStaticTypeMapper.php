@@ -48,7 +48,7 @@ final class PHPStanStaticTypeMapper
         throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }
     /**
-     * @return \PhpParser\Node\ComplexType|\PhpParser\Node\Name|null
+     * @return \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null
      */
     public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind)
     {

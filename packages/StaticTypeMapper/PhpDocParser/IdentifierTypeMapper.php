@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\PhpDocParser;
 
-use RectorPrefix20220425\Nette\Utils\Strings;
+use RectorPrefix20220426\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\NameScope;
@@ -100,7 +100,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         }
         if (\strncmp($typeNode->name, '\\', \strlen('\\')) === 0) {
             $type = $typeNode->name;
-            $typeWithoutPreslash = \RectorPrefix20220425\Nette\Utils\Strings::substring($type, 1);
+            $typeWithoutPreslash = \RectorPrefix20220426\Nette\Utils\Strings::substring($type, 1);
             $objectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($typeWithoutPreslash);
         } else {
             if ($typeNode->name === 'scalar') {
@@ -127,7 +127,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($className);
     }
     /**
-     * @return \PHPStan\Type\MixedType|\Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType
+     * @return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType|\PHPStan\Type\MixedType
      */
     private function mapParent(\PhpParser\Node $node)
     {

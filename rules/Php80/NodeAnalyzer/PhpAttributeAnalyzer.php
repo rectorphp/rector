@@ -35,7 +35,7 @@ final class PhpAttributeAnalyzer
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
      */
     public function hasPhpAttribute($node, string $attributeClass) : bool
     {
@@ -71,7 +71,7 @@ final class PhpAttributeAnalyzer
     }
     /**
      * @param string[] $attributeClasses
-     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
      */
     public function hasPhpAttributes($node, array $attributeClasses) : bool
     {

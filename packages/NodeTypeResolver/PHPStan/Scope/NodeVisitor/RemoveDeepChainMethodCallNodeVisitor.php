@@ -11,7 +11,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220425\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220426\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * Skips performance trap in PHPStan: https://github.com/phpstan/phpstan/issues/254
  */
@@ -31,7 +31,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends \PhpParser\NodeVisitorA
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20220425\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20220426\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nestedChainMethodCallLimit = (int) $parameterProvider->provideParameter(\Rector\Core\Configuration\Option::NESTED_CHAIN_METHOD_CALL_LIMIT);
@@ -51,7 +51,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends \PhpParser\NodeVisitorA
         return null;
     }
     /**
-     * @return \PhpParser\Node|\PhpParser\Node\Stmt\Nop
+     * @return \PhpParser\Node\Stmt\Nop|\PhpParser\Node
      */
     public function leaveNode(\PhpParser\Node $node)
     {

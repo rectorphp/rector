@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220425\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20220426\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220425\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
+use RectorPrefix20220426\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
 /**
  * This class builds an if expression.
  *
@@ -22,7 +22,7 @@ class ExprBuilder
     protected $node;
     public $ifPart;
     public $thenPart;
-    public function __construct(\RectorPrefix20220425\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
+    public function __construct(\RectorPrefix20220426\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
     {
         $this->node = $node;
     }
@@ -193,7 +193,7 @@ class ExprBuilder
     public function thenUnset()
     {
         $this->thenPart = function () {
-            throw new \RectorPrefix20220425\Symfony\Component\Config\Definition\Exception\UnsetKeyException('Unsetting key.');
+            throw new \RectorPrefix20220426\Symfony\Component\Config\Definition\Exception\UnsetKeyException('Unsetting key.');
         };
         return $this;
     }
@@ -201,7 +201,7 @@ class ExprBuilder
      * Returns the related node.
      *
      * @throws \RuntimeException
-     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeDefinition|\Symfony\Component\Config\Definition\Builder\VariableNodeDefinition
+     * @return \Symfony\Component\Config\Definition\Builder\NodeDefinition|\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\VariableNodeDefinition
      */
     public function end()
     {

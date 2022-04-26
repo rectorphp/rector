@@ -154,7 +154,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return \PhpParser\Node\Expr\BinaryOp\Greater|\PhpParser\Node\Expr\BinaryOp\Identical|null
+     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\Greater|null
      */
     private function resolveCount(bool $isNegated, \PhpParser\Node\Expr\FuncCall $funcCall)
     {
@@ -185,7 +185,7 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $array);
     }
     /**
-     * @return \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr|\PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical
+     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr
      */
     private function resolveString(bool $isNegated, \PhpParser\Node\Expr $expr)
     {

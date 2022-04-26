@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220425\Symfony\Component\DependencyInjection\ParameterBag;
+namespace RectorPrefix20220426\Symfony\Component\DependencyInjection\ParameterBag;
 
-use RectorPrefix20220425\Symfony\Component\DependencyInjection\Exception\LogicException;
-use RectorPrefix20220425\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use RectorPrefix20220426\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix20220426\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 /**
  * ParameterBagInterface is the interface implemented by objects that manage service container parameters.
  *
@@ -39,7 +39,7 @@ interface ParameterBagInterface
      * Gets a service container parameter.
      *
      * @throws ParameterNotFoundException if the parameter is not defined
-     * @return mixed[]|bool|float|int|string|\UnitEnum|null
+     * @return mixed[]|bool|string|int|float|\UnitEnum|null
      */
     public function get(string $name);
     /**
@@ -50,7 +50,7 @@ interface ParameterBagInterface
      * Sets a service container parameter.
      *
      * @throws LogicException if the parameter cannot be set
-     * @param mixed[]|bool|float|int|string|\UnitEnum|null $value
+     * @param mixed[]|bool|string|int|float|\UnitEnum|null $value
      */
     public function set(string $name, $value);
     /**

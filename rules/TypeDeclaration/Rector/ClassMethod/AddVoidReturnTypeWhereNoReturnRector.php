@@ -22,7 +22,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220425\Webmozart\Assert\Assert;
+use RectorPrefix20220426\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\AddVoidReturnTypeWhereNoReturnRectorTest
  */
@@ -122,11 +122,11 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $usePhpdoc = $configuration[self::USE_PHPDOC] ?? (bool) \current($configuration);
-        \RectorPrefix20220425\Webmozart\Assert\Assert::boolean($usePhpdoc);
+        \RectorPrefix20220426\Webmozart\Assert\Assert::boolean($usePhpdoc);
         $this->usePhpdoc = $usePhpdoc;
     }
     /**
-     * @param \PhpParser\Node|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node $node
      */
     private function changePhpDocToVoidIfNotNever($node) : void
     {
@@ -137,7 +137,7 @@ CODE_SAMPLE
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new \PHPStan\Type\VoidType());
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function shouldSkipClassMethod($functionLike) : bool
     {

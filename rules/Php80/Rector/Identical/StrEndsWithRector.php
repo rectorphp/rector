@@ -114,7 +114,7 @@ CODE_SAMPLE
      * Covers:
      * $isMatch = substr($haystack, -strlen($needle)) === $needle;
      * $isMatch = 'needle' === substr($haystack, -6)
-     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\FuncCall|null
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot|null
      */
     private function refactorSubstr(\PhpParser\Node\Expr\BinaryOp $binaryOp)
     {
@@ -142,7 +142,7 @@ CODE_SAMPLE
         return $this->buildReturnNode($haystack, $comparedNeedleExpr, $isPositive);
     }
     /**
-     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\FuncCall|null
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot|null
      */
     private function refactorSubstrCompare(\PhpParser\Node\Expr\BinaryOp $binaryOp)
     {
@@ -208,7 +208,7 @@ CODE_SAMPLE
         return $lNumber->value === \strlen($needle->value);
     }
     /**
-     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\FuncCall
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot
      */
     private function buildReturnNode(\PhpParser\Node\Expr $haystack, \PhpParser\Node\Expr $needle, bool $isPositive)
     {

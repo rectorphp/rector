@@ -173,7 +173,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
-     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Name|null $node
+     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $node
      */
     private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property) : bool
     {

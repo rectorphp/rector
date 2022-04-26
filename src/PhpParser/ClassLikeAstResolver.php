@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220425\Symplify\Astral\PhpParser\SmartPhpParser;
+use RectorPrefix20220426\Symplify\Astral\PhpParser\SmartPhpParser;
 final class ClassLikeAstResolver
 {
     /**
@@ -31,13 +31,13 @@ final class ClassLikeAstResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20220425\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20220426\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->smartPhpParser = $smartPhpParser;
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
+     * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
     public function resolveClassFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection, string $className)
     {

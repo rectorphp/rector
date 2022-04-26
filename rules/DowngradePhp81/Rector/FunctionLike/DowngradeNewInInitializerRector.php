@@ -119,8 +119,8 @@ CODE_SAMPLE
         return $param->type instanceof \PhpParser\Node\IntersectionType;
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_
      */
     private function replaceNewInParams($functionLike)
     {
@@ -151,7 +151,7 @@ CODE_SAMPLE
         return $functionLike;
     }
     /**
-     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $type
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType $type
      * @return \PhpParser\Node\NullableType|\PhpParser\Node\UnionType
      */
     private function ensureNullableType($type)

@@ -10,7 +10,7 @@ use Rector\Php80\ValueObject\AnnotationToAttribute;
 final class AttributeNameFactory
 {
     /**
-     * @return \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
+     * @return \PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Name
      */
     public function create(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {

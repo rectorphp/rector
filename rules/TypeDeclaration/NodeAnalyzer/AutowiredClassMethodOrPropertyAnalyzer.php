@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use RectorPrefix20220425\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220426\Symfony\Contracts\Service\Attribute\Required;
 final class AutowiredClassMethodOrPropertyAnalyzer
 {
     /**
@@ -27,7 +27,7 @@ final class AutowiredClassMethodOrPropertyAnalyzer
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
     /**
-     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
      */
     public function detect($node) : bool
     {
@@ -35,6 +35,6 @@ final class AutowiredClassMethodOrPropertyAnalyzer
         if ($nodePhpDocInfo->hasByNames(['required', 'inject'])) {
             return \true;
         }
-        return $this->phpAttributeAnalyzer->hasPhpAttributes($node, [\RectorPrefix20220425\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject']);
+        return $this->phpAttributeAnalyzer->hasPhpAttributes($node, [\RectorPrefix20220426\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject']);
     }
 }

@@ -105,7 +105,7 @@ final class ColumnPropertyTypeResolver
         return $this->resolveFromPhpDocInfo($phpDocInfo, $isNullable);
     }
     /**
-     * @return \PHPStan\Type\Type|null
+     * @return null|\PHPStan\Type\Type
      */
     private function resolveFromPhpDocInfo(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, bool $isNullable)
     {

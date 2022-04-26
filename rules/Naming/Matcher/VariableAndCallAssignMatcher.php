@@ -55,7 +55,7 @@ final class VariableAndCallAssignMatcher
         return new \Rector\Naming\ValueObject\VariableAndCallAssign($assign->var, $call, $assign, $variableName, $functionLike);
     }
     /**
-     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
      */
     private function getFunctionLike(\PhpParser\Node\Expr\Assign $assign)
     {

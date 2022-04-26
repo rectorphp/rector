@@ -204,7 +204,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     * @param \PhpParser\Node\IntersectionType|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $inferredReturnNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\IntersectionType $inferredReturnNode
      */
     private function addReturnType($functionLike, $inferredReturnNode) : void
     {

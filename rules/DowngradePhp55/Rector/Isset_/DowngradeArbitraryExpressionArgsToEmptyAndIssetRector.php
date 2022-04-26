@@ -17,7 +17,7 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220425\Webmozart\Assert\Assert;
+use RectorPrefix20220426\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/empty_isset_exprs
  *
@@ -57,7 +57,7 @@ CODE_SAMPLE
         return $node instanceof \PhpParser\Node\Expr\Empty_ ? $this->refactorEmpty($node) : $this->refactorIsset($node);
     }
     /**
-     * @param \PhpParser\Node\Expr\Empty_|\PhpParser\Node\Expr\Isset_ $node
+     * @param \PhpParser\Node\Expr\Isset_|\PhpParser\Node\Expr\Empty_ $node
      */
     private function shouldSkip($node) : bool
     {
@@ -107,7 +107,7 @@ CODE_SAMPLE
             }
             $currentExpr->vars[] = $var;
         }
-        \RectorPrefix20220425\Webmozart\Assert\Assert::minCount($exprs, 1);
+        \RectorPrefix20220426\Webmozart\Assert\Assert::minCount($exprs, 1);
         return $this->joinWithBooleanAnd($exprs);
     }
     /**

@@ -97,7 +97,7 @@ CODE_SAMPLE
         return $continue;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Break_|\PhpParser\Node\Stmt\Continue_
+     * @return \PhpParser\Node\Stmt\Continue_|\PhpParser\Node\Stmt\Break_
      */
     private function processVariableNum(\PhpParser\Node\Stmt\Continue_ $continue, \PhpParser\Node\Expr\Variable $numVariable)
     {

@@ -93,7 +93,7 @@ CODE_SAMPLE
         return $this->processParams($node);
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $node
      */
     private function processArgs($node) : ?\PhpParser\Node
     {
@@ -111,7 +111,7 @@ CODE_SAMPLE
         $this->cleanTrailingComma($node, $node->uses);
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
     private function processParams($node) : ?\PhpParser\Node
     {
@@ -122,7 +122,7 @@ CODE_SAMPLE
     }
     /**
      * @param ClosureUse[]|Param[]|Arg[] $array
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
     private function cleanTrailingComma($node, array $array) : ?\PhpParser\Node
     {

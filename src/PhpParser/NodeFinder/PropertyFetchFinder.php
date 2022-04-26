@@ -60,7 +60,7 @@ final class PropertyFetchFinder
     }
     /**
      * @return PropertyFetch[]|StaticPropertyFetch[]
-     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $propertyOrPromotedParam
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
      */
     public function findPrivatePropertyFetches($propertyOrPromotedParam) : array
     {
@@ -162,7 +162,7 @@ final class PropertyFetchFinder
         return $propertyFetchVarTypeClassName === $classLikeName;
     }
     /**
-     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $propertyOrPromotedParam
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
      */
     private function resolvePropertyName($propertyOrPromotedParam) : ?string
     {

@@ -37,7 +37,7 @@ use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\Sorter\PriorityAwareSorter;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeNormalizer;
-use RectorPrefix20220425\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220426\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ReturnTypeInferer
 {
     /**
@@ -87,7 +87,7 @@ final class ReturnTypeInferer
     /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
-    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\PriorityAwareSorter $priorityAwareSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20220425\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\PriorityAwareSorter $priorityAwareSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20220426\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
@@ -100,7 +100,7 @@ final class ReturnTypeInferer
         $this->returnTypeInferers = $priorityAwareSorter->sort($returnTypeInferers);
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function inferFunctionLike($functionLike) : \PHPStan\Type\Type
     {
@@ -108,7 +108,7 @@ final class ReturnTypeInferer
     }
     /**
      * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function inferFunctionLikeWithExcludedInferers($functionLike, array $excludedInferers) : \PHPStan\Type\Type
     {
@@ -172,7 +172,7 @@ final class ReturnTypeInferer
         return new \PHPStan\Type\MixedType();
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function resolveTypeWithVoidHandling($functionLike, \PHPStan\Type\Type $resolvedType) : \PHPStan\Type\Type
     {
@@ -196,8 +196,8 @@ final class ReturnTypeInferer
         return $resolvedType;
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     * @return \PHPStan\Type\IntegerType|\PHPStan\Type\UnionType
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @return \PHPStan\Type\UnionType|\PHPStan\Type\IntegerType
      */
     private function resolveBenevolentUnionTypeInteger($functionLike, \PHPStan\Type\UnionType $unionType)
     {

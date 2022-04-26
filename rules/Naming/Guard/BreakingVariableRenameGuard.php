@@ -73,7 +73,7 @@ final class BreakingVariableRenameGuard
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function shouldSkipVariable(string $currentName, string $expectedName, $functionLike, \PhpParser\Node\Expr\Variable $variable) : bool
     {
@@ -103,7 +103,7 @@ final class BreakingVariableRenameGuard
         return $this->isUsedInIfAndOtherBranches($variable, $currentName);
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $classMethod
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $classMethod
      */
     public function shouldSkipParam(string $currentName, string $expectedName, $classMethod, \PhpParser\Node\Param $param) : bool
     {
@@ -151,14 +151,14 @@ final class BreakingVariableRenameGuard
         return $trinaryLogic->maybe();
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function hasConflictVariable($functionLike, string $newName) : bool
     {
         return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, \PhpParser\Node\Expr\Variable::class, $newName);
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function isUsedInClosureUsesName(string $expectedName, $functionLike) : bool
     {

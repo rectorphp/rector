@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220425\Symfony\Component\String;
+namespace RectorPrefix20220426\Symfony\Component\String;
 
 /**
  * A string whose value is computed lazily by a callback.
@@ -47,7 +47,7 @@ class LazyString implements \JsonSerializable
         return $lazyString;
     }
     /**
-     * @param bool|float|int|string|\Stringable $value
+     * @param string|int|float|bool|\Stringable $value
      * @return $this
      */
     public static function fromStringable($value)
@@ -71,7 +71,7 @@ class LazyString implements \JsonSerializable
      * Casts scalars and stringable objects to strings.
      *
      * @throws \TypeError When the provided value is not stringable
-     * @param bool|float|int|string|\Stringable $value
+     * @param \Stringable|string|int|float|bool $value
      */
     public static final function resolve($value) : string
     {

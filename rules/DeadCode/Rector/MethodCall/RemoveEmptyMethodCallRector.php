@@ -131,7 +131,7 @@ CODE_SAMPLE
         return $scope;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classLike
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_ $classLike
      */
     private function shouldSkipClassMethod($classLike, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Type\TypeWithClassName $typeWithClassName) : bool
     {
@@ -165,7 +165,7 @@ CODE_SAMPLE
         return !$classMethod->isPrivate();
     }
     /**
-     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\MethodCall
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\ConstFetch
      */
     private function processArrowFunction(\PhpParser\Node\Expr\ArrowFunction $arrowFunction, \PhpParser\Node\Expr\MethodCall $methodCall)
     {

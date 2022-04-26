@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
-use RectorPrefix20220425\Nette\Utils\Strings;
+use RectorPrefix20220426\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -68,7 +68,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     }
     /**
      * @return mixed|Node|null
-     * @param int|string $key
+     * @param string|int $key
      */
     public function getValue($key)
     {
@@ -93,7 +93,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     }
     /**
      * @return mixed|null
-     * @param int|string $key
+     * @param string|int $key
      */
     public function getValueWithoutQuotes($key)
     {
@@ -168,7 +168,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
         if (!\is_string($value)) {
             return $value;
         }
-        $matches = \RectorPrefix20220425\Nette\Utils\Strings::match($value, self::UNQUOTED_VALUE_REGEX);
+        $matches = \RectorPrefix20220426\Nette\Utils\Strings::match($value, self::UNQUOTED_VALUE_REGEX);
         if ($matches === null) {
             return $value;
         }

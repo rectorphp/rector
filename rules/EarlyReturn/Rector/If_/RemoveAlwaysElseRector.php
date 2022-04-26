@@ -106,7 +106,7 @@ CODE_SAMPLE
         return $statements;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\If_ $node
+     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_ $node
      */
     private function doesLastStatementBreakFlow($node) : bool
     {

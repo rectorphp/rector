@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\PHPStan\Type;
 
-use RectorPrefix20220425\Nette\Utils\Strings;
+use RectorPrefix20220426\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -52,14 +52,10 @@ final class ObjectTypeSpecifier
     }
     /**
      * @param \PHPStan\Analyser\Scope|null $scope
-     * @return \PHPStan\Type\MixedType|\PHPStan\Type\TypeWithClassName|\PHPStan\Type\UnionType|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType
+     * @return \PHPStan\Type\TypeWithClassName|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType|\PHPStan\Type\UnionType|\PHPStan\Type\MixedType
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, $scope)
     {
-        $sameNamespacedFullyQualifiedObjectType = $this->matchSameNamespacedObjectType($node, $objectType);
-        if ($sameNamespacedFullyQualifiedObjectType !== null) {
-            return $sameNamespacedFullyQualifiedObjectType;
-        }
         if ($scope instanceof \PHPStan\Analyser\Scope) {
             foreach ($this->typeWithClassTypeSpecifiers as $typeWithClassTypeSpecifier) {
                 if ($typeWithClassTypeSpecifier->match($objectType, $scope)) {
@@ -130,7 +126,7 @@ final class ObjectTypeSpecifier
         return null;
     }
     /**
-     * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|null
+     * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|null
      */
     private function matchShortenedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType)
     {
@@ -162,29 +158,13 @@ final class ObjectTypeSpecifier
         }
         return null;
     }
-    private function matchSameNamespacedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : ?\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType
-    {
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return null;
-        }
-        $namespaceName = $scope->getNamespace();
-        if ($namespaceName === null) {
-            return null;
-        }
-        $namespacedObject = $namespaceName . '\\' . \ltrim($objectType->getClassName(), '\\');
-        if ($this->reflectionProvider->hasClass($namespacedObject)) {
-            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($namespacedObject);
-        }
-        return null;
-    }
     private function matchPartialNamespaceObjectType(\PHPStan\Type\ObjectType $objectType, \PhpParser\Node\Stmt\UseUse $useUse) : ?\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType
     {
         // partial namespace
         if (\strncmp($objectType->getClassName(), $useUse->name->getLast() . '\\', \strlen($useUse->name->getLast() . '\\')) !== 0) {
             return null;
         }
-        $classNameWithoutLastUsePart = \RectorPrefix20220425\Nette\Utils\Strings::after($objectType->getClassName(), '\\', 1);
+        $classNameWithoutLastUsePart = \RectorPrefix20220426\Nette\Utils\Strings::after($objectType->getClassName(), '\\', 1);
         $connectedClassName = $useUse->name->toString() . '\\' . $classNameWithoutLastUsePart;
         if (!$this->reflectionProvider->hasClass($connectedClassName)) {
             return null;

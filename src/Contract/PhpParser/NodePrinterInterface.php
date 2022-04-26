@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt;
 interface NodePrinterInterface
 {
     /**
-     * @param mixed[]|\PhpParser\Node|null $node
+     * @param \PhpParser\Node|mixed[]|null $node
      */
     public function print($node) : string;
     /**

@@ -5,13 +5,13 @@ namespace Rector\Core\Configuration;
 
 use ReflectionClass;
 use ReflectionMethod;
-use RectorPrefix20220425\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220425\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
+use RectorPrefix20220426\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220426\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
 final class ValueObjectInliner
 {
     /**
      * @param object|object[] $object
-     * @return mixed[]|\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
+     * @return \Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator|mixed[]
      * @noRector \Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector
      */
     public static function inline($object)
@@ -55,12 +55,12 @@ final class ValueObjectInliner
         }
         return $inlineServices;
     }
-    private static function inlineSingle(object $object) : \RectorPrefix20220425\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
+    private static function inlineSingle(object $object) : \RectorPrefix20220426\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
     {
         $reflectionClass = new \ReflectionClass($object);
         $className = $reflectionClass->getName();
         $argumentValues = self::resolveArgumentValues($reflectionClass, $object);
-        $inlineServiceConfigurator = new \RectorPrefix20220425\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator(new \RectorPrefix20220425\Symfony\Component\DependencyInjection\Definition($className));
+        $inlineServiceConfigurator = new \RectorPrefix20220426\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator(new \RectorPrefix20220426\Symfony\Component\DependencyInjection\Definition($className));
         if ($argumentValues !== []) {
             $inlineServiceConfigurator->args($argumentValues);
         }
