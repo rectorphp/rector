@@ -32,7 +32,7 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionInt
 
 final class AccessedBeforeInitializationMulti
 {
-    private \stdClass|string|null $name = null;
+    private string|\stdClass|null $name = null;
 
     private function generateName(): void
     {

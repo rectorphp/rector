@@ -453,17 +453,16 @@ final class BetterNodeFinder
         }
 
         foreach ($types as $type) {
-            $foundNode = $this->findFirstInstanceOf((array) $functionLike->stmts, $type);
-            if (! $foundNode instanceof Node) {
-                continue;
-            }
+            $foundNodes = $this->findInstanceOf((array) $functionLike->stmts, $type);
+            foreach ($foundNodes as $foundNode) {
+                $parentFunctionLike = $this->findParentByTypes(
+                    $foundNode,
+                    [ClassMethod::class, Function_::class, Closure::class]
+                );
 
-            $parentFunctionLike = $this->findParentByTypes(
-                $foundNode,
-                [ClassMethod::class, Function_::class, Closure::class]
-            );
-            if ($parentFunctionLike === $functionLike) {
-                return true;
+                if ($parentFunctionLike === $functionLike) {
+                    return true;
+                }
             }
         }
 

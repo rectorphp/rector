@@ -103,6 +103,10 @@ CODE_SAMPLE
     private function shouldSkip(ClassMethod | Function_ | Closure $node): bool
     {
         $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, Return_::class);
+        if ($node instanceof ClassMethod && $node->isMagic()) {
+            return true;
+        }
+
         if ($hasReturn) {
             return true;
         }

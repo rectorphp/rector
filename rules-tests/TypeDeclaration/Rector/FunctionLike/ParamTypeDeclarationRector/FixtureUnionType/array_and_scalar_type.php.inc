@@ -23,7 +23,7 @@ final class ArrayAndScalarType
     /**
      * @param scalar|scalar[] $id
      */
-    public function run(array|bool|float|int|string $id)
+    public function run(bool|string|int|float|array $id)
     {
     }
 }

@@ -23,9 +23,9 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionInt
 
 final class MultipleTypes
 {
-    private float|int|string $nonNullableVariable;
+    private string|int|float $nonNullableVariable;
     
-    private float|int|string|null $nullableVariable = null;
+    private string|int|float|null $nullableVariable = null;
 }
 
 ?>

@@ -24,7 +24,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsR
 
 final class IfElse
 {
-    protected int|string $stringOrInteger = 'hi';
+    protected string|int $stringOrInteger = 'hi';
 
     public function setNumber()
     {

@@ -18,7 +18,7 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionInt
 
 final class NullFalseOtherType
 {
-    private \stdClass|false|null $unionValue = null;
+    private null|false|\stdClass $unionValue = null;
 }
 
 ?>

@@ -375,7 +375,6 @@ parameters:
 
         # internal tag
         - '#Unknown PHPDoc tag\: @phpstan\-rule#'
-        - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is 14, keep it under 10#'
 
         # many internal cases
         - '#Calling (.*?) is not covered by backward compatibility promise\. The method might change in a minor PHPStan version#'
@@ -595,7 +594,8 @@ parameters:
 
         # resolve later to collector
         -
-            message: '#Class cognitive complexity is 55, keep it under 50#'
-            path: rules/TypeDeclaration/PHPStan/Type/ObjectTypeSpecifier.php
+            message: '#Class cognitive complexity is \d+, keep it under 50#'
+            path: rules/TypeDeclaration/PHPStan/ObjectTypeSpecifier.php
 
-        - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier\:\:narrowToFullyQualifiedOrAliasedObjectType\(\)" is \d+, keep it under 10#'
+        - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is \d+, keep it under 10#'
+        - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier\:\:narrowToFullyQualifiedOrAliasedObjectType\(\)" is \d+, keep it under 10#'

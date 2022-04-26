@@ -23,7 +23,7 @@ namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fi
 class UnionNestedAndSingleLevelArrayScalars
 {
     /**
-     * @var array<int|string, int[]|string[]|null>
+     * @var array<int|string, string[]|int[]|null>
      */
     public const ARRAY_CONST = [
         'key2' => ['value2', 1234],

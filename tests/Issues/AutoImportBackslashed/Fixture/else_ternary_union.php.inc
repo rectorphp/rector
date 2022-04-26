@@ -29,7 +29,7 @@ use PhpParser\Node\Expr;
 
 final class ElseTernaryUnion
 {
-    public function run(?Expr $expr, Expr $expr2, Expr $expr3): int|Expr|string
+    public function run(?Expr $expr, Expr $expr2, Expr $expr3): Expr|int|string
     {
         return $expr !== null ? $expr : $this->getOther();
     }

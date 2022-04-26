@@ -38,7 +38,7 @@ class UnionNestedArrayScalars
     ];
 
     /**
-     * @var array<string, array<int|string>>
+     * @var array<string, array<string|int>>
      */
     public const NESTED_STRING_INT = [
         'key2' => ['value2', 1234],

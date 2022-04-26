@@ -31,6 +31,6 @@ final class TraitTypeResolverTest extends AbstractNodeTypeResolverTest
         $anotherTraitObjectType = new ObjectType(AnotherTrait::class);
         $traitWithTraitObjectType = new ObjectType(TraitWithTrait::class);
 
-        return new UnionType([$anotherTraitObjectType, $traitWithTraitObjectType]);
+        return new UnionType([$traitWithTraitObjectType, $anotherTraitObjectType]);
     }
 }

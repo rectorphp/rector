@@ -28,7 +28,7 @@ class StringNullAndFalse
 {
     public function run(string|null|false $name)
     {
-        if ($name === '' || $name === false || $name === null) {
+        if ($name === '' || $name === null || $name === false) {
             return 'no name';
         }
 

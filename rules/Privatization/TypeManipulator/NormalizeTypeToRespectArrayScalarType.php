@@ -59,7 +59,7 @@ final class NormalizeTypeToRespectArrayScalarType
             }
         }
 
-        $arrayItemType = count($types) === 1 ? $types[0] : new IntersectionType($types);
+        $arrayItemType = count($types) === 1 ? array_pop($types) : new IntersectionType($types);
         return new ArrayType($arrayType->getKeyType(), $arrayItemType);
     }
 

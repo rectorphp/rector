@@ -23,7 +23,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictCo
 final class ConstructorArrayParamWithNullable
 {
     /**
-     * @var mixed[]|null
+     * @var null|mixed[]
      */
     private $data;
 

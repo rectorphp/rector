@@ -61,13 +61,13 @@ final class ArrayTypeMapperTest extends AbstractTestCase
     {
         $stringAndIntegerUnionType = new UnionType([new StringType(), new IntegerType()]);
         $unionArrayType = new ArrayType(new MixedType(), $stringAndIntegerUnionType);
-        yield [$unionArrayType, 'int[]|string[]'];
+        yield [$unionArrayType, 'string[]|int[]'];
 
         $moreNestedUnionArrayType = new ArrayType(new MixedType(), $unionArrayType);
-        yield [$moreNestedUnionArrayType, 'int[][]|string[][]'];
+        yield [$moreNestedUnionArrayType, 'string[][]|int[][]'];
 
         $evenMoreNestedUnionArrayType = new ArrayType(new MixedType(), $moreNestedUnionArrayType);
-        yield [$evenMoreNestedUnionArrayType, 'int[][][]|string[][][]'];
+        yield [$evenMoreNestedUnionArrayType, 'string[][][]|int[][][]'];
     }
 
     public function provideDataWithKeys(): Iterator
@@ -80,7 +80,7 @@ final class ArrayTypeMapperTest extends AbstractTestCase
 
         $stringAndIntegerUnionArrayType = new ArrayType(new MixedType(), $stringAndIntegerUnionType);
         $arrayType = new ArrayType(new StringType(), $stringAndIntegerUnionArrayType);
-        yield [$arrayType, 'array<string, array<int|string>>'];
+        yield [$arrayType, 'array<string, array<string|int>>'];
 
         $arrayType = new ArrayType(new StringType(), new IntegerType());
         yield [$arrayType, 'array<string, int>'];

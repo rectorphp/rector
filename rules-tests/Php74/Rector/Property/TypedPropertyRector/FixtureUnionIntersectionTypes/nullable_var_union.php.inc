@@ -32,7 +32,7 @@ use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class NullableVarUnionClassLike
 {
-    private \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass|\stdClass|null $anotherClass;
+    private null|\Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass|\stdClass $anotherClass;
 
     public function __construct(?AnotherClass $anotherClass)
     {

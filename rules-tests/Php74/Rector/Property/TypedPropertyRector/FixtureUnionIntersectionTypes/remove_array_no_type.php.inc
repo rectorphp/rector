@@ -18,7 +18,7 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionInt
 
 final class RemoveArrayNoType
 {
-    private array|string|null $property = null;
+    private string|array|null $property = null;
 }
 
 ?>

@@ -40,7 +40,7 @@ class Fixture
     /**
      * @var string|false|null
      */
-    private bool|string|null $property = null;
+    private string|bool|null $property = null;
 
     public function run()
     {

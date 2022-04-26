@@ -21,7 +21,7 @@ final class DoNotRemoveArrayOfMixedTypeDocInMultipleWithNull
     /**
      * @var string|mixed[]|null
      */
-    private array|string|null $property = null;
+    private string|array|null $property = null;
 }
 
 ?>

@@ -85,13 +85,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Match_|null $match */
-        $match = $this->betterNodeFinder->findFirst(
-            $node,
-            fn (Node $subNode): bool => $subNode instanceof Match_
-        );
+        $match = $this->betterNodeFinder->findFirst($node, fn (Node $subNode): bool => $subNode instanceof Match_);
 
-        if ($match === null || $this->shouldSkip($match)) {
+        if (! $match instanceof Match_) {
+            return null;
+        }
+
+        if ($this->shouldSkip($match)) {
             return null;
         }
 
@@ -99,10 +99,10 @@ CODE_SAMPLE
         return new Switch_($match->cond, $switchCases);
     }
 
-    private function shouldSkip(Match_ $node): bool
+    private function shouldSkip(Match_ $match): bool
     {
         return (bool) $this->betterNodeFinder->findFirst(
-            $node,
+            $match,
             fn (Node $subNode): bool => $subNode instanceof ArrayItem && $subNode->unpack
         );
     }

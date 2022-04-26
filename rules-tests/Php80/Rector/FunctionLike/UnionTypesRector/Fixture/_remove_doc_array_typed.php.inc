@@ -21,7 +21,7 @@ namespace Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Fixture;
 
 final class RemoveDocArrayTyped
 {
-    public function normalizeNodeValue($value): array|bool|float|int|string
+    public function normalizeNodeValue($value): bool|float|int|string|array
     {
         return $value;
     }

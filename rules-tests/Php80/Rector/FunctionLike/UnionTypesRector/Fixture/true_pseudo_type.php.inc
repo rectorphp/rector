@@ -24,7 +24,7 @@ final class TruePseudoType
     /**
      * @return true|int
      */
-    public function go($value): int|bool
+    public function go($value): bool|int
     {
         return (int) $value ?? true;
     }
