@@ -1083,17 +1083,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.6.0",
-            "version_normalized": "1.6.0.0",
+            "version": "1.6.1",
+            "version_normalized": "1.6.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "b480ba2ae0699a72d43a340c20b9c00ede91ee3e"
+                "reference": "e8852764cf5ec8dcd2a3fa8ea03cbcf523639419"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/b480ba2ae0699a72d43a340c20b9c00ede91ee3e",
-                "reference": "b480ba2ae0699a72d43a340c20b9c00ede91ee3e",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/e8852764cf5ec8dcd2a3fa8ea03cbcf523639419",
+                "reference": "e8852764cf5ec8dcd2a3fa8ea03cbcf523639419",
                 "shasum": ""
             },
             "require": {
@@ -1102,7 +1102,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-04-26T05:43:03+00:00",
+            "time": "2022-04-26T18:09:31+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -1121,7 +1121,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.6.0"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.6.1"
             },
             "funding": [
                 {
@@ -2767,12 +2767,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "cf6309c5cea3c480bea4786b69f4f811cce19ddb"
+                "reference": "1f14d626138357be8c3231d5f15b00f1e4a5300b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/cf6309c5cea3c480bea4786b69f4f811cce19ddb",
-                "reference": "cf6309c5cea3c480bea4786b69f4f811cce19ddb",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/1f14d626138357be8c3231d5f15b00f1e4a5300b",
+                "reference": "1f14d626138357be8c3231d5f15b00f1e4a5300b",
                 "shasum": ""
             },
             "require": {
@@ -2802,7 +2802,7 @@
                 "symplify\/vendor-patches": "^10.2",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-04-26T13:38:32+00:00",
+            "time": "2022-04-26T17:25:39+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

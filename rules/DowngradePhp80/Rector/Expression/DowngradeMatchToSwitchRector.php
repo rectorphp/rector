@@ -11,6 +11,9 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt;
@@ -138,19 +141,18 @@ CODE_SAMPLE
         } elseif ($node instanceof \PhpParser\Node\Stmt\Echo_) {
             $stmts[] = new \PhpParser\Node\Stmt\Echo_([$matchArm->body]);
             $stmts[] = new \PhpParser\Node\Stmt\Break_();
-        } else {
-            if ($node->expr instanceof \PhpParser\Node\Expr\MethodCall || $node->expr instanceof \PhpParser\Node\Expr\FuncCall) {
-                $call = clone $node->expr;
-                $call->args = [new \PhpParser\Node\Arg($matchArm->body)];
-                $stmts[] = new \PhpParser\Node\Stmt\Expression($call);
-                $stmts[] = new \PhpParser\Node\Stmt\Break_();
-            } elseif ($node->expr instanceof \PhpParser\Node\Expr\Assign) {
-                $stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($node->expr->var, $matchArm->body));
-                $stmts[] = new \PhpParser\Node\Stmt\Break_();
-            } elseif ($node->expr instanceof \PhpParser\Node\Expr\Match_) {
-                $stmts[] = new \PhpParser\Node\Stmt\Expression($matchArm->body);
-                $stmts[] = new \PhpParser\Node\Stmt\Break_();
-            }
+        } elseif ($node->expr instanceof \PhpParser\Node\Expr\Assign) {
+            $stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($node->expr->var, $matchArm->body));
+            $stmts[] = new \PhpParser\Node\Stmt\Break_();
+        } elseif ($node->expr instanceof \PhpParser\Node\Expr\Match_) {
+            $stmts[] = new \PhpParser\Node\Stmt\Expression($matchArm->body);
+            $stmts[] = new \PhpParser\Node\Stmt\Break_();
+        } elseif ($node->expr instanceof \PhpParser\Node\Expr\CallLike) {
+            /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $call */
+            $call = clone $node->expr;
+            $call->args = [new \PhpParser\Node\Arg($matchArm->body)];
+            $stmts[] = new \PhpParser\Node\Stmt\Expression($call);
+            $stmts[] = new \PhpParser\Node\Stmt\Break_();
         }
         return $stmts;
     }
