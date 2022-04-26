@@ -1,23 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\PHPStan\Type;
+namespace Rector\TypeDeclaration\PHPStan;
 
 use RectorPrefix20220426\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
@@ -42,13 +43,19 @@ final class ObjectTypeSpecifier
      */
     private $typeWithClassTypeSpecifiers;
     /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
+     */
+    private $nameScopeFactory;
+    /**
      * @param TypeWithClassTypeSpecifierInterface[] $typeWithClassTypeSpecifiers
      */
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver, array $typeWithClassTypeSpecifiers)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver, array $typeWithClassTypeSpecifiers, \Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->useImportsResolver = $useImportsResolver;
         $this->typeWithClassTypeSpecifiers = $typeWithClassTypeSpecifiers;
+        $this->nameScopeFactory = $nameScopeFactory;
     }
     /**
      * @param \PHPStan\Analyser\Scope|null $scope
@@ -56,6 +63,8 @@ final class ObjectTypeSpecifier
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, $scope)
     {
+        $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
+        // @todo reuse name scope
         if ($scope instanceof \PHPStan\Analyser\Scope) {
             foreach ($this->typeWithClassTypeSpecifiers as $typeWithClassTypeSpecifier) {
                 if ($typeWithClassTypeSpecifier->match($objectType, $scope)) {
@@ -70,11 +79,11 @@ final class ObjectTypeSpecifier
             }
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($objectType->getClassName(), null, $objectType->getClassReflection());
         }
-        $aliasedObjectType = $this->matchAliasedObjectType($node, $objectType);
+        $aliasedObjectType = $this->matchAliasedObjectType($node, $objectType, $uses);
         if ($aliasedObjectType !== null) {
             return $aliasedObjectType;
         }
-        $shortenedObjectType = $this->matchShortenedObjectType($node, $objectType);
+        $shortenedObjectType = $this->matchShortenedObjectType($objectType, $uses);
         if ($shortenedObjectType !== null) {
             return $shortenedObjectType;
         }
@@ -85,9 +94,11 @@ final class ObjectTypeSpecifier
         // invalid type
         return new \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType($className);
     }
-    private function matchAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : ?\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType
+    /**
+     * @param Use_[] $uses
+     */
+    private function matchAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, array $uses) : ?\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType
     {
-        $uses = $this->useImportsResolver->resolveForNode($node);
         if ($uses === []) {
             return null;
         }
@@ -126,11 +137,11 @@ final class ObjectTypeSpecifier
         return null;
     }
     /**
+     * @param Use_[] $uses
      * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|null
      */
-    private function matchShortenedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType)
+    private function matchShortenedObjectType(\PHPStan\Type\ObjectType $objectType, array $uses)
     {
-        $uses = $this->useImportsResolver->resolveForNode($node);
         if ($uses === []) {
             return null;
         }

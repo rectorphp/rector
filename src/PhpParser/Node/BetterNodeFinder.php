@@ -408,13 +408,12 @@ final class BetterNodeFinder
             $types = [$types];
         }
         foreach ($types as $type) {
-            $foundNode = $this->findFirstInstanceOf((array) $functionLike->stmts, $type);
-            if (!$foundNode instanceof \PhpParser\Node) {
-                continue;
-            }
-            $parentFunctionLike = $this->findParentByTypes($foundNode, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class]);
-            if ($parentFunctionLike === $functionLike) {
-                return \true;
+            $foundNodes = $this->findInstanceOf((array) $functionLike->stmts, $type);
+            foreach ($foundNodes as $foundNode) {
+                $parentFunctionLike = $this->findParentByTypes($foundNode, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class]);
+                if ($parentFunctionLike === $functionLike) {
+                    return \true;
+                }
             }
         }
         return \false;

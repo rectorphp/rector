@@ -76,19 +76,21 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        /** @var Match_|null $match */
         $match = $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $subNode) : bool {
             return $subNode instanceof \PhpParser\Node\Expr\Match_;
         });
-        if ($match === null || $this->shouldSkip($match)) {
+        if (!$match instanceof \PhpParser\Node\Expr\Match_) {
+            return null;
+        }
+        if ($this->shouldSkip($match)) {
             return null;
         }
         $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
         return new \PhpParser\Node\Stmt\Switch_($match->cond, $switchCases);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\Match_ $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\Match_ $match) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $subNode) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($match, function (\PhpParser\Node $subNode) : bool {
             return $subNode instanceof \PhpParser\Node\Expr\ArrayItem && $subNode->unpack;
         });
     }

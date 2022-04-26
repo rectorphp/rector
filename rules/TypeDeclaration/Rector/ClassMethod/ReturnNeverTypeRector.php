@@ -102,6 +102,9 @@ CODE_SAMPLE
     private function shouldSkip($node) : bool
     {
         $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, \PhpParser\Node\Stmt\Return_::class);
+        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && $node->isMagic()) {
+            return \true;
+        }
         if ($hasReturn) {
             return \true;
         }

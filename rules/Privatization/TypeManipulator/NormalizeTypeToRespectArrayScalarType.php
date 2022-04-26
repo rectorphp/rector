@@ -53,7 +53,7 @@ final class NormalizeTypeToRespectArrayScalarType
                 unset($types[$key]);
             }
         }
-        $arrayItemType = \count($types) === 1 ? $types[0] : new \PHPStan\Type\IntersectionType($types);
+        $arrayItemType = \count($types) === 1 ? \array_pop($types) : new \PHPStan\Type\IntersectionType($types);
         return new \PHPStan\Type\ArrayType($arrayType->getKeyType(), $arrayItemType);
     }
     private function normalizeUnionType(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\UnionType

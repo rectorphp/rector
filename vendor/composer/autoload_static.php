@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit61a729469f28752899c8e24a34d80df3
+class ComposerStaticInit670c1a1bfc06390d63a2d63ac53da483
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3477,9 +3477,9 @@ class ComposerStaticInit61a729469f28752899c8e24a34d80df3
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\DetailedTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/DetailedTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/PropertyTypeDecorator.php',
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\TraitTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/TraitTypeAnalyzer.php',
+        'Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PHPStan/ObjectTypeSpecifier.php',
         'Rector\\TypeDeclaration\\PHPStan\\TypeSpecifier\\SameNamespacedTypeSpecifier' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PHPStan/TypeSpecifier/SameNamespacedTypeSpecifier.php',
         'Rector\\TypeDeclaration\\PHPStan\\TypeSpecifier\\SelfStaticParentTypeSpecifier' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PHPStan/TypeSpecifier/SelfStaticParentTypeSpecifier.php',
-        'Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PHPStan/Type/ObjectTypeSpecifier.php',
         'Rector\\TypeDeclaration\\PhpDocParser\\NonInformativeReturnTagRemover' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PhpDocParser/NonInformativeReturnTagRemover.php',
         'Rector\\TypeDeclaration\\PhpDocParser\\ParamPhpDocNodeFactory' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PhpDocParser/ParamPhpDocNodeFactory.php',
         'Rector\\TypeDeclaration\\PhpParserTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PhpParserTypeAnalyzer.php',
@@ -3874,9 +3874,9 @@ class ComposerStaticInit61a729469f28752899c8e24a34d80df3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit61a729469f28752899c8e24a34d80df3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit61a729469f28752899c8e24a34d80df3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit61a729469f28752899c8e24a34d80df3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit670c1a1bfc06390d63a2d63ac53da483::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit670c1a1bfc06390d63a2d63ac53da483::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit670c1a1bfc06390d63a2d63ac53da483::$classMap;
 
         }, null, ClassLoader::class);
     }

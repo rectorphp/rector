@@ -10,7 +10,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
+use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
 final class ShortClassExpander
 {
     /**
@@ -25,10 +25,10 @@ final class ShortClassExpander
     private $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier
+     * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier $objectTypeSpecifier)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->objectTypeSpecifier = $objectTypeSpecifier;

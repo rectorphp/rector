@@ -30,7 +30,7 @@ use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
-use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
+use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
 /**
  * @implements PhpDocTypeMapperInterface<IdentifierTypeNode>
  */
@@ -38,7 +38,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier
+     * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
     /**
@@ -61,7 +61,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper $scalarStringToTypeMapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper $scalarStringToTypeMapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
