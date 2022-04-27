@@ -33,8 +33,11 @@ final class ControllerRenderMethodAnalyzer
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function isRenderMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : bool
+    public function isRenderMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?\PHPStan\Analyser\Scope $scope) : bool
     {
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return \false;
+        }
         // nette one?
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
