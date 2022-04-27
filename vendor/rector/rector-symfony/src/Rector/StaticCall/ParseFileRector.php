@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\StaticCall;
 
-use RectorPrefix20220426\Nette\Utils\Strings;
+use RectorPrefix20220427\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
@@ -111,6 +111,6 @@ CODE_SAMPLE
         if (!$nodeType instanceof \PHPStan\Type\Constant\ConstantStringType) {
             return \false;
         }
-        return (bool) \RectorPrefix20220426\Nette\Utils\Strings::match($nodeType->getValue(), self::YAML_SUFFIX_REGEX);
+        return (bool) \RectorPrefix20220427\Nette\Utils\Strings::match($nodeType->getValue(), self::YAML_SUFFIX_REGEX);
     }
 }

@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ClosureType;
@@ -13,7 +13,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix20220426\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220427\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ClosureType>
  */
@@ -47,7 +47,7 @@ final class ClosureTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
         if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY())) {
             return null;
         }
-        return new \PhpParser\Node\Name('callable');
+        return new \PhpParser\Node\Name\FullyQualified('Closure');
     }
     /**
      * @required

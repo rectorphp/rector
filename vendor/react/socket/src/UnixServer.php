@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20220426\React\Socket;
+namespace RectorPrefix20220427\React\Socket;
 
-use RectorPrefix20220426\Evenement\EventEmitter;
-use RectorPrefix20220426\React\EventLoop\Loop;
-use RectorPrefix20220426\React\EventLoop\LoopInterface;
+use RectorPrefix20220427\Evenement\EventEmitter;
+use RectorPrefix20220427\React\EventLoop\Loop;
+use RectorPrefix20220427\React\EventLoop\LoopInterface;
 use InvalidArgumentException;
 use RuntimeException;
 /**
@@ -20,7 +20,7 @@ use RuntimeException;
  * @see ServerInterface
  * @see ConnectionInterface
  */
-final class UnixServer extends \RectorPrefix20220426\Evenement\EventEmitter implements \RectorPrefix20220426\React\Socket\ServerInterface
+final class UnixServer extends \RectorPrefix20220427\Evenement\EventEmitter implements \RectorPrefix20220427\React\Socket\ServerInterface
 {
     private $master;
     private $loop;
@@ -48,9 +48,9 @@ final class UnixServer extends \RectorPrefix20220426\Evenement\EventEmitter impl
      * @throws InvalidArgumentException if the listening address is invalid
      * @throws RuntimeException if listening on this address fails (already in use etc.)
      */
-    public function __construct($path, \RectorPrefix20220426\React\EventLoop\LoopInterface $loop = null, array $context = array())
+    public function __construct($path, \RectorPrefix20220427\React\EventLoop\LoopInterface $loop = null, array $context = array())
     {
-        $this->loop = $loop ?: \RectorPrefix20220426\React\EventLoop\Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20220427\React\EventLoop\Loop::get();
         if (\strpos($path, '://') === \false) {
             $path = 'unix://' . $path;
         } elseif (\substr($path, 0, 7) !== 'unix://') {
@@ -68,7 +68,7 @@ final class UnixServer extends \RectorPrefix20220426\Evenement\EventEmitter impl
                     $errno = isset($match[2]) ? (int) $match[2] : 0;
                 }
             }
-            throw new \RuntimeException('Failed to listen on Unix domain socket "' . $path . '": ' . $errstr . \RectorPrefix20220426\React\Socket\SocketServer::errconst($errno), $errno);
+            throw new \RuntimeException('Failed to listen on Unix domain socket "' . $path . '": ' . $errstr . \RectorPrefix20220427\React\Socket\SocketServer::errconst($errno), $errno);
         }
         \stream_set_blocking($this->master, 0);
         $this->resume();
@@ -96,7 +96,7 @@ final class UnixServer extends \RectorPrefix20220426\Evenement\EventEmitter impl
         $that = $this;
         $this->loop->addReadStream($this->master, function ($master) use($that) {
             try {
-                $newSocket = \RectorPrefix20220426\React\Socket\SocketServer::accept($master);
+                $newSocket = \RectorPrefix20220427\React\Socket\SocketServer::accept($master);
             } catch (\RuntimeException $e) {
                 $that->emit('error', array($e));
                 return;
@@ -117,7 +117,7 @@ final class UnixServer extends \RectorPrefix20220426\Evenement\EventEmitter impl
     /** @internal */
     public function handleConnection($socket)
     {
-        $connection = new \RectorPrefix20220426\React\Socket\Connection($socket, $this->loop);
+        $connection = new \RectorPrefix20220427\React\Socket\Connection($socket, $this->loop);
         $connection->unix = \true;
         $this->emit('connection', array($connection));
     }

@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220426\Symplify\EasyTesting\Command;
+namespace RectorPrefix20220427\Symplify\EasyTesting\Command;
 
-use RectorPrefix20220426\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix20220426\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220426\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220426\Symplify\EasyTesting\Finder\FixtureFinder;
-use RectorPrefix20220426\Symplify\EasyTesting\MissplacedSkipPrefixResolver;
-use RectorPrefix20220426\Symplify\EasyTesting\ValueObject\Option;
-use RectorPrefix20220426\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand;
-final class ValidateFixtureSkipNamingCommand extends \RectorPrefix20220426\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand
+use RectorPrefix20220427\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20220427\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220427\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220427\Symplify\EasyTesting\Finder\FixtureFinder;
+use RectorPrefix20220427\Symplify\EasyTesting\MissplacedSkipPrefixResolver;
+use RectorPrefix20220427\Symplify\EasyTesting\ValueObject\Option;
+use RectorPrefix20220427\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand;
+final class ValidateFixtureSkipNamingCommand extends \RectorPrefix20220427\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand
 {
     /**
      * @var \Symplify\EasyTesting\MissplacedSkipPrefixResolver
@@ -20,7 +20,7 @@ final class ValidateFixtureSkipNamingCommand extends \RectorPrefix20220426\Sympl
      * @var \Symplify\EasyTesting\Finder\FixtureFinder
      */
     private $fixtureFinder;
-    public function __construct(\RectorPrefix20220426\Symplify\EasyTesting\MissplacedSkipPrefixResolver $missplacedSkipPrefixResolver, \RectorPrefix20220426\Symplify\EasyTesting\Finder\FixtureFinder $fixtureFinder)
+    public function __construct(\RectorPrefix20220427\Symplify\EasyTesting\MissplacedSkipPrefixResolver $missplacedSkipPrefixResolver, \RectorPrefix20220427\Symplify\EasyTesting\Finder\FixtureFinder $fixtureFinder)
     {
         $this->missplacedSkipPrefixResolver = $missplacedSkipPrefixResolver;
         $this->fixtureFinder = $fixtureFinder;
@@ -29,12 +29,12 @@ final class ValidateFixtureSkipNamingCommand extends \RectorPrefix20220426\Sympl
     protected function configure() : void
     {
         $this->setName('validate-fixture-skip-naming');
-        $this->addArgument(\RectorPrefix20220426\Symplify\EasyTesting\ValueObject\Option::SOURCE, \RectorPrefix20220426\Symfony\Component\Console\Input\InputArgument::REQUIRED | \RectorPrefix20220426\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'Paths to analyse');
+        $this->addArgument(\RectorPrefix20220427\Symplify\EasyTesting\ValueObject\Option::SOURCE, \RectorPrefix20220427\Symfony\Component\Console\Input\InputArgument::REQUIRED | \RectorPrefix20220427\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'Paths to analyse');
         $this->setDescription('Check that skipped fixture files (without `-----` separator) have a "skip" prefix');
     }
-    protected function execute(\RectorPrefix20220426\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220426\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(\RectorPrefix20220427\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220427\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
-        $source = (array) $input->getArgument(\RectorPrefix20220426\Symplify\EasyTesting\ValueObject\Option::SOURCE);
+        $source = (array) $input->getArgument(\RectorPrefix20220427\Symplify\EasyTesting\ValueObject\Option::SOURCE);
         $fixtureFileInfos = $this->fixtureFinder->find($source);
         $incorrectAndMissingSkips = $this->missplacedSkipPrefixResolver->resolve($fixtureFileInfos);
         foreach ($incorrectAndMissingSkips->getIncorrectSkipFileInfos() as $incorrectSkipFileInfo) {

@@ -3,25 +3,25 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection;
 
-use RectorPrefix20220426\Nette\Utils\FileSystem;
-use RectorPrefix20220426\Psr\Container\ContainerInterface;
+use RectorPrefix20220427\Nette\Utils\FileSystem;
+use RectorPrefix20220427\Psr\Container\ContainerInterface;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Kernel\RectorKernel;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
-use RectorPrefix20220426\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220427\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorContainerFactory
 {
-    public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20220426\Psr\Container\ContainerInterface
+    public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20220427\Psr\Container\ContainerInterface
     {
         $container = $this->createFromConfigs($bootstrapConfigs->getConfigFiles());
         $mainConfigFile = $bootstrapConfigs->getMainConfigFile();
         if ($mainConfigFile !== null) {
             // warning about old syntax before RectorConfig
-            $fileContents = \RectorPrefix20220426\Nette\Utils\FileSystem::read($mainConfigFile);
+            $fileContents = \RectorPrefix20220427\Nette\Utils\FileSystem::read($mainConfigFile);
             if (\strpos($fileContents, 'ContainerConfigurator $containerConfigurator') !== \false) {
                 /** @var SymfonyStyle $symfonyStyle */
-                $symfonyStyle = $container->get(\RectorPrefix20220426\Symfony\Component\Console\Style\SymfonyStyle::class);
+                $symfonyStyle = $container->get(\RectorPrefix20220427\Symfony\Component\Console\Style\SymfonyStyle::class);
                 // @todo add link to blog post after release
                 $warningMessage = \sprintf('Your "%s" config is using old syntax with "ContainerConfigurator".%sPlease upgrade to "RectorConfig" that allows better autocomplete and future standard.', $mainConfigFile, \PHP_EOL);
                 $symfonyStyle->warning($warningMessage);
@@ -38,7 +38,7 @@ final class RectorContainerFactory
      * @param string[] $configFiles
      * @api
      */
-    private function createFromConfigs(array $configFiles) : \RectorPrefix20220426\Psr\Container\ContainerInterface
+    private function createFromConfigs(array $configFiles) : \RectorPrefix20220427\Psr\Container\ContainerInterface
     {
         $phpStanStubLoader = new \Rector\Core\Stubs\PHPStanStubLoader();
         $phpStanStubLoader->loadStubs();

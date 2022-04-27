@@ -34,7 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220426\\Symfony\\Contracts\\Service\\": ""
+            "RectorPrefix20220427\\Symfony\\Contracts\\Service\\": ""
         }
     },
     "minimum-stability": "dev",
