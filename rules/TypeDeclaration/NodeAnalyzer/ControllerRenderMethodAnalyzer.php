@@ -21,8 +21,12 @@ final class ControllerRenderMethodAnalyzer
     ) {
     }
 
-    public function isRenderMethod(ClassMethod $classMethod, Scope $scope): bool
+    public function isRenderMethod(ClassMethod $classMethod, ?Scope $scope): bool
     {
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
         // nette one?
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
