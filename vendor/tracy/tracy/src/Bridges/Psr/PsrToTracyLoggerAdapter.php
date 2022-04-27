@@ -15,7 +15,7 @@ use RectorPrefix20220427\Tracy;
 class PsrToTracyLoggerAdapter implements \RectorPrefix20220427\Tracy\ILogger
 {
     /** Tracy logger level to PSR-3 log level mapping */
-    private const LEVEL_MAP = [\RectorPrefix20220427\Tracy\ILogger::DEBUG => \RectorPrefix20220427\Psr\Log\LogLevel::DEBUG, \RectorPrefix20220427\Tracy\ILogger::INFO => \RectorPrefix20220427\Psr\Log\LogLevel::INFO, \RectorPrefix20220427\Tracy\ILogger::WARNING => \RectorPrefix20220427\Psr\Log\LogLevel::WARNING, \RectorPrefix20220427\Tracy\ILogger::ERROR => \RectorPrefix20220427\Psr\Log\LogLevel::ERROR, \RectorPrefix20220427\Tracy\ILogger::EXCEPTION => \RectorPrefix20220427\Psr\Log\LogLevel::ERROR, \RectorPrefix20220427\Tracy\ILogger::CRITICAL => \RectorPrefix20220427\Psr\Log\LogLevel::CRITICAL];
+    private const LevelMap = [\RectorPrefix20220427\Tracy\ILogger::DEBUG => \RectorPrefix20220427\Psr\Log\LogLevel::DEBUG, \RectorPrefix20220427\Tracy\ILogger::INFO => \RectorPrefix20220427\Psr\Log\LogLevel::INFO, \RectorPrefix20220427\Tracy\ILogger::WARNING => \RectorPrefix20220427\Psr\Log\LogLevel::WARNING, \RectorPrefix20220427\Tracy\ILogger::ERROR => \RectorPrefix20220427\Psr\Log\LogLevel::ERROR, \RectorPrefix20220427\Tracy\ILogger::EXCEPTION => \RectorPrefix20220427\Psr\Log\LogLevel::ERROR, \RectorPrefix20220427\Tracy\ILogger::CRITICAL => \RectorPrefix20220427\Psr\Log\LogLevel::CRITICAL];
     /** @var Psr\Log\LoggerInterface */
     private $psrLogger;
     public function __construct(\RectorPrefix20220427\Psr\Log\LoggerInterface $psrLogger)
@@ -34,6 +34,6 @@ class PsrToTracyLoggerAdapter implements \RectorPrefix20220427\Tracy\ILogger
             $message = $value;
             $context = [];
         }
-        $this->psrLogger->log(self::LEVEL_MAP[$level] ?? \RectorPrefix20220427\Psr\Log\LogLevel::ERROR, $message, $context);
+        $this->psrLogger->log(self::LevelMap[$level] ?? \RectorPrefix20220427\Psr\Log\LogLevel::ERROR, $message, $context);
     }
 }

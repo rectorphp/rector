@@ -14,7 +14,7 @@ use RectorPrefix20220427\Tracy\Helpers;
  */
 final class Renderer
 {
-    private const TYPE_ARRAY_KEY = 'array';
+    private const TypeArrayKey = 'array';
     /** @var int|bool */
     public $collapseTop = 14;
     /** @var int */
@@ -132,11 +132,11 @@ final class Renderer
      */
     private function renderString($str, int $depth, $keyType) : string
     {
-        if ($keyType === self::TYPE_ARRAY_KEY) {
+        if ($keyType === self::TypeArrayKey) {
             $indent = '<span class="tracy-dump-indent">   ' . \str_repeat('|  ', $depth - 1) . ' </span>';
             return '<span class="tracy-dump-string">' . "<span class='tracy-dump-lq'>'</span>" . (\is_string($str) ? \RectorPrefix20220427\Tracy\Helpers::escapeHtml($str) : \str_replace("\n", "\n" . $indent, $str->value)) . "<span>'</span>" . '</span>';
         } elseif ($keyType !== null) {
-            static $classes = [\RectorPrefix20220427\Tracy\Dumper\Value::PROP_PUBLIC => 'tracy-dump-public', \RectorPrefix20220427\Tracy\Dumper\Value::PROP_PROTECTED => 'tracy-dump-protected', \RectorPrefix20220427\Tracy\Dumper\Value::PROP_DYNAMIC => 'tracy-dump-dynamic', \RectorPrefix20220427\Tracy\Dumper\Value::PROP_VIRTUAL => 'tracy-dump-virtual'];
+            $classes = [\RectorPrefix20220427\Tracy\Dumper\Value::PROP_PUBLIC => 'tracy-dump-public', \RectorPrefix20220427\Tracy\Dumper\Value::PROP_PROTECTED => 'tracy-dump-protected', \RectorPrefix20220427\Tracy\Dumper\Value::PROP_DYNAMIC => 'tracy-dump-dynamic', \RectorPrefix20220427\Tracy\Dumper\Value::PROP_VIRTUAL => 'tracy-dump-virtual'];
             $indent = '<span class="tracy-dump-indent">   ' . \str_repeat('|  ', $depth - 1) . ' </span>';
             $title = \is_string($keyType) ? ' title="declared in ' . \RectorPrefix20220427\Tracy\Helpers::escapeHtml($keyType) . '"' : null;
             return '<span class="' . ($title ? 'tracy-dump-private' : $classes[$keyType]) . '"' . $title . '>' . (\is_string($str) ? \RectorPrefix20220427\Tracy\Helpers::escapeHtml($str) : "<span class='tracy-dump-lq'>'</span>" . \str_replace("\n", "\n" . $indent, $str->value) . "<span>'</span>") . '</span>';
@@ -183,8 +183,9 @@ final class Renderer
                     $ref = new \RectorPrefix20220427\Tracy\Dumper\Value(\RectorPrefix20220427\Tracy\Dumper\Value::TYPE_REF, $array->id);
                     $this->copySnapshot($ref);
                     return '<span class="tracy-toggle tracy-collapsed" data-tracy-dump=\'' . \json_encode($ref) . "'>" . $out . '</span>';
+                } elseif ($this->hash) {
+                    return $out . (isset($this->above[$array->id]) ? ' <i>see above</i>' : ' <i>see below</i>');
                 }
-                return $out . (isset($this->above[$array->id]) ? ' <i>see above</i>' : ' <i>see below</i>');
             }
         }
         if (!$count) {
@@ -202,7 +203,7 @@ final class Renderer
         $this->parents[$array->id ?? null] = $this->above[$array->id ?? null] = \true;
         foreach ($items as $info) {
             [$k, $v, $ref] = $info + [2 => null];
-            $out .= $indent . $this->renderVar($k, $depth + 1, self::TYPE_ARRAY_KEY) . ' => ' . ($ref && $this->hash ? '<span class="tracy-dump-hash">&' . $ref . '</span> ' : '') . ($tmp = $this->renderVar($v, $depth + 1)) . (\substr($tmp, -6) === '</div>' ? '' : "\n");
+            $out .= $indent . $this->renderVar($k, $depth + 1, self::TypeArrayKey) . ' => ' . ($ref && $this->hash ? '<span class="tracy-dump-hash">&' . $ref . '</span> ' : '') . ($tmp = $this->renderVar($v, $depth + 1)) . (\substr($tmp, -6) === '</div>' ? '' : "\n");
         }
         if ($count > \count($items)) {
             $out .= $indent . "…\n";
@@ -229,8 +230,9 @@ final class Renderer
                 $ref = new \RectorPrefix20220427\Tracy\Dumper\Value(\RectorPrefix20220427\Tracy\Dumper\Value::TYPE_REF, $object->id);
                 $this->copySnapshot($ref);
                 return '<span class="tracy-toggle tracy-collapsed" data-tracy-dump=\'' . \json_encode($ref) . "'>" . $out . '</span>';
+            } elseif ($this->hash) {
+                return $out . (isset($this->above[$object->id]) ? ' <i>see above</i>' : ' <i>see below</i>');
             }
-            return $out . (isset($this->above[$object->id]) ? ' <i>see above</i>' : ' <i>see below</i>');
         }
         $collapsed = $object->collapsed ?? ($depth ? $this->lazy === \false || $depth === 1 ? \count($object->items) >= $this->collapseSub : \true : (\is_int($this->collapseTop) ? \count($object->items) >= $this->collapseTop : $this->collapseTop));
         $span = '<span class="tracy-toggle' . ($collapsed ? ' tracy-collapsed' : '') . '"';

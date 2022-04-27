@@ -96,6 +96,9 @@ final class DevelopmentStrategy
         if (\function_exists('ini_set')) {
             \ini_set('display_errors', '1');
         }
+        if (\preg_match('#^Content-Length:#im', \implode("\n", \headers_list()))) {
+            \RectorPrefix20220427\Tracy\Debugger::log(new \LogicException('Tracy cannot display the Bar because the Content-Length header is being sent'), \RectorPrefix20220427\Tracy\Debugger::EXCEPTION);
+        }
         $this->bar->render($this->defer);
     }
 }

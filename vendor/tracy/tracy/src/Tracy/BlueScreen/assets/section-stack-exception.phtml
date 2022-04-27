@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+/**
+ * @var \Throwable $ex
+ * @var callable $dump
+ * @var BlueScreen $this
+ */
+
+$stack = $ex->getTrace();
+$expanded = null;
+if (
+	(!$ex instanceof \ErrorException
+		|| in_array($ex->getSeverity(), [E_USER_NOTICE, E_USER_WARNING, E_USER_DEPRECATED], true))
+	&& $this->isCollapsed($ex->getFile())
+) {
+	foreach ($stack as $key => $row) {
+		if (isset($row['file']) && !$this->isCollapsed($row['file'])) {
+			$expanded = $key;
+			break;
+		}
+	}
+}
+
+if (in_array($stack[0]['class'] ?? null, [DevelopmentStrategy::class, ProductionStrategy::class], true)) {
+	array_shift($stack);
+}
+if (($stack[0]['class'] ?? null) === Debugger::class && in_array($stack[0]['function'], ['shutdownHandler', 'errorHandler'], true)) {
+	array_shift($stack);
+}
+$file = $ex->getFile();
+$line = $ex->getLine();
+
+require __DIR__ . '/section-stack-sourceFile.phtml';
+require __DIR__ . '/section-stack-callStack.phtml';

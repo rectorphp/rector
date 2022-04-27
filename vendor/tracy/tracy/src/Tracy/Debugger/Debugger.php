@@ -13,7 +13,7 @@ use ErrorException;
  */
 class Debugger
 {
-    public const VERSION = '2.9.1';
+    public const VERSION = '2.9.2';
     /** server modes for Debugger::enable() */
     public const DEVELOPMENT = \false, PRODUCTION = \true, DETECT = null;
     public const COOKIE_SECRET = 'tracy-debug';

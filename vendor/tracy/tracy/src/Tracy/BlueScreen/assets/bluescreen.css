@@ -261,8 +261,15 @@
 	font-weight: bold;
 	font-style: normal;
 	display: block;
-	padding: 0 .4em;
-	margin: 0 -.4em;
+	padding: 0 1ch;
+	margin: 0 -1ch;
+}
+
+#tracy-bs .tracy-column-highlight {
+	display: inline-block;
+	backdrop-filter: grayscale(1);
+	margin: 0 -1px;
+	padding: 0 1px;
 }
 
 #tracy-bs .tracy-line {
@@ -291,7 +298,7 @@
 
 #tracy-bs .tracy-caused {
 	float: right;
-	padding: .3em .6em;
+	padding: .3em calc(1.5 * var(--tracy-space));
 	background: #df8075;
 	border-radius: 0 0 0 8px;
 	white-space: nowrap;
@@ -356,6 +363,10 @@
 
 #tracy-bs .tracy-section--causedby .tracy-section--error {
 	background: #cd1818a6;
+}
+
+#tracy-bs .tracy-section--error + .tracy-section--stack {
+	margin-top: calc(1.5 * var(--tracy-space));
 }
 
 

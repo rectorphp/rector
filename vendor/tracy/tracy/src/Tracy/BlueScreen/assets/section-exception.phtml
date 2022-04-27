@@ -10,29 +10,10 @@ namespace Tracy;
  * @var array[] $actions
  * @var callable $dump
  * @var BlueScreen $this
+ * @var \Generator[] $generators
+ * @var \Fiber[] $fibers
  */
 
-$stack = $ex->getTrace();
-$expanded = null;
-if (
-	(!$ex instanceof \ErrorException
-		|| in_array($ex->getSeverity(), [E_USER_NOTICE, E_USER_WARNING, E_USER_DEPRECATED], true))
-	&& $this->isCollapsed($ex->getFile())
-) {
-	foreach ($stack as $key => $row) {
-		if (isset($row['file']) && !$this->isCollapsed($row['file'])) {
-			$expanded = $key;
-			break;
-		}
-	}
-}
-
-if (in_array($stack[0]['class'] ?? null, [DevelopmentStrategy::class, ProductionStrategy::class], true)) {
-	array_shift($stack);
-}
-if (($stack[0]['class'] ?? null) === Debugger::class && in_array($stack[0]['function'], ['shutdownHandler', 'errorHandler'], true)) {
-	array_shift($stack);
-}
 ?>
 <?php require __DIR__ . '/section-header.phtml' ?>
 
@@ -46,9 +27,45 @@ if (($stack[0]['class'] ?? null) === Debugger::class && in_array($stack[0]['func
 </section>
 <?php endforeach ?>
 
-<?php require __DIR__ . '/section-exception-sourceFile.phtml' ?>
+<?php if (!$exceptions && ($generators || $fibers)): ?>
+<section class="tracy-section tracy-section--stack">
+	<div class="tracy-section-panel">
+		<div class="tracy-tabs">
+			<ul class="tracy-tab-bar">
+				<li class="tracy-tab-label tracy-active"><a href="#">Main thread</a></li>
 
-<?php require __DIR__ . '/section-exception-callStack.phtml' ?>
+				<?php foreach ($generators as $id => $generator): ?>
+					<li class="tracy-tab-label"><a href="#">Generator #<?= $id ?></a></li>
+				<?php endforeach ?>
+
+				<?php foreach ($fibers as $id => $fiber): ?>
+					<li class="tracy-tab-label"><a href="#">Fiber #<?= $id ?></a></li>
+				<?php endforeach ?>
+			</ul>
+
+			<div>
+				<div class="tracy-tab-panel tracy-active">
+					<?php require __DIR__ . '/section-stack-exception.phtml' ?>
+				</div>
+
+				<?php foreach ($generators as $generator): ?>
+					<div class="tracy-tab-panel">
+						<?php require __DIR__ . '/section-stack-generator.phtml' ?>
+					</div>
+				<?php endforeach ?>
+
+				<?php foreach ($fibers as $fiber): ?>
+					<div class="tracy-tab-panel">
+						<?php require __DIR__ . '/section-stack-fiber.phtml' ?>
+					</div>
+				<?php endforeach ?>
+			</div>
+		</div>
+	</div>
+</section>
+<?php else: ?>
+<?php require __DIR__ . '/section-stack-exception.phtml' ?>
+<?php endif ?>
 
 <?php require __DIR__ . '/section-exception-variables.phtml' ?>
 

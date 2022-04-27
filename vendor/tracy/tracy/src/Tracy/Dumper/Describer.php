@@ -17,9 +17,9 @@ final class Describer
 {
     public const HIDDEN_VALUE = '*****';
     // Number.MAX_SAFE_INTEGER
-    private const JS_SAFE_INTEGER = 1 << 53 - 1;
+    private const JsSafeInteger = 1 << 53 - 1;
     /** @var int */
-    public $maxDepth = 15;
+    public $maxDepth = 7;
     /** @var int */
     public $maxLength = 150;
     /** @var int */
@@ -69,7 +69,7 @@ final class Describer
      */
     private function describeInteger(int $num)
     {
-        return $num <= self::JS_SAFE_INTEGER && $num >= -self::JS_SAFE_INTEGER ? $num : new \RectorPrefix20220427\Tracy\Dumper\Value(\RectorPrefix20220427\Tracy\Dumper\Value::TYPE_NUMBER, "{$num}");
+        return $num <= self::JsSafeInteger && $num >= -self::JsSafeInteger ? $num : new \RectorPrefix20220427\Tracy\Dumper\Value(\RectorPrefix20220427\Tracy\Dumper\Value::TYPE_NUMBER, "{$num}");
     }
     /**
      * @return Value|float

@@ -314,33 +314,41 @@ class Table
             $rows = \array_merge($this->headers, [$divider], $this->rows);
         }
         $this->calculateNumberOfColumns($rows);
-        $rows = $this->buildTableRows($rows);
-        $this->calculateColumnsWidth($rows);
+        $rowGroups = $this->buildTableRows($rows);
+        $this->calculateColumnsWidth($rowGroups);
         $isHeader = !$this->horizontal;
         $isFirstRow = $this->horizontal;
         $hasTitle = (bool) $this->headerTitle;
-        foreach ($rows as $row) {
-            if ($divider === $row) {
-                $isHeader = \false;
-                $isFirstRow = \true;
-                continue;
-            }
-            if ($row instanceof \RectorPrefix20220427\Symfony\Component\Console\Helper\TableSeparator) {
-                $this->renderRowSeparator();
-                continue;
-            }
-            if (!$row) {
-                continue;
-            }
-            if ($isHeader || $isFirstRow) {
-                $this->renderRowSeparator($isHeader ? self::SEPARATOR_TOP : self::SEPARATOR_TOP_BOTTOM, $hasTitle ? $this->headerTitle : null, $hasTitle ? $this->style->getHeaderTitleFormat() : null);
-                $isFirstRow = \false;
-                $hasTitle = \false;
-            }
-            if ($this->horizontal) {
-                $this->renderRow($row, $this->style->getCellRowFormat(), $this->style->getCellHeaderFormat());
-            } else {
-                $this->renderRow($row, $isHeader ? $this->style->getCellHeaderFormat() : $this->style->getCellRowFormat());
+        foreach ($rowGroups as $rowGroup) {
+            $isHeaderSeparatorRendered = \false;
+            foreach ($rowGroup as $row) {
+                if ($divider === $row) {
+                    $isHeader = \false;
+                    $isFirstRow = \true;
+                    continue;
+                }
+                if ($row instanceof \RectorPrefix20220427\Symfony\Component\Console\Helper\TableSeparator) {
+                    $this->renderRowSeparator();
+                    continue;
+                }
+                if (!$row) {
+                    continue;
+                }
+                if ($isHeader && !$isHeaderSeparatorRendered) {
+                    $this->renderRowSeparator($isHeader ? self::SEPARATOR_TOP : self::SEPARATOR_TOP_BOTTOM, $hasTitle ? $this->headerTitle : null, $hasTitle ? $this->style->getHeaderTitleFormat() : null);
+                    $hasTitle = \false;
+                    $isHeaderSeparatorRendered = \true;
+                }
+                if ($isFirstRow) {
+                    $this->renderRowSeparator($isHeader ? self::SEPARATOR_TOP : self::SEPARATOR_TOP_BOTTOM, $hasTitle ? $this->headerTitle : null, $hasTitle ? $this->style->getHeaderTitleFormat() : null);
+                    $isFirstRow = \false;
+                    $hasTitle = \false;
+                }
+                if ($this->horizontal) {
+                    $this->renderRow($row, $this->style->getCellRowFormat(), $this->style->getCellHeaderFormat());
+                } else {
+                    $this->renderRow($row, $isHeader ? $this->style->getCellHeaderFormat() : $this->style->getCellRowFormat());
+                }
             }
         }
         $this->renderRowSeparator(self::SEPARATOR_BOTTOM, $this->footerTitle, $this->style->getFooterTitleFormat());
@@ -520,12 +528,13 @@ class Table
         }
         return new \RectorPrefix20220427\Symfony\Component\Console\Helper\TableRows(function () use($rows, $unmergedRows) : \Traversable {
             foreach ($rows as $rowKey => $row) {
-                (yield $row instanceof \RectorPrefix20220427\Symfony\Component\Console\Helper\TableSeparator ? $row : $this->fillCells($row));
+                $rowGroup = [$row instanceof \RectorPrefix20220427\Symfony\Component\Console\Helper\TableSeparator ? $row : $this->fillCells($row)];
                 if (isset($unmergedRows[$rowKey])) {
                     foreach ($unmergedRows[$rowKey] as $row) {
-                        (yield $row instanceof \RectorPrefix20220427\Symfony\Component\Console\Helper\TableSeparator ? $row : $this->fillCells($row));
+                        $rowGroup[] = $row instanceof \RectorPrefix20220427\Symfony\Component\Console\Helper\TableSeparator ? $row : $this->fillCells($row);
                     }
                 }
+                (yield $rowGroup);
             }
         });
     }
@@ -649,27 +658,29 @@ class Table
     /**
      * Calculates columns widths.
      */
-    private function calculateColumnsWidth(iterable $rows)
+    private function calculateColumnsWidth(iterable $groups)
     {
         for ($column = 0; $column < $this->numberOfColumns; ++$column) {
             $lengths = [];
-            foreach ($rows as $row) {
-                if ($row instanceof \RectorPrefix20220427\Symfony\Component\Console\Helper\TableSeparator) {
-                    continue;
-                }
-                foreach ($row as $i => $cell) {
-                    if ($cell instanceof \RectorPrefix20220427\Symfony\Component\Console\Helper\TableCell) {
-                        $textContent = \RectorPrefix20220427\Symfony\Component\Console\Helper\Helper::removeDecoration($this->output->getFormatter(), $cell);
-                        $textLength = \RectorPrefix20220427\Symfony\Component\Console\Helper\Helper::width($textContent);
-                        if ($textLength > 0) {
-                            $contentColumns = \str_split($textContent, \ceil($textLength / $cell->getColspan()));
-                            foreach ($contentColumns as $position => $content) {
-                                $row[$i + $position] = $content;
+            foreach ($groups as $group) {
+                foreach ($group as $row) {
+                    if ($row instanceof \RectorPrefix20220427\Symfony\Component\Console\Helper\TableSeparator) {
+                        continue;
+                    }
+                    foreach ($row as $i => $cell) {
+                        if ($cell instanceof \RectorPrefix20220427\Symfony\Component\Console\Helper\TableCell) {
+                            $textContent = \RectorPrefix20220427\Symfony\Component\Console\Helper\Helper::removeDecoration($this->output->getFormatter(), $cell);
+                            $textLength = \RectorPrefix20220427\Symfony\Component\Console\Helper\Helper::width($textContent);
+                            if ($textLength > 0) {
+                                $contentColumns = \str_split($textContent, \ceil($textLength / $cell->getColspan()));
+                                foreach ($contentColumns as $position => $content) {
+                                    $row[$i + $position] = $content;
+                                }
                             }
                         }
                     }
+                    $lengths[] = $this->getCellWidth($row, $column);
                 }
-                $lengths[] = $this->getCellWidth($row, $column);
             }
             $this->effectiveColumnWidths[$column] = \max($lengths) + \RectorPrefix20220427\Symfony\Component\Console\Helper\Helper::width($this->style->getCellRowContentFormat()) - 2;
         }

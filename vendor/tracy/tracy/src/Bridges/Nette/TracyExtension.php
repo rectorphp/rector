@@ -15,7 +15,7 @@ use RectorPrefix20220427\Tracy;
  */
 class TracyExtension extends \RectorPrefix20220427\Nette\DI\CompilerExtension
 {
-    private const ERROR_SEVERITY_PATTERN = 'E_(?:ALL|PARSE|STRICT|RECOVERABLE_ERROR|(?:CORE|COMPILE)_(?:ERROR|WARNING)|(?:USER_)?(?:ERROR|WARNING|NOTICE|DEPRECATED))';
+    private const ErrorSeverityPattern = 'E_(?:ALL|PARSE|STRICT|RECOVERABLE_ERROR|(?:CORE|COMPILE)_(?:ERROR|WARNING)|(?:USER_)?(?:ERROR|WARNING|NOTICE|DEPRECATED))';
     /** @var bool */
     private $debugMode;
     /** @var bool */
@@ -27,8 +27,8 @@ class TracyExtension extends \RectorPrefix20220427\Nette\DI\CompilerExtension
     }
     public function getConfigSchema() : \RectorPrefix20220427\Nette\Schema\Schema
     {
-        $errorSeverity = \RectorPrefix20220427\Nette\Schema\Expect::string()->pattern(self::ERROR_SEVERITY_PATTERN);
-        $errorSeverityExpr = \RectorPrefix20220427\Nette\Schema\Expect::string()->pattern('(' . self::ERROR_SEVERITY_PATTERN . '|[ &|~()])+');
+        $errorSeverity = \RectorPrefix20220427\Nette\Schema\Expect::string()->pattern(self::ErrorSeverityPattern);
+        $errorSeverityExpr = \RectorPrefix20220427\Nette\Schema\Expect::string()->pattern('(' . self::ErrorSeverityPattern . '|[ &|~()])+');
         return \RectorPrefix20220427\Nette\Schema\Expect::structure(['email' => \RectorPrefix20220427\Nette\Schema\Expect::anyOf(\RectorPrefix20220427\Nette\Schema\Expect::email(), \RectorPrefix20220427\Nette\Schema\Expect::listOf('email'))->dynamic(), 'fromEmail' => \RectorPrefix20220427\Nette\Schema\Expect::email()->dynamic(), 'emailSnooze' => \RectorPrefix20220427\Nette\Schema\Expect::string()->dynamic(), 'logSeverity' => \RectorPrefix20220427\Nette\Schema\Expect::anyOf(\RectorPrefix20220427\Nette\Schema\Expect::int(), $errorSeverityExpr, \RectorPrefix20220427\Nette\Schema\Expect::listOf($errorSeverity)), 'editor' => \RectorPrefix20220427\Nette\Schema\Expect::type('string|null')->dynamic(), 'browser' => \RectorPrefix20220427\Nette\Schema\Expect::string()->dynamic(), 'errorTemplate' => \RectorPrefix20220427\Nette\Schema\Expect::string()->dynamic(), 'strictMode' => \RectorPrefix20220427\Nette\Schema\Expect::anyOf(\RectorPrefix20220427\Nette\Schema\Expect::bool(), \RectorPrefix20220427\Nette\Schema\Expect::int(), $errorSeverityExpr, \RectorPrefix20220427\Nette\Schema\Expect::listOf($errorSeverity)), 'showBar' => \RectorPrefix20220427\Nette\Schema\Expect::bool()->dynamic(), 'maxLength' => \RectorPrefix20220427\Nette\Schema\Expect::int()->dynamic(), 'maxDepth' => \RectorPrefix20220427\Nette\Schema\Expect::int()->dynamic(), 'maxItems' => \RectorPrefix20220427\Nette\Schema\Expect::int()->dynamic(), 'keysToHide' => \RectorPrefix20220427\Nette\Schema\Expect::array(null)->dynamic(), 'dumpTheme' => \RectorPrefix20220427\Nette\Schema\Expect::string()->dynamic(), 'showLocation' => \RectorPrefix20220427\Nette\Schema\Expect::bool()->dynamic(), 'scream' => \RectorPrefix20220427\Nette\Schema\Expect::anyOf(\RectorPrefix20220427\Nette\Schema\Expect::bool(), \RectorPrefix20220427\Nette\Schema\Expect::int(), $errorSeverityExpr, \RectorPrefix20220427\Nette\Schema\Expect::listOf($errorSeverity)), 'bar' => \RectorPrefix20220427\Nette\Schema\Expect::listOf('RectorPrefix20220427\\string|Nette\\DI\\Definitions\\Statement'), 'blueScreen' => \RectorPrefix20220427\Nette\Schema\Expect::listOf('callable'), 'editorMapping' => \RectorPrefix20220427\Nette\Schema\Expect::arrayOf('string')->dynamic()->default(null), 'netteMailer' => \RectorPrefix20220427\Nette\Schema\Expect::bool(\true)]);
     }
     public function loadConfiguration()
@@ -52,7 +52,7 @@ class TracyExtension extends \RectorPrefix20220427\Nette\DI\CompilerExtension
         }
         foreach ($options as $key => $value) {
             if ($value !== null) {
-                static $tbl = ['keysToHide' => 'array_push(Tracy\\Debugger::getBlueScreen()->keysToHide, ... ?)', 'fromEmail' => 'Tracy\\Debugger::getLogger()->fromEmail = ?', 'emailSnooze' => 'Tracy\\Debugger::getLogger()->emailSnooze = ?'];
+                $tbl = ['keysToHide' => 'array_push(Tracy\\Debugger::getBlueScreen()->keysToHide, ... ?)', 'fromEmail' => 'Tracy\\Debugger::getLogger()->fromEmail = ?', 'emailSnooze' => 'Tracy\\Debugger::getLogger()->emailSnooze = ?'];
                 $initialize->addBody($builder->formatPhp(($tbl[$key] ?? 'Tracy\\Debugger::$' . $key . ' = ?') . ';', \RectorPrefix20220427\Nette\DI\Helpers::filterArguments([$value])));
             }
         }

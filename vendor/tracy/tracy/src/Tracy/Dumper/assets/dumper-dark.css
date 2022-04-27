@@ -115,7 +115,7 @@
 .tracy-dark .tracy-dump-private::after,
 .tracy-dark .tracy-dump-hash {
 	font-size: 85%;
-	color: rgba(255, 255, 255, 0.4);
+	color: rgba(255, 255, 255, 0.35);
 }
 
 .tracy-dark .tracy-dump-indent {

@@ -9,8 +9,8 @@ namespace RectorPrefix20220427\Tracy;
 
 class FileSession implements \RectorPrefix20220427\Tracy\SessionStorage
 {
-    private const FILE_PREFIX = 'tracy-';
-    private const COOKIE_LIFETIME = 31557600;
+    private const FilePrefix = 'tracy-';
+    private const CookieLifetime = 31557600;
     /** @var string */
     public $cookieName = 'tracy-session';
     /** @var float probability that the clean() routine is started */
@@ -35,10 +35,10 @@ class FileSession implements \RectorPrefix20220427\Tracy\SessionStorage
     private function open() : void
     {
         $id = $_COOKIE[$this->cookieName] ?? null;
-        if (!\is_string($id) || !\preg_match('#^\\w{10}\\z#i', $id) || !($file = @\fopen($path = $this->dir . '/' . self::FILE_PREFIX . $id, 'r+'))) {
+        if (!\is_string($id) || !\preg_match('#^\\w{10}\\z#i', $id) || !($file = @\fopen($path = $this->dir . '/' . self::FilePrefix . $id, 'r+'))) {
             $id = \RectorPrefix20220427\Tracy\Helpers::createId();
-            \setcookie($this->cookieName, $id, \time() + self::COOKIE_LIFETIME, '/', '', \false, \true);
-            $file = @\fopen($path = $this->dir . '/' . self::FILE_PREFIX . $id, 'c+');
+            \setcookie($this->cookieName, $id, \time() + self::CookieLifetime, '/', '', \false, \true);
+            $file = @\fopen($path = $this->dir . '/' . self::FilePrefix . $id, 'c+');
             // intentionally @
             if ($file === \false) {
                 throw new \RuntimeException("Unable to create file '{$path}'. " . \error_get_last()['message']);
@@ -62,7 +62,7 @@ class FileSession implements \RectorPrefix20220427\Tracy\SessionStorage
     public function clean() : void
     {
         $old = \strtotime('-1 week');
-        foreach (\glob($this->dir . '/' . self::FILE_PREFIX . '*') as $file) {
+        foreach (\glob($this->dir . '/' . self::FilePrefix . '*') as $file) {
             if (\filemtime($file) < $old) {
                 \unlink($file);
             }
@@ -76,6 +76,7 @@ class FileSession implements \RectorPrefix20220427\Tracy\SessionStorage
         \ftruncate($this->file, 0);
         \fseek($this->file, 0);
         \fwrite($this->file, \serialize($this->data));
+        \flock($this->file, \LOCK_UN);
         \fclose($this->file);
         $this->file = null;
     }

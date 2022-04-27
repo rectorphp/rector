@@ -28,7 +28,7 @@ class Dumper
     /** @var array */
     public static $resources = ['stream' => 'stream_get_meta_data', 'stream-context' => 'stream_context_get_options', 'curl' => 'curl_getinfo'];
     /** @var array */
-    public static $objectExporters = [\Closure::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeClosure'], \RectorPrefix20220427\UnitEnum::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeEnum'], \ArrayObject::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeArrayObject'], \SplFileInfo::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeSplFileInfo'], \SplObjectStorage::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeSplObjectStorage'], \__PHP_Incomplete_Class::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposePhpIncompleteClass'], \DOMNode::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeDOMNode'], \DOMNodeList::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeDOMNodeList'], \DOMNamedNodeMap::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeDOMNodeList'], \Ds\Collection::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeDsCollection'], \Ds\Map::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeDsMap']];
+    public static $objectExporters = [\Closure::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeClosure'], \RectorPrefix20220427\UnitEnum::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeEnum'], \ArrayObject::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeArrayObject'], \SplFileInfo::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeSplFileInfo'], \SplObjectStorage::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeSplObjectStorage'], \__PHP_Incomplete_Class::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposePhpIncompleteClass'], \Generator::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeGenerator'], \RectorPrefix20220427\Fiber::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeFiber'], \DOMNode::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeDOMNode'], \DOMNodeList::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeDOMNodeList'], \DOMNamedNodeMap::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeDOMNodeList'], \Ds\Collection::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeDsCollection'], \Ds\Map::class => [\RectorPrefix20220427\Tracy\Dumper\Exposer::class, 'exposeDsMap']];
     /** @var Describer */
     private $describer;
     /** @var Renderer */
@@ -43,14 +43,12 @@ class Dumper
             $useColors = self::$terminalColors && \RectorPrefix20220427\Tracy\Helpers::detectColors();
             $dumper = new self($options);
             \fwrite(\STDOUT, $dumper->asTerminal($var, $useColors ? self::$terminalColors : []));
-        } elseif (\preg_match('#^Content-Type: (?!text/html)#im', \implode("\n", \headers_list()))) {
-            // non-html
-            echo self::toText($var, $options);
-        } else {
-            // html
+        } elseif (\RectorPrefix20220427\Tracy\Helpers::isHtmlMode()) {
             $options[self::LOCATION] = $options[self::LOCATION] ?? \true;
             self::renderAssets();
             echo self::toHtml($var, $options);
+        } else {
+            echo self::toText($var, $options);
         }
         return $var;
     }

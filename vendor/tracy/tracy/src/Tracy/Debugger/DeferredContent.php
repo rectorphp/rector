@@ -55,7 +55,10 @@ final class DeferredContent
             \header('Cache-Control: max-age=864000');
             \header_remove('Pragma');
             \header_remove('Set-Cookie');
-            $this->sendJsCss();
+            $str = $this->buildJsCss();
+            \header('Content-Length: ' . \strlen($str));
+            echo $str;
+            \flush();
             return \true;
         }
         $this->useSession = $this->sessionStorage->isAvailable();
@@ -68,12 +71,13 @@ final class DeferredContent
             \header('Content-Type: application/javascript; charset=UTF-8');
             \header('Cache-Control: max-age=60');
             \header_remove('Set-Cookie');
-            if (!$ajax) {
-                $this->sendJsCss();
-            }
+            $str = $ajax ? '' : $this->buildJsCss();
             $data =& $this->getItems('setup');
-            echo $data[$requestId]['code'] ?? '';
+            $str .= $data[$requestId]['code'] ?? '';
             unset($data[$requestId]);
+            \header('Content-Length: ' . \strlen($str));
+            echo $str;
+            \flush();
             return \true;
         }
         if (\RectorPrefix20220427\Tracy\Helpers::isAjax()) {
@@ -82,14 +86,15 @@ final class DeferredContent
         }
         return \false;
     }
-    private function sendJsCss() : void
+    private function buildJsCss() : string
     {
         $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/../assets/reset.css', __DIR__ . '/../Bar/assets/bar.css', __DIR__ . '/../assets/toggle.css', __DIR__ . '/../assets/table-sort.css', __DIR__ . '/../assets/tabs.css', __DIR__ . '/../Dumper/assets/dumper-light.css', __DIR__ . '/../Dumper/assets/dumper-dark.css', __DIR__ . '/../BlueScreen/assets/bluescreen.css'], \RectorPrefix20220427\Tracy\Debugger::$customCssFiles));
-        echo "'use strict';\n(function(){\n\tvar el = document.createElement('style');\n\tel.setAttribute('nonce', document.currentScript.getAttribute('nonce') || document.currentScript.nonce);\n\tel.className='tracy-debug';\n\tel.textContent=" . \json_encode(\RectorPrefix20220427\Tracy\Helpers::minifyCss(\implode('', $css))) . ";\n\tdocument.head.appendChild(el);})\n();\n";
-        \array_map(function ($file) {
-            echo '(function() {', \file_get_contents($file), '})();';
+        $js1 = \array_map(function ($file) {
+            return '(function() {' . \file_get_contents($file) . '})();';
         }, [__DIR__ . '/../Bar/assets/bar.js', __DIR__ . '/../assets/toggle.js', __DIR__ . '/../assets/table-sort.js', __DIR__ . '/../assets/tabs.js', __DIR__ . '/../Dumper/assets/dumper.js', __DIR__ . '/../BlueScreen/assets/bluescreen.js']);
-        \array_map('readfile', \RectorPrefix20220427\Tracy\Debugger::$customJsFiles);
+        $js2 = \array_map('file_get_contents', \RectorPrefix20220427\Tracy\Debugger::$customJsFiles);
+        $str = "'use strict';\n(function(){\n\tvar el = document.createElement('style');\n\tel.setAttribute('nonce', document.currentScript.getAttribute('nonce') || document.currentScript.nonce);\n\tel.className='tracy-debug';\n\tel.textContent=" . \json_encode(\RectorPrefix20220427\Tracy\Helpers::minifyCss(\implode('', $css))) . ";\n\tdocument.head.appendChild(el);})\n();\n" . \implode('', $js1) . \implode('', $js2);
+        return $str;
     }
     public function clean() : void
     {

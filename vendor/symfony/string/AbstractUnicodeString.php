@@ -439,7 +439,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20220427\Symfony\Compo
         foreach (\explode("\n", $s) as $s) {
             if ($ignoreAnsiDecoration) {
                 $s = \preg_replace('/(?:\\x1B(?:
-                    \\[ [\\x30-\\x3F]*+ [\\x20-\\x2F]*+ [0x40-\\x7E]
+                    \\[ [\\x30-\\x3F]*+ [\\x20-\\x2F]*+ [\\x40-\\x7E]
                     | [P\\]X^_] .*? \\x1B\\\\
                     | [\\x41-\\x7E]
                 )|[\\p{Cc}\\x7F]++)/xu', '', $s);

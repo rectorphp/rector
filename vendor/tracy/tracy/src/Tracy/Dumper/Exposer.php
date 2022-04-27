@@ -111,6 +111,28 @@ final class Exposer
         $describer->addPropertyTo($value, 'length', $obj->length, \RectorPrefix20220427\Tracy\Dumper\Value::PROP_PUBLIC);
         $describer->addPropertyTo($value, 'items', \iterator_to_array($obj));
     }
+    public static function exposeGenerator(\Generator $gen, \RectorPrefix20220427\Tracy\Dumper\Value $value, \RectorPrefix20220427\Tracy\Dumper\Describer $describer) : void
+    {
+        try {
+            $r = new \ReflectionGenerator($gen);
+            $describer->addPropertyTo($value, 'file', $r->getExecutingFile() . ':' . $r->getExecutingLine());
+            $describer->addPropertyTo($value, 'this', $r->getThis());
+        } catch (\ReflectionException $e) {
+            $value->value = \get_class($gen) . ' (terminated)';
+        }
+    }
+    public static function exposeFiber(\RectorPrefix20220427\Fiber $fiber, \RectorPrefix20220427\Tracy\Dumper\Value $value, \RectorPrefix20220427\Tracy\Dumper\Describer $describer) : void
+    {
+        if ($fiber->isTerminated()) {
+            $value->value = \get_class($fiber) . ' (terminated)';
+        } elseif (!$fiber->isStarted()) {
+            $value->value = \get_class($fiber) . ' (not started)';
+        } else {
+            $r = new \RectorPrefix20220427\ReflectionFiber($fiber);
+            $describer->addPropertyTo($value, 'file', $r->getExecutingFile() . ':' . $r->getExecutingLine());
+            $describer->addPropertyTo($value, 'callable', $r->getCallable());
+        }
+    }
     public static function exposeSplFileInfo(\SplFileInfo $obj) : array
     {
         return ['path' => $obj->getPathname()];

@@ -106,6 +106,87 @@ tracy-div select {
 	white-space: pre;
 }
 
+tracy-div article,
+tracy-div aside,
+tracy-div details,
+tracy-div div,
+tracy-div figcaption,
+tracy-div footer,
+tracy-div form,
+tracy-div header,
+tracy-div hgroup,
+tracy-div main,
+tracy-div nav,
+tracy-div section,
+tracy-div summary,
+tracy-div pre,
+tracy-div p,
+tracy-div dl,
+tracy-div dd,
+tracy-div dt,
+tracy-div blockquote,
+tracy-div figure,
+tracy-div address,
+tracy-div h1,
+tracy-div h2,
+tracy-div h3,
+tracy-div h4,
+tracy-div h5,
+tracy-div h6,
+tracy-div ul,
+tracy-div ol,
+tracy-div li,
+tracy-div hr {
+	display: block;
+}
+
+tracy-div a,
+tracy-div b,
+tracy-div big,
+tracy-div code,
+tracy-div em,
+tracy-div i,
+tracy-div small,
+tracy-div span,
+tracy-div strong {
+	display: inline;
+}
+
+tracy-div table {
+	display: table;
+}
+
+tracy-div tr {
+	display: table-row;
+}
+
+tracy-div col {
+	display: table-column;
+}
+
+tracy-div colgroup {
+	display: table-column-group;
+}
+
+tracy-div tbody {
+	display: table-row-group;
+}
+
+tracy-div thead {
+	display: table-header-group;
+}
+
+tracy-div tfoot {
+	display: table-footer-group;
+}
+
+tracy-div td {
+	display: table-cell;
+}
+
+tracy-div th {
+	display: table-cell;
+}
 
 
 

@@ -214,7 +214,7 @@ class Helpers
     /** @internal */
     public static function isHtmlMode() : bool
     {
-        return empty($_SERVER['HTTP_X_REQUESTED_WITH']) && empty($_SERVER['HTTP_X_TRACY_AJAX']) && !self::isCli() && !\preg_match('#^Content-Type: (?!text/html)#im', \implode("\n", \headers_list()));
+        return empty($_SERVER['HTTP_X_REQUESTED_WITH']) && empty($_SERVER['HTTP_X_TRACY_AJAX']) && isset($_SERVER['HTTP_HOST']) && !self::isCli() && !\preg_match('#^Content-Type: (?!text/html)#im', \implode("\n", \headers_list()));
     }
     /** @internal */
     public static function isAjax() : bool
@@ -275,7 +275,7 @@ class Helpers
     }
     private static function doEncodeString(string $s, bool $utf8, bool $showWhitespaces) : string
     {
-        static $specials = [\true => ["\r" => '<i>\\r</i>', "\n" => "<i>\\n</i>\n", "\t" => '<i>\\t</i>    ', "\33" => '<i>\\e</i>', '<' => '&lt;', '&' => '&amp;'], \false => ["\r" => "\r", "\n" => "\n", "\t" => "\t", "\33" => '<i>\\e</i>', '<' => '&lt;', '&' => '&amp;']];
+        $specials = [\true => ["\r" => '<i>\\r</i>', "\n" => "<i>\\n</i>\n", "\t" => '<i>\\t</i>    ', "\33" => '<i>\\e</i>', '<' => '&lt;', '&' => '&amp;'], \false => ["\r" => "\r", "\n" => "\n", "\t" => "\t", "\33" => '<i>\\e</i>', '<' => '&lt;', '&' => '&amp;']];
         $special = $specials[$showWhitespaces];
         $s = \preg_replace_callback($utf8 ? '#[\\p{C}<&]#u' : '#[\\x00-\\x1F\\x7F-\\xFF<&]#', function ($m) use($special) {
             return $special[$m[0]] ?? (\strlen($m[0]) === 1 ? '<i>\\x' . \str_pad(\strtoupper(\dechex(\ord($m[0]))), 2, '0', \STR_PAD_LEFT) . '</i>' : '<i>\\u{' . \strtoupper(\ltrim(\dechex(self::utf8Ord($m[0])), '0')) . '}</i>');
@@ -391,7 +391,7 @@ XX
     }
     public static function detectColors() : bool
     {
-        return self::isCli() && \getenv('NO_COLOR') === \false && (\getenv('FORCE_COLOR') || @\stream_isatty(\STDOUT) || (\defined('PHP_WINDOWS_VERSION_BUILD') && (\function_exists('sapi_windows_vt100_support') && \sapi_windows_vt100_support(\STDOUT)) || \getenv('ConEmuANSI') === 'ON' || \getenv('ANSICON') !== \false || \getenv('term') === 'xterm' || \getenv('term') === 'xterm-256color'));
+        return self::isCli() && \getenv('NO_COLOR') === \false && (\getenv('FORCE_COLOR') || (\function_exists('sapi_windows_vt100_support') ? \sapi_windows_vt100_support(\STDOUT) : @\stream_isatty(\STDOUT)));
     }
     public static function getExceptionChain(\Throwable $ex) : array
     {
@@ -400,5 +400,27 @@ XX
             $res[] = $ex;
         }
         return $res;
+    }
+    public static function traverseValue($val, callable $callback, array &$skip = [], ?string $refId = null) : void
+    {
+        if (\is_object($val)) {
+            $id = \spl_object_id($val);
+            if (!isset($skip[$id])) {
+                $skip[$id] = \true;
+                $callback($val);
+                self::traverseValue((array) $val, $callback, $skip);
+            }
+        } elseif (\is_array($val)) {
+            if ($refId) {
+                if (isset($skip[$refId])) {
+                    return;
+                }
+                $skip[$refId] = \true;
+            }
+            foreach ($val as $k => $v) {
+                $refId = ($r = \ReflectionReference::fromArrayElement($val, $k)) ? $r->getId() : null;
+                self::traverseValue($v, $callback, $skip, $refId);
+            }
+        }
     }
 }

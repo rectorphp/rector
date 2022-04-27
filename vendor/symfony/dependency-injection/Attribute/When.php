@@ -15,7 +15,7 @@ namespace RectorPrefix20220427\Symfony\Component\DependencyInjection\Attribute;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::TARGET_FUNCTION | \Attribute::IS_REPEATABLE)]
 class When
 {
     /**
