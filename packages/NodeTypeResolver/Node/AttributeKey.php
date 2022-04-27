@@ -17,7 +17,7 @@ final class AttributeKey
      */
     public const SCOPE = 'scope';
     /**
-     * @deprecated
+     * @deprecated Use @see \Rector\Naming\Naming\UseImportsResolver::resolveForNode() instead
      * @var string
      */
     public const USE_NODES = 'useNodes';
@@ -76,6 +76,7 @@ final class AttributeKey
     /**
      * @deprecated Instead of tree climbing without context, hook into parent node that contains the stmts directly.
      * E.g. FunctionLike, If_, While_ etc.
+     * Use @see \Rector\Core\PhpParser\Node\BetterNodeFinder::resolveCurrentStatement() instead if actually needed
      * @var string
      */
     public const CURRENT_STATEMENT = 'currentExpression';
