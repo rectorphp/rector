@@ -46,7 +46,7 @@ final class ReturnTypeDeclarationRector extends AbstractRector implements MinPhp
         private readonly ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
         private readonly VendorLockResolver $vendorLockResolver,
         private readonly PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
-        private readonly ObjectTypeComparator $objectTypeComparator,
+        private readonly ObjectTypeComparator $objectTypeComparator
     ) {
     }
 

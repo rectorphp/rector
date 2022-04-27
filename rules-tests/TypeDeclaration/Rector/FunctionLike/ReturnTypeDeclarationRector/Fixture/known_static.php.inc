@@ -67,7 +67,7 @@ class KnownStatic
         return [];
     }
 
-    public function getCallable(): callable
+    public function getCallable(): \Closure
     {
         return function () {
         };
