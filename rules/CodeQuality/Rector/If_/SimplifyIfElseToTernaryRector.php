@@ -80,10 +80,10 @@ CODE_SAMPLE
             return null;
         }
         $ifAssignVar = $this->resolveOnlyStmtAssignVar($node->stmts);
-        $elseAssignVar = $this->resolveOnlyStmtAssignVar($node->else->stmts);
         if (!$ifAssignVar instanceof \PhpParser\Node\Expr) {
             return null;
         }
+        $elseAssignVar = $this->resolveOnlyStmtAssignVar($node->else->stmts);
         if (!$elseAssignVar instanceof \PhpParser\Node\Expr) {
             return null;
         }
@@ -139,11 +139,15 @@ CODE_SAMPLE
         if (\count($stmts) !== 1) {
             return null;
         }
-        $onlyStmt = $this->unwrapExpression($stmts[0]);
-        if (!$onlyStmt instanceof \PhpParser\Node\Expr\Assign) {
+        $stmt = $stmts[0];
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        return $onlyStmt->var;
+        $stmtExpr = $stmt->expr;
+        if (!$stmtExpr instanceof \PhpParser\Node\Expr\Assign) {
+            return null;
+        }
+        return $stmtExpr->var;
     }
     /**
      * @param Stmt[] $stmts
@@ -153,11 +157,15 @@ CODE_SAMPLE
         if (\count($stmts) !== 1) {
             return null;
         }
-        $onlyStmt = $this->unwrapExpression($stmts[0]);
-        if (!$onlyStmt instanceof \PhpParser\Node\Expr\Assign) {
+        $stmt = $stmts[0];
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        return $onlyStmt->expr;
+        $stmtExpr = $stmt->expr;
+        if (!$stmtExpr instanceof \PhpParser\Node\Expr\Assign) {
+            return null;
+        }
+        return $stmtExpr->expr;
     }
     /**
      * @param Node[] $nodes

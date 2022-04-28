@@ -304,16 +304,6 @@ CODE_SAMPLE;
         }
         return $currentArgs;
     }
-    /**
-     * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt
-     */
-    protected function unwrapExpression(\PhpParser\Node\Stmt $stmt)
-    {
-        if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
-            return $stmt->expr;
-        }
-        return $stmt;
-    }
     protected function removeNode(\PhpParser\Node $node) : void
     {
         $this->nodeRemover->removeNode($node);

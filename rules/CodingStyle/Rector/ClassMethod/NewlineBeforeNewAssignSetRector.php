@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
@@ -98,13 +99,16 @@ CODE_SAMPLE
     }
     private function resolveCurrentStmtVariableName(\PhpParser\Node\Stmt $stmt) : ?string
     {
-        $stmt = $this->unwrapExpression($stmt);
-        if ($stmt instanceof \PhpParser\Node\Expr\Assign || $stmt instanceof \PhpParser\Node\Expr\MethodCall) {
-            if ($this->shouldSkipLeftVariable($stmt)) {
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            return null;
+        }
+        $stmtExpr = $stmt->expr;
+        if ($stmtExpr instanceof \PhpParser\Node\Expr\Assign || $stmtExpr instanceof \PhpParser\Node\Expr\MethodCall) {
+            if ($this->shouldSkipLeftVariable($stmtExpr)) {
                 return null;
             }
-            if (!$stmt->var instanceof \PhpParser\Node\Expr\MethodCall && !$stmt->var instanceof \PhpParser\Node\Expr\StaticCall) {
-                return $this->getName($stmt->var);
+            if (!$stmtExpr->var instanceof \PhpParser\Node\Expr\MethodCall && !$stmtExpr->var instanceof \PhpParser\Node\Expr\StaticCall) {
+                return $this->getName($stmtExpr->var);
             }
         }
         return null;
