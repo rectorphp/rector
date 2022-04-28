@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator;
@@ -174,7 +175,11 @@ CODE_SAMPLE
 
         // recount empty notes
         $stmtsValues = array_values($classMethodStmts);
+        $stmtValue = $stmtsValues[0];
+        if ($stmtValue instanceof Expression) {
+            return $stmtValue->expr;
+        }
 
-        return $this->unwrapExpression($stmtsValues[0]);
+        return $stmtValue;
     }
 }

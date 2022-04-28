@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
@@ -112,15 +113,19 @@ CODE_SAMPLE
 
     private function resolveCurrentStmtVariableName(Stmt $stmt): ?string
     {
-        $stmt = $this->unwrapExpression($stmt);
+        if (! $stmt instanceof Expression) {
+            return null;
+        }
 
-        if ($stmt instanceof Assign || $stmt instanceof MethodCall) {
-            if ($this->shouldSkipLeftVariable($stmt)) {
+        $stmtExpr = $stmt->expr;
+
+        if ($stmtExpr instanceof Assign || $stmtExpr instanceof MethodCall) {
+            if ($this->shouldSkipLeftVariable($stmtExpr)) {
                 return null;
             }
 
-            if (! $stmt->var instanceof MethodCall && ! $stmt->var instanceof StaticCall) {
-                return $this->getName($stmt->var);
+            if (! $stmtExpr->var instanceof MethodCall && ! $stmtExpr->var instanceof StaticCall) {
+                return $this->getName($stmtExpr->var);
             }
         }
 

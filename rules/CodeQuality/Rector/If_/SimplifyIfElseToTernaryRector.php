@@ -90,11 +90,11 @@ CODE_SAMPLE
         }
 
         $ifAssignVar = $this->resolveOnlyStmtAssignVar($node->stmts);
-        $elseAssignVar = $this->resolveOnlyStmtAssignVar($node->else->stmts);
         if (! $ifAssignVar instanceof Expr) {
             return null;
         }
 
+        $elseAssignVar = $this->resolveOnlyStmtAssignVar($node->else->stmts);
         if (! $elseAssignVar instanceof Expr) {
             return null;
         }
@@ -169,12 +169,17 @@ CODE_SAMPLE
             return null;
         }
 
-        $onlyStmt = $this->unwrapExpression($stmts[0]);
-        if (! $onlyStmt instanceof Assign) {
+        $stmt = $stmts[0];
+        if (! $stmt instanceof Expression) {
             return null;
         }
 
-        return $onlyStmt->var;
+        $stmtExpr = $stmt->expr;
+        if (! $stmtExpr instanceof Assign) {
+            return null;
+        }
+
+        return $stmtExpr->var;
     }
 
     /**
@@ -186,12 +191,17 @@ CODE_SAMPLE
             return null;
         }
 
-        $onlyStmt = $this->unwrapExpression($stmts[0]);
-        if (! $onlyStmt instanceof Assign) {
+        $stmt = $stmts[0];
+        if (! $stmt instanceof Expression) {
             return null;
         }
 
-        return $onlyStmt->expr;
+        $stmtExpr = $stmt->expr;
+        if (! $stmtExpr instanceof Assign) {
+            return null;
+        }
+
+        return $stmtExpr->expr;
     }
 
     /**

@@ -326,15 +326,6 @@ CODE_SAMPLE;
         return $currentArgs;
     }
 
-    protected function unwrapExpression(Stmt $stmt): Expr | Stmt
-    {
-        if ($stmt instanceof Expression) {
-            return $stmt->expr;
-        }
-
-        return $stmt;
-    }
-
     protected function removeNode(Node $node): void
     {
         $this->nodeRemover->removeNode($node);
