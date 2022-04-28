@@ -19,6 +19,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -30,7 +31,8 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
 {
     public function __construct(
         private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
-        private readonly ClassRenamer $classRenamer
+        private readonly ClassRenamer $classRenamer,
+        private readonly ParameterProvider $parameterProvider,
     ) {
     }
 

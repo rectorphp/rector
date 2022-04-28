@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\PhpScoper;
 
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
+
 final class StaticEasyPrefixer
 {
     /**
@@ -24,7 +26,7 @@ final class StaticEasyPrefixer
     ];
 
     /**
-     * @var string[]
+     * @var class-string<ParameterProvider>[]|string[]
      */
     private const EXCLUDED_NAMESPACES = [
         // naturally
@@ -38,6 +40,7 @@ final class StaticEasyPrefixer
 
         // this is public API of a Rector rule
         'Symplify\RuleDocGenerator\*',
+        'Symplify\PackageBuilder\Parameter\ParameterProvider',
     ];
 
     /**
