@@ -104,8 +104,10 @@ final class BetterNodeFinder
             if (\is_a($parent, $type, \true)) {
                 return $parent;
             }
-            $parent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        } while ($parent instanceof \PhpParser\Node);
+            if (!$parent instanceof \PhpParser\Node) {
+                return null;
+            }
+        } while ($parent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE));
         return null;
     }
     /**
