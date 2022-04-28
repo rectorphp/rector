@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220427\Symplify\SymplifyKernel\Tests\ContainerBuilderFactory;
+namespace RectorPrefix20220428\Symplify\SymplifyKernel\Tests\ContainerBuilderFactory;
 
-use RectorPrefix20220427\PHPUnit\Framework\TestCase;
-use RectorPrefix20220427\Symplify\SmartFileSystem\SmartFileSystem;
-use RectorPrefix20220427\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory;
-use RectorPrefix20220427\Symplify\SymplifyKernel\ContainerBuilderFactory;
-final class ContainerBuilderFactoryTest extends \RectorPrefix20220427\PHPUnit\Framework\TestCase
+use RectorPrefix20220428\PHPUnit\Framework\TestCase;
+use RectorPrefix20220428\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220428\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory;
+use RectorPrefix20220428\Symplify\SymplifyKernel\ContainerBuilderFactory;
+final class ContainerBuilderFactoryTest extends \RectorPrefix20220428\PHPUnit\Framework\TestCase
 {
     public function test() : void
     {
-        $containerBuilderFactory = new \RectorPrefix20220427\Symplify\SymplifyKernel\ContainerBuilderFactory(new \RectorPrefix20220427\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory());
+        $containerBuilderFactory = new \RectorPrefix20220428\Symplify\SymplifyKernel\ContainerBuilderFactory(new \RectorPrefix20220428\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory());
         $container = $containerBuilderFactory->create([__DIR__ . '/config/some_services.php'], [], []);
-        $hasSmartFileSystemService = $container->has(\RectorPrefix20220427\Symplify\SmartFileSystem\SmartFileSystem::class);
+        $hasSmartFileSystemService = $container->has(\RectorPrefix20220428\Symplify\SmartFileSystem\SmartFileSystem::class);
         $this->assertTrue($hasSmartFileSystemService);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220427;
+namespace RectorPrefix20220428;
 
 use Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector;
 use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
@@ -13,6 +13,7 @@ use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector;
+use Rector\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector;
 use Rector\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector;
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
 use Rector\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector;
@@ -177,4 +178,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(\Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector::class);
     $rectorConfig->rule(\Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector::class);
     $rectorConfig->rule(\Rector\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector::class);
+    $rectorConfig->rule(\Rector\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector::class);
 };

@@ -26,12 +26,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220427\\Composer\\Pcre\\": "src"
+            "RectorPrefix20220428\\Composer\\Pcre\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220427\\Composer\\Pcre\\": "tests"
+            "RectorPrefix20220428\\Composer\\Pcre\\": "tests"
         }
     },
     "extra": {

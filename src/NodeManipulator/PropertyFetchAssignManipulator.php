@@ -15,7 +15,7 @@ use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220427\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220428\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class PropertyFetchAssignManipulator
 {
     /**
@@ -38,7 +38,7 @@ final class PropertyFetchAssignManipulator
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(\RectorPrefix20220427\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(\RectorPrefix20220428\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;

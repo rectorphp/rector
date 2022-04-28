@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220427\Symfony\Component\Config\Util;
+namespace RectorPrefix20220428\Symfony\Component\Config\Util;
 
-use RectorPrefix20220427\Symfony\Component\Config\Util\Exception\InvalidXmlException;
-use RectorPrefix20220427\Symfony\Component\Config\Util\Exception\XmlParsingException;
+use RectorPrefix20220428\Symfony\Component\Config\Util\Exception\InvalidXmlException;
+use RectorPrefix20220428\Symfony\Component\Config\Util\Exception\XmlParsingException;
 /**
  * XMLUtils is a bunch of utility methods to XML operations.
  *
@@ -49,13 +49,13 @@ class XmlUtils
         $dom = new \DOMDocument();
         $dom->validateOnParse = \true;
         if (!$dom->loadXML($content, \LIBXML_NONET | \LIBXML_COMPACT)) {
-            throw new \RectorPrefix20220427\Symfony\Component\Config\Util\Exception\XmlParsingException(\implode("\n", static::getXmlErrors($internalErrors)));
+            throw new \RectorPrefix20220428\Symfony\Component\Config\Util\Exception\XmlParsingException(\implode("\n", static::getXmlErrors($internalErrors)));
         }
         $dom->normalizeDocument();
         \libxml_use_internal_errors($internalErrors);
         foreach ($dom->childNodes as $child) {
             if (\XML_DOCUMENT_TYPE_NODE === $child->nodeType) {
-                throw new \RectorPrefix20220427\Symfony\Component\Config\Util\Exception\XmlParsingException('Document types are not allowed.');
+                throw new \RectorPrefix20220428\Symfony\Component\Config\Util\Exception\XmlParsingException('Document types are not allowed.');
             }
         }
         if (null !== $schemaOrCallable) {
@@ -73,14 +73,14 @@ class XmlUtils
                 $valid = @$dom->schemaValidateSource($schemaSource);
             } else {
                 \libxml_use_internal_errors($internalErrors);
-                throw new \RectorPrefix20220427\Symfony\Component\Config\Util\Exception\XmlParsingException(\sprintf('Invalid XSD file: "%s".', $schemaOrCallable));
+                throw new \RectorPrefix20220428\Symfony\Component\Config\Util\Exception\XmlParsingException(\sprintf('Invalid XSD file: "%s".', $schemaOrCallable));
             }
             if (!$valid) {
                 $messages = static::getXmlErrors($internalErrors);
                 if (empty($messages)) {
-                    throw new \RectorPrefix20220427\Symfony\Component\Config\Util\Exception\InvalidXmlException('The XML is not valid.', 0, $e);
+                    throw new \RectorPrefix20220428\Symfony\Component\Config\Util\Exception\InvalidXmlException('The XML is not valid.', 0, $e);
                 }
-                throw new \RectorPrefix20220427\Symfony\Component\Config\Util\Exception\XmlParsingException(\implode("\n", $messages), 0, $e);
+                throw new \RectorPrefix20220428\Symfony\Component\Config\Util\Exception\XmlParsingException(\implode("\n", $messages), 0, $e);
             }
         }
         \libxml_clear_errors();
@@ -111,8 +111,8 @@ class XmlUtils
         }
         try {
             return static::parse($content, $schemaOrCallable);
-        } catch (\RectorPrefix20220427\Symfony\Component\Config\Util\Exception\InvalidXmlException $e) {
-            throw new \RectorPrefix20220427\Symfony\Component\Config\Util\Exception\XmlParsingException(\sprintf('The XML file "%s" is not valid.', $file), 0, $e->getPrevious());
+        } catch (\RectorPrefix20220428\Symfony\Component\Config\Util\Exception\InvalidXmlException $e) {
+            throw new \RectorPrefix20220428\Symfony\Component\Config\Util\Exception\XmlParsingException(\sprintf('The XML file "%s" is not valid.', $file), 0, $e->getPrevious());
         }
     }
     /**

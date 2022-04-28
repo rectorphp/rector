@@ -26,7 +26,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Php80\ValueObject\ArrayDimFetchAndConstFetch;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
-use RectorPrefix20220427\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220428\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class TokenManipulator
 {
     /**
@@ -68,7 +68,7 @@ final class TokenManipulator
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\RectorPrefix20220427\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\RectorPrefix20220428\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;

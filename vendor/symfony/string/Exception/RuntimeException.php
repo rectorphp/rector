@@ -8,8 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220427\Symfony\Component\String\Exception;
+namespace RectorPrefix20220428\Symfony\Component\String\Exception;
 
-class RuntimeException extends \RuntimeException implements \RectorPrefix20220427\Symfony\Component\String\Exception\ExceptionInterface
+class RuntimeException extends \RuntimeException implements \RectorPrefix20220428\Symfony\Component\String\Exception\ExceptionInterface
 {
 }

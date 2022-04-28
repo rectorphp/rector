@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220427\Symfony\Component\Process;
+namespace RectorPrefix20220428\Symfony\Component\Process;
 
-use RectorPrefix20220427\Symfony\Component\Process\Exception\LogicException;
-use RectorPrefix20220427\Symfony\Component\Process\Exception\RuntimeException;
+use RectorPrefix20220428\Symfony\Component\Process\Exception\LogicException;
+use RectorPrefix20220428\Symfony\Component\Process\Exception\RuntimeException;
 /**
  * PhpProcess runs a PHP script in an independent process.
  *
@@ -21,7 +21,7 @@ use RectorPrefix20220427\Symfony\Component\Process\Exception\RuntimeException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class PhpProcess extends \RectorPrefix20220427\Symfony\Component\Process\Process
+class PhpProcess extends \RectorPrefix20220428\Symfony\Component\Process\Process
 {
     /**
      * @param string      $script  The PHP script to run (as a string)
@@ -33,7 +33,7 @@ class PhpProcess extends \RectorPrefix20220427\Symfony\Component\Process\Process
     public function __construct(string $script, string $cwd = null, array $env = null, int $timeout = 60, array $php = null)
     {
         if (null === $php) {
-            $executableFinder = new \RectorPrefix20220427\Symfony\Component\Process\PhpExecutableFinder();
+            $executableFinder = new \RectorPrefix20220428\Symfony\Component\Process\PhpExecutableFinder();
             $php = $executableFinder->find(\false);
             $php = \false === $php ? null : \array_merge([$php], $executableFinder->findArguments());
         }
@@ -53,7 +53,7 @@ class PhpProcess extends \RectorPrefix20220427\Symfony\Component\Process\Process
      */
     public static function fromShellCommandline(string $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60)
     {
-        throw new \RectorPrefix20220427\Symfony\Component\Process\Exception\LogicException(\sprintf('The "%s()" method cannot be called when using "%s".', __METHOD__, self::class));
+        throw new \RectorPrefix20220428\Symfony\Component\Process\Exception\LogicException(\sprintf('The "%s()" method cannot be called when using "%s".', __METHOD__, self::class));
     }
     /**
      * {@inheritdoc}
@@ -61,7 +61,7 @@ class PhpProcess extends \RectorPrefix20220427\Symfony\Component\Process\Process
     public function start(callable $callback = null, array $env = [])
     {
         if (null === $this->getCommandLine()) {
-            throw new \RectorPrefix20220427\Symfony\Component\Process\Exception\RuntimeException('Unable to find the PHP executable.');
+            throw new \RectorPrefix20220428\Symfony\Component\Process\Exception\RuntimeException('Unable to find the PHP executable.');
         }
         parent::start($callback, $env);
     }

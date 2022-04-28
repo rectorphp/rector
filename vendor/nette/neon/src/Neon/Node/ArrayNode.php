@@ -5,18 +5,18 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220427\Nette\Neon\Node;
+namespace RectorPrefix20220428\Nette\Neon\Node;
 
-use RectorPrefix20220427\Nette\Neon\Node;
+use RectorPrefix20220428\Nette\Neon\Node;
 /** @internal */
-abstract class ArrayNode extends \RectorPrefix20220427\Nette\Neon\Node
+abstract class ArrayNode extends \RectorPrefix20220428\Nette\Neon\Node
 {
     /** @var ArrayItemNode[] */
     public $items = [];
     /** @return mixed[] */
     public function toValue() : array
     {
-        return \RectorPrefix20220427\Nette\Neon\Node\ArrayItemNode::itemsToArray($this->items);
+        return \RectorPrefix20220428\Nette\Neon\Node\ArrayItemNode::itemsToArray($this->items);
     }
     public function &getIterator() : \Generator
     {

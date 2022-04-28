@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220427\Symfony\Component\Process\Pipes;
+namespace RectorPrefix20220428\Symfony\Component\Process\Pipes;
 
-use RectorPrefix20220427\Symfony\Component\Process\Exception\InvalidArgumentException;
+use RectorPrefix20220428\Symfony\Component\Process\Exception\InvalidArgumentException;
 /**
  * @author Romain Neutron <imprec@gmail.com>
  *
  * @internal
  */
-abstract class AbstractPipes implements \RectorPrefix20220427\Symfony\Component\Process\Pipes\PipesInterface
+abstract class AbstractPipes implements \RectorPrefix20220428\Symfony\Component\Process\Pipes\PipesInterface
 {
     /**
      * @var mixed[]
@@ -96,7 +96,7 @@ abstract class AbstractPipes implements \RectorPrefix20220427\Symfony\Component\
             } elseif (!isset($this->inputBuffer[0])) {
                 if (!\is_string($input)) {
                     if (!\is_scalar($input)) {
-                        throw new \RectorPrefix20220427\Symfony\Component\Process\Exception\InvalidArgumentException(\sprintf('"%s" yielded a value of type "%s", but only scalars and stream resources are supported.', \get_debug_type($this->input), \get_debug_type($input)));
+                        throw new \RectorPrefix20220428\Symfony\Component\Process\Exception\InvalidArgumentException(\sprintf('"%s" yielded a value of type "%s", but only scalars and stream resources are supported.', \get_debug_type($this->input), \get_debug_type($input)));
                     }
                     $input = (string) $input;
                 }

@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220427\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20220428\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20220427\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220427\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220428\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220428\Symfony\Contracts\Service\Attribute\Required;
 /**
  * Looks for definitions with autowiring enabled and registers their corresponding "@required" methods as setters.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class AutowireRequiredMethodsPass extends \RectorPrefix20220427\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class AutowireRequiredMethodsPass extends \RectorPrefix20220428\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class AutowireRequiredMethodsPass extends \RectorPrefix20220427\Symfony\Componen
     protected function processValue($value, bool $isRoot = \false)
     {
         $value = parent::processValue($value, $isRoot);
-        if (!$value instanceof \RectorPrefix20220427\Symfony\Component\DependencyInjection\Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
+        if (!$value instanceof \RectorPrefix20220428\Symfony\Component\DependencyInjection\Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
             return $value;
         }
         if (!($reflectionClass = $this->container->getReflectionClass($value->getClass(), \false))) {
@@ -44,7 +44,7 @@ class AutowireRequiredMethodsPass extends \RectorPrefix20220427\Symfony\Componen
                 continue;
             }
             while (\true) {
-                if (\method_exists($r, 'getAttributes') ? $r->getAttributes(\RectorPrefix20220427\Symfony\Contracts\Service\Attribute\Required::class) : []) {
+                if (\method_exists($r, 'getAttributes') ? $r->getAttributes(\RectorPrefix20220428\Symfony\Contracts\Service\Attribute\Required::class) : []) {
                     if ($this->isWither($r, $r->getDocComment() ?: '')) {
                         $withers[] = [$r->name, [], \true];
                     } else {

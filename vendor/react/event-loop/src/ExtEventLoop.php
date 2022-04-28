@@ -1,12 +1,12 @@
 <?php
 
-namespace RectorPrefix20220427\React\EventLoop;
+namespace RectorPrefix20220428\React\EventLoop;
 
 use BadMethodCallException;
 use Event;
 use EventBase;
-use RectorPrefix20220427\React\EventLoop\Tick\FutureTickQueue;
-use RectorPrefix20220427\React\EventLoop\Timer\Timer;
+use RectorPrefix20220428\React\EventLoop\Tick\FutureTickQueue;
+use RectorPrefix20220428\React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 /**
  * An `ext-event` based event loop.
@@ -19,7 +19,7 @@ use SplObjectStorage;
  *
  * @link https://pecl.php.net/package/event
  */
-final class ExtEventLoop implements \RectorPrefix20220427\React\EventLoop\LoopInterface
+final class ExtEventLoop implements \RectorPrefix20220428\React\EventLoop\LoopInterface
 {
     private $eventBase;
     private $futureTickQueue;
@@ -48,9 +48,9 @@ final class ExtEventLoop implements \RectorPrefix20220427\React\EventLoop\LoopIn
             $config->requireFeatures(\EventConfig::FEATURE_FDS);
         }
         $this->eventBase = new \EventBase($config);
-        $this->futureTickQueue = new \RectorPrefix20220427\React\EventLoop\Tick\FutureTickQueue();
+        $this->futureTickQueue = new \RectorPrefix20220428\React\EventLoop\Tick\FutureTickQueue();
         $this->timerEvents = new \SplObjectStorage();
-        $this->signals = new \RectorPrefix20220427\React\EventLoop\SignalsHandler();
+        $this->signals = new \RectorPrefix20220428\React\EventLoop\SignalsHandler();
         $this->createTimerCallback();
         $this->createStreamCallback();
     }
@@ -113,17 +113,17 @@ final class ExtEventLoop implements \RectorPrefix20220427\React\EventLoop\LoopIn
     }
     public function addTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20220427\React\EventLoop\Timer\Timer($interval, $callback, \false);
+        $timer = new \RectorPrefix20220428\React\EventLoop\Timer\Timer($interval, $callback, \false);
         $this->scheduleTimer($timer);
         return $timer;
     }
     public function addPeriodicTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20220427\React\EventLoop\Timer\Timer($interval, $callback, \true);
+        $timer = new \RectorPrefix20220428\React\EventLoop\Timer\Timer($interval, $callback, \true);
         $this->scheduleTimer($timer);
         return $timer;
     }
-    public function cancelTimer(\RectorPrefix20220427\React\EventLoop\TimerInterface $timer)
+    public function cancelTimer(\RectorPrefix20220428\React\EventLoop\TimerInterface $timer)
     {
         if ($this->timerEvents->contains($timer)) {
             $this->timerEvents[$timer]->free();
@@ -173,7 +173,7 @@ final class ExtEventLoop implements \RectorPrefix20220427\React\EventLoop\LoopIn
      *
      * @param TimerInterface $timer
      */
-    private function scheduleTimer(\RectorPrefix20220427\React\EventLoop\TimerInterface $timer)
+    private function scheduleTimer(\RectorPrefix20220428\React\EventLoop\TimerInterface $timer)
     {
         $flags = \Event::TIMEOUT;
         if ($timer->isPeriodic()) {
