@@ -13,6 +13,7 @@ use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector;
+use Rector\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector;
 use Rector\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector;
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
 use Rector\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector;
@@ -179,4 +180,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(FlipTypeControlToUseExclusiveTypeRector::class);
     $rectorConfig->rule(ExplicitMethodCallOverMagicGetSetRector::class);
     $rectorConfig->rule(DoWhileBreakFalseToIfElseRector::class);
+    $rectorConfig->rule(InlineArrayReturnAssignRector::class);
 };

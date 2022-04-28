@@ -599,3 +599,4 @@ parameters:
 
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is \d+, keep it under 10#'
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier\:\:narrowToFullyQualifiedOrAliasedObjectType\(\)" is \d+, keep it under 10#'
+        - '#Class "Rector\\CodeQuality\\Rector\\ClassMethod\\InlineArrayReturnAssignRector" has invalid namespace category "ClassMethod"\. Pick one of\: "NodeTypeGroup"#'

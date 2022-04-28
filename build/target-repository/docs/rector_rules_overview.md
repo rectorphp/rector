@@ -1,4 +1,4 @@
-# 512 Rules Overview
+# 513 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (70)
+- [CodeQuality](#codequality) (71)
 
 - [CodingStyle](#codingstyle) (35)
 
@@ -848,6 +848,29 @@ Changes comparison with get_class to instanceof
 ```diff
 -if (EventsListener::class === get_class($event->job)) { }
 +if ($event->job instanceof EventsListener) { }
+```
+
+<br>
+
+### InlineArrayReturnAssignRector
+
+Inline just in time array dim fetch assigns to direct return
+
+- class: [`Rector\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector`](../rules/CodeQuality/Rector/ClassMethod/InlineArrayReturnAssignRector.php)
+
+```diff
+ function getPerson()
+ {
+-    $person = [];
+-    $person['name'] = 'Timmy';
+-    $person['surname'] = 'Back';
+-
+-    return $person;
++    return [
++        'name' => 'Timmy',
++        'surname' => 'Back',
++    ];
+ }
 ```
 
 <br>
