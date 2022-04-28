@@ -217,14 +217,9 @@ final class BetterNodeFinder
      */
     public function findFirstNonAnonymousClass(array $nodes): ?Node
     {
-        return $this->findFirst($nodes, function (Node $node): bool {
-            if (! $node instanceof ClassLike) {
-                return false;
-            }
-
-            // skip anonymous classes
-            return ! ($node instanceof Class_ && $this->classAnalyzer->isAnonymousClass($node));
-        });
+        // skip anonymous classes
+        return $this->findFirst($nodes, fn (Node $node): bool =>
+            $node instanceof Class_ && ! $this->classAnalyzer->isAnonymousClass($node));
     }
 
     /**
