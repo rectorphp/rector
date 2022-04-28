@@ -21,8 +21,6 @@ final class StaticEasyPrefixer
         'Helmich\TypoScriptParser\Parser\Traverser\Traverser',
         // for usage in packages/Testing/PHPUnit/PlatformAgnosticAssertions.php
         'PHPUnit\Framework\Constraint\IsEqual',
-        // part of public API
-        'Symplify\PackageBuilder\Parameter\ParameterProvider',
     ];
 
     /**

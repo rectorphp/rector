@@ -13,10 +13,12 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/src',
     ]);
 
-    $services = $rectorConfig->services();
-    $services->set(RenameClassRector::class)
-        ->configure(['DateTime' => 'DateTimeInterface']);
-    $services->set(DowngradeAttributeToAnnotationRector::class)
-        ->configure([new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route')]);
-    $services->set(RemoveUselessVarTagRector::class);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'DateTime' => 'DateTimeInterface'
+    ]);
+    $rectorConfig->ruleWithConfiguration(DowngradeAttributeToAnnotationRector::class, [
+        new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route')
+    ]);
+
+    $rectorConfig->rule(RemoveUselessVarTagRector::class);
 };

@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurato
 final class RectorServiceConfigurator extends ServiceConfigurator
 {
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig instead
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): self
