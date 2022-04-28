@@ -8,7 +8,7 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class StaticEasyPrefixer
 {
-    /**
+    /**ParameterP
      * @var string[]
      */
     public const EXCLUDED_CLASSES = [
@@ -23,10 +23,12 @@ final class StaticEasyPrefixer
         'Helmich\TypoScriptParser\Parser\Traverser\Traverser',
         // for usage in packages/Testing/PHPUnit/PlatformAgnosticAssertions.php
         'PHPUnit\Framework\Constraint\IsEqual',
+        // part of public API
+        'Symplify\PackageBuilder\Parameter\ParameterProvider',
     ];
 
     /**
-     * @var class-string<ParameterProvider>[]|string[]
+     * @var string[]
      */
     private const EXCLUDED_NAMESPACES = [
         // naturally
@@ -40,7 +42,6 @@ final class StaticEasyPrefixer
 
         // this is public API of a Rector rule
         'Symplify\RuleDocGenerator\*',
-        'Symplify\PackageBuilder\Parameter\ParameterProvider',
     ];
 
     /**
