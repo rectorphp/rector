@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -34,7 +35,8 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
     private array $addParamTypeDeclarations = [];
 
     public function __construct(
-        private readonly TypeComparator $typeComparator
+        private readonly TypeComparator $typeComparator,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

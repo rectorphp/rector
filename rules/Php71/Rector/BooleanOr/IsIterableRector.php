@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Name;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php71\IsArrayAndDualCheckToAble;
@@ -22,7 +23,8 @@ final class IsIterableRector extends AbstractRector implements MinPhpVersionInte
 {
     public function __construct(
         private readonly IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble,
-        private readonly ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

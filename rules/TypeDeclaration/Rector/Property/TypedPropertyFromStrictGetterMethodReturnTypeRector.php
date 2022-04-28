@@ -11,6 +11,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -29,7 +30,8 @@ final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends Abstract
         private readonly GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
         private readonly VarTagRemover $varTagRemover,
-        private readonly ParentPropertyLookupGuard $parentPropertyLookupGuard
+        private readonly ParentPropertyLookupGuard $parentPropertyLookupGuard,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

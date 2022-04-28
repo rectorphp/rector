@@ -13,6 +13,7 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -48,7 +49,8 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements All
         private readonly PropertyTypeDecorator $propertyTypeDecorator,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
         private readonly VarTagRemover $varTagRemover,
-        private readonly MakePropertyTypedGuard $makePropertyTypedGuard
+        private readonly MakePropertyTypedGuard $makePropertyTypedGuard,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\PhpVersionFactory;
 use Rector\Core\ValueObject\PhpVersion;
@@ -28,7 +29,8 @@ final class RemovePhpVersionIdCheckRector extends AbstractRector implements Conf
     private string | int | null $phpVersionConstraint = null;
 
     public function __construct(
-        private readonly PhpVersionFactory $phpVersionFactory
+        private readonly PhpVersionFactory $phpVersionFactory,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

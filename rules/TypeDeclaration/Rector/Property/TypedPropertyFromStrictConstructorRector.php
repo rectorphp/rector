@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -28,7 +29,8 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector
         private readonly ConstructorPropertyTypeInferer $constructorPropertyTypeInferer,
         private readonly VarTagRemover $varTagRemover,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
-        private readonly ConstructorAssignDetector $constructorAssignDetector
+        private readonly ConstructorAssignDetector $constructorAssignDetector,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

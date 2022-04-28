@@ -20,6 +20,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -37,7 +38,8 @@ final class ReturnTypeFromStrictTypedCallRector extends AbstractRector
     public function __construct(
         private readonly TypeNodeUnwrapper $typeNodeUnwrapper,
         private readonly ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer,
-        private readonly ReturnTypeInferer $returnTypeInferer
+        private readonly ReturnTypeInferer $returnTypeInferer,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

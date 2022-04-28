@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -30,7 +31,8 @@ final class ParamAnnotationIncorrectNullableRector extends AbstractRector
         private readonly TypeComparator $typeComparator,
         private readonly PhpDocNullableTypeHelper $phpDocNullableTypeHelper,
         private readonly PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard,
-        private readonly ParamPhpDocNodeFactory $paramPhpDocNodeFactory
+        private readonly ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

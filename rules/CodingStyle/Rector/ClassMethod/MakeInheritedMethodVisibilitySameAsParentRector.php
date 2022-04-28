@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -29,7 +30,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MakeInheritedMethodVisibilitySameAsParentRector extends AbstractRector
 {
     public function __construct(
-        private readonly VisibilityManipulator $visibilityManipulator
+        private readonly VisibilityManipulator $visibilityManipulator,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

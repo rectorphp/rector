@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use PHPStan\Type\NeverType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
@@ -32,7 +33,8 @@ final class ReturnNeverTypeRector extends AbstractRector
 {
     public function __construct(
         private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard,
-        private readonly PhpDocTypeChanger $phpDocTypeChanger
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

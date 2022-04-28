@@ -22,7 +22,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
-use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
@@ -72,8 +71,6 @@ CODE_SAMPLE;
     protected NodeNameResolver $nodeNameResolver;
 
     protected NodeTypeResolver $nodeTypeResolver;
-
-    protected PhpVersionProvider $phpVersionProvider;
 
     protected StaticTypeMapper $staticTypeMapper;
 
@@ -126,7 +123,6 @@ CODE_SAMPLE;
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeFactory $nodeFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        PhpVersionProvider $phpVersionProvider,
         ExclusionManager $exclusionManager,
         StaticTypeMapper $staticTypeMapper,
         CurrentRectorProvider $currentRectorProvider,
@@ -147,7 +143,6 @@ CODE_SAMPLE;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeFactory = $nodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->phpVersionProvider = $phpVersionProvider;
         $this->exclusionManager = $exclusionManager;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->currentRectorProvider = $currentRectorProvider;

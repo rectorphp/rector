@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard;
@@ -27,7 +28,8 @@ final class ReturnAnnotationIncorrectNullableRector extends AbstractRector
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
         private readonly PhpDocNullableTypeHelper $phpDocNullableTypeHelper,
         private readonly ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
-        private readonly PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard
+        private readonly PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

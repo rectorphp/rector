@@ -24,6 +24,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -43,7 +44,8 @@ final class CountOnNullRector extends AbstractRector implements MinPhpVersionInt
     public function __construct(
         private readonly CountableTypeAnalyzer $countableTypeAnalyzer,
         private readonly CountableAnalyzer $countableAnalyzer,
-        private readonly VariableAnalyzer $variableAnalyzer
+        private readonly VariableAnalyzer $variableAnalyzer,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

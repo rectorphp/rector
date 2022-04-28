@@ -16,6 +16,7 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -46,7 +47,8 @@ final class ReturnTypeDeclarationRector extends AbstractRector implements MinPhp
         private readonly ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
         private readonly VendorLockResolver $vendorLockResolver,
         private readonly PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
-        private readonly ObjectTypeComparator $objectTypeComparator
+        private readonly ObjectTypeComparator $objectTypeComparator,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

@@ -11,6 +11,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard;
@@ -26,7 +27,8 @@ final class VarAnnotationIncorrectNullableRector extends AbstractRector
     public function __construct(
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
         private readonly PhpDocNullableTypeHelper $phpDocNullableTypeHelper,
-        private readonly PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard
+        private readonly PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

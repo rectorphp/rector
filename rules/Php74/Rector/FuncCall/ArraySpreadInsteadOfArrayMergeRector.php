@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
@@ -31,7 +32,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private readonly ArrayTypeAnalyzer $arrayTypeAnalyzer
+        private readonly ArrayTypeAnalyzer $arrayTypeAnalyzer,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

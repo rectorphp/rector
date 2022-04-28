@@ -20,6 +20,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeFactory\AttrGroupsFactory;
@@ -55,7 +56,8 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
         private readonly PhpDocNodeFinder $phpDocNodeFinder,
         private readonly UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer,
         private readonly RemovableAnnotationAnalyzer $removableAnnotationAnalyzer,
-        private readonly AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator
+        private readonly AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 
