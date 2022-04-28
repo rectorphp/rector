@@ -18,6 +18,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
+use RectorPrefix20220428\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220428\Webmozart\Assert\Assert;
@@ -36,10 +37,16 @@ final class RenameClassRector extends \Rector\Core\Rector\AbstractRector impleme
      * @var \Rector\Renaming\NodeManipulator\ClassRenamer
      */
     private $classRenamer;
-    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\Renaming\NodeManipulator\ClassRenamer $classRenamer)
+    /**
+     * @readonly
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     */
+    private $parameterProvider;
+    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\Renaming\NodeManipulator\ClassRenamer $classRenamer, \RectorPrefix20220428\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->classRenamer = $classRenamer;
+        $this->parameterProvider = $parameterProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -39,7 +39,6 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20220428\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20220428\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix20220428\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20220428\Symplify\Skipper\Skipper\Skipper;
 abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements \Rector\Core\Contract\Rector\PhpRectorInterface
 {
@@ -70,10 +69,6 @@ CODE_SAMPLE;
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     protected $nodeTypeResolver;
-    /**
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
-     */
-    protected $parameterProvider;
     /**
      * @var \Rector\Core\Php\PhpVersionProvider
      */
@@ -157,7 +152,7 @@ CODE_SAMPLE;
     /**
      * @required
      */
-    public function autowire(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20220428\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20220428\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20220428\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\ProcessAnalyzer\RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Core\NodeDecorator\CreatedByRuleDecorator $createdByRuleDecorator) : void
+    public function autowire(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20220428\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20220428\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\ProcessAnalyzer\RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Core\NodeDecorator\CreatedByRuleDecorator $createdByRuleDecorator) : void
     {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
@@ -170,7 +165,6 @@ CODE_SAMPLE;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->exclusionManager = $exclusionManager;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
