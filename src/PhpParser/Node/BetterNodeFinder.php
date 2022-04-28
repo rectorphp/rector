@@ -216,12 +216,9 @@ final class BetterNodeFinder
      */
     public function findFirstNonAnonymousClass(array $nodes) : ?\PhpParser\Node
     {
+        // skip anonymous classes
         return $this->findFirst($nodes, function (\PhpParser\Node $node) : bool {
-            if (!$node instanceof \PhpParser\Node\Stmt\ClassLike) {
-                return \false;
-            }
-            // skip anonymous classes
-            return !($node instanceof \PhpParser\Node\Stmt\Class_ && $this->classAnalyzer->isAnonymousClass($node));
+            return $node instanceof \PhpParser\Node\Stmt\Class_ && !$this->classAnalyzer->isAnonymousClass($node);
         });
     }
     /**
