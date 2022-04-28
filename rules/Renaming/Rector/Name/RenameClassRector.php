@@ -12,13 +12,12 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
-use RectorPrefix20220428\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220428\Webmozart\Assert\Assert;
@@ -39,14 +38,14 @@ final class RenameClassRector extends \Rector\Core\Rector\AbstractRector impleme
     private $classRenamer;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \Rector\Core\Configuration\RectorConfigProvider
      */
-    private $parameterProvider;
-    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\Renaming\NodeManipulator\ClassRenamer $classRenamer, \RectorPrefix20220428\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    private $rectorConfigProvider;
+    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\Renaming\NodeManipulator\ClassRenamer $classRenamer, \Rector\Core\Configuration\RectorConfigProvider $rectorConfigProvider)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->classRenamer = $classRenamer;
-        $this->parameterProvider = $parameterProvider;
+        $this->rectorConfigProvider = $rectorConfigProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -92,7 +91,7 @@ CODE_SAMPLE
         if (!$node instanceof \PhpParser\Node\Stmt\Use_) {
             return $this->classRenamer->renameNode($node, $oldToNewClasses, $this->file);
         }
-        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES)) {
+        if (!$this->rectorConfigProvider->shouldImportNames()) {
             return null;
         }
         return $this->processCleanUpUse($node, $oldToNewClasses);

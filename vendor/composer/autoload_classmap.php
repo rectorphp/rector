@@ -1646,6 +1646,7 @@ return array(
     'Rector\\Core\\Configuration\\ConfigurationFactory' => $baseDir . '/src/Configuration/ConfigurationFactory.php',
     'Rector\\Core\\Configuration\\CurrentNodeProvider' => $baseDir . '/src/Configuration/CurrentNodeProvider.php',
     'Rector\\Core\\Configuration\\Option' => $baseDir . '/src/Configuration/Option.php',
+    'Rector\\Core\\Configuration\\RectorConfigProvider' => $baseDir . '/src/Configuration/RectorConfigProvider.php',
     'Rector\\Core\\Configuration\\RenamedClassesDataCollector' => $baseDir . '/src/Configuration/RenamedClassesDataCollector.php',
     'Rector\\Core\\Configuration\\ValueObjectInliner' => $baseDir . '/src/Configuration/ValueObjectInliner.php',
     'Rector\\Core\\Console\\Command\\AbstractProcessCommand' => $baseDir . '/src/Console/Command/AbstractProcessCommand.php',

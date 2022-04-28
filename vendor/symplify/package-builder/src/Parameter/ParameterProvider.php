@@ -92,8 +92,3 @@ final class ParameterProvider
         throw new \RectorPrefix20220428\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException($name);
     }
 }
-/**
- * @api
- * @see \Symplify\PackageBuilder\Tests\Parameter\ParameterProviderTest
- */
-\class_alias('RectorPrefix20220428\\Symplify\\PackageBuilder\\Parameter\\ParameterProvider', 'Symplify\\PackageBuilder\\Parameter\\ParameterProvider', \false);
