@@ -186,16 +186,19 @@ final class Option
     public const PARALLEL_PORT = 'port';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::parallel() instead with pass int $jobSize parameter
      * @var string
      */
     public const PARALLEL_JOB_SIZE = 'parallel-job-size';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::parallel() instead with pass int $maxNumberOfProcess parameter
      * @var string
      */
     public const PARALLEL_MAX_NUMBER_OF_PROCESSES = 'parallel-max-number-of-processes';
 
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::parallel() instead with pass int $seconds parameter
      * @var string
      */
     public const PARALLEL_TIMEOUT_IN_SECONDS = 'parallel-timeout-in-seconds';
