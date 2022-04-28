@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use Rector\Core\Rector\AbstractRector;
@@ -51,8 +52,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
+     * @return \PhpParser\Node\Stmt\If_|null|mixed[]
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node)
     {
         if ($node->else !== null) {
             return null;
@@ -68,10 +70,10 @@ CODE_SAMPLE
         if (!$conditionStaticType->getValue()) {
             return null;
         }
-        if (\count($node->stmts) !== 1) {
-            // unable to handle now
-            return null;
+        if ($node->stmts === []) {
+            $this->removeNode($node);
+            return $node;
         }
-        return $node->stmts[0];
+        return $node->stmts;
     }
 }
