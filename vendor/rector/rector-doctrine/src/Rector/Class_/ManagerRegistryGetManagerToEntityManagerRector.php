@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -51,11 +52,17 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends \Rector\Core\
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    public function __construct(\Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver $methodCallNameOnTypeResolver, \Rector\Doctrine\NodeManipulator\DependencyRemover $dependencyRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver $methodCallNameOnTypeResolver, \Rector\Doctrine\NodeManipulator\DependencyRemover $dependencyRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->methodCallNameOnTypeResolver = $methodCallNameOnTypeResolver;
         $this->dependencyRemover = $dependencyRemover;
         $this->propertyToAddCollector = $propertyToAddCollector;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

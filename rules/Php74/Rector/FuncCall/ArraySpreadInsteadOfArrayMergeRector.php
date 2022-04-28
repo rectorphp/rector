@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
@@ -33,9 +34,15 @@ final class ArraySpreadInsteadOfArrayMergeRector extends \Rector\Core\Rector\Abs
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
-    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

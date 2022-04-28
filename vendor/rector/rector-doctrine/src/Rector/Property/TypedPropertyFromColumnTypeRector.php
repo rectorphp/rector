@@ -10,6 +10,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver;
@@ -43,12 +44,18 @@ final class TypedPropertyFromColumnTypeRector extends \Rector\Core\Rector\Abstra
      * @var \Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver
      */
     private $nullabilityColumnPropertyTypeResolver;
-    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver $columnPropertyTypeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver $columnPropertyTypeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
         $this->columnPropertyTypeResolver = $columnPropertyTypeResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->nullabilityColumnPropertyTypeResolver = $nullabilityColumnPropertyTypeResolver;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

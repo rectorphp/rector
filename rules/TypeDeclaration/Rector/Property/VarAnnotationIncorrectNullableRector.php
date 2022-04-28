@@ -10,6 +10,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard;
@@ -36,11 +37,17 @@ final class VarAnnotationIncorrectNullableRector extends \Rector\Core\Rector\Abs
      * @var \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard
      */
     private $phpDocNestedAnnotationGuard;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper $phpDocNullableTypeHelper, \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper $phpDocNullableTypeHelper, \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocNullableTypeHelper = $phpDocNullableTypeHelper;
         $this->phpDocNestedAnnotationGuard = $phpDocNestedAnnotationGuard;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -23,6 +23,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -53,11 +54,17 @@ final class CountOnNullRector extends \Rector\Core\Rector\AbstractRector impleme
      * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
      */
     private $variableAnalyzer;
-    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer $countableTypeAnalyzer, \Rector\Php71\NodeAnalyzer\CountableAnalyzer $countableAnalyzer, \Rector\Core\NodeAnalyzer\VariableAnalyzer $variableAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer $countableTypeAnalyzer, \Rector\Php71\NodeAnalyzer\CountableAnalyzer $countableAnalyzer, \Rector\Core\NodeAnalyzer\VariableAnalyzer $variableAnalyzer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->countableTypeAnalyzer = $countableTypeAnalyzer;
         $this->countableAnalyzer = $countableAnalyzer;
         $this->variableAnalyzer = $variableAnalyzer;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function provideMinPhpVersion() : int
     {

@@ -9,6 +9,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Doctrine\NodeManipulator\ToManyRelationPropertyTypeResolver;
@@ -36,11 +37,17 @@ final class TypedPropertyFromToManyRelationTypeRector extends \Rector\Core\Recto
      * @var \Rector\Doctrine\NodeManipulator\ToManyRelationPropertyTypeResolver
      */
     private $toManyRelationPropertyTypeResolver;
-    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\NodeManipulator\ToManyRelationPropertyTypeResolver $toManyRelationPropertyTypeResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\NodeManipulator\ToManyRelationPropertyTypeResolver $toManyRelationPropertyTypeResolver, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->toManyRelationPropertyTypeResolver = $toManyRelationPropertyTypeResolver;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -42,12 +43,18 @@ final class MoveInjectToExistingConstructorRector extends \Rector\Core\Rector\Ab
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->visibilityManipulator = $visibilityManipulator;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

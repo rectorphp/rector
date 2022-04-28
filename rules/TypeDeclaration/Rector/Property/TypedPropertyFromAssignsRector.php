@@ -12,6 +12,7 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -65,13 +66,19 @@ final class TypedPropertyFromAssignsRector extends \Rector\Core\Rector\AbstractR
      * @var \Rector\Php74\Guard\MakePropertyTypedGuard
      */
     private $makePropertyTypedGuard;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, \Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Php74\Guard\MakePropertyTypedGuard $makePropertyTypedGuard)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, \Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Php74\Guard\MakePropertyTypedGuard $makePropertyTypedGuard, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->allAssignNodePropertyTypeInferer = $allAssignNodePropertyTypeInferer;
         $this->propertyTypeDecorator = $propertyTypeDecorator;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->varTagRemover = $varTagRemover;
         $this->makePropertyTypedGuard = $makePropertyTypedGuard;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function configure(array $configuration) : void
     {

@@ -19,6 +19,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -47,11 +48,17 @@ final class ReturnTypeFromStrictTypedCallRector extends \Rector\Core\Rector\Abst
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
-    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, \Rector\TypeDeclaration\NodeAnalyzer\ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, \Rector\TypeDeclaration\NodeAnalyzer\ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->typeNodeUnwrapper = $typeNodeUnwrapper;
         $this->returnStrictTypeAnalyzer = $returnStrictTypeAnalyzer;
         $this->returnTypeInferer = $returnTypeInferer;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -9,6 +9,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -31,9 +32,15 @@ final class AddReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractR
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
-    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->typeComparator = $typeComparator;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -11,6 +11,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -38,11 +39,17 @@ final class PropertyTypeDeclarationRector extends \Rector\Core\Rector\AbstractRe
      * @var \Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard
      */
     private $propertyTypeOverrideGuard;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard $propertyTypeOverrideGuard)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard $propertyTypeOverrideGuard, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->propertyTypeOverrideGuard = $propertyTypeOverrideGuard;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

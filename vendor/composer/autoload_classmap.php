@@ -2533,6 +2533,7 @@ return array(
     'Rector\\PHPUnit\\Rector\\MethodCall\\ExplicitPhpErrorApiRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/ExplicitPhpErrorApiRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\GetMockBuilderGetMockToCreateMockRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\RemoveExpectAnyFromMockRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/RemoveExpectAnyFromMockRector.php',
+    'Rector\\PHPUnit\\Rector\\MethodCall\\RemoveSetMethodsMethodCallRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\ReplaceAssertArraySubsetWithDmsPolyfillRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/ReplaceAssertArraySubsetWithDmsPolyfillRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\SpecificAssertContainsRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/SpecificAssertContainsRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\SpecificAssertContainsWithoutIdentityRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector.php',

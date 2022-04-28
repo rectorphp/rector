@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticIniteae54a7d6e15d307b7ed9df50f7fc7a4
+class ComposerStaticInitbaed1963ecee0f333bc5667aff544aba
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2902,6 +2902,7 @@ class ComposerStaticIniteae54a7d6e15d307b7ed9df50f7fc7a4
         'Rector\\PHPUnit\\Rector\\MethodCall\\ExplicitPhpErrorApiRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/ExplicitPhpErrorApiRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\GetMockBuilderGetMockToCreateMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\RemoveExpectAnyFromMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/RemoveExpectAnyFromMockRector.php',
+        'Rector\\PHPUnit\\Rector\\MethodCall\\RemoveSetMethodsMethodCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\ReplaceAssertArraySubsetWithDmsPolyfillRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/ReplaceAssertArraySubsetWithDmsPolyfillRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\SpecificAssertContainsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/SpecificAssertContainsRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\SpecificAssertContainsWithoutIdentityRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector.php',
@@ -3879,9 +3880,9 @@ class ComposerStaticIniteae54a7d6e15d307b7ed9df50f7fc7a4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticIniteae54a7d6e15d307b7ed9df50f7fc7a4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticIniteae54a7d6e15d307b7ed9df50f7fc7a4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticIniteae54a7d6e15d307b7ed9df50f7fc7a4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbaed1963ecee0f333bc5667aff544aba::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbaed1963ecee0f333bc5667aff544aba::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbaed1963ecee0f333bc5667aff544aba::$classMap;
 
         }, null, ClassLoader::class);
     }

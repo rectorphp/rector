@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\PhpVersionFactory;
 use Rector\Core\ValueObject\PhpVersion;
@@ -32,9 +33,15 @@ final class RemovePhpVersionIdCheckRector extends \Rector\Core\Rector\AbstractRe
      * @var \Rector\Core\Util\PhpVersionFactory
      */
     private $phpVersionFactory;
-    public function __construct(\Rector\Core\Util\PhpVersionFactory $phpVersionFactory)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\Core\Util\PhpVersionFactory $phpVersionFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionFactory = $phpVersionFactory;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     /**
      * @param mixed[] $configuration

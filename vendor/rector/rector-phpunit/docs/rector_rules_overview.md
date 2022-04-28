@@ -1,4 +1,4 @@
-# 38 Rules Overview
+# 39 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -78,25 +78,12 @@ Move array argument from tests into data provider [configurable]
 - class: [`Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector`](../src/Rector/Class_/ArrayArgumentToDataProviderRector.php)
 
 ```php
+use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $rectorConfig->rule(ArrayArgumentToDataProviderRector::class)
-        ->call('configure', [[
-            ArrayArgumentToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => ValueObjectInliner::inline([
-                new ArrayArgumentToDataProvider(
-                    'PHPUnit\Framework\TestCase',
-                    'doTestMultiple',
-                    'doTestSingle',
-                    'number'
-                ),
-            ]),
-        ]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ArrayArgumentToDataProviderRector::class, [Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS: [new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number')]]);
 };
 ```
 
@@ -658,6 +645,28 @@ Remove `expect($this->any())` from mocks as it has no added value
 
 <br>
 
+## RemoveSetMethodsMethodCallRector
+
+Remove `"setMethods()"` method as never used
+
+- class: [`Rector\PHPUnit\Rector\MethodCall\RemoveSetMethodsMethodCallRector`](../src/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+     public function test()
+     {
+         $someMock = $this->getMockBuilder(SomeClass::class)
+-            ->setMethods(['run'])
+             ->getMock();
+     }
+ }
+```
+
+<br>
+
 ## ReplaceAssertArraySubsetWithDmsPolyfillRector
 
 Change `assertArraySubset()` to static call of DMS\PHPUnitExtensions\ArraySubset\Assert
@@ -676,6 +685,28 @@ Change `assertArraySubset()` to static call of DMS\PHPUnitExtensions\ArraySubset
 
 -        $this->assertArraySubset(['bar' => 0], ['bar' => '0'], true);
 +        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset(['bar' => 0], ['bar' => '0'], true);
+     }
+ }
+```
+
+<br>
+
+## ReplaceTestAnnotationWithPrefixedFunctionRector
+
+Replace `@test` with prefixed function
+
+- class: [`Rector\PHPUnit\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector`](../src/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php)
+
+```diff
+ class SomeTest extends \PHPUnit\Framework\TestCase
+ {
+-    /**
+-     * @test
+-     */
+-    public function onePlusOneShouldBeTwo()
++    public function testOnePlusOneShouldBeTwo()
+     {
+         $this->assertSame(2, 1+1);
      }
  }
 ```
@@ -863,36 +894,6 @@ Changes `->will($this->xxx())` to one specific method
 -            ->will($this->returnValue('translated max {{ max }}!'));
 +            ->with('old max {{ max }}!')
 +            ->willReturnValue('translated max {{ max }}!');
-     }
- }
-```
-
-<br>
-
-## WithConsecutiveArgToArrayRector
-
-Split `withConsecutive()` arg to array
-
-- class: [`Rector\PHPUnit\Rector\MethodCall\WithConsecutiveArgToArrayRector`](../src/Rector/MethodCall/WithConsecutiveArgToArrayRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($one, $two)
-     {
-     }
- }
-
- class SomeTestCase extends \PHPUnit\Framework\TestCase
- {
-     public function test()
-     {
-         $someClassMock = $this->createMock(SomeClass::class);
-         $someClassMock
-             ->expects($this->exactly(2))
-             ->method('run')
--            ->withConsecutive(1, 2, 3, 5);
-+            ->withConsecutive([1, 2], [3, 5]);
      }
  }
 ```

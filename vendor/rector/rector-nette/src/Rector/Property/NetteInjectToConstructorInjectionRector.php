@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Nette\NodeAnalyzer\NetteInjectPropertyAnalyzer;
@@ -52,13 +53,19 @@ final class NetteInjectToConstructorInjectionRector extends \Rector\Core\Rector\
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\Nette\NodeAnalyzer\NetteInjectPropertyAnalyzer $netteInjectPropertyAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\Nette\NodeAnalyzer\NetteInjectPropertyAnalyzer $netteInjectPropertyAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->netteInjectPropertyAnalyzer = $netteInjectPropertyAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->visibilityManipulator = $visibilityManipulator;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

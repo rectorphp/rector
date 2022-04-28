@@ -18,10 +18,12 @@ To add a set to your config, use `Rector\Nette\Set\NetteSetList` class and pick 
 
 ```php
 use Rector\Nette\Set\NetteSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(NetteSetList::NETTE_24);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([
+        NetteSetList::NETTE_24,
+    ]);
 };
 ```
 

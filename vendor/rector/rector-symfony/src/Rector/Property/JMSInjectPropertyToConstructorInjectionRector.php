@@ -9,6 +9,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator;
@@ -38,10 +39,16 @@ final class JMSInjectPropertyToConstructorInjectionRector extends \Rector\Core\R
      * @var \Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator
      */
     private $propertyConstructorInjectionManipulator;
-    public function __construct(\Rector\Symfony\TypeAnalyzer\JMSDITypeResolver $jmsDITypeResolver, \Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\Symfony\TypeAnalyzer\JMSDITypeResolver $jmsDITypeResolver, \Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->jmsDITypeResolver = $jmsDITypeResolver;
         $this->propertyConstructorInjectionManipulator = $propertyConstructorInjectionManipulator;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

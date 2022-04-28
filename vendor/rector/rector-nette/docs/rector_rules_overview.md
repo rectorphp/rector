@@ -1,4 +1,4 @@
-# 37 Rules Overview
+# 38 Rules Overview
 
 ## AddNextrasDatePickerToDateControlRector
 
@@ -247,17 +247,11 @@ Create form data class with all fields of Form
 - class: [`Rector\Nette\Rector\Class_\FormDataRector`](../src/Rector/Class_/FormDataRector.php)
 
 ```php
+use Rector\Config\RectorConfig;
 use Rector\Nette\Rector\Class_\FormDataRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(FormDataRector::class)
-->configure([
-            FormDataRector::FORM_DATA_CLASS_PARENT => '',
-            FormDataRector::FORM_DATA_CLASS_TRAITS => [],
-        ]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(FormDataRector::class, [Rector\Nette\Rector\Class_\FormDataRector::FORM_DATA_CLASS_PARENT: '', Rector\Nette\Rector\Class_\FormDataRector::FORM_DATA_CLASS_TRAITS: []]);
 };
 ```
 
@@ -633,6 +627,29 @@ Renames method calls in NEON configs
 
 <br>
 
+## RenderMethodParamToTypeDeclarationRector
+
+Move `@param` declarations on `render()` method in Nette components and presenter to strict type declarations
+
+- class: [`Rector\Nette\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector`](../src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php)
+
+```diff
+ use Nette\Application\UI\Control;
+
+ final class SomeControl extends Control
+ {
+-    /**
+-     * @param string $name
+-     */
+-    public function render($name)
++    public function render(string $name)
+     {
+     }
+ }
+```
+
+<br>
+
 ## ReplaceEventManagerWithEventSubscriberRector
 
 Change Kdyby EventManager to EventDispatcher
@@ -834,17 +851,11 @@ Creates Template class and adds latte {templateType} based on presenter `$this->
 - class: [`Rector\Nette\Rector\Class_\TemplateTypeBasedOnPresenterTemplateParametersRector`](../src/Rector/Class_/TemplateTypeBasedOnPresenterTemplateParametersRector.php)
 
 ```php
+use Rector\Config\RectorConfig;
 use Rector\Nette\Rector\Class_\TemplateTypeBasedOnPresenterTemplateParametersRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(TemplateTypeBasedOnPresenterTemplateParametersRector::class)
-->configure([
-            TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_PARENT => '',
-            TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_TRAITS => [],
-        ]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(TemplateTypeBasedOnPresenterTemplateParametersRector::class, [Rector\Nette\Rector\Class_\TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_PARENT: '', Rector\Nette\Rector\Class_\TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_TRAITS: []]);
 };
 ```
 

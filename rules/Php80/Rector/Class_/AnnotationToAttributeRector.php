@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeFactory\AttrGroupsFactory;
@@ -80,7 +81,12 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\Php80\NodeManipulator\AttributeGroupNamedArgumentManipulator
      */
     private $attributeGroupNamedArgumentManipulator;
-    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\PhpDoc\PhpDocNodeFinder $phpDocNodeFinder, \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer, \Rector\PhpAttribute\RemovableAnnotationAnalyzer $removableAnnotationAnalyzer, \Rector\Php80\NodeManipulator\AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\PhpDoc\PhpDocNodeFinder $phpDocNodeFinder, \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer, \Rector\PhpAttribute\RemovableAnnotationAnalyzer $removableAnnotationAnalyzer, \Rector\Php80\NodeManipulator\AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->attrGroupsFactory = $attrGroupsFactory;
@@ -89,6 +95,7 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
         $this->unwrapableAnnotationAnalyzer = $unwrapableAnnotationAnalyzer;
         $this->removableAnnotationAnalyzer = $removableAnnotationAnalyzer;
         $this->attributeGroupNamedArgumentManipulator = $attributeGroupNamedArgumentManipulator;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

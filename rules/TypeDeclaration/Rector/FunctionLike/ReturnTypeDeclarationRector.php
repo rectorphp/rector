@@ -15,6 +15,7 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -72,7 +73,12 @@ final class ReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator
      */
     private $objectTypeComparator;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker, \Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover $nonInformativeReturnTagRemover, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\PhpParserTypeAnalyzer $phpParserTypeAnalyzer, \Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator $objectTypeComparator)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker, \Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover $nonInformativeReturnTagRemover, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\PhpParserTypeAnalyzer $phpParserTypeAnalyzer, \Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator $objectTypeComparator, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
@@ -81,6 +87,7 @@ final class ReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractRect
         $this->vendorLockResolver = $vendorLockResolver;
         $this->phpParserTypeAnalyzer = $phpParserTypeAnalyzer;
         $this->objectTypeComparator = $objectTypeComparator;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     /**
      * @return array<class-string<Node>>
