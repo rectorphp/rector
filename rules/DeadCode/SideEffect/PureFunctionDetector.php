@@ -112,7 +112,7 @@ final class PureFunctionDetector
         'json_encode', 'json_decode', 'json_last_error',
 
         // array
-        'array_pop', 'array_push', 'array_shift', 'next', 'prev',
+        'array_pop', 'array_push', 'array_shift', 'array_splice', 'next', 'prev',
 
         // stream
         'stream_filter_append',
