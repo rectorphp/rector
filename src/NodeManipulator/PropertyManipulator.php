@@ -25,6 +25,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Unset_;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -265,17 +266,15 @@ final class PropertyManipulator
         }
         return null;
     }
-    public function isUsedByTrait(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : bool
+    public function isUsedByTrait(\PHPStan\Reflection\ClassReflection $classReflection, string $propertyName) : bool
     {
-        foreach ($class->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $traitName) {
-                $trait = $this->astResolver->resolveClassFromName($traitName->toString());
-                if (!$trait instanceof \PhpParser\Node\Stmt\Trait_) {
-                    continue;
-                }
-                if ($this->propertyFetchAnalyzer->containsLocalPropertyFetchName($trait, $propertyName)) {
-                    return \true;
-                }
+        foreach ($classReflection->getTraits() as $traitUse) {
+            $trait = $this->astResolver->resolveClassFromName($traitUse->getName());
+            if (!$trait instanceof \PhpParser\Node\Stmt\Trait_) {
+                continue;
+            }
+            if ($this->propertyFetchAnalyzer->containsLocalPropertyFetchName($trait, $propertyName)) {
+                return \true;
             }
         }
         return \false;

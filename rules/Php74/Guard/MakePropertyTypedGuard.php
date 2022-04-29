@@ -3,23 +3,16 @@
 declare (strict_types=1);
 namespace Rector\Php74\Guard;
 
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeManipulator\PropertyManipulator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\Guard\ParentPropertyLookupGuard;
 final class MakePropertyTypedGuard
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
     /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -40,9 +33,8 @@ final class MakePropertyTypedGuard
      * @var \Rector\Privatization\Guard\ParentPropertyLookupGuard
      */
     private $parentPropertyLookupGuard;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Privatization\Guard\ParentPropertyLookupGuard $parentPropertyLookupGuard)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Privatization\Guard\ParentPropertyLookupGuard $parentPropertyLookupGuard)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyAnalyzer = $propertyAnalyzer;
         $this->propertyManipulator = $propertyManipulator;
@@ -68,12 +60,11 @@ final class MakePropertyTypedGuard
          * - trait properties are unpredictable based on class context they appear in
          * - on interface properties as well, as interface not allowed to have property
          */
-        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$classReflection->isClass()) {
             return \false;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
-        if ($this->propertyManipulator->isUsedByTrait($class, $propertyName)) {
+        if ($this->propertyManipulator->isUsedByTrait($classReflection, $propertyName)) {
             return \false;
         }
         if ($inlinePublic) {
@@ -82,14 +73,14 @@ final class MakePropertyTypedGuard
         if ($property->isPrivate()) {
             return !$this->propertyAnalyzer->hasForbiddenType($property);
         }
-        return $this->isSafeProtectedProperty($property, $class);
+        return $this->isSafeProtectedProperty($property, $classReflection);
     }
-    private function isSafeProtectedProperty(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Stmt\Class_ $class) : bool
+    private function isSafeProtectedProperty(\PhpParser\Node\Stmt\Property $property, \PHPStan\Reflection\ClassReflection $classReflection) : bool
     {
         if (!$property->isProtected()) {
             return \false;
         }
-        if (!$class->isFinal()) {
+        if (!$classReflection->isFinal()) {
             return \false;
         }
         return $this->parentPropertyLookupGuard->isLegal($property);

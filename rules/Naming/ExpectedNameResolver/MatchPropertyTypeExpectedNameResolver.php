@@ -5,9 +5,11 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -38,13 +40,19 @@ final class MatchPropertyTypeExpectedNameResolver
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->propertyNaming = $propertyNaming;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->propertyManipulator = $propertyManipulator;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function resolve(\PhpParser\Node\Stmt\Property $property) : ?string
     {
@@ -52,8 +60,12 @@ final class MatchPropertyTypeExpectedNameResolver
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($property);
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            return null;
+        }
         $propertyName = $this->nodeNameResolver->getName($property);
-        if ($this->propertyManipulator->isUsedByTrait($class, $propertyName)) {
+        if ($this->propertyManipulator->isUsedByTrait($classReflection, $propertyName)) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
