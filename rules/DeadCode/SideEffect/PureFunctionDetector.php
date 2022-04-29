@@ -219,6 +219,7 @@ final class PureFunctionDetector
         'array_pop',
         'array_push',
         'array_shift',
+        'array_splice',
         'next',
         'prev',
         // stream
