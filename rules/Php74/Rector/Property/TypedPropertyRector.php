@@ -47,7 +47,7 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
      * Default to false, which only apply changes:
      *
      *  – private modifier property
-     *  - protected modifier property on final class without extends
+     *  - protected modifier property on final class without extends or has extends but property and/or its usage only in current class
      *
      * Set to true will allow change other modifiers as well as far as not forbidden, eg: callable type, null type, etc.
      * @var bool
