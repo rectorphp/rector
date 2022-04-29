@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220428;
+namespace RectorPrefix20220429;
 
 use Rector\Config\RectorConfig;
 // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/

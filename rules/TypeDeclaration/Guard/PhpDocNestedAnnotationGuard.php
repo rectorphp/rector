@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Guard;
 
-use RectorPrefix20220428\Nette\Utils\Strings;
+use RectorPrefix20220429\Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -48,8 +48,8 @@ final class PhpDocNestedAnnotationGuard
     }
     public function hasAnnotationCountChanged(string $originalPhpDocText, string $updatedPhpDocText) : bool
     {
-        $originalAnnotationCount = \count(\RectorPrefix20220428\Nette\Utils\Strings::matchAll($originalPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
-        $reconstructedAnnotationCount = \count(\RectorPrefix20220428\Nette\Utils\Strings::matchAll($updatedPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
+        $originalAnnotationCount = \count(\RectorPrefix20220429\Nette\Utils\Strings::matchAll($originalPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
+        $reconstructedAnnotationCount = \count(\RectorPrefix20220429\Nette\Utils\Strings::matchAll($updatedPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
         return $originalAnnotationCount !== $reconstructedAnnotationCount;
     }
 }

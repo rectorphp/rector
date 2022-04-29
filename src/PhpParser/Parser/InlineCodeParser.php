@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\Parser;
 
-use RectorPrefix20220428\Nette\Utils\Strings;
+use RectorPrefix20220429\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -17,7 +17,7 @@ use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use RectorPrefix20220428\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220429\Symplify\SmartFileSystem\SmartFileSystem;
 final class InlineCodeParser
 {
     /**
@@ -60,7 +60,7 @@ final class InlineCodeParser
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \RectorPrefix20220428\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \RectorPrefix20220429\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->nodePrinter = $nodePrinter;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
@@ -91,9 +91,9 @@ final class InlineCodeParser
             // remove "
             $expr = \trim($this->nodePrinter->print($expr), '""');
             // use \$ → $
-            $expr = \RectorPrefix20220428\Nette\Utils\Strings::replace($expr, self::PRESLASHED_DOLLAR_REGEX, '$');
+            $expr = \RectorPrefix20220429\Nette\Utils\Strings::replace($expr, self::PRESLASHED_DOLLAR_REGEX, '$');
             // use \'{$...}\' → $...
-            return \RectorPrefix20220428\Nette\Utils\Strings::replace($expr, self::CURLY_BRACKET_WRAPPER_REGEX, '$1');
+            return \RectorPrefix20220429\Nette\Utils\Strings::replace($expr, self::CURLY_BRACKET_WRAPPER_REGEX, '$1');
         }
         if ($expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             return $this->stringify($expr->left) . $this->stringify($expr->right);

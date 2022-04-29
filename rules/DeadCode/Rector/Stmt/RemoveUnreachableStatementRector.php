@@ -93,7 +93,6 @@ CODE_SAMPLE
      */
     private function processCleanUpUnreachabelStmts(array $stmts) : array
     {
-        $originalStmts = $stmts;
         foreach ($stmts as $key => $stmt) {
             if (!isset($stmts[$key - 1])) {
                 continue;
@@ -103,15 +102,11 @@ CODE_SAMPLE
             }
             $previousStmt = $stmts[$key - 1];
             if ($this->shouldRemove($previousStmt, $stmt)) {
-                unset($stmts[$key]);
-                break;
+                \array_splice($stmts, $key);
+                return $stmts;
             }
         }
-        if ($originalStmts === $stmts) {
-            return $originalStmts;
-        }
-        $stmts = \array_values($stmts);
-        return $this->processCleanUpUnreachabelStmts($stmts);
+        return $stmts;
     }
     private function shouldRemove(\PhpParser\Node\Stmt $previousStmt, \PhpParser\Node\Stmt $currentStmt) : bool
     {

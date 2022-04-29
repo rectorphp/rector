@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\Class_;
 
-use RectorPrefix20220428\Nette\Utils\Strings;
+use RectorPrefix20220429\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -21,7 +21,7 @@ use Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory;
 use Rector\Nette\ValueObject\LatteVariableType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220428\Webmozart\Assert\Assert;
+use RectorPrefix20220429\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Nette\Tests\Rector\Class_\TemplateTypeBasedOnPresenterTemplateParametersRector\TemplateTypeBasedOnPresenterTemplateParametersRectorTest
  */
@@ -124,12 +124,12 @@ CODE_SAMPLE
     {
         if (isset($configuration[self::TEMPLATE_CLASS_PARENT])) {
             $templateClassParent = $configuration[self::TEMPLATE_CLASS_PARENT];
-            \RectorPrefix20220428\Webmozart\Assert\Assert::string($templateClassParent);
+            \RectorPrefix20220429\Webmozart\Assert\Assert::string($templateClassParent);
             $this->templateClassParent = $templateClassParent;
         }
         if (isset($configuration[self::TEMPLATE_CLASS_TRAITS])) {
             $templateClassTraits = $configuration[self::TEMPLATE_CLASS_TRAITS];
-            \RectorPrefix20220428\Webmozart\Assert\Assert::isArray($templateClassTraits);
+            \RectorPrefix20220429\Webmozart\Assert\Assert::isArray($templateClassTraits);
             $this->templateClassTraits = $templateClassTraits;
         }
     }
@@ -228,7 +228,7 @@ CODE_SAMPLE
         $upperCasedActionName = \ucfirst($actionName);
         $templateClassName = $presenterName . $upperCasedActionName . 'Template';
         $presenterPattern = '#Presenter$#';
-        $fullTemplateClassName = '\\' . \RectorPrefix20220428\Nette\Utils\Strings::replace($fullPresenterName, $presenterPattern, $upperCasedActionName . 'Template');
+        $fullTemplateClassName = '\\' . \RectorPrefix20220429\Nette\Utils\Strings::replace($fullPresenterName, $presenterPattern, $upperCasedActionName . 'Template');
         $templateClass = $this->classWithPublicPropertiesFactory->createNode($fullTemplateClassName, $properties, $this->templateClassParent, $this->templateClassTraits);
         $printedClassContent = "<?php\n\n" . $this->nodePrinter->print($templateClass) . "\n";
         $smartFileInfo = $this->file->getSmartFileInfo();

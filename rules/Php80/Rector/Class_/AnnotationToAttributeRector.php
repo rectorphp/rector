@@ -31,10 +31,10 @@ use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Rector\PhpAttribute\RemovableAnnotationAnalyzer;
 use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220428\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220429\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220428\Webmozart\Assert\Assert;
+use RectorPrefix20220429\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/attributes_v2
  *
@@ -158,7 +158,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220428\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Php80\ValueObject\AnnotationToAttribute::class);
+        \RectorPrefix20220429\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Php80\ValueObject\AnnotationToAttribute::class);
         $this->annotationsToAttributes = $configuration;
         $this->unwrapableAnnotationAnalyzer->configure($configuration);
         $this->removableAnnotationAnalyzer->configure($configuration);
@@ -173,7 +173,7 @@ CODE_SAMPLE
     private function processGenericTags(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : array
     {
         $attributeGroups = [];
-        $phpDocNodeTraverser = new \RectorPrefix20220428\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20220429\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $docNode) use(&$attributeGroups, $phpDocInfo) : ?int {
             if (!$docNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
                 return null;
@@ -193,7 +193,7 @@ CODE_SAMPLE
                 }
                 $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute);
                 $phpDocInfo->markAsChanged();
-                return \RectorPrefix20220428\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+                return \RectorPrefix20220429\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
             }
             return null;
         });
