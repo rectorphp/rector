@@ -6,9 +6,11 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -20,7 +22,8 @@ final class MatchPropertyTypeExpectedNameResolver
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly PropertyManipulator $propertyManipulator
+        private readonly PropertyManipulator $propertyManipulator,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -31,8 +34,14 @@ final class MatchPropertyTypeExpectedNameResolver
             return null;
         }
 
+        $classReflection = $this->reflectionResolver->resolveClassReflection($property);
+
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
         $propertyName = $this->nodeNameResolver->getName($property);
-        if ($this->propertyManipulator->isUsedByTrait($class, $propertyName)) {
+        if ($this->propertyManipulator->isUsedByTrait($classReflection, $propertyName)) {
             return null;
         }
 
