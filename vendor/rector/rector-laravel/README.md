@@ -18,10 +18,12 @@ To add a set to your config, use `Rector\Laravel\Set\LaravelSetList` class and p
 
 ```php
 use Rector\Laravel\Set\LaravelSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(LaravelSetList::LARAVEL_80);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([
+        LaravelSetList::LARAVEL_80
+    ]);
 };
 ```
 

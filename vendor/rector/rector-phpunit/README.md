@@ -18,10 +18,12 @@ To add a set to your config, use `Rector\PHPUnit\Set\PHPUnitSetList` class and p
 
 ```php
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_90);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([
+        PHPUnitSetList::PHPUNIT_90,
+    ]);
 };
 ```
 

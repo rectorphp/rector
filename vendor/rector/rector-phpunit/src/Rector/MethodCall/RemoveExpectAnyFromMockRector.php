@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -77,15 +78,19 @@ CODE_SAMPLE
             return null;
         }
         $onlyArgument = $node->args[0]->value;
-        if (!$onlyArgument instanceof \PhpParser\Node\Expr\MethodCall) {
-            return null;
-        }
-        if (!$this->isName($onlyArgument->var, 'this')) {
-            return null;
-        }
-        if (!$this->isName($onlyArgument->name, 'any')) {
+        if (!$this->isMethodCallOnVariableNamed($onlyArgument, 'this', 'any')) {
             return null;
         }
         return $node->var;
+    }
+    private function isMethodCallOnVariableNamed(\PhpParser\Node\Expr $expr, string $variableName, string $methodName) : bool
+    {
+        if (!$expr instanceof \PhpParser\Node\Expr\MethodCall) {
+            return \false;
+        }
+        if (!$this->isName($expr->var, $variableName)) {
+            return \false;
+        }
+        return $this->isName($expr->name, $methodName);
     }
 }

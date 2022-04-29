@@ -9,6 +9,6 @@ use RectorPrefix20220429\Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersi
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     // @see https://github.com/symplify/monorepo-builder#6-release-flow
-    $rectorConfig->rule(\RectorPrefix20220429\Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersionReleaseWorker::class);
-    $rectorConfig->rule(\RectorPrefix20220429\Symplify\MonorepoBuilder\Release\ReleaseWorker\PushTagReleaseWorker::class);
+    $services->set(\RectorPrefix20220429\Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersionReleaseWorker::class);
+    $services->set(\RectorPrefix20220429\Symplify\MonorepoBuilder\Release\ReleaseWorker\PushTagReleaseWorker::class);
 };

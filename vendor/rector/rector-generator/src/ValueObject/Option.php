@@ -11,14 +11,6 @@ final class Option
     /**
      * @var string
      */
-    public const RULES_DIRECTORY = 'rules_directory';
-    /**
-     * @var string
-     */
-    public const SET_LIST_CLASSES = 'set_list_classes';
-    /**
-     * @var string
-     */
     public const PACKAGE = 'package';
     /**
      * @var string

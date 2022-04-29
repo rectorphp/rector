@@ -10,7 +10,6 @@ use RectorPrefix20220429\Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function RectorPrefix20220429\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use RectorPrefix20220429\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix20220429\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20220429\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use RectorPrefix20220429\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use RectorPrefix20220429\Symplify\SmartFileSystem\FileSystemGuard;
@@ -18,11 +17,9 @@ use RectorPrefix20220429\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use RectorPrefix20220429\Symplify\SmartFileSystem\Json\JsonFileSystem;
 use RectorPrefix20220429\Symplify\SmartFileSystem\SmartFileSystem;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $containerConfigurator->import(__DIR__ . '/parameters.php');
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->load('Rector\\RectorGenerator\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/ValueObject']);
-    $services->set(\RectorPrefix20220429\Symplify\PackageBuilder\Parameter\ParameterProvider::class)->arg('$container', \RectorPrefix20220429\Symfony\Component\DependencyInjection\Loader\Configurator\service('service_container'));
+    $services->load('Rector\\RectorGenerator\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/ValueObject', __DIR__ . '/../src/Enum']);
     // console
     $services->set(\RectorPrefix20220429\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class);
     $services->set(\RectorPrefix20220429\Symfony\Component\Console\Style\SymfonyStyle::class)->factory([\RectorPrefix20220429\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20220429\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class), 'create']);

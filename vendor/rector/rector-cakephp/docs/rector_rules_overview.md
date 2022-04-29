@@ -26,18 +26,10 @@ Moves array options to fluent setter method calls.
 ```php
 use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
 use Rector\CakePHP\ValueObject\ArrayToFluentCall;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ArrayToFluentCallRector::class)
-        ->configure([
-ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => ValueObjectInliner::inline([
-    new ArrayToFluentCall('ArticlesTable', ['setForeignKey', 'setProperty']), ]
-),
-]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ArrayToFluentCallRector::class, [Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS: [new ArrayToFluentCall('ArticlesTable', ['setForeignKey', 'setProperty'])]]);
 };
 ```
 
@@ -84,23 +76,6 @@ Changes `$fixtures` style from snake_case to PascalCase.
 
 <br>
 
-## ImplicitShortClassNameUseStatementRector
-
-Collect implicit class names and add imports
-
-- class: [`Rector\CakePHP\Rector\FileWithoutNamespace\ImplicitShortClassNameUseStatementRector`](../src/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector.php)
-
-```diff
- use App\Foo\Plugin;
-+use Cake\TestSuite\Fixture\TestFixture;
-
- class LocationsFixture extends TestFixture implements Plugin
- {
- }
-```
-
-<br>
-
 ## ModalToGetSetRector
 
 Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.
@@ -112,18 +87,10 @@ Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.
 ```php
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ModalToGetSetRector::class)
-        ->configure([
-ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => ValueObjectInliner::inline([
-    new ModalToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig', 1, null),
-    ]),
-]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ModalToGetSetRector::class, [Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET: [new ModalToGetSet('getConfig', 'setConfig', 'InstanceConfigTrait', 'config', 1)]]);
 };
 ```
 
@@ -145,6 +112,33 @@ ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => ValueObjectInliner::inline
 
 <br>
 
+## RemoveIntermediaryMethodRector
+
+Removes an intermediary method call for when a higher level API is added.
+
+:wrench: **configure it!**
+
+- class: [`Rector\CakePHP\Rector\MethodCall\RemoveIntermediaryMethodRector`](../src/Rector/MethodCall/RemoveIntermediaryMethodRector.php)
+
+```php
+use Rector\CakePHP\Rector\MethodCall\RemoveIntermediaryMethodRector;
+use Rector\CakePHP\ValueObject\RemoveIntermediaryMethod;
+use Rector\Config\RectorConfig;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RemoveIntermediaryMethodRector::class, [Rector\CakePHP\Rector\MethodCall\RemoveIntermediaryMethodRector::REMOVE_INTERMEDIARY_METHOD: [new RemoveIntermediaryMethod('getTableLocator', 'get', 'fetchTable')]]);
+};
+```
+
+↓
+
+```diff
+-$users = $this->getTableLocator()->get('Users');
++$users = $this->fetchTable('Users');
+```
+
+<br>
+
 ## RenameMethodCallBasedOnParameterRector
 
 Changes method calls based on matching the first parameter value.
@@ -156,19 +150,10 @@ Changes method calls based on matching the first parameter value.
 ```php
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 use Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(RenameMethodCallBasedOnParameterRector::class)
-        ->configure([
-RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => ValueObjectInliner::inline([
-    new RenameMethodCallBasedOnParameter('getParam', 'paging', 'getAttribute', 'ServerRequest'),
-    new RenameMethodCallBasedOnParameter('withParam', 'paging', 'withAttribute', 'ServerRequest'),
-    ]),
-]]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RenameMethodCallBasedOnParameterRector::class, [Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES: [new RenameMethodCallBasedOnParameter('ServerRequest', 'getParam', 'paging', 'getAttribute'), new RenameMethodCallBasedOnParameter('ServerRequest', 'withParam', 'paging', 'withAttribute')]]);
 };
 ```
 

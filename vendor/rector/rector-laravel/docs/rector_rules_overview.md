@@ -1,4 +1,4 @@
-# 21 Rules Overview
+# 22 Rules Overview
 
 ## AddArgumentDefaultValueRector
 
@@ -9,19 +9,12 @@ Adds default value for arguments in defined methods.
 - class: [`Rector\Laravel\Rector\ClassMethod\AddArgumentDefaultValueRector`](../src/Rector/ClassMethod/AddArgumentDefaultValueRector.php)
 
 ```php
+use Rector\Config\RectorConfig;
 use Rector\Laravel\Rector\ClassMethod\AddArgumentDefaultValueRector;
 use Rector\Laravel\ValueObject\AddArgumentDefaultValue;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddArgumentDefaultValueRector::class)
-        ->configure([
-            AddArgumentDefaultValueRector::ADDED_ARGUMENTS => [
-                new AddArgumentDefaultValue('SomeClass', 'someMethod', 0, false),
-            ],
-        ]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(AddArgumentDefaultValueRector::class, [Rector\Laravel\Rector\ClassMethod\AddArgumentDefaultValueRector::ADDED_ARGUMENTS: [new AddArgumentDefaultValue('SomeClass', 'someMethod', 0, false)]]);
 };
 ```
 
@@ -325,16 +318,11 @@ Convert simple calls to optional helper to use the nullsafe operator
 - class: [`Rector\Laravel\Rector\PropertyFetch\OptionalToNullsafeOperatorRector`](../src/Rector/PropertyFetch/OptionalToNullsafeOperatorRector.php)
 
 ```php
+use Rector\Config\RectorConfig;
 use Rector\Laravel\Rector\PropertyFetch\OptionalToNullsafeOperatorRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(OptionalToNullsafeOperatorRector::class)
-        ->configure([
-            OptionalToNullsafeOperatorRector::EXCLUDE_METHODS => ['present'],
-        ]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(OptionalToNullsafeOperatorRector::class, [Rector\Laravel\Rector\PropertyFetch\OptionalToNullsafeOperatorRector::EXCLUDE_METHODS: ['present']]);
 };
 ```
 
@@ -403,17 +391,17 @@ Replace `redirect()->back()` and `Redirect::back()` with `back()`
 
  class MyController
  {
-    public function store()
-    {
--        return redirect()->back()->with('error', 'Incorrect details.');
-+        return back()->with('error', 'Incorrect details.');
-    }
+     public function store()
+     {
+-        return redirect()->back()->with('error', 'Incorrect Details.')
++        return back()->with('error', 'Incorrect Details.')
+     }
 
-    public function update()
-    {
--        return Redirect::back()->with('error', 'Incorrect details.');
-+        return back()->with('error', 'Incorrect details.');
-    }
+     public function update()
+     {
+-        return Redirect::back()->with('error', 'Incorrect Details.')
++        return back()->with('error', 'Incorrect Details.')
+     }
  }
 ```
 
@@ -470,16 +458,11 @@ Use PHP callable syntax instead of string syntax for controller route declaratio
 - class: [`Rector\Laravel\Rector\StaticCall\RouteActionCallableRector`](../src/Rector/StaticCall/RouteActionCallableRector.php)
 
 ```php
+use Rector\Config\RectorConfig;
 use Rector\Laravel\Rector\StaticCall\RouteActionCallableRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(RouteActionCallableRector::class)
-        ->configure([
-            RouteActionCallableRector::NAMESPACE => 'App\Http\Controllers',
-        ]);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RouteActionCallableRector::class, [Rector\Laravel\Rector\StaticCall\RouteActionCallableRector::NAMESPACE: 'App\Http\Controllers']);
 };
 ```
 

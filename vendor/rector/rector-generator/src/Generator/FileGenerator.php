@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\RectorGenerator\Generator;
 
 use RectorPrefix20220429\Nette\Utils\Strings;
+use Rector\RectorGenerator\Enum\Packages;
 use Rector\RectorGenerator\FileSystem\TemplateFileSystem;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
@@ -66,6 +67,15 @@ final class FileGenerator
         if (!$rectorRecipe->isRectorRepository()) {
             $content = \RectorPrefix20220429\Nette\Utils\Strings::replace($content, self::RECTOR_UTILS_REGEX, 'Utils\\Rector');
             $content = \RectorPrefix20220429\Nette\Utils\Strings::replace($content, self::RECTOR_UTILS_TESTS_REGEX, 'Utils\\Rector\\Tests');
+        }
+        // correct tests PSR-4 namespace for core rector packages
+        if (\in_array($rectorRecipe->getPackage(), \Rector\RectorGenerator\Enum\Packages::RECTOR_CORE, \true)) {
+            $content = \RectorPrefix20220429\Nette\Utils\Strings::replace($content, '#namespace Rector\\\\Tests\\\\' . $rectorRecipe->getPackage() . '#', 'namespace Rector\\' . $rectorRecipe->getPackage() . '\\Tests');
+            // add core package main config
+            if (\substr_compare($targetFilePath, 'configured_rule.php', -\strlen('configured_rule.php')) === 0) {
+                $rectorConfigLine = 'return static function (RectorConfig $rectorConfig): void {';
+                $content = \str_replace($rectorConfigLine, $rectorConfigLine . \PHP_EOL . '    $rectorConfig->import(__DIR__ . \'/../../../../../config/config.php\')' . \PHP_EOL, $content);
+            }
         }
         $this->smartFileSystem->dumpFile($targetFilePath, $content);
         return $targetFilePath;

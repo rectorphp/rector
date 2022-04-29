@@ -17,11 +17,13 @@ composer require rector/rector --dev
 To add a set to your config, use `Rector\CakePHP\Set\CakePHPSetList` class and pick one of constants:
 
 ```php
+use Rector\Config\RectorConfig;
 use Rector\CakePHP\Set\CakePHPSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(CakePHPSetList::CAKEPHP_40);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([
+        CakePHPSetList::CAKEPHP_40
+    ]);
 };
 ```
 

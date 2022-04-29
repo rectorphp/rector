@@ -18,7 +18,9 @@ final class GetMockBuilderGetMockToCreateMockRector extends \Rector\Core\Rector\
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove getMockBuilder() to createMock()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-class SomeTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
 {
     public function test()
     {
@@ -29,7 +31,9 @@ class SomeTest extends \PHPUnit\Framework\TestCase
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
 {
     public function test()
     {

@@ -21,6 +21,7 @@ use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -44,11 +45,17 @@ final class AddArrayDefaultToArrayPropertyRector extends \Rector\Core\Rector\Abs
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\CodingStyle\TypeAnalyzer\IterableTypeAnalyzer $iterableTypeAnalyzer, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
+     */
+    private $visibilityManipulator;
+    public function __construct(\Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\CodingStyle\TypeAnalyzer\IterableTypeAnalyzer $iterableTypeAnalyzer, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->iterableTypeAnalyzer = $iterableTypeAnalyzer;
         $this->argsAnalyzer = $argsAnalyzer;
+        $this->visibilityManipulator = $visibilityManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -120,6 +127,13 @@ CODE_SAMPLE
             }
             $varType = $this->resolveVarType($node);
             if (!$this->iterableTypeAnalyzer->detect($varType)) {
+                return null;
+            }
+            $property = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+                return null;
+            }
+            if ($this->visibilityManipulator->isReadonly($property)) {
                 return null;
             }
             $propertyNames[] = $this->getName($node);

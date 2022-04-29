@@ -18,10 +18,12 @@ To add a set to your config, use `Rector\PHPOffice\Set\PHPOfficeSetList` class a
 
 ```php
 use Rector\PHPOffice\Set\PHPOfficeSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(PHPOfficeSetList::PHPEXCEL_TO_PHPSPREADSHEET);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([
+        PHPOfficeSetList::PHPEXCEL_TO_PHPSPREADSHEET
+    ]);
 };
 ```
 

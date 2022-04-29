@@ -2779,6 +2779,7 @@ return array(
     'Rector\\ReadWrite\\ReadNodeAnalyzer\\VariableReadNodeAnalyzer' => $baseDir . '/packages/ReadWrite/ReadNodeAnalyzer/VariableReadNodeAnalyzer.php',
     'Rector\\RectorGenerator\\Command\\GenerateCommand' => $vendorDir . '/rector/rector-generator/src/Command/GenerateCommand.php',
     'Rector\\RectorGenerator\\Command\\InitRecipeCommand' => $vendorDir . '/rector/rector-generator/src/Command/InitRecipeCommand.php',
+    'Rector\\RectorGenerator\\Enum\\Packages' => $vendorDir . '/rector/rector-generator/src/Enum/Packages.php',
     'Rector\\RectorGenerator\\Exception\\ConfigurationException' => $vendorDir . '/rector/rector-generator/src/Exception/ConfigurationException.php',
     'Rector\\RectorGenerator\\Exception\\ShouldNotHappenException' => $vendorDir . '/rector/rector-generator/src/Exception/ShouldNotHappenException.php',
     'Rector\\RectorGenerator\\FileSystem\\ConfigFilesystem' => $vendorDir . '/rector/rector-generator/src/FileSystem/ConfigFilesystem.php',

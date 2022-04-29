@@ -4,13 +4,13 @@ declare (strict_types=1);
 namespace Rector\RectorGenerator\FileSystem;
 
 use RectorPrefix20220429\Nette\Utils\Strings;
+use Rector\RectorGenerator\Enum\Packages;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class TemplateFileSystem
 {
-    public const ROOT_PACKAGES = ['Symfony', 'Nette', 'Doctrine', 'Laravel', 'PHPUnit', 'CakePHP'];
     /**
      * @var string
      * @see https://regex101.com/r/fw3jBe/1
@@ -60,7 +60,7 @@ final class TemplateFileSystem
         if ($this->isNonFixtureFileWithIncSuffix($destination)) {
             $destination = \RectorPrefix20220429\Nette\Utils\Strings::before($destination, '.inc');
         }
-        // special hack for tests, to PHPUnit doesn't load the generated file as test case
+        // special hack for tests, so PHPUnit doesn't load the generated file as a test case
         /** @var string $destination */
         if (\substr_compare($destination, 'Test.php', -\strlen('Test.php')) === 0 && \defined('PHPUNIT_COMPOSER_INSTALL')) {
             $destination .= '.inc';
@@ -77,7 +77,7 @@ final class TemplateFileSystem
     private function changeRootPathForRootPackage(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, string $destination) : string
     {
         // rector split package? path are in the root directory
-        if (!\in_array($rectorRecipe->getPackage(), self::ROOT_PACKAGES, \true)) {
+        if (!\in_array($rectorRecipe->getPackage(), \Rector\RectorGenerator\Enum\Packages::RECTOR_CORE, \true)) {
             return $destination;
         }
         $destination = \str_replace('rules/__Package__', 'src', $destination);

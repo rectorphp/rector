@@ -17,16 +17,11 @@ composer require rector/rector --dev
 To add a set to your config, use `Rector\Symfony\Set\SymfonySetList` class and pick one of constants:
 
 ```php
-use Rector\Core\Configuration\Option;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $parameters = $rectorConfig->parameters();
-    $parameters->set(
-        Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
-        __DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml'
-    );
+    $rectorConfig->symfonyContainerXml(__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml');
 
     $rectorConfig->sets([
         SymfonySetList::SYMFONY_52,

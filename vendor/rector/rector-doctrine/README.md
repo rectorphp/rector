@@ -18,10 +18,12 @@ To add a set to your config, use `Rector\Doctrine\Set\DoctrineSetList` class and
 
 ```php
 use Rector\Doctrine\Set\DoctrineSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(DoctrineSetList::DOCTRINE_CODE_QUALITY);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([
+        DoctrineSetList::DOCTRINE_CODE_QUALITY,
+    ]);
 };
 ```
 
