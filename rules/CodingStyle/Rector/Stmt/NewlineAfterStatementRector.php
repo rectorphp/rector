@@ -58,11 +58,6 @@ final class NewlineAfterStatementRector extends AbstractRector
         Switch_::class,
     ];
 
-    /**
-     * @var array<string, true>
-     */
-    private array $stmtsHashed = [];
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -115,11 +110,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $hash = spl_object_hash($node);
-        if (isset($this->stmtsHashed[$hash])) {
-            return null;
-        }
-
         $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
         if (! $nextNode instanceof Node) {
             return null;
@@ -155,7 +145,6 @@ CODE_SAMPLE
             }
         }
 
-        $this->stmtsHashed[$hash] = true;
         $this->nodesToAddCollector->addNodeAfterNode(new Nop(), $node);
 
         return $node;
