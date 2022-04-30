@@ -49,10 +49,6 @@ final class PHPUnitSetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
-    public const PHPUNIT_MOCK = __DIR__ . '/../../config/sets/phpunit-mock.php';
-    /**
-     * @var string
-     */
     public const REMOVE_MOCKS = __DIR__ . '/../../config/sets/remove-mocks.php';
     /**
      * @var string

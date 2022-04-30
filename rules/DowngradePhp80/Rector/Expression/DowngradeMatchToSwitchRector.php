@@ -5,9 +5,11 @@ namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
@@ -25,6 +27,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -34,6 +37,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeMatchToSwitchRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
+     */
+    private $anonymousFunctionFactory;
+    public function __construct(\Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory)
+    {
+        $this->anonymousFunctionFactory = $anonymousFunctionFactory;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade match() to switch()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -76,26 +88,38 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Echo_::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\Return_::class];
+        return [\PhpParser\Node\Expr\ArrayItem::class, \PhpParser\Node\Stmt\Echo_::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param Echo_|Expression|Return_ $node
+     * @param ArrayItem|Echo_|Expression|Return_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        if ($this->shouldSkipNode($node)) {
+            return null;
+        }
         $match = $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $subNode) : bool {
             return $subNode instanceof \PhpParser\Node\Expr\Match_;
         });
-        if (!$match instanceof \PhpParser\Node\Expr\Match_) {
-            return null;
-        }
-        if ($this->shouldSkip($match)) {
+        if (!$match instanceof \PhpParser\Node\Expr\Match_ || $this->shouldSkipMatch($match)) {
             return null;
         }
         $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
-        return new \PhpParser\Node\Stmt\Switch_($match->cond, $switchCases);
+        $switch = new \PhpParser\Node\Stmt\Switch_($match->cond, $switchCases);
+        if ($node instanceof \PhpParser\Node\Expr\ArrayItem) {
+            $node->value = new \PhpParser\Node\Expr\FuncCall($this->anonymousFunctionFactory->create([], [$switch], null));
+            return $node;
+        }
+        return $switch;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\Match_ $match) : bool
+    private function shouldSkipNode(\PhpParser\Node $node) : bool
+    {
+        if ($node instanceof \PhpParser\Node\Stmt\Return_ && !$node->expr instanceof \PhpParser\Node\Expr\Match_) {
+            return \true;
+        }
+        return \false;
+    }
+    private function shouldSkipMatch(\PhpParser\Node\Expr\Match_ $match) : bool
     {
         return (bool) $this->betterNodeFinder->findFirst($match, function (\PhpParser\Node $subNode) : bool {
             return $subNode instanceof \PhpParser\Node\Expr\ArrayItem && $subNode->unpack;
@@ -104,7 +128,7 @@ CODE_SAMPLE
     /**
      * @param MatchArm[] $matchArms
      * @return Case_[]
-     * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     * @param \PhpParser\Node\Expr\ArrayItem|\PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
     private function createSwitchCasesFromMatchArms($node, array $matchArms) : array
     {
@@ -129,14 +153,14 @@ CODE_SAMPLE
     }
     /**
      * @return Stmt[]
-     * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     * @param \PhpParser\Node\Expr\ArrayItem|\PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
     private function createSwitchStmts($node, \PhpParser\Node\MatchArm $matchArm) : array
     {
         $stmts = [];
         if ($matchArm->body instanceof \PhpParser\Node\Expr\Throw_) {
             $stmts[] = new \PhpParser\Node\Stmt\Expression($matchArm->body);
-        } elseif ($node instanceof \PhpParser\Node\Stmt\Return_) {
+        } elseif ($node instanceof \PhpParser\Node\Expr\ArrayItem || $node instanceof \PhpParser\Node\Stmt\Return_) {
             $stmts[] = new \PhpParser\Node\Stmt\Return_($matchArm->body);
         } elseif ($node instanceof \PhpParser\Node\Stmt\Echo_) {
             $stmts[] = new \PhpParser\Node\Stmt\Echo_([$matchArm->body]);
