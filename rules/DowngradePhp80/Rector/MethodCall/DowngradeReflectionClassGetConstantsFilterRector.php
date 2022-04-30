@@ -131,7 +131,7 @@ CODE_SAMPLE
         $assignValue = $value;
         foreach ($classConstFetchNames as $classConstFetchName) {
             $methodCallName = self::MAP_CONSTANT_TO_METHOD[$classConstFetchName];
-            $ifs[] = $this->ifManipulator->createIfExpr(new \PhpParser\Node\Expr\MethodCall($valueVariable, $methodCallName), new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($arrayDimFetch, $assignValue)));
+            $ifs[] = $this->ifManipulator->createIfStmt(new \PhpParser\Node\Expr\MethodCall($valueVariable, $methodCallName), new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($arrayDimFetch, $assignValue)));
         }
         $closure = new \PhpParser\Node\Expr\Closure();
         $closure->params = [new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable('value'))];

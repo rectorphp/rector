@@ -76,7 +76,7 @@ CODE_SAMPLE
         $leftParam = new \PhpParser\Node\Param($leftVariableParam);
         $rightParam = new \PhpParser\Node\Param($rightVariableParam);
         $anonymousFunction->params = [$leftParam, $rightParam];
-        $if = $this->ifManipulator->createIfExpr(new \PhpParser\Node\Expr\BinaryOp\Identical($leftVariableParam, $rightVariableParam), new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Scalar\LNumber(0)));
+        $if = $this->ifManipulator->createIfStmt(new \PhpParser\Node\Expr\BinaryOp\Identical($leftVariableParam, $rightVariableParam), new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Scalar\LNumber(0)));
         $anonymousFunction->stmts[0] = $if;
         $smaller = new \PhpParser\Node\Expr\BinaryOp\Smaller($leftVariableParam, $rightVariableParam);
         $ternaryIf = new \PhpParser\Node\Scalar\LNumber(-1);

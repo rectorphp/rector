@@ -149,7 +149,7 @@ CODE_SAMPLE
         $param->byRef = \true;
         $closure->params = [$param];
         $assign = new \PhpParser\Node\Expr\Assign($variablePass, $this->nodeFactory->createNull());
-        $if = $this->ifManipulator->createIfExpr(new \PhpParser\Node\Expr\BinaryOp\Identical($variablePass, new \PhpParser\Node\Scalar\String_('')), new \PhpParser\Node\Stmt\Expression($assign));
+        $if = $this->ifManipulator->createIfStmt(new \PhpParser\Node\Expr\BinaryOp\Identical($variablePass, new \PhpParser\Node\Scalar\String_('')), new \PhpParser\Node\Stmt\Expression($assign));
         $closure->stmts[0] = $if;
         $arguments = $this->nodeFactory->createArgs([$variable, $closure]);
         $replaceEmptyStringToNull = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);

@@ -105,7 +105,7 @@ CODE_SAMPLE
     {
         while ($expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             $ifs = \array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $return, $ifs));
-            $ifs[] = $this->ifManipulator->createIfExpr($expr->right, new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createTrue()));
+            $ifs[] = $this->ifManipulator->createIfStmt($expr->right, new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createTrue()));
             $expr = $expr->right;
             if ($expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
                 return [];
@@ -115,7 +115,7 @@ CODE_SAMPLE
             }
             return [];
         }
-        return $ifs + [$this->ifManipulator->createIfExpr($expr, new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createTrue()))];
+        return $ifs + [$this->ifManipulator->createIfStmt($expr, new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createTrue()))];
     }
     /**
      * @param If_[] $ifs
@@ -125,7 +125,7 @@ CODE_SAMPLE
     {
         $left = $BooleanOr->left;
         if (!$left instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
-            return [$this->ifManipulator->createIfExpr($left, new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createTrue()))];
+            return [$this->ifManipulator->createIfStmt($left, new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createTrue()))];
         }
         return $this->createMultipleIfs($left, $return, $ifs);
     }

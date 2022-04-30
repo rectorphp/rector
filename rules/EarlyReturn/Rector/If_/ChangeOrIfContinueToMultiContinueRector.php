@@ -110,10 +110,10 @@ CODE_SAMPLE
     {
         while ($expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             $ifs = \array_merge($ifs, $this->collectLeftbooleanOrToIfs($expr, $continue, $ifs));
-            $ifs[] = $this->ifManipulator->createIfExpr($expr->right, $continue);
+            $ifs[] = $this->ifManipulator->createIfStmt($expr->right, $continue);
             $expr = $expr->right;
         }
-        return $ifs + [$this->ifManipulator->createIfExpr($expr, $continue)];
+        return $ifs + [$this->ifManipulator->createIfStmt($expr, $continue)];
     }
     /**
      * @param If_[] $ifs
@@ -123,7 +123,7 @@ CODE_SAMPLE
     {
         $left = $booleanOr->left;
         if (!$left instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
-            return [$this->ifManipulator->createIfExpr($left, $continue)];
+            return [$this->ifManipulator->createIfStmt($left, $continue)];
         }
         return $this->createMultipleIfs($left, $continue, $ifs);
     }

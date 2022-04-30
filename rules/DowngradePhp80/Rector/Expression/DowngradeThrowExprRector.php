@@ -123,7 +123,7 @@ CODE_SAMPLE
             return null;
         }
         $inversedTernaryCond = $this->binaryOpManipulator->inverseNode($ternary->cond);
-        $if = $this->ifManipulator->createIfExpr($inversedTernaryCond, new \PhpParser\Node\Stmt\Expression($ternary->else));
+        $if = $this->ifManipulator->createIfStmt($inversedTernaryCond, new \PhpParser\Node\Stmt\Expression($ternary->else));
         if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
             return $if;
         }
@@ -142,7 +142,7 @@ CODE_SAMPLE
             return null;
         }
         $condExpr = $this->createCondExpr($coalesce);
-        $if = $this->ifManipulator->createIfExpr($condExpr, new \PhpParser\Node\Stmt\Expression($coalesce->right));
+        $if = $this->ifManipulator->createIfStmt($condExpr, new \PhpParser\Node\Stmt\Expression($coalesce->right));
         if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
             return $if;
         }
