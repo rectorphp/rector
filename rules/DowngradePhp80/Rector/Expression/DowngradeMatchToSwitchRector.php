@@ -6,9 +6,11 @@ namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
@@ -26,6 +28,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -36,6 +39,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeMatchToSwitchRector extends AbstractRector
 {
+    public function __construct(
+        private readonly AnonymousFunctionFactory $anonymousFunctionFactory
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade match() to switch()', [
@@ -84,29 +92,45 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Echo_::class, Expression::class, Return_::class];
+        return [ArrayItem::class, Echo_::class, Expression::class, Return_::class];
     }
 
     /**
-     * @param Echo_|Expression|Return_ $node
+     * @param ArrayItem|Echo_|Expression|Return_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        $match = $this->betterNodeFinder->findFirst($node, fn (Node $subNode): bool => $subNode instanceof Match_);
-
-        if (! $match instanceof Match_) {
+        if ($this->shouldSkipNode($node)) {
             return null;
         }
 
-        if ($this->shouldSkip($match)) {
+        $match = $this->betterNodeFinder->findFirst($node, fn (Node $subNode): bool => $subNode instanceof Match_);
+
+        if (! $match instanceof Match_ || $this->shouldSkipMatch($match)) {
             return null;
         }
 
         $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
-        return new Switch_($match->cond, $switchCases);
+        $switch = new Switch_($match->cond, $switchCases);
+
+        if ($node instanceof ArrayItem) {
+            $node->value = new FuncCall($this->anonymousFunctionFactory->create([], [$switch], null));
+            return $node;
+        }
+
+        return $switch;
     }
 
-    private function shouldSkip(Match_ $match): bool
+    private function shouldSkipNode(Node $node): bool
+    {
+        if ($node instanceof Return_ && ! $node->expr instanceof Match_) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function shouldSkipMatch(Match_ $match): bool
     {
         return (bool) $this->betterNodeFinder->findFirst(
             $match,
@@ -118,7 +142,7 @@ CODE_SAMPLE
      * @param MatchArm[] $matchArms
      * @return Case_[]
      */
-    private function createSwitchCasesFromMatchArms(Echo_ | Expression | Return_ $node, array $matchArms): array
+    private function createSwitchCasesFromMatchArms(ArrayItem | Echo_ | Expression | Return_ $node, array $matchArms): array
     {
         $switchCases = [];
 
@@ -148,13 +172,13 @@ CODE_SAMPLE
     /**
      * @return Stmt[]
      */
-    private function createSwitchStmts(Echo_ | Expression | Return_ $node, MatchArm $matchArm): array
+    private function createSwitchStmts(ArrayItem | Echo_ | Expression | Return_ $node, MatchArm $matchArm): array
     {
         $stmts = [];
 
         if ($matchArm->body instanceof Throw_) {
             $stmts[] = new Expression($matchArm->body);
-        } elseif ($node instanceof Return_) {
+        } elseif ($node instanceof ArrayItem || $node instanceof Return_) {
             $stmts[] = new Return_($matchArm->body);
         } elseif ($node instanceof Echo_) {
             $stmts[] = new Echo_([$matchArm->body]);
