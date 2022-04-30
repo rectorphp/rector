@@ -55,12 +55,7 @@ final class FilesFinder
 
         $directories = $this->fileSystemFilter->filterDirectories($filesAndDirectories);
 
-        $smartFileInfos = [];
-        foreach ($filePaths as $filePath) {
-            $smartFileInfos[] = new SmartFileInfo($filePath);
-        }
-
-        $smartFileInfos = $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($smartFileInfos);
+        $smartFileInfos = $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($filePaths);
 
         return array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
     }

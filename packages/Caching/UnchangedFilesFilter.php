@@ -15,7 +15,7 @@ final class UnchangedFilesFilter
     }
 
     /**
-     * @param SmartFileInfo[] $fileInfos
+     * @param SmartFileInfo[]|string[] $fileInfos
      * @return SmartFileInfo[]
      */
     public function filterAndJoinWithDependentFileInfos(array $fileInfos): array
@@ -24,6 +24,10 @@ final class UnchangedFilesFilter
         $dependentFileInfos = [];
 
         foreach ($fileInfos as $fileInfo) {
+            if (is_string($fileInfo)) {
+                $fileInfo = new SmartFileInfo($fileInfo);
+            }
+
             if (! $this->changedFilesDetector->hasFileChanged($fileInfo)) {
                 continue;
             }
