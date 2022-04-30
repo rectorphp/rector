@@ -77,7 +77,11 @@ final class FilesFinder
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         $filePaths = $this->fileSystemFilter->filterFiles($filesAndDirectories);
         $directories = $this->fileSystemFilter->filterDirectories($filesAndDirectories);
-        $smartFileInfos = $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($filePaths);
+        $smartFileInfos = [];
+        foreach ($filePaths as $filePath) {
+            $smartFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($filePath);
+        }
+        $smartFileInfos = $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($smartFileInfos);
         return \array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
     }
     /**

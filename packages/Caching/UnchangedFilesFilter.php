@@ -17,7 +17,7 @@ final class UnchangedFilesFilter
         $this->changedFilesDetector = $changedFilesDetector;
     }
     /**
-     * @param SmartFileInfo[]|string[] $fileInfos
+     * @param SmartFileInfo[] $fileInfos
      * @return SmartFileInfo[]
      */
     public function filterAndJoinWithDependentFileInfos(array $fileInfos) : array
@@ -25,9 +25,6 @@ final class UnchangedFilesFilter
         $changedFileInfos = [];
         $dependentFileInfos = [];
         foreach ($fileInfos as $fileInfo) {
-            if (\is_string($fileInfo)) {
-                $fileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileInfo);
-            }
             if (!$this->changedFilesDetector->hasFileChanged($fileInfo)) {
                 continue;
             }
