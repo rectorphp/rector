@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\Formatter;
 
-use RectorPrefix20220429\Nette\Utils\Strings;
+use RectorPrefix20220430\Nette\Utils\Strings;
 use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
@@ -83,7 +83,7 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
      */
     private function getXmlParts(string $xml) : array
     {
-        $withNewLines = \RectorPrefix20220429\Nette\Utils\Strings::replace(\trim($xml), self::XML_PARTS_REGEX, "\$1\n\$2\$3");
+        $withNewLines = \RectorPrefix20220430\Nette\Utils\Strings::replace(\trim($xml), self::XML_PARTS_REGEX, "\$1\n\$2\$3");
         return \explode("\n", $withNewLines);
     }
     private function getOutputForPart(string $part, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : string

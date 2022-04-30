@@ -39,10 +39,6 @@ final class NewlineAfterStatementRector extends \Rector\Core\Rector\AbstractRect
      * @var array<class-string<Node>>
      */
     private const STMTS_TO_HAVE_NEXT_NEWLINE = [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Stmt\ClassConst::class, \PhpParser\Node\Stmt\Namespace_::class, \PhpParser\Node\Stmt\TryCatch::class, \PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Trait_::class, \PhpParser\Node\Stmt\Interface_::class, \PhpParser\Node\Stmt\Switch_::class];
-    /**
-     * @var array<string, true>
-     */
-    private $stmtsHashed = [];
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add new line after statements to tidify code', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -85,10 +81,6 @@ CODE_SAMPLE
         if (!\in_array(\get_class($node), self::STMTS_TO_HAVE_NEXT_NEWLINE, \true)) {
             return null;
         }
-        $hash = \spl_object_hash($node);
-        if (isset($this->stmtsHashed[$hash])) {
-            return null;
-        }
         $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         if (!$nextNode instanceof \PhpParser\Node) {
             return null;
@@ -116,7 +108,6 @@ CODE_SAMPLE
                 return null;
             }
         }
-        $this->stmtsHashed[$hash] = \true;
         $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Nop(), $node);
         return $node;
     }

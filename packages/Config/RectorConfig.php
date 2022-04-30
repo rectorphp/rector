@@ -8,7 +8,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\PhpVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220429\Webmozart\Assert\Assert;
+use RectorPrefix20220430\Webmozart\Assert\Assert;
 /**
  * @api
  * Same as Symfony container configurator, with patched return type for "set()" method for easier DX.
@@ -21,7 +21,7 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function paths(array $paths) : void
     {
-        \RectorPrefix20220429\Webmozart\Assert\Assert::allString($paths);
+        \RectorPrefix20220430\Webmozart\Assert\Assert::allString($paths);
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::PATHS, $paths);
     }
@@ -30,9 +30,9 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function sets(array $sets) : void
     {
-        \RectorPrefix20220429\Webmozart\Assert\Assert::allString($sets);
+        \RectorPrefix20220430\Webmozart\Assert\Assert::allString($sets);
         foreach ($sets as $set) {
-            \RectorPrefix20220429\Webmozart\Assert\Assert::fileExists($set);
+            \RectorPrefix20220430\Webmozart\Assert\Assert::fileExists($set);
             $this->import($set);
         }
     }
@@ -83,7 +83,7 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function phpstanConfig(string $filePath) : void
     {
-        \RectorPrefix20220429\Webmozart\Assert\Assert::fileExists($filePath);
+        \RectorPrefix20220430\Webmozart\Assert\Assert::fileExists($filePath);
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH, $filePath);
     }
@@ -93,8 +93,8 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function ruleWithConfiguration(string $rectorClass, array $configuration) : void
     {
-        \RectorPrefix20220429\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
-        \RectorPrefix20220429\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class);
+        \RectorPrefix20220430\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
+        \RectorPrefix20220430\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class);
         $services = $this->services();
         $services->set($rectorClass)->configure($configuration);
     }
@@ -103,7 +103,7 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function rule(string $rectorClass) : void
     {
-        \RectorPrefix20220429\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
+        \RectorPrefix20220430\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
         $services = $this->services();
         $services->set($rectorClass);
     }
@@ -120,7 +120,7 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function autoloadPaths(array $autoloadPaths) : void
     {
-        \RectorPrefix20220429\Webmozart\Assert\Assert::allString($autoloadPaths);
+        \RectorPrefix20220430\Webmozart\Assert\Assert::allString($autoloadPaths);
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::AUTOLOAD_PATHS, $autoloadPaths);
     }
@@ -129,7 +129,7 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function bootstrapFiles(array $bootstrapFiles) : void
     {
-        \RectorPrefix20220429\Webmozart\Assert\Assert::allString($bootstrapFiles);
+        \RectorPrefix20220430\Webmozart\Assert\Assert::allString($bootstrapFiles);
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES, $bootstrapFiles);
     }
