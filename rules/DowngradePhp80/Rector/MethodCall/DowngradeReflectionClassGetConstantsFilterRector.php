@@ -153,7 +153,7 @@ CODE_SAMPLE
         foreach ($classConstFetchNames as $classConstFetchName) {
             $methodCallName = self::MAP_CONSTANT_TO_METHOD[$classConstFetchName];
 
-            $ifs[] = $this->ifManipulator->createIfExpr(
+            $ifs[] = $this->ifManipulator->createIfStmt(
                 new MethodCall($valueVariable, $methodCallName),
                 new Expression(new Assign($arrayDimFetch, $assignValue))
             );

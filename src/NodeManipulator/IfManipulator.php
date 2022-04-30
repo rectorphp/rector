@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -260,10 +259,10 @@ final class IfManipulator
     public function createIfNegation(Expr $expr, Stmt $stmt): If_
     {
         $expr = $this->conditionInverter->createInvertedCondition($expr);
-        return $this->createIfExpr($expr, $stmt);
+        return $this->createIfStmt($expr, $stmt);
     }
 
-    public function createIfExpr(Expr $expr, Stmt $stmt): If_
+    public function createIfStmt(Expr $expr, Stmt $stmt): If_
     {
         return new If_($expr, [
             'stmts' => [$stmt],

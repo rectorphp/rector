@@ -164,7 +164,7 @@ CODE_SAMPLE
 
         $assign = new Assign($variablePass, $this->nodeFactory->createNull());
 
-        $if = $this->ifManipulator->createIfExpr(
+        $if = $this->ifManipulator->createIfStmt(
             new Identical($variablePass, new String_('')),
             new Expression($assign)
         );

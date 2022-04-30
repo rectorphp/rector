@@ -80,7 +80,7 @@ CODE_SAMPLE
         $rightParam = new Param($rightVariableParam);
         $anonymousFunction->params = [$leftParam, $rightParam];
 
-        $if = $this->ifManipulator->createIfExpr(
+        $if = $this->ifManipulator->createIfStmt(
             new Identical($leftVariableParam, $rightVariableParam),
             new Return_(new LNumber(0))
         );

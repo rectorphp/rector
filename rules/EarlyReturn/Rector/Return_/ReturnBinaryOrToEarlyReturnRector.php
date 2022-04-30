@@ -107,7 +107,7 @@ CODE_SAMPLE
     {
         while ($expr instanceof BooleanOr) {
             $ifs = array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $return, $ifs));
-            $ifs[] = $this->ifManipulator->createIfExpr(
+            $ifs[] = $this->ifManipulator->createIfStmt(
                 $expr->right,
                 new Return_($this->nodeFactory->createTrue())
             );
@@ -124,7 +124,7 @@ CODE_SAMPLE
             return [];
         }
 
-        return $ifs + [$this->ifManipulator->createIfExpr($expr, new Return_($this->nodeFactory->createTrue()))];
+        return $ifs + [$this->ifManipulator->createIfStmt($expr, new Return_($this->nodeFactory->createTrue()))];
     }
 
     /**
@@ -135,7 +135,7 @@ CODE_SAMPLE
     {
         $left = $BooleanOr->left;
         if (! $left instanceof BooleanOr) {
-            return [$this->ifManipulator->createIfExpr($left, new Return_($this->nodeFactory->createTrue()))];
+            return [$this->ifManipulator->createIfStmt($left, new Return_($this->nodeFactory->createTrue()))];
         }
 
         return $this->createMultipleIfs($left, $return, $ifs);
