@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite29f14d3375b21659f7e16fd7c87803d
+class ComposerStaticInit3a09451c4d454e1686b1a056e742dd10
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2226,7 +2226,6 @@ class ComposerStaticInite29f14d3375b21659f7e16fd7c87803d
         'Rector\\DeadCode\\Rector\\For_\\RemoveDeadIfForeachForRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/For_/RemoveDeadIfForeachForRector.php',
         'Rector\\DeadCode\\Rector\\For_\\RemoveDeadLoopRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/For_/RemoveDeadLoopRector.php',
         'Rector\\DeadCode\\Rector\\Foreach_\\RemoveUnusedForeachKeyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Foreach_/RemoveUnusedForeachKeyRector.php',
-        'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveCodeAfterReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/FunctionLike/RemoveCodeAfterReturnRector.php',
         'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveDeadReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/FunctionLike/RemoveDeadReturnRector.php',
         'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveDuplicatedIfReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/FunctionLike/RemoveDuplicatedIfReturnRector.php',
         'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveOverriddenValuesRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/FunctionLike/RemoveOverriddenValuesRector.php',
@@ -3881,9 +3880,9 @@ class ComposerStaticInite29f14d3375b21659f7e16fd7c87803d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite29f14d3375b21659f7e16fd7c87803d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite29f14d3375b21659f7e16fd7c87803d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite29f14d3375b21659f7e16fd7c87803d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3a09451c4d454e1686b1a056e742dd10::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3a09451c4d454e1686b1a056e742dd10::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3a09451c4d454e1686b1a056e742dd10::$classMap;
 
         }, null, ClassLoader::class);
     }

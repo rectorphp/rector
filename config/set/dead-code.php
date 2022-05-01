@@ -30,7 +30,6 @@ use Rector\DeadCode\Rector\For_\RemoveDeadContinueRector;
 use Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector;
 use Rector\DeadCode\Rector\For_\RemoveDeadLoopRector;
 use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
-use Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveOverriddenValuesRector;
@@ -65,7 +64,6 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(\Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector::class);
     $rectorConfig->rule(\Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector::class);
     $rectorConfig->rule(\Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector::class);
-    $rectorConfig->rule(\Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector::class);
     $rectorConfig->rule(\Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector::class);
     $rectorConfig->rule(\Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector::class);
     $rectorConfig->rule(\Rector\DeadCode\Rector\For_\RemoveDeadContinueRector::class);

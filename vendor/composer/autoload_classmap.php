@@ -1857,7 +1857,6 @@ return array(
     'Rector\\DeadCode\\Rector\\For_\\RemoveDeadIfForeachForRector' => $baseDir . '/rules/DeadCode/Rector/For_/RemoveDeadIfForeachForRector.php',
     'Rector\\DeadCode\\Rector\\For_\\RemoveDeadLoopRector' => $baseDir . '/rules/DeadCode/Rector/For_/RemoveDeadLoopRector.php',
     'Rector\\DeadCode\\Rector\\Foreach_\\RemoveUnusedForeachKeyRector' => $baseDir . '/rules/DeadCode/Rector/Foreach_/RemoveUnusedForeachKeyRector.php',
-    'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveCodeAfterReturnRector' => $baseDir . '/rules/DeadCode/Rector/FunctionLike/RemoveCodeAfterReturnRector.php',
     'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveDeadReturnRector' => $baseDir . '/rules/DeadCode/Rector/FunctionLike/RemoveDeadReturnRector.php',
     'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveDuplicatedIfReturnRector' => $baseDir . '/rules/DeadCode/Rector/FunctionLike/RemoveDuplicatedIfReturnRector.php',
     'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveOverriddenValuesRector' => $baseDir . '/rules/DeadCode/Rector/FunctionLike/RemoveOverriddenValuesRector.php',
