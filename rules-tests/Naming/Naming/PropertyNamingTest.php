@@ -25,13 +25,13 @@ final class PropertyNamingTest extends AbstractTestCase
      */
     public function testGetExpectedNameFromMethodName(string $methodName, ?string $expectedPropertyName): void
     {
-        /** @var ExpectedName $actualPropertyName */
-        $actualPropertyName = $this->propertyNaming->getExpectedNameFromMethodName($methodName);
+        /** @var ExpectedName $expectedName */
+        $expectedName = $this->propertyNaming->getExpectedNameFromMethodName($methodName);
 
         if ($expectedPropertyName === null) {
-            $this->assertNull($actualPropertyName);
+            $this->assertNull($expectedName);
         } else {
-            $this->assertSame($expectedPropertyName, $actualPropertyName->getSingularized());
+            $this->assertSame($expectedPropertyName, $expectedName->getSingularized());
         }
     }
 

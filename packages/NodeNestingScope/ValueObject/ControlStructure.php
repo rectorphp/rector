@@ -66,4 +66,9 @@ final class ControlStructure
         Switch_::class,
         Foreach_::class,
     ];
+
+    /**
+     * @var array<class-string<Node>>
+     */
+    public const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class];
 }

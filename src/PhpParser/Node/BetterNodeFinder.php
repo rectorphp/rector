@@ -17,16 +17,13 @@ use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Php\TypeChecker;
@@ -308,47 +305,54 @@ final class BetterNodeFinder
     /**
      * @param callable(Node $node): bool $filter
      */
-    public function findFirstPrevious(Node $node, callable $filter, ?File $file = null): ?Node
+    public function findFirstPrevious(Node $node, callable $filter): ?Node
     {
         $currentStmt = $this->resolveCurrentStatement($node);
-        if (! $currentStmt instanceof Node) {
+
+        // current Stmt not an Stmt may caused by Node already removed
+        if (! $currentStmt instanceof Stmt) {
             return null;
         }
 
-        $parentStmtIterator = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
+        $foundInCurrentStmt = $this->findFirst($currentStmt, $filter);
 
-        // @todo add root virtual node for namespace-less nodes
-        if ($parentStmtIterator instanceof Node) {
-            // @todo assert iteratble interface that will be added in vendor patch
-            $parentStmts = $parentStmtIterator->stmts;
-        } else {
-            // fallback to parent stmts iterator
-            if (! $file instanceof File) {
-                $errorMessage = sprintf('File argument is missing in "%s()" method', __METHOD__);
-                throw new ShouldNotHappenException($errorMessage);
-            }
-
-            $parentStmts = $file->getNewStmts();
+        if ($foundInCurrentStmt instanceof Node) {
+            return $foundInCurrentStmt;
         }
 
-        if ($parentStmts === null) {
+        // previous Stmt of Stmt must be Stmt if found
+        $previousStatement = $currentStmt->getAttribute(AttributeKey::PREVIOUS_NODE);
+
+        if ($previousStatement instanceof Stmt) {
+            return $this->findFirstPrevious($previousStatement, $filter);
+        }
+
+        $parent = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
+
+        // parent Stmt not an Stmt may caused by Node already removed
+        if (! $parent instanceof Stmt) {
             return null;
         }
 
-        // @todo we don't need the first one; maybe find first above current node... check for positions...?
-        return $this->findFirst($parentStmts, $filter);
+        // previous Stmt of Stmt must be Stmt if found
+        $previousStatement = $parent->getAttribute(AttributeKey::PREVIOUS_NODE);
+
+        if ($previousStatement instanceof Stmt) {
+            return $this->findFirstPrevious($previousStatement, $filter);
+        }
+
+        return null;
     }
 
     /**
      * @template T of Node
      * @param array<class-string<T>> $types
      */
-    public function findFirstPreviousOfTypes(Node $mainNode, array $types, ?File $file = null): ?Node
+    public function findFirstPreviousOfTypes(Node $mainNode, array $types): ?Node
     {
         return $this->findFirstPrevious(
             $mainNode,
-            fn (Node $node): bool => $this->typeChecker->isInstanceOf($node, $types),
-            $file
+            fn (Node $node): bool => $this->typeChecker->isInstanceOf($node, $types)
         );
     }
 

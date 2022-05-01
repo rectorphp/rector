@@ -97,7 +97,7 @@ CODE_SAMPLE
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
 
         if (! $node instanceof Use_) {
-            return $this->classRenamer->renameNode($node, $oldToNewClasses, $this->file);
+            return $this->classRenamer->renameNode($node, $oldToNewClasses);
         }
 
         if (! $this->rectorConfigProvider->shouldImportNames()) {

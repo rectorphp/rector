@@ -186,7 +186,7 @@ CODE_SAMPLE
             }
 
             return $this->isObjectType($node->expr, new ObjectType('mysqli'));
-        }, $this->file);
+        });
 
         if (! $connectionAssign instanceof Assign) {
             return null;

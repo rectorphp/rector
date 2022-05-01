@@ -13,6 +13,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeNestingScope\ValueObject\ControlStructure;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -95,7 +96,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->shouldSkipAsPartOfNestedForeach($foreach)) {
+        if ($this->shouldSkipAsPartOfOtherLoop($foreach)) {
             return true;
         }
 
@@ -135,9 +136,9 @@ CODE_SAMPLE
         return false;
     }
 
-    private function shouldSkipAsPartOfNestedForeach(Foreach_ $foreach): bool
+    private function shouldSkipAsPartOfOtherLoop(Foreach_ $foreach): bool
     {
-        $foreachParent = $this->betterNodeFinder->findParentType($foreach, Foreach_::class);
-        return $foreachParent !== null;
+        $foreachParent = $this->betterNodeFinder->findParentByTypes($foreach, ControlStructure::LOOP_NODES);
+        return $foreachParent instanceof Node;
     }
 }

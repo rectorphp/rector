@@ -7,17 +7,13 @@ namespace Rector\NodeNestingScope;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\While_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNestingScope\ValueObject\ControlStructure;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -29,11 +25,6 @@ final class ContextAnalyzer
      */
     private const BREAK_NODES = [FunctionLike::class, ClassMethod::class];
 
-    /**
-     * @var array<class-string<Stmt>>
-     */
-    private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class];
-
     public function __construct(
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly NodeTypeResolver $nodeTypeResolver,
@@ -42,14 +33,14 @@ final class ContextAnalyzer
 
     public function isInLoop(Node $node): bool
     {
-        $stopNodes = array_merge(self::LOOP_NODES, self::BREAK_NODES);
+        $stopNodes = array_merge(ControlStructure::LOOP_NODES, self::BREAK_NODES);
 
         $firstParent = $this->betterNodeFinder->findParentByTypes($node, $stopNodes);
         if (! $firstParent instanceof Node) {
             return false;
         }
 
-        foreach (self::LOOP_NODES as $type) {
+        foreach (ControlStructure::LOOP_NODES as $type) {
             if (is_a($firstParent, $type, true)) {
                 return true;
             }
@@ -77,7 +68,7 @@ final class ContextAnalyzer
 
     public function isHasAssignWithIndirectReturn(Node $node, If_ $if): bool
     {
-        foreach (self::LOOP_NODES as $loopNode) {
+        foreach (ControlStructure::LOOP_NODES as $loopNode) {
             $loopObjectType = new ObjectType($loopNode);
             $parentType = $this->nodeTypeResolver->getType($node);
             $superType = $parentType->isSuperTypeOf($loopObjectType);
