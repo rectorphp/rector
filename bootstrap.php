@@ -17,7 +17,11 @@ spl_autoload_register(function (string $class): void {
             // prefixed version autoload
             $composerAutoloader = require __DIR__ . '/vendor/autoload.php';
         }
-        $composerAutoloader->loadClass($class);
+
+        // some weird collision with PHPStan custom rule tests
+        if (! is_int($composerAutoloader)) {
+            $composerAutoloader->loadClass($class);
+        }
     }
 
     // aliased by php-scoper, that's why its missing
