@@ -12,6 +12,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeNestingScope\ValueObject\ControlStructure;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -89,7 +90,7 @@ CODE_SAMPLE
         if (!$assignVariable instanceof \PhpParser\Node\Expr) {
             return \true;
         }
-        if ($this->shouldSkipAsPartOfNestedForeach($foreach)) {
+        if ($this->shouldSkipAsPartOfOtherLoop($foreach)) {
             return \true;
         }
         $previousDeclaration = $this->nodeUsageFinder->findPreviousForeachNodeUsage($foreach, $assignVariable);
@@ -118,9 +119,9 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function shouldSkipAsPartOfNestedForeach(\PhpParser\Node\Stmt\Foreach_ $foreach) : bool
+    private function shouldSkipAsPartOfOtherLoop(\PhpParser\Node\Stmt\Foreach_ $foreach) : bool
     {
-        $foreachParent = $this->betterNodeFinder->findParentType($foreach, \PhpParser\Node\Stmt\Foreach_::class);
-        return $foreachParent !== null;
+        $foreachParent = $this->betterNodeFinder->findParentByTypes($foreach, \Rector\NodeNestingScope\ValueObject\ControlStructure::LOOP_NODES);
+        return $foreachParent instanceof \PhpParser\Node;
     }
 }

@@ -35,4 +35,8 @@ final class ControlStructure
      * @var array<class-string<Node>>
      */
     public const CONDITIONAL_NODE_SCOPE_TYPES = [\PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\Else_::class, \PhpParser\Node\Stmt\ElseIf_::class, \PhpParser\Node\Stmt\Catch_::class, \PhpParser\Node\Stmt\Case_::class, \PhpParser\Node\Expr\Match_::class, \PhpParser\Node\Stmt\Switch_::class, \PhpParser\Node\Stmt\Foreach_::class];
+    /**
+     * @var array<class-string<Node>>
+     */
+    public const LOOP_NODES = [\PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\Do_::class];
 }

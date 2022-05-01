@@ -16,16 +16,13 @@ use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20220501\Symplify\PackageBuilder\Php\TypeChecker;
@@ -292,40 +289,43 @@ final class BetterNodeFinder
     /**
      * @param callable(Node $node): bool $filter
      */
-    public function findFirstPrevious(\PhpParser\Node $node, callable $filter, ?\Rector\Core\ValueObject\Application\File $file = null) : ?\PhpParser\Node
+    public function findFirstPrevious(\PhpParser\Node $node, callable $filter) : ?\PhpParser\Node
     {
         $currentStmt = $this->resolveCurrentStatement($node);
-        if (!$currentStmt instanceof \PhpParser\Node) {
+        // current Stmt not an Stmt may caused by Node already removed
+        if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
             return null;
         }
-        $parentStmtIterator = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        // @todo add root virtual node for namespace-less nodes
-        if ($parentStmtIterator instanceof \PhpParser\Node) {
-            // @todo assert iteratble interface that will be added in vendor patch
-            $parentStmts = $parentStmtIterator->stmts;
-        } else {
-            // fallback to parent stmts iterator
-            if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
-                $errorMessage = \sprintf('File argument is missing in "%s()" method', __METHOD__);
-                throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
-            }
-            $parentStmts = $file->getNewStmts();
+        $foundInCurrentStmt = $this->findFirst($currentStmt, $filter);
+        if ($foundInCurrentStmt instanceof \PhpParser\Node) {
+            return $foundInCurrentStmt;
         }
-        if ($parentStmts === null) {
+        // previous Stmt of Stmt must be Stmt if found
+        $previousStatement = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
+        if ($previousStatement instanceof \PhpParser\Node\Stmt) {
+            return $this->findFirstPrevious($previousStatement, $filter);
+        }
+        $parent = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        // parent Stmt not an Stmt may caused by Node already removed
+        if (!$parent instanceof \PhpParser\Node\Stmt) {
             return null;
         }
-        // @todo we don't need the first one; maybe find first above current node... check for positions...?
-        return $this->findFirst($parentStmts, $filter);
+        // previous Stmt of Stmt must be Stmt if found
+        $previousStatement = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
+        if ($previousStatement instanceof \PhpParser\Node\Stmt) {
+            return $this->findFirstPrevious($previousStatement, $filter);
+        }
+        return null;
     }
     /**
      * @template T of Node
      * @param array<class-string<T>> $types
      */
-    public function findFirstPreviousOfTypes(\PhpParser\Node $mainNode, array $types, ?\Rector\Core\ValueObject\Application\File $file = null) : ?\PhpParser\Node
+    public function findFirstPreviousOfTypes(\PhpParser\Node $mainNode, array $types) : ?\PhpParser\Node
     {
         return $this->findFirstPrevious($mainNode, function (\PhpParser\Node $node) use($types) : bool {
             return $this->typeChecker->isInstanceOf($node, $types);
-        }, $file);
+        });
     }
     /**
      * @param callable(Node $node): bool $filter

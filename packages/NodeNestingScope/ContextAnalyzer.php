@@ -6,17 +6,13 @@ namespace Rector\NodeNestingScope;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\While_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNestingScope\ValueObject\ControlStructure;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ContextAnalyzer
@@ -26,10 +22,6 @@ final class ContextAnalyzer
      * @var array<class-string<FunctionLike>>
      */
     private const BREAK_NODES = [\PhpParser\Node\FunctionLike::class, \PhpParser\Node\Stmt\ClassMethod::class];
-    /**
-     * @var array<class-string<Stmt>>
-     */
-    private const LOOP_NODES = [\PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\Do_::class];
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
@@ -47,12 +39,12 @@ final class ContextAnalyzer
     }
     public function isInLoop(\PhpParser\Node $node) : bool
     {
-        $stopNodes = \array_merge(self::LOOP_NODES, self::BREAK_NODES);
+        $stopNodes = \array_merge(\Rector\NodeNestingScope\ValueObject\ControlStructure::LOOP_NODES, self::BREAK_NODES);
         $firstParent = $this->betterNodeFinder->findParentByTypes($node, $stopNodes);
         if (!$firstParent instanceof \PhpParser\Node) {
             return \false;
         }
-        foreach (self::LOOP_NODES as $type) {
+        foreach (\Rector\NodeNestingScope\ValueObject\ControlStructure::LOOP_NODES as $type) {
             if (\is_a($firstParent, $type, \true)) {
                 return \true;
             }
@@ -74,7 +66,7 @@ final class ContextAnalyzer
     }
     public function isHasAssignWithIndirectReturn(\PhpParser\Node $node, \PhpParser\Node\Stmt\If_ $if) : bool
     {
-        foreach (self::LOOP_NODES as $loopNode) {
+        foreach (\Rector\NodeNestingScope\ValueObject\ControlStructure::LOOP_NODES as $loopNode) {
             $loopObjectType = new \PHPStan\Type\ObjectType($loopNode);
             $parentType = $this->nodeTypeResolver->getType($node);
             $superType = $parentType->isSuperTypeOf($loopObjectType);

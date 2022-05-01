@@ -119,7 +119,7 @@ CODE_SAMPLE
                 return \false;
             }
             return $this->isObjectType($node->expr, new \PHPStan\Type\ObjectType('mysqli'));
-        }, $this->file);
+        });
         if (!$connectionAssign instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
