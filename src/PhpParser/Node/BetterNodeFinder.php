@@ -329,7 +329,7 @@ final class BetterNodeFinder
 
         $parent = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
 
-        // parent Stmt not an Stmt may caused by Node already removed
+        // Last Node? Node not found
         if (! $parent instanceof Stmt) {
             return null;
         }
