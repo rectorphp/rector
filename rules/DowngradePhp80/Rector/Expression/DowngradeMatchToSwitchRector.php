@@ -5,11 +5,9 @@ namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
@@ -101,7 +99,10 @@ CODE_SAMPLE
         $match = $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $subNode) : bool {
             return $subNode instanceof \PhpParser\Node\Expr\Match_;
         });
-        if (!$match instanceof \PhpParser\Node\Expr\Match_ || $this->shouldSkipMatch($match)) {
+        if (!$match instanceof \PhpParser\Node\Expr\Match_) {
+            return null;
+        }
+        if ($this->shouldSkipMatch($match)) {
             return null;
         }
         $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
@@ -114,10 +115,7 @@ CODE_SAMPLE
     }
     private function shouldSkipNode(\PhpParser\Node $node) : bool
     {
-        if ($node instanceof \PhpParser\Node\Stmt\Return_ && !$node->expr instanceof \PhpParser\Node\Expr\Match_) {
-            return \true;
-        }
-        return \false;
+        return $node instanceof \PhpParser\Node\Stmt\Return_ && !$node->expr instanceof \PhpParser\Node\Expr\Match_;
     }
     private function shouldSkipMatch(\PhpParser\Node\Expr\Match_ $match) : bool
     {

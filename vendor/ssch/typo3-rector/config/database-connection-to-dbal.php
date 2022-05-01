@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220430;
+namespace RectorPrefix20220501;
 
 use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v9\v0\DatabaseConnectionToDbalRector;

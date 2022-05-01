@@ -7,9 +7,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use RectorPrefix20220430\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
-use RectorPrefix20220430\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
-use RectorPrefix20220430\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
+use RectorPrefix20220501\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220501\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
+use RectorPrefix20220501\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocNodeMapperTest
  */
@@ -38,7 +38,7 @@ final class PhpDocNodeMapper
     /**
      * @param BasePhpDocNodeVisitorInterface[] $phpDocNodeVisitors
      */
-    public function __construct(\Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider $currentTokenIteratorProvider, \RectorPrefix20220430\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor, \RectorPrefix20220430\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor, array $phpDocNodeVisitors)
+    public function __construct(\Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider $currentTokenIteratorProvider, \RectorPrefix20220501\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor, \RectorPrefix20220501\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor, array $phpDocNodeVisitors)
     {
         $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
         $this->parentConnectingPhpDocNodeVisitor = $parentConnectingPhpDocNodeVisitor;
@@ -48,13 +48,13 @@ final class PhpDocNodeMapper
     public function transform(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator) : void
     {
         $this->currentTokenIteratorProvider->setBetterTokenIterator($betterTokenIterator);
-        $parentPhpDocNodeTraverser = new \RectorPrefix20220430\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $parentPhpDocNodeTraverser = new \RectorPrefix20220501\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $parentPhpDocNodeTraverser->addPhpDocNodeVisitor($this->parentConnectingPhpDocNodeVisitor);
         $parentPhpDocNodeTraverser->traverse($phpDocNode);
-        $cloningPhpDocNodeTraverser = new \RectorPrefix20220430\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $cloningPhpDocNodeTraverser = new \RectorPrefix20220501\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $cloningPhpDocNodeTraverser->addPhpDocNodeVisitor($this->cloningPhpDocNodeVisitor);
         $cloningPhpDocNodeTraverser->traverse($phpDocNode);
-        $phpDocNodeTraverser = new \RectorPrefix20220430\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20220501\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
             $phpDocNodeTraverser->addPhpDocNodeVisitor($phpDocNodeVisitor);
         }
