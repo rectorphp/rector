@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -30,6 +31,6 @@ final class UseImportsResolver
             return [];
         }
 
-        return $this->betterNodeFinder->findInstanceOf($namespace, Use_::class);
+        return array_filter($namespace->stmts, fn (Stmt $stmt): bool => $stmt instanceof Use_);
     }
 }
