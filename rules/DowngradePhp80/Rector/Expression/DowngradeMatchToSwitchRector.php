@@ -6,11 +6,9 @@ namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
@@ -105,8 +103,11 @@ CODE_SAMPLE
         }
 
         $match = $this->betterNodeFinder->findFirst($node, fn (Node $subNode): bool => $subNode instanceof Match_);
+        if (! $match instanceof Match_) {
+            return null;
+        }
 
-        if (! $match instanceof Match_ || $this->shouldSkipMatch($match)) {
+        if ($this->shouldSkipMatch($match)) {
             return null;
         }
 
@@ -123,11 +124,7 @@ CODE_SAMPLE
 
     private function shouldSkipNode(Node $node): bool
     {
-        if ($node instanceof Return_ && ! $node->expr instanceof Match_) {
-            return true;
-        }
-
-        return false;
+        return $node instanceof Return_ && ! $node->expr instanceof Match_;
     }
 
     private function shouldSkipMatch(Match_ $match): bool
@@ -142,8 +139,10 @@ CODE_SAMPLE
      * @param MatchArm[] $matchArms
      * @return Case_[]
      */
-    private function createSwitchCasesFromMatchArms(ArrayItem | Echo_ | Expression | Return_ $node, array $matchArms): array
-    {
+    private function createSwitchCasesFromMatchArms(
+        ArrayItem | Echo_ | Expression | Return_ $node,
+        array $matchArms
+    ): array {
         $switchCases = [];
 
         foreach ($matchArms as $matchArm) {
