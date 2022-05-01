@@ -1,4 +1,4 @@
-# 513 Rules Overview
+# 512 Rules Overview
 
 <br>
 
@@ -14,7 +14,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (49)
+- [DeadCode](#deadcode) (48)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -2782,25 +2782,6 @@ return static function (RectorConfig $rectorConfig): void {
 - */
  final class SomeClass
  {
- }
-```
-
-<br>
-
-### RemoveCodeAfterReturnRector
-
-Remove dead code after return statement
-
-- class: [`Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector`](../rules/DeadCode/Rector/FunctionLike/RemoveCodeAfterReturnRector.php)
-
-```diff
- class SomeClass
- {
-     public function run(int $a)
-     {
-          return $a;
--         $a++;
-     }
  }
 ```
 
