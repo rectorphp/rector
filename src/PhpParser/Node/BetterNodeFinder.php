@@ -306,7 +306,7 @@ final class BetterNodeFinder
             return $this->findFirstPrevious($previousStatement, $filter);
         }
         $parent = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        // parent Stmt not an Stmt may caused by Node already removed
+        // Last Node? Node not found
         if (!$parent instanceof \PhpParser\Node\Stmt) {
             return null;
         }
