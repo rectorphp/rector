@@ -53,9 +53,7 @@ final class DowngradeRectorConfig
         'vendor/cweagans/*',
         'nette/caching/src/Bridges/*',
 
-        // This class has an issue for PHP 7.1:
-        // https://github.com/rectorphp/rector/issues/4816#issuecomment-743209526
-        // It doesn't happen often, and Rector doesn't use it, so then
+        // Rector doesn't use it, so then
         // we simply skip downgrading this class
         'vendor/symfony/dependency-injection/ExpressionLanguage.php',
         'vendor/symfony/dependency-injection/ExpressionLanguageProvider.php',
