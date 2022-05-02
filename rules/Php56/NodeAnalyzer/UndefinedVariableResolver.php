@@ -171,7 +171,7 @@ final class UndefinedVariableResolver
 
     private function isAfterSwitchCaseWithParentCase(Variable $variable): bool
     {
-        $previousSwitch = $this->betterNodeFinder->findFirstPreviousOfNode(
+        $previousSwitch = $this->betterNodeFinder->findFirstPrevious(
             $variable,
             fn (Node $subNode): bool => $subNode instanceof Switch_
         );
@@ -197,7 +197,7 @@ final class UndefinedVariableResolver
 
     private function hasPreviousCheckedWithIsset(Variable $variable): bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $subNode) use (
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $subNode) use (
             $variable
         ): bool {
             if (! $subNode instanceof Isset_) {
@@ -217,7 +217,7 @@ final class UndefinedVariableResolver
 
     private function hasPreviousCheckedWithEmpty(Variable $variable): bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $subNode) use (
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $subNode) use (
             $variable
         ): bool {
             if (! $subNode instanceof Empty_) {

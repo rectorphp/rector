@@ -272,18 +272,23 @@ final class BetterNodeFinder
     /**
      * @param callable(Node $node): bool $filter
      */
-    public function findFirstPreviousOfNode(Node $node, callable $filter, bool $lookupParent = true): ?Node
-    {
-        // move to previous expression
+    public function findFirstPrevious(
+        Node $node,
+        callable $filter,
+        bool $lookupParent = true,
+        bool $stopOnFunctionLike = true
+    ): ?Node {
+        // move to previous Node
         $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousStatement !== null) {
+        if ($previousStatement instanceof Node) {
             $foundNode = $this->findFirst([$previousStatement], $filter);
+
             // we found what we need
-            if ($foundNode !== null) {
+            if ($foundNode instanceof Node) {
                 return $foundNode;
             }
 
-            return $this->findFirstPreviousOfNode($previousStatement, $filter);
+            return $this->findFirstPrevious($previousStatement, $filter);
         }
 
         if (! $lookupParent) {
@@ -291,54 +296,12 @@ final class BetterNodeFinder
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof FunctionLike) {
+        if ($stopOnFunctionLike && $parent instanceof FunctionLike) {
             return null;
         }
 
         if ($parent instanceof Node) {
-            return $this->findFirstPreviousOfNode($parent, $filter);
-        }
-
-        return null;
-    }
-
-    /**
-     * @param callable(Node $node): bool $filter
-     */
-    public function findFirstPrevious(Node $node, callable $filter): ?Node
-    {
-        $currentStmt = $this->resolveCurrentStatement($node);
-
-        // current Stmt not an Stmt may caused by Node already removed
-        if (! $currentStmt instanceof Stmt) {
-            return null;
-        }
-
-        $foundInCurrentStmt = $this->findFirst($currentStmt, $filter);
-
-        if ($foundInCurrentStmt instanceof Node) {
-            return $foundInCurrentStmt;
-        }
-
-        // previous Stmt of Stmt must be Stmt if found
-        $previousStatement = $currentStmt->getAttribute(AttributeKey::PREVIOUS_NODE);
-
-        if ($previousStatement instanceof Stmt) {
-            return $this->findFirstPrevious($previousStatement, $filter);
-        }
-
-        $parent = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
-
-        // Last Node? Node not found
-        if (! $parent instanceof Stmt) {
-            return null;
-        }
-
-        // previous Stmt of Stmt must be Stmt if found
-        $previousStatement = $parent->getAttribute(AttributeKey::PREVIOUS_NODE);
-
-        if ($previousStatement instanceof Stmt) {
-            return $this->findFirstPrevious($previousStatement, $filter);
+            return $this->findFirstPrevious($parent, $filter);
         }
 
         return null;

@@ -202,9 +202,7 @@ CODE_SAMPLE
 
     private function isCastedReassign(Expr $expr): bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (Node $subNode) use (
-            $expr
-        ): bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($expr, function (Node $subNode) use ($expr): bool {
             if (! $subNode instanceof Assign) {
                 return false;
             }

@@ -141,7 +141,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $subNode): bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($node, function (Node $subNode): bool {
             if (! $subNode instanceof FuncCall) {
                 return false;
             }

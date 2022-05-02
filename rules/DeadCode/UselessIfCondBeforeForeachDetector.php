@@ -91,7 +91,7 @@ final class UselessIfCondBeforeForeachDetector
 
     private function fromPreviousParam(Expr $expr): ?Node
     {
-        return $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (Node $node) use ($expr): bool {
+        return $this->betterNodeFinder->findFirstPrevious($expr, function (Node $node) use ($expr): bool {
             if (! $node instanceof Param) {
                 return false;
             }

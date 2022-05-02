@@ -121,7 +121,7 @@ final class ResourceReturnToObject
         array $collectionFunctionToReturnObject
     ): ?FullyQualifiedObjectType {
         $objectInstanceCheck = null;
-        $assign = $this->betterNodeFinder->findFirstPreviousOfNode($funcCall, function (Node $subNode) use (
+        $assign = $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $subNode) use (
             &$objectInstanceCheck,
             $expr,
             $collectionFunctionToReturnObject

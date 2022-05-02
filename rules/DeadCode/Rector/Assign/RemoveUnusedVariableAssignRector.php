@@ -185,7 +185,7 @@ CODE_SAMPLE
 
     private function isUsedInPreviousNode(Variable $variable): bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
+        return (bool) $this->betterNodeFinder->findFirstPrevious(
             $variable,
             fn (Node $node): bool => $this->usedVariableNameAnalyzer->isVariableNamed($node, $variable)
         );
@@ -214,7 +214,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode(
+        $previousAssign = $this->betterNodeFinder->findFirstPrevious(
             $assign,
             fn (Node $node): bool => $node instanceof Assign && $this->usedVariableNameAnalyzer->isVariableNamed(
                 $node->var,

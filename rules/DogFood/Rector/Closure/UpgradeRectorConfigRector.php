@@ -147,7 +147,7 @@ CODE_SAMPLE
                         return null;
                     }
 
-                    $isPossiblyServiceDefinition = (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
+                    $isPossiblyServiceDefinition = (bool) $this->betterNodeFinder->findFirstPrevious(
                         $node,
                         fn (Node $node): bool => $this->isFoundFluentServiceCall($node)
                     );

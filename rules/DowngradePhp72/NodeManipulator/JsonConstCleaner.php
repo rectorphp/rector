@@ -40,7 +40,7 @@ final class JsonConstCleaner
      */
     private function hasDefinedCheck(ConstFetch|BitwiseOr $node, array $constants): bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
+        return (bool) $this->betterNodeFinder->findFirstPrevious(
             $node,
             function (Node $subNode) use ($constants): bool {
                 if (! $subNode instanceof FuncCall) {

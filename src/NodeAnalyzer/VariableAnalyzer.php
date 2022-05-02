@@ -28,7 +28,7 @@ final class VariableAnalyzer
             return true;
         }
 
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use (
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $node) use (
             $variable
         ): bool {
             if (! in_array($node::class, [Static_::class, Global_::class], true)) {
@@ -56,7 +56,7 @@ final class VariableAnalyzer
 
     public function isUsedByReference(Variable $variable): bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $subNode) use (
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $subNode) use (
             $variable
         ): bool {
             if (! $subNode instanceof Variable) {

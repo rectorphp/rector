@@ -15,7 +15,6 @@ use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
-use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -52,8 +51,7 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
 
     public function __construct(
         private readonly ClassInsertManipulator $classInsertManipulator,
-        private readonly ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
-        private readonly ScopeAwareNodeFinder $scopeAwareNodeFinder
+        private readonly ReservedKeywordAnalyzer $reservedKeywordAnalyzer
     ) {
     }
 
@@ -253,7 +251,7 @@ CODE_SAMPLE
         }
 
         // skip values in another constants
-        $parentConst = $this->scopeAwareNodeFinder->findParentType($string, [ClassConst::class]);
+        $parentConst = $this->betterNodeFinder->findParentType($string, ClassConst::class);
         if ($parentConst !== null) {
             return true;
         }

@@ -81,7 +81,7 @@ final class CallAnalyzer
             return true;
         }
 
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (Node $node) use ($expr): bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($expr, function (Node $node) use ($expr): bool {
             if (! $node instanceof Assign) {
                 return false;
             }

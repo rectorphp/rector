@@ -120,7 +120,7 @@ CODE_SAMPLE
 
     private function findPreviousAssignToArrayKeys(FuncCall $funcCall, Expr $expr): null|Node|FunctionLike
     {
-        return $this->betterNodeFinder->findFirstPreviousOfNode($funcCall, function (Node $node) use ($expr): bool {
+        return $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $node) use ($expr): bool {
             // breaking out of scope
             if ($node instanceof FunctionLike) {
                 return true;
