@@ -262,58 +262,27 @@ final class BetterNodeFinder
     /**
      * @param callable(Node $node): bool $filter
      */
-    public function findFirstPreviousOfNode(\PhpParser\Node $node, callable $filter, bool $lookupParent = \true) : ?\PhpParser\Node
+    public function findFirstPrevious(\PhpParser\Node $node, callable $filter, bool $lookupParent = \true, bool $stopOnFunctionLike = \true) : ?\PhpParser\Node
     {
-        // move to previous expression
+        // move to previous Node
         $previousStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-        if ($previousStatement !== null) {
+        if ($previousStatement instanceof \PhpParser\Node) {
             $foundNode = $this->findFirst([$previousStatement], $filter);
             // we found what we need
-            if ($foundNode !== null) {
+            if ($foundNode instanceof \PhpParser\Node) {
                 return $foundNode;
             }
-            return $this->findFirstPreviousOfNode($previousStatement, $filter);
+            return $this->findFirstPrevious($previousStatement, $filter);
         }
         if (!$lookupParent) {
             return null;
         }
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\FunctionLike) {
+        if ($stopOnFunctionLike && $parent instanceof \PhpParser\Node\FunctionLike) {
             return null;
         }
         if ($parent instanceof \PhpParser\Node) {
-            return $this->findFirstPreviousOfNode($parent, $filter);
-        }
-        return null;
-    }
-    /**
-     * @param callable(Node $node): bool $filter
-     */
-    public function findFirstPrevious(\PhpParser\Node $node, callable $filter) : ?\PhpParser\Node
-    {
-        $currentStmt = $this->resolveCurrentStatement($node);
-        // current Stmt not an Stmt may caused by Node already removed
-        if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
-            return null;
-        }
-        $foundInCurrentStmt = $this->findFirst($currentStmt, $filter);
-        if ($foundInCurrentStmt instanceof \PhpParser\Node) {
-            return $foundInCurrentStmt;
-        }
-        // previous Stmt of Stmt must be Stmt if found
-        $previousStatement = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-        if ($previousStatement instanceof \PhpParser\Node\Stmt) {
-            return $this->findFirstPrevious($previousStatement, $filter);
-        }
-        $parent = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        // Last Node? Node not found
-        if (!$parent instanceof \PhpParser\Node\Stmt) {
-            return null;
-        }
-        // previous Stmt of Stmt must be Stmt if found
-        $previousStatement = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-        if ($previousStatement instanceof \PhpParser\Node\Stmt) {
-            return $this->findFirstPrevious($previousStatement, $filter);
+            return $this->findFirstPrevious($parent, $filter);
         }
         return null;
     }

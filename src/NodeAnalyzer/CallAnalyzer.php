@@ -77,7 +77,7 @@ final class CallAnalyzer
         if ($expr instanceof \PhpParser\Node\Expr\Clone_ || $expr instanceof \PhpParser\Node\Expr\New_) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (\PhpParser\Node $node) use($expr) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($expr, function (\PhpParser\Node $node) use($expr) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;
             }

@@ -121,7 +121,7 @@ CODE_SAMPLE
         if (!$isUsedInNextNode) {
             return \false;
         }
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $subNode) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($node, function (\PhpParser\Node $subNode) : bool {
             if (!$subNode instanceof \PhpParser\Node\Expr\FuncCall) {
                 return \false;
             }

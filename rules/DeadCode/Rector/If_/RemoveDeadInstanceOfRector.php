@@ -155,7 +155,7 @@ CODE_SAMPLE
             return \false;
         }
         $variable = $instanceof->expr;
-        $isReassign = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($instanceof, function (\PhpParser\Node $subNode) use($variable) : bool {
+        $isReassign = (bool) $this->betterNodeFinder->findFirstPrevious($instanceof, function (\PhpParser\Node $subNode) use($variable) : bool {
             return $subNode instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($subNode->var, $variable);
         });
         if ($isReassign) {

@@ -97,7 +97,7 @@ final class UselessIfCondBeforeForeachDetector
     }
     private function fromPreviousParam(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node
     {
-        return $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (\PhpParser\Node $node) use($expr) : bool {
+        return $this->betterNodeFinder->findFirstPrevious($expr, function (\PhpParser\Node $node) use($expr) : bool {
             if (!$node instanceof \PhpParser\Node\Param) {
                 return \false;
             }

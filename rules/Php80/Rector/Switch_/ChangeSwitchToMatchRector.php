@@ -134,7 +134,7 @@ CODE_SAMPLE
     }
     private function changeToAssign(\PhpParser\Node\Stmt\Switch_ $switch, \PhpParser\Node\Expr\Match_ $match, \PhpParser\Node\Expr $assignExpr) : \PhpParser\Node\Expr\Assign
     {
-        $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($switch, function (\PhpParser\Node $node) use($assignExpr) : bool {
+        $prevInitializedAssign = $this->betterNodeFinder->findFirstPrevious($switch, function (\PhpParser\Node $node) use($assignExpr) : bool {
             return $node instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($node->var, $assignExpr);
         }, \false);
         $assign = new \PhpParser\Node\Expr\Assign($assignExpr, $match);

@@ -164,7 +164,7 @@ final class UndefinedVariableResolver
     }
     private function isAfterSwitchCaseWithParentCase(\PhpParser\Node\Expr\Variable $variable) : bool
     {
-        $previousSwitch = $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $subNode) : bool {
+        $previousSwitch = $this->betterNodeFinder->findFirstPrevious($variable, function (\PhpParser\Node $subNode) : bool {
             return $subNode instanceof \PhpParser\Node\Stmt\Switch_;
         });
         if (!$previousSwitch instanceof \PhpParser\Node\Stmt\Switch_) {
@@ -184,7 +184,7 @@ final class UndefinedVariableResolver
     }
     private function hasPreviousCheckedWithIsset(\PhpParser\Node\Expr\Variable $variable) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $subNode) use($variable) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (\PhpParser\Node $subNode) use($variable) : bool {
             if (!$subNode instanceof \PhpParser\Node\Expr\Isset_) {
                 return \false;
             }
@@ -199,7 +199,7 @@ final class UndefinedVariableResolver
     }
     private function hasPreviousCheckedWithEmpty(\PhpParser\Node\Expr\Variable $variable) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $subNode) use($variable) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (\PhpParser\Node $subNode) use($variable) : bool {
             if (!$subNode instanceof \PhpParser\Node\Expr\Empty_) {
                 return \false;
             }

@@ -14,7 +14,6 @@ use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
-use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -53,16 +52,10 @@ final class RepeatedLiteralToClassConstantRector extends \Rector\Core\Rector\Abs
      * @var \Rector\Core\Php\ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder
-     */
-    private $scopeAwareNodeFinder;
-    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder $scopeAwareNodeFinder)
+    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
-        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -219,7 +212,7 @@ CODE_SAMPLE
             return \true;
         }
         // skip values in another constants
-        $parentConst = $this->scopeAwareNodeFinder->findParentType($string, [\PhpParser\Node\Stmt\ClassConst::class]);
+        $parentConst = $this->betterNodeFinder->findParentType($string, \PhpParser\Node\Stmt\ClassConst::class);
         if ($parentConst !== null) {
             return \true;
         }

@@ -48,7 +48,7 @@ final class JsonConstCleaner
      */
     private function hasDefinedCheck($node, array $constants) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $subNode) use($constants) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($node, function (\PhpParser\Node $subNode) use($constants) : bool {
             if (!$subNode instanceof \PhpParser\Node\Expr\FuncCall) {
                 return \false;
             }

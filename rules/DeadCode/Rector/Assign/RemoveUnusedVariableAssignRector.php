@@ -184,7 +184,7 @@ CODE_SAMPLE
     }
     private function isUsedInPreviousNode(\PhpParser\Node\Expr\Variable $variable) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $node) use($variable) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (\PhpParser\Node $node) use($variable) : bool {
             return $this->usedVariableNameAnalyzer->isVariableNamed($node, $variable);
         });
     }
@@ -209,7 +209,7 @@ CODE_SAMPLE
         if (!$expr instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
-        $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (\PhpParser\Node $node) use($expr) : bool {
+        $previousAssign = $this->betterNodeFinder->findFirstPrevious($assign, function (\PhpParser\Node $node) use($expr) : bool {
             return $node instanceof \PhpParser\Node\Expr\Assign && $this->usedVariableNameAnalyzer->isVariableNamed($node->var, $expr);
         });
         if ($previousAssign instanceof \PhpParser\Node\Expr\Assign) {

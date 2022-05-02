@@ -119,7 +119,7 @@ final class ResourceReturnToObject
     private function resolveArgValueTypeFromPreviousAssign(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr, array $collectionFunctionToReturnObject) : ?\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType
     {
         $objectInstanceCheck = null;
-        $assign = $this->betterNodeFinder->findFirstPreviousOfNode($funcCall, function (\PhpParser\Node $subNode) use(&$objectInstanceCheck, $expr, $collectionFunctionToReturnObject) : bool {
+        $assign = $this->betterNodeFinder->findFirstPrevious($funcCall, function (\PhpParser\Node $subNode) use(&$objectInstanceCheck, $expr, $collectionFunctionToReturnObject) : bool {
             if (!$this->isAssignWithFuncCallExpr($subNode)) {
                 return \false;
             }

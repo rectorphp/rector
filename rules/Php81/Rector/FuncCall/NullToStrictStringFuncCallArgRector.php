@@ -172,7 +172,7 @@ CODE_SAMPLE
     }
     private function isCastedReassign(\PhpParser\Node\Expr $expr) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (\PhpParser\Node $subNode) use($expr) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($expr, function (\PhpParser\Node $subNode) use($expr) : bool {
             if (!$subNode instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;
             }

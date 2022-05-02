@@ -95,7 +95,7 @@ CODE_SAMPLE
      */
     private function findPreviousAssignToArrayKeys(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr)
     {
-        return $this->betterNodeFinder->findFirstPreviousOfNode($funcCall, function (\PhpParser\Node $node) use($expr) : bool {
+        return $this->betterNodeFinder->findFirstPrevious($funcCall, function (\PhpParser\Node $node) use($expr) : bool {
             // breaking out of scope
             if ($node instanceof \PhpParser\Node\FunctionLike) {
                 return \true;

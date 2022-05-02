@@ -34,7 +34,7 @@ final class VariableAnalyzer
         if ($this->isParentStaticOrGlobal($variable)) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $node) use($variable) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (\PhpParser\Node $node) use($variable) : bool {
             if (!\in_array(\get_class($node), [\PhpParser\Node\Stmt\Static_::class, \PhpParser\Node\Stmt\Global_::class], \true)) {
                 return \false;
             }
@@ -54,7 +54,7 @@ final class VariableAnalyzer
     }
     public function isUsedByReference(\PhpParser\Node\Expr\Variable $variable) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $subNode) use($variable) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (\PhpParser\Node $subNode) use($variable) : bool {
             if (!$subNode instanceof \PhpParser\Node\Expr\Variable) {
                 return \false;
             }

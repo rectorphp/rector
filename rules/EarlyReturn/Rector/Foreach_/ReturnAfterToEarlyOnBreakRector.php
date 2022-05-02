@@ -87,7 +87,7 @@ CODE_SAMPLE
         }
         $assignVariable = $assign->var;
         /** @var Expr $variablePrevious */
-        $variablePrevious = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $node) use($assignVariable) : bool {
+        $variablePrevious = $this->betterNodeFinder->findFirstPrevious($node, function (\PhpParser\Node $node) use($assignVariable) : bool {
             $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             if (!$parent instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;

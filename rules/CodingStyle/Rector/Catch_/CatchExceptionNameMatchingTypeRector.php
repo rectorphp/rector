@@ -112,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
         $newVariable = new \PhpParser\Node\Expr\Variable($newVariableName);
-        $isFoundInPrevious = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $n) use($newVariable) : bool {
+        $isFoundInPrevious = (bool) $this->betterNodeFinder->findFirstPrevious($node, function (\PhpParser\Node $n) use($newVariable) : bool {
             return $this->nodeComparator->areNodesEqual($n, $newVariable);
         });
         if ($isFoundInPrevious) {

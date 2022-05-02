@@ -56,7 +56,7 @@ final class RegexFuncAnalyzer
             return \false;
         }
         /** @var Assign|null $assignExprVariable */
-        $assignExprVariable = $this->betterNodeFinder->findFirstPreviousOfNode($funcCall, function (\PhpParser\Node $node) use($variable) : bool {
+        $assignExprVariable = $this->betterNodeFinder->findFirstPrevious($funcCall, function (\PhpParser\Node $node) use($variable) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;
             }
