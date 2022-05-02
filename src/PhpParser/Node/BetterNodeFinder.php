@@ -272,23 +272,19 @@ final class BetterNodeFinder
     /**
      * @param callable(Node $node): bool $filter
      */
-    public function findFirstPrevious(
-        Node $node,
-        callable $filter,
-        bool $lookupParent = true,
-        bool $stopOnFunctionLike = true
-    ): ?Node {
+    public function findFirstPrevious(Node $node, callable $filter, bool $lookupParent = true): ?Node
+    {
         // move to previous Node
-        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousStatement instanceof Node) {
-            $foundNode = $this->findFirst([$previousStatement], $filter);
+        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($previousNode instanceof Node) {
+            $foundNode = $this->findFirst($previousNode, $filter);
 
             // we found what we need
             if ($foundNode instanceof Node) {
                 return $foundNode;
             }
 
-            return $this->findFirstPrevious($previousStatement, $filter);
+            return $this->findFirstPrevious($previousNode, $filter, $lookupParent);
         }
 
         if (! $lookupParent) {
@@ -296,12 +292,12 @@ final class BetterNodeFinder
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($stopOnFunctionLike && $parent instanceof FunctionLike) {
+        if ($parent instanceof FunctionLike) {
             return null;
         }
 
         if ($parent instanceof Node) {
-            return $this->findFirstPrevious($parent, $filter);
+            return $this->findFirstPrevious($parent, $filter, $lookupParent);
         }
 
         return null;
