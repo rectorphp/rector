@@ -19,27 +19,6 @@ final class ScopeAwareNodeFinder
 
     /**
      * Find node based on $callable or null, when the nesting scope is broken
-     * @param array<class-string<Node>> $allowedTypes
-     */
-    public function findParentType(Node $node, array $allowedTypes): ?Node
-    {
-        $callable = function (Node $node) use ($allowedTypes): bool {
-            foreach ($allowedTypes as $allowedType) {
-                if (! is_a($node, $allowedType)) {
-                    continue;
-                }
-
-                return true;
-            }
-
-            return false;
-        };
-
-        return $this->findParent($node, $callable, $allowedTypes);
-    }
-
-    /**
-     * Find node based on $callable or null, when the nesting scope is broken
      * @param callable(Node $node): bool $callable
      * @param array<class-string<Node>> $allowedTypes
      */
