@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeCollector\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -83,6 +84,10 @@ final class ArrayCallableMethodMatcher
         $firstItemValue = $items[0]->value;
         $calleeType = $firstItemValue instanceof \PhpParser\Node\Expr\ClassConstFetch ? $this->resolveClassConstFetchType($firstItemValue) : $this->nodeTypeResolver->getType($firstItemValue);
         if (!$calleeType instanceof \PHPStan\Type\TypeWithClassName) {
+            return null;
+        }
+        $isInAttribute = (bool) $this->betterNodeFinder->findParentType($array, \PhpParser\Node\Attribute::class);
+        if ($isInAttribute) {
             return null;
         }
         $values = $this->valueResolver->getValue($array);

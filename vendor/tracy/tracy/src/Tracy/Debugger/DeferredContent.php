@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220501\Tracy;
+namespace RectorPrefix20220502\Tracy;
 
 /**
  * @internal
@@ -18,10 +18,10 @@ final class DeferredContent
     private $requestId;
     /** @var bool */
     private $useSession = \false;
-    public function __construct(\RectorPrefix20220501\Tracy\SessionStorage $sessionStorage)
+    public function __construct(\RectorPrefix20220502\Tracy\SessionStorage $sessionStorage)
     {
         $this->sessionStorage = $sessionStorage;
-        $this->requestId = $_SERVER['HTTP_X_TRACY_AJAX'] ?? \RectorPrefix20220501\Tracy\Helpers::createId();
+        $this->requestId = $_SERVER['HTTP_X_TRACY_AJAX'] ?? \RectorPrefix20220502\Tracy\Helpers::createId();
     }
     public function isAvailable() : bool
     {
@@ -80,7 +80,7 @@ final class DeferredContent
             \flush();
             return \true;
         }
-        if (\RectorPrefix20220501\Tracy\Helpers::isAjax()) {
+        if (\RectorPrefix20220502\Tracy\Helpers::isAjax()) {
             \header('X-Tracy-Ajax: 1');
             // session must be already locked
         }
@@ -88,12 +88,12 @@ final class DeferredContent
     }
     private function buildJsCss() : string
     {
-        $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/../assets/reset.css', __DIR__ . '/../Bar/assets/bar.css', __DIR__ . '/../assets/toggle.css', __DIR__ . '/../assets/table-sort.css', __DIR__ . '/../assets/tabs.css', __DIR__ . '/../Dumper/assets/dumper-light.css', __DIR__ . '/../Dumper/assets/dumper-dark.css', __DIR__ . '/../BlueScreen/assets/bluescreen.css'], \RectorPrefix20220501\Tracy\Debugger::$customCssFiles));
+        $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/../assets/reset.css', __DIR__ . '/../Bar/assets/bar.css', __DIR__ . '/../assets/toggle.css', __DIR__ . '/../assets/table-sort.css', __DIR__ . '/../assets/tabs.css', __DIR__ . '/../Dumper/assets/dumper-light.css', __DIR__ . '/../Dumper/assets/dumper-dark.css', __DIR__ . '/../BlueScreen/assets/bluescreen.css'], \RectorPrefix20220502\Tracy\Debugger::$customCssFiles));
         $js1 = \array_map(function ($file) {
             return '(function() {' . \file_get_contents($file) . '})();';
         }, [__DIR__ . '/../Bar/assets/bar.js', __DIR__ . '/../assets/toggle.js', __DIR__ . '/../assets/table-sort.js', __DIR__ . '/../assets/tabs.js', __DIR__ . '/../Dumper/assets/dumper.js', __DIR__ . '/../BlueScreen/assets/bluescreen.js']);
-        $js2 = \array_map('file_get_contents', \RectorPrefix20220501\Tracy\Debugger::$customJsFiles);
-        $str = "'use strict';\n(function(){\n\tvar el = document.createElement('style');\n\tel.setAttribute('nonce', document.currentScript.getAttribute('nonce') || document.currentScript.nonce);\n\tel.className='tracy-debug';\n\tel.textContent=" . \json_encode(\RectorPrefix20220501\Tracy\Helpers::minifyCss(\implode('', $css))) . ";\n\tdocument.head.appendChild(el);})\n();\n" . \implode('', $js1) . \implode('', $js2);
+        $js2 = \array_map('file_get_contents', \RectorPrefix20220502\Tracy\Debugger::$customJsFiles);
+        $str = "'use strict';\n(function(){\n\tvar el = document.createElement('style');\n\tel.setAttribute('nonce', document.currentScript.getAttribute('nonce') || document.currentScript.nonce);\n\tel.className='tracy-debug';\n\tel.textContent=" . \json_encode(\RectorPrefix20220502\Tracy\Helpers::minifyCss(\implode('', $css))) . ";\n\tdocument.head.appendChild(el);})\n();\n" . \implode('', $js1) . \implode('', $js2);
         return $str;
     }
     public function clean() : void

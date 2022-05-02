@@ -15,7 +15,7 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220501\Webmozart\Assert\Assert;
+use RectorPrefix20220502\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\PreferThisOrSelfMethodCallRectorTest
  */
@@ -93,8 +93,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220501\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220501\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\CodingStyle\Enum\PreferenceSelfThis::class);
+        \RectorPrefix20220502\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220502\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\CodingStyle\Enum\PreferenceSelfThis::class);
         $this->typeToPreference = $configuration;
     }
     /**

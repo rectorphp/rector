@@ -5,13 +5,13 @@ namespace Rector\Core\DependencyInjection\Loader\Configurator;
 
 use Rector\Core\Configuration\ValueObjectInliner;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use RectorPrefix20220501\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use RectorPrefix20220501\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
+use RectorPrefix20220502\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix20220502\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
 /**
  * @api
  * Same as Symfony service configurator, with extra "configure()" method for easier DX
  */
-final class RectorServiceConfigurator extends \RectorPrefix20220501\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator
+final class RectorServiceConfigurator extends \RectorPrefix20220502\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator
 {
     /**
      * @deprecated Use @see \Rector\Config\RectorConfig instead
@@ -33,11 +33,11 @@ final class RectorServiceConfigurator extends \RectorPrefix20220501\Symfony\Comp
     private function ensureClassIsConfigurable(?string $class) : void
     {
         if ($class === null) {
-            throw new \RectorPrefix20220501\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException('The class is missing');
+            throw new \RectorPrefix20220502\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException('The class is missing');
         }
         if (!\is_a($class, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class, \true)) {
             $errorMessage = \sprintf('The service "%s" is not configurable. Make it implement "%s" or remove "configure()" call.', $class, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class);
-            throw new \RectorPrefix20220501\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException($errorMessage);
+            throw new \RectorPrefix20220502\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException($errorMessage);
         }
     }
 }

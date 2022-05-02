@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220501\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220502\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220501\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220501\OndraM\CiDetector\Env;
-use RectorPrefix20220501\OndraM\CiDetector\TrinaryLogic;
-class Jenkins extends \RectorPrefix20220501\OndraM\CiDetector\Ci\AbstractCi
+use RectorPrefix20220502\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220502\OndraM\CiDetector\Env;
+use RectorPrefix20220502\OndraM\CiDetector\TrinaryLogic;
+class Jenkins extends \RectorPrefix20220502\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220501\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(\RectorPrefix20220502\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('JENKINS_URL') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220501\OndraM\CiDetector\CiDetector::CI_JENKINS;
+        return \RectorPrefix20220502\OndraM\CiDetector\CiDetector::CI_JENKINS;
     }
-    public function isPullRequest() : \RectorPrefix20220501\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220502\OndraM\CiDetector\TrinaryLogic
     {
-        return \RectorPrefix20220501\OndraM\CiDetector\TrinaryLogic::createMaybe();
+        return \RectorPrefix20220502\OndraM\CiDetector\TrinaryLogic::createMaybe();
     }
     public function getBuildNumber() : string
     {

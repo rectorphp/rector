@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220501;
+namespace RectorPrefix20220502;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220501\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
-use RectorPrefix20220501\Symplify\Skipper\ValueObject\Option;
-use RectorPrefix20220501\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix20220502\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix20220502\Symplify\Skipper\ValueObject\Option;
+use RectorPrefix20220502\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(\RectorPrefix20220501\Symplify\Skipper\ValueObject\Option::SKIP, []);
-    $parameters->set(\RectorPrefix20220501\Symplify\Skipper\ValueObject\Option::ONLY, []);
+    $parameters->set(\RectorPrefix20220502\Symplify\Skipper\ValueObject\Option::SKIP, []);
+    $parameters->set(\RectorPrefix20220502\Symplify\Skipper\ValueObject\Option::ONLY, []);
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->load('RectorPrefix20220501\Symplify\\Skipper\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/ValueObject']);
-    $services->set(\RectorPrefix20220501\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker::class);
-    $services->set(\RectorPrefix20220501\Symplify\SmartFileSystem\Normalizer\PathNormalizer::class);
+    $services->load('RectorPrefix20220502\Symplify\\Skipper\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/ValueObject']);
+    $services->set(\RectorPrefix20220502\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker::class);
+    $services->set(\RectorPrefix20220502\Symplify\SmartFileSystem\Normalizer\PathNormalizer::class);
 };
