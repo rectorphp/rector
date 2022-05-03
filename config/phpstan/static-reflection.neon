@@ -4,8 +4,8 @@ parameters:
         disableRuntimeReflectionProvider: false
 
 conditionalTags:
-	PhpParser\NodeVisitor\NodeConnectingVisitor:
-		phpstan.parser.richParserNodeVisitor: true
+    PhpParser\NodeVisitor\NodeConnectingVisitor:
+        phpstan.parser.richParserNodeVisitor: true
 
 services:
     - Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory

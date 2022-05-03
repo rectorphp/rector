@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
         $newVariableName = \RectorPrefix20220503\Nette\Utils\Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, function (array $matches) : string {
             $output = '';
-            $output .= isset($matches[1]) ? \strtolower($matches[1]) : '';
+            $output .= isset($matches[1]) ? \strtolower((string) $matches[1]) : '';
             $output .= $matches[2] ?? '';
             return $output . ($matches[3] ?? '');
         });

@@ -12,8 +12,8 @@ final class ContainerBuilderFactoryTest extends \RectorPrefix20220503\PHPUnit\Fr
     public function test() : void
     {
         $containerBuilderFactory = new \RectorPrefix20220503\Symplify\SymplifyKernel\ContainerBuilderFactory(new \RectorPrefix20220503\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory());
-        $container = $containerBuilderFactory->create([__DIR__ . '/config/some_services.php'], [], []);
-        $hasSmartFileSystemService = $container->has(\RectorPrefix20220503\Symplify\SmartFileSystem\SmartFileSystem::class);
+        $containerBuilder = $containerBuilderFactory->create([__DIR__ . '/config/some_services.php'], [], []);
+        $hasSmartFileSystemService = $containerBuilder->has(\RectorPrefix20220503\Symplify\SmartFileSystem\SmartFileSystem::class);
         $this->assertTrue($hasSmartFileSystemService);
     }
 }
