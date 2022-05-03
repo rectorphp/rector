@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220502\Doctrine\Inflector\Rules\Spanish;
+namespace RectorPrefix20220503\Doctrine\Inflector\Rules\Spanish;
 
-use RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern;
-use RectorPrefix20220502\Doctrine\Inflector\Rules\Substitution;
-use RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation;
-use RectorPrefix20220502\Doctrine\Inflector\Rules\Word;
+use RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern;
+use RectorPrefix20220503\Doctrine\Inflector\Rules\Substitution;
+use RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation;
+use RectorPrefix20220503\Doctrine\Inflector\Rules\Word;
 class Inflectible
 {
     /**
@@ -14,36 +14,36 @@ class Inflectible
      */
     public static function getSingular() : iterable
     {
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/ereses$/'), 'erés'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/iones$/'), 'ión'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/ces$/'), 'z'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/es$/'), ''));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/s$/'), ''));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/ereses$/'), 'erés'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/iones$/'), 'ión'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/ces$/'), 'z'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/es$/'), ''));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/s$/'), ''));
     }
     /**
      * @return Transformation[]
      */
     public static function getPlural() : iterable
     {
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/ú([sn])$/i'), 'RectorPrefix20220502\\u\\1es'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/ó([sn])$/i'), 'RectorPrefix20220502\\o\\1es'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/í([sn])$/i'), 'RectorPrefix20220502\\i\\1es'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/é([sn])$/i'), 'RectorPrefix20220502\\e\\1es'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/á([sn])$/i'), 'RectorPrefix20220502\\a\\1es'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/z$/i'), 'ces'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/([aeiou]s)$/i'), '\\1'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/([^aeéiou])$/i'), '\\1es'));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Pattern('/$/'), 's'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/ú([sn])$/i'), 'RectorPrefix20220503\\u\\1es'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/ó([sn])$/i'), 'RectorPrefix20220503\\o\\1es'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/í([sn])$/i'), 'RectorPrefix20220503\\i\\1es'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/é([sn])$/i'), 'RectorPrefix20220503\\e\\1es'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/á([sn])$/i'), 'RectorPrefix20220503\\a\\1es'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/z$/i'), 'ces'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/([aeiou]s)$/i'), '\\1'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/([^aeéiou])$/i'), '\\1es'));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Pattern('/$/'), 's'));
     }
     /**
      * @return Substitution[]
      */
     public static function getIrregular() : iterable
     {
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Word('el'), new \RectorPrefix20220502\Doctrine\Inflector\Rules\Word('los')));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Word('papá'), new \RectorPrefix20220502\Doctrine\Inflector\Rules\Word('papás')));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Word('mamá'), new \RectorPrefix20220502\Doctrine\Inflector\Rules\Word('mamás')));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Word('sofá'), new \RectorPrefix20220502\Doctrine\Inflector\Rules\Word('sofás')));
-        (yield new \RectorPrefix20220502\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Word('mes'), new \RectorPrefix20220502\Doctrine\Inflector\Rules\Word('meses')));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Word('el'), new \RectorPrefix20220503\Doctrine\Inflector\Rules\Word('los')));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Word('papá'), new \RectorPrefix20220503\Doctrine\Inflector\Rules\Word('papás')));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Word('mamá'), new \RectorPrefix20220503\Doctrine\Inflector\Rules\Word('mamás')));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Word('sofá'), new \RectorPrefix20220503\Doctrine\Inflector\Rules\Word('sofás')));
+        (yield new \RectorPrefix20220503\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Word('mes'), new \RectorPrefix20220503\Doctrine\Inflector\Rules\Word('meses')));
     }
 }

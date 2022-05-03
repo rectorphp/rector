@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220502\Doctrine\Inflector\Rules\English;
+namespace RectorPrefix20220503\Doctrine\Inflector\Rules\English;
 
-use RectorPrefix20220502\Doctrine\Inflector\Rules\Patterns;
-use RectorPrefix20220502\Doctrine\Inflector\Rules\Ruleset;
-use RectorPrefix20220502\Doctrine\Inflector\Rules\Substitutions;
-use RectorPrefix20220502\Doctrine\Inflector\Rules\Transformations;
+use RectorPrefix20220503\Doctrine\Inflector\Rules\Patterns;
+use RectorPrefix20220503\Doctrine\Inflector\Rules\Ruleset;
+use RectorPrefix20220503\Doctrine\Inflector\Rules\Substitutions;
+use RectorPrefix20220503\Doctrine\Inflector\Rules\Transformations;
 final class Rules
 {
-    public static function getSingularRuleset() : \RectorPrefix20220502\Doctrine\Inflector\Rules\Ruleset
+    public static function getSingularRuleset() : \RectorPrefix20220503\Doctrine\Inflector\Rules\Ruleset
     {
-        return new \RectorPrefix20220502\Doctrine\Inflector\Rules\Ruleset(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformations(...\RectorPrefix20220502\Doctrine\Inflector\Rules\English\Inflectible::getSingular()), new \RectorPrefix20220502\Doctrine\Inflector\Rules\Patterns(...\RectorPrefix20220502\Doctrine\Inflector\Rules\English\Uninflected::getSingular()), (new \RectorPrefix20220502\Doctrine\Inflector\Rules\Substitutions(...\RectorPrefix20220502\Doctrine\Inflector\Rules\English\Inflectible::getIrregular()))->getFlippedSubstitutions());
+        return new \RectorPrefix20220503\Doctrine\Inflector\Rules\Ruleset(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformations(...\RectorPrefix20220503\Doctrine\Inflector\Rules\English\Inflectible::getSingular()), new \RectorPrefix20220503\Doctrine\Inflector\Rules\Patterns(...\RectorPrefix20220503\Doctrine\Inflector\Rules\English\Uninflected::getSingular()), (new \RectorPrefix20220503\Doctrine\Inflector\Rules\Substitutions(...\RectorPrefix20220503\Doctrine\Inflector\Rules\English\Inflectible::getIrregular()))->getFlippedSubstitutions());
     }
-    public static function getPluralRuleset() : \RectorPrefix20220502\Doctrine\Inflector\Rules\Ruleset
+    public static function getPluralRuleset() : \RectorPrefix20220503\Doctrine\Inflector\Rules\Ruleset
     {
-        return new \RectorPrefix20220502\Doctrine\Inflector\Rules\Ruleset(new \RectorPrefix20220502\Doctrine\Inflector\Rules\Transformations(...\RectorPrefix20220502\Doctrine\Inflector\Rules\English\Inflectible::getPlural()), new \RectorPrefix20220502\Doctrine\Inflector\Rules\Patterns(...\RectorPrefix20220502\Doctrine\Inflector\Rules\English\Uninflected::getPlural()), new \RectorPrefix20220502\Doctrine\Inflector\Rules\Substitutions(...\RectorPrefix20220502\Doctrine\Inflector\Rules\English\Inflectible::getIrregular()));
+        return new \RectorPrefix20220503\Doctrine\Inflector\Rules\Ruleset(new \RectorPrefix20220503\Doctrine\Inflector\Rules\Transformations(...\RectorPrefix20220503\Doctrine\Inflector\Rules\English\Inflectible::getPlural()), new \RectorPrefix20220503\Doctrine\Inflector\Rules\Patterns(...\RectorPrefix20220503\Doctrine\Inflector\Rules\English\Uninflected::getPlural()), new \RectorPrefix20220503\Doctrine\Inflector\Rules\Substitutions(...\RectorPrefix20220503\Doctrine\Inflector\Rules\English\Inflectible::getIrregular()));
     }
 }

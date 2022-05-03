@@ -37,7 +37,7 @@ final class NullToStrictStringFuncCallArgRector extends \Rector\Core\Rector\Abst
     /**
      * @var array<string, string[]>
      */
-    private const ARG_POSITION_NAME_NULL_TO_STRICT_STRING = ['preg_split' => ['subject'], 'preg_match' => ['subject'], 'preg_match_all' => ['subject'], 'explode' => ['string'], 'strlen' => ['string'], 'str_contains' => ['haystack', 'needle']];
+    private const ARG_POSITION_NAME_NULL_TO_STRICT_STRING = ['preg_split' => ['subject'], 'preg_match' => ['subject'], 'preg_match_all' => ['subject'], 'explode' => ['string'], 'strlen' => ['string'], 'str_contains' => ['haystack', 'needle'], 'strtotime' => ['datetime'], 'str_replace' => ['subject'], 'substr' => ['string'], 'str_starts_with' => ['haystack', 'needle'], 'strtoupper' => ['string'], 'strtolower' => ['string'], 'strpos' => ['haystack', 'needle'], 'stripos' => ['haystack', 'needle']];
     /**
      * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
