@@ -154,6 +154,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($currentExpression->expr !== $funcCall) {
+            return null;
+        }
+
         return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
     }
 }
