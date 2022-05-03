@@ -105,7 +105,7 @@ CODE_SAMPLE
         /** @var Arg $secondArg */
         $secondArg = $node->args[1];
         $typeNode = $this->valueResolver->getValue($secondArg->value);
-        if ($typeNode === null) {
+        if (! is_string($typeNode)) {
             return null;
         }
 

@@ -26,7 +26,9 @@ final class StaticRectorStrings
         $matches = Strings::matchAll($input, self::CAMEL_CASE_SPLIT_REGEX);
         $parts = [];
         foreach ($matches as $match) {
-            $parts[] = $match[0] === strtoupper($match[0]) ? strtolower($match[0]) : lcfirst($match[0]);
+            $matchedPart = (string) $match[0];
+
+            $parts[] = $matchedPart === strtoupper($matchedPart) ? strtolower($matchedPart) : lcfirst($matchedPart);
         }
 
         return implode('_', $parts);

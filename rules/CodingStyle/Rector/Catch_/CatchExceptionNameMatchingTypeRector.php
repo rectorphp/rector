@@ -114,7 +114,7 @@ CODE_SAMPLE
             function (array $matches): string {
                 $output = '';
 
-                $output .= isset($matches[1]) ? strtolower($matches[1]) : '';
+                $output .= isset($matches[1]) ? strtolower((string) $matches[1]) : '';
                 $output .= $matches[2] ?? '';
 
                 return $output . ($matches[3] ?? '');
