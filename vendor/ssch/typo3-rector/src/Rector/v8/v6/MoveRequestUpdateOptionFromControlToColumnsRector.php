@@ -115,7 +115,6 @@ CODE_SAMPLE
             }
             $columnItem->value->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('reload'), new \PhpParser\Node\Scalar\String_('onChange'));
         }
-        // change the node
         return $node;
     }
 }

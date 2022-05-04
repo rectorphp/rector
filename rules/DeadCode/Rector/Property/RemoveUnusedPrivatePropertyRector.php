@@ -42,6 +42,9 @@ final class RemoveUnusedPrivatePropertyRector extends \Rector\Core\Rector\Abstra
         $this->propertyManipulator = $propertyManipulator;
         $this->complexNodeRemover = $complexNodeRemover;
     }
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration) : void
     {
         $this->removeAssignSideEffect = $configuration[self::REMOVE_ASSIGN_SIDE_EFFECT] ?? (bool) \current($configuration);
@@ -66,31 +69,34 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param Property $node
+     * @param Class_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->shouldSkipProperty($node)) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->getProperties() as $property) {
+            if ($this->shouldSkipProperty($property)) {
+                continue;
+            }
+            if ($this->propertyManipulator->isPropertyUsedInReadContext($property)) {
+                continue;
+            }
+            $this->complexNodeRemover->removePropertyAndUsages($node, $property, $this->removeAssignSideEffect);
+            $hasChanged = \true;
         }
-        if ($this->propertyManipulator->isPropertyUsedInReadContext($node)) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        $this->complexNodeRemover->removePropertyAndUsages($node, $this->removeAssignSideEffect);
-        return $node;
+        return null;
     }
     private function shouldSkipProperty(\PhpParser\Node\Stmt\Property $property) : bool
     {
         if (\count($property->props) !== 1) {
             return \true;
         }
-        if (!$property->isPrivate()) {
-            return \true;
-        }
-        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
-        return !$class instanceof \PhpParser\Node\Stmt\Class_;
+        return !$property->isPrivate();
     }
 }

@@ -48,10 +48,11 @@ final class UseIconsFromSubFolderInIconRegistryRector extends \Rector\Core\Recto
         if (!\array_key_exists(self::SOURCE, $options)) {
             return null;
         }
-        if (\strncmp($options[self::SOURCE], 'typo3/sysext/core/Resources/Public/Icons/T3Icons/content/', \strlen('typo3/sysext/core/Resources/Public/Icons/T3Icons/content/')) !== 0) {
+        $source = (string) $options[self::SOURCE];
+        if (\strncmp($source, 'typo3/sysext/core/Resources/Public/Icons/T3Icons/content/', \strlen('typo3/sysext/core/Resources/Public/Icons/T3Icons/content/')) !== 0) {
             return null;
         }
-        $options[self::SOURCE] = \RectorPrefix20220504\Nette\Utils\Strings::replace($options[self::SOURCE], '#typo3/sysext/core/Resources/Public/Icons/T3Icons/content/#i', 'typo3/sysext/core/Resources/Public/Icons/T3Icons/svgs/content/');
+        $options[self::SOURCE] = \RectorPrefix20220504\Nette\Utils\Strings::replace($source, '#typo3/sysext/core/Resources/Public/Icons/T3Icons/content/#i', 'typo3/sysext/core/Resources/Public/Icons/T3Icons/svgs/content/');
         $node->args[2]->value = $this->nodeFactory->createArray($options);
         return null;
     }

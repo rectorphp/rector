@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9
+class ComposerStaticInit36685e4138711e329198d519eb0443c6
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2737,7 +2737,6 @@ class ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9
         'Rector\\NodeNestingScope\\ParentScopeFinder' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ParentScopeFinder.php',
         'Rector\\NodeNestingScope\\ScopeNestingComparator' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ScopeNestingComparator.php',
         'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ValueObject/ControlStructure.php',
-        'Rector\\NodeRemoval\\AssignRemover' => __DIR__ . '/../..' . '/packages/NodeRemoval/AssignRemover.php',
         'Rector\\NodeRemoval\\BreakingRemovalGuard' => __DIR__ . '/../..' . '/packages/NodeRemoval/BreakingRemovalGuard.php',
         'Rector\\NodeRemoval\\NodeRemover' => __DIR__ . '/../..' . '/packages/NodeRemoval/NodeRemover.php',
         'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Contract/NodeTypeResolverInterface.php',
@@ -3101,7 +3100,6 @@ class ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9
         'Rector\\PostRector\\Application\\PostFileProcessor' => __DIR__ . '/../..' . '/packages/PostRector/Application/PostFileProcessor.php',
         'Rector\\PostRector\\Collector\\NodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToAddCollector.php',
         'Rector\\PostRector\\Collector\\NodesToRemoveCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToRemoveCollector.php',
-        'Rector\\PostRector\\Collector\\NodesToReplaceCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToReplaceCollector.php',
         'Rector\\PostRector\\Collector\\PropertyToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/PropertyToAddCollector.php',
         'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/UseNodesToAddCollector.php',
         'Rector\\PostRector\\Contract\\Collector\\NodeCollectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Collector/NodeCollectorInterface.php',
@@ -3113,7 +3111,6 @@ class ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9
         'Rector\\PostRector\\Rector\\NameImportingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NameImportingPostRector.php',
         'Rector\\PostRector\\Rector\\NodeAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NodeAddingPostRector.php',
         'Rector\\PostRector\\Rector\\NodeRemovingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NodeRemovingPostRector.php',
-        'Rector\\PostRector\\Rector\\NodeToReplacePostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NodeToReplacePostRector.php',
         'Rector\\PostRector\\Rector\\PropertyAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/PropertyAddingPostRector.php',
         'Rector\\PostRector\\Rector\\UseAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/UseAddingPostRector.php',
         'Rector\\PostRector\\ValueObject\\PropertyMetadata' => __DIR__ . '/../..' . '/packages/PostRector/ValueObject/PropertyMetadata.php',
@@ -3883,9 +3880,9 @@ class ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit36685e4138711e329198d519eb0443c6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit36685e4138711e329198d519eb0443c6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit36685e4138711e329198d519eb0443c6::$classMap;
 
         }, null, ClassLoader::class);
     }

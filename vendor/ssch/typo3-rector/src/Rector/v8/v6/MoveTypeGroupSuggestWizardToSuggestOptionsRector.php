@@ -177,7 +177,11 @@ CODE_SAMPLE
                 if (null === $item->key) {
                     continue;
                 }
-                if (\strncmp($this->valueResolver->getValue($item->key), '_', \strlen('_')) !== 0) {
+                $keyValue = $this->valueResolver->getValue($item->key);
+                if (!\is_string($keyValue)) {
+                    continue;
+                }
+                if (\strncmp($keyValue, '_', \strlen('_')) !== 0) {
                     $nodeEmpty = \false;
                     break;
                 }

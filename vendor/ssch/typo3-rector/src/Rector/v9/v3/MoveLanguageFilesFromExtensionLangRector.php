@@ -31,7 +31,7 @@ final class MoveLanguageFilesFromExtensionLangRector extends \Rector\Core\Rector
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $value = $this->valueResolver->getValue($node);
-        if (null === $value || !\is_string($value)) {
+        if (!\is_string($value)) {
             return null;
         }
         foreach (self::MAPPING_OLD_TO_NEW_PATHS as $oldPath => $newPath) {

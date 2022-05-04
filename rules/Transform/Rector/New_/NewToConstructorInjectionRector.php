@@ -9,12 +9,12 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
-use Rector\NodeRemoval\AssignRemover;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
@@ -45,17 +45,11 @@ final class NewToConstructorInjectionRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    /**
-     * @readonly
-     * @var \Rector\NodeRemoval\AssignRemover
-     */
-    private $assignRemover;
-    public function __construct(\Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\NodeRemoval\AssignRemover $assignRemover)
+    public function __construct(\Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyFetchFactory = $propertyFetchFactory;
         $this->propertyNaming = $propertyNaming;
         $this->propertyToAddCollector = $propertyToAddCollector;
-        $this->assignRemover = $assignRemover;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -95,18 +89,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Expr\MethodCall::class];
+        return [\PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Stmt\Expression::class];
     }
     /**
-     * @param New_|Assign|MethodCall $node
+     * @param New_|Assign|MethodCall|Expression $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->refactorMethodCall($node);
         }
-        if ($node instanceof \PhpParser\Node\Expr\Assign) {
-            $this->refactorAssign($node);
+        if ($node instanceof \PhpParser\Node\Stmt\Expression) {
+            $nodeExpr = $node->expr;
+            if ($nodeExpr instanceof \PhpParser\Node\Expr\Assign) {
+                $this->refactorAssignExpression($node, $nodeExpr);
+            }
         }
         if ($node instanceof \PhpParser\Node\Expr\New_) {
             $this->refactorNew($node);
@@ -141,16 +138,17 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorAssign(\PhpParser\Node\Expr\Assign $assign) : void
+    private function refactorAssignExpression(\PhpParser\Node\Stmt\Expression $expression, \PhpParser\Node\Expr\Assign $assign) : void
     {
-        if (!$assign->expr instanceof \PhpParser\Node\Expr\New_) {
+        $currentAssign = $assign->expr instanceof \PhpParser\Node\Expr\Assign ? $assign->expr : $assign;
+        if (!$currentAssign->expr instanceof \PhpParser\Node\Expr\New_) {
             return;
         }
         foreach ($this->constructorInjectionObjectTypes as $constructorInjectionObjectType) {
-            if (!$this->isObjectType($assign->expr, $constructorInjectionObjectType)) {
+            if (!$this->isObjectType($currentAssign->expr, $constructorInjectionObjectType)) {
                 continue;
             }
-            $this->assignRemover->removeAssignNode($assign);
+            $this->removeNode($expression);
         }
     }
     private function refactorNew(\PhpParser\Node\Expr\New_ $new) : void

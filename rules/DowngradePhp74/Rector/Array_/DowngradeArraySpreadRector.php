@@ -208,7 +208,8 @@ CODE_SAMPLE
         }
         // Assign the value to the variable, and replace the element with the variable
         $newVariable = new \PhpParser\Node\Expr\Variable($variableName);
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Expr\Assign($newVariable, $arrayItem->value), $array);
+        $newVariableAssign = new \PhpParser\Node\Expr\Assign($newVariable, $arrayItem->value);
+        $this->nodesToAddCollector->addNodeBeforeNode($newVariableAssign, $array);
         return $newVariable;
     }
     /**

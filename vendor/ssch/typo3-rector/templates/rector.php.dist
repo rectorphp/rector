@@ -107,7 +107,7 @@ return static function (RectorConfig $rectorConfig): void {
     // $rectorConfig->ruleWithConfiguration(ExtbasePersistenceTypoScriptRector::class, []);
     // Add some general TYPO3 rules
     $rectorConfig->rule(ConvertImplicitVariablesToExplicitGlobalsRector::class);
-    $rectorConfig->rule(ExtEmConfRector::class)->configure([
+    $rectorConfig->ruleWithConfiguration(ExtEmConfRector::class, [
         ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => []
     ]);
     $rectorConfig->ruleWithConfiguration(ExtensionComposerRector::class, [

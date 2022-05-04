@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\PostRector\Collector\NodesToReplaceCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -45,15 +44,9 @@ final class SubstituteBackendTemplateViewWithModuleTemplateRector extends \Recto
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToReplaceCollector
-     */
-    private $nodesToReplaceCollector;
-    public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator, \Rector\PostRector\Collector\NodesToReplaceCollector $nodesToReplaceCollector)
+    public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
-        $this->nodesToReplaceCollector = $nodesToReplaceCollector;
     }
     /**
      * @return array<class-string<Node>>
@@ -164,20 +157,21 @@ CODE_SAMPLE
         if (null === $classMethod->stmts) {
             return;
         }
-        /** @var MethodCall[] $moduleTemplateMethodCalls */
-        $moduleTemplateMethodCalls = $this->betterNodeFinder->find($classMethod->stmts, function (\PhpParser\Node $node) {
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable($classMethod->stmts, function (\PhpParser\Node $node) use(&$hasChanged) {
             if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
-                return \false;
+                return null;
             }
-            return $this->isName($node->name, 'getModuleTemplate');
+            if (!$this->isName($node->name, 'getModuleTemplate')) {
+                return null;
+            }
+            $hasChanged = \true;
+            return new \PhpParser\Node\Expr\Variable(self::MODULE_TEMPLATE);
         });
-        if ([] === $moduleTemplateMethodCalls) {
+        if (!$hasChanged) {
             return;
         }
         $this->callModuleTemplateFactoryCreateIfNeeded($classMethod);
-        foreach ($moduleTemplateMethodCalls as $moduleTemplateMethodCall) {
-            $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($moduleTemplateMethodCall, new \PhpParser\Node\Expr\Variable(self::MODULE_TEMPLATE));
-        }
     }
     private function callSetContentAndGetContent(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {

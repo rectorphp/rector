@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\Removing\NodeManipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -12,6 +14,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -19,17 +22,12 @@ use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeRemoval\AssignRemover;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer;
+use RectorPrefix20220504\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ComplexNodeRemover
 {
-    /**
-     * @readonly
-     * @var \Rector\NodeRemoval\AssignRemover
-     */
-    private $assignRemover;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
@@ -65,9 +63,13 @@ final class ComplexNodeRemover
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;
-    public function __construct(\Rector\NodeRemoval\AssignRemover $assignRemover, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer $forbiddenPropertyRemovalAnalyzer, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector)
+    /**
+     * @readonly
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+    public function __construct(\Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer $forbiddenPropertyRemovalAnalyzer, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector, \RectorPrefix20220504\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
-        $this->assignRemover = $assignRemover;
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -75,20 +77,55 @@ final class ComplexNodeRemover
         $this->nodeComparator = $nodeComparator;
         $this->forbiddenPropertyRemovalAnalyzer = $forbiddenPropertyRemovalAnalyzer;
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function removePropertyAndUsages(\PhpParser\Node\Stmt\Property $property, bool $removeAssignSideEffect = \true) : void
+    public function removePropertyAndUsages(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\Property $property, bool $removeAssignSideEffect) : void
     {
+        $propertyName = $this->nodeNameResolver->getName($property);
+        $hasSideEffect = \false;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $node) use($removeAssignSideEffect, $propertyName, &$hasSideEffect) {
+            // here should be checked all expr like stmts that can hold assign, e.f. if, foreach etc. etc.
+            if ($node instanceof \PhpParser\Node\Stmt\Expression) {
+                $nodeExpr = $node->expr;
+                // remove direct assigns
+                if ($nodeExpr instanceof \PhpParser\Node\Expr\Assign) {
+                    $assign = $nodeExpr;
+                    // skip double assigns
+                    if ($assign->expr instanceof \PhpParser\Node\Expr\Assign) {
+                        return null;
+                    }
+                    $propertyFetches = $this->resolvePropertyFetchFromDimFetch($assign->var);
+                    if ($propertyFetches === []) {
+                        return null;
+                    }
+                    foreach ($propertyFetches as $propertyFetch) {
+                        if (!$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+                            continue;
+                        }
+                        if ($this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
+                            if (!$removeAssignSideEffect && $this->sideEffectNodeDetector->detect($assign->expr)) {
+                                $hasSideEffect = \true;
+                                return null;
+                            }
+                            $this->nodeRemover->removeNode($node);
+                        }
+                    }
+                }
+            }
+            return null;
+        });
+        // do not remove anyhting in case of side-effect
+        if ($hasSideEffect) {
+            return;
+        }
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
         $assigns = [];
         foreach ($propertyFetches as $propertyFetch) {
-            $assign = $this->resolveAssign($propertyFetch);
+            $assign = $this->resolvePropertyFetchAssign($propertyFetch);
             if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
                 return;
             }
             if ($assign->expr instanceof \PhpParser\Node\Expr\Assign) {
-                return;
-            }
-            if (!$removeAssignSideEffect && $this->sideEffectNodeDetector->detect($assign->expr)) {
                 return;
             }
             $assigns[] = $assign;
@@ -130,14 +167,13 @@ final class ComplexNodeRemover
     {
         foreach ($assigns as $assign) {
             // remove assigns
-            $this->assignRemover->removeAssignNode($assign);
             $this->removeConstructorDependency($assign);
         }
     }
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
-    private function resolveAssign($expr) : ?\PhpParser\Node\Expr\Assign
+    private function resolvePropertyFetchAssign($expr) : ?\PhpParser\Node\Expr\Assign
     {
         $assign = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         while ($assign instanceof \PhpParser\Node && !$assign instanceof \PhpParser\Node\Expr\Assign) {
@@ -228,5 +264,23 @@ final class ComplexNodeRemover
     {
         $expressionVariable = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         return !$expressionVariable instanceof \PhpParser\Node\Expr\Assign;
+    }
+    /**
+     * @return PropertyFetch[]
+     */
+    private function resolvePropertyFetchFromDimFetch(\PhpParser\Node\Expr $expr) : array
+    {
+        // unwrap array dim fetch, till we get to parent too caller node
+        $propertyFetches = [];
+        while ($expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            if ($expr->dim instanceof \PhpParser\Node\Expr\PropertyFetch) {
+                $propertyFetches[] = $expr->dim;
+            }
+            $expr = $expr->var;
+        }
+        if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            $propertyFetches[] = $expr;
+        }
+        return $propertyFetches;
     }
 }
