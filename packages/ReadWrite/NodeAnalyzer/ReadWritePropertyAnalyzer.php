@@ -7,6 +7,7 @@ namespace Rector\ReadWrite\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PostDec;
@@ -39,6 +40,26 @@ final class ReadWritePropertyAnalyzer
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof Node) {
             throw new ShouldNotHappenException();
+        }
+
+        if ($parent instanceof PostInc) {
+            return true;
+        }
+
+        if ($parent instanceof PreInc) {
+            return true;
+        }
+
+        if ($parent instanceof PostDec) {
+            return true;
+        }
+
+        if ($parent instanceof PreDec) {
+            return true;
+        }
+
+        if ($parent instanceof AssignOp) {
+            return true;
         }
 
         $parent = $this->unwrapPostPreIncDec($parent);

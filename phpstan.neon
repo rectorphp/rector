@@ -89,7 +89,6 @@ parameters:
                 - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
                 - rules/Renaming/NodeManipulator/ClassRenamer.php
-                - rules/DogFood/Rector/Closure/UpgradeRectorConfigRector.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 10$#"
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 10#'
@@ -150,8 +149,6 @@ parameters:
 
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
 
-        - '#Instanceof between PhpParser\\Node\\Stmt and Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace will always evaluate to false#'
-
         -
             message: '#Unreachable statement \- code above always terminates#'
             paths:
@@ -184,15 +181,12 @@ parameters:
             paths:
                 - src/Rector/AbstractRector.php
 
-        - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentType\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
-
         - '#Property Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap\:\:\$binaryOpToAssignClasses \(array<class\-string<PhpParser\\Node\\Expr\\BinaryOp\>, class\-string<PhpParser\\Node\\Expr\\BinaryOp\>\>\) does not accept array#'
 
         -
             message: '#Function "property_exists\(\)" cannot be used/left in the code#'
             paths:
                 # on PhpParser Nodes
-                - packages/NodeTypeResolver/NodeVisitor/StatementNodeVisitor.php
                 - packages/NodeNameResolver/NodeNameResolver.php
                 - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
                 - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
@@ -342,6 +336,7 @@ parameters:
             message: '#Class cognitive complexity is \d+, keep it under 50#'
             paths:
                 - src/PhpParser/Node/BetterNodeFinder.php
+                - rules/Removing/NodeManipulator/ComplexNodeRemover.php
 
         -
             message: '#Parameter \#2 \$length of function str_split expects int<1, max\>, int given#'
@@ -579,28 +574,19 @@ parameters:
         # move later in BC break release
         - '#Class "(Rector\\DeadCode\\Rector\\(.*?)\\(RemoveUnreachableStatementRector|RemoveDoubleAssignRector))" has invalid namespace category "(.*?)"\. Pick one of\: "(.*?)"#'
 
-        # by child generics, this property is always available
-        - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\Else_\|PhpParser\\Node\\Stmt\\Foreach_\|PhpParser\\Node\\Stmt\\If_\:\:\$stmts#'
-        - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\Foreach_\|PhpParser\\Node\\Stmt\\If_\|PhpParser\\Node\\Stmt\\Namespace_\|Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace\:\:\$stmts#'
         # stmts refactoring
         - '#Cognitive complexity for "Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleAssignRector\:\:refactor\(\)" is \d+, keep it under 10#'
 
-        # todo add custom stmts aware interface
-        -
-            message: '#Access to an undefined property PhpParser\\Node\:\:\$stmts#'
-            path: src/PhpParser/Node/BetterNodeFinder.php
-
         # empty parent construct
         - '#Rector\\Core\\PhpParser\\NodeTraverser\\FileWithoutNamespaceNodeTraverser\:\:__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
-
-        # resolve later to collector
-        -
-            message: '#Class cognitive complexity is \d+, keep it under 50#'
-            path: rules/TypeDeclaration/PHPStan/ObjectTypeSpecifier.php
 
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is \d+, keep it under 10#'
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier\:\:narrowToFullyQualifiedOrAliasedObjectType\(\)" is \d+, keep it under 10#'
         - '#Class "Rector\\CodeQuality\\Rector\\ClassMethod\\InlineArrayReturnAssignRector" has invalid namespace category "ClassMethod"\. Pick one of\: "NodeTypeGroup"#'
 
         - '#Parameter \#1 \$node (.*?) of method Rector\\(.*?)\:\:refactorWithScope\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface\:\:refactorWithScope\(\)#'
-        - '#Return type \(array\|null\) of method Rector\\CodeQuality\\Rector\\For_\\ForRepeatedCountToOwnVariableRector\:\:refactorWithScope\(\) should be covariant with return type \(array<PhpParser\\Node>\|PhpParser\\Node\|null\) of method Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface\:\:refactorWithScope\(\)#'
+
+        # cleanup after merge of assing remover refactoring
+        - '#Cognitive complexity for "Rector\\Removing\\NodeManipulator\\ComplexNodeRemover\:\:removePropertyAndUsages\(\)" is \d+, keep it under 10#'
+        - '#Class "Rector\\DeadCode\\Rector\\Property\\RemoveUnusedPrivatePropertyRector" has invalid namespace category "Property"\. Pick one of\: "Class_"#'
+        - '#Cognitive complexity for "Rector\\ReadWrite\\NodeAnalyzer\\ReadWritePropertyAnalyzer\:\:isRead\(\)" is 14, keep it under 10#'

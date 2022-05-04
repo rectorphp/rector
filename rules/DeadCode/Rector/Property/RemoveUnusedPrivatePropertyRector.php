@@ -36,6 +36,9 @@ final class RemoveUnusedPrivatePropertyRector extends AbstractRector implements 
     ) {
     }
 
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->removeAssignSideEffect = $configuration[self::REMOVE_ASSIGN_SIDE_EFFECT] ?? (bool) current(
@@ -72,25 +75,35 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Property::class];
+        return [Class_::class];
     }
 
     /**
-     * @param Property $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipProperty($node)) {
-            return null;
+        $hasChanged = false;
+
+        foreach ($node->getProperties() as $property) {
+            if ($this->shouldSkipProperty($property)) {
+                continue;
+            }
+
+            if ($this->propertyManipulator->isPropertyUsedInReadContext($property)) {
+                continue;
+            }
+
+            $this->complexNodeRemover->removePropertyAndUsages($node, $property, $this->removeAssignSideEffect);
+
+            $hasChanged = true;
         }
 
-        if ($this->propertyManipulator->isPropertyUsedInReadContext($node)) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
 
-        $this->complexNodeRemover->removePropertyAndUsages($node, $this->removeAssignSideEffect);
-
-        return $node;
+        return null;
     }
 
     private function shouldSkipProperty(Property $property): bool
@@ -99,11 +112,6 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $property->isPrivate()) {
-            return true;
-        }
-
-        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
-        return ! $class instanceof Class_;
+        return ! $property->isPrivate();
     }
 }

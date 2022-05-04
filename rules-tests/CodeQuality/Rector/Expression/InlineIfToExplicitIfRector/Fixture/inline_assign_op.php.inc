@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector\Fixture;
 
-class AssignOp
+final class InlineAssignOp
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class AssignOp
 
 namespace Rector\Tests\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector\Fixture;
 
-class AssignOp
+final class InlineAssignOp
 {
     public function run()
     {

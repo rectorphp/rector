@@ -29,25 +29,14 @@ use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PostRector\Collector\NodesToAddCollector;
 
 final class LivingCodeManipulator
 {
     public function __construct(
-        private readonly NodesToAddCollector $nodesToAddCollector,
         private readonly NodeTypeResolver $nodeTypeResolver
     ) {
-    }
-
-    public function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
-    {
-        $livinExprs = $this->keepLivingCodeFromExpr($expr);
-        foreach ($livinExprs as $livinExpr) {
-            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($livinExpr), $addBeforeThisNode);
-        }
     }
 
     /**
