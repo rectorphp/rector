@@ -9,14 +9,13 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -39,11 +38,17 @@ final class UnSpreadOperatorRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\CodingStyle\Reflection\VendorLocationDetector
      */
     private $vendorLocationDetector;
-    public function __construct(\Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector $spreadVariablesCollector, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector)
+    /**
+     * @readonly
+     * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
+     */
+    private $classChildAnalyzer;
+    public function __construct(\Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector $spreadVariablesCollector, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector, \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer)
     {
         $this->spreadVariablesCollector = $spreadVariablesCollector;
         $this->reflectionResolver = $reflectionResolver;
         $this->vendorLocationDetector = $vendorLocationDetector;
+        $this->classChildAnalyzer = $classChildAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -94,7 +99,15 @@ CODE_SAMPLE
     }
     private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
     {
-        if ($this->isInPHPUnitTestCase($classMethod)) {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            return null;
+        }
+        if ($this->isInPHPUnitTestCase($classReflection, $classMethod)) {
+            return null;
+        }
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        if ($this->classChildAnalyzer->hasParentClassMethod($classReflection, $methodName)) {
             return null;
         }
         $spreadParams = $this->spreadVariablesCollector->resolveFromClassMethod($classMethod);
@@ -193,17 +206,9 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isInPHPUnitTestCase(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isInPHPUnitTestCase(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return \false;
-        }
         if (!$classMethod->isPublic()) {
-            return \false;
-        }
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         return $classReflection->isSubclassOf('PHPUnit\\Framework\\TestCase');
