@@ -323,6 +323,7 @@ parameters:
                 - packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php
                 - packages/PostRector/Rector/AbstractPostRector.php
                 - src/Rector/AbstractRector.php
+                - src/Rector/AbstractScopeAwareRector.php
 
         -
             message: '#This call has duplicate argument#'
@@ -600,3 +601,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is \d+, keep it under 10#'
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier\:\:narrowToFullyQualifiedOrAliasedObjectType\(\)" is \d+, keep it under 10#'
         - '#Class "Rector\\CodeQuality\\Rector\\ClassMethod\\InlineArrayReturnAssignRector" has invalid namespace category "ClassMethod"\. Pick one of\: "NodeTypeGroup"#'
+
+        - '#Parameter \#1 \$node (.*?) of method Rector\\(.*?)\:\:refactorWithScope\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface\:\:refactorWithScope\(\)#'
+        - '#Return type \(array\|null\) of method Rector\\CodeQuality\\Rector\\For_\\ForRepeatedCountToOwnVariableRector\:\:refactorWithScope\(\) should be covariant with return type \(array<PhpParser\\Node>\|PhpParser\\Node\|null\) of method Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface\:\:refactorWithScope\(\)#'

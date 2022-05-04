@@ -6,12 +6,12 @@ namespace Rector\CodeQuality\Rector\Array_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodReflection;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\CallableThisArrayToAnonymousFunctionRectorTest
  */
-final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
+final class CallableThisArrayToAnonymousFunctionRector extends AbstractScopeAwareRector
 {
     public function __construct(
         private readonly AnonymousFunctionFactory $anonymousFunctionFactory,
@@ -91,14 +91,12 @@ CODE_SAMPLE
     /**
      * @param Array_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactorWithScope(Node $node, Scope $scope): ?Node
     {
         $arrayCallable = $this->arrayCallableMethodMatcher->match($node);
         if (! $arrayCallable instanceof ArrayCallable) {
             return null;
         }
-
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
 
         $phpMethodReflection = $this->reflectionResolver->resolveMethodReflection(
             $arrayCallable->getClass(),

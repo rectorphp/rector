@@ -8,17 +8,19 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
-use Rector\Core\Rector\AbstractRector;
+use PHPStan\Analyser\Scope;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector\ForRepeatedCountToOwnVariableRectorTest
  */
-final class ForRepeatedCountToOwnVariableRector extends AbstractRector
+final class ForRepeatedCountToOwnVariableRector extends AbstractScopeAwareRector
 {
     public function __construct(
         private readonly VariableNaming $variableNaming
@@ -70,18 +72,17 @@ CODE_SAMPLE
 
     /**
      * @param For_ $node
+     * @return Stmt[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactorWithScope(Node $node, Scope $scope): ?array
     {
         $countInCond = null;
         $variableName = null;
 
-        $forScope = $node->getAttribute(AttributeKey::SCOPE);
-
         $this->traverseNodesWithCallable($node->cond, function (Node $node) use (
             &$countInCond,
             &$variableName,
-            $forScope
+            $scope
         ): ?Variable {
             if (! $node instanceof FuncCall) {
                 return null;
@@ -97,11 +98,12 @@ CODE_SAMPLE
                 $node,
                 'Count',
                 'itemsCount',
-                $forScope
+                $scope
             );
 
             return new Variable($variableName);
         });
+
         if ($countInCond === null) {
             return null;
         }
@@ -111,8 +113,7 @@ CODE_SAMPLE
         }
 
         $countAssign = new Assign(new Variable($variableName), $countInCond);
-        $this->nodesToAddCollector->addNodeBeforeNode($countAssign, $node);
 
-        return $node;
+        return [new Expression($countAssign), $node];
     }
 }

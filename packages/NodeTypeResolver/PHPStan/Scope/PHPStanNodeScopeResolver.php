@@ -7,6 +7,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
@@ -74,6 +75,11 @@ final class PHPStanNodeScopeResolver
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use (&$nodeCallback): void {
+            if ($node instanceof Foreach_) {
+                // decorate value as well
+                $node->valueVar->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+
             if ($node instanceof Trait_) {
                 $traitName = $this->resolveClassName($node);
 

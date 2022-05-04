@@ -7,10 +7,13 @@ namespace Rector\PostRector\Collector;
 use PhpParser\Node;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 
+/**
+ * @deprecated Resolve in the rules itself instead of hacking around collector.
+ */
 final class NodesToReplaceCollector implements NodeCollectorInterface
 {
     /**
-     * @var Node[][]
+     * @var array<array{Node, Node}>
      */
     private array $nodesToReplace = [];
 
@@ -25,7 +28,7 @@ final class NodesToReplaceCollector implements NodeCollectorInterface
     }
 
     /**
-     * @return Node[][]
+     * @return array<array{Node, Node}>
      */
     public function getNodes(): array
     {
