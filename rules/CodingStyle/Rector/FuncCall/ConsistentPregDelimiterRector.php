@@ -156,9 +156,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->refactorArgument($node->args[$position]);
-
-                return $node;
+                return $this->refactorArgument($node, $node->args[$position]);
             }
         }
 
@@ -181,9 +179,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->refactorArgument($funcCall->args[$position]);
-
-            return $funcCall;
+            return $this->refactorArgument($funcCall, $funcCall->args[$position]);
         }
 
         return null;
@@ -209,17 +205,32 @@ CODE_SAMPLE
         return StringUtils::isMatch($matchInnerUnionRegex['content'], self::NEW_LINE_REGEX);
     }
 
-    private function refactorArgument(Arg $arg): void
+    private function hasEscapedQuote(String_ $string): bool
+    {
+        $kind = $string->getAttribute(AttributeKey::KIND);
+
+        if ($kind === String_::KIND_DOUBLE_QUOTED && str_contains($string->value, '"')) {
+            return true;
+        }
+
+        return $kind === String_::KIND_SINGLE_QUOTED && str_contains($string->value, "'");
+    }
+
+    private function refactorArgument(FuncCall|StaticCall $node, Arg $arg): Node|null
     {
         if (! $arg->value instanceof String_) {
-            return;
+            return null;
         }
 
         /** @var String_ $string */
         $string = $arg->value;
 
+        if ($this->hasEscapedQuote($string)) {
+            return null;
+        }
+
         if ($this->hasNewLineWithUnicodeModifier($string->value)) {
-            return;
+            return null;
         }
 
         $string->value = Strings::replace($string->value, self::INNER_REGEX, function (array $match) use (
@@ -245,5 +256,6 @@ CODE_SAMPLE
 
             return $innerPattern . $match['close'];
         });
+        return $node;
     }
 }
