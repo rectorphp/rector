@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6d2af92af631c7792f0df9d8f3f53158
+class ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2038,6 +2038,7 @@ class ComposerStaticInit6d2af92af631c7792f0df9d8f3f53158
         'Rector\\Core\\Contract\\Rector\\NonPhpRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/NonPhpRectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\PhpRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/PhpRectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\RectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/RectorInterface.php',
+        'Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ScopeAwarePhpRectorInterface.php',
         'Rector\\Core\\Contract\\Template\\TemplateResolverInterface' => __DIR__ . '/../..' . '/src/Contract/Template/TemplateResolverInterface.php',
         'Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector' => __DIR__ . '/../..' . '/src/DependencyInjection/Collector/ConfigureCallValuesCollector.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\MakeRectorsPublicCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/MakeRectorsPublicCompilerPass.php',
@@ -2142,6 +2143,7 @@ class ComposerStaticInit6d2af92af631c7792f0df9d8f3f53158
         'Rector\\Core\\ProcessAnalyzer\\RectifiedAnalyzer' => __DIR__ . '/../..' . '/src/ProcessAnalyzer/RectifiedAnalyzer.php',
         'Rector\\Core\\Provider\\CurrentFileProvider' => __DIR__ . '/../..' . '/src/Provider/CurrentFileProvider.php',
         'Rector\\Core\\Rector\\AbstractRector' => __DIR__ . '/../..' . '/src/Rector/AbstractRector.php',
+        'Rector\\Core\\Rector\\AbstractScopeAwareRector' => __DIR__ . '/../..' . '/src/Rector/AbstractScopeAwareRector.php',
         'Rector\\Core\\Reflection\\ReflectionResolver' => __DIR__ . '/../..' . '/src/Reflection/ReflectionResolver.php',
         'Rector\\Core\\Reporting\\MissingRectorRulesReporter' => __DIR__ . '/../..' . '/src/Reporting/MissingRectorRulesReporter.php',
         'Rector\\Core\\StaticReflection\\DynamicSourceLocatorDecorator' => __DIR__ . '/../..' . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
@@ -3881,9 +3883,9 @@ class ComposerStaticInit6d2af92af631c7792f0df9d8f3f53158
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6d2af92af631c7792f0df9d8f3f53158::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6d2af92af631c7792f0df9d8f3f53158::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6d2af92af631c7792f0df9d8f3f53158::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf6275bd29d5ecce67cedf3a11996b0e9::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -6,6 +6,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
@@ -112,6 +113,10 @@ final class PHPStanNodeScopeResolver
         $scope = $this->scopeFactory->createFromFile($smartFileInfo);
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $mutatingScope) use(&$nodeCallback) : void {
+            if ($node instanceof \PhpParser\Node\Stmt\Foreach_) {
+                // decorate value as well
+                $node->valueVar->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+            }
             if ($node instanceof \PhpParser\Node\Stmt\Trait_) {
                 $traitName = $this->resolveClassName($node);
                 $traitReflectionClass = $this->reflectionProvider->getClass($traitName);

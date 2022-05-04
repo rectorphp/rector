@@ -7,16 +7,18 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
-use Rector\Core\Rector\AbstractRector;
+use PHPStan\Analyser\Scope;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector\ForRepeatedCountToOwnVariableRectorTest
  */
-final class ForRepeatedCountToOwnVariableRector extends \Rector\Core\Rector\AbstractRector
+final class ForRepeatedCountToOwnVariableRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -63,13 +65,13 @@ CODE_SAMPLE
     }
     /**
      * @param For_ $node
+     * @return Stmt[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?array
     {
         $countInCond = null;
         $variableName = null;
-        $forScope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        $this->traverseNodesWithCallable($node->cond, function (\PhpParser\Node $node) use(&$countInCond, &$variableName, $forScope) : ?Variable {
+        $this->traverseNodesWithCallable($node->cond, function (\PhpParser\Node $node) use(&$countInCond, &$variableName, $scope) : ?Variable {
             if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
                 return null;
             }
@@ -77,7 +79,7 @@ CODE_SAMPLE
                 return null;
             }
             $countInCond = $node;
-            $variableName = $this->variableNaming->resolveFromFuncCallFirstArgumentWithSuffix($node, 'Count', 'itemsCount', $forScope);
+            $variableName = $this->variableNaming->resolveFromFuncCallFirstArgumentWithSuffix($node, 'Count', 'itemsCount', $scope);
             return new \PhpParser\Node\Expr\Variable($variableName);
         });
         if ($countInCond === null) {
@@ -87,7 +89,6 @@ CODE_SAMPLE
             return null;
         }
         $countAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable($variableName), $countInCond);
-        $this->nodesToAddCollector->addNodeBeforeNode($countAssign, $node);
-        return $node;
+        return [new \PhpParser\Node\Stmt\Expression($countAssign), $node];
     }
 }

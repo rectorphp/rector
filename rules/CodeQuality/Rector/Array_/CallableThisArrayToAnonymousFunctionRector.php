@@ -5,12 +5,12 @@ namespace Rector\CodeQuality\Rector\Array_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodReflection;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\CallableThisArrayToAnonymousFunctionRectorTest
  */
-final class CallableThisArrayToAnonymousFunctionRector extends \Rector\Core\Rector\AbstractRector
+final class CallableThisArrayToAnonymousFunctionRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -94,13 +94,12 @@ CODE_SAMPLE
     /**
      * @param Array_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
         $arrayCallable = $this->arrayCallableMethodMatcher->match($node);
         if (!$arrayCallable instanceof \Rector\NodeCollector\ValueObject\ArrayCallable) {
             return null;
         }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $phpMethodReflection = $this->reflectionResolver->resolveMethodReflection($arrayCallable->getClass(), $arrayCallable->getMethod(), $scope);
         if (!$phpMethodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
             return null;
