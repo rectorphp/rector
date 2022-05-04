@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220503\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220504\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220503\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220503\OndraM\CiDetector\Env;
-use RectorPrefix20220503\OndraM\CiDetector\TrinaryLogic;
-class Wercker extends \RectorPrefix20220503\OndraM\CiDetector\Ci\AbstractCi
+use RectorPrefix20220504\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220504\OndraM\CiDetector\Env;
+use RectorPrefix20220504\OndraM\CiDetector\TrinaryLogic;
+class Wercker extends \RectorPrefix20220504\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220503\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(\RectorPrefix20220504\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('WERCKER') === 'true';
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220503\OndraM\CiDetector\CiDetector::CI_WERCKER;
+        return \RectorPrefix20220504\OndraM\CiDetector\CiDetector::CI_WERCKER;
     }
-    public function isPullRequest() : \RectorPrefix20220503\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220504\OndraM\CiDetector\TrinaryLogic
     {
-        return \RectorPrefix20220503\OndraM\CiDetector\TrinaryLogic::createMaybe();
+        return \RectorPrefix20220504\OndraM\CiDetector\TrinaryLogic::createMaybe();
     }
     public function getBuildNumber() : string
     {

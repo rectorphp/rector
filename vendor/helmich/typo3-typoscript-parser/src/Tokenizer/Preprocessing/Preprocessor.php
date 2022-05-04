@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220503\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
+namespace RectorPrefix20220504\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
 
 /**
  * Interface definitions for tokenizer preprocessors.

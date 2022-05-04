@@ -120,6 +120,9 @@ CODE_SAMPLE
         if (!$currentExpression instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
+        if ($currentExpression->expr !== $funcCall) {
+            return null;
+        }
         return $currentExpression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
     }
 }

@@ -15,7 +15,7 @@ use Rector\Renaming\Contract\RenameAnnotationInterface;
 use Rector\Renaming\ValueObject\RenameAnnotationByType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220503\Webmozart\Assert\Assert;
+use RectorPrefix20220504\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\ClassMethod\RenameAnnotationRector\RenameAnnotationRectorTest
  */
@@ -99,7 +99,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220503\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\Contract\RenameAnnotationInterface::class);
+        \RectorPrefix20220504\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\Contract\RenameAnnotationInterface::class);
         $this->renameAnnotations = $configuration;
     }
 }

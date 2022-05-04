@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php70;
 
-use RectorPrefix20220503\Nette\Utils\Strings;
+use RectorPrefix20220504\Nette\Utils\Strings;
 use Rector\Php70\Exception\InvalidEregException;
 /**
  * @changelog https://gist.github.com/lifthrasiir/704754/7e486f43e62fd1c9d3669330c251f8ca4a59a3f8
@@ -257,8 +257,8 @@ final class EregToPcreTransformer
         }
         $start = $i + 1;
         $length = $ii - ($i + 1);
-        $bound = \RectorPrefix20220503\Nette\Utils\Strings::substring($s, $start, $length);
-        $matches = \RectorPrefix20220503\Nette\Utils\Strings::match($bound, self::BOUND_REGEX);
+        $bound = \RectorPrefix20220504\Nette\Utils\Strings::substring($s, $start, $length);
+        $matches = \RectorPrefix20220504\Nette\Utils\Strings::match($bound, self::BOUND_REGEX);
         if ($matches === null) {
             throw new \Rector\Php70\Exception\InvalidEregException('an invalid bound');
         }
@@ -286,7 +286,7 @@ final class EregToPcreTransformer
         }
         $start = $i + 1;
         $length = $ii - ($i + 1);
-        $ccls = \RectorPrefix20220503\Nette\Utils\Strings::substring($content, $start, $length);
+        $ccls = \RectorPrefix20220504\Nette\Utils\Strings::substring($content, $start, $length);
         if (!isset(self::CHARACTER_CLASS_MAP[$ccls])) {
             throw new \Rector\Php70\Exception\InvalidEregException('an invalid or unsupported character class [' . $ccls . ']');
         }

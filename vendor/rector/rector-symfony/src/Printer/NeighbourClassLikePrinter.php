@@ -47,7 +47,7 @@ final class NeighbourClassLikePrinter
      */
     public function printClassLike(\PhpParser\Node\Stmt\ClassLike $classLike, $mainNode, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, ?\Rector\Core\ValueObject\Application\File $file = null) : void
     {
-        $declares = $this->resolveDeclares($mainNode, $file);
+        $declares = $this->resolveDeclares($mainNode);
         if ($mainNode instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
             $nodesToPrint = \array_merge($declares, [$classLike]);
         } else {
@@ -69,9 +69,9 @@ final class NeighbourClassLikePrinter
      * @return Declare_[]
      * @param \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_ $mainNode
      */
-    private function resolveDeclares($mainNode, ?\Rector\Core\ValueObject\Application\File $file = null) : array
+    private function resolveDeclares($mainNode) : array
     {
-        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [\PhpParser\Node\Stmt\Declare_::class], $file);
+        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [\PhpParser\Node\Stmt\Declare_::class]);
         if ($declare instanceof \PhpParser\Node\Stmt\Declare_) {
             return [$declare];
         }
