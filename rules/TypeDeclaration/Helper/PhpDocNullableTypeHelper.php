@@ -34,9 +34,6 @@ final class PhpDocNullableTypeHelper
      */
     public function resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserType(\PHPStan\Type\Type $phpDocType, \PHPStan\Type\Type $phpParserType) : ?\PHPStan\Type\Type
     {
-        if ($phpParserType instanceof \PHPStan\Type\MixedType) {
-            return null;
-        }
         return $this->resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserTypeNullInfo($phpDocType, $this->isParserTypeContainingNullType($phpParserType));
     }
     /**
