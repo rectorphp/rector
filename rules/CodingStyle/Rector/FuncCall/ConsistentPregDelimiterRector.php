@@ -124,8 +124,7 @@ CODE_SAMPLE
                 if (!$node->args[$position] instanceof \PhpParser\Node\Arg) {
                     continue;
                 }
-                $this->refactorArgument($node->args[$position]);
-                return $node;
+                return $this->refactorArgument($node, $node->args[$position]);
             }
         }
         return null;
@@ -143,8 +142,7 @@ CODE_SAMPLE
             if (!$funcCall->args[$position] instanceof \PhpParser\Node\Arg) {
                 continue;
             }
-            $this->refactorArgument($funcCall->args[$position]);
-            return $funcCall;
+            return $this->refactorArgument($funcCall, $funcCall->args[$position]);
         }
         return null;
     }
@@ -163,15 +161,30 @@ CODE_SAMPLE
         }
         return \Rector\Core\Util\StringUtils::isMatch($matchInnerUnionRegex['content'], self::NEW_LINE_REGEX);
     }
-    private function refactorArgument(\PhpParser\Node\Arg $arg) : void
+    private function hasEscapedQuote(\PhpParser\Node\Scalar\String_ $string) : bool
+    {
+        $kind = $string->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
+        if ($kind === \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED && \strpos($string->value, '"') !== \false) {
+            return \true;
+        }
+        return $kind === \PhpParser\Node\Scalar\String_::KIND_SINGLE_QUOTED && \strpos($string->value, "'") !== \false;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall $node
+     * @return \PhpParser\Node|null
+     */
+    private function refactorArgument($node, \PhpParser\Node\Arg $arg)
     {
         if (!$arg->value instanceof \PhpParser\Node\Scalar\String_) {
-            return;
+            return null;
         }
         /** @var String_ $string */
         $string = $arg->value;
+        if ($this->hasEscapedQuote($string)) {
+            return null;
+        }
         if ($this->hasNewLineWithUnicodeModifier($string->value)) {
-            return;
+            return null;
         }
         $string->value = \RectorPrefix20220504\Nette\Utils\Strings::replace($string->value, self::INNER_REGEX, function (array $match) use(&$string) : string {
             $printedString = $this->nodePrinter->print($string);
@@ -190,5 +203,6 @@ CODE_SAMPLE
             }
             return $innerPattern . $match['close'];
         });
+        return $node;
     }
 }
