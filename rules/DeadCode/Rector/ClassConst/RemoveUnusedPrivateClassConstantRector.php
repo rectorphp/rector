@@ -6,12 +6,11 @@ namespace Rector\DeadCode\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\NodeAnalyzer\EnumAnalyzer;
 use Rector\Core\NodeManipulator\ClassConstManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,6 +22,7 @@ final class RemoveUnusedPrivateClassConstantRector extends AbstractRector
     public function __construct(
         private readonly ClassConstManipulator $classConstManipulator,
         private readonly EnumAnalyzer $enumAnalyzer,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -70,12 +70,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (! $classReflection instanceof ClassReflection) {
             return null;
         }

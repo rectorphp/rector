@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\VendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Reflection\MethodReflection;
@@ -13,9 +12,9 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 
@@ -25,7 +24,8 @@ final class ParentClassMethodTypeOverrideGuard
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly PathNormalizer $pathNormalizer,
         private readonly AstResolver $astResolver,
-        private readonly ParamTypeInferer $paramTypeInferer
+        private readonly ParamTypeInferer $paramTypeInferer,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -68,10 +68,8 @@ final class ParentClassMethodTypeOverrideGuard
          *     - one of them in /vendor/ -> not allowed
          *     - both not in /vendor/ -> allowed
          */
-        /** @var Scope $scope */
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         /** @var ClassReflection $currentClassReflection */
-        $currentClassReflection = $scope->getClassReflection();
+        $currentClassReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         /** @var string $currentFileName */
         $currentFileName = $currentClassReflection->getFileName();
 
@@ -121,20 +119,15 @@ final class ParentClassMethodTypeOverrideGuard
 
     public function getParentClassMethod(ClassMethod $classMethod): ?MethodReflection
     {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        if (! $classReflection instanceof ClassReflection) {
             return null;
         }
 
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
-
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return null;
-        }
-
         $parentClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+
         foreach ($parentClassReflections as $parentClassReflection) {
             if (! $parentClassReflection->hasNativeMethod($methodName)) {
                 continue;

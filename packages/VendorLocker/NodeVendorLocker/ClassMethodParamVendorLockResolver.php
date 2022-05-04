@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 
 final class ClassMethodParamVendorLockResolver
@@ -17,7 +16,8 @@ final class ClassMethodParamVendorLockResolver
     public function __construct(
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly PathNormalizer $pathNormalizer,
-        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -30,7 +30,7 @@ final class ClassMethodParamVendorLockResolver
             return true;
         }
 
-        $classReflection = $this->resolveClassReflection($classMethod);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (! $classReflection instanceof ClassReflection) {
             return false;
         }
@@ -46,7 +46,7 @@ final class ClassMethodParamVendorLockResolver
             return true;
         }
 
-        $classReflection = $this->resolveClassReflection($classMethod);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (! $classReflection instanceof ClassReflection) {
             return false;
         }
@@ -82,16 +82,6 @@ final class ClassMethodParamVendorLockResolver
         }
 
         return false;
-    }
-
-    private function resolveClassReflection(ClassMethod $classMethod): ClassReflection | null
-    {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        return $scope->getClassReflection();
     }
 
     /**

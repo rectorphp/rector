@@ -10,13 +10,12 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -32,7 +31,8 @@ final class DowngradeContravariantArgumentTypeRector extends AbstractRector
 {
     public function __construct(
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
-        private readonly ParamAnalyzer $paramAnalyzer
+        private readonly ParamAnalyzer $paramAnalyzer,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -134,13 +134,7 @@ CODE_SAMPLE
 
     private function getDifferentParamTypeFromAncestorClass(Param $param, ClassMethod|Function_ $functionLike): ?string
     {
-        $scope = $functionLike->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            // possibly trait
-            return null;
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($functionLike);
         if (! $classReflection instanceof ClassReflection) {
             return null;
         }

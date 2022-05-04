@@ -11,16 +11,15 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class IsClassMethodUsedAnalyzer
 {
@@ -30,7 +29,8 @@ final class IsClassMethodUsedAnalyzer
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly ValueResolver $valueResolver,
         private readonly ArrayCallableMethodMatcher $arrayCallableMethodMatcher,
-        private readonly CallCollectionAnalyzer $callCollectionAnalyzer
+        private readonly CallCollectionAnalyzer $callCollectionAnalyzer,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -149,12 +149,7 @@ final class IsClassMethodUsedAnalyzer
 
     private function doesMethodExistInTrait(ClassMethod $classMethod, string $classMethodName): bool
     {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (! $classReflection instanceof ClassReflection) {
             return false;
         }

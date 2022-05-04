@@ -20,6 +20,7 @@ use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\NodeManipulator\Dependency\DependencyClassMethodDecorator;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -40,7 +41,8 @@ final class ClassDependencyManipulator
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly NodesToRemoveCollector $nodesToRemoveCollector,
         private readonly AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer,
-        private readonly DependencyClassMethodDecorator $dependencyClassMethodDecorator
+        private readonly DependencyClassMethodDecorator $dependencyClassMethodDecorator,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -176,12 +178,7 @@ final class ClassDependencyManipulator
 
     private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
     {
-        $scope = $class->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
         if (! $classReflection instanceof ClassReflection) {
             return false;
         }

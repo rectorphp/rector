@@ -6,10 +6,9 @@ namespace Rector\Privatization\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -23,6 +22,7 @@ final class PrivatizeFinalClassMethodRector extends AbstractRector
     public function __construct(
         private readonly ClassMethodVisibilityGuard $classMethodVisibilityGuard,
         private readonly VisibilityManipulator $visibilityManipulator,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -67,17 +67,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        if ($scope->isInTrait()) {
-            return null;
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if (! $classReflection->isClass()) {
             return null;
         }
 

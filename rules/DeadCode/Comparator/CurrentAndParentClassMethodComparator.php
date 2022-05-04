@@ -16,6 +16,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -27,7 +28,8 @@ final class CurrentAndParentClassMethodComparator
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly ParameterDefaultsComparator $parameterDefaultsComparator,
         private readonly ParameterTypeComparator $parameterTypeComparator,
-        private readonly NodeComparator $nodeComparator
+        private readonly NodeComparator $nodeComparator,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -94,12 +96,7 @@ final class CurrentAndParentClassMethodComparator
         ClassMethod $classMethod,
         StaticCall $staticCall
     ): bool {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (! $classReflection instanceof ClassReflection) {
             return false;
         }

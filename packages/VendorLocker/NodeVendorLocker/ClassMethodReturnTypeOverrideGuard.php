@@ -7,9 +7,7 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
-//use PHPStan\Analyser\Scope;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
@@ -17,9 +15,9 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -38,7 +36,8 @@ final class ClassMethodReturnTypeOverrideGuard
         private readonly ReflectionProvider $reflectionProvider,
         private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer,
         private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly AstResolver $astResolver
+        private readonly AstResolver $astResolver,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -54,14 +53,9 @@ final class ClassMethodReturnTypeOverrideGuard
             return true;
         }
 
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (! $classReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
+            return true;
         }
 
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
@@ -73,7 +67,7 @@ final class ClassMethodReturnTypeOverrideGuard
             return true;
         }
 
-        if ($this->shouldSkipHasChildNoReturn($childrenClassReflections, $classMethod, $scope)) {
+        if ($this->shouldSkipHasChildNoReturn($childrenClassReflections, $classMethod)) {
             return true;
         }
 
@@ -98,12 +92,11 @@ final class ClassMethodReturnTypeOverrideGuard
     /**
      * @param ClassReflection[] $childrenClassReflections
      */
-    private function shouldSkipHasChildNoReturn(
-        array $childrenClassReflections,
-        ClassMethod $classMethod,
-        Scope $scope
-    ): bool {
+    private function shouldSkipHasChildNoReturn(array $childrenClassReflections, ClassMethod $classMethod): bool
+    {
         $methodName = $this->nodeNameResolver->getName($classMethod);
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+
         foreach ($childrenClassReflections as $childClassReflection) {
             if (! $childClassReflection->hasMethod($methodName)) {
                 continue;
@@ -126,14 +119,9 @@ final class ClassMethodReturnTypeOverrideGuard
 
     private function shouldSkipChaoticClassMethods(ClassMethod $classMethod): bool
     {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (! $classReflection instanceof ClassReflection) {
-            return false;
+            return true;
         }
 
         foreach (self::CHAOTIC_CLASS_METHOD_NAMES as $chaoticClass => $chaoticMethodNames) {

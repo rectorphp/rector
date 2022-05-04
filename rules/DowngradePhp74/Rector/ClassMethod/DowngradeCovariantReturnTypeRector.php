@@ -11,7 +11,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\UnionType;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
@@ -20,6 +19,7 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -38,7 +38,8 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
     public function __construct(
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
         private readonly PrivatesCaller $privatesCaller,
-        private readonly ReturnTagRemover $returnTagRemover
+        private readonly ReturnTagRemover $returnTagRemover,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -148,13 +149,7 @@ CODE_SAMPLE
         ClassMethod $classMethod,
         UnionType | NullableType | Name | Identifier | ComplexType $returnTypeNode
     ): Type {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            // possibly trait
-            return new MixedType();
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (! $classReflection instanceof ClassReflection) {
             return new MixedType();
         }

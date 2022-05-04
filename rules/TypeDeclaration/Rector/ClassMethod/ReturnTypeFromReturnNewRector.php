@@ -12,7 +12,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
@@ -20,8 +19,8 @@ use PHPStan\Type\StaticType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
@@ -37,6 +36,7 @@ final class ReturnTypeFromReturnNewRector extends AbstractRector implements MinP
     public function __construct(
         private readonly TypeFactory $typeFactory,
         private readonly ReflectionProvider $reflectionProvider,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -129,12 +129,7 @@ CODE_SAMPLE
         }
 
         if ($className === ObjectReference::STATIC()->getValue() || $className === ObjectReference::SELF()->getValue()) {
-            $scope = $new->getAttribute(AttributeKey::SCOPE);
-            if (! $scope instanceof Scope) {
-                throw new ShouldNotHappenException();
-            }
-
-            $classReflection = $scope->getClassReflection();
+            $classReflection = $this->reflectionResolver->resolveClassReflection($new);
             if (! $classReflection instanceof ClassReflection) {
                 throw new ShouldNotHappenException();
             }

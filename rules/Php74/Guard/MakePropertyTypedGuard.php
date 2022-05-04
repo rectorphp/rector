@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Rector\Php74\Guard;
 
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeManipulator\PropertyManipulator;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\Guard\ParentPropertyLookupGuard;
 
 final class MakePropertyTypedGuard
@@ -19,7 +18,8 @@ final class MakePropertyTypedGuard
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly PropertyAnalyzer $propertyAnalyzer,
         private readonly PropertyManipulator $propertyManipulator,
-        private readonly ParentPropertyLookupGuard $parentPropertyLookupGuard
+        private readonly ParentPropertyLookupGuard $parentPropertyLookupGuard,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -33,12 +33,7 @@ final class MakePropertyTypedGuard
             return false;
         }
 
-        $scope = $property->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($property);
         if (! $classReflection instanceof ClassReflection) {
             return false;
         }
