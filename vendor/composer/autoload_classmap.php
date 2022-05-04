@@ -20,6 +20,7 @@ return array(
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstFetchNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstFetchNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Node' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Node.php',
     'PHPStan\\PhpDocParser\\Ast\\NodeAttributes' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/NodeAttributes.php',
+    'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\DeprecatedTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/DeprecatedTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ExtendsTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ExtendsTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\GenericTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/GenericTagValueNode.php',

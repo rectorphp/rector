@@ -158,6 +158,14 @@ class PhpDocParser
                 case '@psalm-import-type':
                     $tagValue = $this->parseTypeAliasImportTagValue($tokens);
                     break;
+                case '@phpstan-assert':
+                case '@phpstan-assert-if-true':
+                case '@phpstan-assert-if-false':
+                case '@psalm-assert':
+                case '@psalm-assert-if-true':
+                case '@psalm-assert-if-false':
+                    $tagValue = $this->parseAssertTagValue($tokens);
+                    break;
                 default:
                     $tagValue = new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode($this->parseOptionalDescription($tokens));
                     break;
@@ -318,6 +326,14 @@ class PhpDocParser
             $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER);
         }
         return new \PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasImportTagValueNode($importedAlias, new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($importedFrom), $importedAs);
+    }
+    private function parseAssertTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : \PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagValueNode
+    {
+        $isNegated = $tokens->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_NEGATED);
+        $type = $this->typeParser->parse($tokens);
+        $parameter = $this->parseRequiredVariableName($tokens);
+        $description = $this->parseOptionalDescription($tokens);
+        return new \PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagValueNode($type, $parameter, $isNegated, $description);
     }
     private function parseOptionalVariableName(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : string
     {

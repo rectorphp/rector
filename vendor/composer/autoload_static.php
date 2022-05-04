@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitef92bc95d26cd6d3b95cc1d424a32ab0
+class ComposerStaticInit4a6ff5ce889c26f515c53b633862d1b3
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -389,6 +389,7 @@ class ComposerStaticInitef92bc95d26cd6d3b95cc1d424a32ab0
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstFetchNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstFetchNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Node' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Node.php',
         'PHPStan\\PhpDocParser\\Ast\\NodeAttributes' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/NodeAttributes.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\DeprecatedTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/DeprecatedTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ExtendsTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ExtendsTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\GenericTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/GenericTagValueNode.php',
@@ -3880,9 +3881,9 @@ class ComposerStaticInitef92bc95d26cd6d3b95cc1d424a32ab0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitef92bc95d26cd6d3b95cc1d424a32ab0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitef92bc95d26cd6d3b95cc1d424a32ab0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitef92bc95d26cd6d3b95cc1d424a32ab0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4a6ff5ce889c26f515c53b633862d1b3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4a6ff5ce889c26f515c53b633862d1b3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4a6ff5ce889c26f515c53b633862d1b3::$classMap;
 
         }, null, ClassLoader::class);
     }

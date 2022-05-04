@@ -4,11 +4,10 @@ declare (strict_types=1);
 namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20220504\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ClassMethodParamVendorLockResolver
 {
@@ -27,11 +26,17 @@ final class ClassMethodParamVendorLockResolver
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220504\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220504\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+        $this->reflectionResolver = $reflectionResolver;
     }
     /**
      * Includes non-vendor classes
@@ -41,7 +46,7 @@ final class ClassMethodParamVendorLockResolver
         if ($this->isVendorLocked($classMethod)) {
             return \true;
         }
-        $classReflection = $this->resolveClassReflection($classMethod);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
@@ -54,7 +59,7 @@ final class ClassMethodParamVendorLockResolver
         if ($classMethod->isMagic()) {
             return \true;
         }
-        $classReflection = $this->resolveClassReflection($classMethod);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
@@ -83,17 +88,6 @@ final class ClassMethodParamVendorLockResolver
             }
         }
         return \false;
-    }
-    /**
-     * @return \PHPStan\Reflection\ClassReflection|null
-     */
-    private function resolveClassReflection(\PhpParser\Node\Stmt\ClassMethod $classMethod)
-    {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return null;
-        }
-        return $scope->getClassReflection();
     }
     /**
      * Has interface even in our project?
