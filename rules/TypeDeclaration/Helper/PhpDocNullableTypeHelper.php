@@ -29,6 +29,10 @@ final class PhpDocNullableTypeHelper
         Type $phpDocType,
         Type $phpParserType
     ): ?Type {
+        if ($phpParserType instanceof MixedType) {
+            return null;
+        }
+
         return $this->resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserTypeNullInfo(
             $phpDocType,
             $this->isParserTypeContainingNullType($phpParserType)
