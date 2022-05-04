@@ -10,14 +10,13 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -29,7 +28,8 @@ final class UnSpreadOperatorRector extends AbstractRector
     public function __construct(
         private readonly SpreadVariablesCollector $spreadVariablesCollector,
         private readonly ReflectionResolver $reflectionResolver,
-        private readonly VendorLocationDetector $vendorLocationDetector
+        private readonly VendorLocationDetector $vendorLocationDetector,
+        private readonly ClassChildAnalyzer $classChildAnalyzer
     ) {
     }
 
@@ -90,7 +90,17 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        if ($this->isInPHPUnitTestCase($classMethod)) {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if ($this->isInPHPUnitTestCase($classReflection, $classMethod)) {
+            return null;
+        }
+
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        if ($this->classChildAnalyzer->hasParentClassMethod($classReflection, $methodName)) {
             return null;
         }
 
@@ -216,19 +226,9 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isInPHPUnitTestCase(ClassMethod $classMethod): bool
+    private function isInPHPUnitTestCase(ClassReflection $classReflection, ClassMethod $classMethod): bool
     {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
         if (! $classMethod->isPublic()) {
-            return false;
-        }
-
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
             return false;
         }
 
