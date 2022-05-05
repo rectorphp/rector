@@ -22,6 +22,7 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSo
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\ReadWrite\Contract\ParentNodeReadAnalyzerInterface;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 use Rector\Set\Contract\SetListInterface;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
@@ -72,5 +73,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SameClassMethodCallAnalyzer::class,
         AnnotationToAttributeMapperInterface::class,
         TypeWithClassTypeSpecifierInterface::class,
+        ParentNodeReadAnalyzerInterface::class,
     ]);
 };

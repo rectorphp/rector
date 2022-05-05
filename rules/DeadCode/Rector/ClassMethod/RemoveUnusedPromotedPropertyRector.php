@@ -100,7 +100,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->propertyManipulator->isPropertyUsedInReadContext($param)) {
+            if ($this->propertyManipulator->isPropertyUsedInReadContext($class, $param)) {
                 continue;
             }
 

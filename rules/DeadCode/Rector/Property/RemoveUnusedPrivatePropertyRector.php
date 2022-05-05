@@ -90,7 +90,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->propertyManipulator->isPropertyUsedInReadContext($property)) {
+            if ($this->propertyManipulator->isPropertyUsedInReadContext($node, $property)) {
                 continue;
             }
 

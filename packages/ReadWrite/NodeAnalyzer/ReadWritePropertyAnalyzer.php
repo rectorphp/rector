@@ -10,10 +10,6 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Expr\PostDec;
-use PhpParser\Node\Expr\PostInc;
-use PhpParser\Node\Expr\PreDec;
-use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Unset_;
@@ -22,16 +18,23 @@ use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\DeadCode\SideEffect\PureFunctionDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\ReadWrite\Guard\VariableToConstantGuard;
+use Rector\ReadWrite\Contract\ParentNodeReadAnalyzerInterface;
 
+/**
+ * Possibly re-use the same logic from PHPStan rule:
+ * https://github.com/phpstan/phpstan-src/blob/8f16632f6ccb312159250bc06df5531fa4a1ff91/src/Rules/DeadCode/UnusedPrivatePropertyRule.php#L64-L116
+ */
 final class ReadWritePropertyAnalyzer
 {
+    /**
+     * @param ParentNodeReadAnalyzerInterface[] $parentNodeReadAnalyzers
+     */
     public function __construct(
-        private readonly VariableToConstantGuard $variableToConstantGuard,
         private readonly AssignManipulator $assignManipulator,
         private readonly ReadExprAnalyzer $readExprAnalyzer,
         private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly PureFunctionDetector $pureFunctionDetector
+        private readonly PureFunctionDetector $pureFunctionDetector,
+        private readonly array $parentNodeReadAnalyzers
     ) {
     }
 
@@ -42,33 +45,14 @@ final class ReadWritePropertyAnalyzer
             throw new ShouldNotHappenException();
         }
 
-        if ($parent instanceof PostInc) {
-            return true;
-        }
-
-        if ($parent instanceof PreInc) {
-            return true;
-        }
-
-        if ($parent instanceof PostDec) {
-            return true;
-        }
-
-        if ($parent instanceof PreDec) {
-            return true;
+        foreach ($this->parentNodeReadAnalyzers as $parentNodeReadAnalyzer) {
+            if ($parentNodeReadAnalyzer->isRead($node, $parent)) {
+                return true;
+            }
         }
 
         if ($parent instanceof AssignOp) {
             return true;
-        }
-
-        $parent = $this->unwrapPostPreIncDec($parent);
-
-        if ($parent instanceof Arg) {
-            $readArg = $this->variableToConstantGuard->isReadArg($parent);
-            if ($readArg) {
-                return true;
-            }
         }
 
         if ($parent instanceof ArrayDimFetch && $parent->dim === $node && $this->isNotInsideIssetUnset($parent)) {
@@ -101,18 +85,6 @@ final class ReadWritePropertyAnalyzer
         }
 
         return false;
-    }
-
-    private function unwrapPostPreIncDec(Node $node): Node
-    {
-        if ($node instanceof PreInc || $node instanceof PreDec || $node instanceof PostInc || $node instanceof PostDec) {
-            $node = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $node instanceof Node) {
-                throw new ShouldNotHappenException();
-            }
-        }
-
-        return $node;
     }
 
     private function isNotInsideIssetUnset(ArrayDimFetch $arrayDimFetch): bool

@@ -107,8 +107,13 @@ CODE_SAMPLE
             return null;
         }
 
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (! $class instanceof Class_) {
+            return null;
+        }
+
         // is property read only?
-        if ($this->propertyManipulator->isPropertyChangeable($node)) {
+        if ($this->propertyManipulator->isPropertyChangeable($class, $node)) {
             return null;
         }
 

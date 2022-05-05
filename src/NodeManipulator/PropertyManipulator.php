@@ -22,7 +22,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Unset_;
@@ -105,7 +104,7 @@ final class PropertyManipulator
         );
     }
 
-    public function isPropertyUsedInReadContext(Property | Param $propertyOrPromotedParam): bool
+    public function isPropertyUsedInReadContext(Class_ $class, Property | Param $propertyOrPromotedParam): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($propertyOrPromotedParam);
 
@@ -113,7 +112,10 @@ final class PropertyManipulator
             return true;
         }
 
-        $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrPromotedParam);
+        $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches(
+            $class,
+            $propertyOrPromotedParam
+        );
 
         foreach ($privatePropertyFetches as $privatePropertyFetch) {
             if ($this->readWritePropertyAnalyzer->isRead($privatePropertyFetch)) {
@@ -142,31 +144,26 @@ final class PropertyManipulator
 
     public function isPropertyChangeableExceptConstructor(Property | Param $propertyOrParam): bool
     {
-        $classLike = $this->betterNodeFinder->findParentType($propertyOrParam, ClassLike::class);
+        $class = $this->betterNodeFinder->findParentType($propertyOrParam, Class_::class);
 
         // does not has parent type ClassLike? Possibly parent is changed by other rule
-        if (! $classLike instanceof ClassLike) {
+        if (! $class instanceof Class_) {
             return true;
         }
 
-        // Property or Param in interface? return true early as no property in interface
-        if ($classLike instanceof Interface_) {
-            return true;
-        }
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classLike);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         if ($phpDocInfo->hasByAnnotationClasses(self::ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES)) {
             return true;
         }
 
         if ($this->phpAttributeAnalyzer->hasPhpAttributes(
-            $classLike,
+            $class,
             self::ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES
         )) {
             return true;
         }
 
-        $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrParam);
+        $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($class, $propertyOrParam);
 
         foreach ($propertyFetches as $propertyFetch) {
             if ($this->isChangeableContext($propertyFetch)) {
@@ -177,7 +174,7 @@ final class PropertyManipulator
             $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch);
             $classMethod = $this->betterNodeFinder->findParentType($propertyFetch, ClassMethod::class);
 
-            if ($this->isPropertyAssignedOnlyInConstructor($classLike, $propertyName, $classMethod)) {
+            if ($this->isPropertyAssignedOnlyInConstructor($class, $propertyName, $classMethod)) {
                 continue;
             }
 
@@ -194,9 +191,9 @@ final class PropertyManipulator
         return false;
     }
 
-    public function isPropertyChangeable(Property $property): bool
+    public function isPropertyChangeable(Class_ $class, Property $property): bool
     {
-        $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
+        $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($class, $property);
 
         foreach ($propertyFetches as $propertyFetch) {
             if ($this->isChangeableContext($propertyFetch)) {
@@ -252,7 +249,7 @@ final class PropertyManipulator
     }
 
     private function isPropertyAssignedOnlyInConstructor(
-        ClassLike $classLike,
+        Class_ $class,
         string $propertyName,
         ?ClassMethod $classMethod
     ): bool {
@@ -265,7 +262,7 @@ final class PropertyManipulator
             return false;
         }
 
-        return $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
+        return $this->constructorAssignDetector->isPropertyAssigned($class, $propertyName);
     }
 
     private function isChangeableContext(PropertyFetch | StaticPropertyFetch $propertyFetch): bool
