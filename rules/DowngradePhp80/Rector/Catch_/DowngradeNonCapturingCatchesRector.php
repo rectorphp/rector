@@ -6,9 +6,9 @@ namespace Rector\DowngradePhp80\Rector\Catch_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
-use Rector\Core\Rector\AbstractRector;
+use PHPStan\Analyser\Scope;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector\DowngradeNonCapturingCatchesRectorTest
  */
-final class DowngradeNonCapturingCatchesRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeNonCapturingCatchesRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -67,12 +67,11 @@ CODE_SAMPLE
     /**
      * @param Catch_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
         if ($node->var !== null) {
             return null;
         }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $exceptionVarName = $this->variableNaming->createCountedValueName('exception', $scope);
         $node->var = new \PhpParser\Node\Expr\Variable($exceptionVarName);
         return $node;

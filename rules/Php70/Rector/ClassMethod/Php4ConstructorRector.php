@@ -12,13 +12,13 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/remove_php4_constructors
  * @see \Rector\Tests\Php70\Rector\ClassMethod\Php4ConstructorRector\Php4ConstructorRectorTest
  */
-final class Php4ConstructorRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class Php4ConstructorRector extends \Rector\Core\Rector\AbstractScopeAwareRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -78,9 +78,9 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
-        if (!$this->php4ConstructorClassMethodAnalyzer->detect($node)) {
+        if (!$this->php4ConstructorClassMethodAnalyzer->detect($node, $scope)) {
             return null;
         }
         $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
@@ -88,7 +88,7 @@ CODE_SAMPLE
             return null;
         }
         // process parent call references first
-        $this->processClassMethodStatementsForParentConstructorCalls($node);
+        $this->processClassMethodStatementsForParentConstructorCalls($node, $scope);
         // not PSR-4 constructor
         if (!$this->nodeNameResolver->areNamesEqual($classLike, $node)) {
             return null;
@@ -115,7 +115,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processClassMethodStatementsForParentConstructorCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function processClassMethodStatementsForParentConstructorCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : void
     {
         if (!\is_iterable($classMethod->stmts)) {
             return;
@@ -128,12 +128,11 @@ CODE_SAMPLE
             if (!$methodStmt instanceof \PhpParser\Node\Expr\StaticCall) {
                 continue;
             }
-            $this->processParentPhp4ConstructCall($methodStmt);
+            $this->processParentPhp4ConstructCall($methodStmt, $scope);
         }
     }
-    private function processParentPhp4ConstructCall(\PhpParser\Node\Expr\StaticCall $staticCall) : void
+    private function processParentPhp4ConstructCall(\PhpParser\Node\Expr\StaticCall $staticCall, \PHPStan\Analyser\Scope $scope) : void
     {
-        $scope = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
         // no parent class
         if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {

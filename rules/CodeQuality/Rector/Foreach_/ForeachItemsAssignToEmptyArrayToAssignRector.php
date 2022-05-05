@@ -11,7 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector\ForeachItemsAssignToEmptyArrayToAssignRectorTest
  */
-final class ForeachItemsAssignToEmptyArrayToAssignRector extends \Rector\Core\Rector\AbstractRector
+final class ForeachItemsAssignToEmptyArrayToAssignRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -75,16 +75,16 @@ CODE_SAMPLE
     /**
      * @param Foreach_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkip($node, $scope)) {
             return null;
         }
         /** @var Expr $assignVariable */
         $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($node);
         return new \PhpParser\Node\Expr\Assign($assignVariable, $node->expr);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Foreach_ $foreach) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Foreach_ $foreach, \PHPStan\Analyser\Scope $scope) : bool
     {
         $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($foreach);
         if (!$assignVariable instanceof \PhpParser\Node\Expr) {
@@ -104,10 +104,6 @@ CODE_SAMPLE
         // must be empty array, otherwise it will false override
         $defaultValue = $this->valueResolver->getValue($previousDeclarationParentNode->expr);
         if ($defaultValue !== []) {
-            return \true;
-        }
-        $scope = $foreach->expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \true;
         }
         $type = $scope->getType($foreach->expr);
