@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -54,12 +55,15 @@ final class PropertyFetchAnalyzer
     public function isLocalPropertyFetch(\PhpParser\Node $node) : bool
     {
         if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            if ($node->var instanceof \PhpParser\Node\Expr\MethodCall) {
+            if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($node->var, self::THIS);
         }
         if ($node instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+            if (!$node->class instanceof \PhpParser\Node\Name) {
+                return \false;
+            }
             return $this->nodeNameResolver->isName($node->class, \Rector\Core\Enum\ObjectReference::SELF()->getValue());
         }
         return \false;
