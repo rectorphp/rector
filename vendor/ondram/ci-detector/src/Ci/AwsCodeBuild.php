@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220504\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220505\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220504\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220504\OndraM\CiDetector\Env;
-use RectorPrefix20220504\OndraM\CiDetector\TrinaryLogic;
-class AwsCodeBuild extends \RectorPrefix20220504\OndraM\CiDetector\Ci\AbstractCi
+use RectorPrefix20220505\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220505\OndraM\CiDetector\Env;
+use RectorPrefix20220505\OndraM\CiDetector\TrinaryLogic;
+class AwsCodeBuild extends \RectorPrefix20220505\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220504\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(\RectorPrefix20220505\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('CODEBUILD_CI') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220504\OndraM\CiDetector\CiDetector::CI_AWS_CODEBUILD;
+        return \RectorPrefix20220505\OndraM\CiDetector\CiDetector::CI_AWS_CODEBUILD;
     }
-    public function isPullRequest() : \RectorPrefix20220504\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220505\OndraM\CiDetector\TrinaryLogic
     {
-        return \RectorPrefix20220504\OndraM\CiDetector\TrinaryLogic::createFromBoolean(\mb_strpos($this->env->getString('CODEBUILD_WEBHOOK_EVENT'), 'PULL_REQUEST') === 0);
+        return \RectorPrefix20220505\OndraM\CiDetector\TrinaryLogic::createFromBoolean(\mb_strpos($this->env->getString('CODEBUILD_WEBHOOK_EVENT'), 'PULL_REQUEST') === 0);
     }
     public function getBuildNumber() : string
     {

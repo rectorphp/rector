@@ -125,7 +125,7 @@ final class PropertyFetchFinder
         $staticPropertyFetches = $this->betterNodeFinder->findInstanceOf($stmts, \PhpParser\Node\Expr\StaticPropertyFetch::class);
         /** @var StaticPropertyFetch[] $matchingStaticPropertyFetches */
         $matchingStaticPropertyFetches = \array_filter($staticPropertyFetches, function (\PhpParser\Node\Expr\StaticPropertyFetch $staticPropertyFetch) use($propertyName) : bool {
-            return $this->isLocalStaticPropertyByFetchName($staticPropertyFetch, $propertyName);
+            return $this->nodeNameResolver->isName($staticPropertyFetch->name, $propertyName);
         });
         return \array_merge($matchingPropertyFetches, $matchingStaticPropertyFetches);
     }
@@ -170,13 +170,5 @@ final class PropertyFetchFinder
             return $this->nodeNameResolver->getName($propertyOrPromotedParam->props[0]);
         }
         return $this->nodeNameResolver->getName($propertyOrPromotedParam->var);
-    }
-    private function isLocalStaticPropertyByFetchName(\PhpParser\Node\Expr\StaticPropertyFetch $staticPropertyFetch, string $propertyName) : bool
-    {
-        $class = $this->nodeNameResolver->getName($staticPropertyFetch->class);
-        if (!\in_array($class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue(), self::THIS], \true)) {
-            return \false;
-        }
-        return $this->nodeNameResolver->isName($staticPropertyFetch->name, $propertyName);
     }
 }

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220504\Symfony\Contracts\HttpClient;
+namespace RectorPrefix20220505\Symfony\Contracts\HttpClient;
 
-use RectorPrefix20220504\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use RectorPrefix20220504\Symfony\Contracts\HttpClient\Test\HttpClientTestCase;
+use RectorPrefix20220505\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use RectorPrefix20220505\Symfony\Contracts\HttpClient\Test\HttpClientTestCase;
 /**
  * Provides flexible methods for requesting HTTP resources synchronously or asynchronously.
  *
@@ -97,14 +97,14 @@ interface HttpClientInterface
      *
      * @throws TransportExceptionInterface When an unsupported option is passed
      */
-    public function request(string $method, string $url, array $options = []) : \RectorPrefix20220504\Symfony\Contracts\HttpClient\ResponseInterface;
+    public function request(string $method, string $url, array $options = []) : \RectorPrefix20220505\Symfony\Contracts\HttpClient\ResponseInterface;
     /**
      * Yields responses chunk by chunk as they complete.
      *
      * @param ResponseInterface|iterable<array-key, ResponseInterface> $responses One or more responses created by the current HTTP client
      * @param float|null                                               $timeout   The idle timeout before yielding timeout chunks
      */
-    public function stream($responses, float $timeout = null) : \RectorPrefix20220504\Symfony\Contracts\HttpClient\ResponseStreamInterface;
+    public function stream($responses, float $timeout = null) : \RectorPrefix20220505\Symfony\Contracts\HttpClient\ResponseStreamInterface;
     /**
      * Returns a new instance of the client with new default options.
      * @return $this

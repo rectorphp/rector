@@ -4,26 +4,26 @@
  * @file
  * Provides a way to patch Composer packages after installation.
  */
-namespace RectorPrefix20220504\cweagans\Composer;
+namespace RectorPrefix20220505\cweagans\Composer;
 
-use RectorPrefix20220504\Composer\Composer;
-use RectorPrefix20220504\Composer\DependencyResolver\Operation\InstallOperation;
-use RectorPrefix20220504\Composer\DependencyResolver\Operation\UninstallOperation;
-use RectorPrefix20220504\Composer\DependencyResolver\Operation\UpdateOperation;
-use RectorPrefix20220504\Composer\DependencyResolver\Operation\OperationInterface;
-use RectorPrefix20220504\Composer\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix20220504\Composer\IO\IOInterface;
-use RectorPrefix20220504\Composer\Package\AliasPackage;
-use RectorPrefix20220504\Composer\Package\PackageInterface;
-use RectorPrefix20220504\Composer\Plugin\PluginInterface;
-use RectorPrefix20220504\Composer\Installer\PackageEvents;
-use RectorPrefix20220504\Composer\Script\Event;
-use RectorPrefix20220504\Composer\Script\ScriptEvents;
-use RectorPrefix20220504\Composer\Installer\PackageEvent;
-use RectorPrefix20220504\Composer\Util\ProcessExecutor;
-use RectorPrefix20220504\Composer\Util\RemoteFilesystem;
-use RectorPrefix20220504\Symfony\Component\Process\Process;
-class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, \RectorPrefix20220504\Composer\EventDispatcher\EventSubscriberInterface
+use RectorPrefix20220505\Composer\Composer;
+use RectorPrefix20220505\Composer\DependencyResolver\Operation\InstallOperation;
+use RectorPrefix20220505\Composer\DependencyResolver\Operation\UninstallOperation;
+use RectorPrefix20220505\Composer\DependencyResolver\Operation\UpdateOperation;
+use RectorPrefix20220505\Composer\DependencyResolver\Operation\OperationInterface;
+use RectorPrefix20220505\Composer\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20220505\Composer\IO\IOInterface;
+use RectorPrefix20220505\Composer\Package\AliasPackage;
+use RectorPrefix20220505\Composer\Package\PackageInterface;
+use RectorPrefix20220505\Composer\Plugin\PluginInterface;
+use RectorPrefix20220505\Composer\Installer\PackageEvents;
+use RectorPrefix20220505\Composer\Script\Event;
+use RectorPrefix20220505\Composer\Script\ScriptEvents;
+use RectorPrefix20220505\Composer\Installer\PackageEvent;
+use RectorPrefix20220505\Composer\Util\ProcessExecutor;
+use RectorPrefix20220505\Composer\Util\RemoteFilesystem;
+use RectorPrefix20220505\Symfony\Component\Process\Process;
+class Patches implements \RectorPrefix20220505\Composer\Plugin\PluginInterface, \RectorPrefix20220505\Composer\EventDispatcher\EventSubscriberInterface
 {
     /**
      * @var Composer $composer
@@ -51,12 +51,12 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
      * @param Composer    $composer
      * @param IOInterface $io
      */
-    public function activate(\RectorPrefix20220504\Composer\Composer $composer, \RectorPrefix20220504\Composer\IO\IOInterface $io)
+    public function activate(\RectorPrefix20220505\Composer\Composer $composer, \RectorPrefix20220505\Composer\IO\IOInterface $io)
     {
         $this->composer = $composer;
         $this->io = $io;
         $this->eventDispatcher = $composer->getEventDispatcher();
-        $this->executor = new \RectorPrefix20220504\Composer\Util\ProcessExecutor($this->io);
+        $this->executor = new \RectorPrefix20220505\Composer\Util\ProcessExecutor($this->io);
         $this->patches = array();
         $this->installedPatches = array();
     }
@@ -66,25 +66,25 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
     public static function getSubscribedEvents()
     {
         return array(
-            \RectorPrefix20220504\Composer\Script\ScriptEvents::PRE_INSTALL_CMD => array('checkPatches'),
-            \RectorPrefix20220504\Composer\Script\ScriptEvents::PRE_UPDATE_CMD => array('checkPatches'),
-            \RectorPrefix20220504\Composer\Installer\PackageEvents::PRE_PACKAGE_INSTALL => array('gatherPatches'),
-            \RectorPrefix20220504\Composer\Installer\PackageEvents::PRE_PACKAGE_UPDATE => array('gatherPatches'),
+            \RectorPrefix20220505\Composer\Script\ScriptEvents::PRE_INSTALL_CMD => array('checkPatches'),
+            \RectorPrefix20220505\Composer\Script\ScriptEvents::PRE_UPDATE_CMD => array('checkPatches'),
+            \RectorPrefix20220505\Composer\Installer\PackageEvents::PRE_PACKAGE_INSTALL => array('gatherPatches'),
+            \RectorPrefix20220505\Composer\Installer\PackageEvents::PRE_PACKAGE_UPDATE => array('gatherPatches'),
             // The following is a higher weight for compatibility with
             // https://github.com/AydinHassan/magento-core-composer-installer and more generally for compatibility with
             // every Composer plugin which deploys downloaded packages to other locations.
             // In such cases you want that those plugins deploy patched files so they have to run after
             // the "composer-patches" plugin.
             // @see: https://github.com/cweagans/composer-patches/pull/153
-            \RectorPrefix20220504\Composer\Installer\PackageEvents::POST_PACKAGE_INSTALL => array('postInstall', 10),
-            \RectorPrefix20220504\Composer\Installer\PackageEvents::POST_PACKAGE_UPDATE => array('postInstall', 10),
+            \RectorPrefix20220505\Composer\Installer\PackageEvents::POST_PACKAGE_INSTALL => array('postInstall', 10),
+            \RectorPrefix20220505\Composer\Installer\PackageEvents::POST_PACKAGE_UPDATE => array('postInstall', 10),
         );
     }
     /**
      * Before running composer install,
      * @param Event $event
      */
-    public function checkPatches(\RectorPrefix20220504\Composer\Script\Event $event)
+    public function checkPatches(\RectorPrefix20220505\Composer\Script\Event $event)
     {
         if (!$this->isPatchingEnabled()) {
             return;
@@ -119,13 +119,13 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
             // Remove packages for which the patch set has changed.
             $promises = array();
             foreach ($packages as $package) {
-                if (!$package instanceof \RectorPrefix20220504\Composer\Package\AliasPackage) {
+                if (!$package instanceof \RectorPrefix20220505\Composer\Package\AliasPackage) {
                     $package_name = $package->getName();
                     $extra = $package->getExtra();
                     $has_patches = isset($tmp_patches[$package_name]);
                     $has_applied_patches = isset($extra['patches_applied']) && \count($extra['patches_applied']) > 0;
                     if ($has_patches && !$has_applied_patches || !$has_patches && $has_applied_patches || $has_patches && $has_applied_patches && $tmp_patches[$package_name] !== $extra['patches_applied']) {
-                        $uninstallOperation = new \RectorPrefix20220504\Composer\DependencyResolver\Operation\UninstallOperation($package, 'Removing package so it can be re-installed and re-patched.');
+                        $uninstallOperation = new \RectorPrefix20220505\Composer\DependencyResolver\Operation\UninstallOperation($package, 'Removing package so it can be re-installed and re-patched.');
                         $this->io->write('<info>Removing package ' . $package_name . ' so that it can be re-installed and re-patched.</info>');
                         $promises[] = $installationManager->uninstall($localRepository, $uninstallOperation);
                     }
@@ -144,14 +144,14 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
      *
      * @param PackageEvent $event
      */
-    public function gatherPatches(\RectorPrefix20220504\Composer\Installer\PackageEvent $event)
+    public function gatherPatches(\RectorPrefix20220505\Composer\Installer\PackageEvent $event)
     {
         // If we've already done this, then don't do it again.
         if (isset($this->patches['_patchesGathered'])) {
-            $this->io->write('<info>Patches already gathered. Skipping</info>', TRUE, \RectorPrefix20220504\Composer\IO\IOInterface::VERBOSE);
+            $this->io->write('<info>Patches already gathered. Skipping</info>', TRUE, \RectorPrefix20220505\Composer\IO\IOInterface::VERBOSE);
             return;
         } elseif (!$this->isPatchingEnabled()) {
-            $this->io->write('<info>Patching is disabled. Skipping.</info>', TRUE, \RectorPrefix20220504\Composer\IO\IOInterface::VERBOSE);
+            $this->io->write('<info>Patching is disabled. Skipping.</info>', TRUE, \RectorPrefix20220505\Composer\IO\IOInterface::VERBOSE);
             return;
         }
         $this->patches = $this->grabPatches();
@@ -164,7 +164,7 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
         $operations = $event->getOperations();
         $this->io->write('<info>Gathering patches for dependencies. This might take a minute.</info>');
         foreach ($operations as $operation) {
-            if ($operation instanceof \RectorPrefix20220504\Composer\DependencyResolver\Operation\InstallOperation || $operation instanceof \RectorPrefix20220504\Composer\DependencyResolver\Operation\UpdateOperation) {
+            if ($operation instanceof \RectorPrefix20220505\Composer\DependencyResolver\Operation\InstallOperation || $operation instanceof \RectorPrefix20220505\Composer\DependencyResolver\Operation\UpdateOperation) {
                 $package = $this->getPackageFromOperation($operation);
                 $extra = $package->getExtra();
                 if (isset($extra['patches'])) {
@@ -253,7 +253,7 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
      * @param PackageEvent $event
      * @throws \Exception
      */
-    public function postInstall(\RectorPrefix20220504\Composer\Installer\PackageEvent $event)
+    public function postInstall(\RectorPrefix20220505\Composer\Installer\PackageEvent $event)
     {
         // Check if we should exit in failure.
         $extra = $this->composer->getPackage()->getExtra();
@@ -275,7 +275,7 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
         $manager = $event->getComposer()->getInstallationManager();
         $install_path = $manager->getInstaller($package->getType())->getInstallPath($package);
         // Set up a downloader.
-        $downloader = new \RectorPrefix20220504\Composer\Util\RemoteFilesystem($this->io, $this->composer->getConfig());
+        $downloader = new \RectorPrefix20220505\Composer\Util\RemoteFilesystem($this->io, $this->composer->getConfig());
         // Track applied patches in the package info in installed.json
         $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
         $localPackage = $localRepository->findPackage($package_name, $package->getVersion());
@@ -284,9 +284,9 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
         foreach ($this->patches[$package_name] as $description => $url) {
             $this->io->write('    <info>' . $url . '</info> (<comment>' . $description . '</comment>)');
             try {
-                $this->eventDispatcher->dispatch(NULL, new \RectorPrefix20220504\cweagans\Composer\PatchEvent(\RectorPrefix20220504\cweagans\Composer\PatchEvents::PRE_PATCH_APPLY, $package, $url, $description));
+                $this->eventDispatcher->dispatch(NULL, new \RectorPrefix20220505\cweagans\Composer\PatchEvent(\RectorPrefix20220505\cweagans\Composer\PatchEvents::PRE_PATCH_APPLY, $package, $url, $description));
                 $this->getAndApplyPatch($downloader, $install_path, $url, $package);
-                $this->eventDispatcher->dispatch(NULL, new \RectorPrefix20220504\cweagans\Composer\PatchEvent(\RectorPrefix20220504\cweagans\Composer\PatchEvents::POST_PATCH_APPLY, $package, $url, $description));
+                $this->eventDispatcher->dispatch(NULL, new \RectorPrefix20220505\cweagans\Composer\PatchEvent(\RectorPrefix20220505\cweagans\Composer\PatchEvents::POST_PATCH_APPLY, $package, $url, $description));
                 $extra['patches_applied'][$description] = $url;
             } catch (\Exception $e) {
                 $this->io->write('   <error>Could not apply patch! Skipping. The error was: ' . $e->getMessage() . '</error>');
@@ -308,11 +308,11 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
      * @return PackageInterface
      * @throws \Exception
      */
-    protected function getPackageFromOperation(\RectorPrefix20220504\Composer\DependencyResolver\Operation\OperationInterface $operation)
+    protected function getPackageFromOperation(\RectorPrefix20220505\Composer\DependencyResolver\Operation\OperationInterface $operation)
     {
-        if ($operation instanceof \RectorPrefix20220504\Composer\DependencyResolver\Operation\InstallOperation) {
+        if ($operation instanceof \RectorPrefix20220505\Composer\DependencyResolver\Operation\InstallOperation) {
             $package = $operation->getPackage();
-        } elseif ($operation instanceof \RectorPrefix20220504\Composer\DependencyResolver\Operation\UpdateOperation) {
+        } elseif ($operation instanceof \RectorPrefix20220505\Composer\DependencyResolver\Operation\UpdateOperation) {
             $package = $operation->getTargetPackage();
         } else {
             throw new \Exception('Unknown operation: ' . \get_class($operation));
@@ -328,7 +328,7 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
      * @param PackageInterface $package
      * @throws \Exception
      */
-    protected function getAndApplyPatch(\RectorPrefix20220504\Composer\Util\RemoteFilesystem $downloader, $install_path, $patch_url, \RectorPrefix20220504\Composer\Package\PackageInterface $package)
+    protected function getAndApplyPatch(\RectorPrefix20220505\Composer\Util\RemoteFilesystem $downloader, $install_path, $patch_url, \RectorPrefix20220505\Composer\Package\PackageInterface $package)
     {
         // Local patch file.
         if (\file_exists($patch_url)) {
@@ -433,7 +433,7 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
             $this->io->write('<comment>' . $command . '</comment>');
             $io = $this->io;
             $output = function ($type, $data) use($io) {
-                if ($type == \RectorPrefix20220504\Symfony\Component\Process\Process::ERR) {
+                if ($type == \RectorPrefix20220505\Symfony\Component\Process\Process::ERR) {
                     $io->write('<error>' . $data . '</error>');
                 } else {
                     $io->write('<comment>' . $data . '</comment>');
@@ -519,20 +519,20 @@ class Patches implements \RectorPrefix20220504\Composer\Plugin\PluginInterface, 
      * @return bool
      *   TRUE if the package has been patched.
      */
-    public static function isPackagePatched(\RectorPrefix20220504\Composer\Package\PackageInterface $package)
+    public static function isPackagePatched(\RectorPrefix20220505\Composer\Package\PackageInterface $package)
     {
         return \array_key_exists('patches_applied', $package->getExtra());
     }
     /**
      * {@inheritDoc}
      */
-    public function deactivate(\RectorPrefix20220504\Composer\Composer $composer, \RectorPrefix20220504\Composer\IO\IOInterface $io)
+    public function deactivate(\RectorPrefix20220505\Composer\Composer $composer, \RectorPrefix20220505\Composer\IO\IOInterface $io)
     {
     }
     /**
      * {@inheritDoc}
      */
-    public function uninstall(\RectorPrefix20220504\Composer\Composer $composer, \RectorPrefix20220504\Composer\IO\IOInterface $io)
+    public function uninstall(\RectorPrefix20220505\Composer\Composer $composer, \RectorPrefix20220505\Composer\IO\IOInterface $io)
     {
     }
 }
