@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -56,33 +57,34 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Assign::class];
+        return [Expression::class];
     }
 
     /**
-     * @param Assign $node
+     * @param Expression $node
+     * @return Expression[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?array
     {
-        if ($this->shouldSkip($node)) {
+        if (! $node->expr instanceof Assign) {
+            return null;
+        }
+
+        $assign = $node->expr;
+        if ($this->shouldSkipAssign($assign)) {
             return null;
         }
 
         /** @var Array_|List_ $leftArray */
-        $leftArray = $node->var;
+        $leftArray = $assign->var;
 
         /** @var Array_ $rightArray */
-        $rightArray = $node->expr;
+        $rightArray = $assign->expr;
 
-        $standaloneAssigns = $this->createStandaloneAssigns($leftArray, $rightArray);
-        $this->nodesToAddCollector->addNodesAfterNode($standaloneAssigns, $node);
-
-        $this->removeNode($node);
-
-        return $node;
+        return $this->createStandaloneAssignExpressions($leftArray, $rightArray);
     }
 
-    private function shouldSkip(Assign $assign): bool
+    private function shouldSkipAssign(Assign $assign): bool
     {
         if (! $assign->var instanceof Array_ && ! $assign->var instanceof List_) {
             return true;
@@ -102,11 +104,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Assign[]
+     * @return Expression[]
      */
-    private function createStandaloneAssigns(Array_ | List_ $expr, Array_ $rightArray): array
+    private function createStandaloneAssignExpressions(Array_ | List_ $expr, Array_ $rightArray): array
     {
-        $standaloneAssigns = [];
+        $standaloneAssignExpresssions = [];
         foreach ($expr->items as $key => $leftArrayItem) {
             if ($leftArrayItem === null) {
                 continue;
@@ -118,10 +120,11 @@ CODE_SAMPLE
                 continue;
             }
 
-            $standaloneAssigns[] = new Assign($leftArrayItem->value, $rightArrayItem);
+            $assign = new Assign($leftArrayItem->value, $rightArrayItem);
+            $standaloneAssignExpresssions[] = new Expression($assign);
         }
 
-        return $standaloneAssigns;
+        return $standaloneAssignExpresssions;
     }
 
     private function isValueSwap(Array_ | List_ $expr, Array_ $secondArray): bool
