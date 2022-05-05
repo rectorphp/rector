@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -38,7 +39,7 @@ final class PropertyFetchAnalyzer
     public function isLocalPropertyFetch(Node $node): bool
     {
         if ($node instanceof PropertyFetch) {
-            if ($node->var instanceof MethodCall) {
+            if (! $node->var instanceof Variable) {
                 return false;
             }
 
@@ -46,6 +47,10 @@ final class PropertyFetchAnalyzer
         }
 
         if ($node instanceof StaticPropertyFetch) {
+            if (! $node->class instanceof Name) {
+                return false;
+            }
+
             return $this->nodeNameResolver->isName($node->class, ObjectReference::SELF()->getValue());
         }
 
