@@ -9,10 +9,6 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Expr\PostDec;
-use PhpParser\Node\Expr\PostInc;
-use PhpParser\Node\Expr\PreDec;
-use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Unset_;
@@ -21,14 +17,13 @@ use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\DeadCode\SideEffect\PureFunctionDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\ReadWrite\Guard\VariableToConstantGuard;
+use Rector\ReadWrite\Contract\ParentNodeReadAnalyzerInterface;
+/**
+ * Possibly re-use the same logic from PHPStan rule:
+ * https://github.com/phpstan/phpstan-src/blob/8f16632f6ccb312159250bc06df5531fa4a1ff91/src/Rules/DeadCode/UnusedPrivatePropertyRule.php#L64-L116
+ */
 final class ReadWritePropertyAnalyzer
 {
-    /**
-     * @readonly
-     * @var \Rector\ReadWrite\Guard\VariableToConstantGuard
-     */
-    private $variableToConstantGuard;
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\AssignManipulator
@@ -49,13 +44,21 @@ final class ReadWritePropertyAnalyzer
      * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
      */
     private $pureFunctionDetector;
-    public function __construct(\Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector)
+    /**
+     * @var ParentNodeReadAnalyzerInterface[]
+     * @readonly
+     */
+    private $parentNodeReadAnalyzers;
+    /**
+     * @param ParentNodeReadAnalyzerInterface[] $parentNodeReadAnalyzers
+     */
+    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector, array $parentNodeReadAnalyzers)
     {
-        $this->variableToConstantGuard = $variableToConstantGuard;
         $this->assignManipulator = $assignManipulator;
         $this->readExprAnalyzer = $readExprAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->pureFunctionDetector = $pureFunctionDetector;
+        $this->parentNodeReadAnalyzers = $parentNodeReadAnalyzers;
     }
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $node
@@ -66,27 +69,13 @@ final class ReadWritePropertyAnalyzer
         if (!$parent instanceof \PhpParser\Node) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if ($parent instanceof \PhpParser\Node\Expr\PostInc) {
-            return \true;
-        }
-        if ($parent instanceof \PhpParser\Node\Expr\PreInc) {
-            return \true;
-        }
-        if ($parent instanceof \PhpParser\Node\Expr\PostDec) {
-            return \true;
-        }
-        if ($parent instanceof \PhpParser\Node\Expr\PreDec) {
-            return \true;
+        foreach ($this->parentNodeReadAnalyzers as $parentNodeReadAnalyzer) {
+            if ($parentNodeReadAnalyzer->isRead($node, $parent)) {
+                return \true;
+            }
         }
         if ($parent instanceof \PhpParser\Node\Expr\AssignOp) {
             return \true;
-        }
-        $parent = $this->unwrapPostPreIncDec($parent);
-        if ($parent instanceof \PhpParser\Node\Arg) {
-            $readArg = $this->variableToConstantGuard->isReadArg($parent);
-            if ($readArg) {
-                return \true;
-            }
         }
         if ($parent instanceof \PhpParser\Node\Expr\ArrayDimFetch && $parent->dim === $node && $this->isNotInsideIssetUnset($parent)) {
             return $this->isArrayDimFetchRead($parent);
@@ -112,16 +101,6 @@ final class ReadWritePropertyAnalyzer
             }
         }
         return \false;
-    }
-    private function unwrapPostPreIncDec(\PhpParser\Node $node) : \PhpParser\Node
-    {
-        if ($node instanceof \PhpParser\Node\Expr\PreInc || $node instanceof \PhpParser\Node\Expr\PreDec || $node instanceof \PhpParser\Node\Expr\PostInc || $node instanceof \PhpParser\Node\Expr\PostDec) {
-            $node = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if (!$node instanceof \PhpParser\Node) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
-            }
-        }
-        return $node;
     }
     private function isNotInsideIssetUnset(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {

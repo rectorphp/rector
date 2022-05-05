@@ -8,8 +8,6 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\TypeWithClassName;
@@ -62,26 +60,18 @@ final class PropertyFetchFinder
      * @return PropertyFetch[]|StaticPropertyFetch[]
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
      */
-    public function findPrivatePropertyFetches($propertyOrPromotedParam) : array
+    public function findPrivatePropertyFetches(\PhpParser\Node\Stmt\Class_ $class, $propertyOrPromotedParam) : array
     {
-        $classLike = $this->betterNodeFinder->findParentType($propertyOrPromotedParam, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
-            return [];
-        }
-        if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
-            return [];
-        }
         $propertyName = $this->resolvePropertyName($propertyOrPromotedParam);
         if ($propertyName === null) {
             return [];
         }
-        $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($classLike);
-        $nodes = [$classLike];
+        $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($class);
+        $nodes = [$class];
         $nodesTrait = $this->astResolver->parseClassReflectionTraits($classReflection);
         $hasTrait = $nodesTrait !== [];
         $nodes = \array_merge($nodes, $nodesTrait);
-        /** @var Class_|Trait_ $classLike */
-        return $this->findPropertyFetchesInClassLike($classLike, $nodes, $propertyName, $hasTrait);
+        return $this->findPropertyFetchesInClassLike($class, $nodes, $propertyName, $hasTrait);
     }
     /**
      * @return PropertyFetch[]|StaticPropertyFetch[]

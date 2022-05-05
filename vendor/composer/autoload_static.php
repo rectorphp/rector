@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5cc2a5088da81dfb6fa464d3dbfa78cb
+class ComposerStaticInitce769fdaea10a611ec6984021df3591a
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3137,11 +3137,14 @@ class ComposerStaticInit5cc2a5088da81dfb6fa464d3dbfa78cb
         'Rector\\Privatization\\TypeManipulator\\TypeNormalizer' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/TypeNormalizer.php',
         'Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant' => __DIR__ . '/../..' . '/rules/Privatization/ValueObject/ReplaceStringWithClassConstant.php',
         'Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard' => __DIR__ . '/../..' . '/rules/Privatization/VisibilityGuard/ClassMethodVisibilityGuard.php',
+        'Rector\\ReadWrite\\Contract\\ParentNodeReadAnalyzerInterface' => __DIR__ . '/../..' . '/packages/ReadWrite/Contract/ParentNodeReadAnalyzerInterface.php',
         'Rector\\ReadWrite\\Contract\\ReadNodeAnalyzerInterface' => __DIR__ . '/../..' . '/packages/ReadWrite/Contract/ReadNodeAnalyzerInterface.php',
         'Rector\\ReadWrite\\Guard\\VariableToConstantGuard' => __DIR__ . '/../..' . '/packages/ReadWrite/Guard/VariableToConstantGuard.php',
         'Rector\\ReadWrite\\NodeAnalyzer\\ReadExprAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/NodeAnalyzer/ReadExprAnalyzer.php',
         'Rector\\ReadWrite\\NodeAnalyzer\\ReadWritePropertyAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/NodeAnalyzer/ReadWritePropertyAnalyzer.php',
         'Rector\\ReadWrite\\NodeFinder\\NodeUsageFinder' => __DIR__ . '/../..' . '/packages/ReadWrite/NodeFinder/NodeUsageFinder.php',
+        'Rector\\ReadWrite\\ParentNodeReadAnalyzer\\ArgParentNodeReadAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ParentNodeReadAnalyzer/ArgParentNodeReadAnalyzer.php',
+        'Rector\\ReadWrite\\ParentNodeReadAnalyzer\\IncDecParentNodeReadAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ParentNodeReadAnalyzer/IncDecParentNodeReadAnalyzer.php',
         'Rector\\ReadWrite\\ReadNodeAnalyzer\\JustReadExprAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ReadNodeAnalyzer/JustReadExprAnalyzer.php',
         'Rector\\ReadWrite\\ReadNodeAnalyzer\\LocalPropertyFetchReadNodeAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ReadNodeAnalyzer/LocalPropertyFetchReadNodeAnalyzer.php',
         'Rector\\ReadWrite\\ReadNodeAnalyzer\\VariableReadNodeAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ReadNodeAnalyzer/VariableReadNodeAnalyzer.php',
@@ -3879,9 +3882,9 @@ class ComposerStaticInit5cc2a5088da81dfb6fa464d3dbfa78cb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5cc2a5088da81dfb6fa464d3dbfa78cb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5cc2a5088da81dfb6fa464d3dbfa78cb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5cc2a5088da81dfb6fa464d3dbfa78cb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitce769fdaea10a611ec6984021df3591a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitce769fdaea10a611ec6984021df3591a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitce769fdaea10a611ec6984021df3591a::$classMap;
 
         }, null, ClassLoader::class);
     }

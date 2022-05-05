@@ -101,7 +101,7 @@ CODE_SAMPLE
             if (!$this->visibilityManipulator->hasVisibility($param, \Rector\Core\ValueObject\Visibility::PRIVATE)) {
                 continue;
             }
-            if ($this->propertyManipulator->isPropertyUsedInReadContext($param)) {
+            if ($this->propertyManipulator->isPropertyUsedInReadContext($class, $param)) {
                 continue;
             }
             $paramName = $this->getName($param);

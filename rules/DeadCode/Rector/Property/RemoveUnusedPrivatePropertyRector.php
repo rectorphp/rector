@@ -81,7 +81,7 @@ CODE_SAMPLE
             if ($this->shouldSkipProperty($property)) {
                 continue;
             }
-            if ($this->propertyManipulator->isPropertyUsedInReadContext($property)) {
+            if ($this->propertyManipulator->isPropertyUsedInReadContext($node, $property)) {
                 continue;
             }
             $this->complexNodeRemover->removePropertyAndUsages($node, $property, $this->removeAssignSideEffect);

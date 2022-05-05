@@ -106,8 +106,12 @@ CODE_SAMPLE
         if (!$node->isPrivate()) {
             return null;
         }
+        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return null;
+        }
         // is property read only?
-        if ($this->propertyManipulator->isPropertyChangeable($node)) {
+        if ($this->propertyManipulator->isPropertyChangeable($class, $node)) {
             return null;
         }
         /** @var Class_ $classLike */
