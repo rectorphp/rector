@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -46,26 +47,28 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [\PhpParser\Node\Stmt\Expression::class];
     }
     /**
-     * @param Assign $node
+     * @param Expression $node
+     * @return Expression[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?array
     {
-        if ($this->shouldSkip($node)) {
+        if (!$node->expr instanceof \PhpParser\Node\Expr\Assign) {
+            return null;
+        }
+        $assign = $node->expr;
+        if ($this->shouldSkipAssign($assign)) {
             return null;
         }
         /** @var Array_|List_ $leftArray */
-        $leftArray = $node->var;
+        $leftArray = $assign->var;
         /** @var Array_ $rightArray */
-        $rightArray = $node->expr;
-        $standaloneAssigns = $this->createStandaloneAssigns($leftArray, $rightArray);
-        $this->nodesToAddCollector->addNodesAfterNode($standaloneAssigns, $node);
-        $this->removeNode($node);
-        return $node;
+        $rightArray = $assign->expr;
+        return $this->createStandaloneAssignExpressions($leftArray, $rightArray);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\Assign $assign) : bool
+    private function shouldSkipAssign(\PhpParser\Node\Expr\Assign $assign) : bool
     {
         if (!$assign->var instanceof \PhpParser\Node\Expr\Array_ && !$assign->var instanceof \PhpParser\Node\Expr\List_) {
             return \true;
@@ -81,12 +84,12 @@ CODE_SAMPLE
         return $this->isValueSwap($assign->var, $assignExpr);
     }
     /**
-     * @return Assign[]
+     * @return Expression[]
      * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $expr
      */
-    private function createStandaloneAssigns($expr, \PhpParser\Node\Expr\Array_ $rightArray) : array
+    private function createStandaloneAssignExpressions($expr, \PhpParser\Node\Expr\Array_ $rightArray) : array
     {
-        $standaloneAssigns = [];
+        $standaloneAssignExpresssions = [];
         foreach ($expr->items as $key => $leftArrayItem) {
             if ($leftArrayItem === null) {
                 continue;
@@ -95,9 +98,10 @@ CODE_SAMPLE
             if (!$rightArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
-            $standaloneAssigns[] = new \PhpParser\Node\Expr\Assign($leftArrayItem->value, $rightArrayItem);
+            $assign = new \PhpParser\Node\Expr\Assign($leftArrayItem->value, $rightArrayItem);
+            $standaloneAssignExpresssions[] = new \PhpParser\Node\Stmt\Expression($assign);
         }
-        return $standaloneAssigns;
+        return $standaloneAssignExpresssions;
     }
     /**
      * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $expr
