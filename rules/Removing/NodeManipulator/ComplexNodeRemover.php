@@ -194,6 +194,7 @@ final class ComplexNodeRemover
     private function resolvePropertyFetchFromDimFetch(Expr $expr): array
     {
         // unwrap array dim fetch, till we get to parent too caller node
+        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
         $propertyFetches = [];
 
         while ($expr instanceof ArrayDimFetch) {
@@ -201,16 +202,12 @@ final class ComplexNodeRemover
             $expr = $expr->var;
         }
 
-        if ($this->propertyFetchAnalyzer->isLocalPropertyFetch($expr)) {
-            $propertyFetches = $this->collectPropertyFetches($expr, $propertyFetches);
-        }
-
-        return $propertyFetches;
+        return $this->collectPropertyFetches($expr, $propertyFetches);
     }
 
     /**
      * @param StaticPropertyFetch[]|PropertyFetch[] $propertyFetches
-     * @return PropertyFetch[]|StaticPropertyFetch[]|mixed[]
+     * @return PropertyFetch[]|StaticPropertyFetch[]
      */
     private function collectPropertyFetches(?Expr $expr, array $propertyFetches): array
     {
