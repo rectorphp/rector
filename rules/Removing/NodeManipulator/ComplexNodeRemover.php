@@ -62,32 +62,34 @@ final class ComplexNodeRemover
         $isPartoFAnotherAssign = \false;
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $node) use($removeAssignSideEffect, $propertyName, &$hasSideEffect, &$isPartoFAnotherAssign) {
             // here should be checked all expr like stmts that can hold assign, e.f. if, foreach etc. etc.
-            if ($node instanceof \PhpParser\Node\Stmt\Expression) {
-                $nodeExpr = $node->expr;
-                // remove direct assigns
-                if ($nodeExpr instanceof \PhpParser\Node\Expr\Assign) {
-                    $assign = $nodeExpr;
-                    // skip double assigns
-                    if ($assign->expr instanceof \PhpParser\Node\Expr\Assign) {
-                        $isPartoFAnotherAssign = \true;
+            if (!$node instanceof \PhpParser\Node\Stmt\Expression) {
+                return null;
+            }
+            $nodeExpr = $node->expr;
+            // remove direct assigns
+            if (!$nodeExpr instanceof \PhpParser\Node\Expr\Assign) {
+                return null;
+            }
+            $assign = $nodeExpr;
+            // skip double assigns
+            if ($assign->expr instanceof \PhpParser\Node\Expr\Assign) {
+                $isPartoFAnotherAssign = \true;
+                return null;
+            }
+            $propertyFetches = $this->resolvePropertyFetchFromDimFetch($assign->var);
+            if ($propertyFetches === []) {
+                return null;
+            }
+            foreach ($propertyFetches as $propertyFetch) {
+                if (!$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+                    continue;
+                }
+                if ($this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
+                    if (!$removeAssignSideEffect && $this->sideEffectNodeDetector->detect($assign->expr)) {
+                        $hasSideEffect = \true;
                         return null;
                     }
-                    $propertyFetches = $this->resolvePropertyFetchFromDimFetch($assign->var);
-                    if ($propertyFetches === []) {
-                        return null;
-                    }
-                    foreach ($propertyFetches as $propertyFetch) {
-                        if (!$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
-                            continue;
-                        }
-                        if ($this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
-                            if (!$removeAssignSideEffect && $this->sideEffectNodeDetector->detect($assign->expr)) {
-                                $hasSideEffect = \true;
-                                return null;
-                            }
-                            $this->nodeRemover->removeNode($node);
-                        }
-                    }
+                    $this->nodeRemover->removeNode($node);
                 }
             }
             return null;
@@ -136,21 +138,35 @@ final class ComplexNodeRemover
             return;
         }
         $stmts = (array) $classMethod->stmts;
+        $paramKeysToBeRemoved = [];
         foreach ($stmts as $key => $stmt) {
             if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
             $stmtExpr = $stmt->expr;
-            if ($stmtExpr instanceof \PhpParser\Node\Expr\Assign && $stmtExpr->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
-                $propertyFetch = $stmtExpr->var;
-                if ($this->nodeNameResolver->isName($propertyFetch, $propertyName)) {
-                    unset($classMethod->stmts[$key]);
-                    if ($stmtExpr->expr instanceof \PhpParser\Node\Expr\Variable) {
-                        $this->clearParamFromConstructor($classMethod, $stmtExpr->expr);
-                    }
-                }
+            if (!$stmtExpr instanceof \PhpParser\Node\Expr\Assign) {
+                continue;
+            }
+            if (!$stmtExpr->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+                continue;
+            }
+            $propertyFetch = $stmtExpr->var;
+            if (!$this->nodeNameResolver->isName($propertyFetch, $propertyName)) {
+                continue;
+            }
+            unset($classMethod->stmts[$key]);
+            if (!$stmtExpr->expr instanceof \PhpParser\Node\Expr\Variable) {
+                continue;
+            }
+            $key = $this->resolveToBeClearedParamFromConstructor($classMethod, $stmtExpr->expr);
+            if (\is_int($key)) {
+                $paramKeysToBeRemoved[] = $key;
             }
         }
+        if ($paramKeysToBeRemoved === []) {
+            return;
+        }
+        $this->processRemoveParamWithKeys($classMethod->getParams(), $paramKeysToBeRemoved);
     }
     /**
      * @return PropertyFetch[]
@@ -170,7 +186,7 @@ final class ComplexNodeRemover
         }
         return $propertyFetches;
     }
-    private function clearParamFromConstructor(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\Variable $assignedVariable) : void
+    private function resolveToBeClearedParamFromConstructor(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\Variable $assignedVariable) : ?int
     {
         // is variable used somewhere else? skip it
         $variables = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Expr\Variable::class);
@@ -179,16 +195,17 @@ final class ComplexNodeRemover
         });
         // there is more than 1 use, keep it in the constructor
         if (\count($paramNamedVariables) > 1) {
-            return;
+            return null;
         }
         $paramName = $this->nodeNameResolver->getName($assignedVariable);
         if (!\is_string($paramName)) {
-            return;
+            return null;
         }
         foreach ($classMethod->params as $paramKey => $param) {
             if ($this->nodeNameResolver->isName($param->var, $paramName)) {
-                unset($classMethod->params[$paramKey]);
+                return $paramKey;
             }
         }
+        return null;
     }
 }
