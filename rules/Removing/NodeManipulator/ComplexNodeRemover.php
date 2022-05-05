@@ -9,12 +9,14 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
@@ -30,6 +32,7 @@ final class ComplexNodeRemover
         private readonly NodeRemover $nodeRemover,
         private readonly SideEffectNodeDetector $sideEffectNodeDetector,
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 
@@ -75,10 +78,6 @@ final class ComplexNodeRemover
             }
 
             foreach ($propertyFetches as $propertyFetch) {
-                if (! $this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
-                    continue;
-                }
-
                 if ($this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
                     if (! $removeAssignSideEffect && $this->sideEffectNodeDetector->detect($assign->expr)) {
                         $hasSideEffect = true;
@@ -160,10 +159,11 @@ final class ComplexNodeRemover
                 continue;
             }
 
-            if (! $stmtExpr->var instanceof PropertyFetch) {
+            if (! $this->propertyFetchAnalyzer->isLocalPropertyFetch($stmtExpr->var)) {
                 continue;
             }
 
+            /** @var StaticPropertyFetch|PropertyFetch $propertyFetch */
             $propertyFetch = $stmtExpr->var;
             if (! $this->nodeNameResolver->isName($propertyFetch, $propertyName)) {
                 continue;
@@ -189,7 +189,7 @@ final class ComplexNodeRemover
     }
 
     /**
-     * @return PropertyFetch[]
+     * @return StaticPropertyFetch[]|PropertyFetch[]
      */
     private function resolvePropertyFetchFromDimFetch(Expr $expr): array
     {
@@ -197,15 +197,30 @@ final class ComplexNodeRemover
         $propertyFetches = [];
 
         while ($expr instanceof ArrayDimFetch) {
-            if ($expr->dim instanceof PropertyFetch) {
-                $propertyFetches[] = $expr->dim;
-            }
-
+            $propertyFetches = $this->collectPropertyFetches($expr->dim, $propertyFetches);
             $expr = $expr->var;
         }
 
-        if ($expr instanceof PropertyFetch) {
-            $propertyFetches[] = $expr;
+        if ($this->propertyFetchAnalyzer->isLocalPropertyFetch($expr)) {
+            $propertyFetches = $this->collectPropertyFetches($expr, $propertyFetches);
+        }
+
+        return $propertyFetches;
+    }
+
+    /**
+     * @param StaticPropertyFetch[]|PropertyFetch[] $propertyFetches
+     * @return PropertyFetch[]|StaticPropertyFetch[]|mixed[]
+     */
+    private function collectPropertyFetches(?Expr $expr, array $propertyFetches): array
+    {
+        if (! $expr instanceof Expr) {
+            return $propertyFetches;
+        }
+
+        if ($this->propertyFetchAnalyzer->isLocalPropertyFetch($expr)) {
+            /** @var StaticPropertyFetch|PropertyFetch $expr */
+            return array_merge($propertyFetches, [$expr]);
         }
 
         return $propertyFetches;
