@@ -143,13 +143,12 @@ CODE_SAMPLE
 
     private function changeToAssign(Switch_ $switch, Match_ $match, Expr $assignExpr): Assign
     {
-        $prevInitializedAssign = $this->betterNodeFinder->findFirstPrevious(
+        $prevInitializedAssign = $this->betterNodeFinder->findFirstInlinedPrevious(
             $switch,
             fn (Node $node): bool => $node instanceof Assign && $this->nodeComparator->areNodesEqual(
                 $node->var,
                 $assignExpr
-            ),
-            false
+            )
         );
 
         $assign = new Assign($assignExpr, $match);
