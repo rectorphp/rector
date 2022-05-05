@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector\ParamTypeByParentCallTypeRectorTest
  */
-final class ParamTypeByParentCallTypeRector extends AbstractRector
+final class ParamTypeByParentCallTypeRector extends AbstractScopeAwareRector
 {
     public function __construct(
         private readonly CallerParamMatcher $callerParamMatcher,
@@ -82,7 +82,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactorWithScope(Node $node, Scope $scope): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -93,13 +93,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
         $hasChanged = false;
-
         foreach ($node->params as $param) {
             // already has type, skip
             if ($param->type !== null) {

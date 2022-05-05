@@ -12,7 +12,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector\ForeachItemsAssignToEmptyArrayToAssignRectorTest
  */
-final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractRector
+final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractScopeAwareRector
 {
     public function __construct(
         private readonly NodeUsageFinder $nodeUsageFinder,
@@ -77,9 +77,9 @@ CODE_SAMPLE
     /**
      * @param Foreach_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactorWithScope(Node $node, Scope $scope): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkip($node, $scope)) {
             return null;
         }
 
@@ -89,7 +89,7 @@ CODE_SAMPLE
         return new Assign($assignVariable, $node->expr);
     }
 
-    private function shouldSkip(Foreach_ $foreach): bool
+    private function shouldSkip(Foreach_ $foreach, Scope $scope): bool
     {
         $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($foreach);
         if (! $assignVariable instanceof Expr) {
@@ -113,11 +113,6 @@ CODE_SAMPLE
         // must be empty array, otherwise it will false override
         $defaultValue = $this->valueResolver->getValue($previousDeclarationParentNode->expr);
         if ($defaultValue !== []) {
-            return true;
-        }
-
-        $scope = $foreach->expr->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
             return true;
         }
 

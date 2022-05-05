@@ -17,7 +17,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -86,13 +85,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?If_
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-
-        // a trait
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
         if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
             return null;
         }

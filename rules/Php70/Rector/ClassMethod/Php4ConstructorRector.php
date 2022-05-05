@@ -13,13 +13,13 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/remove_php4_constructors
  * @see \Rector\Tests\Php70\Rector\ClassMethod\Php4ConstructorRector\Php4ConstructorRectorTest
  */
-final class Php4ConstructorRector extends AbstractRector implements MinPhpVersionInterface
+final class Php4ConstructorRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     public function __construct(
         private readonly Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer,
@@ -81,9 +81,9 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactorWithScope(Node $node, Scope $scope): ?Node
     {
-        if (! $this->php4ConstructorClassMethodAnalyzer->detect($node)) {
+        if (! $this->php4ConstructorClassMethodAnalyzer->detect($node, $scope)) {
             return null;
         }
 
@@ -93,7 +93,7 @@ CODE_SAMPLE
         }
 
         // process parent call references first
-        $this->processClassMethodStatementsForParentConstructorCalls($node);
+        $this->processClassMethodStatementsForParentConstructorCalls($node, $scope);
 
         // not PSR-4 constructor
         if (! $this->nodeNameResolver->areNamesEqual($classLike, $node)) {
@@ -129,7 +129,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod): void
+    private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod, Scope $scope): void
     {
         if (! is_iterable($classMethod->stmts)) {
             return;
@@ -145,13 +145,12 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->processParentPhp4ConstructCall($methodStmt);
+            $this->processParentPhp4ConstructCall($methodStmt, $scope);
         }
     }
 
-    private function processParentPhp4ConstructCall(StaticCall $staticCall): void
+    private function processParentPhp4ConstructCall(StaticCall $staticCall, Scope $scope): void
     {
-        $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
         $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
 
         // no parent class

@@ -7,17 +7,11 @@ namespace Rector\Php70\NodeAnalyzer;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class Php4ConstructorClassMethodAnalyzer
 {
-    public function detect(ClassMethod $classMethod): bool
+    public function detect(ClassMethod $classMethod, Scope $scope): bool
     {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
         // catch only classes without namespace
         if ($scope->getNamespace() !== null) {
             return false;

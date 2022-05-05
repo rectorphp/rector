@@ -2,10 +2,7 @@
 
 namespace Rector\Tests\DeadCode\Rector\If_\RemoveDeadInstanceOfRector\Fixture;
 
-interface HasA
-{
-    public function getA();
-}
+use Rector\Tests\DeadCode\Rector\If_\RemoveDeadInstanceOfRector\Source\HasAInterface;
 
 trait A
 {
@@ -19,13 +16,13 @@ trait B
 {
     public function getB()
     {
-        if ($this instanceof HasA) {
+        if ($this instanceof HasAInterface) {
             return $this->getA();
         }
     }
 }
 
-class C implements HasA
+class C implements HasAInterface
 {
     use A;
     use B;
