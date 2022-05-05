@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -44,27 +43,30 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [\PhpParser\Node\Stmt\Expression::class];
     }
     /**
-     * @param Assign $node
+     * @param Expression $node
+     * @return Expression[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?array
     {
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Stmt\Expression) {
-            return null;
-        }
         if (!$node->expr instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
-        $newAssign = new \PhpParser\Node\Expr\Assign($node->var, $node->expr->expr);
-        if (!$node->expr->expr instanceof \PhpParser\Node\Expr\CallLike) {
-            $this->nodesToAddCollector->addNodeAfterNode($node->expr, $node);
-            return $newAssign;
+        $firstAssign = $node->expr;
+        if (!$firstAssign->expr instanceof \PhpParser\Node\Expr\Assign) {
+            return null;
         }
-        $varAssign = new \PhpParser\Node\Expr\Assign($node->expr->var, $node->var);
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($newAssign), $node);
-        return $varAssign;
+        $nestedAssign = $firstAssign->expr;
+        $newAssign = new \PhpParser\Node\Expr\Assign($firstAssign->var, $nestedAssign->expr);
+        $newAssignExpression = new \PhpParser\Node\Stmt\Expression($newAssign);
+        // avoid calling the same method/funtion/new twice
+        if (!$nestedAssign->expr instanceof \PhpParser\Node\Expr\CallLike) {
+            $varAssign = new \PhpParser\Node\Expr\Assign($nestedAssign->var, $nestedAssign->expr);
+            return [$newAssignExpression, new \PhpParser\Node\Stmt\Expression($varAssign)];
+        }
+        $varAssign = new \PhpParser\Node\Expr\Assign($nestedAssign->var, $firstAssign->var);
+        return [$newAssignExpression, new \PhpParser\Node\Stmt\Expression($varAssign)];
     }
 }

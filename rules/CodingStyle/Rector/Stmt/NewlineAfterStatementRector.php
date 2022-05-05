@@ -108,6 +108,7 @@ CODE_SAMPLE
                 return null;
             }
         }
+        // @todo refactor to direct return of array
         $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Nop(), $node);
         return $node;
     }

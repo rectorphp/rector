@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\LogicalAnd;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -47,24 +46,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp\LogicalAnd::class];
+        return [\PhpParser\Node\Stmt\Expression::class];
     }
     /**
-     * @param LogicalAnd $node
+     * @param Expression $node
+     * @return Expression[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?array
     {
-        if (!$node->left instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$node->expr instanceof \PhpParser\Node\Expr\BinaryOp\LogicalAnd) {
             return null;
         }
-        if (!$node->right instanceof \PhpParser\Node\Expr\Assign) {
+        $logicalAnd = $node->expr;
+        if (!$logicalAnd->left instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$logicalAnd->right instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
-        $this->nodesToAddCollector->addNodeAfterNode($node->right, $node);
-        return $node->left;
+        $leftAssignExpression = new \PhpParser\Node\Stmt\Expression($logicalAnd->left);
+        $rightAssignExpression = new \PhpParser\Node\Stmt\Expression($logicalAnd->right);
+        return [$leftAssignExpression, $rightAssignExpression];
     }
 }
