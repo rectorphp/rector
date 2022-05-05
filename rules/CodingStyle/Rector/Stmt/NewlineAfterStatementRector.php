@@ -145,6 +145,7 @@ CODE_SAMPLE
             }
         }
 
+        // @todo refactor to direct return of array
         $this->nodesToAddCollector->addNodeAfterNode(new Nop(), $node);
 
         return $node;

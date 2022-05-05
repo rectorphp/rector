@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -54,33 +53,38 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Assign::class];
+        return [Expression::class];
     }
 
     /**
-     * @param Assign $node
+     * @param Expression $node
+     * @return Expression[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?array
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Expression) {
-            return null;
-        }
-
         if (! $node->expr instanceof Assign) {
             return null;
         }
 
-        $newAssign = new Assign($node->var, $node->expr->expr);
-
-        if (! $node->expr->expr instanceof CallLike) {
-            $this->nodesToAddCollector->addNodeAfterNode($node->expr, $node);
-            return $newAssign;
+        $firstAssign = $node->expr;
+        if (! $firstAssign->expr instanceof Assign) {
+            return null;
         }
 
-        $varAssign = new Assign($node->expr->var, $node->var);
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($newAssign), $node);
+        $nestedAssign = $firstAssign->expr;
 
-        return $varAssign;
+        $newAssign = new Assign($firstAssign->var, $nestedAssign->expr);
+        $newAssignExpression = new Expression($newAssign);
+
+        // avoid calling the same method/funtion/new twice
+        if (! $nestedAssign->expr instanceof CallLike) {
+            $varAssign = new Assign($nestedAssign->var, $nestedAssign->expr);
+
+            return [$newAssignExpression, new Expression($varAssign)];
+        }
+
+        $varAssign = new Assign($nestedAssign->var, $firstAssign->var);
+
+        return [$newAssignExpression, new Expression($varAssign)];
     }
 }

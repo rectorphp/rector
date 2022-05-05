@@ -32,7 +32,6 @@ final class MultiAssignExtract
     {
         $this->content_type = "Something";
         $content_type = "Something";
-
         return $content_type;
     }
 }

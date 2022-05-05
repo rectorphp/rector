@@ -40,6 +40,9 @@ final class NodesToAddCollector implements NodeCollectorInterface
         return $this->nodesToAddAfter !== [] || $this->nodesToAddBefore !== [];
     }
 
+    /**
+     * @internal Try to avoid using this magic added. Better return directly array of nodes in the Rector rule.
+     */
     public function addNodeBeforeNode(Node $addedNode, Node $positionNode): void
     {
         if ($positionNode->getAttributes() === []) {

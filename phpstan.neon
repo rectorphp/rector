@@ -416,6 +416,7 @@ parameters:
 
         # specific generics
         - '#Parameter \#1 \$node (.*?) of method Rector\\(.*?)Rector\:\:refactor\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method Rector\\Core\\Contract\\Rector\\PhpRectorInterface\:\:refactor\(\)#'
+        - '#Return type (.*?) of method Rector\\(.*?)\\Rector\\(.*?)\\(.*?)\:\:refactor\(\) should be covariant with return type \(array<PhpParser\\Node>\|PhpParser\\Node\|null\) of method Rector\\Core\\Contract\\Rector\\PhpRectorInterface\:\:refactor\(\)#'
 
         # only for empty ctor
         - '#Rector\\Core\\PhpParser\\NodeTraverser\\RectorNodeTraverser\:\:__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
@@ -590,3 +591,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\Removing\\NodeManipulator\\ComplexNodeRemover\:\:removeConstructorDependency\(\)" is \d+, keep it under 10#'
         - '#Class "Rector\\DeadCode\\Rector\\Property\\RemoveUnusedPrivatePropertyRector" has invalid namespace category "Property"\. Pick one of\: "Class_"#'
         - '#Cognitive complexity for "Rector\\ReadWrite\\NodeAnalyzer\\ReadWritePropertyAnalyzer\:\:isRead\(\)" is 14, keep it under 10#'
+
+        # avoid moving rule around, while re-targeting to stmt
+        - '#Class "Rector\\(.*?)\\Rector\\(.*?) has invalid namespace category "(.*?)"\. Pick one of\: "Expression"#'

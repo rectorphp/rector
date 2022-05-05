@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\LogicalAnd;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -54,29 +53,31 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [LogicalAnd::class];
+        return [Expression::class];
     }
 
     /**
-     * @param LogicalAnd $node
+     * @param Expression $node
+     * @return Expression[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?array
     {
-        if (! $node->left instanceof Assign) {
+        if (! $node->expr instanceof LogicalAnd) {
             return null;
         }
 
-        if (! $node->right instanceof Assign) {
+        $logicalAnd = $node->expr;
+        if (! $logicalAnd->left instanceof Assign) {
             return null;
         }
 
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Expression) {
+        if (! $logicalAnd->right instanceof Assign) {
             return null;
         }
 
-        $this->nodesToAddCollector->addNodeAfterNode($node->right, $node);
+        $leftAssignExpression = new Expression($logicalAnd->left);
+        $rightAssignExpression = new Expression($logicalAnd->right);
 
-        return $node->left;
+        return [$leftAssignExpression, $rightAssignExpression];
     }
 }
