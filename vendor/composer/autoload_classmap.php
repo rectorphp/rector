@@ -55,6 +55,7 @@ return array(
     'PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/IdentifierTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\IntersectionTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/IntersectionTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\NullableTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/NullableTypeNode.php',
+    'PHPStan\\PhpDocParser\\Ast\\Type\\OffsetAccessTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/OffsetAccessTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\ThisTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ThisTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/TypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\UnionTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/UnionTypeNode.php',

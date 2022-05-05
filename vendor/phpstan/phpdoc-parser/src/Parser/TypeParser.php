@@ -62,14 +62,14 @@ class TypeParser
             $tokens->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL);
             $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_PARENTHESES);
             if ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
-                return $this->tryParseArray($tokens, $type);
+                return $this->tryParseArrayOrOffsetAccess($tokens, $type);
             }
             return $type;
         }
         if ($tokens->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_THIS_VARIABLE)) {
             $type = new \PHPStan\PhpDocParser\Ast\Type\ThisTypeNode();
             if ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
-                return $this->tryParseArray($tokens, $type);
+                return $this->tryParseArrayOrOffsetAccess($tokens, $type);
             }
             return $type;
         }
@@ -90,16 +90,16 @@ class TypeParser
                     }
                     $type = $this->parseGeneric($tokens, $type);
                     if ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
-                        $type = $this->tryParseArray($tokens, $type);
+                        $type = $this->tryParseArrayOrOffsetAccess($tokens, $type);
                     }
                 } elseif ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_PARENTHESES)) {
                     $type = $this->tryParseCallable($tokens, $type);
                 } elseif ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
-                    $type = $this->tryParseArray($tokens, $type);
+                    $type = $this->tryParseArrayOrOffsetAccess($tokens, $type);
                 } elseif ($type->name === 'array' && $tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_CURLY_BRACKET) && !$tokens->isPrecededByHorizontalWhitespace()) {
                     $type = $this->parseArrayShape($tokens, $type);
                     if ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
-                        $type = $this->tryParseArray($tokens, $type);
+                        $type = $this->tryParseArrayOrOffsetAccess($tokens, $type);
                     }
                 }
                 return $type;
@@ -218,7 +218,7 @@ class TypeParser
             $type = $this->parseArrayShape($tokens, $type);
         }
         if ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
-            $type = $this->tryParseArray($tokens, $type);
+            $type = $this->tryParseArrayOrOffsetAccess($tokens, $type);
         }
         return new \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode($type);
     }
@@ -318,7 +318,7 @@ class TypeParser
             }
         }
         if ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
-            $type = $this->tryParseArray($tokens, $type);
+            $type = $this->tryParseArrayOrOffsetAccess($tokens, $type);
         }
         return $type;
     }
@@ -336,15 +336,23 @@ class TypeParser
         return $type;
     }
     /** @phpstan-impure */
-    private function tryParseArray(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, \PHPStan\PhpDocParser\Ast\Type\TypeNode $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    private function tryParseArrayOrOffsetAccess(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, \PHPStan\PhpDocParser\Ast\Type\TypeNode $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         try {
             while ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
                 $tokens->pushSavePoint();
+                $canBeOffsetAccessType = !$tokens->isPrecededByHorizontalWhitespace();
                 $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_SQUARE_BRACKET);
-                $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_SQUARE_BRACKET);
-                $tokens->dropSavePoint();
-                $type = new \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode($type);
+                if ($canBeOffsetAccessType && !$tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_SQUARE_BRACKET)) {
+                    $offset = $this->parse($tokens);
+                    $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_SQUARE_BRACKET);
+                    $tokens->dropSavePoint();
+                    $type = new \PHPStan\PhpDocParser\Ast\Type\OffsetAccessTypeNode($type, $offset);
+                } else {
+                    $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_SQUARE_BRACKET);
+                    $tokens->dropSavePoint();
+                    $type = new \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode($type);
+                }
             }
         } catch (\PHPStan\PhpDocParser\Parser\ParserException $e) {
             $tokens->rollback();

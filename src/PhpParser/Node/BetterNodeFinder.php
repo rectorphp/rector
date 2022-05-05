@@ -260,29 +260,41 @@ final class BetterNodeFinder
         });
     }
     /**
+     * Only search in previous Node/Stmt
+     *
      * @param callable(Node $node): bool $filter
      */
-    public function findFirstPrevious(\PhpParser\Node $node, callable $filter, bool $lookupParent = \true) : ?\PhpParser\Node
+    public function findFirstInlinedPrevious(\PhpParser\Node $node, callable $filter) : ?\PhpParser\Node
     {
-        // move to previous Node
         $previousNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-        if ($previousNode instanceof \PhpParser\Node) {
-            $foundNode = $this->findFirst($previousNode, $filter);
-            // we found what we need
-            if ($foundNode instanceof \PhpParser\Node) {
-                return $foundNode;
-            }
-            return $this->findFirstPrevious($previousNode, $filter, $lookupParent);
-        }
-        if (!$lookupParent) {
+        if (!$previousNode instanceof \PhpParser\Node) {
             return null;
+        }
+        $foundNode = $this->findFirst($previousNode, $filter);
+        // we found what we need
+        if ($foundNode instanceof \PhpParser\Node) {
+            return $foundNode;
+        }
+        return $this->findFirstInlinedPrevious($previousNode, $filter);
+    }
+    /**
+     * Search in previous Node/Stmt, when no Node found, lookup previous Stmt of Parent Node
+     *
+     * @param callable(Node $node): bool $filter
+     */
+    public function findFirstPrevious(\PhpParser\Node $node, callable $filter) : ?\PhpParser\Node
+    {
+        $foundNode = $this->findFirstInlinedPrevious($node, $filter);
+        // we found what we need
+        if ($foundNode instanceof \PhpParser\Node) {
+            return $foundNode;
         }
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parent instanceof \PhpParser\Node\FunctionLike) {
             return null;
         }
         if ($parent instanceof \PhpParser\Node) {
-            return $this->findFirstPrevious($parent, $filter, $lookupParent);
+            return $this->findFirstPrevious($parent, $filter);
         }
         return null;
     }
