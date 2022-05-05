@@ -137,8 +137,8 @@ final class PropertyFetchFinder
         /** @var StaticPropertyFetch[] $matchingStaticPropertyFetches */
         $matchingStaticPropertyFetches = array_filter(
             $staticPropertyFetches,
-            fn (StaticPropertyFetch $staticPropertyFetch): bool => $this->isLocalStaticPropertyByFetchName(
-                $staticPropertyFetch,
+            fn (StaticPropertyFetch $staticPropertyFetch): bool => $this->nodeNameResolver->isName(
+                $staticPropertyFetch->name,
                 $propertyName
             )
         );
@@ -189,21 +189,5 @@ final class PropertyFetchFinder
         }
 
         return $this->nodeNameResolver->getName($propertyOrPromotedParam->var);
-    }
-
-    private function isLocalStaticPropertyByFetchName(
-        StaticPropertyFetch $staticPropertyFetch,
-        string $propertyName
-    ): bool {
-        $class = $this->nodeNameResolver->getName($staticPropertyFetch->class);
-        if (! in_array(
-            $class,
-            [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue(), self::THIS],
-            true
-        )) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($staticPropertyFetch->name, $propertyName);
     }
 }

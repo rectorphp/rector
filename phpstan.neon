@@ -588,5 +588,6 @@ parameters:
 
         # cleanup after merge of assing remover refactoring
         - '#Cognitive complexity for "Rector\\Removing\\NodeManipulator\\ComplexNodeRemover\:\:removePropertyAndUsages\(\)" is \d+, keep it under 10#'
+        - '#Cognitive complexity for "Rector\\Removing\\NodeManipulator\\ComplexNodeRemover\:\:removeConstructorDependency\(\)" is \d+, keep it under 10#'
         - '#Class "Rector\\DeadCode\\Rector\\Property\\RemoveUnusedPrivatePropertyRector" has invalid namespace category "Property"\. Pick one of\: "Class_"#'
         - '#Cognitive complexity for "Rector\\ReadWrite\\NodeAnalyzer\\ReadWritePropertyAnalyzer\:\:isRead\(\)" is 14, keep it under 10#'
