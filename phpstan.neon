@@ -336,7 +336,6 @@ parameters:
             message: '#Class cognitive complexity is \d+, keep it under 50#'
             paths:
                 - src/PhpParser/Node/BetterNodeFinder.php
-                - rules/Removing/NodeManipulator/ComplexNodeRemover.php
 
         -
             message: '#Parameter \#2 \$length of function str_split expects int<1, max\>, int given#'

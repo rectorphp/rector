@@ -29,7 +29,7 @@ namespace Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRecto
 
 final class ConstructorWithMiddleParams
 {
-    public function __construct(\stdClass $stdClass)
+    public function __construct(int $contentFinder, \stdClass $stdClass)
     {
         $this->init($stdClass);
     }
