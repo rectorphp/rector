@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220505;
+namespace RectorPrefix20220506;
 
 use Rector\Config\RectorConfig;
 use Rector\PSR4\Composer\PSR4NamespaceMatcher;
