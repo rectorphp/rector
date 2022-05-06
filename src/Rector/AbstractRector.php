@@ -48,14 +48,14 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     /**
      * @var string
      */
-    private const MESSAGE = <<<CODE_SAMPLE
-Array of nodes must not be empty, ensure "%s->refactor()" returns non-empty array for Nodes.
+    private const EMPTY_NODE_ARRAY_MESSAGE = <<<CODE_SAMPLE
+Array of nodes cannot be empty. Ensure "%s->refactor()" returns non-empty array for Nodes.
 
-You can also either return null for no change:
+A) Return null for no change:
 
     return null;
 
-or remove the Node if not needed via
+B) Remove the Node:
 
     \$this->removeNode(\$node);
     return \$node;
@@ -210,7 +210,8 @@ CODE_SAMPLE;
             return null;
         }
         if ($node === []) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf(self::MESSAGE, static::class));
+            $errorMessage = \sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
+            throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
         }
         /** @var Node[]|Node $node */
         $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);

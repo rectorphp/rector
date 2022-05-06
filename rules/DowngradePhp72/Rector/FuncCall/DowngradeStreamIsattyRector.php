@@ -25,6 +25,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeStreamIsattyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @var \PhpParser\Node\Expr\Closure|null
+     */
+    private $cachedClosure;
+    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
      */
@@ -113,6 +117,9 @@ CODE_SAMPLE
     }
     private function createClosure() : \PhpParser\Node\Expr\Closure
     {
+        if ($this->cachedClosure instanceof \PhpParser\Node\Expr\Closure) {
+            return clone $this->cachedClosure;
+        }
         $stmts = $this->inlineCodeParser->parse(__DIR__ . '/../../snippet/isatty_closure.php.inc');
         /** @var Expression $expression */
         $expression = $stmts[0];
@@ -120,6 +127,7 @@ CODE_SAMPLE
         if (!$expr instanceof \PhpParser\Node\Expr\Closure) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
+        $this->cachedClosure = $expr;
         return $expr;
     }
 }
