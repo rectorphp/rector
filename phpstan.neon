@@ -90,6 +90,7 @@ parameters:
                 - packages/NodeTypeResolver/NodeTypeResolver.php
                 - rules/Renaming/NodeManipulator/ClassRenamer.php
                 - rules/CodingStyle/Rector/ClassMethod/MakeInheritedMethodVisibilitySameAsParentRector.php
+                - rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 10$#"
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 10#'
@@ -594,3 +595,7 @@ parameters:
         - '#Class "Rector\\(.*?)\\Rector\\(.*?) has invalid namespace category "(.*?)"\. Pick one of\: "(Expression|Class_)"#'
 
         - '#Cognitive complexity for "Rector\\CodingStyle\\Rector\\ClassMethod\\MakeInheritedMethodVisibilitySameAsParentRector\:\:refactorWithScope\(\)" is 11, keep it under 10#'
+        -
+            message: '#Cognitive complexity for "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector\:\:refactor\(\)" is \d+, keep it under 10#'
+            paths:
+                - rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php

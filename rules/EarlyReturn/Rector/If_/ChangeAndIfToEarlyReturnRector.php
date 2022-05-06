@@ -7,10 +7,15 @@ namespace Rector\EarlyReturn\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -80,50 +85,93 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [If_::class];
+        return [
+            Function_::class,
+            ClassMethod::class,
+            Closure::class,
+            Foreach_::class,
+            If_::class,
+            Else_::class,
+            ElseIf_::class,
+        ];
     }
 
     /**
-     * @param If_ $node
-     * @return Node[]|null
+     * @param Function_|ClassMethod|Closure|Foreach_|If_|Else_|ElseIf_ $node
      */
-    public function refactor(Node $node): ?array
+    public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        /** @var Stmt[]|null $stmts */
+        $stmts = $node->stmts;
+
+        if ($stmts === null) {
             return null;
         }
 
-        $ifNextReturn = $this->getIfNextReturn($node);
-        if ($ifNextReturn instanceof Return_ && $this->isIfStmtExprUsedInNextReturn($node, $ifNextReturn)) {
-            return null;
+        $newStmts = [];
+
+        foreach ($stmts as $key => $stmt) {
+            if (! $stmt instanceof If_) {
+                $newStmts[] = $stmt;
+                continue;
+            }
+
+            $nextStmt = $stmts[$key + 1] ?? null;
+
+            if ($this->shouldSkip($node, $stmt, $nextStmt)) {
+                $newStmts[] = $stmt;
+                continue;
+            }
+
+            if ($nextStmt instanceof Return_) {
+                if ($this->isIfStmtExprUsedInNextReturn($stmt, $nextStmt)) {
+                    continue;
+                }
+
+                if ($nextStmt->expr instanceof BooleanAnd) {
+                    continue;
+                }
+            }
+
+            /** @var BooleanAnd $expr */
+            $expr = $stmt->cond;
+            $booleanAndConditions = $this->binaryOpConditionsCollector->findConditions($expr, BooleanAnd::class);
+            $afterStmts = [];
+
+            if (! $nextStmt instanceof Return_) {
+                $afterStmts[] = $stmt->stmts[0];
+
+                $newStmts = array_merge(
+                    $newStmts,
+                    $this->processReplaceIfs($stmt, $booleanAndConditions, new Return_(), $afterStmts)
+                );
+                $node->stmts = $newStmts;
+                return $node;
+            }
+
+            // remove next node
+            unset($newStmts[$key + 1]);
+
+            $afterStmts[] = $stmt->stmts[0];
+
+            $ifNextReturnClone = $stmt->stmts[0] instanceof Return_
+                ? clone $stmt->stmts[0]
+                : new Return_();
+
+            if ($this->isInLoopWithoutContinueOrBreak($stmt)) {
+                $afterStmts[] = new Return_();
+            }
+
+            $changedStmts = $this->processReplaceIfs($stmt, $booleanAndConditions, $ifNextReturnClone, $afterStmts);
+            $changedStmts = array_merge($newStmts, $changedStmts);
+
+            // update stmts
+            $node->stmts = $changedStmts;
+
+            return $node;
         }
 
-        if ($ifNextReturn instanceof Return_ && $ifNextReturn->expr instanceof BooleanAnd) {
-            return null;
-        }
-
-        /** @var BooleanAnd $expr */
-        $expr = $node->cond;
-        $booleanAndConditions = $this->binaryOpConditionsCollector->findConditions($expr, BooleanAnd::class);
-        $afters = [];
-
-        if (! $ifNextReturn instanceof Return_) {
-            $afters[] = $node->stmts[0];
-            return $this->processReplaceIfs($node, $booleanAndConditions, new Return_(), $afters);
-        }
-
-        $this->removeNode($ifNextReturn);
-        $afters[] = $node->stmts[0];
-
-        $ifNextReturnClone = $node->stmts[0] instanceof Return_
-            ? clone $node->stmts[0]
-            : new Return_();
-
-        if ($this->isInLoopWithoutContinueOrBreak($node)) {
-            $afters[] = new Return_();
-        }
-
-        return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone, $afters);
+        return null;
     }
 
     private function isInLoopWithoutContinueOrBreak(If_ $if): bool
@@ -141,8 +189,8 @@ CODE_SAMPLE
 
     /**
      * @param Expr[] $conditions
-     * @param Node[] $afters
-     * @return Node[]
+     * @param Stmt[] $afters
+     * @return Stmt[]
      */
     private function processReplaceIfs(
         If_ $if,
@@ -169,7 +217,7 @@ CODE_SAMPLE
         return array_merge($result, [$ifNextReturnClone]);
     }
 
-    private function shouldSkip(If_ $if): bool
+    private function shouldSkip(Node $parentNode, If_ $if, ?Stmt $nexStmt): bool
     {
         if (! $this->ifManipulator->isIfWithOnlyOneStmt($if)) {
             return true;
@@ -183,15 +231,15 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isParentIfReturnsVoidOrParentIfHasNextNode($if)) {
+        if ($this->isParentIfReturnsVoidOrParentIfHasNextNode($parentNode)) {
             return true;
         }
 
-        if ($this->isNestedIfInLoop($if)) {
+        if ($this->isNestedIfInLoop($if, $parentNode)) {
             return true;
         }
 
-        return ! $this->isLastIfOrBeforeLastReturn($if);
+        return ! $this->isLastIfOrBeforeLastReturn($if, $nexStmt);
     }
 
     private function isIfStmtExprUsedInNextReturn(If_ $if, Return_ $return): bool
@@ -214,19 +262,8 @@ CODE_SAMPLE
         return false;
     }
 
-    private function getIfNextReturn(If_ $if): ?Return_
+    private function isParentIfReturnsVoidOrParentIfHasNextNode(Node $parentNode): bool
     {
-        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof Return_) {
-            return null;
-        }
-
-        return $nextNode;
-    }
-
-    private function isParentIfReturnsVoidOrParentIfHasNextNode(If_ $if): bool
-    {
-        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof If_) {
             return false;
         }
@@ -235,20 +272,19 @@ CODE_SAMPLE
         return $nextParent instanceof Node;
     }
 
-    private function isNestedIfInLoop(If_ $if): bool
+    private function isNestedIfInLoop(If_ $if, ?Node $parentNode): bool
     {
         if (! $this->contextAnalyzer->isInLoop($if)) {
             return false;
         }
 
-        return (bool) $this->betterNodeFinder->findParentByTypes($if, [If_::class, Else_::class, ElseIf_::class]);
+        return $parentNode instanceof If_ || $parentNode instanceof Else_ || $parentNode instanceof ElseIf_;
     }
 
-    private function isLastIfOrBeforeLastReturn(If_ $if): bool
+    private function isLastIfOrBeforeLastReturn(If_ $if, ?Stmt $nextStmt): bool
     {
-        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextNode instanceof Node) {
-            return $nextNode instanceof Return_;
+        if ($nextStmt instanceof Node) {
+            return $nextStmt instanceof Return_;
         }
 
         $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
@@ -257,7 +293,7 @@ CODE_SAMPLE
         }
 
         if ($parent instanceof If_) {
-            return $this->isLastIfOrBeforeLastReturn($parent);
+            return $this->isLastIfOrBeforeLastReturn($parent, $nextStmt);
         }
 
         return ! $this->contextAnalyzer->isHasAssignWithIndirectReturn($parent, $if);
