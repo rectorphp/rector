@@ -57,27 +57,29 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $originalCatches = $node->catches;
+        $hasChanged = false;
+
         foreach ($node->catches as $key => $catch) {
             if (count($catch->types) === 1) {
                 continue;
             }
 
-            $types = $catch->types;
-            $node->catches[$key]->types = [$catch->types[0]];
-            foreach ($types as $keyCatchType => $catchType) {
-                if ($keyCatchType === 0) {
-                    continue;
-                }
+            $catchTypes = $catch->types;
 
-                $this->nodesToAddCollector->addNodeAfterNode(
-                    new Catch_([$catchType], $catch->var, $catch->stmts),
-                    $node->catches[$key]
-                );
+            /** @var Node\Name $firstType */
+            $firstType = array_shift($catchTypes);
+
+            $catch->types = [$firstType];
+
+            foreach ($catchTypes as $catchType) {
+                $newCatch = new Catch_([$catchType], $catch->var, $catch->stmts);
+                array_splice($node->catches, $key + 1, 0, [$newCatch]);
+
+                $hasChanged = true;
             }
         }
 
-        if ($this->nodeComparator->areNodesEqual($originalCatches, $node->catches)) {
+        if (! $hasChanged) {
             return null;
         }
 
