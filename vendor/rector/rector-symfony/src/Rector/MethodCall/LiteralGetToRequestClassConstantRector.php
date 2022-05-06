@@ -6,6 +6,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer;
@@ -22,9 +23,15 @@ final class LiteralGetToRequestClassConstantRector extends \Rector\Core\Rector\A
      * @var \Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer
      */
     private $literalCallLikeConstFetchReplacer;
-    public function __construct(\Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer $literalCallLikeConstFetchReplacer)
+    /**
+     * @readonly
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(\Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer $literalCallLikeConstFetchReplacer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->literalCallLikeConstFetchReplacer = $literalCallLikeConstFetchReplacer;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -67,7 +74,9 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             return $this->refactorStaticCall($node);
         }
-        if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\HttpKernel\\Client'))) {
+        // for client, the transitional dependency to browser-kit might be missing and cause fatal error on PHPStan reflection
+        // in most cases that should be skipped, @see https://github.com/rectorphp/rector/issues/7135
+        if ($this->reflectionProvider->hasClass('Symfony\\Component\\BrowserKit\\AbstractBrowser') && $this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\HttpKernel\\Client'))) {
             return $this->refactorClientMethodCall($node);
         }
         if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\FormBuilderInterface'))) {

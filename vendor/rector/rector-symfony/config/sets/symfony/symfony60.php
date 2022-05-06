@@ -29,6 +29,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/40403
         new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Bridge\\Doctrine\\Security\\User\\UserLoaderInterface', 'loadUserByUsername', 'loadUserByIdentifier'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Security\\Core\\User\\UserProviderInterface', 'loadUserByUsername', 'loadUserByIdentifier'),
         // @see https://github.com/rectorphp/rector-symfony/issues/112
         new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Security\\Core\\User\\UserInterface', 'getUsername', 'getUserIdentifier'),
     ]);
