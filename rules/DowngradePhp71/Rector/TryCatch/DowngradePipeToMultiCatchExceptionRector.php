@@ -46,21 +46,22 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $originalCatches = $node->catches;
+        $hasChanged = \false;
         foreach ($node->catches as $key => $catch) {
             if (\count($catch->types) === 1) {
                 continue;
             }
-            $types = $catch->types;
-            $node->catches[$key]->types = [$catch->types[0]];
-            foreach ($types as $keyCatchType => $catchType) {
-                if ($keyCatchType === 0) {
-                    continue;
-                }
-                $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Catch_([$catchType], $catch->var, $catch->stmts), $node->catches[$key]);
+            $catchTypes = $catch->types;
+            /** @var Node\Name $firstType */
+            $firstType = \array_shift($catchTypes);
+            $catch->types = [$firstType];
+            foreach ($catchTypes as $catchType) {
+                $newCatch = new \PhpParser\Node\Stmt\Catch_([$catchType], $catch->var, $catch->stmts);
+                \array_splice($node->catches, $key + 1, 0, [$newCatch]);
+                $hasChanged = \true;
             }
         }
-        if ($this->nodeComparator->areNodesEqual($originalCatches, $node->catches)) {
+        if (!$hasChanged) {
             return null;
         }
         return $node;
