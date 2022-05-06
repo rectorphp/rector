@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector\Fixture;
 
-class ArrayItem
+final class InsideArray
 {
     public function run($statusCode)
     {
@@ -22,7 +22,7 @@ class ArrayItem
 
 namespace Rector\Tests\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector\Fixture;
 
-class ArrayItem
+final class InsideArray
 {
     public function run($statusCode)
     {

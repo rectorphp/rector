@@ -24,9 +24,12 @@ abstract class AbstractScopeAwareRector extends AbstractRector implements ScopeA
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
+            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+
             $errorMessage = sprintf(
-                'Scope not available on "%s" node, but is required by a refactorWithScope() method of "%s" rule. Fix scope refresh on changed nodes first',
+                'Scope not available on "%s" node with parent node of "%s", but is required by a refactorWithScope() method of "%s" rule. Fix scope refresh on changed nodes first',
                 $node::class,
+                $parent::class,
                 static::class,
             );
 
