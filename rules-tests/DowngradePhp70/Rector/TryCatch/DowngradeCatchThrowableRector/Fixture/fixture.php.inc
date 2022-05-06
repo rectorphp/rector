@@ -20,10 +20,10 @@ try {
     // Some code...
 } catch (\Throwable $e) {
     // Code to handle the exception
-} catch (\Exception $e) {
-    // Code to handle the exception
 } catch (AnotherException $e) {
     // ...
+} catch (\Exception $e) {
+    // Code to handle the exception
 }
 
 ?>

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\TryCatch;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Rector\AbstractRector;
@@ -66,29 +68,31 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $originalCatches = $node->catches;
-        foreach ($node->catches as $key => $catch) {
-            $shouldAddExceptionFallback =
-                $this->isCatchingType($catch->types, 'Throwable')
-                && ! $this->isCatchingType($catch->types, self::EXCEPTION)
-                && ! $this->isCaughtByAnotherClause($catch->stmts, $node->catches);
-            if ($shouldAddExceptionFallback) {
-                $catchType = new FullyQualified(self::EXCEPTION);
-                $this->nodesToAddCollector->addNodeAfterNode(
-                    new Catch_([$catchType], $catch->var, $catch->stmts),
-                    $node->catches[$key]
-                );
+
+        $hasChanged = false;
+
+        foreach ($node->catches as $catch) {
+            if (! $this->shouldAddExceptionFallback($catch, $node)) {
+                continue;
             }
+
+            $catchType = new FullyQualified(self::EXCEPTION);
+            $exceptionCatch = new Catch_([$catchType], $catch->var, $catch->stmts);
+
+            $originalCatches[] = $exceptionCatch;
+            $hasChanged = true;
         }
 
-        if ($this->nodeComparator->areNodesEqual($node->catches, $originalCatches)) {
+        if (! $hasChanged) {
             return null;
         }
 
+        $node->catches = $originalCatches;
         return $node;
     }
 
     /**
-     * @param Node\Name[] $types
+     * @param Name[] $types
      */
     private function isCatchingType(array $types, string $expected): bool
     {
@@ -102,8 +106,8 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Stmt[] $body
-     * @param Node\Stmt\Catch_[] $catches
+     * @param Stmt[] $body
+     * @param Catch_[] $catches
      */
     private function isCaughtByAnotherClause(array $body, array $catches): bool
     {
@@ -117,5 +121,18 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function shouldAddExceptionFallback(Catch_ $catch, TryCatch $tryCatch): bool
+    {
+        if (! $this->isCatchingType($catch->types, 'Throwable')) {
+            return false;
+        }
+
+        if ($this->isCatchingType($catch->types, self::EXCEPTION)) {
+            return false;
+        }
+
+        return ! $this->isCaughtByAnotherClause($catch->stmts, $tryCatch->catches);
     }
 }
