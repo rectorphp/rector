@@ -7,12 +7,15 @@ namespace Rector\EarlyReturn\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\CodeQuality\NodeTypeGroup;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -73,71 +76,90 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [If_::class];
+        return NodeTypeGroup::STMTS_AWARE;
     }
 
     /**
-     * @param If_ $node
+     * @param Function_|ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
-        // A. next node is return
-        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof Return_) {
+        $stmts = $node->stmts;
+        if ($stmts === null) {
             return null;
         }
 
-        $nestedIfsWithOnlyReturn = $this->ifManipulator->collectNestedIfsWithOnlyReturn($node);
-        if ($nestedIfsWithOnlyReturn === []) {
-            return null;
-        }
+        foreach ($stmts as $key => $stmt) {
+            $nextStmt = $stmts[$key + 1] ?? null;
+            if (! $nextStmt instanceof Return_) {
+                continue;
+            }
 
-        $this->processNestedIfsWithOnlyReturn($node, $nestedIfsWithOnlyReturn, $nextNode);
-        $this->removeNode($node);
+            if (! $stmt instanceof If_) {
+                continue;
+            }
+
+            $nestedIfsWithOnlyReturn = $this->ifManipulator->collectNestedIfsWithOnlyReturn($stmt);
+            if ($nestedIfsWithOnlyReturn === []) {
+                continue;
+            }
+
+            $node->stmts = $this->processNestedIfsWithOnlyReturn($nestedIfsWithOnlyReturn, $nextStmt);
+
+            return $node;
+        }
 
         return null;
     }
 
     /**
      * @param If_[] $nestedIfsWithOnlyReturn
+     * @return Stmt[]
      */
-    private function processNestedIfsWithOnlyReturn(If_ $if, array $nestedIfsWithOnlyReturn, Return_ $nextReturn): void
+    private function processNestedIfsWithOnlyReturn(array $nestedIfsWithOnlyReturn, Return_ $nextReturn): array
     {
         // add nested if openly after this
         $nestedIfsWithOnlyReturnCount = count($nestedIfsWithOnlyReturn);
+
+        $newStmts = [];
 
         /** @var int $key */
         foreach ($nestedIfsWithOnlyReturn as $key => $nestedIfWithOnlyReturn) {
             // last item → the return node
             if ($nestedIfsWithOnlyReturnCount === $key + 1) {
-                $this->nodesToAddCollector->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+                $newStmts[] = $nestedIfWithOnlyReturn;
             } else {
-                $this->addStandaloneIfsWithReturn($nestedIfWithOnlyReturn, $if, $nextReturn);
+                $standaloneIfs = $this->createStandaloneIfsWithReturn($nestedIfWithOnlyReturn, $nextReturn);
+                $newStmts = array_merge($newStmts, $standaloneIfs);
             }
         }
+
+        $newStmts[] = $nextReturn;
+
+        return $newStmts;
     }
 
-    private function addStandaloneIfsWithReturn(If_ $nestedIfWithOnlyReturn, If_ $if, Return_ $return): void
+    /**
+     * @return Stmt[]
+     */
+    private function createStandaloneIfsWithReturn(If_ $nestedIfWithOnlyReturn, Return_ $return): array
     {
-        $return = clone $return;
-
         $invertedCondition = $this->conditionInverter->createInvertedCondition($nestedIfWithOnlyReturn->cond);
 
         // special case
         if ($invertedCondition instanceof BooleanNot && $invertedCondition->expr instanceof BooleanAnd) {
             $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->left));
             $booleanNotPartIf->stmts = [clone $return];
-            $this->nodesToAddCollector->addNodeAfterNode($booleanNotPartIf, $if);
 
             $secondBooleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
             $secondBooleanNotPartIf->stmts = [clone $return];
-            $this->nodesToAddCollector->addNodeAfterNode($secondBooleanNotPartIf, $if);
-            return;
+
+            return [$booleanNotPartIf, $secondBooleanNotPartIf];
         }
 
         $nestedIfWithOnlyReturn->cond = $invertedCondition;
-        $nestedIfWithOnlyReturn->stmts = [clone $return];
+        $nestedIfWithOnlyReturn->stmts = [$return];
 
-        $this->nodesToAddCollector->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+        return [$nestedIfWithOnlyReturn];
     }
 }

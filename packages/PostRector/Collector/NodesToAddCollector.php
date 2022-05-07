@@ -41,7 +41,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
     }
 
     /**
-     * @internal Try to avoid using this magic added. Better return directly array of nodes in the Rector rule.
+     * @deprecated Return created nodes right in refactor() method to keep context instead.
      */
     public function addNodeBeforeNode(Node $addedNode, Node $positionNode): void
     {
@@ -58,6 +58,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
     /**
      * @param Node[] $addedNodes
+     * @deprecated Return created nodes right in refactor() method to keep context instead.
      */
     public function addNodesAfterNode(array $addedNodes, Node $positionNode): void
     {
@@ -114,6 +115,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
     }
 
     /**
+     * @deprecated Return created nodes right in refactor() method to keep context instead.
      * @param Node[] $newNodes
      */
     public function addNodesBeforeNode(array $newNodes, Node $positionNode): void
