@@ -74,3 +74,5 @@ cd ..
 
 rm -rf rector-prefixed-downgraded
 rm -rf rector-build
+
+git checkout src/functions

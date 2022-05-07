@@ -3,11 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
-
-$phpStanStubLoader = new PHPStanStubLoader();
-$phpStanStubLoader->loadStubs();
 
 require_once  __DIR__ . '/../target-repository/stubs-rector/PHPUnit/Framework/TestCase.php';
 require_once  __DIR__ . '/../../stubs/Composer/EventDispatcher/EventSubscriberInterface.php';
