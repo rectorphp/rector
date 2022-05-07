@@ -35,6 +35,9 @@ final class PhpVersionProvider
         $this->parameterProvider = $parameterProvider;
         $this->projectComposerJsonPhpVersionResolver = $projectComposerJsonPhpVersionResolver;
     }
+    /**
+     * @return PhpVersion::*
+     */
     public function provide() : int
     {
         $phpVersionFeatures = $this->parameterProvider->provideParameter(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES);
