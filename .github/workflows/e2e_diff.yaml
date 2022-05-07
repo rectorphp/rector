@@ -18,6 +18,7 @@ jobs:
                 php_version: ['7.2', '7.3', '7.4', '8.0', '8.1']
                 directory:
                     - 'e2e/attributes'
+                    - 'e2e/container-configurator'
 
         name: End to end test with diff - ${{ matrix.directory }}
 

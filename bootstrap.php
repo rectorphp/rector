@@ -23,19 +23,4 @@ spl_autoload_register(function (string $class): void {
             $composerAutoloader->loadClass($class);
         }
     }
-
-    // aliased by php-scoper, that's why its missing
-    if ($class === 'Symplify\SmartFileSystem\SmartFileInfo') {
-        $filePath = __DIR__ . '/vendor/symplify/smart-file-system/src/SmartFileInfo.php';
-        if (file_exists($filePath)) {
-            require $filePath;
-        }
-    }
-
-    if ($class === 'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator') {
-        // avoid duplicated autoload bug in Rector demo runner
-        if (class_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false)) {
-            return;
-        }
-    }
 });
