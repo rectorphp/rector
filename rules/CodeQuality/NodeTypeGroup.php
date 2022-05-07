@@ -4,10 +4,15 @@ declare (strict_types=1);
 namespace Rector\CodeQuality;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Stmt\Case_;
+use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Finally_;
+use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
@@ -20,5 +25,5 @@ final class NodeTypeGroup
      * @todo create a virtual node, getStmts(): array
      * @var array<class-string<Node>>
      */
-    public const STMTS_AWARE = [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Else_::class, \PhpParser\Node\Stmt\ElseIf_::class, \PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\TryCatch::class, \PhpParser\Node\Stmt\While_::class];
+    public const STMTS_AWARE = [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Else_::class, \PhpParser\Node\Stmt\ElseIf_::class, \PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\TryCatch::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\Finally_::class, \PhpParser\Node\Stmt\Case_::class, \PhpParser\Node\Stmt\Catch_::class];
 }
