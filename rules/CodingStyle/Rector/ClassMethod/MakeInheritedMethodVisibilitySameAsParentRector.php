@@ -80,10 +80,10 @@ CODE_SAMPLE
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
-        if ($classReflection->getParents() === []) {
+        $parentClassReflections = $classReflection->getParents();
+        if ($parentClassReflections === []) {
             return null;
         }
-        $parentClassReflections = $classReflection->getParents();
         foreach ($node->getMethods() as $classMethod) {
             if ($classMethod->isMagic()) {
                 continue;

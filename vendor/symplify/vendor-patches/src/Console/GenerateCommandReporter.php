@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220506\Symplify\VendorPatches\Console;
+namespace RectorPrefix20220507\Symplify\VendorPatches\Console;
 
-use RectorPrefix20220506\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220506\Symplify\VendorPatches\ValueObject\OldAndNewFileInfo;
+use RectorPrefix20220507\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220507\Symplify\VendorPatches\ValueObject\OldAndNewFileInfo;
 final class GenerateCommandReporter
 {
     /**
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\RectorPrefix20220506\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(\RectorPrefix20220507\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->symfonyStyle = $symfonyStyle;
     }
-    public function reportIdenticalNewAndOldFile(\RectorPrefix20220506\Symplify\VendorPatches\ValueObject\OldAndNewFileInfo $oldAndNewFileInfo) : void
+    public function reportIdenticalNewAndOldFile(\RectorPrefix20220507\Symplify\VendorPatches\ValueObject\OldAndNewFileInfo $oldAndNewFileInfo) : void
     {
         $message = \sprintf('Files "%s" and "%s" have the same content. Did you forgot to change it?', $oldAndNewFileInfo->getOldFileRelativePath(), $oldAndNewFileInfo->getNewFileRelativePath());
         $this->symfonyStyle->warning($message);

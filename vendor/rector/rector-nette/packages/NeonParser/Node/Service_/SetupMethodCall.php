@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Nette\NeonParser\Node\Service_;
 
-use RectorPrefix20220506\Nette\Neon\Node\EntityNode;
-use RectorPrefix20220506\Nette\Neon\Node\LiteralNode;
+use RectorPrefix20220507\Nette\Neon\Node\EntityNode;
+use RectorPrefix20220507\Nette\Neon\Node\LiteralNode;
 use Rector\Nette\NeonParser\Node\AbstractVirtualNode;
 final class SetupMethodCall extends \Rector\Nette\NeonParser\Node\AbstractVirtualNode
 {
@@ -20,7 +20,7 @@ final class SetupMethodCall extends \Rector\Nette\NeonParser\Node\AbstractVirtua
      * @var \Nette\Neon\Node\EntityNode
      */
     public $entityNode;
-    public function __construct(string $className, \RectorPrefix20220506\Nette\Neon\Node\LiteralNode $methodNameLiteralNode, \RectorPrefix20220506\Nette\Neon\Node\EntityNode $entityNode)
+    public function __construct(string $className, \RectorPrefix20220507\Nette\Neon\Node\LiteralNode $methodNameLiteralNode, \RectorPrefix20220507\Nette\Neon\Node\EntityNode $entityNode)
     {
         $this->className = $className;
         $this->methodNameLiteralNode = $methodNameLiteralNode;
