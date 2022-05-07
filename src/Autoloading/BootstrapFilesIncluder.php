@@ -11,6 +11,10 @@ use RectorPrefix20220507\Webmozart\Assert\Assert;
 final class BootstrapFilesIncluder
 {
     /**
+     * @var string[]
+     */
+    private const STUBS = ['/../../stubs-rector/PHPUnit/Framework/TestCase.php', '/../../stubs-rector/Internal/EnumInterfaces.php'];
+    /**
      * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
@@ -39,8 +43,10 @@ final class BootstrapFilesIncluder
                 throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage, $throwable->getCode(), $throwable);
             }
         }
-        if (\is_file(__DIR__ . '/../../stubs-rector/PHPUnit/Framework/TestCase.php')) {
-            require_once __DIR__ . '/../../stubs-rector/PHPUnit/Framework/TestCase.php';
+        foreach (self::STUBS as $stub) {
+            if (\is_file(__DIR__ . $stub)) {
+                require_once __DIR__ . $stub;
+            }
         }
     }
 }
