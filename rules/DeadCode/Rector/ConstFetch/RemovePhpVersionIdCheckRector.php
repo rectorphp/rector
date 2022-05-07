@@ -84,9 +84,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return Stmt[]|null
+     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor(\PhpParser\Node $node)
     {
         /**
          * $this->phpVersionProvider->provide() fallback is here as $currentFileProvider must be accessed after initialization
@@ -110,9 +110,9 @@ CODE_SAMPLE
         return $this->refactorConstFetch($binaryOp->right, $node, $binaryOp);
     }
     /**
-     * @return Stmt[]|null
+     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
      */
-    private function processSmaller(\PhpParser\Node\Expr\ConstFetch $constFetch, \PhpParser\Node\Expr\BinaryOp\Smaller $smaller, \PhpParser\Node\Stmt\If_ $if) : ?array
+    private function processSmaller(\PhpParser\Node\Expr\ConstFetch $constFetch, \PhpParser\Node\Expr\BinaryOp\Smaller $smaller, \PhpParser\Node\Stmt\If_ $if)
     {
         if ($smaller->left === $constFetch) {
             return $this->processSmallerLeft($smaller, $if);
@@ -123,9 +123,9 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return Stmt[]|null
+     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
      */
-    private function processGreaterOrEqual(\PhpParser\Node\Expr\ConstFetch $constFetch, \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual $greaterOrEqual, \PhpParser\Node\Stmt\If_ $if) : ?array
+    private function processGreaterOrEqual(\PhpParser\Node\Expr\ConstFetch $constFetch, \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual $greaterOrEqual, \PhpParser\Node\Stmt\If_ $if)
     {
         if ($greaterOrEqual->left === $constFetch) {
             return $this->processGreaterOrEqualLeft($greaterOrEqual, $if);
@@ -135,10 +135,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    /**
-     * @return null
-     */
-    private function processSmallerLeft(\PhpParser\Node\Expr\BinaryOp\Smaller $smaller, \PhpParser\Node\Stmt\If_ $if)
+    private function processSmallerLeft(\PhpParser\Node\Expr\BinaryOp\Smaller $smaller, \PhpParser\Node\Stmt\If_ $if) : ?\PhpParser\Node\Stmt\If_
     {
         $value = $smaller->right;
         if (!$value instanceof \PhpParser\Node\Scalar\LNumber) {
@@ -146,25 +143,30 @@ CODE_SAMPLE
         }
         if ($this->phpVersion >= $value->value) {
             $this->removeNode($if);
+            return $if;
         }
         return null;
     }
     /**
-     * @return Stmt[]|null
+     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
      */
-    private function processSmallerRight(\PhpParser\Node\Expr\BinaryOp\Smaller $smaller, \PhpParser\Node\Stmt\If_ $if) : ?array
+    private function processSmallerRight(\PhpParser\Node\Expr\BinaryOp\Smaller $smaller, \PhpParser\Node\Stmt\If_ $if)
     {
         $value = $smaller->left;
         if (!$value instanceof \PhpParser\Node\Scalar\LNumber) {
             return null;
         }
-        if ($this->phpVersion >= $value->value) {
-            return $if->stmts;
+        if ($this->phpVersion < $value->value) {
+            return null;
         }
-        return null;
+        if ($if->stmts === []) {
+            $this->removeNode($if);
+            return $if;
+        }
+        return $if->stmts;
     }
     /**
-     * @return mixed[]|null
+     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
      */
     private function processGreaterOrEqualLeft(\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual $greaterOrEqual, \PhpParser\Node\Stmt\If_ $if)
     {
@@ -172,15 +174,16 @@ CODE_SAMPLE
         if (!$value instanceof \PhpParser\Node\Scalar\LNumber) {
             return null;
         }
-        if ($this->phpVersion >= $value->value) {
-            return $if->stmts;
+        if ($this->phpVersion < $value->value) {
+            return null;
         }
-        return null;
+        if ($if->stmts === []) {
+            $this->removeNode($if);
+            return $if;
+        }
+        return $if->stmts;
     }
-    /**
-     * @return null
-     */
-    private function processGreaterOrEqualRight(\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual $greaterOrEqual, \PhpParser\Node\Stmt\If_ $if)
+    private function processGreaterOrEqualRight(\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual $greaterOrEqual, \PhpParser\Node\Stmt\If_ $if) : ?\PhpParser\Node\Stmt\If_
     {
         $value = $greaterOrEqual->left;
         if (!$value instanceof \PhpParser\Node\Scalar\LNumber) {
@@ -188,13 +191,14 @@ CODE_SAMPLE
         }
         if ($this->phpVersion >= $value->value) {
             $this->removeNode($if);
+            return $if;
         }
         return null;
     }
     /**
-     * @return Stmt[]|null
+     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
      */
-    private function processGreater(\PhpParser\Node\Expr\ConstFetch $constFetch, \PhpParser\Node\Expr\BinaryOp\Greater $greater, \PhpParser\Node\Stmt\If_ $if) : ?array
+    private function processGreater(\PhpParser\Node\Expr\ConstFetch $constFetch, \PhpParser\Node\Expr\BinaryOp\Greater $greater, \PhpParser\Node\Stmt\If_ $if)
     {
         if ($greater->left === $constFetch) {
             return $this->processGreaterLeft($greater, $if);
@@ -205,23 +209,24 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return Stmt[]|null
+     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
      */
-    private function processGreaterLeft(\PhpParser\Node\Expr\BinaryOp\Greater $greater, \PhpParser\Node\Stmt\If_ $if) : ?array
+    private function processGreaterLeft(\PhpParser\Node\Expr\BinaryOp\Greater $greater, \PhpParser\Node\Stmt\If_ $if)
     {
         $value = $greater->right;
         if (!$value instanceof \PhpParser\Node\Scalar\LNumber) {
             return null;
         }
-        if ($this->phpVersion >= $value->value) {
-            return $if->stmts;
+        if ($this->phpVersion < $value->value) {
+            return null;
         }
-        return null;
+        if ($if->stmts === []) {
+            $this->removeNode($if);
+            return $if;
+        }
+        return $if->stmts;
     }
-    /**
-     * @return null
-     */
-    private function processGreaterRight(\PhpParser\Node\Expr\BinaryOp\Greater $greater, \PhpParser\Node\Stmt\If_ $if)
+    private function processGreaterRight(\PhpParser\Node\Expr\BinaryOp\Greater $greater, \PhpParser\Node\Stmt\If_ $if) : ?\PhpParser\Node\Stmt\If_
     {
         $value = $greater->left;
         if (!$value instanceof \PhpParser\Node\Scalar\LNumber) {
@@ -229,13 +234,14 @@ CODE_SAMPLE
         }
         if ($this->phpVersion >= $value->value) {
             $this->removeNode($if);
+            return $if;
         }
         return null;
     }
     /**
-     * @return Stmt[]|null
+     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
      */
-    private function refactorConstFetch(\PhpParser\Node\Expr\ConstFetch $constFetch, \PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\BinaryOp $binaryOp) : ?array
+    private function refactorConstFetch(\PhpParser\Node\Expr\ConstFetch $constFetch, \PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\BinaryOp $binaryOp)
     {
         if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Smaller) {
             return $this->processSmaller($constFetch, $binaryOp, $if);
