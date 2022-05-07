@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
@@ -82,8 +83,9 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
+     * @return Stmt[]|null
      */
-    public function refactor(Node $node): ?If_
+    public function refactor(Node $node): ?array
     {
         if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
             return null;
@@ -109,7 +111,10 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): ?If_
+    /**
+     * @return Stmt[]|null
+     */
+    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): ?array
     {
         if (! $instanceof->class instanceof Name) {
             return null;
@@ -135,12 +140,13 @@ CODE_SAMPLE
             return null;
         }
 
+        $this->removeNode($if);
+
         if ($if->cond === $instanceof) {
-            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
+            return $if->stmts;
         }
 
-        $this->removeNode($if);
-        return $if;
+        return null;
     }
 
     private function shouldSkipFromNotTypedParam(Instanceof_ $instanceof): bool
