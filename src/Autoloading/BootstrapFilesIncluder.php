@@ -12,6 +12,14 @@ use Webmozart\Assert\Assert;
 
 final class BootstrapFilesIncluder
 {
+    /**
+     * @var string[]
+     */
+    private const STUBS = [
+        '/../../stubs-rector/PHPUnit/Framework/TestCase.php',
+        '/../../stubs-rector/Internal/EnumInterfaces.php',
+    ];
+
     public function __construct(
         private readonly ParameterProvider $parameterProvider
     ) {
@@ -49,8 +57,10 @@ final class BootstrapFilesIncluder
             }
         }
 
-        if (is_file(__DIR__ . '/../../stubs-rector/PHPUnit/Framework/TestCase.php')) {
-            require_once __DIR__ . '/../../stubs-rector/PHPUnit/Framework/TestCase.php';
+        foreach (self::STUBS as $stub) {
+            if (is_file(__DIR__ . $stub)) {
+                require_once __DIR__ . $stub;
+            }
         }
     }
 }
