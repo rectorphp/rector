@@ -1781,7 +1781,6 @@ return array(
     'Rector\\Core\\StaticReflection\\DynamicSourceLocatorDecorator' => $baseDir . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
     'Rector\\Core\\StaticReflection\\SourceLocator\\ParentAttributeSourceLocator' => $baseDir . '/src/StaticReflection/SourceLocator/ParentAttributeSourceLocator.php',
     'Rector\\Core\\StaticReflection\\SourceLocator\\RenamedClassesSourceLocator' => $baseDir . '/src/StaticReflection/SourceLocator/RenamedClassesSourceLocator.php',
-    'Rector\\Core\\Stubs\\PHPStanStubLoader' => $baseDir . '/src/Stubs/PHPStanStubLoader.php',
     'Rector\\Core\\Template\\DefaultResolver' => $baseDir . '/src/Template/DefaultResolver.php',
     'Rector\\Core\\Util\\MemoryLimiter' => $baseDir . '/src/Util/MemoryLimiter.php',
     'Rector\\Core\\Util\\PhpVersionFactory' => $baseDir . '/src/Util/PhpVersionFactory.php',

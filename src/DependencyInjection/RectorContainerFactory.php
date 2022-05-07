@@ -7,7 +7,6 @@ use RectorPrefix20220507\Nette\Utils\FileSystem;
 use RectorPrefix20220507\Psr\Container\ContainerInterface;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Kernel\RectorKernel;
-use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use RectorPrefix20220507\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorContainerFactory
@@ -40,8 +39,6 @@ final class RectorContainerFactory
      */
     private function createFromConfigs(array $configFiles) : \RectorPrefix20220507\Psr\Container\ContainerInterface
     {
-        $phpStanStubLoader = new \Rector\Core\Stubs\PHPStanStubLoader();
-        $phpStanStubLoader->loadStubs();
         $rectorKernel = new \Rector\Core\Kernel\RectorKernel();
         return $rectorKernel->createFromConfigs($configFiles);
     }

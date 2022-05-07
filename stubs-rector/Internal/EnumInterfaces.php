@@ -1,6 +1,6 @@
 <?php
 
-if (! interface_exists('UnitEnum')) {
+if (PHP_VERSION_ID < 80100 && ! interface_exists('UnitEnum', false)) {
     /**
      * @since 8.1
      */
@@ -13,7 +13,7 @@ if (! interface_exists('UnitEnum')) {
     }
 }
 
-if (! interface_exists('BackedEnum')) {
+if (PHP_VERSION_ID < 80100 && ! interface_exists('BackedEnum', false)) {
     /**
      * @since 8.1
      */
