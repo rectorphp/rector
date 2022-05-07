@@ -11,25 +11,27 @@ use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\PhpVersionFactory;
 use Rector\Core\ValueObject\PhpVersion;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\DeadCode\Rector\ConstFetch\RemovePhpVersionIdCheckRector\RemovePhpVersionIdCheckRectorTest
  */
 final class RemovePhpVersionIdCheckRector extends AbstractRector implements ConfigurableRectorInterface
 {
-    private string | int | null $phpVersionConstraint = null;
+    /**
+     * @var PhpVersion::*|null
+     */
+    private int | null $phpVersion = null;
 
     public function __construct(
-        private readonly PhpVersionFactory $phpVersionFactory,
         private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
@@ -39,13 +41,19 @@ final class RemovePhpVersionIdCheckRector extends AbstractRector implements Conf
      */
     public function configure(array $configuration): void
     {
-        $this->phpVersionConstraint = array_pop($configuration);
+        $phpVersion = $configuration[0];
+        Assert::integer($phpVersion);
+        PhpVersion::assertValidValue($phpVersion);
+
+        // ensure cast to (string) first to allow string like "8.0" value to be converted to the int value
+        /** @var PhpVersion::* $phpVersion */
+        $this->phpVersion = $phpVersion;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove unneeded PHP_VERSION_ID check',
+            'Remove unneeded PHP_VERSION_ID conditional checks',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
@@ -56,6 +64,7 @@ class SomeClass
         if (PHP_VERSION_ID < 80000) {
             return;
         }
+
         echo 'do something';
     }
 }
@@ -82,195 +91,212 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ConstFetch::class];
+        return [If_::class];
     }
 
     /**
-     * @param ConstFetch $node
+     * @param If_ $node
+     * @return Stmt[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?array
     {
-        if (! $this->isName($node, 'PHP_VERSION_ID')) {
-            return null;
-        }
-
         /**
          * $this->phpVersionProvider->provide() fallback is here as $currentFileProvider must be accessed after initialization
          */
-        $phpVersionConstraint = $this->phpVersionConstraint ?? $this->phpVersionProvider->provide();
+        if ($this->phpVersion === null) {
+            $this->phpVersion = $this->phpVersionProvider->provide();
+        }
 
-        // ensure cast to (string) first to allow string like "8.0" value to be converted to the int value
-        $this->phpVersionConstraint = $this->phpVersionFactory->createIntVersion((string) $phpVersionConstraint);
-
-        $if = $this->betterNodeFinder->findParentType($node, If_::class);
-        if (! $if instanceof If_) {
+        if (! $node->cond instanceof BinaryOp) {
             return null;
         }
 
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($this->shouldSkip($node, $if, $parent)) {
+        $binaryOp = $node->cond;
+        if ($binaryOp->left instanceof ConstFetch && $this->isName($binaryOp->left->name, 'PHP_VERSION_ID')) {
+            return $this->refactorConstFetch($binaryOp->left, $node, $binaryOp);
+        }
+
+        if (! $binaryOp->right instanceof ConstFetch) {
             return null;
         }
 
-        if ($parent instanceof Smaller) {
-            return $this->processSmaller($node, $parent, $if);
+        if (! $this->isName($binaryOp->right->name, 'PHP_VERSION_ID')) {
+            return null;
         }
 
-        if ($parent instanceof GreaterOrEqual) {
-            return $this->processGreaterOrEqual($node, $parent, $if);
-        }
-
-        if ($parent instanceof Greater) {
-            return $this->processGreater($node, $parent, $if);
-        }
-
-        return null;
+        return $this->refactorConstFetch($binaryOp->right, $node, $binaryOp);
     }
 
-    private function shouldSkip(ConstFetch $constFetch, If_ $if, ?Node $node): bool
-    {
-        $if = $this->betterNodeFinder->findParentType($constFetch, If_::class);
-        if (! $if instanceof If_) {
-            return true;
-        }
-
-        $node = $constFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $node instanceof BinaryOp) {
-            return true;
-        }
-
-        return $if->cond !== $node;
-    }
-
-    private function processSmaller(ConstFetch $constFetch, Smaller $smaller, If_ $if): ?ConstFetch
+    /**
+     * @return Stmt[]|null
+     */
+    private function processSmaller(ConstFetch $constFetch, Smaller $smaller, If_ $if): ?array
     {
         if ($smaller->left === $constFetch) {
-            return $this->processSmallerLeft($constFetch, $smaller, $if);
+            return $this->processSmallerLeft($smaller, $if);
         }
 
         if ($smaller->right === $constFetch) {
-            return $this->processSmallerRight($constFetch, $smaller, $if);
+            return $this->processSmallerRight($smaller, $if);
         }
 
         return null;
     }
 
-    private function processGreaterOrEqual(ConstFetch $constFetch, GreaterOrEqual $greaterOrEqual, If_ $if): ?ConstFetch
-    {
+    /**
+     * @return Stmt[]|null
+     */
+    private function processGreaterOrEqual(
+        ConstFetch $constFetch,
+        GreaterOrEqual $greaterOrEqual,
+        If_ $if,
+    ): ?array {
         if ($greaterOrEqual->left === $constFetch) {
-            return $this->processGreaterOrEqualLeft($constFetch, $greaterOrEqual, $if);
+            return $this->processGreaterOrEqualLeft($greaterOrEqual, $if);
         }
 
         if ($greaterOrEqual->right === $constFetch) {
-            return $this->processGreaterOrEqualRight($constFetch, $greaterOrEqual, $if);
+            return $this->processGreaterOrEqualRight($greaterOrEqual, $if);
         }
 
         return null;
     }
 
-    private function processSmallerLeft(ConstFetch $constFetch, Smaller $smaller, If_ $if): ?ConstFetch
+    /**
+     * @return null
+     */
+    private function processSmallerLeft(Smaller $smaller, If_ $if)
     {
         $value = $smaller->right;
         if (! $value instanceof LNumber) {
             return null;
         }
 
-        if ($this->phpVersionConstraint >= $value->value) {
+        if ($this->phpVersion >= $value->value) {
             $this->removeNode($if);
         }
 
-        return $constFetch;
+        return null;
     }
 
-    private function processSmallerRight(ConstFetch $constFetch, Smaller $smaller, If_ $if): ?ConstFetch
+    /**
+     * @return Stmt[]|null
+     */
+    private function processSmallerRight(Smaller $smaller, If_ $if): ?array
     {
         $value = $smaller->left;
         if (! $value instanceof LNumber) {
             return null;
         }
 
-        if ($this->phpVersionConstraint >= $value->value) {
-            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
-            $this->removeNode($if);
-        }
-
-        return $constFetch;
-    }
-
-    private function processGreaterOrEqualLeft(
-        ConstFetch $constFetch,
-        GreaterOrEqual $greaterOrEqual,
-        If_ $if
-    ): ?ConstFetch {
-        $value = $greaterOrEqual->right;
-        if (! $value instanceof LNumber) {
-            return null;
-        }
-
-        if ($this->phpVersionConstraint >= $value->value) {
-            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
-            $this->removeNode($if);
-        }
-
-        return $constFetch;
-    }
-
-    private function processGreaterOrEqualRight(
-        ConstFetch $constFetch,
-        GreaterOrEqual $greaterOrEqual,
-        If_ $if
-    ): ?ConstFetch {
-        $value = $greaterOrEqual->left;
-        if (! $value instanceof LNumber) {
-            return null;
-        }
-
-        if ($this->phpVersionConstraint >= $value->value) {
-            $this->removeNode($if);
-        }
-
-        return $constFetch;
-    }
-
-    private function processGreater(ConstFetch $constFetch, Greater $greater, If_ $if): ?ConstFetch
-    {
-        if ($greater->left === $constFetch) {
-            return $this->processGreaterLeft($constFetch, $greater, $if);
-        }
-
-        if ($greater->right === $constFetch) {
-            return $this->processGreaterRight($constFetch, $greater, $if);
+        if ($this->phpVersion >= $value->value) {
+            return $if->stmts;
         }
 
         return null;
     }
 
-    private function processGreaterLeft(ConstFetch $constFetch, Greater $greater, If_ $if): ?ConstFetch
+    /**
+     * @return Stmt[]|null
+     */
+    private function processGreaterOrEqualLeft(GreaterOrEqual $greaterOrEqual, If_ $if): array|null
+    {
+        $value = $greaterOrEqual->right;
+        if (! $value instanceof LNumber) {
+            return null;
+        }
+
+        if ($this->phpVersion >= $value->value) {
+            return $if->stmts;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return null
+     */
+    private function processGreaterOrEqualRight(GreaterOrEqual $greaterOrEqual, If_ $if)
+    {
+        $value = $greaterOrEqual->left;
+        if (! $value instanceof LNumber) {
+            return null;
+        }
+
+        if ($this->phpVersion >= $value->value) {
+            $this->removeNode($if);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return Stmt[]|null
+     */
+    private function processGreater(ConstFetch $constFetch, Greater $greater, If_ $if): ?array
+    {
+        if ($greater->left === $constFetch) {
+            return $this->processGreaterLeft($greater, $if);
+        }
+
+        if ($greater->right === $constFetch) {
+            return $this->processGreaterRight($greater, $if);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return Stmt[]|null
+     */
+    private function processGreaterLeft(Greater $greater, If_ $if): ?array
     {
         $value = $greater->right;
         if (! $value instanceof LNumber) {
             return null;
         }
 
-        if ($this->phpVersionConstraint >= $value->value) {
-            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
-            $this->removeNode($if);
+        if ($this->phpVersion >= $value->value) {
+            return $if->stmts;
         }
 
-        return $constFetch;
+        return null;
     }
 
-    private function processGreaterRight(ConstFetch $constFetch, Greater $greater, If_ $if): ?ConstFetch
+    /**
+     * @return null
+     */
+    private function processGreaterRight(Greater $greater, If_ $if)
     {
         $value = $greater->left;
         if (! $value instanceof LNumber) {
             return null;
         }
 
-        if ($this->phpVersionConstraint >= $value->value) {
+        if ($this->phpVersion >= $value->value) {
             $this->removeNode($if);
         }
 
-        return $constFetch;
+        return null;
+    }
+
+    /**
+     * @return Stmt[]|null
+     */
+    private function refactorConstFetch(ConstFetch $constFetch, If_ $if, BinaryOp $binaryOp): ?array
+    {
+        if ($binaryOp instanceof Smaller) {
+            return $this->processSmaller($constFetch, $binaryOp, $if);
+        }
+
+        if ($binaryOp instanceof GreaterOrEqual) {
+            return $this->processGreaterOrEqual($constFetch, $binaryOp, $if);
+        }
+
+        if ($binaryOp instanceof Greater) {
+            return $this->processGreater($constFetch, $binaryOp, $if);
+        }
+
+        return null;
     }
 }

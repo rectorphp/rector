@@ -29,6 +29,9 @@ final class PhpVersionProvider
     ) {
     }
 
+    /**
+     * @return PhpVersion::*
+     */
     public function provide(): int
     {
         $phpVersionFeatures = $this->parameterProvider->provideParameter(Option::PHP_VERSION_FEATURES);

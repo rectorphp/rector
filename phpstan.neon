@@ -585,9 +585,13 @@ parameters:
 
         # avoid moving rule around, while re-targeting to stmt
         - '#Class "Rector\\(.*?)\\Rector\\(.*?) has invalid namespace category "(.*?)"\. Pick one of\: "(Expression|Class_|NodeTypeGroup)"#'
+        - '#Class "Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector" has invalid namespace category "ConstFetch"\. Pick one of\: "If_"#'
 
         - '#Cognitive complexity for "Rector\\CodingStyle\\Rector\\ClassMethod\\MakeInheritedMethodVisibilitySameAsParentRector\:\:refactorWithScope\(\)" is 11, keep it under 10#'
         -
             message: '#Cognitive complexity for "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector\:\:refactor\(\)" is \d+, keep it under 10#'
             paths:
                 - rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php
+
+        # known value
+        - '#Method Rector\\Core\\Php\\PhpVersionProvider\:\:provide\(\) should return 50200\|50300\|50400\|50500\|50600\|70000\|70100\|70200\|70300\|70400\|80000\|80100\|80200\|100000 but returns int#'

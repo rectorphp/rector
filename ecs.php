@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionS
 use PhpCsFixer\Fixer\FunctionNotation\FunctionTypehintSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocNoEmptyReturnFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
@@ -71,5 +72,10 @@ return static function (ECSConfig $ecsConfig): void {
         ],
 
         AssignmentInConditionSniff::class . '.FoundInWhileCondition',
+
+        // null on purpose as no change
+        PhpdocNoEmptyReturnFixer::class => [
+            __DIR__ . '/rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php',
+        ],
     ]);
 };
