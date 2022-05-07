@@ -96,9 +96,9 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
-     * @return Stmt[]|null
+     * @return null|If_|Stmt[]
      */
-    public function refactor(Node $node): ?array
+    public function refactor(Node $node): null|If_|array
     {
         /**
          * $this->phpVersionProvider->provide() fallback is here as $currentFileProvider must be accessed after initialization
@@ -128,9 +128,9 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Stmt[]|null
+     * @return null|If_|Stmt[]
      */
-    private function processSmaller(ConstFetch $constFetch, Smaller $smaller, If_ $if): ?array
+    private function processSmaller(ConstFetch $constFetch, Smaller $smaller, If_ $if): null|If_|array
     {
         if ($smaller->left === $constFetch) {
             return $this->processSmallerLeft($smaller, $if);
@@ -144,13 +144,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Stmt[]|null
+     * @return null|If_|Stmt[]
      */
     private function processGreaterOrEqual(
         ConstFetch $constFetch,
         GreaterOrEqual $greaterOrEqual,
         If_ $if,
-    ): ?array {
+    ): null|If_|array {
         if ($greaterOrEqual->left === $constFetch) {
             return $this->processGreaterOrEqualLeft($greaterOrEqual, $if);
         }
@@ -162,10 +162,7 @@ CODE_SAMPLE
         return null;
     }
 
-    /**
-     * @return null
-     */
-    private function processSmallerLeft(Smaller $smaller, If_ $if)
+    private function processSmallerLeft(Smaller $smaller, If_ $if): ?If_
     {
         $value = $smaller->right;
         if (! $value instanceof LNumber) {
@@ -174,49 +171,57 @@ CODE_SAMPLE
 
         if ($this->phpVersion >= $value->value) {
             $this->removeNode($if);
+            return $if;
         }
 
         return null;
     }
 
     /**
-     * @return Stmt[]|null
+     * @return null|If_|Stmt[]
      */
-    private function processSmallerRight(Smaller $smaller, If_ $if): ?array
+    private function processSmallerRight(Smaller $smaller, If_ $if): null|If_|array
     {
         $value = $smaller->left;
         if (! $value instanceof LNumber) {
             return null;
         }
 
-        if ($this->phpVersion >= $value->value) {
-            return $if->stmts;
+        if ($this->phpVersion < $value->value) {
+            return null;
         }
 
-        return null;
+        if ($if->stmts === []) {
+            $this->removeNode($if);
+            return $if;
+        }
+
+        return $if->stmts;
     }
 
     /**
-     * @return Stmt[]|null
+     * @return null|If_|Stmt[]
      */
-    private function processGreaterOrEqualLeft(GreaterOrEqual $greaterOrEqual, If_ $if): array|null
+    private function processGreaterOrEqualLeft(GreaterOrEqual $greaterOrEqual, If_ $if): null|If_|array
     {
         $value = $greaterOrEqual->right;
         if (! $value instanceof LNumber) {
             return null;
         }
 
-        if ($this->phpVersion >= $value->value) {
-            return $if->stmts;
+        if ($this->phpVersion < $value->value) {
+            return null;
         }
 
-        return null;
+        if ($if->stmts === []) {
+            $this->removeNode($if);
+            return $if;
+        }
+
+        return $if->stmts;
     }
 
-    /**
-     * @return null
-     */
-    private function processGreaterOrEqualRight(GreaterOrEqual $greaterOrEqual, If_ $if)
+    private function processGreaterOrEqualRight(GreaterOrEqual $greaterOrEqual, If_ $if): ?If_
     {
         $value = $greaterOrEqual->left;
         if (! $value instanceof LNumber) {
@@ -225,15 +230,16 @@ CODE_SAMPLE
 
         if ($this->phpVersion >= $value->value) {
             $this->removeNode($if);
+            return $if;
         }
 
         return null;
     }
 
     /**
-     * @return Stmt[]|null
+     * @return null|If_|Stmt[]
      */
-    private function processGreater(ConstFetch $constFetch, Greater $greater, If_ $if): ?array
+    private function processGreater(ConstFetch $constFetch, Greater $greater, If_ $if): null|If_|array
     {
         if ($greater->left === $constFetch) {
             return $this->processGreaterLeft($greater, $if);
@@ -247,26 +253,28 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Stmt[]|null
+     * @return null|If_|Stmt[]
      */
-    private function processGreaterLeft(Greater $greater, If_ $if): ?array
+    private function processGreaterLeft(Greater $greater, If_ $if): null|If_|array
     {
         $value = $greater->right;
         if (! $value instanceof LNumber) {
             return null;
         }
 
-        if ($this->phpVersion >= $value->value) {
-            return $if->stmts;
+        if ($this->phpVersion < $value->value) {
+            return null;
         }
 
-        return null;
+        if ($if->stmts === []) {
+            $this->removeNode($if);
+            return $if;
+        }
+
+        return $if->stmts;
     }
 
-    /**
-     * @return null
-     */
-    private function processGreaterRight(Greater $greater, If_ $if)
+    private function processGreaterRight(Greater $greater, If_ $if): ?If_
     {
         $value = $greater->left;
         if (! $value instanceof LNumber) {
@@ -275,15 +283,16 @@ CODE_SAMPLE
 
         if ($this->phpVersion >= $value->value) {
             $this->removeNode($if);
+            return $if;
         }
 
         return null;
     }
 
     /**
-     * @return Stmt[]|null
+     * @return null|If_|Stmt[]
      */
-    private function refactorConstFetch(ConstFetch $constFetch, If_ $if, BinaryOp $binaryOp): ?array
+    private function refactorConstFetch(ConstFetch $constFetch, If_ $if, BinaryOp $binaryOp): null|If_|array
     {
         if ($binaryOp instanceof Smaller) {
             return $this->processSmaller($constFetch, $binaryOp, $if);
