@@ -50,7 +50,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         return $this->nodesToAddAfter !== [] || $this->nodesToAddBefore !== [];
     }
     /**
-     * @internal Try to avoid using this magic added. Better return directly array of nodes in the Rector rule.
+     * @deprecated Return created nodes right in refactor() method to keep context instead.
      */
     public function addNodeBeforeNode(\PhpParser\Node $addedNode, \PhpParser\Node $positionNode) : void
     {
@@ -64,6 +64,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     }
     /**
      * @param Node[] $addedNodes
+     * @deprecated Return created nodes right in refactor() method to keep context instead.
      */
     public function addNodesAfterNode(array $addedNodes, \PhpParser\Node $positionNode) : void
     {
@@ -112,6 +113,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         unset($this->nodesToAddBefore[$objectHash]);
     }
     /**
+     * @deprecated Return created nodes right in refactor() method to keep context instead.
      * @param Node[] $newNodes
      */
     public function addNodesBeforeNode(array $newNodes, \PhpParser\Node $positionNode) : void
