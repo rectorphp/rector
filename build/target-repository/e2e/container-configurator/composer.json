@@ -1,0 +1,7 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Rector\\e2e\\": "src"
+        }
+    }
+}
