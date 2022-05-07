@@ -16,11 +16,11 @@ final class VersionResolver
     /**
      * @var string
      */
-    public const PACKAGE_VERSION = 'c91f3ad6299b08583c2b994e6c09592f6ddfc200';
+    public const PACKAGE_VERSION = '3135f293622611407e6fb403b335077d16bfee74';
     /**
      * @var string
      */
-    public const RELEASE_DATE = '2022-05-07 09:32:53';
+    public const RELEASE_DATE = '2022-05-07 10:18:33';
     /**
      * @var string
      */

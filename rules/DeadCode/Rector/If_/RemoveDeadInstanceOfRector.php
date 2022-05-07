@@ -99,9 +99,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return Stmt[]|null
+     * @return null|mixed[]|\PhpParser\Node\Stmt\If_
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor(\PhpParser\Node $node)
     {
         if (!$this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
             return null;
@@ -122,9 +122,9 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return Stmt[]|null
+     * @return null|mixed[]|\PhpParser\Node\Stmt\If_
      */
-    private function processMayDeadInstanceOf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\Instanceof_ $instanceof) : ?array
+    private function processMayDeadInstanceOf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\Instanceof_ $instanceof)
     {
         if (!$instanceof->class instanceof \PhpParser\Node\Name) {
             return null;
@@ -141,11 +141,11 @@ CODE_SAMPLE
         if ($this->shouldSkipFromNotTypedParam($instanceof)) {
             return null;
         }
-        $this->removeNode($if);
-        if ($if->cond === $instanceof) {
+        if ($if->cond === $instanceof && $if->stmts !== []) {
             return $if->stmts;
         }
-        return null;
+        $this->removeNode($if);
+        return $if;
     }
     private function shouldSkipFromNotTypedParam(\PhpParser\Node\Expr\Instanceof_ $instanceof) : bool
     {
