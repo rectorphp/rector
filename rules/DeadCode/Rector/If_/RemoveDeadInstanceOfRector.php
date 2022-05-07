@@ -83,9 +83,9 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
-     * @return Stmt[]|null
+     * @return Stmt[]|null|If_
      */
-    public function refactor(Node $node): ?array
+    public function refactor(Node $node): null|array|If_
     {
         if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
             return null;
@@ -114,7 +114,7 @@ CODE_SAMPLE
     /**
      * @return Stmt[]|null
      */
-    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): ?array
+    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): null|array|If_
     {
         if (! $instanceof->class instanceof Name) {
             return null;
@@ -140,13 +140,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeNode($if);
-
-        if ($if->cond === $instanceof) {
+        if ($if->cond === $instanceof && $if->stmts !== []) {
             return $if->stmts;
         }
 
-        return null;
+        $this->removeNode($if);
+        return $if;
     }
 
     private function shouldSkipFromNotTypedParam(Instanceof_ $instanceof): bool
