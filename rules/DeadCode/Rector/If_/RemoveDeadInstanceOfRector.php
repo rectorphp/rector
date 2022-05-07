@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
@@ -98,8 +99,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
+     * @return Stmt[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\If_
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if (!$this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
             return null;
@@ -119,7 +121,10 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processMayDeadInstanceOf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\Instanceof_ $instanceof) : ?\PhpParser\Node\Stmt\If_
+    /**
+     * @return Stmt[]|null
+     */
+    private function processMayDeadInstanceOf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\Instanceof_ $instanceof) : ?array
     {
         if (!$instanceof->class instanceof \PhpParser\Node\Name) {
             return null;
@@ -136,11 +141,11 @@ CODE_SAMPLE
         if ($this->shouldSkipFromNotTypedParam($instanceof)) {
             return null;
         }
-        if ($if->cond === $instanceof) {
-            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
-        }
         $this->removeNode($if);
-        return $if;
+        if ($if->cond === $instanceof) {
+            return $if->stmts;
+        }
+        return null;
     }
     private function shouldSkipFromNotTypedParam(\PhpParser\Node\Expr\Instanceof_ $instanceof) : bool
     {
