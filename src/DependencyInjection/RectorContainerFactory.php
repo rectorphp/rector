@@ -8,7 +8,6 @@ use Nette\Utils\FileSystem;
 use Psr\Container\ContainerInterface;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Kernel\RectorKernel;
-use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -52,9 +51,6 @@ final class RectorContainerFactory
      */
     private function createFromConfigs(array $configFiles): ContainerInterface
     {
-        $phpStanStubLoader = new PHPStanStubLoader();
-        $phpStanStubLoader->loadStubs();
-
         $rectorKernel = new RectorKernel();
         return $rectorKernel->createFromConfigs($configFiles);
     }
