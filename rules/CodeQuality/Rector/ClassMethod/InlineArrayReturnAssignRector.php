@@ -10,9 +10,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CodeQuality\NodeAnalyzer\VariableDimFetchAssignResolver;
 use Rector\CodeQuality\NodeTypeGroup;
@@ -20,6 +18,7 @@ use Rector\CodeQuality\ValueObject\KeyAndExpr;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector\InlineArrayReturnAssignRectorTest
@@ -68,11 +67,10 @@ CODE_SAMPLE
         return NodeTypeGroup::STMTS_AWARE;
     }
 
-    /**
-     * @param ClassMethod|Function_ $node
-     */
     public function refactor(Node $node): ?Node
     {
+        Assert::propertyExists($node, 'stmts');
+
         /** @var Stmt[]|null $stmts */
         $stmts = $node->stmts;
         if ($stmts === null) {
