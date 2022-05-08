@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -29,25 +28,13 @@ final class ChangeArrayPushToArrayAssignRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $items = [];
-        array_push($items, $item);
-    }
-}
+$items = [];
+array_push($items, $item);
 CODE_SAMPLE
 ,
                     <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $items = [];
-        $items[] = $item;
-    }
-}
+$items = [];
+$items[] = $item;
 CODE_SAMPLE
                 ),
             ]
@@ -59,61 +46,54 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [Expression::class];
     }
 
     /**
-     * @param FuncCall $node
+     * @param Expression[] $node
+     * @param Expression[]|null $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?array
     {
-        if (! $this->isName($node, 'array_push')) {
+        if (! $node->expr instanceof FuncCall) {
             return null;
         }
 
-        if ($this->hasArraySpread($node)) {
+        $funcCall = $node->expr;
+        if (! $this->isName($funcCall, 'array_push')) {
             return null;
         }
 
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Expression) {
+        if ($this->hasArraySpread($funcCall)) {
             return null;
         }
 
-        if (! isset($node->args[0])) {
-            return null;
-        }
+        $args = $funcCall->getArgs();
 
-        if (! $node->args[0] instanceof Arg) {
-            return null;
-        }
+        /** @var Arg $firstArg */
+        $firstArg = array_shift($args);
 
-        $arrayDimFetch = new ArrayDimFetch($node->args[0]->value);
+        $arrayDimFetch = new ArrayDimFetch($firstArg->value);
 
-        $position = 1;
-        while (isset($node->args[$position]) && $node->args[$position] instanceof Arg) {
-            $assign = new Assign($arrayDimFetch, $node->args[$position]->value);
+        $newStmts = [];
+
+        foreach ($args as $key => $arg) {
+            $assign = new Assign($arrayDimFetch, $arg->value);
             $assignExpression = new Expression($assign);
+            $newStmts[] = $assignExpression;
 
             // keep comments of first line
-            if ($position === 1) {
+            if ($key === 0) {
                 $this->mirrorComments($assignExpression, $node);
             }
-
-            $this->nodesToAddCollector->addNodeAfterNode($assignExpression, $node);
-
-            ++$position;
         }
 
-        $this->removeNode($node);
-
-        return null;
+        return $newStmts;
     }
 
     private function hasArraySpread(FuncCall $funcCall): bool
     {
-        foreach ($funcCall->args as $arg) {
-            /** @var Arg $arg */
+        foreach ($funcCall->getArgs() as $arg) {
             if ($arg->unpack) {
                 return true;
             }
