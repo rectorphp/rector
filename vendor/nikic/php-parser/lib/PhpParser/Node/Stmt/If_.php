@@ -4,7 +4,8 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-class If_ extends \PhpParser\Node\Stmt
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+class If_ extends \PhpParser\Node\Stmt implements \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
 {
     /** @var Node\Expr Condition expression */
     public $cond;

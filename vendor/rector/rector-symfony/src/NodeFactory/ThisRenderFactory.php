@@ -55,15 +55,15 @@ final class ThisRenderFactory
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->templateGuesser = $templateGuesser;
     }
-    public function create(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?\PhpParser\Node\Stmt\Return_ $return, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : \PhpParser\Node\Expr\MethodCall
+    public function create(?\PhpParser\Node\Stmt\Return_ $return, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, \PhpParser\Node\Stmt\ClassMethod $classMethod) : \PhpParser\Node\Expr\MethodCall
     {
-        $renderArguments = $this->resolveRenderArguments($classMethod, $return, $templateDoctrineAnnotationTagValueNode);
+        $renderArguments = $this->resolveRenderArguments($return, $templateDoctrineAnnotationTagValueNode, $classMethod);
         return $this->nodeFactory->createMethodCall('this', 'render', $renderArguments);
     }
     /**
      * @return Arg[]
      */
-    private function resolveRenderArguments(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?\PhpParser\Node\Stmt\Return_ $return, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : array
+    private function resolveRenderArguments(?\PhpParser\Node\Stmt\Return_ $return, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, \PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         $templateNameString = $this->resolveTemplateName($classMethod, $templateDoctrineAnnotationTagValueNode);
         $arguments = [$templateNameString];
@@ -79,7 +79,7 @@ final class ThisRenderFactory
         if (\is_string($template)) {
             return $template;
         }
-        return $this->templateGuesser->resolveFromClassMethodNode($classMethod);
+        return $this->templateGuesser->resolveFromClassMethod($classMethod);
     }
     private function resolveParametersExpr(?\PhpParser\Node\Stmt\Return_ $return, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : ?\PhpParser\Node\Expr
     {

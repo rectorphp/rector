@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3b740c4d66e00d2a36af6430072d5a86
+class ComposerStaticInit3e72a055e0bf2e893f97d40cfd760520
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2033,6 +2033,7 @@ class ComposerStaticInit3b740c4d66e00d2a36af6430072d5a86
         'Rector\\Core\\Contract\\Console\\OutputStyleInterface' => __DIR__ . '/../..' . '/src/Contract/Console/OutputStyleInterface.php',
         'Rector\\Core\\Contract\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\TypeToCallReflectionResolverInterface' => __DIR__ . '/../..' . '/src/Contract/PHPStan/Reflection/TypeToCallReflectionResolver/TypeToCallReflectionResolverInterface.php',
         'Rector\\Core\\Contract\\PhpParser\\NodePrinterInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/NodePrinterInterface.php',
+        'Rector\\Core\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
         'Rector\\Core\\Contract\\Processor\\FileProcessorInterface' => __DIR__ . '/../..' . '/src/Contract/Processor/FileProcessorInterface.php',
         'Rector\\Core\\Contract\\Rector\\AllowEmptyConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/AllowEmptyConfigurableRectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',
@@ -3296,6 +3297,7 @@ class ComposerStaticInit3b740c4d66e00d2a36af6430072d5a86
         'Rector\\Symfony\\NodeFactory\\OnLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\OnSuccessLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnSuccessLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\ThisRenderFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/ThisRenderFactory.php',
+        'Rector\\Symfony\\NodeFinder\\EmptyReturnNodeFinder' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFinder/EmptyReturnNodeFinder.php',
         'Rector\\Symfony\\PhpDocNode\\SymfonyRouteTagValueNodeFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/PhpDocNode/SymfonyRouteTagValueNodeFactory.php',
         'Rector\\Symfony\\Printer\\NeighbourClassLikePrinter' => __DIR__ . '/..' . '/rector/rector-symfony/src/Printer/NeighbourClassLikePrinter.php',
         'Rector\\Symfony\\Rector\\BinaryOp\\ResponseStatusCodeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/BinaryOp/ResponseStatusCodeRector.php',
@@ -3882,9 +3884,9 @@ class ComposerStaticInit3b740c4d66e00d2a36af6430072d5a86
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3b740c4d66e00d2a36af6430072d5a86::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3b740c4d66e00d2a36af6430072d5a86::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3b740c4d66e00d2a36af6430072d5a86::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3e72a055e0bf2e893f97d40cfd760520::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3e72a055e0bf2e893f97d40cfd760520::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3e72a055e0bf2e893f97d40cfd760520::$classMap;
 
         }, null, ClassLoader::class);
     }

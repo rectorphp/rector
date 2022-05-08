@@ -6,7 +6,8 @@ namespace PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\FunctionLike;
-class Closure extends \PhpParser\Node\Expr implements \PhpParser\Node\FunctionLike
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+class Closure extends \PhpParser\Node\Expr implements \PhpParser\Node\FunctionLike, \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
 {
     /** @var bool Whether the closure is static */
     public $static;

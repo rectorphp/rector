@@ -9,13 +9,12 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\CodeQuality\NodeTypeGroup;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220508\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector\ChangeNestedIfsToEarlyReturnRectorTest
  */
@@ -77,11 +76,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return \Rector\CodeQuality\NodeTypeGroup::STMTS_AWARE;
+        return [\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface::class];
     }
+    /**
+     * @param StmtsAwareInterface $node
+     */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        \RectorPrefix20220508\Webmozart\Assert\Assert::propertyExists($node, 'stmts');
         $stmts = $node->stmts;
         if ($stmts === null) {
             return null;

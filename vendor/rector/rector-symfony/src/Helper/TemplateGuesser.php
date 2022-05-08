@@ -55,7 +55,7 @@ final class TemplateGuesser
         $this->bundleClassResolver = $bundleClassResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolveFromClassMethodNode(\PhpParser\Node\Stmt\ClassMethod $classMethod) : string
+    public function resolveFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : string
     {
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

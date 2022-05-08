@@ -5,7 +5,8 @@ namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
-class ClassMethod extends \PhpParser\Node\Stmt implements \PhpParser\Node\FunctionLike
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+class ClassMethod extends \PhpParser\Node\Stmt implements \PhpParser\Node\FunctionLike, \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
 {
     /** @var int Flags */
     public $flags;

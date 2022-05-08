@@ -925,7 +925,23 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "4.9-dev"
-                }
+                },
+                "patches_applied": [
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-expr-closure-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-finally-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-function-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-do-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-catch-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-trycatch-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-for-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-classmethod-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-else-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-while-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-foreach-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-if-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-case-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-elseif-php.patch"
+                ]
             },
             "installation-source": "dist",
             "autoload": {
@@ -2628,12 +2644,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "df561edade3487e5527a30c44099e3865821686e"
+                "reference": "a30ba67f3cd083583d6b7b2d69213d2eb8cf1616"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/df561edade3487e5527a30c44099e3865821686e",
-                "reference": "df561edade3487e5527a30c44099e3865821686e",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/a30ba67f3cd083583d6b7b2d69213d2eb8cf1616",
+                "reference": "a30ba67f3cd083583d6b7b2d69213d2eb8cf1616",
                 "shasum": ""
             },
             "require": {
@@ -2661,7 +2677,7 @@
                 "symplify\/rule-doc-generator": "^10.2",
                 "symplify\/vendor-patches": "^10.2"
             },
-            "time": "2022-05-06T17:31:13+00:00",
+            "time": "2022-05-08T15:29:30+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
