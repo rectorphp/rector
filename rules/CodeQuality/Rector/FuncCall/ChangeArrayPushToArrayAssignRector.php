@@ -70,8 +70,16 @@ CODE_SAMPLE
 
         $args = $funcCall->getArgs();
 
+        if ($args === []) {
+            return null;
+        }
+
         /** @var Arg $firstArg */
         $firstArg = array_shift($args);
+
+        if ($args === []) {
+            return null;
+        }
 
         $arrayDimFetch = new ArrayDimFetch($firstArg->value);
 
