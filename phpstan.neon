@@ -610,3 +610,5 @@ parameters:
             message: '#Access to an undefined property PhpParser\\Node\:\:\$expr#'
             paths:
                 - rules/CodeQuality/Rector/FuncCall/ChangeArrayPushToArrayAssignRector.php
+
+        - '#Class "Rector\\(.*?)" has invalid namespace category "(.*?)"\. Pick one of\: "StmtsAwareInterface"#'

@@ -18,12 +18,11 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
-use Rector\CodeQuality\NodeTypeGroup;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Webmozart\Assert\Assert;
 
 /**
  * @changelog https://github.com/phpstan/phpstan/blob/83078fe308a383c618b8c1caec299e5765d9ac82/src/Node/UnreachableStatementNode.php
@@ -66,13 +65,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return NodeTypeGroup::STMTS_AWARE;
+        return [StmtsAwareInterface::class];
     }
 
+    /**
+     * @param StmtsAwareInterface $node
+     */
     public function refactor(Node $node): ?Node
     {
-        Assert::propertyExists($node, 'stmts');
-
         if ($node->stmts === null) {
             return null;
         }

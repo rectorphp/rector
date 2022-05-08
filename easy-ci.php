@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\Core\Contract\Console\OutputStyleInterface;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
@@ -74,5 +75,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         AnnotationToAttributeMapperInterface::class,
         TypeWithClassTypeSpecifierInterface::class,
         ParentNodeReadAnalyzerInterface::class,
+        StmtsAwareInterface::class,
+        \Rector\CodeQuality\NodeTypeGroup::class,
     ]);
 };

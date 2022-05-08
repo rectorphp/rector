@@ -91,7 +91,6 @@ PHP;
         // 1. fine php-parser file infos
         $fileInfos = $this->findPhpParserFiles($vendorDir);
 
-
         // append ContainerConfiguration to avoid accidental load of prefixed one from another tool
         $fileInfos[] = new SplFileInfo(__DIR__ . '/../vendor/symfony/dependency-injection/Loader/Configurator/AbstractConfigurator.php');
         $fileInfos[] = new SplFileInfo(__DIR__ . '/../vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php');
@@ -105,6 +104,11 @@ PHP;
 
             return $secondFilePosition <=> $firstFilePosition;
         });
+
+        // add Smsts marker
+
+        $stmtsAwareInterface = new SplFileInfo(__DIR__ . '/../src/Contract/PhpParser/Node/StmtsAwareInterface.php');
+        array_splice($fileInfos, 1, 0, [$stmtsAwareInterface]);
 
         // 3. create preload.php from provided files
         $preloadFileContent = $this->createPreloadFileContent($fileInfos);
@@ -150,6 +154,11 @@ PHP;
 
     private function createRequireOnceFilePathLine(string $realPath): string
     {
+        if (! str_contains($realPath, 'vendor')) {
+            $filePath = '/src/' . Strings::after($realPath, '/src/');
+            return "require_once __DIR__ . '" . $filePath . "';" . PHP_EOL;
+        }
+
         $filePath = '/vendor/' . Strings::after($realPath, 'vendor/');
         return "require_once __DIR__ . '" . $filePath . "';" . PHP_EOL;
     }

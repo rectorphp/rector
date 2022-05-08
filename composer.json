@@ -106,7 +106,10 @@
             ],
             "Rector\\Core\\Tests\\": "tests",
             "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src",
-            "E2e\\Parallel\\Reflection\\Resolver\\": ["e2e/parallel-reflection-resolver/src/", "e2e/no-parallel-reflection-resolver/src"]
+            "E2e\\Parallel\\Reflection\\Resolver\\": [
+                "e2e/parallel-reflection-resolver/src/",
+                "e2e/no-parallel-reflection-resolver/src"
+            ]
         },
         "classmap": [
             "stubs",
@@ -149,13 +152,29 @@
         "release": "vendor/bin/monorepo-builder release patch --ansi"
     },
     "extra": {
-        "enable-patching": true,
         "patches": {
+            "nikic/php-parser": [
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-expr-closure-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-finally-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-function-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-do-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-catch-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-trycatch-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-for-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-classmethod-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-else-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-while-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-foreach-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-if-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-case-php.patch",
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-elseif-php.patch"
+            ],
             "symfony/dependency-injection": [
                 "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/symfony-dependency-injection.patch",
                 "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/symfony-php-config-loader.patch"
             ]
         },
+        "enable-patching": true,
         "branch-alias": {
             "dev-main": "0.12-dev"
         }

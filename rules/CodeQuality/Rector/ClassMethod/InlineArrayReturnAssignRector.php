@@ -13,12 +13,11 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CodeQuality\NodeAnalyzer\VariableDimFetchAssignResolver;
-use Rector\CodeQuality\NodeTypeGroup;
 use Rector\CodeQuality\ValueObject\KeyAndExpr;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector\InlineArrayReturnAssignRectorTest
@@ -64,14 +63,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return NodeTypeGroup::STMTS_AWARE;
+        return [StmtsAwareInterface::class];
     }
 
+    /**
+     * @param StmtsAwareInterface $node
+     */
     public function refactor(Node $node): ?Node
     {
-        Assert::propertyExists($node, 'stmts');
-
-        /** @var Stmt[]|null $stmts */
         $stmts = $node->stmts;
         if ($stmts === null) {
             return null;

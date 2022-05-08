@@ -24,8 +24,8 @@ final class NodeTypeGroup
 {
     /**
      * These nodes have a public $stmts property that can be iterated - based on https://github.com/rectorphp/php-parser-nodes-docs
-     * @todo create a virtual node, getStmts(): array
      * @var array<class-string<Node>>
+     * @api
      */
     public const STMTS_AWARE = [
         ClassMethod::class,
