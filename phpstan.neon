@@ -596,6 +596,11 @@ parameters:
         # known value
         - '#Method Rector\\Core\\Php\\PhpVersionProvider\:\:provide\(\) should return 50200\|50300\|50400\|50500\|50600\|70000\|70100\|70200\|70300\|70400\|80000\|80100\|80200\|100000 but returns int#'
 
+        # stubs-rector directory exists on target-repository
+        -
+            message: '#The path "/\.\./\.\./stubs\-rector" was not found#'
+            path: src/Autoloading/BootstrapFilesIncluder.php # 54
+
         -
             message: '#PHPDoc tag @param for parameter \$node with type array<PhpParser\\Node\\Stmt\\Expression>\|null is incompatible with native type PhpParser\\Node#'
             paths:
