@@ -20,6 +20,10 @@ final class SymplifyQuoteEscapeRector extends \Rector\Core\Rector\AbstractRector
      * @see https://regex101.com/r/qEkCe9/2
      */
     private const ESCAPED_CHAR_REGEX = '#\\\\|\\$|\\n|\\t#sim';
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Prefer quote that are not inside the string', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -54,7 +58,7 @@ CODE_SAMPLE
     /**
      * @param String_ $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Scalar\String_
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Scalar\String_
     {
         $doubleQuoteCount = \substr_count($node->value, '"');
         $singleQuoteCount = \substr_count($node->value, "'");
@@ -65,6 +69,9 @@ CODE_SAMPLE
         $quoteKind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
         if ($quoteKind === \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED) {
             $this->processDoubleQuoted($node, $singleQuoteCount, $doubleQuoteCount);
+        }
+        if (!$this->hasChanged) {
+            return null;
         }
         return $node;
     }
@@ -78,6 +85,7 @@ CODE_SAMPLE
             $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED);
             // invoke override
             $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            $this->hasChanged = \true;
         }
     }
     private function processDoubleQuoted(\PhpParser\Node\Scalar\String_ $string, int $singleQuoteCount, int $doubleQuoteCount) : void
@@ -90,6 +98,7 @@ CODE_SAMPLE
             $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_SINGLE_QUOTED);
             // invoke override
             $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            $this->hasChanged = \true;
         }
     }
     private function isMatchEscapedChars(string $string) : bool
