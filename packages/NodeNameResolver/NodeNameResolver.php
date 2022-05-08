@@ -6,7 +6,6 @@ namespace Rector\NodeNameResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -163,22 +162,6 @@ final class NodeNameResolver
             $names[] = $name;
         }
         return $names;
-    }
-    public function isLocalPropertyFetchNamed(\PhpParser\Node $node, string $name) : bool
-    {
-        if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return \false;
-        }
-        if ($node->var instanceof \PhpParser\Node\Expr\MethodCall) {
-            return \false;
-        }
-        if (!$this->isName($node->var, 'this')) {
-            return \false;
-        }
-        if ($node->name instanceof \PhpParser\Node\Expr) {
-            return \false;
-        }
-        return $this->isName($node->name, $name);
     }
     /**
      * Ends with ucname
