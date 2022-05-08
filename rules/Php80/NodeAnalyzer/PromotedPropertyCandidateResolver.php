@@ -6,6 +6,7 @@ namespace Rector\Php80\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -16,6 +17,7 @@ use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
@@ -35,7 +37,8 @@ final class PromotedPropertyCandidateResolver
         private readonly VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
         private readonly NodeTypeResolver $nodeTypeResolver,
         private readonly TypeComparator $typeComparator,
-        private readonly TypeFactory $typeFactory
+        private readonly TypeFactory $typeFactory,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 
@@ -87,7 +90,13 @@ final class PromotedPropertyCandidateResolver
             }
 
             $assign = $stmt;
-            if (! $this->nodeNameResolver->isLocalPropertyFetchNamed($assign->var, $propertyName)) {
+
+            // promoted property must use non-static property only
+            if (! $assign->var instanceof PropertyFetch) {
+                continue;
+            }
+
+            if (! $this->propertyFetchAnalyzer->isLocalPropertyFetchName($assign->var, $propertyName)) {
                 continue;
             }
 

@@ -10,14 +10,14 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\VarLikeIdentifier;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class PropertyFetchRenamer
 {
     public function __construct(
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private readonly NodeNameResolver $nodeNameResolver
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 
@@ -27,23 +27,15 @@ final class PropertyFetchRenamer
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             $classLike,
             function (Node $node) use ($currentName, $expectedName): ?Node {
-                if ($node instanceof PropertyFetch && $this->nodeNameResolver->isLocalPropertyFetchNamed(
-                    $node,
-                    $currentName
-                )) {
-                    $node->name = new Identifier($expectedName);
-                    return $node;
-                }
-
-                if (! $node instanceof StaticPropertyFetch) {
+                if (! $this->propertyFetchAnalyzer->isLocalPropertyFetchName($node, $currentName)) {
                     return null;
                 }
 
-                if (! $this->nodeNameResolver->isName($node->name, $currentName)) {
-                    return null;
-                }
+                /** @var StaticPropertyFetch|PropertyFetch $node */
+                $node->name = $node instanceof PropertyFetch
+                    ? new Identifier($expectedName)
+                    : new VarLikeIdentifier($expectedName);
 
-                $node->name = new VarLikeIdentifier($expectedName);
                 return $node;
             }
         );
