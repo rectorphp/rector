@@ -62,13 +62,8 @@ final class FilesystemTweaker
      */
     private function findDirectoriesInGlob(string $directory) : array
     {
-        $foundDirectories = [];
-        foreach ((array) \glob($directory, \GLOB_ONLYDIR) as $foundDirectory) {
-            if (!\is_string($foundDirectory)) {
-                continue;
-            }
-            $foundDirectories[] = $foundDirectory;
-        }
+        /** @var string[] $foundDirectories */
+        $foundDirectories = (array) \glob($directory, \GLOB_ONLYDIR);
         return $foundDirectories;
     }
     /**
@@ -76,16 +71,10 @@ final class FilesystemTweaker
      */
     private function foundInGlob(string $path) : array
     {
-        $foundPaths = [];
-        foreach ((array) \glob($path) as $foundPath) {
-            if (!\is_string($foundPath)) {
-                continue;
-            }
-            if (!\file_exists($foundPath)) {
-                continue;
-            }
-            $foundPaths[] = $foundPath;
-        }
-        return $foundPaths;
+        /** @var string[] $paths */
+        $paths = (array) \glob($path);
+        return \array_filter($paths, function (string $path) : bool {
+            return \file_exists($path);
+        });
     }
 }
