@@ -5,23 +5,26 @@ namespace Rector\Core\Autoloading;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\FileSystem\FilesFinder;
 use RectorPrefix20220508\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 use RectorPrefix20220508\Webmozart\Assert\Assert;
 final class BootstrapFilesIncluder
 {
     /**
-     * @var string[]
-     */
-    private const STUBS = ['Internal/EnumInterfaces.php', 'Internal/NativeClasses.php', 'PHPUnit/Framework/TestCase.php'];
-    /**
      * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\RectorPrefix20220508\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    /**
+     * @readonly
+     * @var \Rector\Core\FileSystem\FilesFinder
+     */
+    private $filesFinder;
+    public function __construct(\RectorPrefix20220508\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\FileSystem\FilesFinder $filesFinder)
     {
         $this->parameterProvider = $parameterProvider;
+        $this->filesFinder = $filesFinder;
     }
     /**
      * Inspired by
@@ -43,10 +46,13 @@ final class BootstrapFilesIncluder
                 throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage, $throwable->getCode(), $throwable);
             }
         }
-        foreach (self::STUBS as $stub) {
-            if (\is_file(__DIR__ . '/../../stubs-rector/' . $stub)) {
-                require_once __DIR__ . '/../../stubs-rector/' . $stub;
-            }
+        $stubsRectorDirectory = \realpath(__DIR__ . '/../../stubs-rector');
+        if ($stubsRectorDirectory === \false) {
+            return;
+        }
+        $stubs = $this->filesFinder->findInDirectoriesAndFiles([$stubsRectorDirectory], ['php']);
+        foreach ($stubs as $stub) {
+            require_once $stub->getRealPath();
         }
     }
 }
