@@ -15,7 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220507\Webmozart\Assert\Assert;
+use RectorPrefix20220508\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector\ChangeNestedIfsToEarlyReturnRectorTest
  */
@@ -81,7 +81,7 @@ CODE_SAMPLE
     }
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        \RectorPrefix20220507\Webmozart\Assert\Assert::propertyExists($node, 'stmts');
+        \RectorPrefix20220508\Webmozart\Assert\Assert::propertyExists($node, 'stmts');
         $stmts = $node->stmts;
         if ($stmts === null) {
             return null;

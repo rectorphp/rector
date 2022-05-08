@@ -1,4 +1,4 @@
-# 512 Rules Overview
+# 511 Rules Overview
 
 <br>
 
@@ -74,7 +74,7 @@
 
 - [Php81](#php81) (9)
 
-- [PostRector](#postrector) (7)
+- [PostRector](#postrector) (6)
 
 - [Privatization](#privatization) (10)
 
@@ -3266,7 +3266,7 @@ Remove unused parent call with no parent class
 
 ### RemovePhpVersionIdCheckRector
 
-Remove unneeded PHP_VERSION_ID check
+Remove unneeded PHP_VERSION_ID conditional checks
 
 :wrench: **configure it!**
 
@@ -3291,6 +3291,7 @@ return static function (RectorConfig $rectorConfig): void {
 -        if (PHP_VERSION_ID < 80000) {
 -            return;
 -        }
+-
          echo 'do something';
      }
  }
@@ -8669,25 +8670,6 @@ Remove nodes from weird positions
 -            return 1;
 -        }
 +        return 1;
-     }
- }
-```
-
-<br>
-
-### NodeToReplacePostRector
-
-Replaces nodes on weird positions
-
-- class: [`Rector\PostRector\Rector\NodeToReplacePostRector`](../packages/PostRector/Rector/NodeToReplacePostRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($value)
-     {
--        return 1;
-+        return $value;
      }
  }
 ```

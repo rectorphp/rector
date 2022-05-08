@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220507;
+namespace RectorPrefix20220508;
 
 use Rector\Config\RectorConfig;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {

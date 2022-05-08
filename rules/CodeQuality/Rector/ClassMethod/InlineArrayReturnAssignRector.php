@@ -17,7 +17,7 @@ use Rector\CodeQuality\ValueObject\KeyAndExpr;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220507\Webmozart\Assert\Assert;
+use RectorPrefix20220508\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector\InlineArrayReturnAssignRectorTest
  */
@@ -64,7 +64,7 @@ CODE_SAMPLE
     }
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        \RectorPrefix20220507\Webmozart\Assert\Assert::propertyExists($node, 'stmts');
+        \RectorPrefix20220508\Webmozart\Assert\Assert::propertyExists($node, 'stmts');
         /** @var Stmt[]|null $stmts */
         $stmts = $node->stmts;
         if ($stmts === null) {

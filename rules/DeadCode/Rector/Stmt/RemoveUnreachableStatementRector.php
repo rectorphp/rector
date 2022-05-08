@@ -22,7 +22,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220507\Webmozart\Assert\Assert;
+use RectorPrefix20220508\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/phpstan/phpstan/blob/83078fe308a383c618b8c1caec299e5765d9ac82/src/Node/UnreachableStatementNode.php
  *
@@ -63,7 +63,7 @@ CODE_SAMPLE
     }
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        \RectorPrefix20220507\Webmozart\Assert\Assert::propertyExists($node, 'stmts');
+        \RectorPrefix20220508\Webmozart\Assert\Assert::propertyExists($node, 'stmts');
         if ($node->stmts === null) {
             return null;
         }
