@@ -55,8 +55,14 @@ CODE_SAMPLE
             return null;
         }
         $args = $funcCall->getArgs();
+        if ($args === []) {
+            return null;
+        }
         /** @var Arg $firstArg */
         $firstArg = \array_shift($args);
+        if ($args === []) {
+            return null;
+        }
         $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($firstArg->value);
         $newStmts = [];
         foreach ($args as $key => $arg) {
