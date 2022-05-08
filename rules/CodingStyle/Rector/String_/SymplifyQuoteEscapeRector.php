@@ -23,6 +23,8 @@ final class SymplifyQuoteEscapeRector extends AbstractRector
      */
     private const ESCAPED_CHAR_REGEX = '#\\\\|\$|\\n|\\t#sim';
 
+    private bool $hasChanged = false;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -66,7 +68,7 @@ CODE_SAMPLE
     /**
      * @param String_ $node
      */
-    public function refactor(Node $node): String_
+    public function refactor(Node $node): ?String_
     {
         $doubleQuoteCount = substr_count($node->value, '"');
         $singleQuoteCount = substr_count($node->value, "'");
@@ -79,6 +81,10 @@ CODE_SAMPLE
         $quoteKind = $node->getAttribute(AttributeKey::KIND);
         if ($quoteKind === String_::KIND_DOUBLE_QUOTED) {
             $this->processDoubleQuoted($node, $singleQuoteCount, $doubleQuoteCount);
+        }
+
+        if (! $this->hasChanged) {
+            return null;
         }
 
         return $node;
@@ -95,6 +101,8 @@ CODE_SAMPLE
             $string->setAttribute(AttributeKey::KIND, String_::KIND_DOUBLE_QUOTED);
             // invoke override
             $string->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+
+            $this->hasChanged = true;
         }
     }
 
@@ -109,6 +117,8 @@ CODE_SAMPLE
             $string->setAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
             // invoke override
             $string->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+
+            $this->hasChanged = true;
         }
     }
 
