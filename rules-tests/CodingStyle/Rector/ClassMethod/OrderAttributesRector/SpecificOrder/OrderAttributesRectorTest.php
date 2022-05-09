@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\CodingStyle\Rector\ClassMethod\OrderAttributesRector;
+namespace Rector\Tests\CodingStyle\Rector\ClassMethod\OrderAttributesRector\SpecificOrder;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
