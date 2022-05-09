@@ -1,4 +1,4 @@
-# 236 Rules Overview
+# 237 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -1479,6 +1479,26 @@ Migrate the iframe based file tree to SVG
 ```diff
 -'navigationFrameModule' => 'file_navframe'
 +'navigationComponentId' => 'TYPO3/CMS/Backend/Tree/FileStorageTreeContainer'
+```
+
+<br>
+
+## MigrateInternalTypeRector
+
+Migrates TCA internal_type into new own seperate types
+
+- class: [`Ssch\TYPO3Rector\Rector\v12\v0\MigrateInternalTypeRector`](../src/Rector/v12/v0/MigrateInternalTypeRector.php)
+
+```diff
+ 'columns' => [
+     'aColumn' => [
+         'config' => [
+-            'type' => 'group',
+-            'internal_type' => 'folder',
++            'type' => 'folder',
+         ],
+     ],
+ ],
 ```
 
 <br>
