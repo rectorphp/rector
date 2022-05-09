@@ -21,7 +21,7 @@ final class EmptyReturnNodeFinder
     public function hasNoOrEmptyReturns(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, \PhpParser\Node\Stmt\Return_::class);
         if ($returns === []) {
             return \true;
         }

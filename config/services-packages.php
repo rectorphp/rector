@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220508;
+namespace RectorPrefix20220509;
 
 use Rector\Config\RectorConfig;
-use RectorPrefix20220508\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
-use RectorPrefix20220508\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix20220509\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
+use RectorPrefix20220509\Symplify\PackageBuilder\Yaml\ParametersMerger;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
-    $rectorConfig->import(\RectorPrefix20220508\Symplify\EasyParallel\ValueObject\EasyParallelConfig::FILE_PATH);
+    $rectorConfig->import(\RectorPrefix20220509\Symplify\EasyParallel\ValueObject\EasyParallelConfig::FILE_PATH);
     $services = $rectorConfig->services();
     $services->defaults()->public()->autowire()->autoconfigure();
     $services->load('Rector\\', __DIR__ . '/../packages')->exclude([
@@ -24,5 +24,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         __DIR__ . '/../packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php',
     ]);
     // parallel
-    $services->set(\RectorPrefix20220508\Symplify\PackageBuilder\Yaml\ParametersMerger::class);
+    $services->set(\RectorPrefix20220509\Symplify\PackageBuilder\Yaml\ParametersMerger::class);
 };
