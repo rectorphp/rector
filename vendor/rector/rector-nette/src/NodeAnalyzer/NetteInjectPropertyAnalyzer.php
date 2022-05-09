@@ -4,14 +4,13 @@ declare (strict_types=1);
 namespace Rector\Nette\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NetteInjectPropertyAnalyzer
 {
     /**
@@ -19,9 +18,15 @@ final class NetteInjectPropertyAnalyzer
      * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
     private $classChildAnalyzer;
-    public function __construct(\Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->classChildAnalyzer = $classChildAnalyzer;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function canBeRefactored(\PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
     {
@@ -32,11 +37,7 @@ final class NetteInjectPropertyAnalyzer
         if (!$this->isKnownPropertyType($phpDocInfo, $property)) {
             return \false;
         }
-        $scope = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return \false;
-        }
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($property);
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }

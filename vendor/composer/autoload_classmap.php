@@ -2947,6 +2947,7 @@ return array(
     'Rector\\Symfony\\Rector\\ClassMethod\\RouteCollectionBuilderToRoutingConfiguratorRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/RouteCollectionBuilderToRoutingConfiguratorRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\TemplateAnnotationToThisRenderRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php',
     'Rector\\Symfony\\Rector\\Class_\\ChangeFileLoaderInExtensionAndKernelRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector.php',
+    'Rector\\Symfony\\Rector\\Class_\\CommandPropertyToAttributeRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/CommandPropertyToAttributeRector.php',
     'Rector\\Symfony\\Rector\\Class_\\EventListenerToEventSubscriberRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/EventListenerToEventSubscriberRector.php',
     'Rector\\Symfony\\Rector\\Class_\\InvokableControllerRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/InvokableControllerRector.php',
     'Rector\\Symfony\\Rector\\Class_\\LoadValidatorMetadataToAnnotationRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/LoadValidatorMetadataToAnnotationRector.php',
