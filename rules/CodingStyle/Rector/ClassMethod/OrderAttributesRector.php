@@ -24,6 +24,9 @@ use Webmozart\Assert\Assert;
  */
 final class OrderAttributesRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
     public const ALPHABETICALLY = 'alphabetically';
 
     /**
@@ -123,11 +126,7 @@ CODE_SAMPLE
         Assert::allString($configuration);
         Assert::minCount($configuration, 1);
 
-        if ($this->isAlphabetically($configuration)) {
-            $this->configuration = $configuration;
-        } else {
-            $this->configuration = array_flip($configuration);
-        }
+        $this->configuration = $this->isAlphabetically($configuration) ? $configuration : array_flip($configuration);
     }
 
     /**
@@ -168,7 +167,7 @@ CODE_SAMPLE
     private function resolveAttributeGroupPosition(AttributeGroup $attributeGroup): int
     {
         $attrName = $this->getName($attributeGroup->attrs[0]->name);
-        return (int)($this->configuration[$attrName] ?? count($this->configuration));
+        return (int) ($this->configuration[$attrName] ?? count($this->configuration));
     }
 
     /**

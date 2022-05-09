@@ -89,7 +89,6 @@ parameters:
                 - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
                 - rules/Renaming/NodeManipulator/ClassRenamer.php
-                - rules/CodingStyle/Rector/ClassMethod/MakeInheritedMethodVisibilitySameAsParentRector.php
                 - rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 10$#"
@@ -385,9 +384,9 @@ parameters:
             message: '#Use separate function calls with readable variable names#'
             path: src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
 
-        -
-            message: '#Use separate function calls with readable variable names#'
-            path: rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php
+#        -
+#            message: '#Use separate function calls with readable variable names#'
+#            path: rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php
 
         # on purpose to make use of worker paralle pattern
         -
@@ -580,7 +579,6 @@ parameters:
 
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is \d+, keep it under 10#'
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier\:\:narrowToFullyQualifiedOrAliasedObjectType\(\)" is \d+, keep it under 10#'
-        - '#Class "Rector\\CodeQuality\\Rector\\ClassMethod\\InlineArrayReturnAssignRector" has invalid namespace category "ClassMethod"\. Pick one of\: "NodeTypeGroup"#'
 
         - '#Parameter \#1 \$node (.*?) of method Rector\\(.*?)\:\:refactorWithScope\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface\:\:refactorWithScope\(\)#'
 
@@ -621,3 +619,8 @@ parameters:
                 - rules/CodeQuality/Rector/FuncCall/ChangeArrayPushToArrayAssignRector.php
 
         - '#Class "Rector\\(.*?)" has invalid namespace category "(.*?)"\. Pick one of\: "StmtsAwareInterface"#'
+
+        # to be fixed in https://github.com/symplify/symplify/pull/4052
+        -
+            message: '#Use separate function calls with readable variable names#'
+            path: rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php

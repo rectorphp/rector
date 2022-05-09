@@ -48,12 +48,11 @@ final class MissingRectorRulesReporter
         $this->rectorOutputStyle->warning('We could not find any Rector rules to run. You have 2 options to add them:');
 
         $this->rectorOutputStyle->title('1. Add single rule to "rector.php"');
-        $this->rectorOutputStyle->writeln('  $services = $containerConfigurator->services();');
-        $this->rectorOutputStyle->writeln('  $services->set(...);');
+        $this->rectorOutputStyle->writeln('  $rectorConfig->rule(...);');
         $this->rectorOutputStyle->newLine(1);
 
         $this->rectorOutputStyle->title('2. Add set of rules to "rector.php"');
-        $this->rectorOutputStyle->writeln('  $containerConfigurator->import(SetList::...);');
+        $this->rectorOutputStyle->writeln('  $rectorConfig->sets([SetList::...]);');
         $this->rectorOutputStyle->newLine(1);
 
         $this->rectorOutputStyle->title('Missing "rector.php" in your project? Let Rector create it for you');
