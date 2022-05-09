@@ -22,6 +22,9 @@ use RectorPrefix20220509\Webmozart\Assert\Assert;
  */
 final class OrderAttributesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
     public const ALPHABETICALLY = 'alphabetically';
     /**
      * @var array<string, int>|array<string>
@@ -93,11 +96,7 @@ CODE_SAMPLE
     {
         \RectorPrefix20220509\Webmozart\Assert\Assert::allString($configuration);
         \RectorPrefix20220509\Webmozart\Assert\Assert::minCount($configuration, 1);
-        if ($this->isAlphabetically($configuration)) {
-            $this->configuration = $configuration;
-        } else {
-            $this->configuration = \array_flip($configuration);
-        }
+        $this->configuration = $this->isAlphabetically($configuration) ? $configuration : \array_flip($configuration);
     }
     /**
      * @param array<AttributeGroup> $originalAttrGroups
