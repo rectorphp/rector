@@ -2068,21 +2068,45 @@ Order attributes by desired names
 
 - class: [`Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector`](../rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php)
 
+#### 1) Order by specific namespace
+
 ```php
 use Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(OrderAttributesRector::class, ['First', 'Second']);
+    $rectorConfig->ruleWithConfiguration(OrderAttributesRector::class, [Annotation\First::class, Annotation\Second::class]);
 };
 ```
 
 ↓
 
 ```diff
-+#[First]
- #[Second]
--#[First]
++#[Annotation\First]
+ #[Annotation\Second]
+-#[Annotation\First]
+ class Someclass
+ {
+ }
+```
+
+#### 2) Order alphabetically
+
+```php
+use Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector;
+use Rector\Config\RectorConfig;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(OrderAttributesRector::class, [Rector\CodingStyle\Rector\ClassMethod::ALPHABETICALLY]);
+};
+```
+
+↓
+
+```diff
++#[Annotation\AAttribute]
+ #[Annotation\BAttribute]
+-#[Annotation\AAttribute]
  class Someclass
  {
  }
