@@ -113,6 +113,7 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allString($configuration);
+        Assert::allString(array_keys($configuration));
 
         $this->addOldToNewClasses($configuration);
     }

@@ -613,3 +613,4 @@ parameters:
         -
             message: '#Use separate function calls with readable variable names#'
             path: rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php
+        - '#Class "Rector\\CodeQuality\\Rector\\FunctionLike\\RemoveAlwaysTrueConditionSetInConstructorRector" has invalid namespace category "FunctionLike"\. Pick one of\: "If_"#'
