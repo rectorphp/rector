@@ -110,7 +110,7 @@ CODE_SAMPLE
      */
     private function resolveAssignedVariables(\PhpParser\Node\FunctionLike $functionLike) : array
     {
-        return $this->betterNodeFinder->find($functionLike, function (\PhpParser\Node $node) : bool {
+        return $this->betterNodeFinder->find($functionLike, function (\PhpParser\Node $node) use($functionLike) : bool {
             $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             if (!$parentNode instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;
@@ -133,6 +133,10 @@ CODE_SAMPLE
             }
             // simple variable only
             if (!\is_string($node->name)) {
+                return \false;
+            }
+            $parentFunctionLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\FunctionLike::class);
+            if ($parentFunctionLike !== $functionLike) {
                 return \false;
             }
             return !$this->reservedKeywordAnalyzer->isNativeVariable($node->name);
