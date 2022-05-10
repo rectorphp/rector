@@ -79,8 +79,8 @@ final class IfManipulator
             return null;
         }
 
-        $insideIfNode = $stmts[0];
-        if (! $insideIfNode instanceof Return_) {
+        $insideIfStmt = $stmts[0];
+        if (! $insideIfStmt instanceof Return_) {
             return null;
         }
 
@@ -88,11 +88,11 @@ final class IfManipulator
             return null;
         }
 
-        if ($this->nodeComparator->areNodesEqual($if->cond->left, $insideIfNode->expr)) {
+        if ($this->nodeComparator->areNodesEqual($if->cond->left, $insideIfStmt->expr)) {
             return $if->cond->right;
         }
 
-        if ($this->nodeComparator->areNodesEqual($if->cond->right, $insideIfNode->expr)) {
+        if ($this->nodeComparator->areNodesEqual($if->cond->right, $insideIfStmt->expr)) {
             return $if->cond->left;
         }
 

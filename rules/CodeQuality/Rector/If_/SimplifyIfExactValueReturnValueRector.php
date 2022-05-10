@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -32,7 +33,7 @@ final class SimplifyIfExactValueReturnValueRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 $value = 'something';
 if ($value === 52) {
-    return $value;
+    return 52;
 }
 
 return $value;
@@ -60,21 +61,21 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Return_
     {
-        $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
-        if ($comparedNode !== null) {
-            $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-            if (! $nextNode instanceof Return_) {
-                return null;
-            }
-
-            if (! $this->nodeComparator->areNodesEqual($comparedNode, $nextNode->expr)) {
-                return null;
-            }
-
-            $this->removeNode($nextNode);
-            return clone $nextNode;
+        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $nextNode instanceof Return_) {
+            return null;
         }
 
-        return null;
+        $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
+        if (! $comparedNode instanceof Expr) {
+            return null;
+        }
+
+        if (! $this->nodeComparator->areNodesEqual($comparedNode, $nextNode->expr)) {
+            return null;
+        }
+
+        $this->removeNode($nextNode);
+        return clone $nextNode;
     }
 }
