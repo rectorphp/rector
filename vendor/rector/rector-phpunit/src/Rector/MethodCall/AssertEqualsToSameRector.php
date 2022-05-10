@@ -49,7 +49,7 @@ final class AssertEqualsToSameRector extends \Rector\Core\Rector\AbstractRector
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns `assertEquals()` into stricter `assertSame()` for scalar values in PHPUnit TestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertEquals(2, $result, "message");', '$this->assertSame(2, $result, "message");'), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertEquals($aString, $result, "message");', '$this->assertSame($aString, $result, "message");')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns `assertEquals()` into stricter `assertSame()` for scalar values in PHPUnit TestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertEquals(2, $result);', '$this->assertSame(2, $result);')]);
     }
     /**
      * @return array<class-string<Node>>
@@ -70,16 +70,16 @@ final class AssertEqualsToSameRector extends \Rector\Core\Rector\AbstractRector
         if (!$this->isNames($node->name, $methodNames)) {
             return null;
         }
-        if (!isset($node->args[0])) {
+        $args = $node->getArgs();
+        if (!isset($args[0])) {
             return null;
         }
-        $valueNode = $node->args[0];
-        $valueNodeType = $this->nodeTypeResolver->getType($valueNode->value);
+        $valueNodeType = $this->nodeTypeResolver->getType($args[0]->value);
         if (!$this->isScalarType($valueNodeType)) {
             return null;
         }
-        $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
-        return $node;
+        $hasChanged = $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
+        return $hasChanged ? $node : null;
     }
     private function isScalarType(\PHPStan\Type\Type $valueNodeType) : bool
     {

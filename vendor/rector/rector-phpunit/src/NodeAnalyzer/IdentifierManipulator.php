@@ -29,16 +29,17 @@ final class IdentifierManipulator
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param string[] $renameMethodMap
+     * @param array<string, string> $renameMethodMap
      * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    public function renameNodeWithMap($node, array $renameMethodMap) : void
+    public function renameNodeWithMap($node, array $renameMethodMap) : bool
     {
         $oldNodeMethodName = $this->resolveOldMethodName($node);
-        if ($oldNodeMethodName === null) {
-            return;
+        if (!\is_string($oldNodeMethodName)) {
+            return \false;
         }
         $node->name = new \PhpParser\Node\Identifier($renameMethodMap[$oldNodeMethodName]);
+        return \true;
     }
     /**
      * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node

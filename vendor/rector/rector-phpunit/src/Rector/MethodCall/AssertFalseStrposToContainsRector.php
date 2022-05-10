@@ -38,7 +38,7 @@ final class AssertFalseStrposToContainsRector extends \Rector\Core\Rector\Abstra
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUnit TestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertFalse(strpos($anything, "foo"), "message");', '$this->assertNotContains("foo", $anything, "message");'), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertNotFalse(stripos($anything, "foo"), "message");', '$this->assertContains("foo", $anything, "message");')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUnit TestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertFalse(strpos($anything, "foo"), "message");', '$this->assertNotContains("foo", $anything, "message");')]);
     }
     /**
      * @return array<class-string<Node>>
@@ -70,12 +70,12 @@ final class AssertFalseStrposToContainsRector extends \Rector\Core\Rector\Abstra
         return $this->changeArgumentsOrder($node);
     }
     /**
-     * @return MethodCall|StaticCall|null
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
-    private function changeArgumentsOrder($node) : ?\PhpParser\Node
+    private function changeArgumentsOrder($node)
     {
-        $oldArguments = $node->args;
+        $oldArguments = $node->getArgs();
         $strposFuncCallNode = $oldArguments[0]->value;
         if (!$strposFuncCallNode instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;

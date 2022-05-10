@@ -1534,6 +1534,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\If_\\ExplicitBoolCompareRector' => $baseDir . '/rules/CodeQuality/Rector/If_/ExplicitBoolCompareRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\ShortenElseIfRector' => $baseDir . '/rules/CodeQuality/Rector/If_/ShortenElseIfRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfElseToTernaryRector' => $baseDir . '/rules/CodeQuality/Rector/If_/SimplifyIfElseToTernaryRector.php',
+    'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfExactValueReturnValueRector' => $baseDir . '/rules/CodeQuality/Rector/If_/SimplifyIfExactValueReturnValueRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfIssetToNullCoalescingRector' => $baseDir . '/rules/CodeQuality/Rector/If_/SimplifyIfIssetToNullCoalescingRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfNotNullReturnRector' => $baseDir . '/rules/CodeQuality/Rector/If_/SimplifyIfNotNullReturnRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfNullableReturnRector' => $baseDir . '/rules/CodeQuality/Rector/If_/SimplifyIfNullableReturnRector.php',

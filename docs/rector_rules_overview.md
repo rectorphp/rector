@@ -1,4 +1,4 @@
-# 511 Rules Overview
+# 512 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (71)
+- [CodeQuality](#codequality) (72)
 
 - [CodingStyle](#codingstyle) (35)
 
@@ -490,15 +490,9 @@ Change `array_push()` to direct variable assign
 - class: [`Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector`](../rules/CodeQuality/Rector/FuncCall/ChangeArrayPushToArrayAssignRector.php)
 
 ```diff
- class SomeClass
- {
-     public function run()
-     {
-         $items = [];
--        array_push($items, $item);
-+        $items[] = $item;
-     }
- }
+ $items = [];
+-array_push($items, $item);
++$items[] = $item;
 ```
 
 <br>
@@ -1338,6 +1332,23 @@ Changes if/else for same value as assign to ternary
 
 <br>
 
+### SimplifyIfExactValueReturnValueRector
+
+Changes compared to value and return of expr to direct return
+
+- class: [`Rector\CodeQuality\Rector\If_\SimplifyIfExactValueReturnValueRector`](../rules/CodeQuality/Rector/If_/SimplifyIfExactValueReturnValueRector.php)
+
+```diff
+ $value = 'something';
+-if ($value === 52) {
+-    return $value;
+-}
+-
+ return $value;
+```
+
+<br>
+
 ### SimplifyIfIssetToNullCoalescingRector
 
 Simplify binary if to null coalesce
@@ -2068,45 +2079,43 @@ Order attributes by desired names
 
 - class: [`Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector`](../rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php)
 
-#### 1) Order by specific namespace
-
 ```php
 use Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(OrderAttributesRector::class, [Annotation\First::class, Annotation\Second::class]);
+    $rectorConfig->ruleWithConfiguration(OrderAttributesRector::class, ['First', 'Second']);
 };
 ```
 
 ↓
 
 ```diff
-+#[Annotation\First]
- #[Annotation\Second]
--#[Annotation\First]
++#[First]
+ #[Second]
+-#[First]
  class Someclass
  {
  }
 ```
 
-#### 2) Order alphabetically
+<br>
 
 ```php
 use Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(OrderAttributesRector::class, [Rector\CodingStyle\Rector\ClassMethod::ALPHABETICALLY]);
+    $rectorConfig->ruleWithConfiguration(OrderAttributesRector::class, ['alphabetically']);
 };
 ```
 
 ↓
 
 ```diff
-+#[Annotation\AAttribute]
- #[Annotation\BAttribute]
--#[Annotation\AAttribute]
++#[AAttribute]
+ #[BAttribute]
+-#[AAttribute]
  class Someclass
  {
  }

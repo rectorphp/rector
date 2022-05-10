@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -13,9 +12,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector\SimplifyIfNotNullReturnRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\SimplifyIfNullableReturnRectorTest
  */
-final class SimplifyIfNotNullReturnRector extends \Rector\Core\Rector\AbstractRector
+final class SimplifyIfExactValueReturnValueRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -28,17 +27,17 @@ final class SimplifyIfNotNullReturnRector extends \Rector\Core\Rector\AbstractRe
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes redundant null check to instant return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-$newNode = 'something';
-if ($newNode !== null) {
-    return $newNode;
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes compared to value and return of expr to direct return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+$value = 'something';
+if ($value === 52) {
+    return $value;
 }
 
-return null;
+return $value;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-$newNode = 'something';
-return $newNode;
+$value = 'something';
+return $value;
 CODE_SAMPLE
 )]);
     }
@@ -52,23 +51,19 @@ CODE_SAMPLE
     /**
      * @param If_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\Return_
     {
-        $comparedNode = $this->ifManipulator->matchIfNotNullReturnValue($node);
+        $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
         if ($comparedNode !== null) {
-            $insideIfNode = $node->stmts[0];
             $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
             if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_) {
                 return null;
             }
-            if ($nextNode->expr === null) {
-                return null;
-            }
-            if (!$this->valueResolver->isNull($nextNode->expr)) {
+            if (!$this->nodeComparator->areNodesEqual($comparedNode, $nextNode->expr)) {
                 return null;
             }
             $this->removeNode($nextNode);
-            return $insideIfNode;
+            return clone $nextNode;
         }
         return null;
     }
