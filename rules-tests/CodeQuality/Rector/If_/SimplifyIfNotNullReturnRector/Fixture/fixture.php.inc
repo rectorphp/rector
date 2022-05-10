@@ -8,12 +8,6 @@ function simplifyIfNotNullReturnRector()
     }
 
     return null;
-
-    if (null !== $newNode) {
-        return $newNode;
-    }
-
-    return null;
 }
 
 ?>
@@ -23,7 +17,6 @@ function simplifyIfNotNullReturnRector()
 function simplifyIfNotNullReturnRector()
 {
     $newNode = 'something';
-    return $newNode;
     return $newNode;
 }
 

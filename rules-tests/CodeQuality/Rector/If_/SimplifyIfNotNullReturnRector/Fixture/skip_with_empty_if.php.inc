@@ -2,13 +2,12 @@
 
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector\Fixture;
 
-final class Skip
+final class SkipWithEmptyIf
 {
     public function run()
     {
         $newNode = 'something';
-        if ($newNode === null) {
-            return null;
+        if ($newNode !== null) {
         }
 
         return 5;

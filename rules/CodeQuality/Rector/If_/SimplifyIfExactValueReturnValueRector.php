@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -15,9 +14,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector\SimplifyIfNotNullReturnRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\SimplifyIfNullableReturnRectorTest
  */
-final class SimplifyIfNotNullReturnRector extends AbstractRector
+final class SimplifyIfExactValueReturnValueRector extends AbstractRector
 {
     public function __construct(
         private readonly IfManipulator $ifManipulator
@@ -27,21 +26,21 @@ final class SimplifyIfNotNullReturnRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Changes redundant null check to instant return',
+            'Changes compared to value and return of expr to direct return',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-$newNode = 'something';
-if ($newNode !== null) {
-    return $newNode;
+$value = 'something';
+if ($value === 52) {
+    return $value;
 }
 
-return null;
+return $value;
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-$newNode = 'something';
-return $newNode;
+$value = 'something';
+return $value;
 CODE_SAMPLE
                 ),
             ]
@@ -59,27 +58,21 @@ CODE_SAMPLE
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node): ?Stmt
+    public function refactor(Node $node): ?Return_
     {
-        $comparedNode = $this->ifManipulator->matchIfNotNullReturnValue($node);
+        $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
         if ($comparedNode !== null) {
-            $insideIfNode = $node->stmts[0];
-
             $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
             if (! $nextNode instanceof Return_) {
                 return null;
             }
 
-            if ($nextNode->expr === null) {
-                return null;
-            }
-
-            if (! $this->valueResolver->isNull($nextNode->expr)) {
+            if (! $this->nodeComparator->areNodesEqual($comparedNode, $nextNode->expr)) {
                 return null;
             }
 
             $this->removeNode($nextNode);
-            return $insideIfNode;
+            return clone $nextNode;
         }
 
         return null;
