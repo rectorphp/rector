@@ -107,7 +107,7 @@ CODE_SAMPLE
      */
     private function resolveAssignedVariables(FunctionLike $functionLike): array
     {
-        return $this->betterNodeFinder->find($functionLike, function (Node $node): bool {
+        return $this->betterNodeFinder->find($functionLike, function (Node $node) use ($functionLike): bool {
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if (! $parentNode instanceof Assign) {
                 return false;
@@ -135,6 +135,11 @@ CODE_SAMPLE
 
             // simple variable only
             if (! is_string($node->name)) {
+                return false;
+            }
+
+            $parentFunctionLike = $this->betterNodeFinder->findParentType($node, FunctionLike::class);
+            if ($parentFunctionLike !== $functionLike) {
                 return false;
             }
 
