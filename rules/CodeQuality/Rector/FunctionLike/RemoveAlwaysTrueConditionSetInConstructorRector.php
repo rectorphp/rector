@@ -4,14 +4,11 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
@@ -89,70 +86,45 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\Closure::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
-     * @param ClassMethod|Closure $node
+     * @param If_ $node
+     * @return Stmt[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?array
     {
-        if ($node->stmts === null) {
+        $ifStmt = $this->matchTruableIf($node);
+        if (!$ifStmt instanceof \PhpParser\Node\Stmt\If_) {
             return null;
         }
-        if ($node->stmts === []) {
+        if ($ifStmt->stmts === null) {
             return null;
         }
-        $haveNodeChanged = \false;
-        foreach ($node->stmts as $key => $stmt) {
-            if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
-                $stmt = $stmt->expr;
-            }
-            $ifStmt = $this->matchTruableIf($stmt);
-            if (!$ifStmt instanceof \PhpParser\Node\Stmt\If_) {
-                continue;
-            }
-            if ($ifStmt->stmts === null) {
-                continue;
-            }
-            if (\count($ifStmt->stmts) === 1) {
-                $node->stmts[$key] = $ifStmt->stmts[0];
-                continue;
-            }
-            $haveNodeChanged = \true;
-            // move all nodes one level up
-            \array_splice($node->stmts, $key, \count($ifStmt->stmts) - 1, $ifStmt->stmts);
-        }
-        if ($haveNodeChanged) {
-            return $node;
-        }
-        return null;
+        return $ifStmt->stmts;
     }
     /**
-     * @param \PhpParser\Node\Expr|\PhpParser\Node\Stmt $node
      * @return \PhpParser\Node\Stmt\If_|null
      */
-    private function matchTruableIf($node)
+    private function matchTruableIf(\PhpParser\Node\Stmt\If_ $if)
     {
-        if (!$node instanceof \PhpParser\Node\Stmt\If_) {
-            return null;
-        }
         // just one if
-        if ($node->elseifs !== []) {
+        if ($if->elseifs !== []) {
             return null;
         }
         // there is some else
-        if ($node->else !== null) {
+        if ($if->else !== null) {
             return null;
         }
         // only property fetch, because of constructor set
-        if (!$node->cond instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$if->cond instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return null;
         }
-        $propertyFetchType = $this->resolvePropertyFetchType($node->cond);
+        $propertyFetchType = $this->resolvePropertyFetchType($if->cond);
         if (!$this->staticTypeAnalyzer->isAlwaysTruableType($propertyFetchType)) {
             return null;
         }
-        return $node;
+        return $if;
     }
     private function resolvePropertyFetchType(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \PHPStan\Type\Type
     {

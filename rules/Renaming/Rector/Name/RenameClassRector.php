@@ -102,6 +102,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         \RectorPrefix20220510\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220510\Webmozart\Assert\Assert::allString(\array_keys($configuration));
         $this->addOldToNewClasses($configuration);
     }
     /**
