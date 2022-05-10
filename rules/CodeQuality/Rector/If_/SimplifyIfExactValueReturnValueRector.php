@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -30,7 +31,7 @@ final class SimplifyIfExactValueReturnValueRector extends \Rector\Core\Rector\Ab
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes compared to value and return of expr to direct return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $value = 'something';
 if ($value === 52) {
-    return $value;
+    return 52;
 }
 
 return $value;
@@ -53,18 +54,18 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\Return_
     {
-        $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
-        if ($comparedNode !== null) {
-            $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-            if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_) {
-                return null;
-            }
-            if (!$this->nodeComparator->areNodesEqual($comparedNode, $nextNode->expr)) {
-                return null;
-            }
-            $this->removeNode($nextNode);
-            return clone $nextNode;
+        $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_) {
+            return null;
         }
-        return null;
+        $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
+        if (!$comparedNode instanceof \PhpParser\Node\Expr) {
+            return null;
+        }
+        if (!$this->nodeComparator->areNodesEqual($comparedNode, $nextNode->expr)) {
+            return null;
+        }
+        $this->removeNode($nextNode);
+        return clone $nextNode;
     }
 }

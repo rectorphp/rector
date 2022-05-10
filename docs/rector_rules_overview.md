@@ -1341,7 +1341,7 @@ Changes compared to value and return of expr to direct return
 ```diff
  $value = 'something';
 -if ($value === 52) {
--    return $value;
+-    return 52;
 -}
 -
  return $value;
