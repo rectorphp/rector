@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
@@ -76,11 +77,6 @@ final class ReflectionResolver
             return null;
         }
 
-        if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
-            return $this->resolveClassReflection($classMethod);
-        }
-
         $scope = $node->getAttribute(AttributeKey::SCOPE);
 
         if (! $scope instanceof Scope) {
@@ -88,6 +84,25 @@ final class ReflectionResolver
         }
 
         return $scope->getClassReflection();
+    }
+
+    public function resolveClassReflectionSourceObject(New_|MethodCall|StaticCall $node): ?ClassReflection
+    {
+        if ($node instanceof New_ && $node->class instanceof FullyQualified) {
+            $className = $node->class->toString();
+            if ($this->reflectionProvider->hasClass($className)) {
+                return $this->reflectionProvider->getClass($className);
+            }
+
+            return null;
+        }
+
+        if ($node instanceof MethodCall || $node instanceof StaticCall) {
+            $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
+            return $this->resolveClassReflection($classMethod);
+        }
+
+        return null;
     }
 
     /**
