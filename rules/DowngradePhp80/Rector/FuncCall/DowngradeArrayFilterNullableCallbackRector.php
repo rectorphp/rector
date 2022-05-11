@@ -19,6 +19,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ClosureType;
@@ -131,6 +132,6 @@ CODE_SAMPLE
     {
         $identical = new \PhpParser\Node\Expr\BinaryOp\Identical($args[1]->value, $this->nodeFactory->createNull());
         $constFetch = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('ARRAY_FILTER_USE_BOTH'));
-        return new \PhpParser\Node\Expr\Ternary($identical, $constFetch, isset($args[2]) ? $args[2]->value : new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('0')));
+        return new \PhpParser\Node\Expr\Ternary($identical, $constFetch, isset($args[2]) ? $args[2]->value : new \PhpParser\Node\Scalar\LNumber(0));
     }
 }

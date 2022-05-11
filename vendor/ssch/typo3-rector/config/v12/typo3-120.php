@@ -10,4 +10,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/../config.php');
     $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v12\v0\MigrateInternalTypeRector::class);
     $rectorConfig->ruleWithConfiguration(\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::class, [__DIR__ . '/../../Migrations/TYPO3/12.0/typo3/sysext/backend/Migrations/Code/ClassAliasMap.php', __DIR__ . '/../../Migrations/TYPO3/12.0/typo3/sysext/frontend/Migrations/Code/ClassAliasMap.php']);
+    $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v12\v0\ReplacePreviewUrlMethodRector::class);
 };

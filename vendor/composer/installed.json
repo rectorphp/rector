@@ -2784,12 +2784,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "7d524c8e6004b1300d2a0ea55ec917ae33ec5900"
+                "reference": "3b659b70aad3f33aac3e9944268d3594358eace4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/7d524c8e6004b1300d2a0ea55ec917ae33ec5900",
-                "reference": "7d524c8e6004b1300d2a0ea55ec917ae33ec5900",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/3b659b70aad3f33aac3e9944268d3594358eace4",
+                "reference": "3b659b70aad3f33aac3e9944268d3594358eace4",
                 "shasum": ""
             },
             "require": {
@@ -2819,7 +2819,7 @@
                 "symplify\/vendor-patches": "^10.2",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-05-11T06:44:15+00:00",
+            "time": "2022-05-11T21:48:55+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

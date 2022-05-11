@@ -1,4 +1,4 @@
-# 235 Rules Overview
+# 236 Rules Overview
 
 ## AddRenderTypeToSelectFieldRector
 
@@ -3444,6 +3444,33 @@ Turns properties with `@TYPO3\CMS\Extbase\Annotation\Inject` to setter injection
 +{
 +    $this->someService = $someService;
 +}
+```
+
+<br>
+
+## ReplacePreviewUrlMethodRector
+
+Replace getPreviewUrl
+
+- class: [`Ssch\TYPO3Rector\Rector\v12\v0\ReplacePreviewUrlMethodRector`](../src/Rector/v12/v0/ReplacePreviewUrlMethodRector.php)
+
+```diff
+-$foo = BackendUtility::getPreviewUrl(
+-    $pageUid,
+-    $backPath,
+-    $rootLine,
+-    $anchorSection,
+-    $alternativeUrl,
+-    $additionalGetVars,
+-    &$switchFocus
+-);
++$foo = (string) PreviewUriBuilder::create($pageUid)
++    ->withRootLine($rootLine)
++    ->withSection($anchorSection)
++    ->withAdditionalQueryParameters($additionalGetVars)
++    ->buildUri([
++        PreviewUriBuilder::OPTION_SWITCH_FOCUS => $switchFocus,
++    ]);
 ```
 
 <br>
