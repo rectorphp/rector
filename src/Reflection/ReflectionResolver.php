@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Reflection;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -25,14 +26,20 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220511\Symfony\Contracts\Service\Attribute\Required;
 final class ReflectionResolver
 {
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
     /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
@@ -72,6 +79,13 @@ final class ReflectionResolver
         $this->typeToCallReflectionResolverRegistry = $typeToCallReflectionResolverRegistry;
         $this->classAnalyzer = $classAnalyzer;
     }
+    /**
+     * @required
+     */
+    public function autowire(\Rector\Core\PhpParser\AstResolver $astResolver) : void
+    {
+        $this->astResolver = $astResolver;
+    }
     public function resolveClassAndAnonymousClass(\PhpParser\Node\Stmt\ClassLike $classLike) : \PHPStan\Reflection\ClassReflection
     {
         if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && $this->classAnalyzer->isAnonymousClass($classLike)) {
@@ -81,11 +95,18 @@ final class ReflectionResolver
         return $this->reflectionProvider->getClass($className);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Expr\New_|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassConst $classMethod
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Expr\New_|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null $node
      */
-    public function resolveClassReflection($classMethod) : ?\PHPStan\Reflection\ClassReflection
+    public function resolveClassReflection($node) : ?\PHPStan\Reflection\ClassReflection
     {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$node instanceof \PhpParser\Node) {
+            return null;
+        }
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall) {
+            $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
+            return $this->resolveClassReflection($classMethod);
+        }
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }

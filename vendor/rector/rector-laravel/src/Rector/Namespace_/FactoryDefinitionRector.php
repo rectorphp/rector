@@ -200,7 +200,7 @@ CODE_SAMPLE
             return;
         }
         $method = $class->getMethod('configure');
-        if ($method === null) {
+        if (!$method instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $method = $this->modelFactoryNodeFactory->createEmptyConfigure();
             $class->stmts[] = $method;
         }

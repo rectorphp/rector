@@ -12,7 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220510\Webmozart\Assert\Assert;
+use RectorPrefix20220511\Webmozart\Assert\Assert;
 /**
  * @see https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#deprecated-combined-get-set-methods
  * @see https://github.com/cakephp/cakephp/commit/326292688c5e6d08945a3cafa4b6ffb33e714eea#diff-e7c0f0d636ca50a0350e9be316d8b0f9
@@ -63,11 +63,11 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $unprefixedMethodToGetSet = $this->matchTypeAndMethodName($node);
-        if (!$unprefixedMethodToGetSet instanceof \Rector\CakePHP\ValueObject\ModalToGetSet) {
+        $modalToGetSet = $this->matchTypeAndMethodName($node);
+        if (!$modalToGetSet instanceof \Rector\CakePHP\ValueObject\ModalToGetSet) {
             return null;
         }
-        $newName = $this->resolveNewMethodNameByCondition($node, $unprefixedMethodToGetSet);
+        $newName = $this->resolveNewMethodNameByCondition($node, $modalToGetSet);
         $node->name = new \PhpParser\Node\Identifier($newName);
         return $node;
     }
@@ -77,8 +77,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $unprefixedMethodsToGetSet = $configuration[self::UNPREFIXED_METHODS_TO_GET_SET] ?? $configuration;
-        \RectorPrefix20220510\Webmozart\Assert\Assert::isArray($unprefixedMethodsToGetSet);
-        \RectorPrefix20220510\Webmozart\Assert\Assert::allIsAOf($unprefixedMethodsToGetSet, \Rector\CakePHP\ValueObject\ModalToGetSet::class);
+        \RectorPrefix20220511\Webmozart\Assert\Assert::isArray($unprefixedMethodsToGetSet);
+        \RectorPrefix20220511\Webmozart\Assert\Assert::allIsAOf($unprefixedMethodsToGetSet, \Rector\CakePHP\ValueObject\ModalToGetSet::class);
         $this->unprefixedMethodsToGetSet = $unprefixedMethodsToGetSet;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\ModalToGetSet

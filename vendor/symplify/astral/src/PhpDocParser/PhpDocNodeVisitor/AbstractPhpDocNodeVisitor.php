@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220510\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
+namespace RectorPrefix20220511\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
-use RectorPrefix20220510\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
+use RectorPrefix20220511\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/master/lib/PhpParser/NodeVisitorAbstract.php
  */
-abstract class AbstractPhpDocNodeVisitor implements \RectorPrefix20220510\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface
+abstract class AbstractPhpDocNodeVisitor implements \RectorPrefix20220511\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface
 {
     public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {

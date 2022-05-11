@@ -1,11 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220510;
+namespace RectorPrefix20220511;
 
 use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\TemplateToFluidTemplateTypoScriptRector;
 use Ssch\TYPO3Rector\Rector\v11\v0\DateTimeAspectInsteadOfGlobalsExecTimeRector;
 use Ssch\TYPO3Rector\Rector\v11\v0\ExtbaseControllerActionsMustReturnResponseInterfaceRector;
 use Ssch\TYPO3Rector\Rector\v11\v0\ForwardResponseInsteadOfForwardMethodRector;
@@ -27,4 +28,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v11\v0\RemoveLanguageModeMethodsFromTypo3QuerySettingsRector::class);
     $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector::class, [new \Rector\Transform\ValueObject\StaticCallToFuncCall('TYPO3\\CMS\\Core\\Utility\\StringUtility', 'beginsWith', 'str_starts_with'), new \Rector\Transform\ValueObject\StaticCallToFuncCall('TYPO3\\CMS\\Core\\Utility\\StringUtility', 'endsWith', 'str_ends_with'), new \Rector\Transform\ValueObject\StaticCallToFuncCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'isFirstPartOfStr', 'str_starts_with')]);
     $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v11\v0\ReplaceInjectAnnotationWithMethodRector::class);
+    $rectorConfig->rule(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\TemplateToFluidTemplateTypoScriptRector::class);
 };

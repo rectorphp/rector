@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220510;
+namespace RectorPrefix20220511;
 
-use RectorPrefix20220510\Nette\Neon\Decoder;
+use RectorPrefix20220511\Nette\Neon\Decoder;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $services = $rectorConfig->services();
     $services->defaults()->public()->autowire()->autoconfigure();
     $services->load('Rector\\Nette\\NeonParser\\', __DIR__ . '/../packages/NeonParser')->exclude([__DIR__ . '/../packages/NeonParser/NeonNodeTraverser.php', __DIR__ . '/../packages/NeonParser/Node']);
-    $services->set(\RectorPrefix20220510\Nette\Neon\Decoder::class);
+    $services->set(\RectorPrefix20220511\Nette\Neon\Decoder::class);
 };

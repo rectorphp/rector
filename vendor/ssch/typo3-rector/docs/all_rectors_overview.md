@@ -1,4 +1,4 @@
-# 237 Rules Overview
+# 238 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -4154,6 +4154,19 @@ Substitute `TemplateService->splitConfArray()` with `TypoScriptService->explodeC
 ```diff
 -$splitConfig = GeneralUtility::makeInstance(TemplateService::class)->splitConfArray($conf, $splitCount);
 +$splitConfig = GeneralUtility::makeInstance(TypoScriptService::class)->explodeConfigurationForOptionSplit($conf, $splitCount);
+```
+
+<br>
+
+## TemplateToFluidTemplateTypoScriptRector
+
+Convert TEMPLATE to FLUIDTEMPLATE
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\TemplateToFluidTemplateTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/TemplateToFluidTemplateTypoScriptRector.php)
+
+```diff
+-page.10 = TEMPLATE
++page.10 = FLUIDTEMPLATE
 ```
 
 <br>

@@ -12,10 +12,10 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220510\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20220511\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220510\Webmozart\Assert\Assert;
+use RectorPrefix20220511\Webmozart\Assert\Assert;
 /**
  * @see https://github.com/laravel/framework/pull/32856
  *
@@ -90,7 +90,7 @@ CODE_SAMPLE
         }
         $castsProperty = $node->getProperty('casts');
         // add property $casts if not exists
-        if ($castsProperty === null) {
+        if (!$castsProperty instanceof \PhpParser\Node\Stmt\Property) {
             $castsProperty = $this->createCastsProperty();
             $this->classInsertManipulator->addAsFirstMethod($node, $castsProperty);
         }
@@ -101,7 +101,7 @@ CODE_SAMPLE
         $casts = $this->valueResolver->getValue($castsPropertyProperty->default);
         // exclude attributes added in $casts
         $missingDates = \array_diff($dates, \array_keys($casts));
-        \RectorPrefix20220510\Webmozart\Assert\Assert::allString($missingDates);
+        \RectorPrefix20220511\Webmozart\Assert\Assert::allString($missingDates);
         foreach ($missingDates as $missingDate) {
             $castsPropertyProperty->default->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('datetime'), new \PhpParser\Node\Scalar\String_($missingDate));
         }
@@ -110,7 +110,7 @@ CODE_SAMPLE
     }
     private function createCastsProperty() : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20220510\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder('casts');
+        $propertyBuilder = new \RectorPrefix20220511\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder('casts');
         $propertyBuilder->makeProtected();
         $propertyBuilder->setDefault([]);
         $property = $propertyBuilder->getNode();

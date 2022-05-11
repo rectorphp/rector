@@ -10,7 +10,7 @@
     },
     "require-dev": {
         "phpstan\/phpstan": "^1.6",
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-main#28fb30f",
         "phpunit\/phpunit": "^9.5",
         "symplify\/phpstan-rules": "^10.2",
         "symplify\/phpstan-extensions": "^10.2",

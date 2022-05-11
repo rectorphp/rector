@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220510;
+namespace RectorPrefix20220511;
 
-use RectorPrefix20220510\SebastianBergmann\Diff\Differ;
+use RectorPrefix20220511\SebastianBergmann\Diff\Differ;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220510\Symplify\PackageBuilder\Console\Formatter\ColorConsoleDiffFormatter;
-use RectorPrefix20220510\Symplify\PackageBuilder\Console\Output\ConsoleDiffer;
-use RectorPrefix20220510\Symplify\PackageBuilder\Diff\Output\CompleteUnifiedDiffOutputBuilderFactory;
-use RectorPrefix20220510\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20220511\Symplify\PackageBuilder\Console\Formatter\ColorConsoleDiffFormatter;
+use RectorPrefix20220511\Symplify\PackageBuilder\Console\Output\ConsoleDiffer;
+use RectorPrefix20220511\Symplify\PackageBuilder\Diff\Output\CompleteUnifiedDiffOutputBuilderFactory;
+use RectorPrefix20220511\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->set(\RectorPrefix20220510\Symplify\PackageBuilder\Console\Formatter\ColorConsoleDiffFormatter::class);
-    $services->set(\RectorPrefix20220510\Symplify\PackageBuilder\Console\Output\ConsoleDiffer::class);
-    $services->set(\RectorPrefix20220510\Symplify\PackageBuilder\Diff\Output\CompleteUnifiedDiffOutputBuilderFactory::class);
-    $services->set(\RectorPrefix20220510\SebastianBergmann\Diff\Differ::class);
-    $services->set(\RectorPrefix20220510\Symplify\PackageBuilder\Reflection\PrivatesAccessor::class);
+    $services->set(\RectorPrefix20220511\Symplify\PackageBuilder\Console\Formatter\ColorConsoleDiffFormatter::class);
+    $services->set(\RectorPrefix20220511\Symplify\PackageBuilder\Console\Output\ConsoleDiffer::class);
+    $services->set(\RectorPrefix20220511\Symplify\PackageBuilder\Diff\Output\CompleteUnifiedDiffOutputBuilderFactory::class);
+    $services->set(\RectorPrefix20220511\SebastianBergmann\Diff\Differ::class);
+    $services->set(\RectorPrefix20220511\Symplify\PackageBuilder\Reflection\PrivatesAccessor::class);
 };
