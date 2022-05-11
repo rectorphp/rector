@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
@@ -22,6 +23,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
@@ -38,7 +40,8 @@ final class TypeComparator
         private readonly ArrayTypeComparator $arrayTypeComparator,
         private readonly ScalarTypeComparator $scalarTypeComparator,
         private readonly TypeFactory $typeFactory,
-        private readonly UnionTypeAnalyzer $unionTypeAnalyzer
+        private readonly UnionTypeAnalyzer $unionTypeAnalyzer,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -108,7 +111,7 @@ final class TypeComparator
             return false;
         }
 
-        return $this->isThisTypeInFinalClass($phpStanDocType, $phpParserNodeType);
+        return $this->isThisTypeInFinalClass($phpStanDocType, $phpParserNodeType, $phpParserNode);
     }
 
     public function isSubtype(Type $checkedType, Type $mainType): bool
@@ -165,15 +168,15 @@ final class TypeComparator
 
     private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType): bool
     {
-        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType && $firstType->getFullyQualifiedName() === $secondType->getClassName()) {
-            return true;
-        }
-
-        if (! $secondType instanceof AliasedObjectType) {
-            return false;
+        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType) {
+            return $firstType->getFullyQualifiedName() === $secondType->getClassName();
         }
 
         if (! $firstType instanceof ObjectType) {
+            return false;
+        }
+
+        if (! $secondType instanceof AliasedObjectType) {
             return false;
         }
 
@@ -214,17 +217,20 @@ final class TypeComparator
 
     private function isMutualObjectSubtypes(Type $firstArrayItemType, Type $secondArrayItemType): bool
     {
-        if ($firstArrayItemType instanceof ObjectType && $secondArrayItemType instanceof ObjectType) {
-            if ($firstArrayItemType->isSuperTypeOf($secondArrayItemType)->yes()) {
-                return true;
-            }
-
-            if ($secondArrayItemType->isSuperTypeOf($firstArrayItemType)->yes()) {
-                return true;
-            }
+        if (! $firstArrayItemType instanceof ObjectType) {
+            return false;
         }
 
-        return false;
+        if (! $secondArrayItemType instanceof ObjectType) {
+            return false;
+        }
+
+        if ($firstArrayItemType->isSuperTypeOf($secondArrayItemType)->yes()) {
+            return true;
+        }
+
+        return $secondArrayItemType->isSuperTypeOf($firstArrayItemType)
+            ->yes();
     }
 
     private function normalizeSingleUnionType(Type $type): Type
@@ -251,11 +257,7 @@ final class TypeComparator
             return false;
         }
 
-        if ($firstType instanceof ConstantArrayType) {
-            return false;
-        }
-
-        if ($secondType instanceof ConstantArrayType) {
+        if ($firstType instanceof ConstantArrayType || $secondType instanceof ConstantArrayType) {
             return false;
         }
 
@@ -313,15 +315,30 @@ final class TypeComparator
                 ->yes();
     }
 
-    private function isThisTypeInFinalClass(Type $phpStanDocType, Type $phpParserNodeType): bool
+    private function isThisTypeInFinalClass(Type $phpStanDocType, Type $phpParserNodeType, Node $node): bool
     {
-
         /**
          * Special case for $this/(self|static) compare
          *
          * $this refers to the exact object identity, not just the same type. Therefore, it's valid and should not be removed
          * @see https://wiki.php.net/rfc/this_return_type for more context
          */
-        return ! ($phpStanDocType instanceof ThisType && $phpParserNodeType instanceof StaticType);
+        if ($phpStanDocType instanceof ThisType && $phpParserNodeType instanceof StaticType) {
+            return false;
+        }
+
+        $isStaticReturnDocTypeWithThisType = $phpStanDocType instanceof StaticType && $phpParserNodeType instanceof ThisType;
+
+        if (! $isStaticReturnDocTypeWithThisType) {
+            return true;
+        }
+
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+
+        if (! $class instanceof Class_) {
+            return false;
+        }
+
+        return $class->isFinal();
     }
 }
