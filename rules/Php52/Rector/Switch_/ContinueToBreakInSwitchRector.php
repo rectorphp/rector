@@ -75,16 +75,27 @@ CODE_SAMPLE
     /**
      * @param Switch_ $node
      */
-    public function refactor(Node $node): Switch_
+    public function refactor(Node $node): ?Switch_
     {
+        $hasChanged = false;
         foreach ($node->cases as $case) {
             foreach ($case->stmts as $key => $caseStmt) {
                 if (! $caseStmt instanceof Continue_) {
                     continue;
                 }
 
-                $case->stmts[$key] = $this->processContinueStatement($caseStmt);
+                $newStmt = $this->processContinueStatement($caseStmt);
+                if ($newStmt === $caseStmt) {
+                    continue;
+                }
+
+                $case->stmts[$key] = $newStmt;
+                $hasChanged = true;
             }
+        }
+
+        if (! $hasChanged) {
+            return null;
         }
 
         return $node;
