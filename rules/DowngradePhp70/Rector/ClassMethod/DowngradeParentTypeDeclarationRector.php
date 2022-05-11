@@ -6,10 +6,10 @@ namespace Rector\DowngradePhp70\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -18,10 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector\DowngradeParentTypeDeclarationRectorTest
  */
-final class DowngradeParentTypeDeclarationRector extends AbstractScopeAwareRector
+final class DowngradeParentTypeDeclarationRector extends AbstractRector
 {
     public function __construct(
         private readonly PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -77,9 +78,9 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactorWithScope(Node $node, Scope $scope): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (! $classReflection instanceof ClassReflection) {
             return null;
         }

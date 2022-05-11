@@ -7,9 +7,9 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -20,10 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\MakeInheritedMethodVisibilitySameAsParentRectorTest
  */
-final class MakeInheritedMethodVisibilitySameAsParentRector extends AbstractScopeAwareRector
+final class MakeInheritedMethodVisibilitySameAsParentRector extends AbstractRector
 {
     public function __construct(
         private readonly VisibilityManipulator $visibilityManipulator,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -77,11 +78,9 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $hasChanged = false;
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (! $classReflection instanceof ClassReflection) {
             return null;
         }
@@ -92,6 +91,7 @@ CODE_SAMPLE
             return null;
         }
 
+        $hasChanged = false;
         foreach ($node->getMethods() as $classMethod) {
             if ($classMethod->isMagic()) {
                 continue;
