@@ -11,7 +11,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class DowngradePipeToMultiCatchExceptionRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 7.1
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void

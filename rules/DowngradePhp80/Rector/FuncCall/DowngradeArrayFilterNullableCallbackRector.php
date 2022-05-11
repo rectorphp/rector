@@ -20,6 +20,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ClosureType;
@@ -156,10 +157,6 @@ CODE_SAMPLE
         $identical = new Identical($args[1]->value, $this->nodeFactory->createNull());
         $constFetch = new ConstFetch(new Name('ARRAY_FILTER_USE_BOTH'));
 
-        return new Ternary(
-            $identical,
-            $constFetch,
-            isset($args[2]) ? $args[2]->value : new ConstFetch(new Name('0'))
-        );
+        return new Ternary($identical, $constFetch, isset($args[2]) ? $args[2]->value : new LNumber(0));
     }
 }

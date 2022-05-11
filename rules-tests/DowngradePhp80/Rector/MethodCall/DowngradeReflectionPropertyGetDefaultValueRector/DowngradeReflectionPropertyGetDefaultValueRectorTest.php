@@ -12,7 +12,6 @@ final class DowngradeReflectionPropertyGetDefaultValueRectorTest extends Abstrac
 {
     /**
      * @dataProvider provideData()
-     * @requires PHP 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {
