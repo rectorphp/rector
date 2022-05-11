@@ -6,9 +6,9 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -18,16 +18,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\MakeInheritedMethodVisibilitySameAsParentRectorTest
  */
-final class MakeInheritedMethodVisibilitySameAsParentRector extends \Rector\Core\Rector\AbstractScopeAwareRector
+final class MakeInheritedMethodVisibilitySameAsParentRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->visibilityManipulator = $visibilityManipulator;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -73,10 +79,9 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $hasChanged = \false;
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
@@ -84,6 +89,7 @@ CODE_SAMPLE
         if ($parentClassReflections === []) {
             return null;
         }
+        $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
             if ($classMethod->isMagic()) {
                 continue;
