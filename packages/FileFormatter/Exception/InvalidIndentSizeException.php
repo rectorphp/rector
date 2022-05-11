@@ -8,10 +8,9 @@ use InvalidArgumentException;
 
 final class InvalidIndentSizeException extends InvalidArgumentException
 {
-    public static function fromSizeAndMinimumSize(int $size, int $minimumSize): self
+    public function __construct(int $size, int $minimumSize)
     {
         $message = sprintf('Size %d must be greater than %d', $size, $minimumSize);
-
-        return new self($message);
+        parent::__construct($message);
     }
 }

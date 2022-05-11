@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\FileFormatter\ValueObjectFactory;
 
+use Rector\FileFormatter\Enum\IndentType;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
 use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObject\NewLine;
@@ -12,8 +13,11 @@ final class EditorConfigConfigurationBuilder
 {
     private NewLine $newLine;
 
+    /**
+     * @param IndentType::* $indentStyle
+     */
     public function __construct(
-        private string $indentStyle = 'space',
+        private string $indentStyle = IndentType::SPACE,
         private int $indentSize = 2,
         private bool $insertFinalNewline = true
     ) {
@@ -40,6 +44,9 @@ final class EditorConfigConfigurationBuilder
         return $this;
     }
 
+    /**
+     * @param IndentType::* $indentStyle
+     */
     public function withIndentStyle(string $indentStyle): self
     {
         $this->indentStyle = $indentStyle;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\FileFormatter\ValueObject;
 
 use Nette\Utils\Strings;
+use Rector\FileFormatter\Enum\IndentType;
 use Rector\FileFormatter\Exception\InvalidIndentSizeException;
 use Rector\FileFormatter\Exception\InvalidIndentStringException;
 use Rector\FileFormatter\Exception\InvalidIndentStyleException;
@@ -20,19 +21,9 @@ final class Indent implements Stringable
      * @var array<string, string>
      */
     public const CHARACTERS = [
-        self::SPACE => ' ',
-        self::TAB => "\t",
+        IndentType::SPACE => ' ',
+        IndentType::TAB => "\t",
     ];
-
-    /**
-     * @var string
-     */
-    private const SPACE = 'space';
-
-    /**
-     * @var string
-     */
-    private const TAB = 'tab';
 
     /**
      * @see https://regex101.com/r/A2XiaF/1
@@ -73,22 +64,25 @@ final class Indent implements Stringable
 
     public static function createSpaceWithSize(int $size): self
     {
-        return self::fromSizeAndStyle($size, self::SPACE);
+        return self::fromSizeAndStyle($size, IndentType::SPACE);
     }
 
     public static function createTab(): self
     {
-        return self::fromSizeAndStyle(1, self::TAB);
+        return self::fromSizeAndStyle(1, IndentType::TAB);
     }
 
+    /**
+     * @param IndentType::* $style
+     */
     public static function fromSizeAndStyle(int $size, string $style): self
     {
         if ($size < self::MINIMUM_SIZE) {
-            throw InvalidIndentSizeException::fromSizeAndMinimumSize($size, self::MINIMUM_SIZE);
+            throw new InvalidIndentSizeException($size, self::MINIMUM_SIZE);
         }
 
         if (! array_key_exists($style, self::CHARACTERS)) {
-            throw InvalidIndentStyleException::fromStyleAndAllowedStyles($style, array_keys(self::CHARACTERS));
+            throw new InvalidIndentStyleException($style);
         }
 
         $value = str_repeat(self::CHARACTERS[$style], $size);
@@ -103,7 +97,7 @@ final class Indent implements Stringable
             return self::fromString($match['indent']);
         }
 
-        throw ParseIndentException::fromString($content);
+        throw new ParseIndentException($content);
     }
 
     public function getIndentSize(): int
@@ -111,14 +105,17 @@ final class Indent implements Stringable
         return strlen($this->string);
     }
 
+    /**
+     * @return IndentType::*
+     */
     public function getIndentStyle(): string
     {
-        return $this->startsWithSpace() ? self::SPACE : self::TAB;
+        return $this->startsWithSpace() ? IndentType::SPACE : IndentType::TAB;
     }
 
     public function getIndentStyleCharacter(): string
     {
-        return $this->startsWithSpace() ? self::CHARACTERS[self::SPACE] : self::CHARACTERS[self::TAB];
+        return $this->startsWithSpace() ? self::CHARACTERS[IndentType::SPACE] : self::CHARACTERS[IndentType::TAB];
     }
 
     private function startsWithSpace(): bool

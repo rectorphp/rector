@@ -624,3 +624,28 @@ parameters:
         -
             message: '#Call to static method Webmozart\\Assert\\Assert\:\:allString\(\) with array<class\-string<Rector\\Core\\Contract\\Rector\\RectorInterface>> will always evaluate to true#'
             path: packages/Config/RectorConfig.php
+
+        # hash key
+        -
+            path: rules/Renaming/NodeManipulator/ClassRenamer.php
+            message: '#Use separate function calls with readable variable names#'
+
+        - '#Cognitive complexity for "Rector\\Core\\Rector\\AbstractRector\:\:enterNode\(\)" is \d+, keep it under 10#'
+
+        # false positive by php-parser, the args can be null
+        - '#Parameter \#2 \$args of class PhpParser\\Node\\Expr\\FuncCall constructor expects array<PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder>, array<int, PhpParser\\Node\\Arg\|null> given#'
+
+        # known type
+        - '#Anonymous variable in a `\$parentStmt\->\.\.\.\(\)` method call can lead to false dead methods\. Make sure the variable type is known#'
+
+        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver\:\:processNodes\(\)" is \d+, keep it under 10#'
+
+        # depends on falsy docs
+        - '#Call to static method Webmozart\\Assert\\Assert\:\:allIsInstanceOf\(\) with array<PhpParser\\Node\\Stmt> and (.*?)Stmt(.*?) will always evaluate to true#'
+
+        # doc validation
+        -
+            message: '#Call to function array_key_exists\(\) with (.*?) and array(.*?) will always evaluate to true#'
+            path: packages/FileFormatter/ValueObject/Indent.php
+
+        - '#Parameter \#1 \$indentStyle of method Rector\\FileFormatter\\ValueObjectFactory\\EditorConfigConfigurationBuilder\:\:withIndentStyle\(\) expects (.*?), string given#'
