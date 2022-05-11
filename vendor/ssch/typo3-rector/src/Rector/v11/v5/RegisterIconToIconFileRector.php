@@ -5,11 +5,10 @@ namespace Ssch\TYPO3Rector\Rector\v11\v5;
 
 use RectorPrefix20220511\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
@@ -17,7 +16,7 @@ use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Ssch\TYPO3Rector\Helper\FilesFinder;
-use Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector;
+use Ssch\TYPO3Rector\NodeFactory\IconArrayItemFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -38,11 +37,6 @@ final class RegisterIconToIconFileRector extends \Rector\Core\Rector\AbstractRec
     private $filesFinder;
     /**
      * @readonly
-     * @var \Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector
-     */
-    private $addIconsToReturnRector;
-    /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
     private $simplePhpParser;
@@ -56,13 +50,18 @@ final class RegisterIconToIconFileRector extends \Rector\Core\Rector\AbstractRec
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector $addIconsToReturnRector, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    /**
+     * @readonly
+     * @var \Ssch\TYPO3Rector\NodeFactory\IconArrayItemFactory
+     */
+    private $iconArrayItemFactory;
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Ssch\TYPO3Rector\NodeFactory\IconArrayItemFactory $iconArrayItemFactory)
     {
         $this->filesFinder = $filesFinder;
-        $this->addIconsToReturnRector = $addIconsToReturnRector;
         $this->simplePhpParser = $simplePhpParser;
         $this->nodePrinter = $nodePrinter;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+        $this->iconArrayItemFactory = $iconArrayItemFactory;
     }
     /**
      * @return array<class-string<Node>>
@@ -108,7 +107,6 @@ final class RegisterIconToIconFileRector extends \Rector\Core\Rector\AbstractRec
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Generate or add registerIcon calls to Icons.php file', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -134,16 +132,6 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param Stmt[] $stmts
-     */
-    private function decorateNamesToFullyQualified(array $stmts) : void
-    {
-        // decorate nodes with names first
-        $nameResolverNodeTraverser = new \PhpParser\NodeTraverser();
-        $nameResolverNodeTraverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
-        $nameResolverNodeTraverser->traverse($stmts);
-    }
-    /**
      * @param array<string, mixed> $iconConfiguration
      */
     private function addNewIconToIconsFile(string $iconsFilePath, string $iconIdentifier, array $iconConfiguration) : void
@@ -155,17 +143,20 @@ CODE_SAMPLE
                 $existingIcons = $addedFileWithContent->getFileContent();
             }
         }
+        $iconArrayItem = $this->iconArrayItemFactory->create($iconConfiguration, $iconIdentifier);
         if (\is_string($existingIcons)) {
             $stmts = $this->simplePhpParser->parseString($existingIcons);
+            $this->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use($iconArrayItem) {
+                if (!$node instanceof \PhpParser\Node\Expr\Array_) {
+                    return null;
+                }
+                $node->items[] = $iconArrayItem;
+                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CHILDREN;
+            });
         } else {
-            $stmts = [new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createArray([]))];
+            $array = new \PhpParser\Node\Expr\Array_([$iconArrayItem]);
+            $stmts = [new \PhpParser\Node\Stmt\Return_($array)];
         }
-        $this->decorateNamesToFullyQualified($stmts);
-        $nodeTraverser = new \PhpParser\NodeTraverser();
-        $this->addIconsToReturnRector->configure([\Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector::ICON_IDENTIFIER => $iconIdentifier, \Ssch\TYPO3Rector\Rector\v11\v5\RegisterIconToIconFileRector\AddIconsToReturnRector::ICON_CONFIGURATION => $iconConfiguration]);
-        $nodeTraverser->addVisitor($this->addIconsToReturnRector);
-        /** @var Stmt[] $stmts */
-        $stmts = $nodeTraverser->traverse($stmts);
         $changedIconsContent = $this->nodePrinter->prettyPrintFile($stmts);
         $changedIconsContent = \RectorPrefix20220511\Nette\Utils\Strings::replace($changedIconsContent, self::REMOVE_EMPTY_LINES);
         $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($iconsFilePath, $changedIconsContent));

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
@@ -21,6 +22,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
@@ -64,7 +66,12 @@ final class TypeComparator
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
      */
     private $unionTypeAnalyzer;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\TypeHasher $typeHasher, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\TypeHasher $typeHasher, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->typeHasher = $typeHasher;
         $this->typeNormalizer = $typeNormalizer;
@@ -73,6 +80,7 @@ final class TypeComparator
         $this->scalarTypeComparator = $scalarTypeComparator;
         $this->typeFactory = $typeFactory;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function areTypesEqual(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
@@ -117,7 +125,7 @@ final class TypeComparator
         if ($this->areTypesSameWithLiteralTypeInPhpDoc($areDifferentScalarTypes, $phpStanDocType, $phpParserNodeType)) {
             return \false;
         }
-        return $this->isThisTypeInFinalClass($phpStanDocType, $phpParserNodeType);
+        return $this->isThisTypeInFinalClass($phpStanDocType, $phpParserNodeType, $phpParserNode);
     }
     public function isSubtype(\PHPStan\Type\Type $checkedType, \PHPStan\Type\Type $mainType) : bool
     {
@@ -159,13 +167,13 @@ final class TypeComparator
     }
     private function areAliasedObjectMatchingFqnObject(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
-        if ($firstType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $secondType instanceof \PHPStan\Type\ObjectType && $firstType->getFullyQualifiedName() === $secondType->getClassName()) {
-            return \true;
-        }
-        if (!$secondType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
-            return \false;
+        if ($firstType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $secondType instanceof \PHPStan\Type\ObjectType) {
+            return $firstType->getFullyQualifiedName() === $secondType->getClassName();
         }
         if (!$firstType instanceof \PHPStan\Type\ObjectType) {
+            return \false;
+        }
+        if (!$secondType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
             return \false;
         }
         return $secondType->getFullyQualifiedName() === $firstType->getClassName();
@@ -197,15 +205,16 @@ final class TypeComparator
     }
     private function isMutualObjectSubtypes(\PHPStan\Type\Type $firstArrayItemType, \PHPStan\Type\Type $secondArrayItemType) : bool
     {
-        if ($firstArrayItemType instanceof \PHPStan\Type\ObjectType && $secondArrayItemType instanceof \PHPStan\Type\ObjectType) {
-            if ($firstArrayItemType->isSuperTypeOf($secondArrayItemType)->yes()) {
-                return \true;
-            }
-            if ($secondArrayItemType->isSuperTypeOf($firstArrayItemType)->yes()) {
-                return \true;
-            }
+        if (!$firstArrayItemType instanceof \PHPStan\Type\ObjectType) {
+            return \false;
         }
-        return \false;
+        if (!$secondArrayItemType instanceof \PHPStan\Type\ObjectType) {
+            return \false;
+        }
+        if ($firstArrayItemType->isSuperTypeOf($secondArrayItemType)->yes()) {
+            return \true;
+        }
+        return $secondArrayItemType->isSuperTypeOf($firstArrayItemType)->yes();
     }
     private function normalizeSingleUnionType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
@@ -226,10 +235,7 @@ final class TypeComparator
         if (!$secondType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
-        if ($firstType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
-            return \false;
-        }
-        if ($secondType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
+        if ($firstType instanceof \PHPStan\Type\Constant\ConstantArrayType || $secondType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return \false;
         }
         $firstKeyType = $this->normalizeSingleUnionType($firstType->getKeyType());
@@ -265,7 +271,7 @@ final class TypeComparator
     {
         return $areDifferentScalarTypes && $phpStanDocType instanceof \PHPStan\Type\ConstantScalarType && $phpParserNodeType->isSuperTypeOf($phpStanDocType)->yes();
     }
-    private function isThisTypeInFinalClass(\PHPStan\Type\Type $phpStanDocType, \PHPStan\Type\Type $phpParserNodeType) : bool
+    private function isThisTypeInFinalClass(\PHPStan\Type\Type $phpStanDocType, \PHPStan\Type\Type $phpParserNodeType, \PhpParser\Node $node) : bool
     {
         /**
          * Special case for $this/(self|static) compare
@@ -273,6 +279,17 @@ final class TypeComparator
          * $this refers to the exact object identity, not just the same type. Therefore, it's valid and should not be removed
          * @see https://wiki.php.net/rfc/this_return_type for more context
          */
-        return !($phpStanDocType instanceof \PHPStan\Type\ThisType && $phpParserNodeType instanceof \PHPStan\Type\StaticType);
+        if ($phpStanDocType instanceof \PHPStan\Type\ThisType && $phpParserNodeType instanceof \PHPStan\Type\StaticType) {
+            return \false;
+        }
+        $isStaticReturnDocTypeWithThisType = $phpStanDocType instanceof \PHPStan\Type\StaticType && $phpParserNodeType instanceof \PHPStan\Type\ThisType;
+        if (!$isStaticReturnDocTypeWithThisType) {
+            return \true;
+        }
+        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return \false;
+        }
+        return $class->isFinal();
     }
 }

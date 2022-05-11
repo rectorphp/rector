@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdef0663bbddfe6c4b9647213fe734d55
+class ComposerStaticInitf4d3d73b2d810c5eea9f754f08f9876b
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3628,7 +3628,11 @@ class ComposerStaticInitdef0663bbddfe6c4b9647213fe734d55
         'Ssch\\TYPO3Rector\\Helper\\TcaHelperTrait' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/TcaHelperTrait.php',
         'Ssch\\TYPO3Rector\\Helper\\Typo3NodeResolver' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/Typo3NodeResolver.php',
         'Ssch\\TYPO3Rector\\NodeAnalyzer\\ClassConstAnalyzer' => __DIR__ . '/..' . '/ssch/typo3-rector/src/NodeAnalyzer/ClassConstAnalyzer.php',
+        'Ssch\\TYPO3Rector\\NodeAnalyzer\\CommandArrayDecorator' => __DIR__ . '/..' . '/ssch/typo3-rector/src/NodeAnalyzer/CommandArrayDecorator.php',
+        'Ssch\\TYPO3Rector\\NodeAnalyzer\\CommandMethodDecorator' => __DIR__ . '/..' . '/ssch/typo3-rector/src/NodeAnalyzer/CommandMethodDecorator.php',
+        'Ssch\\TYPO3Rector\\NodeFactory\\CommandArrayItemFactory' => __DIR__ . '/..' . '/ssch/typo3-rector/src/NodeFactory/CommandArrayItemFactory.php',
         'Ssch\\TYPO3Rector\\NodeFactory\\HelperArgumentAssignFactory' => __DIR__ . '/..' . '/ssch/typo3-rector/src/NodeFactory/HelperArgumentAssignFactory.php',
+        'Ssch\\TYPO3Rector\\NodeFactory\\IconArrayItemFactory' => __DIR__ . '/..' . '/ssch/typo3-rector/src/NodeFactory/IconArrayItemFactory.php',
         'Ssch\\TYPO3Rector\\NodeFactory\\ImportExtbaseAnnotationIfMissingFactory' => __DIR__ . '/..' . '/ssch/typo3-rector/src/NodeFactory/ImportExtbaseAnnotationIfMissingFactory.php',
         'Ssch\\TYPO3Rector\\NodeFactory\\InitializeArgumentsClassMethodFactory' => __DIR__ . '/..' . '/ssch/typo3-rector/src/NodeFactory/InitializeArgumentsClassMethodFactory.php',
         'Ssch\\TYPO3Rector\\NodeFactory\\InjectMethodFactory' => __DIR__ . '/..' . '/ssch/typo3-rector/src/NodeFactory/InjectMethodFactory.php',
@@ -3708,7 +3712,6 @@ class ComposerStaticInitdef0663bbddfe6c4b9647213fe734d55
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\FlexFormToolsArrayValueByPathRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/FlexFormToolsArrayValueByPathRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\HandleCObjRendererATagParamsMethodRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/HandleCObjRendererATagParamsMethodRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\RegisterIconToIconFileRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/RegisterIconToIconFileRector.php',
-        'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\RegisterIconToIconFileRector\\AddIconsToReturnRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/RegisterIconToIconFileRector/AddIconsToReturnRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\RemoveDefaultInternalTypeDBRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/RemoveDefaultInternalTypeDBRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\ReplaceTSFEATagParamsCallOnGlobalsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/ReplaceTSFEATagParamsCallOnGlobalsRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\SubstituteBackendTemplateViewWithModuleTemplateRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/SubstituteBackendTemplateViewWithModuleTemplateRector.php',
@@ -3855,8 +3858,6 @@ class ComposerStaticInitdef0663bbddfe6c4b9647213fe734d55
         'Ssch\\TYPO3Rector\\Rector\\v9\\v4\\UseSignalAfterExtensionInstallInsteadOfHasInstalledExtensionsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v4/UseSignalAfterExtensionInstallInsteadOfHasInstalledExtensionsRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v9\\v4\\UseSignalTablesDefinitionIsBeingBuiltSqlExpectedSchemaServiceRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v4/UseSignalTablesDefinitionIsBeingBuiltSqlExpectedSchemaServiceRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v9\\v5\\ExtbaseCommandControllerToSymfonyCommandRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v5/ExtbaseCommandControllerToSymfonyCommandRector.php',
-        'Ssch\\TYPO3Rector\\Rector\\v9\\v5\\ExtbaseCommandControllerToSymfonyCommand\\AddArgumentToSymfonyCommandRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v5/ExtbaseCommandControllerToSymfonyCommand/AddArgumentToSymfonyCommandRector.php',
-        'Ssch\\TYPO3Rector\\Rector\\v9\\v5\\ExtbaseCommandControllerToSymfonyCommand\\AddCommandsToReturnRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v5/ExtbaseCommandControllerToSymfonyCommand/AddCommandsToReturnRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v9\\v5\\RefactorProcessOutputRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v5/RefactorProcessOutputRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v9\\v5\\RefactorPropertiesOfTypoScriptFrontendControllerRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v5/RefactorPropertiesOfTypoScriptFrontendControllerRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v9\\v5\\RefactorTypeInternalTypeFileAndFileReferenceToFalRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v5/RefactorTypeInternalTypeFileAndFileReferenceToFalRector.php',
@@ -3888,9 +3889,9 @@ class ComposerStaticInitdef0663bbddfe6c4b9647213fe734d55
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdef0663bbddfe6c4b9647213fe734d55::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdef0663bbddfe6c4b9647213fe734d55::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdef0663bbddfe6c4b9647213fe734d55::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf4d3d73b2d810c5eea9f754f08f9876b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf4d3d73b2d810c5eea9f754f08f9876b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf4d3d73b2d810c5eea9f754f08f9876b::$classMap;
 
         }, null, ClassLoader::class);
     }
