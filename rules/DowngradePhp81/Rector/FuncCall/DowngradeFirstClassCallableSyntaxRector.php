@@ -81,7 +81,7 @@ CODE_SAMPLE
         // StaticCall
         $class = $node->class instanceof \PhpParser\Node\Name ? new \PhpParser\Node\Expr\ClassConstFetch($node->class, 'class') : $node->class;
         $method = $node->name instanceof \PhpParser\Node\Identifier ? new \PhpParser\Node\Scalar\String_($node->name->toString()) : $node->name;
-        return new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($class), new \PhpParser\Node\Expr\ArrayItem($method)]);
+        return $this->nodeFactory->createArray([$class, $method]);
     }
     private function createClosureFromCallableCall(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\StaticCall
     {

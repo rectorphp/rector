@@ -116,8 +116,8 @@ CODE_SAMPLE
         if (!$assignScope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
-        $currentStatement = $this->betterNodeFinder->resolveCurrentStatement($funcCall);
-        if (!$currentStatement instanceof \PhpParser\Node\Stmt) {
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($funcCall);
+        if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
             return null;
         }
         $isCompactOfUndefinedVariables = $this->arrayItemsAnalyzer->hasArrayExclusiveDefinedVariableNames($array, $assignScope);
@@ -138,7 +138,7 @@ CODE_SAMPLE
         $firstArg = $funcCall->args[0];
         $assignVariable = $firstArg->value;
         $preAssign = new \PhpParser\Node\Expr\Assign($assignVariable, $array);
-        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStmt);
         return $expr;
     }
     private function refactorAssignArray(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr

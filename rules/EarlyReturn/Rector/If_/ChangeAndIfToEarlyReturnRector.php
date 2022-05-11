@@ -6,17 +6,14 @@ namespace Rector\EarlyReturn\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
@@ -96,16 +93,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Else_::class, \PhpParser\Node\Stmt\ElseIf_::class];
+        return [\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface::class];
     }
     /**
-     * @param Function_|ClassMethod|Closure|Foreach_|If_|Else_|ElseIf_ $node
+     * @param StmtsAwareInterface $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        /** @var Stmt[]|null $stmts */
-        $stmts = $node->stmts;
-        if ($stmts === null) {
+        $stmts = (array) $node->stmts;
+        if ($stmts === []) {
             return null;
         }
         $newStmts = [];
@@ -183,7 +179,7 @@ CODE_SAMPLE
         }
         return \array_merge($result, [$ifNextReturnClone]);
     }
-    private function shouldSkip(\PhpParser\Node $parentNode, \PhpParser\Node\Stmt\If_ $if, ?\PhpParser\Node\Stmt $nexStmt) : bool
+    private function shouldSkip(\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmtsAware, \PhpParser\Node\Stmt\If_ $if, ?\PhpParser\Node\Stmt $nexStmt) : bool
     {
         if (!$this->ifManipulator->isIfWithOnlyOneStmt($if)) {
             return \true;
@@ -194,10 +190,10 @@ CODE_SAMPLE
         if (!$this->ifManipulator->isIfWithoutElseAndElseIfs($if)) {
             return \true;
         }
-        if ($this->isParentIfReturnsVoidOrParentIfHasNextNode($parentNode)) {
+        if ($this->isParentIfReturnsVoidOrParentIfHasNextNode($stmtsAware)) {
             return \true;
         }
-        if ($this->isNestedIfInLoop($if, $parentNode)) {
+        if ($this->isNestedIfInLoop($if, $stmtsAware)) {
             return \true;
         }
         return !$this->isLastIfOrBeforeLastReturn($if, $nexStmt);
@@ -218,20 +214,20 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isParentIfReturnsVoidOrParentIfHasNextNode(\PhpParser\Node $parentNode) : bool
+    private function isParentIfReturnsVoidOrParentIfHasNextNode(\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmtsAware) : bool
     {
-        if (!$parentNode instanceof \PhpParser\Node\Stmt\If_) {
+        if (!$stmtsAware instanceof \PhpParser\Node\Stmt\If_) {
             return \false;
         }
-        $nextParent = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        $nextParent = $stmtsAware->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         return $nextParent instanceof \PhpParser\Node;
     }
-    private function isNestedIfInLoop(\PhpParser\Node\Stmt\If_ $if, ?\PhpParser\Node $parentNode) : bool
+    private function isNestedIfInLoop(\PhpParser\Node\Stmt\If_ $if, \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmtsAware) : bool
     {
         if (!$this->contextAnalyzer->isInLoop($if)) {
             return \false;
         }
-        return $parentNode instanceof \PhpParser\Node\Stmt\If_ || $parentNode instanceof \PhpParser\Node\Stmt\Else_ || $parentNode instanceof \PhpParser\Node\Stmt\ElseIf_;
+        return $stmtsAware instanceof \PhpParser\Node\Stmt\If_ || $stmtsAware instanceof \PhpParser\Node\Stmt\Else_ || $stmtsAware instanceof \PhpParser\Node\Stmt\ElseIf_;
     }
     private function isLastIfOrBeforeLastReturn(\PhpParser\Node\Stmt\If_ $if, ?\PhpParser\Node\Stmt $nextStmt) : bool
     {

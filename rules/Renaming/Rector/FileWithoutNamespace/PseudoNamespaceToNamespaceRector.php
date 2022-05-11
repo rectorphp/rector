@@ -82,9 +82,7 @@ CODE_SAMPLE
             $node->stmts = $stmts;
             // add a new namespace?
             if ($this->newNamespace !== null) {
-                $namespace = new \PhpParser\Node\Stmt\Namespace_(new \PhpParser\Node\Name($this->newNamespace));
-                $namespace->stmts = $stmts;
-                return $namespace;
+                return new \PhpParser\Node\Stmt\Namespace_(new \PhpParser\Node\Name($this->newNamespace), $stmts);
             }
         }
         if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {

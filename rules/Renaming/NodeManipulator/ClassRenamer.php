@@ -42,6 +42,10 @@ final class ClassRenamer
      */
     private $alreadyProcessedClasses = [];
     /**
+     * @var array<string, OldToNewType[]>
+     */
+    private $oldToNewTypesByCacheKey = [];
+    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
@@ -115,10 +119,7 @@ final class ClassRenamer
      */
     public function renameNode(\PhpParser\Node $node, array $oldToNewClasses) : ?\PhpParser\Node
     {
-        $oldToNewTypes = [];
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
-            $oldToNewTypes[] = new \Rector\NodeTypeResolver\ValueObject\OldToNewType(new \PHPStan\Type\ObjectType($oldClass), new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($newClass));
-        }
+        $oldToNewTypes = $this->createOldToNewTypes($oldToNewClasses);
         $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses);
         if ($node instanceof \PhpParser\Node\Name) {
             return $this->refactorName($node, $oldToNewClasses);
@@ -401,5 +402,24 @@ final class ClassRenamer
     private function shouldRemoveUseName(string $last, string $newNameLastName, bool $importNames) : bool
     {
         return $last === $newNameLastName && $importNames;
+    }
+    /**
+     * @param array<string, string> $oldToNewClasses
+     * @return OldToNewType[]
+     */
+    private function createOldToNewTypes(array $oldToNewClasses) : array
+    {
+        $cacheKey = \md5(\serialize($oldToNewClasses));
+        if (isset($this->oldToNewTypesByCacheKey[$cacheKey])) {
+            return $this->oldToNewTypesByCacheKey[$cacheKey];
+        }
+        $oldToNewTypes = [];
+        foreach ($oldToNewClasses as $oldClass => $newClass) {
+            $oldObjectType = new \PHPStan\Type\ObjectType($oldClass);
+            $newObjectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($newClass);
+            $oldToNewTypes[] = new \Rector\NodeTypeResolver\ValueObject\OldToNewType($oldObjectType, $newObjectType);
+        }
+        $this->oldToNewTypesByCacheKey[$cacheKey] = $oldToNewTypes;
+        return $oldToNewTypes;
     }
 }
