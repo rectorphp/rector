@@ -5,8 +5,6 @@ namespace Rector\Symfony\Bridge\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 final class ControllerMethodAnalyzer
 {
@@ -25,10 +23,6 @@ final class ControllerMethodAnalyzer
     public function isAction(\PhpParser\Node $node) : bool
     {
         if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return \false;
-        }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \false;
         }
         if (!$this->controllerAnalyzer->isInsideController($node)) {

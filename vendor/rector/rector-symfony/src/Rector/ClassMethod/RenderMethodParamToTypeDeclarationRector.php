@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\NodeAnalyzer\ControllerRenderMethodAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
@@ -94,8 +93,7 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return null;
         }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$this->controllerRenderMethodAnalyzer->isRenderMethod($node, $scope)) {
+        if (!$this->controllerRenderMethodAnalyzer->isRenderMethod($node)) {
             return null;
         }
         // $node->getParams()

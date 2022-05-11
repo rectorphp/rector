@@ -4,18 +4,22 @@ declare (strict_types=1);
 namespace Rector\Symfony\NodeAnalyzer;
 
 use PhpParser\Node;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\Reflection\ReflectionResolver;
 final class SymfonyTestCaseAnalyzer
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    {
+        $this->reflectionResolver = $reflectionResolver;
+    }
     public function isInWebTestCase(\PhpParser\Node $node) : bool
     {
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return \false;
-        }
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
