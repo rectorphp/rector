@@ -614,3 +614,8 @@ parameters:
             message: '#Use separate function calls with readable variable names#'
             path: rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php
         - '#Class "Rector\\CodeQuality\\Rector\\FunctionLike\\RemoveAlwaysTrueConditionSetInConstructorRector" has invalid namespace category "FunctionLike"\. Pick one of\: "If_"#'
+
+        # doc arrays cannot be trusted
+        -
+            message: '#Call to static method Webmozart\\Assert\\Assert\:\:allString\(\) with array<class\-string<Rector\\Core\\Contract\\Rector\\RectorInterface>> will always evaluate to true#'
+            path: packages/Config/RectorConfig.php

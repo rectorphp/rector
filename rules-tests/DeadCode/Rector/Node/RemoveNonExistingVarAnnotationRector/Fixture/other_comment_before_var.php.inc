@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
-class OtherCommentBeforeVar
+final class SkipOtherCommentBeforeVar
 {
     public function get()
     {
@@ -11,20 +11,3 @@ class OtherCommentBeforeVar
         $return[] = $this->getReturnData();
     }
 }
-
-?>
------
-<?php
-
-namespace Rector\Tests\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
-
-class OtherCommentBeforeVar
-{
-    public function get()
-    {
-        // Load data also with projekt...
-        $return[] = $this->getReturnData();
-    }
-}
-
-?>

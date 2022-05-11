@@ -65,7 +65,7 @@ final class Indent implements Stringable
     {
         $match = Strings::match($content, self::VALID_INDENT_REGEX);
         if ($match === null) {
-            throw InvalidIndentStringException::fromString($content);
+            throw new InvalidIndentStringException($content);
         }
 
         return new self($content);

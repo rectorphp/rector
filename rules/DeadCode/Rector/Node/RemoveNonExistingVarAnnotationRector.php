@@ -20,7 +20,6 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\Comments\CommentRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use Symplify\PackageBuilder\Php\TypeChecker;
@@ -54,7 +53,6 @@ final class RemoveNonExistingVarAnnotationRector extends AbstractRector
 
     public function __construct(
         private readonly TypeChecker $typeChecker,
-        private readonly CommentRemover $commentRemover,
         private readonly ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer
     ) {
     }
@@ -121,8 +119,8 @@ CODE_SAMPLE
 
         $comments = $node->getComments();
         if (isset($comments[1])) {
-            $this->commentRemover->rollbackComments($node, $comments[1]);
-            return $node;
+            // skip edge case with double comment, as impossible to resolve by PHPStan doc parser
+            return null;
         }
 
         $phpDocInfo->removeByType(VarTagValueNode::class);

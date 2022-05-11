@@ -130,6 +130,18 @@ final class RectorConfig extends ContainerConfigurator
     }
 
     /**
+     * @param array<class-string<RectorInterface>> $rectorClasses
+     */
+    public function rules(array $rectorClasses): void
+    {
+        Assert::allString($rectorClasses);
+
+        foreach ($rectorClasses as $rectorClass) {
+            $this->rule($rectorClass);
+        }
+    }
+
+    /**
      * @param PhpVersion::* $phpVersion
      */
     public function phpVersion(int $phpVersion): void
