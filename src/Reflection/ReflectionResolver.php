@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
@@ -102,15 +103,29 @@ final class ReflectionResolver
         if (!$node instanceof \PhpParser\Node) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall) {
-            $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
-            return $this->resolveClassReflection($classMethod);
-        }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
         return $scope->getClassReflection();
+    }
+    /**
+     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     */
+    public function resolveClassReflectionSourceObject($node) : ?\PHPStan\Reflection\ClassReflection
+    {
+        if ($node instanceof \PhpParser\Node\Expr\New_ && $node->class instanceof \PhpParser\Node\Name\FullyQualified) {
+            $className = $node->class->toString();
+            if ($this->reflectionProvider->hasClass($className)) {
+                return $this->reflectionProvider->getClass($className);
+            }
+            return null;
+        }
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall) {
+            $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
+            return $this->resolveClassReflection($classMethod);
+        }
+        return null;
     }
     /**
      * @param class-string $className

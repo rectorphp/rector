@@ -121,7 +121,7 @@ CODE_SAMPLE
     private function shouldSkipClassMethod($node, \Rector\Renaming\Contract\MethodCallRenameInterface $methodCallRename) : bool
     {
         if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+            $classReflection = $this->reflectionResolver->resolveClassReflectionSourceObject($node);
             if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
                 return \false;
             }
