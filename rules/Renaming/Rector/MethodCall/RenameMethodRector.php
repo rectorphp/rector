@@ -12,9 +12,12 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Renaming\Collector\MethodCallRenameCollector;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -35,7 +38,9 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
 
     public function __construct(
         private readonly ClassManipulator $classManipulator,
-        private readonly MethodCallRenameCollector $methodCallRenameCollector
+        private readonly MethodCallRenameCollector $methodCallRenameCollector,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 
@@ -124,7 +129,28 @@ CODE_SAMPLE
         MethodCallRenameInterface $methodCallRename
     ): bool {
         if (! $node instanceof ClassMethod) {
-            return false;
+            $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+
+            if (! $classReflection instanceof ClassReflection) {
+                return false;
+            }
+
+            $targetClass = $methodCallRename->getClass();
+            if (! $this->reflectionProvider->hasClass($targetClass)) {
+                return false;
+            }
+
+            $targetClassReflection = $this->reflectionProvider->getClass($targetClass);
+            if ($classReflection->getName() === $targetClassReflection->getName()) {
+                return false;
+            }
+
+            // different with configured ClassLike source? it is a child, which may has old and new exists
+            if (! $classReflection->hasMethod($methodCallRename->getOldMethod())) {
+                return false;
+            }
+
+            return $classReflection->hasMethod($methodCallRename->getNewMethod());
         }
 
         return $this->shouldSkipForAlreadyExistingClassMethod($node, $methodCallRename);

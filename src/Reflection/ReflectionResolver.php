@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Reflection;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -26,15 +27,19 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class ReflectionResolver
 {
+    private AstResolver $astResolver;
+
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
         private readonly BetterNodeFinder $betterNodeFinder,
@@ -43,6 +48,12 @@ final class ReflectionResolver
         private readonly TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry,
         private readonly ClassAnalyzer $classAnalyzer
     ) {
+    }
+
+    #[Required]
+    public function autowire(AstResolver $astResolver): void
+    {
+        $this->astResolver = $astResolver;
     }
 
     public function resolveClassAndAnonymousClass(ClassLike $classLike): ClassReflection
@@ -59,9 +70,18 @@ final class ReflectionResolver
     }
 
     public function resolveClassReflection(
-        ClassMethod|Property|ClassLike|New_|Function_|ClassConst $classMethod
+        ClassMethod|Property|ClassLike|New_|Function_|ClassConst|MethodCall|StaticCall|null $node
     ): ?ClassReflection {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $node instanceof Node) {
+            return null;
+        }
+
+        if ($node instanceof MethodCall || $node instanceof StaticCall) {
+            $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
+            return $this->resolveClassReflection($classMethod);
+        }
+
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
 
         if (! $scope instanceof Scope) {
             return null;
