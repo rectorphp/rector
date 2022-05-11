@@ -14,11 +14,8 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
@@ -70,9 +67,8 @@ final class ReflectionResolver
         return $this->reflectionProvider->getClass($className);
     }
 
-    public function resolveClassReflection(
-        ClassMethod|Property|ClassLike|New_|Function_|ClassConst|MethodCall|StaticCall|null $node
-    ): ?ClassReflection {
+    public function resolveClassReflection(?Node $node): ?ClassReflection
+    {
         if (! $node instanceof Node) {
             return null;
         }
