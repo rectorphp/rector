@@ -22,10 +22,10 @@ final class RectorContainerFactory
                 /** @var SymfonyStyle $symfonyStyle */
                 $symfonyStyle = $container->get(\RectorPrefix20220511\Symfony\Component\Console\Style\SymfonyStyle::class);
                 // @todo add link to blog post after release
-                $warningMessage = \sprintf('Your "%s" config is using old syntax with "ContainerConfigurator".%sPlease upgrade to "RectorConfig" that allows better autocomplete and future standard.', $mainConfigFile, \PHP_EOL);
+                $warningMessage = \sprintf('Your "%s" config is using old syntax with "ContainerConfigurator".%sUpgrade to "RectorConfig" that allows better autocomplete and future standard.', $mainConfigFile, \PHP_EOL);
                 $symfonyStyle->warning($warningMessage);
                 // to make message noticable
-                \sleep(1);
+                \sleep(3);
             }
             /** @var ChangedFilesDetector $changedFilesDetector */
             $changedFilesDetector = $container->get(\Rector\Caching\Detector\ChangedFilesDetector::class);

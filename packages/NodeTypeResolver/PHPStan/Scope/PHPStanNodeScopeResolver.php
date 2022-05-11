@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Foreach_;
@@ -187,7 +188,7 @@ final class PHPStanNodeScopeResolver
      */
     private function resolveClassName($classLike) : string
     {
-        if (\property_exists($classLike, 'namespacedName')) {
+        if ($classLike->namespacedName instanceof \PhpParser\Node\Name) {
             return (string) $classLike->namespacedName;
         }
         if ($classLike->name === null) {

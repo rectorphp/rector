@@ -19,7 +19,6 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\Comments\CommentRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use RectorPrefix20220511\Symplify\PackageBuilder\Php\TypeChecker;
@@ -43,18 +42,12 @@ final class RemoveNonExistingVarAnnotationRector extends \Rector\Core\Rector\Abs
     private $typeChecker;
     /**
      * @readonly
-     * @var \Rector\Comments\CommentRemover
-     */
-    private $commentRemover;
-    /**
-     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
      */
     private $exprUsedInNodeAnalyzer;
-    public function __construct(\RectorPrefix20220511\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Comments\CommentRemover $commentRemover, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
+    public function __construct(\RectorPrefix20220511\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
     {
         $this->typeChecker = $typeChecker;
-        $this->commentRemover = $commentRemover;
         $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -106,8 +99,8 @@ CODE_SAMPLE
         }
         $comments = $node->getComments();
         if (isset($comments[1])) {
-            $this->commentRemover->rollbackComments($node, $comments[1]);
-            return $node;
+            // skip edge case with double comment, as impossible to resolve by PHPStan doc parser
+            return null;
         }
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
         return $node;

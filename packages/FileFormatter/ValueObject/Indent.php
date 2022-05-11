@@ -57,7 +57,7 @@ final class Indent
     {
         $match = \RectorPrefix20220511\Nette\Utils\Strings::match($content, self::VALID_INDENT_REGEX);
         if ($match === null) {
-            throw \Rector\FileFormatter\Exception\InvalidIndentStringException::fromString($content);
+            throw new \Rector\FileFormatter\Exception\InvalidIndentStringException($content);
         }
         return new self($content);
     }

@@ -108,6 +108,16 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
         $services->set($rectorClass);
     }
     /**
+     * @param array<class-string<RectorInterface>> $rectorClasses
+     */
+    public function rules(array $rectorClasses) : void
+    {
+        \RectorPrefix20220511\Webmozart\Assert\Assert::allString($rectorClasses);
+        foreach ($rectorClasses as $rectorClass) {
+            $this->rule($rectorClass);
+        }
+    }
+    /**
      * @param PhpVersion::* $phpVersion
      */
     public function phpVersion(int $phpVersion) : void

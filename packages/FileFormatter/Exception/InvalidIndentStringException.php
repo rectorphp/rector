@@ -6,9 +6,9 @@ namespace Rector\FileFormatter\Exception;
 use InvalidArgumentException;
 final class InvalidIndentStringException extends \InvalidArgumentException
 {
-    public static function fromString(string $string) : self
+    public function __construct(string $value)
     {
-        $message = \sprintf('This is not valid indentation "%s"', $string);
-        return new self($message);
+        $message = \sprintf('The "%s" is not valid indentation', $value);
+        parent::__construct($message);
     }
 }
