@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Symplify\Astral\Naming\SimpleNameResolver;
 
@@ -18,17 +18,14 @@ final class ControllerRenderMethodAnalyzer
         private readonly SimpleNameResolver $simpleNameResolver,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
-    public function isRenderMethod(ClassMethod $classMethod, ?Scope $scope): bool
+    public function isRenderMethod(ClassMethod $classMethod): bool
     {
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
         // nette one?
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (! $classReflection instanceof ClassReflection) {
             return false;
         }

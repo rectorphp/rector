@@ -138,7 +138,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node instanceof ClassMethod && $this->controllerRenderMethodAnalyzer->isRenderMethod($node, $scope)) {
+        if ($node instanceof ClassMethod && $this->controllerRenderMethodAnalyzer->isRenderMethod($node)) {
             return null;
         }
 
