@@ -92,17 +92,18 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
-     * @return Stmt[]|null
+     * @return null|If_|Stmt[]
      */
-    public function refactor(Node $node): ?array
+    public function refactor(Node $node): null|If_|array
     {
         $ifStmt = $this->matchTruableIf($node);
         if (! $ifStmt instanceof If_) {
             return null;
         }
 
-        if ($ifStmt->stmts === null) {
-            return null;
+        if ($ifStmt->stmts === []) {
+            $this->removeNode($ifStmt);
+            return $ifStmt;
         }
 
         return $ifStmt->stmts;
