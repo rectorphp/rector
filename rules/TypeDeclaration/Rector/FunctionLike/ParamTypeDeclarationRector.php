@@ -10,11 +10,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,7 +38,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @deprecated Use specific rules to infer params instead. This rule will be split info many small ones.
  */
-final class ParamTypeDeclarationRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpVersionInterface
 {
     private bool $hasChanged = false;
 
@@ -130,7 +129,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope): ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->hasChanged = false;
 
