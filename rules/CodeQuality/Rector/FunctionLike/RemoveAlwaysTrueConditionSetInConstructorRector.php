@@ -90,16 +90,17 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return Stmt[]|null
+     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor(\PhpParser\Node $node)
     {
         $ifStmt = $this->matchTruableIf($node);
         if (!$ifStmt instanceof \PhpParser\Node\Stmt\If_) {
             return null;
         }
-        if ($ifStmt->stmts === null) {
-            return null;
+        if ($ifStmt->stmts === []) {
+            $this->removeNode($ifStmt);
+            return $ifStmt;
         }
         return $ifStmt->stmts;
     }
