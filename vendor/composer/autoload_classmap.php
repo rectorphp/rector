@@ -2007,7 +2007,6 @@ return array(
     'Rector\\DowngradePhp70\\Rector\\MethodCall\\DowngradeMethodCallOnCloneRector' => $baseDir . '/rules/DowngradePhp70/Rector/MethodCall/DowngradeMethodCallOnCloneRector.php',
     'Rector\\DowngradePhp70\\Rector\\New_\\DowngradeAnonymousClassRector' => $baseDir . '/rules/DowngradePhp70/Rector/New_/DowngradeAnonymousClassRector.php',
     'Rector\\DowngradePhp70\\Rector\\Spaceship\\DowngradeSpaceshipRector' => $baseDir . '/rules/DowngradePhp70/Rector/Spaceship/DowngradeSpaceshipRector.php',
-    'Rector\\DowngradePhp70\\Rector\\String_\\DowngradeGeneratedScalarTypesRector' => $baseDir . '/rules/DowngradePhp70/Rector/String_/DowngradeGeneratedScalarTypesRector.php',
     'Rector\\DowngradePhp70\\Rector\\TryCatch\\DowngradeCatchThrowableRector' => $baseDir . '/rules/DowngradePhp70/Rector/TryCatch/DowngradeCatchThrowableRector.php',
     'Rector\\DowngradePhp70\\Tokenizer\\WrappedInParenthesesAnalyzer' => $baseDir . '/rules/DowngradePhp70/Tokenizer/WrappedInParenthesesAnalyzer.php',
     'Rector\\DowngradePhp71\\Rector\\Array_\\SymmetricArrayDestructuringToListRector' => $baseDir . '/rules/DowngradePhp71/Rector/Array_/SymmetricArrayDestructuringToListRector.php',

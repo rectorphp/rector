@@ -1,4 +1,4 @@
-# 512 Rules Overview
+# 511 Rules Overview
 
 <br>
 
@@ -28,7 +28,7 @@
 
 - [DowngradePhp56](#downgradephp56) (5)
 
-- [DowngradePhp70](#downgradephp70) (19)
+- [DowngradePhp70](#downgradephp70) (18)
 
 - [DowngradePhp71](#downgradephp71) (11)
 
@@ -4217,27 +4217,6 @@ Replace the 2nd argument of `dirname()`
 ```diff
 -return dirname($path, 2);
 +return dirname(dirname($path));
-```
-
-<br>
-
-### DowngradeGeneratedScalarTypesRector
-
-Refactor scalar types in PHP code in string snippets, e.g. generated container code from symfony/dependency-injection
-
-- class: [`Rector\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector`](../rules/DowngradePhp70/Rector/String_/DowngradeGeneratedScalarTypesRector.php)
-
-```diff
- $code = <<<'EOF'
--    public function getParameter(string $name)
-+    /**
-+     * @param string $name
-+     */
-+    public function getParameter($name)
-     {
-         return $name;
-     }
- EOF;
 ```
 
 <br>

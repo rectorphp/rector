@@ -22,7 +22,6 @@ use Rector\DowngradePhp70\Rector\MethodCall\DowngradeClosureCallRector;
 use Rector\DowngradePhp70\Rector\MethodCall\DowngradeMethodCallOnCloneRector;
 use Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
 use Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector;
-use Rector\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector;
 use Rector\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_56);
@@ -41,7 +40,6 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(\Rector\DowngradePhp70\Rector\FuncCall\DowngradeUncallableValueCallToCallUserFuncRector::class);
     $rectorConfig->rule(\Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector::class);
     $rectorConfig->rule(\Rector\DowngradePhp70\Rector\MethodCall\DowngradeClosureCallRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector::class);
     $rectorConfig->rule(\Rector\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector::class);
     $rectorConfig->rule(\Rector\DowngradePhp70\Rector\MethodCall\DowngradeMethodCallOnCloneRector::class);
     $rectorConfig->rule(\Rector\DowngradePhp70\Rector\Expr\DowngradeUnnecessarilyParenthesizedExpressionRector::class);
