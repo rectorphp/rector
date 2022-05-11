@@ -8,16 +8,15 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\RepositoryNodeFactory;
 use Rector\Doctrine\Type\RepositoryTypeFactory;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -55,13 +54,19 @@ final class ServiceEntityRepositoryParentCallToDIRector extends \Rector\Core\Rec
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\Doctrine\NodeFactory\RepositoryNodeFactory $repositoryNodeFactory, \Rector\Doctrine\Type\RepositoryTypeFactory $repositoryTypeFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\Doctrine\NodeFactory\RepositoryNodeFactory $repositoryNodeFactory, \Rector\Doctrine\Type\RepositoryTypeFactory $repositoryTypeFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->repositoryNodeFactory = $repositoryNodeFactory;
         $this->repositoryTypeFactory = $repositoryTypeFactory;
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->propertyNaming = $propertyNaming;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -148,14 +153,9 @@ CODE_SAMPLE
         if (!$this->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return \true;
         }
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            // fresh node?
-            return \true;
-        }
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            // possibly trait/interface
+            // fresh node or possibly trait/interface
             return \true;
         }
         return !$classReflection->isSubclassOf('Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository');

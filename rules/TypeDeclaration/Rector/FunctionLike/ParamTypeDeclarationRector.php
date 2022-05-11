@@ -156,7 +156,7 @@ CODE_SAMPLE
         if ($node->params === []) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && $this->controllerRenderMethodAnalyzer->isRenderMethod($node, $scope)) {
+        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && $this->controllerRenderMethodAnalyzer->isRenderMethod($node)) {
             return null;
         }
         foreach ($node->params as $position => $param) {

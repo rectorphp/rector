@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use RectorPrefix20220511\Symplify\Astral\Naming\SimpleNameResolver;
 final class ControllerRenderMethodAnalyzer
@@ -27,19 +27,22 @@ final class ControllerRenderMethodAnalyzer
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\RectorPrefix20220511\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\RectorPrefix20220511\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->reflectionResolver = $reflectionResolver;
     }
-    public function isRenderMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?\PHPStan\Analyser\Scope $scope) : bool
+    public function isRenderMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return \false;
-        }
         // nette one?
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
