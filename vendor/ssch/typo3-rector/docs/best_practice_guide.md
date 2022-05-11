@@ -110,7 +110,11 @@ Those need to be provided via `extra` section inside `composer.json` of the proj
                 "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/recordlist/Migrations/Code/ClassAliasMap.php",
                 "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/reports/Migrations/Code/ClassAliasMap.php",
                 "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/t3editor/Migrations/Code/ClassAliasMap.php",
-                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/workspaces/Migrations/Code/ClassAliasMap.php"
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/workspaces/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/10.4/typo3/sysext/backend/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/10.4/typo3/sysext/core/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/12.0/typo3/sysext/backend/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/12.0/typo3/sysext/frontend/Migrations/Code/ClassAliasMap.php"
             ]
         }
     }

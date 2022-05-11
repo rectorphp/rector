@@ -66,15 +66,24 @@ CODE_SAMPLE
     /**
      * @param Switch_ $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Stmt\Switch_
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\Switch_
     {
+        $hasChanged = \false;
         foreach ($node->cases as $case) {
             foreach ($case->stmts as $key => $caseStmt) {
                 if (!$caseStmt instanceof \PhpParser\Node\Stmt\Continue_) {
                     continue;
                 }
-                $case->stmts[$key] = $this->processContinueStatement($caseStmt);
+                $newStmt = $this->processContinueStatement($caseStmt);
+                if ($newStmt === $caseStmt) {
+                    continue;
+                }
+                $case->stmts[$key] = $newStmt;
+                $hasChanged = \true;
             }
+        }
+        if (!$hasChanged) {
+            return null;
         }
         return $node;
     }
