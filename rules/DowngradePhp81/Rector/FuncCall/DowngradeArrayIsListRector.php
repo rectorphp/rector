@@ -26,6 +26,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeArrayIsListRector extends AbstractRector
 {
+    private ?Closure $cachedClosure = null;
+
     public function __construct(
         private readonly InlineCodeParser $inlineCodeParser,
         private readonly FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer,
@@ -94,6 +96,10 @@ CODE_SAMPLE
 
     private function createClosure(): Closure
     {
+        if ($this->cachedClosure instanceof Closure) {
+            return clone $this->cachedClosure;
+        }
+
         $stmts = $this->inlineCodeParser->parse(__DIR__ . '/../../snippet/array_is_list_closure.php.inc');
 
         /** @var Expression $expression */
@@ -103,6 +109,8 @@ CODE_SAMPLE
         if (! $expr instanceof Closure) {
             throw new ShouldNotHappenException();
         }
+
+        $this->cachedClosure = $expr;
 
         return $expr;
     }

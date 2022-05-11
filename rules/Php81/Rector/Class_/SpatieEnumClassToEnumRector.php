@@ -6,6 +6,7 @@ namespace Rector\Php81\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Enum_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -73,7 +74,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?Enum_
     {
         if (! $this->isObjectType($node, new ObjectType('Spatie\Enum\Enum'))) {
             return null;

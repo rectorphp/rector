@@ -90,10 +90,7 @@ CODE_SAMPLE
 
             // add a new namespace?
             if ($this->newNamespace !== null) {
-                $namespace = new Namespace_(new Name($this->newNamespace));
-                $namespace->stmts = $stmts;
-
-                return $namespace;
+                return new Namespace_(new Name($this->newNamespace), $stmts);
             }
         }
 

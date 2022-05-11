@@ -162,6 +162,12 @@ parameters:
             message: '#There should be no empty class#'
             paths:
                 - packages/StaticTypeMapper/ValueObject/Type/*Type.php
+                - */Exception/*
+
+        -
+            message: '#Namespace "Rector\\(.*?)\\Rector" is only reserved for "Rector"\. Move the class somewhere else#'
+            paths:
+                - */Contract/*
 
         # generics nullable bugs
         - '#Method (.*?) should return (.*?)\|null but returns PhpParser\\Node\|null#'
@@ -377,13 +383,12 @@ parameters:
 
         - '#Cognitive complexity for "Rector\\Core\\NodeManipulator\\ClassMethodAssignManipulator\:\:collectReferenceVariableNames\(\)" is 13, keep it under 10#'
 
+        # caching
         -
             message: '#Use separate function calls with readable variable names#'
-            path: src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
-
-#        -
-#            message: '#Use separate function calls with readable variable names#'
-#            path: rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php
+            paths:
+                - src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
+                - rules/Renaming/NodeManipulator/ClassRenamer.php
 
         # on purpose to make use of worker paralle pattern
         -

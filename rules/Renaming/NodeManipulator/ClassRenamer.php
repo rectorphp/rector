@@ -44,6 +44,11 @@ final class ClassRenamer
      */
     private array $alreadyProcessedClasses = [];
 
+    /**
+     * @var array<string, OldToNewType[]>
+     */
+    private array $oldToNewTypesByCacheKey = [];
+
     public function __construct(
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
@@ -64,11 +69,7 @@ final class ClassRenamer
      */
     public function renameNode(Node $node, array $oldToNewClasses): ?Node
     {
-        $oldToNewTypes = [];
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
-            $oldToNewTypes[] = new OldToNewType(new ObjectType($oldClass), new FullyQualifiedObjectType($newClass));
-        }
-
+        $oldToNewTypes = $this->createOldToNewTypes($oldToNewClasses);
         $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses);
 
         if ($node instanceof Name) {
@@ -431,5 +432,30 @@ final class ClassRenamer
     private function shouldRemoveUseName(string $last, string $newNameLastName, bool $importNames): bool
     {
         return $last === $newNameLastName && $importNames;
+    }
+
+    /**
+     * @param array<string, string> $oldToNewClasses
+     * @return OldToNewType[]
+     */
+    private function createOldToNewTypes(array $oldToNewClasses): array
+    {
+        $cacheKey = md5(serialize($oldToNewClasses));
+
+        if (isset($this->oldToNewTypesByCacheKey[$cacheKey])) {
+            return $this->oldToNewTypesByCacheKey[$cacheKey];
+        }
+
+        $oldToNewTypes = [];
+
+        foreach ($oldToNewClasses as $oldClass => $newClass) {
+            $oldObjectType = new ObjectType($oldClass);
+            $newObjectType = new FullyQualifiedObjectType($newClass);
+            $oldToNewTypes[] = new OldToNewType($oldObjectType, $newObjectType);
+        }
+
+        $this->oldToNewTypesByCacheKey[$cacheKey] = $oldToNewTypes;
+
+        return $oldToNewTypes;
     }
 }

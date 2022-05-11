@@ -119,9 +119,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $currentStatement = $this->betterNodeFinder->resolveCurrentStatement($funcCall);
-
-        if (! $currentStatement instanceof Stmt) {
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($funcCall);
+        if (! $currentStmt instanceof Stmt) {
             return null;
         }
 
@@ -155,7 +154,7 @@ CODE_SAMPLE
         $assignVariable = $firstArg->value;
         $preAssign = new Assign($assignVariable, $array);
 
-        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStmt);
 
         return $expr;
     }

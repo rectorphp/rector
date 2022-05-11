@@ -102,13 +102,12 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
 
             $replacements = $this->getReplacementsFor($argument, $currentScope, $scopeNode);
 
-            $currentStatement = $this->betterNodeFinder->resolveCurrentStatement($node);
-
-            if (! $currentStatement instanceof Stmt) {
+            $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
+            if (! $currentStmt instanceof Stmt) {
                 continue;
             }
 
-            $this->nodesToAddCollector->addNodeBeforeNode($replacements->getAssign(), $currentStatement);
+            $this->nodesToAddCollector->addNodeBeforeNode($replacements->getAssign(), $currentStmt);
 
             $node->args[$key]->value = $replacements->getVariable();
 

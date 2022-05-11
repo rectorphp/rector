@@ -92,7 +92,7 @@ CODE_SAMPLE
         $class = $node->class instanceof Name ? new ClassConstFetch($node->class, 'class') : $node->class;
         $method = $node->name instanceof Identifier ? new String_($node->name->toString()) : $node->name;
 
-        return new Array_([new ArrayItem($class), new ArrayItem($method)]);
+        return $this->nodeFactory->createArray([$class, $method]);
     }
 
     private function createClosureFromCallableCall(Expr $expr): StaticCall
