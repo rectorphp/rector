@@ -13,11 +13,8 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
@@ -95,10 +92,7 @@ final class ReflectionResolver
         $className = (string) $this->nodeNameResolver->getName($classLike);
         return $this->reflectionProvider->getClass($className);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Expr\New_|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null $node
-     */
-    public function resolveClassReflection($node) : ?\PHPStan\Reflection\ClassReflection
+    public function resolveClassReflection(?\PhpParser\Node $node) : ?\PHPStan\Reflection\ClassReflection
     {
         if (!$node instanceof \PhpParser\Node) {
             return null;
