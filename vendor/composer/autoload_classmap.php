@@ -2114,6 +2114,7 @@ return array(
     'Rector\\FamilyTree\\ValueObject\\PropertyType' => $baseDir . '/packages/FamilyTree/ValueObject/PropertyType.php',
     'Rector\\FileFormatter\\Contract\\Formatter\\FileFormatterInterface' => $baseDir . '/packages/FileFormatter/Contract/Formatter/FileFormatterInterface.php',
     'Rector\\FileFormatter\\EditorConfig\\EditorConfigParser' => $baseDir . '/packages/FileFormatter/EditorConfig/EditorConfigParser.php',
+    'Rector\\FileFormatter\\Enum\\IndentType' => $baseDir . '/packages/FileFormatter/Enum/IndentType.php',
     'Rector\\FileFormatter\\Exception\\InvalidIndentSizeException' => $baseDir . '/packages/FileFormatter/Exception/InvalidIndentSizeException.php',
     'Rector\\FileFormatter\\Exception\\InvalidIndentStringException' => $baseDir . '/packages/FileFormatter/Exception/InvalidIndentStringException.php',
     'Rector\\FileFormatter\\Exception\\InvalidIndentStyleException' => $baseDir . '/packages/FileFormatter/Exception/InvalidIndentStyleException.php',

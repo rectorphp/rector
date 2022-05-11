@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\FileFormatter\ValueObject;
 
 use RectorPrefix20220511\Nette\Utils\Strings;
+use Rector\FileFormatter\Enum\IndentType;
 use Rector\FileFormatter\Exception\InvalidIndentSizeException;
 use Rector\FileFormatter\Exception\InvalidIndentStringException;
 use Rector\FileFormatter\Exception\InvalidIndentStyleException;
@@ -17,15 +18,7 @@ final class Indent
     /**
      * @var array<string, string>
      */
-    public const CHARACTERS = [self::SPACE => ' ', self::TAB => "\t"];
-    /**
-     * @var string
-     */
-    private const SPACE = 'space';
-    /**
-     * @var string
-     */
-    private const TAB = 'tab';
+    public const CHARACTERS = [\Rector\FileFormatter\Enum\IndentType::SPACE => ' ', \Rector\FileFormatter\Enum\IndentType::TAB => "\t"];
     /**
      * @see https://regex101.com/r/A2XiaF/1
      * @var string
@@ -63,19 +56,22 @@ final class Indent
     }
     public static function createSpaceWithSize(int $size) : self
     {
-        return self::fromSizeAndStyle($size, self::SPACE);
+        return self::fromSizeAndStyle($size, \Rector\FileFormatter\Enum\IndentType::SPACE);
     }
     public static function createTab() : self
     {
-        return self::fromSizeAndStyle(1, self::TAB);
+        return self::fromSizeAndStyle(1, \Rector\FileFormatter\Enum\IndentType::TAB);
     }
+    /**
+     * @param IndentType::* $style
+     */
     public static function fromSizeAndStyle(int $size, string $style) : self
     {
         if ($size < self::MINIMUM_SIZE) {
-            throw \Rector\FileFormatter\Exception\InvalidIndentSizeException::fromSizeAndMinimumSize($size, self::MINIMUM_SIZE);
+            throw new \Rector\FileFormatter\Exception\InvalidIndentSizeException($size, self::MINIMUM_SIZE);
         }
         if (!\array_key_exists($style, self::CHARACTERS)) {
-            throw \Rector\FileFormatter\Exception\InvalidIndentStyleException::fromStyleAndAllowedStyles($style, \array_keys(self::CHARACTERS));
+            throw new \Rector\FileFormatter\Exception\InvalidIndentStyleException($style);
         }
         $value = \str_repeat(self::CHARACTERS[$style], $size);
         return new self($value);
@@ -86,19 +82,22 @@ final class Indent
         if (isset($match['indent'])) {
             return self::fromString($match['indent']);
         }
-        throw \Rector\FileFormatter\Exception\ParseIndentException::fromString($content);
+        throw new \Rector\FileFormatter\Exception\ParseIndentException($content);
     }
     public function getIndentSize() : int
     {
         return \strlen($this->string);
     }
+    /**
+     * @return IndentType::*
+     */
     public function getIndentStyle() : string
     {
-        return $this->startsWithSpace() ? self::SPACE : self::TAB;
+        return $this->startsWithSpace() ? \Rector\FileFormatter\Enum\IndentType::SPACE : \Rector\FileFormatter\Enum\IndentType::TAB;
     }
     public function getIndentStyleCharacter() : string
     {
-        return $this->startsWithSpace() ? self::CHARACTERS[self::SPACE] : self::CHARACTERS[self::TAB];
+        return $this->startsWithSpace() ? self::CHARACTERS[\Rector\FileFormatter\Enum\IndentType::SPACE] : self::CHARACTERS[\Rector\FileFormatter\Enum\IndentType::TAB];
     }
     private function startsWithSpace() : bool
     {

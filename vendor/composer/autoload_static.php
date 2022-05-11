@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit22ce320586a70de6a340d412e08160cc
+class ComposerStaticInit18d187e19bf72ae7245db766a4deb22d
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2483,6 +2483,7 @@ class ComposerStaticInit22ce320586a70de6a340d412e08160cc
         'Rector\\FamilyTree\\ValueObject\\PropertyType' => __DIR__ . '/../..' . '/packages/FamilyTree/ValueObject/PropertyType.php',
         'Rector\\FileFormatter\\Contract\\Formatter\\FileFormatterInterface' => __DIR__ . '/../..' . '/packages/FileFormatter/Contract/Formatter/FileFormatterInterface.php',
         'Rector\\FileFormatter\\EditorConfig\\EditorConfigParser' => __DIR__ . '/../..' . '/packages/FileFormatter/EditorConfig/EditorConfigParser.php',
+        'Rector\\FileFormatter\\Enum\\IndentType' => __DIR__ . '/../..' . '/packages/FileFormatter/Enum/IndentType.php',
         'Rector\\FileFormatter\\Exception\\InvalidIndentSizeException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/InvalidIndentSizeException.php',
         'Rector\\FileFormatter\\Exception\\InvalidIndentStringException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/InvalidIndentStringException.php',
         'Rector\\FileFormatter\\Exception\\InvalidIndentStyleException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/InvalidIndentStyleException.php',
@@ -3889,9 +3890,9 @@ class ComposerStaticInit22ce320586a70de6a340d412e08160cc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit22ce320586a70de6a340d412e08160cc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit22ce320586a70de6a340d412e08160cc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit22ce320586a70de6a340d412e08160cc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit18d187e19bf72ae7245db766a4deb22d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit18d187e19bf72ae7245db766a4deb22d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit18d187e19bf72ae7245db766a4deb22d::$classMap;
 
         }, null, ClassLoader::class);
     }

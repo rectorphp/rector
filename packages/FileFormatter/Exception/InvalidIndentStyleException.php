@@ -4,14 +4,13 @@ declare (strict_types=1);
 namespace Rector\FileFormatter\Exception;
 
 use InvalidArgumentException;
+use Rector\FileFormatter\Enum\IndentType;
 final class InvalidIndentStyleException extends \InvalidArgumentException
 {
-    /**
-     * @param array<int, string> $allowedStyles
-     */
-    public static function fromStyleAndAllowedStyles(string $style, array $allowedStyles) : self
+    public function __construct(string $style)
     {
-        $message = \sprintf('Given style "%s" is not allowed. Allowed are "%s"', $style, \implode(' ', $allowedStyles));
-        return new self($message);
+        $allowedIndentTypesString = \implode('", "', [\Rector\FileFormatter\Enum\IndentType::SPACE, \Rector\FileFormatter\Enum\IndentType::TAB]);
+        $message = \sprintf('Given style "%s" is not allowed. Allowed are "%s"', $style, $allowedIndentTypesString);
+        parent::__construct($message);
     }
 }
