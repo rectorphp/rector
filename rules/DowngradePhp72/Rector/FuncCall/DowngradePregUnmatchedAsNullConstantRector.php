@@ -33,7 +33,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @changelog https://www.php.net/manual/en/function.preg-match.php
+     * @see https://www.php.net/manual/en/function.preg-match.php
      * @var string
      */
     private const UNMATCHED_NULL_FLAG = 'PREG_UNMATCHED_AS_NULL';

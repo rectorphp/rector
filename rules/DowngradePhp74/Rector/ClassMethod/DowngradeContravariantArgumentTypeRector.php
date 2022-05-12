@@ -193,7 +193,7 @@ CODE_SAMPLE
             if ($parentReflectionMethodParam->getName() === $paramName) {
                 /**
                  * Getting a ReflectionNamedType works from PHP 7.1 onwards
-                 * @changelog https://www.php.net/manual/en/reflectionparameter.gettype.php#125334
+                 * @see https://www.php.net/manual/en/reflectionparameter.gettype.php#125334
                  */
                 $reflectionParamType = $parentReflectionMethodParam->getType();
                 /**
