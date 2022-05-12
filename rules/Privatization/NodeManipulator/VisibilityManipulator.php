@@ -16,7 +16,7 @@ use RectorPrefix20220512\Webmozart\Assert\Assert;
 final class VisibilityManipulator
 {
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Param $node
      */
     public function hasVisibility($node, int $visibility) : bool
     {
@@ -124,7 +124,7 @@ final class VisibilityManipulator
         $classMethod->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
     public function makeReadonly($node) : void
     {

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5c03c90529f0aa64881de1d57e5d16d7
+class ComposerStaticInit8780a4aca5ad8a91147a0fadb68cc41f
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3086,6 +3086,7 @@ class ComposerStaticInit5c03c90529f0aa64881de1d57e5d16d7
         'Rector\\Php81\\Rector\\FunctionLike\\IntersectionTypesRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FunctionLike/IntersectionTypesRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
+        'Rector\\Php82\\Rector\\Class_\\ReadOnlyClassRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Class_/ReadOnlyClassRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ClassConstFetchAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ClassConstFetchAnnotationToAttributeMapper.php',
@@ -3895,9 +3896,9 @@ class ComposerStaticInit5c03c90529f0aa64881de1d57e5d16d7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5c03c90529f0aa64881de1d57e5d16d7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5c03c90529f0aa64881de1d57e5d16d7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5c03c90529f0aa64881de1d57e5d16d7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8780a4aca5ad8a91147a0fadb68cc41f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8780a4aca5ad8a91147a0fadb68cc41f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8780a4aca5ad8a91147a0fadb68cc41f::$classMap;
 
         }, null, ClassLoader::class);
     }

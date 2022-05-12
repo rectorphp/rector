@@ -9,6 +9,10 @@ final class LevelSetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
+    public const UP_TO_PHP_82 = __DIR__ . '/../../../config/set/level/up-to-php82.php';
+    /**
+     * @var string
+     */
     public const UP_TO_PHP_81 = __DIR__ . '/../../../config/set/level/up-to-php81.php';
     /**
      * @var string

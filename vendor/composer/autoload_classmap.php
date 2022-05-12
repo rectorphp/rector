@@ -2717,6 +2717,7 @@ return array(
     'Rector\\Php81\\Rector\\FunctionLike\\IntersectionTypesRector' => $baseDir . '/rules/Php81/Rector/FunctionLike/IntersectionTypesRector.php',
     'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => $baseDir . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
     'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => $baseDir . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
+    'Rector\\Php82\\Rector\\Class_\\ReadOnlyClassRector' => $baseDir . '/rules/Php82/Rector/Class_/ReadOnlyClassRector.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => $baseDir . '/packages/PhpAttribute/AnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => $baseDir . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ClassConstFetchAnnotationToAttributeMapper' => $baseDir . '/packages/PhpAttribute/AnnotationToAttributeMapper/ClassConstFetchAnnotationToAttributeMapper.php',

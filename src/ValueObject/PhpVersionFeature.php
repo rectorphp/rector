@@ -459,6 +459,11 @@ final class PhpVersionFeature
      */
     public const DEPRECATE_DYNAMIC_PROPERTIES = \Rector\Core\ValueObject\PhpVersion::PHP_82;
     /**
+     * @see https://wiki.php.net/rfc/readonly_classes
+     * @var int
+     */
+    public const READONLY_CLASS = \Rector\Core\ValueObject\PhpVersion::PHP_82;
+    /**
      * @see https://wiki.php.net/rfc/mixed_type_v2
      * @var int
      */
