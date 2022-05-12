@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220511\Nette\Utils;
+namespace RectorPrefix20220512\Nette\Utils;
 
-use RectorPrefix20220511\Nette;
+use RectorPrefix20220512\Nette;
 /**
  * Provides objects to work as array.
  * @template T
@@ -51,7 +51,7 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
     {
         if (!\is_scalar($key)) {
             // prevents null
-            throw new \RectorPrefix20220511\Nette\InvalidArgumentException(\sprintf('Key must be either a string or an integer, %s given.', \gettype($key)));
+            throw new \RectorPrefix20220512\Nette\InvalidArgumentException(\sprintf('Key must be either a string or an integer, %s given.', \gettype($key)));
         }
         $this->{$key} = $value;
     }

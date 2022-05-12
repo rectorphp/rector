@@ -43,18 +43,15 @@ final class RectifiedAnalyzer
         if ($rectifiedNode->getRectorClass() === \get_class($rector) && $rectifiedNode->getNode() === $node) {
             return \false;
         }
+        if ($rector instanceof \Rector\Core\Rector\AbstractScopeAwareRector) {
+            $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+            return $scope instanceof \PHPStan\Analyser\Scope;
+        }
         $originalNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
         if ($originalNode instanceof \PhpParser\Node) {
             return \true;
         }
         $startTokenPos = $node->getStartTokenPos();
-        if ($startTokenPos >= 0) {
-            return \false;
-        }
-        if (!$rector instanceof \Rector\Core\Rector\AbstractScopeAwareRector) {
-            return \true;
-        }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        return $scope instanceof \PHPStan\Analyser\Scope;
+        return $startTokenPos < 0;
     }
 }

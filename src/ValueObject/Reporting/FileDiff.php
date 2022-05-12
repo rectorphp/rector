@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject\Reporting;
 
-use RectorPrefix20220511\Nette\Utils\Strings;
+use RectorPrefix20220512\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix20220511\Symplify\EasyParallel\Contract\SerializableInterface;
-use RectorPrefix20220511\Webmozart\Assert\Assert;
-final class FileDiff implements \RectorPrefix20220511\Symplify\EasyParallel\Contract\SerializableInterface
+use RectorPrefix20220512\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix20220512\Webmozart\Assert\Assert;
+final class FileDiff implements \RectorPrefix20220512\Symplify\EasyParallel\Contract\SerializableInterface
 {
     /**
      * @var string
@@ -64,7 +64,7 @@ final class FileDiff implements \RectorPrefix20220511\Symplify\EasyParallel\Cont
         $this->diff = $diff;
         $this->diffConsoleFormatted = $diffConsoleFormatted;
         $this->rectorsWithLineChanges = $rectorsWithLineChanges;
-        \RectorPrefix20220511\Webmozart\Assert\Assert::allIsAOf($rectorsWithLineChanges, \Rector\ChangesReporting\ValueObject\RectorWithLineChange::class);
+        \RectorPrefix20220512\Webmozart\Assert\Assert::allIsAOf($rectorsWithLineChanges, \Rector\ChangesReporting\ValueObject\RectorWithLineChange::class);
     }
     public function getDiff() : string
     {
@@ -98,7 +98,7 @@ final class FileDiff implements \RectorPrefix20220511\Symplify\EasyParallel\Cont
     }
     public function getFirstLineNumber() : ?int
     {
-        $match = \RectorPrefix20220511\Nette\Utils\Strings::match($this->diff, self::FIRST_LINE_REGEX);
+        $match = \RectorPrefix20220512\Nette\Utils\Strings::match($this->diff, self::FIRST_LINE_REGEX);
         // probably some error in diff
         if (!isset($match[self::FIRST_LINE_KEY])) {
             return null;
@@ -115,7 +115,7 @@ final class FileDiff implements \RectorPrefix20220511\Symplify\EasyParallel\Cont
     /**
      * @param array<string, mixed> $json
      */
-    public static function decode(array $json) : \RectorPrefix20220511\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : \RectorPrefix20220512\Symplify\EasyParallel\Contract\SerializableInterface
     {
         $rectorWithLineChanges = [];
         foreach ($json[self::KEY_RECTORS_WITH_LINE_CHANGES] as $rectorWithLineChangesJson) {
