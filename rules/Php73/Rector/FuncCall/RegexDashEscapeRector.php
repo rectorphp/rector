@@ -19,14 +19,14 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://3v4l.org/dRG8U
+ * @changelog https://3v4l.org/dRG8U
  * @see \Rector\Tests\Php73\Rector\FuncCall\RegexDashEscapeRector\RegexDashEscapeRectorTest
  */
 final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
-     * @see https://regex101.com/r/iQbGgZ/1
+     * @changelog https://regex101.com/r/iQbGgZ/1
      *
      * Use {2} as detected only 2 after $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern() call
      */
@@ -34,13 +34,13 @@ final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersio
 
     /**
      * @var string
-     * @see https://regex101.com/r/YgVJFp/1
+     * @changelog https://regex101.com/r/YgVJFp/1
      */
     private const LEFT_HAND_UNESCAPED_DASH_REGEX = '#(\[.*?\\\\(w|s|d))-(?!\])#i';
 
     /**
      * @var string
-     * @see https://regex101.com/r/TBVme9/8
+     * @changelog https://regex101.com/r/TBVme9/8
      */
     private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\[)-(\\\\(w|s|d)[.*]?)\]#i';
 

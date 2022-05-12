@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\IssetOnPropertyObjectToPropertyExistsRectorTest
  *
- * @see https://3v4l.org/TI8XL Change isset on property object to property_exists() with not null check
+ * @changelog https://3v4l.org/TI8XL Change isset on property object to property_exists() with not null check
  */
 final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
 {

@@ -19,7 +19,7 @@ final class SymplifyQuoteEscapeRector extends AbstractRector
 {
     /**
      * @var string
-     * @see https://regex101.com/r/qEkCe9/2
+     * @changelog https://regex101.com/r/qEkCe9/2
      */
     private const ESCAPED_CHAR_REGEX = '#\\\\|\$|\\n|\\t#sim';
 

@@ -23,7 +23,7 @@ use Webmozart\Assert\Assert;
 
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
- * @see https://3v4l.org/fOgSE
+ * @changelog https://3v4l.org/fOgSE
  *
  * @see \Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
  */

@@ -31,7 +31,7 @@ final class PregMatchTypeCorrector
 
     /**
      * Special case for "preg_match(), preg_match_all()" - with 3rd argument
-     * @see https://github.com/rectorphp/rector/issues/786
+     * @changelog https://github.com/rectorphp/rector/issues/786
      */
     public function correct(Node $node, Type $originalType): Type
     {

@@ -17,15 +17,15 @@ use Webmozart\Assert\Assert;
 final class RenameClassNonPhpRector implements NonPhpRectorInterface, ConfigurableRuleInterface, ConfigurableRectorInterface, ComplementaryRectorInterface
 {
     /**
-     * @see https://regex101.com/r/HKUFJD/7
+     * @changelog https://regex101.com/r/HKUFJD/7
      * for "?<!" @see https://stackoverflow.com/a/3735908/1348344
      * @var string
      */
     private const STANDALONE_CLASS_PREFIX_REGEX = '#((?<!(\\\\|"|\>|\.|\'))|(?<extra_space>\s+\\\\))';
 
     /**
-     * @see https://regex101.com/r/HKUFJD/5
-     * @see https://stackoverflow.com/a/3926546/1348344
+     * @changelog https://regex101.com/r/HKUFJD/5
+     * @changelog https://stackoverflow.com/a/3926546/1348344
      * @var string
      */
     private const STANDALONE_CLASS_SUFFIX_REGEX = '(?=::)#';

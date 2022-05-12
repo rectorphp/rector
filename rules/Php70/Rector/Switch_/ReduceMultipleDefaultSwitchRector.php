@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://3v4l.org/iGDVW
+ * @changelog https://3v4l.org/iGDVW
  *
  * @changelog https://wiki.php.net/rfc/switch.default.multiple https://stackoverflow.com/a/44000794/1348344 https://github.com/franzliedke/wp-mpdf/commit/9dc489215fbd1adcb514810653a73dea71db8e99#diff-2f1f4a51a2dd3a73ca034a48a67a2320L1373
  *

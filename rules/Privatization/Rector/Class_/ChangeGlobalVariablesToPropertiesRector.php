@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://3v4l.org/DWC4P
+ * @changelog https://3v4l.org/DWC4P
  *
  * @changelog https://stackoverflow.com/a/12446305/1348344
  * @see \Rector\Tests\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector\ChangeGlobalVariablesToPropertiesRectorTest

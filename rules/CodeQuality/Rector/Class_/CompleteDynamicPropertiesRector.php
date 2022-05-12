@@ -21,9 +21,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://3v4l.org/GL6II
- * @see https://3v4l.org/eTrhZ
- * @see https://3v4l.org/C554W
+ * @changelog https://3v4l.org/GL6II
+ * @changelog https://3v4l.org/eTrhZ
+ * @changelog https://3v4l.org/C554W
  *
  * @see \Rector\Tests\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector\CompleteDynamicPropertiesRectorTest
  */
