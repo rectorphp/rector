@@ -118,11 +118,11 @@ CODE_SAMPLE
         $reflectionClassConstants = $this->variableNaming->createCountedValueName('reflectionClassConstants', $scope);
         $variableReflectionClassConstants = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName($reflectionClassConstants, $scope));
         $assign = new \PhpParser\Node\Expr\Assign($variableReflectionClassConstants, new \PhpParser\Node\Expr\MethodCall($methodCall->var, 'getReflectionConstants'));
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assign), $methodCall);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assign), $methodCall, $this->file->getSmartFileInfo());
         $result = $this->variableNaming->createCountedValueName('result', $scope);
         $variableResult = new \PhpParser\Node\Expr\Variable($result);
         $assignVariableResult = new \PhpParser\Node\Expr\Assign($variableResult, new \PhpParser\Node\Expr\Array_());
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assignVariableResult), $methodCall);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assignVariableResult), $methodCall, $this->file->getSmartFileInfo());
         $ifs = [];
         $valueVariable = new \PhpParser\Node\Expr\Variable('value');
         $key = new \PhpParser\Node\Expr\MethodCall($valueVariable, 'getName');
@@ -138,7 +138,7 @@ CODE_SAMPLE
         $closure->uses = [new \PhpParser\Node\Expr\ClosureUse($variableResult, \true)];
         $closure->stmts = $ifs;
         $funcCall = $this->nodeFactory->createFuncCall('array_walk', [$variableReflectionClassConstants, $closure]);
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($funcCall), $methodCall);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($funcCall), $methodCall, $this->file->getSmartFileInfo());
         return $variableResult;
     }
     private function resolveClassConstFetchName(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : ?string

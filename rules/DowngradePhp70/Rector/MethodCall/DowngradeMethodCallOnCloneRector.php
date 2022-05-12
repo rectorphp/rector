@@ -73,7 +73,7 @@ CODE_SAMPLE
             $variable = new \PhpParser\Node\Expr\Variable($newVariableName);
             $assign = new \PhpParser\Node\Expr\Assign($variable, $node->var);
         }
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assign), $node);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assign), $node, $this->file->getSmartFileInfo());
         $node->var = $variable;
         $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         return $node;

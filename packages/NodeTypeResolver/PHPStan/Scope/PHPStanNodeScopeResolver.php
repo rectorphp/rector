@@ -4,12 +4,20 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Trait_;
+use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\NodeTraverser;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
@@ -32,6 +40,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use RectorPrefix20220512\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220512\Webmozart\Assert\Assert;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
  * - https://github.com/silverstripe/silverstripe-upgrader/pull/57/commits/e5c7cfa166ad940d9d4ff69537d9f7608e992359#diff-5e0807bb3dc03d6a8d8b6ad049abd774
@@ -108,15 +117,56 @@ final class PHPStanNodeScopeResolver
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function processNodes(array $stmts, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
+    public function processNodes(array $stmts, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, ?\PHPStan\Analyser\MutatingScope $formerMutatingScope = null) : array
     {
+        $isScopeRefreshing = $formerMutatingScope instanceof \PHPStan\Analyser\MutatingScope;
+        /**
+         * The stmts must be array of Stmt, or it will be silently skipped by PHPStan
+         * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
+         */
+        \RectorPrefix20220512\Webmozart\Assert\Assert::allIsInstanceOf($stmts, \PhpParser\Node\Stmt::class);
         $this->removeDeepChainMethodCallNodes($stmts);
-        $scope = $this->scopeFactory->createFromFile($smartFileInfo);
+        $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($smartFileInfo);
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
-        $nodeCallback = function (\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $mutatingScope) use(&$nodeCallback) : void {
+        $nodeCallback = function (\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $mutatingScope) use(&$nodeCallback, $isScopeRefreshing) : void {
             if ($node instanceof \PhpParser\Node\Stmt\Foreach_) {
                 // decorate value as well
                 $node->valueVar->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+            }
+            if ($node instanceof \PhpParser\Node\Stmt\Property) {
+                foreach ($node->props as $propertyProperty) {
+                    $propertyProperty->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+                    if ($propertyProperty->default instanceof \PhpParser\Node\Expr) {
+                        $propertyProperty->default->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+                    }
+                }
+            }
+            if ($node instanceof \PhpParser\Node\Stmt\Switch_) {
+                // decorate value as well
+                foreach ($node->cases as $case) {
+                    $case->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+                }
+            }
+            if ($node instanceof \PhpParser\Node\Stmt\TryCatch && $node->finally instanceof \PhpParser\Node\Stmt\Finally_) {
+                $node->finally->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+            }
+            if ($node instanceof \PhpParser\Node\Expr\Assign) {
+                // decorate value as well
+                $node->expr->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+                $node->var->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+            }
+            // decorate value as well
+            if ($node instanceof \PhpParser\Node\Stmt\Return_ && $node->expr instanceof \PhpParser\Node\Expr) {
+                $node->expr->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+            }
+            // scope is missing on attributes
+            // @todo decorate parent nodes too
+            if ($node instanceof \PhpParser\Node\Stmt\Property) {
+                foreach ($node->attrGroups as $attrGroup) {
+                    foreach ($attrGroup->attrs as $attribute) {
+                        $attribute->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+                    }
+                }
             }
             if ($node instanceof \PhpParser\Node\Stmt\Trait_) {
                 $traitName = $this->resolveClassName($node);
@@ -124,22 +174,24 @@ final class PHPStanNodeScopeResolver
                 $traitScope = clone $mutatingScope;
                 $scopeContext = $this->privatesAccessor->getPrivatePropertyOfClass($traitScope, self::CONTEXT, \PHPStan\Analyser\ScopeContext::class);
                 $traitContext = clone $scopeContext;
+                // before entering the class/trait again, we have to tell scope no class was set, otherwise it crashes
                 $this->privatesAccessor->setPrivatePropertyOfClass($traitContext, 'classReflection', $traitReflectionClass, \PHPStan\Reflection\ClassReflection::class);
                 $this->privatesAccessor->setPrivatePropertyOfClass($traitScope, self::CONTEXT, $traitContext, \PHPStan\Analyser\ScopeContext::class);
+                $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $traitScope);
                 $this->nodeScopeResolver->processNodes($node->stmts, $traitScope, $nodeCallback);
                 return;
             }
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
-            if ($node instanceof \PhpParser\Node\Stmt\Class_ || $node instanceof \PhpParser\Node\Stmt\Interface_) {
+            if ($node instanceof \PhpParser\Node\Stmt\Class_ || $node instanceof \PhpParser\Node\Stmt\Interface_ || $node instanceof \PhpParser\Node\Stmt\Enum_) {
                 /** @var MutatingScope $mutatingScope */
-                $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
+                $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope, $isScopeRefreshing);
             }
             // special case for unreachable nodes
             if ($node instanceof \PHPStan\Node\UnreachableStatementNode) {
-                $originalNode = $node->getOriginalStatement();
-                $originalNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE, \true);
-                $originalNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+                $originalStmt = $node->getOriginalStatement();
+                $originalStmt->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE, \true);
+                $originalStmt->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
             } else {
                 $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
             }
@@ -168,9 +220,9 @@ final class PHPStanNodeScopeResolver
         $nodeTraverser->traverse($nodes);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_ $classLike
      */
-    private function resolveClassOrInterfaceScope($classLike, \PHPStan\Analyser\MutatingScope $mutatingScope) : \PHPStan\Analyser\MutatingScope
+    private function resolveClassOrInterfaceScope($classLike, \PHPStan\Analyser\MutatingScope $mutatingScope, bool $isScopeRefreshing) : \PHPStan\Analyser\MutatingScope
     {
         $className = $this->resolveClassName($classLike);
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
@@ -181,10 +233,15 @@ final class PHPStanNodeScopeResolver
         } else {
             $classReflection = $this->reflectionProvider->getClass($className);
         }
+        // on refresh, remove entered class avoid entering the class again
+        if ($isScopeRefreshing && $mutatingScope->isInClass() && !$classReflection->isAnonymous()) {
+            $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
+            $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);
+        }
         return $mutatingScope->enterClass($classReflection);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classLike
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Enum_ $classLike
      */
     private function resolveClassName($classLike) : string
     {

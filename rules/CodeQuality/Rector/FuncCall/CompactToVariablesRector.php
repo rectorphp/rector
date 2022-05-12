@@ -138,7 +138,7 @@ CODE_SAMPLE
         $firstArg = $funcCall->args[0];
         $assignVariable = $firstArg->value;
         $preAssign = new \PhpParser\Node\Expr\Assign($assignVariable, $array);
-        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStmt, $this->file->getSmartFileInfo());
         return $expr;
     }
     private function refactorAssignArray(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr

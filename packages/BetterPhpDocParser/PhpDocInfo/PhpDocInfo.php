@@ -300,6 +300,7 @@ final class PhpDocInfo
         $phpDocNodeTraverser = new \RectorPrefix20220512\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use($typeToRemove) : ?int {
             if ($node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode && \is_a($node->value, $typeToRemove, \true)) {
+                // keep special annotation for tools
                 if (\strncmp($node->name, '@psalm-', \strlen('@psalm-')) === 0) {
                     return null;
                 }

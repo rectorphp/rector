@@ -87,10 +87,7 @@ CODE_SAMPLE
             $this->complexNodeRemover->removePropertyAndUsages($node, $property, $this->removeAssignSideEffect);
             $hasChanged = \true;
         }
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
+        return $hasChanged ? $node : null;
     }
     private function shouldSkipProperty(\PhpParser\Node\Stmt\Property $property) : bool
     {

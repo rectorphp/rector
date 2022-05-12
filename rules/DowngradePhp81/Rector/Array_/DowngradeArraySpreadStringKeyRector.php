@@ -6,42 +6,49 @@ namespace Rector\DowngradePhp81\Rector\Array_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntegerType;
-use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer;
+use Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/array_unpacking_string_keys
+ *
  * @see \Rector\Tests\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector\DowngradeArraySpreadStringKeyRectorTest
  */
-final class DowngradeArraySpreadStringKeyRector extends \Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector
+final class DowngradeArraySpreadStringKeyRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
+    /**
+     * @readonly
+     * @var \Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory
+     */
+    private $arrayMergeFromArraySpreadFactory;
+    /**
+     * @readonly
+     * @var \Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer
+     */
+    private $arraySpreadAnalyzer;
+    public function __construct(\Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory $arrayMergeFromArraySpreadFactory, \Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer $arraySpreadAnalyzer)
+    {
+        $this->arrayMergeFromArraySpreadFactory = $arrayMergeFromArraySpreadFactory;
+        $this->arraySpreadAnalyzer = $arraySpreadAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace array spread with string key to array_merge function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $parts = ['a' => 'b'];
-        $parts2 = ['c' => 'd'];
+$parts = ['a' => 'b'];
+$parts2 = ['c' => 'd'];
 
-        $result = [...$parts, ...$parts2];
-    }
-}
+$result = [...$parts, ...$parts2];
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $parts = ['a' => 'b'];
-        $parts2 = ['c' => 'd'];
+$parts = ['a' => 'b'];
+$parts2 = ['c' => 'd'];
 
-        $result = array_merge($parts, $parts2);
-    }
-}
+$result = array_merge($parts, $parts2);
 CODE_SAMPLE
 )]);
     }
@@ -55,20 +62,20 @@ CODE_SAMPLE
     /**
      * @param Array_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkipArray($node)) {
             return null;
         }
-        return parent::refactor($node);
+        return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope, $this->file);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\Array_ $array) : bool
+    private function shouldSkipArray(\PhpParser\Node\Expr\Array_ $array) : bool
     {
+        if (!$this->arraySpreadAnalyzer->isArrayWithUnpack($array)) {
+            return \true;
+        }
         foreach ($array->items as $item) {
             if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
-                continue;
-            }
-            if (!$item->unpack) {
                 continue;
             }
             $type = $this->nodeTypeResolver->getType($item->value);

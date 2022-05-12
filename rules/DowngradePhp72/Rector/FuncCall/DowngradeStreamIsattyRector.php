@@ -9,12 +9,12 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector\DowngradeStreamIsattyRectorTest
  */
-final class DowngradeStreamIsattyRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeStreamIsattyRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
     /**
      * @var \PhpParser\Node\Expr\Closure|null
@@ -100,7 +100,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'stream_isatty')) {
             return null;
@@ -109,10 +109,9 @@ CODE_SAMPLE
             return null;
         }
         $function = $this->createClosure();
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $variable = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
         $assign = new \PhpParser\Node\Expr\Assign($variable, $function);
-        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node, $this->file->getSmartFileInfo());
         return new \PhpParser\Node\Expr\FuncCall($variable, $node->args);
     }
     private function createClosure() : \PhpParser\Node\Expr\Closure

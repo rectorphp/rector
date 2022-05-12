@@ -85,7 +85,7 @@ CODE_SAMPLE
         $anonymousFunction->stmts[1] = new \PhpParser\Node\Stmt\Return_($ternary);
         $assignVariable = $this->namedVariableFactory->createVariable($node, 'battleShipcompare');
         $assignExpression = $this->getAssignExpression($anonymousFunction, $assignVariable);
-        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node, $this->file->getSmartFileInfo());
         return new \PhpParser\Node\Expr\FuncCall($assignVariable, [new \PhpParser\Node\Arg($node->left), new \PhpParser\Node\Arg($node->right)]);
     }
     private function getAssignExpression(\PhpParser\Node\Expr\Closure $closure, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Stmt\Expression

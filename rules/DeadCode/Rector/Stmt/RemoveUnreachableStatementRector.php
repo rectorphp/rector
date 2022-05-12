@@ -90,6 +90,7 @@ CODE_SAMPLE
                 continue;
             }
             $previousStmt = $stmts[$key - 1];
+            // unset...
             if ($this->shouldRemove($previousStmt, $stmt)) {
                 \array_splice($stmts, $key);
                 return $stmts;
@@ -118,7 +119,13 @@ CODE_SAMPLE
             return \false;
         }
         $isUnreachable = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE);
-        return $isUnreachable === \true && $previousStmt->finally instanceof \PhpParser\Node\Stmt\Finally_ && $this->cleanNop($previousStmt->finally->stmts) !== [];
+        if ($isUnreachable !== \true) {
+            return \false;
+        }
+        if (!$previousStmt->finally instanceof \PhpParser\Node\Stmt\Finally_) {
+            return \false;
+        }
+        return $this->cleanNop($previousStmt->finally->stmts) !== [];
     }
     /**
      * @param Stmt[] $stmts

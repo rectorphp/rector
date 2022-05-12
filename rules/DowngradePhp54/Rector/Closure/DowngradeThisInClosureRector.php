@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
         $selfVariable = $this->namedVariableFactory->createVariable($node, 'self');
         $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($selfVariable, new \PhpParser\Node\Expr\Variable('this')));
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
         $this->traverseNodesWithCallable($node, function (\PhpParser\Node $subNode) use($selfVariable) : ?Closure {
             if (!$subNode instanceof \PhpParser\Node\Expr\Closure) {
                 return null;

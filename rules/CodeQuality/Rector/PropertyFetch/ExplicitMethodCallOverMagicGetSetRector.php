@@ -12,7 +12,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ResolvedMethodReflection;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector\ExplicitMethodCallOverMagicGetSetRectorTest
  */
-final class ExplicitMethodCallOverMagicGetSetRector extends \Rector\Core\Rector\AbstractRector
+final class ExplicitMethodCallOverMagicGetSetRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -85,11 +85,11 @@ CODE_SAMPLE
     /**
      * @param PropertyFetch|Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\Assign) {
             if ($node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
-                return $this->refactorMagicSet($node->expr, $node->var);
+                return $this->refactorMagicSet($node->expr, $node->var, $scope);
             }
             return null;
         }
@@ -142,7 +142,7 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Expr\MethodCall|null
      */
-    private function refactorMagicSet(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\PropertyFetch $propertyFetch)
+    private function refactorMagicSet(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\PropertyFetch $propertyFetch, \PHPStan\Analyser\Scope $scope)
     {
         $propertyCallerType = $this->getType($propertyFetch->var);
         if (!$propertyCallerType instanceof \PHPStan\Type\ObjectType) {
@@ -159,17 +159,13 @@ CODE_SAMPLE
         if (!$propertyCallerType->hasMethod($setterMethodName)->yes()) {
             return null;
         }
-        if ($this->hasNoParamOrVariadic($propertyCallerType, $propertyFetch, $setterMethodName)) {
+        if ($this->hasNoParamOrVariadic($propertyCallerType, $setterMethodName, $scope)) {
             return null;
         }
         return $this->nodeFactory->createMethodCall($propertyFetch->var, $setterMethodName, [$expr]);
     }
-    private function hasNoParamOrVariadic(\PHPStan\Type\ObjectType $objectType, \PhpParser\Node\Expr\PropertyFetch $propertyFetch, string $setterMethodName) : bool
+    private function hasNoParamOrVariadic(\PHPStan\Type\ObjectType $objectType, string $setterMethodName, \PHPStan\Analyser\Scope $scope) : bool
     {
-        $scope = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return \false;
-        }
         $methodReflection = $objectType->getMethod($setterMethodName, $scope);
         if (!$methodReflection instanceof \PHPStan\Reflection\ResolvedMethodReflection) {
             return \false;

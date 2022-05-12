@@ -104,11 +104,11 @@ CODE_SAMPLE
         }
         $scope = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $variable = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('result', $scope));
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, new \PhpParser\Node\Expr\Array_([]))), $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, new \PhpParser\Node\Expr\Array_([]))), $funcCall, $this->file->getSmartFileInfo());
         /** @var ConstFetch $constant */
         $constant = $args[2]->value;
         $foreach = $this->nodeNameResolver->isName($constant, 'ARRAY_FILTER_USE_KEY') ? $this->applyArrayFilterUseKey($args, $closure, $variable) : $this->applyArrayFilterUseBoth($args, $closure, $variable);
-        $this->nodesToAddCollector->addNodeBeforeNode($foreach, $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode($foreach, $funcCall, $this->file->getSmartFileInfo());
         return $variable;
     }
     /**

@@ -72,6 +72,7 @@ CODE_SAMPLE
         }
         if ($node->stmts === []) {
             $this->removeNode($node);
+            // needed to apply removeNode(), @todo fix in AbstractRector itself
             return $node;
         }
         return $node->stmts;

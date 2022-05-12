@@ -6,8 +6,11 @@ namespace Rector\Core\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\NodeVisitorAbstract;
@@ -15,14 +18,17 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
+use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
+use Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer;
 use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\ProcessAnalyzer\RectifiedAnalyzer;
@@ -109,6 +115,10 @@ CODE_SAMPLE;
      */
     protected $nodesToAddCollector;
     /**
+     * @var \Rector\Core\Application\ChangedNodeScopeRefresher
+     */
+    protected $changedNodeScopeRefresher;
+    /**
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
@@ -145,9 +155,13 @@ CODE_SAMPLE;
      */
     private $createdByRuleDecorator;
     /**
+     * @var \Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer
+     */
+    private $unreachableStmtAnalyzer;
+    /**
      * @required
      */
-    public function autowire(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20220512\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20220512\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\ProcessAnalyzer\RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Core\NodeDecorator\CreatedByRuleDecorator $createdByRuleDecorator) : void
+    public function autowire(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20220512\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20220512\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\ProcessAnalyzer\RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Core\NodeDecorator\CreatedByRuleDecorator $createdByRuleDecorator, \Rector\Core\Application\ChangedNodeScopeRefresher $changedNodeScopeRefresher, \Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer $unreachableStmtAnalyzer) : void
     {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
@@ -168,6 +182,8 @@ CODE_SAMPLE;
         $this->currentFileProvider = $currentFileProvider;
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
+        $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
+        $this->unreachableStmtAnalyzer = $unreachableStmtAnalyzer;
     }
     /**
      * @return Node[]|null
@@ -231,6 +247,27 @@ CODE_SAMPLE;
         // update parents relations - must run before connectParentNodes()
         /** @var Node $node */
         $this->mirrorAttributes($originalAttributes, $node);
+        $currentScope = $originalNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $requiresScopeRefresh = \true;
+        // names do not have scope in PHPStan
+        if (!$node instanceof \PhpParser\Node\Name && !$node instanceof \PhpParser\Node\Stmt\Namespace_ && !$node instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace && !$node instanceof \PhpParser\Node\Identifier) {
+            if ($currentScope === null) {
+                $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+                // in case of unreachable stmts, no other node will have available scope
+                // loop all previous expressions, until we find nothing or is_unreachable
+                $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($parent);
+                if ($currentStmt instanceof \PhpParser\Node\Stmt && $this->unreachableStmtAnalyzer->isStmtPHPStanUnreachable($currentStmt)) {
+                    $requiresScopeRefresh = \false;
+                }
+                if ($requiresScopeRefresh) {
+                    $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), $parent instanceof \PhpParser\Node ? \get_class($parent) : null);
+                    throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
+                }
+            }
+            if ($requiresScopeRefresh) {
+                $this->changedNodeScopeRefresher->refresh($node, $this->file->getSmartFileInfo(), $currentScope);
+            }
+        }
         $this->connectParentNodes($node);
         // is equals node type? return node early
         if (\get_class($originalNode) === \get_class($node)) {

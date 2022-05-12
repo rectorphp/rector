@@ -68,7 +68,7 @@ CODE_SAMPLE
         }
         $tempVariable = $this->namedVariableFactory->createVariable($node, 'callable');
         $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($tempVariable, $node->args[0]->value));
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
         $closure = new \PhpParser\Node\Expr\Closure();
         $closure->uses[] = new \PhpParser\Node\Expr\ClosureUse($tempVariable);
         $innerFuncCall = new \PhpParser\Node\Expr\FuncCall($tempVariable, [new \PhpParser\Node\Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);

@@ -9,11 +9,13 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector\NodeCollectorInterface
 {
     /**
@@ -39,11 +41,17 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
+    /**
+     * @readonly
+     * @var \Rector\Core\Application\ChangedNodeScopeRefresher
+     */
+    private $changedNodeScopeRefresher;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\Core\Application\ChangedNodeScopeRefresher $changedNodeScopeRefresher)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->nodePrinter = $nodePrinter;
+        $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
     }
     public function isActive() : bool
     {
@@ -52,11 +60,17 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     /**
      * @deprecated Return created nodes right in refactor() method to keep context instead.
      */
-    public function addNodeBeforeNode(\PhpParser\Node $addedNode, \PhpParser\Node $positionNode) : void
+    public function addNodeBeforeNode(\PhpParser\Node $addedNode, \PhpParser\Node $positionNode, ?\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo = null) : void
     {
         if ($positionNode->getAttributes() === []) {
             $message = \sprintf('Switch arguments in "%s()" method', __METHOD__);
             throw new \Rector\Core\Exception\ShouldNotHappenException($message);
+        }
+        // @todo the node must be returned here, so traverser can refresh it
+        // this is nasty hack to verify it works
+        if ($smartFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
+            $currentScope = $positionNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+            $this->changedNodeScopeRefresher->refresh($addedNode, $smartFileInfo, $currentScope);
         }
         $position = $this->resolveNearestStmtPosition($positionNode);
         $this->nodesToAddBefore[$position][] = $this->wrapToExpression($addedNode);
@@ -119,7 +133,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     public function addNodesBeforeNode(array $newNodes, \PhpParser\Node $positionNode) : void
     {
         foreach ($newNodes as $newNode) {
-            $this->addNodeBeforeNode($newNode, $positionNode);
+            $this->addNodeBeforeNode($newNode, $positionNode, null);
         }
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }

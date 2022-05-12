@@ -107,7 +107,7 @@ CODE_SAMPLE
             $variableName = $this->variableNaming->resolveFromFuncCallFirstArgumentWithSuffix($node, 'AllowableTags', 'allowableTags', $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));
             // Assign the value to the variable
             $newVariable = new \PhpParser\Node\Expr\Variable($variableName);
-            $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Expr\Assign($newVariable, $allowableTagsParam), $node);
+            $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Expr\Assign($newVariable, $allowableTagsParam), $node, $this->file->getSmartFileInfo());
             // Apply refactor on the variable
             $newExpr = $this->createIsArrayTernaryFromExpression($newVariable);
         }
