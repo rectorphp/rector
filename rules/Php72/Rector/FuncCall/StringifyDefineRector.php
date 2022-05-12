@@ -15,7 +15,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://3v4l.org/YiTeP
+ * @changelog https://3v4l.org/YiTeP
  * @see \Rector\Tests\Php72\Rector\FuncCall\StringifyDefineRector\StringifyDefineRectorTest
  */
 final class StringifyDefineRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface

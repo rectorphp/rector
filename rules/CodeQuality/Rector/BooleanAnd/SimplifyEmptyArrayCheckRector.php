@@ -15,8 +15,8 @@ use Rector\Php71\ValueObject\TwoNodeMatch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://3v4l.org/EZ2P4
- * @see https://3v4l.org/egtb5
+ * @changelog https://3v4l.org/EZ2P4
+ * @changelog https://3v4l.org/egtb5
  * @see \Rector\Tests\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector\SimplifyEmptyArrayCheckRectorTest
  */
 final class SimplifyEmptyArrayCheckRector extends \Rector\Core\Rector\AbstractRector

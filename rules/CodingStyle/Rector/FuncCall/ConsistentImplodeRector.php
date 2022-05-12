@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog http://php.net/manual/en/function.implode.php#refsect1-function.implode-description
- * @see https://3v4l.org/iYTgh
+ * @changelog https://3v4l.org/iYTgh
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\ConsistentImplodeRector\ConsistentImplodeRectorTest
  */
 final class ConsistentImplodeRector extends \Rector\Core\Rector\AbstractRector

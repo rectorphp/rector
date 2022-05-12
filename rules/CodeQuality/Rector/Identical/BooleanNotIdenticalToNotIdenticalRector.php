@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://3v4l.org/GoEPq
+ * @changelog https://3v4l.org/GoEPq
  * @see \Rector\Tests\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector\BooleanNotIdenticalToNotIdenticalRectorTest
  */
 final class BooleanNotIdenticalToNotIdenticalRector extends \Rector\Core\Rector\AbstractRector

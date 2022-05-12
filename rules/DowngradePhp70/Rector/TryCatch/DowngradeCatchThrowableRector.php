@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Throwable was introduced in PHP 7.0 so to support older versions we need to also check for Exception.
- * @see https://www.php.net/manual/en/class.throwable.php
+ * @changelog https://www.php.net/manual/en/class.throwable.php
  * @see \Rector\Tests\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector\DowngradeCatchThrowableRectorTest
  */
 final class DowngradeCatchThrowableRector extends \Rector\Core\Rector\AbstractRector

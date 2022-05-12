@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
- * @see https://3v4l.org/9rLjE
+ * @changelog https://3v4l.org/9rLjE
  * @see \Rector\Tests\Php74\Rector\FuncCall\FilterVarToAddSlashesRector\FilterVarToAddSlashesRectorTest
  */
 final class FilterVarToAddSlashesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface

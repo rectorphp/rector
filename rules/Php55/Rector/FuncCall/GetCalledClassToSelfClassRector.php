@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.php.net/ChangeLog-5.php#5.5.0
- * @see https://3v4l.org/GU9dP
+ * @changelog https://3v4l.org/GU9dP
  * @see \Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToSelfClassRector\GetCalledClassToSelfClassRectorTest
  */
 final class GetCalledClassToSelfClassRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface

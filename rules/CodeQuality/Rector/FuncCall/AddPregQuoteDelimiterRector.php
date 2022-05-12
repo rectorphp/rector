@@ -20,7 +20,7 @@ final class AddPregQuoteDelimiterRector extends \Rector\Core\Rector\AbstractRect
 {
     /**
      * @var string
-     * @see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
+     * @changelog https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
     private const ALL_MODIFIERS = 'imsxeADSUXJu';
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition

@@ -16,8 +16,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.php.net/manual/en/language.types.callable.php#117260
- * @see https://3v4l.org/MsMbQ
- * @see https://3v4l.org/KM1Ji
+ * @changelog https://3v4l.org/MsMbQ
+ * @changelog https://3v4l.org/KM1Ji
  *
  * @see \Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\CallableThisArrayToAnonymousFunctionRectorTest
  */

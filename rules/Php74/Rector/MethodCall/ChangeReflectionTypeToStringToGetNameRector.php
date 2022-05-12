@@ -21,8 +21,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.reddit.com/r/PHP/comments/apikof/whats_the_deal_with_reflectiontype/ https://www.php.net/manual/en/reflectiontype.tostring.php
  *
- * @see https://3v4l.org/fYeif
- * @see https://3v4l.org/QeM6U
+ * @changelog https://3v4l.org/fYeif
+ * @changelog https://3v4l.org/QeM6U
  *
  * @see \Rector\Tests\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector\ChangeReflectionTypeToStringToGetNameRectorTest
  */

@@ -11,7 +11,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://3v4l.org/ji8bX
+ * @changelog https://3v4l.org/ji8bX
  * @see \Rector\Tests\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector\AndAssignsToSeparateLinesRectorTest
  */
 final class AndAssignsToSeparateLinesRector extends \Rector\Core\Rector\AbstractRector

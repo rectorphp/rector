@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220512\Webmozart\Assert\Assert;
 /**
  * @changelog https://medium.com/tech-tajawal/use-memory-gently-with-yield-in-php-7e62e2480b8d
- * @see https://3v4l.org/5PJid
+ * @changelog https://3v4l.org/5PJid
  *
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\ReturnArrayClassMethodToYieldRectorTest
  */
