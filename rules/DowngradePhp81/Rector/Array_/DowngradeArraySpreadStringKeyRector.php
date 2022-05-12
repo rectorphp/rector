@@ -10,16 +10,25 @@ use PhpParser\Node\Expr\ArrayItem;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntegerType;
-use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer;
+use Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @changelog https://wiki.php.net/rfc/array_unpacking_string_keys
+ *
  * @see \Rector\Tests\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector\DowngradeArraySpreadStringKeyRectorTest
  */
-final class DowngradeArraySpreadStringKeyRector extends DowngradeArraySpreadRector
+final class DowngradeArraySpreadStringKeyRector extends AbstractScopeAwareRector
 {
+    public function __construct(
+        private readonly ArrayMergeFromArraySpreadFactory $arrayMergeFromArraySpreadFactory,
+        private readonly ArraySpreadAnalyzer $arraySpreadAnalyzer,
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -27,29 +36,17 @@ final class DowngradeArraySpreadStringKeyRector extends DowngradeArraySpreadRect
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $parts = ['a' => 'b'];
-        $parts2 = ['c' => 'd'];
+$parts = ['a' => 'b'];
+$parts2 = ['c' => 'd'];
 
-        $result = [...$parts, ...$parts2];
-    }
-}
+$result = [...$parts, ...$parts2];
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $parts = ['a' => 'b'];
-        $parts2 = ['c' => 'd'];
+$parts = ['a' => 'b'];
+$parts2 = ['c' => 'd'];
 
-        $result = array_merge($parts, $parts2);
-    }
-}
+$result = array_merge($parts, $parts2);
 CODE_SAMPLE
                 ),
             ]
@@ -69,21 +66,21 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkipArray($node)) {
             return null;
         }
 
-        return parent::refactorWithScope($node, $scope);
+        return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope, $this->file);
     }
 
-    private function shouldSkip(Array_ $array): bool
+    private function shouldSkipArray(Array_ $array): bool
     {
+        if (! $this->arraySpreadAnalyzer->isArrayWithUnpack($array)) {
+            return true;
+        }
+
         foreach ($array->items as $item) {
             if (! $item instanceof ArrayItem) {
-                continue;
-            }
-
-            if (! $item->unpack) {
                 continue;
             }
 

@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector\Fixture;
 
-class ArraySpreadStringKey
+final class ArraySpreadStringKey
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class ArraySpreadStringKey
 
 namespace Rector\Tests\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector\Fixture;
 
-class ArraySpreadStringKey
+final class ArraySpreadStringKey
 {
     public function run()
     {
