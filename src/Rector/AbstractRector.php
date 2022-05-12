@@ -21,6 +21,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Console\Output\RectorOutputStyle;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
@@ -123,6 +124,8 @@ CODE_SAMPLE;
 
     private UnreachableStmtAnalyzer $unreachableStmtAnalyzer;
 
+    private RectorOutputStyle $rectorOutputStyle;
+
     #[Required]
     public function autowire(
         NodesToRemoveCollector $nodesToRemoveCollector,
@@ -145,7 +148,8 @@ CODE_SAMPLE;
         RectifiedAnalyzer $rectifiedAnalyzer,
         CreatedByRuleDecorator $createdByRuleDecorator,
         ChangedNodeScopeRefresher $changedNodeScopeRefresher,
-        UnreachableStmtAnalyzer $unreachableStmtAnalyzer
+        UnreachableStmtAnalyzer $unreachableStmtAnalyzer,
+        RectorOutputStyle $rectorOutputStyle,
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
@@ -168,6 +172,7 @@ CODE_SAMPLE;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
         $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
         $this->unreachableStmtAnalyzer = $unreachableStmtAnalyzer;
+        $this->rectorOutputStyle = $rectorOutputStyle;
     }
 
     /**
@@ -215,6 +220,8 @@ CODE_SAMPLE;
         $this->currentNodeProvider->setNode($node);
 
         $originalAttributes = $node->getAttributes();
+
+        $this->printDebugCurrentFileAndRule();
 
         $node = $this->refactor($node);
 
@@ -434,5 +441,16 @@ CODE_SAMPLE;
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new ParentConnectingVisitor());
         $nodeTraverser->traverse([$node]);
+    }
+
+    private function printDebugCurrentFileAndRule(): void
+    {
+        if (! $this->rectorOutputStyle->isDebug()) {
+            return;
+        }
+
+        $this->rectorOutputStyle->writeln('[file] ' . $this->file->getRelativeFilePath());
+        $this->rectorOutputStyle->writeln('[rule] ' . static::class);
+        $this->rectorOutputStyle->newLine(1);
     }
 }

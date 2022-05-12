@@ -64,17 +64,21 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->shouldRefactor($node)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
-        $numberNode = clone $node;
-        $numberNodeValue = (string) $numberNode->value;
-        if (\str_contains($numberNodeValue, '+')) {
+        $numberValueAsString = (string) $node->value;
+        if (\str_contains($numberValueAsString, '+')) {
             return null;
         }
 
-        $node->value = (string) $node->value;
+        // trigger reprint
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+
+        if ($node instanceof LNumber) {
+            return $node;
+        }
 
         /**
          * This code follows a guess, to avoid modifying floats needlessly.
@@ -83,24 +87,33 @@ CODE_SAMPLE
          * by adding ".0" at the end (eg: 0.0).
          * Then, add it again.
          */
-        if ($node instanceof DNumber && ! \str_contains($node->value, '.')) {
-            $node->value .= '.0';
+        if (! \str_contains($numberValueAsString, '.')) {
+            $numberValueAsString .= '.0';
         }
 
-        if (! str_contains($node->value, '_')) {
-            return null;
-        }
+        $node->value = (float) $numberValueAsString;
 
         return $node;
     }
 
-    public function shouldRefactor(LNumber | DNumber $node): bool
+    private function shouldSkip(LNumber | DNumber $node): bool
     {
         // "_" notation can be applied to decimal numbers only
         if ($node instanceof LNumber) {
-            return $node->getAttribute(AttributeKey::KIND) === LNumber::KIND_DEC;
+            $numberKind = $node->getAttribute(AttributeKey::KIND);
+            if ($numberKind !== LNumber::KIND_DEC) {
+                return true;
+            }
         }
 
-        return true;
+        // we have to hack around tokens to get original value, see https://github.com/nikic/PHP-Parser/pull/832
+        $oldTokens = $this->file->getOldTokens();
+        $tokenValue = $oldTokens[$node->getStartTokenPos()][1] ?? null;
+
+        if ($tokenValue === null) {
+            return true;
+        }
+
+        return ! str_contains((string) $tokenValue, '_');
     }
 }
