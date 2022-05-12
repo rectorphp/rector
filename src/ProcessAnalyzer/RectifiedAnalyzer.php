@@ -51,21 +51,17 @@ final class RectifiedAnalyzer
             return false;
         }
 
+        if ($rector instanceof AbstractScopeAwareRector) {
+            $scope = $node->getAttribute(AttributeKey::SCOPE);
+            return $scope instanceof Scope;
+        }
+
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
         if ($originalNode instanceof Node) {
             return true;
         }
 
         $startTokenPos = $node->getStartTokenPos();
-        if ($startTokenPos >= 0) {
-            return false;
-        }
-
-        if (! $rector instanceof AbstractScopeAwareRector) {
-            return true;
-        }
-
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        return $scope instanceof Scope;
+        return $startTokenPos < 0;
     }
 }
