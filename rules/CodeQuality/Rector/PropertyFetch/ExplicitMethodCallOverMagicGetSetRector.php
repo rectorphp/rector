@@ -115,17 +115,22 @@ CODE_SAMPLE
         return $this->refactorPropertyFetch($node);
     }
 
+    /**
+     * @return string[]
+     */
+    public function resolvePossibleGetMethodNames(string $propertyName): array
+    {
+        return ['get' . ucfirst($propertyName), 'has' . ucfirst($propertyName), 'is' . ucfirst($propertyName)];
+    }
+
     private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch): bool
     {
-        $parentAssign = $this->betterNodeFinder->findParentType($propertyFetch, Assign::class);
-        if (! $parentAssign instanceof Assign) {
+        $parent = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Assign) {
             return false;
         }
 
-        return (bool) $this->betterNodeFinder->findFirst(
-            $parentAssign->var,
-            fn (Node $subNode): bool => $subNode === $propertyFetch
-        );
+        return $parent->var === $propertyFetch;
     }
 
     private function refactorPropertyFetch(PropertyFetch $propertyFetch): MethodCall|null
@@ -145,10 +150,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $possibleGetterMethodNames = [];
-        $possibleGetterMethodNames[] = 'get' . ucfirst($propertyName);
-        $possibleGetterMethodNames[] = 'has' . ucfirst($propertyName);
-        $possibleGetterMethodNames[] = 'is' . ucfirst($propertyName);
+        $possibleGetterMethodNames = $this->resolvePossibleGetMethodNames($propertyName);
 
         foreach ($possibleGetterMethodNames as $possibleGetterMethodName) {
             if (! $callerType->hasMethod($possibleGetterMethodName)->yes()) {

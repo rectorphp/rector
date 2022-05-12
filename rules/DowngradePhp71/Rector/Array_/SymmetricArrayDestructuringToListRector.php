@@ -12,9 +12,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -43,28 +41,29 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Array_::class];
+        return [Array_::class, Assign::class, Foreach_::class];
     }
 
     /**
-     * @param Array_ $node
+     * @param Array_|Assign|Foreach_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual($node, $parentNode->var)) {
-            return $this->processToList($node);
-        }
+        if ($node instanceof Assign) {
+            if ($node->var instanceof Array_) {
+                $node->var = $this->processToList($node->var);
+                return $node;
+            }
 
-        if (! $parentNode instanceof Foreach_) {
             return null;
         }
 
-        if (! $this->nodeComparator->areNodesEqual($node, $parentNode->valueVar)) {
-            return null;
+        if ($node instanceof Foreach_ && $node->valueVar instanceof Array_) {
+            $node->valueVar = $this->processToList($node->valueVar);
+            return $node;
         }
 
-        return $this->processToList($node);
+        return null;
     }
 
     private function processToList(Array_ $array): FuncCall
@@ -74,7 +73,6 @@ CODE_SAMPLE
             $args[] = $arrayItem instanceof ArrayItem ? new Arg($arrayItem->value) : null;
         }
 
-        /** @var Arg[]|VariadicPlaceholder[] $args */
         return new FuncCall(new Name('list'), $args);
     }
 }

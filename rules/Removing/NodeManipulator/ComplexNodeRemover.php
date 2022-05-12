@@ -44,13 +44,13 @@ final class ComplexNodeRemover
         $propertyName = $this->nodeNameResolver->getName($property);
 
         $hasSideEffect = false;
-        $isPartoFAnotherAssign = false;
+        $isPartOfAnotherAssign = false;
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             $removeAssignSideEffect,
             $propertyName,
             &$hasSideEffect,
-            &$isPartoFAnotherAssign
+            &$isPartOfAnotherAssign
         ) {
             // here should be checked all expr like stmts that can hold assign, e.f. if, foreach etc. etc.
             if (! $node instanceof Expression) {
@@ -68,7 +68,7 @@ final class ComplexNodeRemover
 
             // skip double assigns
             if ($assign->expr instanceof Assign) {
-                $isPartoFAnotherAssign = true;
+                $isPartOfAnotherAssign = true;
                 return null;
             }
 
@@ -96,7 +96,7 @@ final class ComplexNodeRemover
             return;
         }
 
-        if ($isPartoFAnotherAssign) {
+        if ($isPartOfAnotherAssign) {
             return;
         }
 

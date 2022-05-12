@@ -95,6 +95,9 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
+        if ($oldToNewClasses === []) {
+            return null;
+        }
 
         if (! $node instanceof Use_) {
             return $this->classRenamer->renameNode($node, $oldToNewClasses);

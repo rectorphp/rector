@@ -191,8 +191,6 @@ parameters:
             paths:
                 # on PhpParser Nodes
                 - packages/NodeNameResolver/NodeNameResolver.php
-                - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
-                - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
 
         # known types
         - '#Call to an undefined method PHPStan\\Type\\ConstantType\:\:getValue\(\)#'
@@ -462,8 +460,7 @@ parameters:
                  - rules/Composer/Application/FileProcessor/ComposerFileProcessor.php
                  - src/Contract/Processor/FileProcessorInterface.php
                  - packages/Parallel/Application/ParallelFileProcessor.php
-
-        - '#Call to function property_exists\(\) with PhpParser\\Node\\Stmt\\ClassLike and (.*?) will always evaluate to true#'
+                 - rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php
 
         # skipped on purpose, as ctor overrie
         - '#Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType\:\:__construct\(\) does not call parent constructor from PHPStan\\Type\\StaticType#'
@@ -499,6 +496,7 @@ parameters:
                 - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
                 - rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php
                 - rules/Php70/EregToPcreTransformer.php
+                - rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php
 
         - '#Method Rector\\Core\\Application\\ApplicationFileProcessor\:\:runParallel\(\) should return array\{system_errors\: array<Rector\\Core\\ValueObject\\Error\\SystemError\>, file_diffs\: array<Rector\\Core\\ValueObject\\Reporting\\FileDiff\>\} but returns array#'
 
@@ -630,18 +628,15 @@ parameters:
             path: rules/Renaming/NodeManipulator/ClassRenamer.php
             message: '#Use separate function calls with readable variable names#'
 
-        - '#Cognitive complexity for "Rector\\Core\\Rector\\AbstractRector\:\:enterNode\(\)" is \d+, keep it under 10#'
+
 
         # false positive by php-parser, the args can be null
         - '#Parameter \#2 \$args of class PhpParser\\Node\\Expr\\FuncCall constructor expects array<PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder>, array<int, PhpParser\\Node\\Arg\|null> given#'
 
         # known type
-        - '#Anonymous variable in a `\$parentStmt\->\.\.\.\(\)` method call can lead to false dead methods\. Make sure the variable type is known#'
 
-        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver\:\:processNodes\(\)" is \d+, keep it under 10#'
 
-        # depends on falsy docs
-        - '#Call to static method Webmozart\\Assert\\Assert\:\:allIsInstanceOf\(\) with array<PhpParser\\Node\\Stmt> and (.*?)Stmt(.*?) will always evaluate to true#'
+
 
         # doc validation
         -

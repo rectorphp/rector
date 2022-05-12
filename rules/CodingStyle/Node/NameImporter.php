@@ -68,7 +68,7 @@ final class NameImporter
 
     private function shouldSkipName(Name $name): bool
     {
-        $virtualNode = (bool) $name->getAttribute(AttributeKey::VIRTUAL_NODE, false);
+        $virtualNode = (bool) $name->getAttribute(AttributeKey::VIRTUAL_NODE);
         if ($virtualNode) {
             return true;
         }
