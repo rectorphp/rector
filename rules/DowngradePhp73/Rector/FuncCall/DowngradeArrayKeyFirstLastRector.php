@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
 
         $resetFuncCall = $this->nodeFactory->createFuncCall('reset', [$array]);
-        $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall, $this->file->getSmartFileInfo());
 
         $funcCall->name = new Name('key');
         if ($originalArray !== $array) {
@@ -130,7 +130,7 @@ CODE_SAMPLE
         }
 
         $resetFuncCall = $this->nodeFactory->createFuncCall('end', [$array]);
-        $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall, $this->file->getSmartFileInfo());
 
         $funcCall->name = new Name('key');
         if ($originalArray !== $array) {
@@ -142,7 +142,11 @@ CODE_SAMPLE
 
     private function addAssignNewVariable(FuncCall $funcCall, Expr $expr, Expr|Variable $variable): void
     {
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression(new Assign($variable, $expr)), $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode(
+            new Expression(new Assign($variable, $expr)),
+            $funcCall,
+            $this->file->getSmartFileInfo()
+        );
     }
 
     private function resolveCastedArray(Expr $expr): Expr|Variable

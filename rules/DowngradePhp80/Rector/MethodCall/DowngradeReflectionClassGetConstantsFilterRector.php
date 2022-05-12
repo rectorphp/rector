@@ -135,12 +135,20 @@ CODE_SAMPLE
             $variableReflectionClassConstants,
             new MethodCall($methodCall->var, 'getReflectionConstants')
         );
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $methodCall);
+        $this->nodesToAddCollector->addNodeBeforeNode(
+            new Expression($assign),
+            $methodCall,
+            $this->file->getSmartFileInfo()
+        );
 
         $result = $this->variableNaming->createCountedValueName('result', $scope);
         $variableResult = new Variable($result);
         $assignVariableResult = new Assign($variableResult, new Array_());
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assignVariableResult), $methodCall);
+        $this->nodesToAddCollector->addNodeBeforeNode(
+            new Expression($assignVariableResult),
+            $methodCall,
+            $this->file->getSmartFileInfo()
+        );
 
         $ifs = [];
         $valueVariable = new Variable('value');
@@ -168,7 +176,11 @@ CODE_SAMPLE
             'array_walk',
             [$variableReflectionClassConstants, $closure]
         );
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($funcCall), $methodCall);
+        $this->nodesToAddCollector->addNodeBeforeNode(
+            new Expression($funcCall),
+            $methodCall,
+            $this->file->getSmartFileInfo()
+        );
 
         return $variableResult;
     }

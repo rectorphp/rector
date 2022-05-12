@@ -107,7 +107,11 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
                 continue;
             }
 
-            $this->nodesToAddCollector->addNodeBeforeNode($replacements->getAssign(), $currentStmt);
+            $this->nodesToAddCollector->addNodeBeforeNode(
+                $replacements->getAssign(),
+                $currentStmt,
+                $this->file->getSmartFileInfo()
+            );
 
             $node->args[$key]->value = $replacements->getVariable();
 

@@ -121,7 +121,11 @@ CODE_SAMPLE
             );
             // Assign the value to the variable
             $newVariable = new Variable($variableName);
-            $this->nodesToAddCollector->addNodeBeforeNode(new Assign($newVariable, $allowableTagsParam), $node);
+            $this->nodesToAddCollector->addNodeBeforeNode(
+                new Assign($newVariable, $allowableTagsParam),
+                $node,
+                $this->file->getSmartFileInfo()
+            );
 
             // Apply refactor on the variable
             $newExpr = $this->createIsArrayTernaryFromExpression($newVariable);

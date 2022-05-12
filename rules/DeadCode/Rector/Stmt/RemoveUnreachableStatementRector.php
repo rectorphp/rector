@@ -105,6 +105,8 @@ CODE_SAMPLE
 
             $previousStmt = $stmts[$key - 1];
 
+            // unset...
+
             if ($this->shouldRemove($previousStmt, $stmt)) {
                 array_splice($stmts, $key);
                 return $stmts;
@@ -141,9 +143,15 @@ CODE_SAMPLE
         }
 
         $isUnreachable = $currentStmt->getAttribute(AttributeKey::IS_UNREACHABLE);
-        return $isUnreachable === true && $previousStmt->finally instanceof Finally_ && $this->cleanNop(
-            $previousStmt->finally->stmts
-        ) !== [];
+        if ($isUnreachable !== true) {
+            return false;
+        }
+
+        if (! $previousStmt->finally instanceof Finally_) {
+            return false;
+        }
+
+        return $this->cleanNop($previousStmt->finally->stmts) !== [];
     }
 
     /**

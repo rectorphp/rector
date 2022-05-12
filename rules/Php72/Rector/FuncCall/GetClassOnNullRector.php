@@ -13,7 +13,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\NullType;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\GetClassOnNullRectorTest
  */
-final class GetClassOnNullRector extends AbstractRector implements MinPhpVersionInterface
+final class GetClassOnNullRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion(): int
     {
@@ -72,7 +72,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactorWithScope(Node $node, Scope $scope): ?Node
     {
         if (! $this->isName($node, 'get_class')) {
             return null;
@@ -87,12 +87,6 @@ CODE_SAMPLE
         }
 
         $firstArgValue = $node->args[0]->value;
-
-        // only relevant inside the class
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
-        }
 
         if (! $scope->isInClass()) {
             return null;

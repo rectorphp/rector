@@ -7,8 +7,11 @@ namespace Rector\Core\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\NodeVisitorAbstract;
@@ -16,14 +19,17 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
+use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
+use Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer;
 use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\ProcessAnalyzer\RectifiedAnalyzer;
@@ -92,6 +98,8 @@ CODE_SAMPLE;
 
     protected NodesToAddCollector $nodesToAddCollector;
 
+    protected ChangedNodeScopeRefresher $changedNodeScopeRefresher;
+
     private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
 
     private ExclusionManager $exclusionManager;
@@ -113,6 +121,8 @@ CODE_SAMPLE;
 
     private CreatedByRuleDecorator $createdByRuleDecorator;
 
+    private UnreachableStmtAnalyzer $unreachableStmtAnalyzer;
+
     #[Required]
     public function autowire(
         NodesToRemoveCollector $nodesToRemoveCollector,
@@ -133,7 +143,9 @@ CODE_SAMPLE;
         NodeComparator $nodeComparator,
         CurrentFileProvider $currentFileProvider,
         RectifiedAnalyzer $rectifiedAnalyzer,
-        CreatedByRuleDecorator $createdByRuleDecorator
+        CreatedByRuleDecorator $createdByRuleDecorator,
+        ChangedNodeScopeRefresher $changedNodeScopeRefresher,
+        UnreachableStmtAnalyzer $unreachableStmtAnalyzer
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
@@ -154,6 +166,8 @@ CODE_SAMPLE;
         $this->currentFileProvider = $currentFileProvider;
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
+        $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
+        $this->unreachableStmtAnalyzer = $unreachableStmtAnalyzer;
     }
 
     /**
@@ -236,6 +250,42 @@ CODE_SAMPLE;
         // update parents relations - must run before connectParentNodes()
         /** @var Node $node */
         $this->mirrorAttributes($originalAttributes, $node);
+
+        $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
+
+        $requiresScopeRefresh = true;
+
+        // names do not have scope in PHPStan
+        if (! $node instanceof Name && ! $node instanceof Namespace_ && ! $node instanceof FileWithoutNamespace && ! $node instanceof Identifier) {
+            if ($currentScope === null) {
+                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+                // in case of unreachable stmts, no other node will have available scope
+                // loop all previous expressions, until we find nothing or is_unreachable
+                $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($parent);
+
+                if ($currentStmt instanceof Stmt && $this->unreachableStmtAnalyzer->isStmtPHPStanUnreachable(
+                    $currentStmt
+                )) {
+                    $requiresScopeRefresh = false;
+                }
+
+                if ($requiresScopeRefresh) {
+                    $errorMessage = sprintf(
+                        'Node "%s" with parent of "%s" is missing scope required for scope refresh.',
+                        $node::class,
+                        $parent instanceof Node ? $parent::class : null
+                    );
+
+                    throw new ShouldNotHappenException($errorMessage);
+                }
+            }
+
+            if ($requiresScopeRefresh) {
+                $this->changedNodeScopeRefresher->refresh($node, $this->file->getSmartFileInfo(), $currentScope);
+            }
+        }
+
         $this->connectParentNodes($node);
 
         // is equals node type? return node early

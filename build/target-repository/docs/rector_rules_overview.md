@@ -6294,9 +6294,10 @@ Changes Single return of && to early returns
      public function accept()
      {
 -        return $this->something() && $this->somethingelse();
-+        if (!$this->something()) {
++        if (! $this->something()) {
 +            return false;
 +        }
++
 +        return (bool) $this->somethingelse();
      }
  }

@@ -95,7 +95,7 @@ CODE_SAMPLE
         $assignVariable = $this->namedVariableFactory->createVariable($node, 'battleShipcompare');
 
         $assignExpression = $this->getAssignExpression($anonymousFunction, $assignVariable);
-        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node, $this->file->getSmartFileInfo());
 
         return new FuncCall($assignVariable, [new Arg($node->left), new Arg($node->right)]);
     }

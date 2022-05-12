@@ -48,9 +48,10 @@ class SomeClass
 {
     public function accept()
     {
-        if (!$this->something()) {
+        if (! $this->something()) {
             return false;
         }
+
         return (bool) $this->somethingelse();
     }
 }

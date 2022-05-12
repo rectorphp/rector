@@ -18,10 +18,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\UnionType;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -31,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector\ParamTypeByMethodCallTypeRectorTest
  */
-final class ParamTypeByMethodCallTypeRector extends AbstractRector
+final class ParamTypeByMethodCallTypeRector extends AbstractScopeAwareRector
 {
     public function __construct(
         private readonly CallerParamMatcher $callerParamMatcher,
@@ -103,7 +103,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactorWithScope(Node $node, Scope $scope): ?Node
     {
         if ($this->shouldSkipClassMethod($node)) {
             return null;
@@ -116,7 +116,6 @@ CODE_SAMPLE
         );
 
         $hasChanged = false;
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
 
         foreach ($node->params as $param) {
             if ($this->shouldSkipParam($param, $node)) {

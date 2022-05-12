@@ -12,16 +12,16 @@ use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\Rector\AbstractRector;
+use PHPStan\Analyser\Scope;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector\DowngradeNullsafeToTernaryOperatorRectorTest
  */
-final class DowngradeNullsafeToTernaryOperatorRector extends AbstractRector
+final class DowngradeNullsafeToTernaryOperatorRector extends AbstractScopeAwareRector
 {
     public function __construct(
         private readonly VariableNaming $variableNaming
@@ -56,15 +56,9 @@ CODE_SAMPLE
     /**
      * @param NullsafeMethodCall|NullsafePropertyFetch $node
      */
-    public function refactor(Node $node): Ternary
+    public function refactorWithScope(Node $node, Scope $scope): Ternary
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-
-        $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
-            $node->var,
-            $scope,
-            '_'
-        );
+        $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($node->var, $scope, '_');
 
         $variable = new Variable($tempVarName);
         $called = $node instanceof NullsafeMethodCall

@@ -10,11 +10,13 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodesToAddCollector implements NodeCollectorInterface
 {
@@ -31,7 +33,8 @@ final class NodesToAddCollector implements NodeCollectorInterface
     public function __construct(
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly RectorChangeCollector $rectorChangeCollector,
-        private readonly NodePrinterInterface $nodePrinter
+        private readonly NodePrinterInterface $nodePrinter,
+        private readonly ChangedNodeScopeRefresher $changedNodeScopeRefresher
     ) {
     }
 
@@ -43,11 +46,18 @@ final class NodesToAddCollector implements NodeCollectorInterface
     /**
      * @deprecated Return created nodes right in refactor() method to keep context instead.
      */
-    public function addNodeBeforeNode(Node $addedNode, Node $positionNode): void
+    public function addNodeBeforeNode(Node $addedNode, Node $positionNode, ?SmartFileInfo $smartFileInfo = null): void
     {
         if ($positionNode->getAttributes() === []) {
             $message = sprintf('Switch arguments in "%s()" method', __METHOD__);
             throw new ShouldNotHappenException($message);
+        }
+
+        // @todo the node must be returned here, so traverser can refresh it
+        // this is nasty hack to verify it works
+        if ($smartFileInfo instanceof SmartFileInfo) {
+            $currentScope = $positionNode->getAttribute(AttributeKey::SCOPE);
+            $this->changedNodeScopeRefresher->refresh($addedNode, $smartFileInfo, $currentScope);
         }
 
         $position = $this->resolveNearestStmtPosition($positionNode);
@@ -121,7 +131,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
     public function addNodesBeforeNode(array $newNodes, Node $positionNode): void
     {
         foreach ($newNodes as $newNode) {
-            $this->addNodeBeforeNode($newNode, $positionNode);
+            $this->addNodeBeforeNode($newNode, $positionNode, null);
         }
 
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);

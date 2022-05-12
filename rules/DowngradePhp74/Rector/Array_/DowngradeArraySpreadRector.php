@@ -19,7 +19,7 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -31,7 +31,7 @@ use Traversable;
  *
  * @see \Rector\Tests\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector\DowngradeArraySpreadRectorTest
  */
-class DowngradeArraySpreadRector extends AbstractRector
+class DowngradeArraySpreadRector extends AbstractScopeAwareRector
 {
     private bool $shouldIncrement = false;
 
@@ -101,7 +101,7 @@ CODE_SAMPLE
     /**
      * @param Array_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactorWithScope(Node $node, Scope $scope): ?Node
     {
         if (! $this->shouldRefactor($node)) {
             return null;
@@ -115,7 +115,7 @@ CODE_SAMPLE
             return $this->shouldRefactor($subNode);
         });
 
-        return $this->refactorNode($node);
+        return $this->refactorArray($node, $scope);
     }
 
     private function shouldRefactor(Array_ $array): bool
@@ -134,11 +134,11 @@ CODE_SAMPLE
         return false;
     }
 
-    private function refactorNode(Array_ $array): FuncCall
+    private function refactorArray(Array_ $array, Scope $scope): FuncCall
     {
-        $newItems = $this->createArrayItems($array);
+        $newItems = $this->createArrayItems($array, $scope);
         // Replace this array node with an `array_merge`
-        return $this->createArrayMerge($array, $newItems);
+        return $this->createArrayMerge($newItems, $scope);
     }
 
     /**
@@ -148,7 +148,7 @@ CODE_SAMPLE
      *    to be added once the next spread is found, or at the end
      * @return ArrayItem[]
      */
-    private function createArrayItems(Array_ $array): array
+    private function createArrayItems(Array_ $array, Scope $scope): array
     {
         $newItems = [];
         $accumulatedItems = [];
@@ -157,12 +157,12 @@ CODE_SAMPLE
                 // Spread operator found
                 if (! $item->value instanceof Variable) {
                     // If it is a not variable, transform it to a variable
-                    $item->value = $this->createVariableFromNonVariable($array, $item, $position);
+                    $item->value = $this->createVariableFromNonVariable($array, $item, $position, $scope);
                 }
 
                 if ($accumulatedItems !== []) {
                     // If previous items were in the new array, add them first
-                    $newItems[] = $this->createArrayItem($accumulatedItems);
+                    $newItems[] = $this->createArrayItemFromArray($accumulatedItems);
                     // Reset the accumulated items
                     $accumulatedItems = [];
                 }
@@ -178,7 +178,7 @@ CODE_SAMPLE
 
         // Add the remaining accumulated items
         if ($accumulatedItems !== []) {
-            $newItems[] = $this->createArrayItem($accumulatedItems);
+            $newItems[] = $this->createArrayItemFromArray($accumulatedItems);
         }
 
         return $newItems;
@@ -187,11 +187,8 @@ CODE_SAMPLE
     /**
      * @param (ArrayItem|null)[] $items
      */
-    private function createArrayMerge(Array_ $array, array $items): FuncCall
+    private function createArrayMerge(array $items, Scope $scope): FuncCall
     {
-        /** @var Scope $scope */
-        $scope = $array->getAttribute(AttributeKey::SCOPE);
-
         $args = array_map(function (ArrayItem|null $arrayItem) use ($scope): Arg {
             if ($arrayItem === null) {
                 throw new ShouldNotHappenException();
@@ -216,10 +213,12 @@ CODE_SAMPLE
      * as to invoke it only once and avoid potential bugs,
      * such as a method executing some side-effect
      */
-    private function createVariableFromNonVariable(Array_ $array, ArrayItem $arrayItem, int $position): Variable
-    {
-        /** @var Scope $nodeScope */
-        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
+    private function createVariableFromNonVariable(
+        Array_ $array,
+        ArrayItem $arrayItem,
+        int $position,
+        Scope $scope
+    ): Variable {
         // The variable name will be item0Unpacked, item1Unpacked, etc,
         // depending on their position.
         // The number can't be at the end of the var name, or it would
@@ -230,7 +229,7 @@ CODE_SAMPLE
 
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
             $array,
-            $nodeScope,
+            $scope,
             'item' . $position . 'Unpacked'
         );
 
@@ -242,7 +241,7 @@ CODE_SAMPLE
         $newVariable = new Variable($variableName);
 
         $newVariableAssign = new Assign($newVariable, $arrayItem->value);
-        $this->nodesToAddCollector->addNodeBeforeNode($newVariableAssign, $array);
+        $this->nodesToAddCollector->addNodeBeforeNode($newVariableAssign, $array, $this->file->getSmartFileInfo());
 
         return $newVariable;
     }
@@ -250,9 +249,10 @@ CODE_SAMPLE
     /**
      * @param array<ArrayItem|null> $items
      */
-    private function createArrayItem(array $items): ArrayItem
+    private function createArrayItemFromArray(array $items): ArrayItem
     {
-        return new ArrayItem(new Array_($items));
+        $array = new Array_($items);
+        return new ArrayItem($array);
     }
 
     private function createArgFromSpreadArrayItem(Scope $nodeScope, ArrayItem $arrayItem): Arg

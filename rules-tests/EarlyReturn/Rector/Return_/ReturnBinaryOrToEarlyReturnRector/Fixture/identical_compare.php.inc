@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector\Fixture;
 
-class Identical
+final class IdenticalCompare
 {
     public function accept()
     {
@@ -16,7 +16,7 @@ class Identical
 
 namespace Rector\Tests\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector\Fixture;
 
-class Identical
+final class IdenticalCompare
 {
     public function accept()
     {

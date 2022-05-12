@@ -92,6 +92,7 @@ CODE_SAMPLE
         }
 
         $hasChanged = false;
+
         foreach ($node->getMethods() as $classMethod) {
             if ($classMethod->isMagic()) {
                 continue;

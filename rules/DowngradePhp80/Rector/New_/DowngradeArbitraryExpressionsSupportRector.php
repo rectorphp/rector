@@ -96,7 +96,7 @@ CODE_SAMPLE
             $assign = new Assign($variable, $node->class);
         }
 
-        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node, $this->file->getSmartFileInfo());
         $node->class = $variable;
         return $node;
     }

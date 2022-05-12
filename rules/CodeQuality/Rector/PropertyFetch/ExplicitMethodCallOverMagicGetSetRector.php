@@ -13,7 +13,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ResolvedMethodReflection;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector\ExplicitMethodCallOverMagicGetSetRectorTest
  */
-final class ExplicitMethodCallOverMagicGetSetRector extends AbstractRector
+final class ExplicitMethodCallOverMagicGetSetRector extends AbstractScopeAwareRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -98,11 +98,11 @@ CODE_SAMPLE
     /**
      * @param PropertyFetch|Assign $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactorWithScope(Node $node, Scope $scope): ?Node
     {
         if ($node instanceof Assign) {
             if ($node->var instanceof PropertyFetch) {
-                return $this->refactorMagicSet($node->expr, $node->var);
+                return $this->refactorMagicSet($node->expr, $node->var, $scope);
             }
 
             return null;
@@ -163,7 +163,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function refactorMagicSet(Expr $expr, PropertyFetch $propertyFetch): MethodCall|null
+    private function refactorMagicSet(Expr $expr, PropertyFetch $propertyFetch, Scope $scope): MethodCall|null
     {
         $propertyCallerType = $this->getType($propertyFetch->var);
         if (! $propertyCallerType instanceof ObjectType) {
@@ -184,23 +184,15 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->hasNoParamOrVariadic($propertyCallerType, $propertyFetch, $setterMethodName)) {
+        if ($this->hasNoParamOrVariadic($propertyCallerType, $setterMethodName, $scope)) {
             return null;
         }
 
         return $this->nodeFactory->createMethodCall($propertyFetch->var, $setterMethodName, [$expr]);
     }
 
-    private function hasNoParamOrVariadic(
-        ObjectType $objectType,
-        PropertyFetch $propertyFetch,
-        string $setterMethodName
-    ): bool {
-        $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
+    private function hasNoParamOrVariadic(ObjectType $objectType, string $setterMethodName, Scope $scope): bool
+    {
         $methodReflection = $objectType->getMethod($setterMethodName, $scope);
 
         if (! $methodReflection instanceof ResolvedMethodReflection) {

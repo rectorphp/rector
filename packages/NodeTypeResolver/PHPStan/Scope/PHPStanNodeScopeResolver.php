@@ -5,12 +5,20 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Trait_;
+use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\NodeTraverser;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
@@ -33,6 +41,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Webmozart\Assert\Assert;
 
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -68,17 +77,63 @@ final class PHPStanNodeScopeResolver
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function processNodes(array $stmts, SmartFileInfo $smartFileInfo): array
-    {
+    public function processNodes(
+        array $stmts,
+        SmartFileInfo $smartFileInfo,
+        ?MutatingScope $formerMutatingScope = null
+    ): array {
+        $isScopeRefreshing = $formerMutatingScope instanceof MutatingScope;
+
+        /**
+         * The stmts must be array of Stmt, or it will be silently skipped by PHPStan
+         * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
+         */
+
+        Assert::allIsInstanceOf($stmts, Stmt::class);
         $this->removeDeepChainMethodCallNodes($stmts);
 
-        $scope = $this->scopeFactory->createFromFile($smartFileInfo);
+        $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($smartFileInfo);
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
-        $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use (&$nodeCallback): void {
+        $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use (
+            &$nodeCallback,
+            $isScopeRefreshing
+        ): void {
             if ($node instanceof Foreach_) {
                 // decorate value as well
                 $node->valueVar->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+
+            if ($node instanceof Switch_) {
+                // decorate value as well
+                foreach ($node->cases as $case) {
+                    $case->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                }
+            }
+
+            if ($node instanceof TryCatch && $node->finally instanceof Finally_) {
+                $node->finally->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+
+            if ($node instanceof Assign) {
+                // decorate value as well
+                $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $node->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+
+            // decorate value as well
+            if ($node instanceof Return_ && $node->expr instanceof Expr) {
+                $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+
+            // scope is missing on attributes
+            // @todo decorate parent nodes too
+            if ($node instanceof Property) {
+                foreach ($node->attrGroups as $attrGroup) {
+                    foreach ($attrGroup->attrs as $attribute) {
+                        $attribute->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    }
+                }
             }
 
             if ($node instanceof Trait_) {
@@ -96,6 +151,7 @@ final class PHPStanNodeScopeResolver
 
                 $traitContext = clone $scopeContext;
 
+                // before entering the class/trait again, we have to tell scope no class was set, otherwise it crashes
                 $this->privatesAccessor->setPrivatePropertyOfClass(
                     $traitContext,
                     'classReflection',
@@ -109,22 +165,24 @@ final class PHPStanNodeScopeResolver
                     ScopeContext::class
                 );
 
+                $node->setAttribute(AttributeKey::SCOPE, $traitScope);
+
                 $this->nodeScopeResolver->processNodes($node->stmts, $traitScope, $nodeCallback);
                 return;
             }
 
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
-            if ($node instanceof Class_ || $node instanceof Interface_) {
+            if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Enum_) {
                 /** @var MutatingScope $mutatingScope */
-                $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
+                $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope, $isScopeRefreshing);
             }
 
             // special case for unreachable nodes
             if ($node instanceof UnreachableStatementNode) {
-                $originalNode = $node->getOriginalStatement();
-                $originalNode->setAttribute(AttributeKey::IS_UNREACHABLE, true);
-                $originalNode->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $originalStmt = $node->getOriginalStatement();
+                $originalStmt->setAttribute(AttributeKey::IS_UNREACHABLE, true);
+                $originalStmt->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             } else {
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
@@ -163,8 +221,9 @@ final class PHPStanNodeScopeResolver
     }
 
     private function resolveClassOrInterfaceScope(
-        Class_ | Interface_ $classLike,
-        MutatingScope $mutatingScope
+        Class_ | Interface_ | Enum_ $classLike,
+        MutatingScope $mutatingScope,
+        bool $isScopeRefreshing
     ): MutatingScope {
         $className = $this->resolveClassName($classLike);
 
@@ -177,10 +236,16 @@ final class PHPStanNodeScopeResolver
             $classReflection = $this->reflectionProvider->getClass($className);
         }
 
+        // on refresh, remove entered class avoid entering the class again
+        if ($isScopeRefreshing && $mutatingScope->isInClass() && ! $classReflection->isAnonymous()) {
+            $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
+            $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);
+        }
+
         return $mutatingScope->enterClass($classReflection);
     }
 
-    private function resolveClassName(Class_ | Interface_ | Trait_ $classLike): string
+    private function resolveClassName(Class_ | Interface_ | Trait_| Enum_ $classLike): string
     {
         if ($classLike->namespacedName instanceof Name) {
             return (string) $classLike->namespacedName;

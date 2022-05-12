@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp81\Rector\Array_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntegerType;
 use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
@@ -66,13 +67,13 @@ CODE_SAMPLE
     /**
      * @param Array_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactorWithScope(Node $node, Scope $scope): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
 
-        return parent::refactor($node);
+        return parent::refactorWithScope($node, $scope);
     }
 
     private function shouldSkip(Array_ $array): bool

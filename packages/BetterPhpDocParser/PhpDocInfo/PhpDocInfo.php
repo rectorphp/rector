@@ -306,6 +306,7 @@ final class PhpDocInfo
             $typeToRemove
         ): ?int {
             if ($node instanceof PhpDocTagNode && is_a($node->value, $typeToRemove, true)) {
+                // keep special annotation for tools
                 if (str_starts_with($node->name, '@psalm-')) {
                     return null;
                 }

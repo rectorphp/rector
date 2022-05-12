@@ -89,6 +89,7 @@ parameters:
                 - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
                 - rules/Renaming/NodeManipulator/ClassRenamer.php
+                - src/Rector/AbstractRector.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 10$#"
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 10#'
@@ -316,7 +317,7 @@ parameters:
         -
             message: '#This call has duplicate argument#'
             paths:
-                 - rules/Php72/Rector/Assign/ReplaceEachAssignmentWithKeyCurrentRector.php
+                - rules/Php72/Rector/Assign/ReplaceEachAssignmentWithKeyCurrentRector.php
 
         -
             message: '#foreach\(\), while\(\), for\(\) or if\(\) cannot contain a complex expression\. Extract it to a new variable on a line before#'
@@ -348,9 +349,6 @@ parameters:
         # waits for phpstan upgrade to php-parser 4.13
         - '#Access to an undefined property PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\:\:\$value#'
         - '#(.*?), array<PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\> given#'
-
-        # scope & mutating scope mish-mash
-        - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, Closure\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'
 
         # share configuration to avoid duplication in 5 rules
         -
@@ -386,7 +384,6 @@ parameters:
             message: '#Use separate function calls with readable variable names#'
             paths:
                 - src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
-                - rules/Renaming/NodeManipulator/ClassRenamer.php
 
         # on purpose to make use of worker paralle pattern
         -
@@ -453,14 +450,14 @@ parameters:
 
         # parallel
         -
-             message: '#Instead of array shape, use value object with specific types in constructor and getters#'
-             paths:
-                 - src/ValueObjectFactory/ProcessResultFactory.php
-                 - src/*/*Processor.php
-                 - rules/Composer/Application/FileProcessor/ComposerFileProcessor.php
-                 - src/Contract/Processor/FileProcessorInterface.php
-                 - packages/Parallel/Application/ParallelFileProcessor.php
-                 - rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php
+            message: '#Instead of array shape, use value object with specific types in constructor and getters#'
+            paths:
+                - src/ValueObjectFactory/ProcessResultFactory.php
+                - src/*/*Processor.php
+                - rules/Composer/Application/FileProcessor/ComposerFileProcessor.php
+                - src/Contract/Processor/FileProcessorInterface.php
+                - packages/Parallel/Application/ParallelFileProcessor.php
+                - rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php
 
         # skipped on purpose, as ctor overrie
         - '#Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType\:\:__construct\(\) does not call parent constructor from PHPStan\\Type\\StaticType#'
@@ -495,6 +492,7 @@ parameters:
                 - packages/Parallel/Application/ParallelFileProcessor.php
                 - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
                 - rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php
+                - rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php
                 - rules/Php70/EregToPcreTransformer.php
                 - rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php
 
@@ -521,7 +519,7 @@ parameters:
         - '#Parameter \#1 \$type of method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectWithoutClassTypeMapper\:\:mapToPhpParserNode\(\) expects PHPStan\\Type\\ObjectWithoutClassType, PHPStan\\Type\\Accessory\\Has(Property|Method)Type given#'
 
         # Scope vs MutatingScope interchangable false positive
-        - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, callable\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'
+        - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, (callable|Closure)\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'
 
         # internal reflection
         - '#Instead of "new ClassReflection\(\)" use ReflectionProvider service or "\(new PHPStan\\Reflection\\ClassReflection\(<desired_type>\)\)" for static reflection to work#'
@@ -581,11 +579,11 @@ parameters:
         - '#Class "Rector\\(.*?)\\Rector\\(.*?) has invalid namespace category "(.*?)"\. Pick one of\: "(Expression|Class_|NodeTypeGroup)"#'
         - '#Class "Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector" has invalid namespace category "ConstFetch"\. Pick one of\: "If_"#'
 
-        - '#Cognitive complexity for "Rector\\CodingStyle\\Rector\\ClassMethod\\MakeInheritedMethodVisibilitySameAsParentRector\:\:refactor\(\)" is 11, keep it under 10#'
         -
-            message: '#Cognitive complexity for "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector\:\:refactor\(\)" is \d+, keep it under 10#'
+            message: '#Cognitive complexity for "Rector\\(.*?)Rector\:\:refactor\(\)" is \d+, keep it under 10#'
             paths:
                 - rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php
+                - rules/CodingStyle/Rector/ClassMethod/MakeInheritedMethodVisibilitySameAsParentRector.php
 
         # known value
         - '#Method Rector\\Core\\Php\\PhpVersionProvider\:\:provide\(\) should return 50200\|50300\|50400\|50500\|50600\|70000\|70100\|70200\|70300\|70400\|80000\|80100\|80200\|100000 but returns int#'
@@ -616,6 +614,7 @@ parameters:
         -
             message: '#Use separate function calls with readable variable names#'
             path: rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php
+
         - '#Class "Rector\\CodeQuality\\Rector\\FunctionLike\\RemoveAlwaysTrueConditionSetInConstructorRector" has invalid namespace category "FunctionLike"\. Pick one of\: "If_"#'
 
         # doc arrays cannot be trusted
@@ -637,6 +636,33 @@ parameters:
 
 
 
+
+        # doc validation
+        -
+            message: '#Call to function array_key_exists\(\) with (.*?) and array(.*?) will always evaluate to true#'
+            path: packages/FileFormatter/ValueObject/Indent.php
+
+        - '#Parameter \#1 \$indentStyle of method Rector\\FileFormatter\\ValueObjectFactory\\EditorConfigConfigurationBuilder\:\:withIndentStyle\(\) expects (.*?), string given#'
+
+        - '#Cognitive complexity for "Rector\\CodingStyle\\Rector\\ClassMethod\\MakeInheritedMethodVisibilitySameAsParentRector\:\:refactorWithScope\(\)" is 12, keep it under 10#'
+
+        # hash key
+        -
+            path: rules/Renaming/NodeManipulator/ClassRenamer.php
+            message: '#Use separate function calls with readable variable names#'
+
+        - '#Cognitive complexity for "Rector\\Core\\Rector\\AbstractRector\:\:enterNode\(\)" is \d+, keep it under 10#'
+
+        # false positive by php-parser, the args can be null
+        - '#Parameter \#2 \$args of class PhpParser\\Node\\Expr\\FuncCall constructor expects array<PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder>, array<int, PhpParser\\Node\\Arg\|null> given#'
+
+        # known type
+        - '#Anonymous variable in a `\$parentStmt\->\.\.\.\(\)` method call can lead to false dead methods\. Make sure the variable type is known#'
+
+        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver\:\:processNodes\(\)" is \d+, keep it under 10#'
+
+        # depends on falsy docs
+        - '#Call to static method Webmozart\\Assert\\Assert\:\:allIsInstanceOf\(\) with array<PhpParser\\Node\\Stmt> and (.*?)Stmt(.*?) will always evaluate to true#'
 
         # doc validation
         -

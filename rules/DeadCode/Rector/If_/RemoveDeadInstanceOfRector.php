@@ -85,7 +85,7 @@ CODE_SAMPLE
      * @param If_ $node
      * @return Stmt[]|null|If_
      */
-    public function refactor(Node $node): null|array|If_
+    public function refactor(Node $node): If_|array|null
     {
         if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
             return null;

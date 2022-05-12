@@ -99,11 +99,7 @@ CODE_SAMPLE
             $hasChanged = true;
         }
 
-        if ($hasChanged) {
-            return $node;
-        }
-
-        return null;
+        return $hasChanged ? $node : null;
     }
 
     private function shouldSkipProperty(Property $property): bool
