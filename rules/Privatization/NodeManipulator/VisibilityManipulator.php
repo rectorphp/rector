@@ -17,7 +17,7 @@ use Webmozart\Assert\Assert;
  */
 final class VisibilityManipulator
 {
-    public function hasVisibility(ClassMethod | Property | ClassConst | Param $node, int $visibility): bool
+    public function hasVisibility(Class_ | ClassMethod | Property | ClassConst | Param $node, int $visibility): bool
     {
         return (bool) ($node->flags & $visibility);
     }
@@ -117,7 +117,7 @@ final class VisibilityManipulator
         $classMethod->flags -= Class_::MODIFIER_ABSTRACT;
     }
 
-    public function makeReadonly(Property | Param $node): void
+    public function makeReadonly(Class_ | Property | Param $node): void
     {
         $this->addVisibilityFlag($node, Visibility::READONLY);
     }
