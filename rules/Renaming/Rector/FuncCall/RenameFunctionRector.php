@@ -43,7 +43,7 @@ final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector impl
                 continue;
             }
             // not to refactor here
-            $isVirtual = (bool) $node->name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE, \false);
+            $isVirtual = (bool) $node->name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE);
             if ($isVirtual) {
                 continue;
             }

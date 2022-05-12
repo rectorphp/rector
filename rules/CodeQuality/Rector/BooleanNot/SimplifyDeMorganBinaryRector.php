@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\BooleanNot;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BooleanNot;
 use Rector\Core\NodeManipulator\BinaryOpManipulator;
@@ -49,7 +50,7 @@ CODE_SAMPLE
     /**
      * @param BooleanNot $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\BinaryOp
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return null;

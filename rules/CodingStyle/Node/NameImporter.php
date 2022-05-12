@@ -87,7 +87,7 @@ final class NameImporter
     }
     private function shouldSkipName(\PhpParser\Node\Name $name) : bool
     {
-        $virtualNode = (bool) $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE, \false);
+        $virtualNode = (bool) $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE);
         if ($virtualNode) {
             return \true;
         }

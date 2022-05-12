@@ -67,8 +67,8 @@ final class ComplexNodeRemover
     {
         $propertyName = $this->nodeNameResolver->getName($property);
         $hasSideEffect = \false;
-        $isPartoFAnotherAssign = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $node) use($removeAssignSideEffect, $propertyName, &$hasSideEffect, &$isPartoFAnotherAssign) {
+        $isPartOfAnotherAssign = \false;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $node) use($removeAssignSideEffect, $propertyName, &$hasSideEffect, &$isPartOfAnotherAssign) {
             // here should be checked all expr like stmts that can hold assign, e.f. if, foreach etc. etc.
             if (!$node instanceof \PhpParser\Node\Stmt\Expression) {
                 return null;
@@ -81,7 +81,7 @@ final class ComplexNodeRemover
             $assign = $nodeExpr;
             // skip double assigns
             if ($assign->expr instanceof \PhpParser\Node\Expr\Assign) {
-                $isPartoFAnotherAssign = \true;
+                $isPartOfAnotherAssign = \true;
                 return null;
             }
             $propertyFetches = $this->resolvePropertyFetchFromDimFetch($assign->var);
@@ -103,7 +103,7 @@ final class ComplexNodeRemover
         if ($hasSideEffect) {
             return;
         }
-        if ($isPartoFAnotherAssign) {
+        if ($isPartOfAnotherAssign) {
             return;
         }
         $this->removeConstructorDependency($class, $propertyName);

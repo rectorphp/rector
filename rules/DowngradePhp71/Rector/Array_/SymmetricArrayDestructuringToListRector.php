@@ -11,9 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -36,24 +34,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Array_::class];
+        return [\PhpParser\Node\Expr\Array_::class, \PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Stmt\Foreach_::class];
     }
     /**
-     * @param Array_ $node
+     * @param Array_|Assign|Foreach_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($node, $parentNode->var)) {
-            return $this->processToList($node);
-        }
-        if (!$parentNode instanceof \PhpParser\Node\Stmt\Foreach_) {
+        if ($node instanceof \PhpParser\Node\Expr\Assign) {
+            if ($node->var instanceof \PhpParser\Node\Expr\Array_) {
+                $node->var = $this->processToList($node->var);
+                return $node;
+            }
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($node, $parentNode->valueVar)) {
-            return null;
+        if ($node instanceof \PhpParser\Node\Stmt\Foreach_ && $node->valueVar instanceof \PhpParser\Node\Expr\Array_) {
+            $node->valueVar = $this->processToList($node->valueVar);
+            return $node;
         }
-        return $this->processToList($node);
+        return null;
     }
     private function processToList(\PhpParser\Node\Expr\Array_ $array) : \PhpParser\Node\Expr\FuncCall
     {
@@ -61,7 +60,6 @@ CODE_SAMPLE
         foreach ($array->items as $arrayItem) {
             $args[] = $arrayItem instanceof \PhpParser\Node\Expr\ArrayItem ? new \PhpParser\Node\Arg($arrayItem->value) : null;
         }
-        /** @var Arg[]|VariadicPlaceholder[] $args */
         return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('list'), $args);
     }
 }

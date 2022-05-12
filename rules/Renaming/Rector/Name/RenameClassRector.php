@@ -88,6 +88,9 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
+        if ($oldToNewClasses === []) {
+            return null;
+        }
         if (!$node instanceof \PhpParser\Node\Stmt\Use_) {
             return $this->classRenamer->renameNode($node, $oldToNewClasses);
         }

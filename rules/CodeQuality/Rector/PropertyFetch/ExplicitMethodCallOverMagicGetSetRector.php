@@ -98,15 +98,20 @@ CODE_SAMPLE
         }
         return $this->refactorPropertyFetch($node);
     }
+    /**
+     * @return string[]
+     */
+    public function resolvePossibleGetMethodNames(string $propertyName) : array
+    {
+        return ['get' . \ucfirst($propertyName), 'has' . \ucfirst($propertyName), 'is' . \ucfirst($propertyName)];
+    }
     private function shouldSkipPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
-        $parentAssign = $this->betterNodeFinder->findParentType($propertyFetch, \PhpParser\Node\Expr\Assign::class);
-        if (!$parentAssign instanceof \PhpParser\Node\Expr\Assign) {
+        $parent = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node\Expr\Assign) {
             return \false;
         }
-        return (bool) $this->betterNodeFinder->findFirst($parentAssign->var, function (\PhpParser\Node $subNode) use($propertyFetch) : bool {
-            return $subNode === $propertyFetch;
-        });
+        return $parent->var === $propertyFetch;
     }
     /**
      * @return \PhpParser\Node\Expr\MethodCall|null
@@ -125,10 +130,7 @@ CODE_SAMPLE
         if ($propertyName === null) {
             return null;
         }
-        $possibleGetterMethodNames = [];
-        $possibleGetterMethodNames[] = 'get' . \ucfirst($propertyName);
-        $possibleGetterMethodNames[] = 'has' . \ucfirst($propertyName);
-        $possibleGetterMethodNames[] = 'is' . \ucfirst($propertyName);
+        $possibleGetterMethodNames = $this->resolvePossibleGetMethodNames($propertyName);
         foreach ($possibleGetterMethodNames as $possibleGetterMethodName) {
             if (!$callerType->hasMethod($possibleGetterMethodName)->yes()) {
                 continue;

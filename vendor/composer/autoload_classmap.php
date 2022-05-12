@@ -1949,6 +1949,7 @@ return array(
     'Rector\\Doctrine\\Rector\\MethodCall\\ReplaceParentRepositoryCallsByRepositoryPropertyRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/MethodCall/ReplaceParentRepositoryCallsByRepositoryPropertyRector.php',
     'Rector\\Doctrine\\Rector\\Property\\ChangeBigIntEntityPropertyToIntTypeRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Property/ChangeBigIntEntityPropertyToIntTypeRector.php',
     'Rector\\Doctrine\\Rector\\Property\\CorrectDefaultTypesOnEntityPropertyRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Property/CorrectDefaultTypesOnEntityPropertyRector.php',
+    'Rector\\Doctrine\\Rector\\Property\\DoctrineTargetEntityStringToClassConstantRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Property/DoctrineTargetEntityStringToClassConstantRector.php',
     'Rector\\Doctrine\\Rector\\Property\\ImproveDoctrineCollectionDocTypeInEntityRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Property/ImproveDoctrineCollectionDocTypeInEntityRector.php',
     'Rector\\Doctrine\\Rector\\Property\\MakeEntityDateTimePropertyDateTimeInterfaceRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Property/MakeEntityDateTimePropertyDateTimeInterfaceRector.php',
     'Rector\\Doctrine\\Rector\\Property\\RemoveRedundantDefaultPropertyAnnotationValuesRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Property/RemoveRedundantDefaultPropertyAnnotationValuesRector.php',
