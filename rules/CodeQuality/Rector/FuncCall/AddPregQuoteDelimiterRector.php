@@ -22,7 +22,7 @@ final class AddPregQuoteDelimiterRector extends AbstractRector
 {
     /**
      * @var string
-     * @changelog https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
+     * @see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
     private const ALL_MODIFIERS = 'imsxeADSUXJu';
 

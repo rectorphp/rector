@@ -141,7 +141,7 @@ final class PropertyNaming
     }
 
     /**
-     * @changelog https://stackoverflow.com/a/2792045/1348344
+     * @see https://stackoverflow.com/a/2792045/1348344
      */
     public function underscoreToName(string $underscoreName): string
     {

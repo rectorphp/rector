@@ -25,7 +25,7 @@ final class RenameClassNonPhpRector implements NonPhpRectorInterface, Configurab
 
     /**
      * @see https://regex101.com/r/HKUFJD/5
-     * @changelog https://stackoverflow.com/a/3926546/1348344
+     * @see https://stackoverflow.com/a/3926546/1348344
      * @var string
      */
     private const STANDALONE_CLASS_SUFFIX_REGEX = '(?=::)#';
