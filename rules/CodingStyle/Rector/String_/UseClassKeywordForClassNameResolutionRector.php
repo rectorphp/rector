@@ -21,7 +21,7 @@ final class UseClassKeywordForClassNameResolutionRector extends AbstractRector
 {
     /**
      * @var string
-     * @changelog https://regex101.com/r/Vv41Qr/1/
+     * @see https://regex101.com/r/Vv41Qr/1/
      */
     private const CLASS_BEFORE_STATIC_ACCESS_REGEX = '#(?<class_name>[\\\\a-zA-Z0-9_\\x80-\\xff]*)::#';
 

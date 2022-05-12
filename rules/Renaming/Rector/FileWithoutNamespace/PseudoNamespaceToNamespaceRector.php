@@ -30,7 +30,7 @@ use Webmozart\Assert\Assert;
 final class PseudoNamespaceToNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @changelog https://regex101.com/r/chvLgs/1/
+     * @see https://regex101.com/r/chvLgs/1/
      * @var string
      */
     private const SPLIT_BY_UNDERSCORE_REGEX = '#([a-zA-Z])(_)?(_)([a-zA-Z])#';

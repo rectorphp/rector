@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArrayShapeFromConstantArrayReturnRector extends AbstractRector
 {
     /**
-     * @changelog https://regex101.com/r/WvUD0m/2
+     * @see https://regex101.com/r/WvUD0m/2
      * @var string
      */
     private const SKIPPED_CHAR_REGEX = '#\W#u';

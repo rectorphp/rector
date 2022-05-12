@@ -32,7 +32,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Allo
 
     /**
      * @var string
-     * @changelog https://regex101.com/r/isdgEN/1
+     * @see https://regex101.com/r/isdgEN/1
      *
      * For modifiers see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
@@ -40,7 +40,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Allo
 
     /**
      * @var string
-     * @changelog https://regex101.com/r/nnuwUo/1
+     * @see https://regex101.com/r/nnuwUo/1
      *
      * For modifiers see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
@@ -48,13 +48,13 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Allo
 
     /**
      * @var string
-     * @changelog https://regex101.com/r/KpCzg6/1
+     * @see https://regex101.com/r/KpCzg6/1
      */
     private const NEW_LINE_REGEX = '#(\\r|\\n)#';
 
     /**
      * @var string
-     * @changelog https://regex101.com/r/EyXsV6/6
+     * @see https://regex101.com/r/EyXsV6/6
      */
     private const DOUBLE_QUOTED_REGEX = '#^"(?<delimiter>.{1}).{1,}\k<delimiter>[imsxeADSUXJu]*"$#';
 

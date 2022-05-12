@@ -25,7 +25,7 @@ final class ExceptionHandlerTypehintRector extends AbstractRector implements Min
 {
     /**
      * @var string
-     * @changelog https://regex101.com/r/VBFXCR/1
+     * @see https://regex101.com/r/VBFXCR/1
      */
     private const HANDLE_INSENSITIVE_REGEX = '#handle#i';
 

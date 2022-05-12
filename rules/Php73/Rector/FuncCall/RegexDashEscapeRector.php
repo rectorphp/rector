@@ -26,7 +26,7 @@ final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersio
 {
     /**
      * @var string
-     * @changelog https://regex101.com/r/iQbGgZ/1
+     * @see https://regex101.com/r/iQbGgZ/1
      *
      * Use {2} as detected only 2 after $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern() call
      */
@@ -34,13 +34,13 @@ final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersio
 
     /**
      * @var string
-     * @changelog https://regex101.com/r/YgVJFp/1
+     * @see https://regex101.com/r/YgVJFp/1
      */
     private const LEFT_HAND_UNESCAPED_DASH_REGEX = '#(\[.*?\\\\(w|s|d))-(?!\])#i';
 
     /**
      * @var string
-     * @changelog https://regex101.com/r/TBVme9/8
+     * @see https://regex101.com/r/TBVme9/8
      */
     private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\[)-(\\\\(w|s|d)[.*]?)\]#i';
 

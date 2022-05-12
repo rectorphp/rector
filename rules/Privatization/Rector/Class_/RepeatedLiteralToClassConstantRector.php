@@ -45,7 +45,7 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
 
     /**
      * @var string
-     * @changelog https://regex101.com/r/osJLMF/1
+     * @see https://regex101.com/r/osJLMF/1
      */
     private const SLASH_AND_DASH_REGEX = '#[-\\\/]#';
 
