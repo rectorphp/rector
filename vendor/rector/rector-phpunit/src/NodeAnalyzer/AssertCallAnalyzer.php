@@ -156,6 +156,7 @@ final class AssertCallAnalyzer
             'setExpectedException*',
             'expectOutput*',
             'should*',
+            'doTestFileInfo',
         ]);
     }
 }
