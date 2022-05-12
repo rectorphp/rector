@@ -670,3 +670,12 @@ parameters:
             path: packages/FileFormatter/ValueObject/Indent.php
 
         - '#Parameter \#1 \$indentStyle of method Rector\\FileFormatter\\ValueObjectFactory\\EditorConfigConfigurationBuilder\:\:withIndentStyle\(\) expects (.*?), string given#'
+
+        # autoload check in bin file
+        -
+            message: '#Function "class_exists\(\)" cannot be used/left in the code\: use ReflectionProvider\->has\*\(\) instead#'
+            path: bin/rector.php
+
+        -
+            message: '#Do not compare call directly, use a variable assign#'
+            path: bin/rector.php
