@@ -31,6 +31,7 @@ abstract class AbstractProcessCommand extends \RectorPrefix20220513\Symfony\Comp
         $this->addOption(\Rector\Core\Configuration\Option::NO_PROGRESS_BAR, null, \RectorPrefix20220513\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Hide progress bar. Useful e.g. for nicer CI output.');
         $this->addOption(\Rector\Core\Configuration\Option::NO_DIFFS, null, \RectorPrefix20220513\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Hide diffs of changed files. Useful e.g. for nicer CI output.');
         $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, null, \RectorPrefix20220513\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'Select output format', \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
+        $this->addOption(\Rector\Core\Configuration\Option::DEBUG, null, \RectorPrefix20220513\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Display debug output.');
         $this->addOption(\Rector\Core\Configuration\Option::MEMORY_LIMIT, null, \RectorPrefix20220513\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'Memory limit for process');
         $this->addOption(\Rector\Core\Configuration\Option::CLEAR_CACHE, null, \RectorPrefix20220513\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Clear unchaged files cache');
         $this->addOption(\Rector\Core\Configuration\Option::PARALLEL_PORT, null, \RectorPrefix20220513\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED);

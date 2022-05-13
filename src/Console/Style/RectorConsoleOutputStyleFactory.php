@@ -25,9 +25,8 @@ final class RectorConsoleOutputStyleFactory
         $consoleOutput = new \RectorPrefix20220513\Symfony\Component\Console\Output\ConsoleOutput();
         // to configure all -v, -vv, -vvv options without memory-lock to Application run() arguments
         $this->privatesCaller->callPrivateMethod(new \RectorPrefix20220513\Symfony\Component\Console\Application(), 'configureIO', [$argvInput, $consoleOutput]);
-        $debugArgvInputParameterOption = $argvInput->getParameterOption('--debug');
         // --debug is called
-        if ($debugArgvInputParameterOption === null) {
+        if ($argvInput->hasParameterOption('--debug')) {
             $consoleOutput->setVerbosity(\RectorPrefix20220513\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG);
         }
         return new \Rector\Core\Console\Style\RectorConsoleOutputStyle($argvInput, $consoleOutput);
