@@ -62,7 +62,7 @@ final class NamedToUnnamedArgs
      * @return array<int, Arg>
      * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|\ReflectionFunction $functionLikeReflection
      */
-    public function fillFromJumpedNamedArgs($functionLikeReflection, array $unnamedArgs, bool $isNativeFunctionReflection, array $parameters) : array
+    public function fillFromJumpedNamedArgs($functionLikeReflection, array $unnamedArgs, array $parameters) : array
     {
         $keys = \array_keys($unnamedArgs);
         if ($keys === []) {
@@ -78,17 +78,17 @@ final class NamedToUnnamedArgs
                 continue;
             }
             /** @var ParameterReflection|PhpParameterReflection $parameterReflection */
-            if ($isNativeFunctionReflection) {
-                /** @var ReflectionFunction $functionLikeReflection */
+            if ($functionLikeReflection instanceof \ReflectionFunction) {
+                // @todo since PHPStan 1.7.* add new InitializerExprTypeResolver() service as 1st arg - https://github.com/phpstan/phpstan-src/commit/c8b3926f005d008178d6d8c62aaca0200a6359a2#diff-ce65c81a2653b1f53bc416082582e248f629d65c066440d9c4edc5005d16af32
                 $parameterReflection = new \PHPStan\Reflection\Php\PhpParameterReflection($functionLikeReflection->getParameters()[$i], null, null);
             } else {
                 $parameterReflection = $parameters[$i];
             }
-            $defaulValue = $this->defaultParameterValueResolver->resolveFromParameterReflection($parameterReflection);
-            if (!$defaulValue instanceof \PhpParser\Node\Expr) {
+            $defaultValue = $this->defaultParameterValueResolver->resolveFromParameterReflection($parameterReflection);
+            if (!$defaultValue instanceof \PhpParser\Node\Expr) {
                 continue;
             }
-            $unnamedArgs[$i] = new \PhpParser\Node\Arg($defaulValue, $parameterReflection->passedByReference()->yes(), $parameterReflection->isVariadic(), [], null);
+            $unnamedArgs[$i] = new \PhpParser\Node\Arg($defaultValue, $parameterReflection->passedByReference()->yes(), $parameterReflection->isVariadic(), [], null);
         }
         return $unnamedArgs;
     }

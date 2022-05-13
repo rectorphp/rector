@@ -35,10 +35,8 @@ final class UnnamedArgumentResolver
     public function resolveFromReflection($functionLikeReflection, array $currentArgs) : array
     {
         $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
-        $unnamedArgs = [];
         $parameters = $parametersAcceptor->getParameters();
-        $isNativeFunctionReflection = $functionLikeReflection instanceof \PHPStan\Reflection\Native\NativeFunctionReflection;
-        if ($isNativeFunctionReflection) {
+        if ($functionLikeReflection instanceof \PHPStan\Reflection\Native\NativeFunctionReflection) {
             $functionLikeReflection = new \ReflectionFunction($functionLikeReflection->getName());
         }
         /** @var Arg[] $unnamedArgs */
@@ -54,7 +52,7 @@ final class UnnamedArgumentResolver
             $toFillArgs[] = $argName;
         }
         $unnamedArgs = $this->namedToUnnamedArgs->fillFromNamedArgs($parameters, $currentArgs, $toFillArgs, $unnamedArgs);
-        $unnamedArgs = $this->namedToUnnamedArgs->fillFromJumpedNamedArgs($functionLikeReflection, $unnamedArgs, $isNativeFunctionReflection, $parameters);
+        $unnamedArgs = $this->namedToUnnamedArgs->fillFromJumpedNamedArgs($functionLikeReflection, $unnamedArgs, $parameters);
         \ksort($unnamedArgs);
         return $unnamedArgs;
     }

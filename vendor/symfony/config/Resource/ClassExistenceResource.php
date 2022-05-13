@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220512\Symfony\Component\Config\Resource;
+namespace RectorPrefix20220513\Symfony\Component\Config\Resource;
 
 /**
  * ClassExistenceResource represents a class existence.
@@ -20,7 +20,7 @@ namespace RectorPrefix20220512\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class ClassExistenceResource implements \RectorPrefix20220512\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class ClassExistenceResource implements \RectorPrefix20220513\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     /**
      * @var string

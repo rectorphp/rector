@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\ValueObject;
 
-use RectorPrefix20220512\Nette\Utils\Strings;
+use RectorPrefix20220513\Nette\Utils\Strings;
 use Rector\FileFormatter\Enum\IndentType;
 use Rector\FileFormatter\Exception\InvalidIndentSizeException;
 use Rector\FileFormatter\Exception\InvalidIndentStringException;
@@ -48,7 +48,7 @@ final class Indent
     }
     public static function fromString(string $content) : self
     {
-        $match = \RectorPrefix20220512\Nette\Utils\Strings::match($content, self::VALID_INDENT_REGEX);
+        $match = \RectorPrefix20220513\Nette\Utils\Strings::match($content, self::VALID_INDENT_REGEX);
         if ($match === null) {
             throw new \Rector\FileFormatter\Exception\InvalidIndentStringException($content);
         }
@@ -78,7 +78,7 @@ final class Indent
     }
     public static function fromContent(string $content) : self
     {
-        $match = \RectorPrefix20220512\Nette\Utils\Strings::match($content, self::PARSE_INDENT_REGEX);
+        $match = \RectorPrefix20220513\Nette\Utils\Strings::match($content, self::PARSE_INDENT_REGEX);
         if (isset($match['indent'])) {
             return self::fromString($match['indent']);
         }
