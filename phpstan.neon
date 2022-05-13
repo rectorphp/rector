@@ -365,7 +365,6 @@ parameters:
 
         # many internal cases
         - '#Calling (.*?) is not covered by backward compatibility promise\. The method might change in a minor PHPStan version#'
-        - '#Creating (.*?) is not covered by backward compatibility promise\. The class might change in a minor PHPStan version#'
 
         # generated content - not reliable values
         -
@@ -679,3 +678,15 @@ parameters:
         -
             message: '#Do not compare call directly, use a variable assign#'
             path: bin/rector.php
+
+        # use of internal phpstan classes
+        -
+            message: '#Creating new PHPStan\\Reflection\\BetterReflection\\SourceLocator\\Optimized(.*?)SourceLocator is not covered by backward compatibility promise\. The class might change in a minor PHPStan version#'
+            path: packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php
+        -
+            message: '#Creating new PHPStan\\Reflection\\Native\\NativeFunctionReflection is not covered by backward compatibility promise\. The class might change in a minor PHPStan version#'
+            path: src/PHPStan/Reflection/TypeToCallReflectionResolver/ClosureTypeToCallReflectionResolver
+
+        -
+            message: '#Creating new PHPStan\\Reflection\\Php\\PhpParameterReflection is not covered by backward compatibility promise\. The class might change in a minor PHPStan version#'
+            path: rules/DowngradePhp80/NodeAnalyzer/NamedToUnnamedArgs.php

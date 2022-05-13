@@ -29,11 +29,10 @@ final class UnnamedArgumentResolver
         array $currentArgs
     ): array {
         $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
-        $unnamedArgs = [];
-        $parameters = $parametersAcceptor->getParameters();
-        $isNativeFunctionReflection = $functionLikeReflection instanceof NativeFunctionReflection;
 
-        if ($isNativeFunctionReflection) {
+        $parameters = $parametersAcceptor->getParameters();
+
+        if ($functionLikeReflection instanceof NativeFunctionReflection) {
             $functionLikeReflection = new ReflectionFunction($functionLikeReflection->getName());
         }
 
@@ -61,7 +60,6 @@ final class UnnamedArgumentResolver
         $unnamedArgs = $this->namedToUnnamedArgs->fillFromJumpedNamedArgs(
             $functionLikeReflection,
             $unnamedArgs,
-            $isNativeFunctionReflection,
             $parameters
         );
         ksort($unnamedArgs);

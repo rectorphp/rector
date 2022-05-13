@@ -8,10 +8,7 @@ use PhpParser\BuilderHelpers;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
-use PHPStan\Reflection\FunctionReflection;
-use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\ConstantType;
@@ -33,23 +30,6 @@ final class DefaultParameterValueResolver
         }
 
         return $this->resolveValueFromType($defaultValue);
-    }
-
-    public function resolveFromFunctionLikeAndPosition(
-        MethodReflection | FunctionReflection $functionLikeReflection,
-        int $position
-    ): ?Expr {
-        $parametersAcceptor = $functionLikeReflection->getVariants()[0] ?? null;
-        if (! $parametersAcceptor instanceof ParametersAcceptor) {
-            return null;
-        }
-
-        $parameterReflection = $parametersAcceptor->getParameters()[$position] ?? null;
-        if (! $parameterReflection instanceof ParameterReflection) {
-            return null;
-        }
-
-        return $this->resolveFromParameterReflection($parameterReflection);
     }
 
     private function resolveValueFromType(ConstantType $constantType): ConstFetch | Expr
