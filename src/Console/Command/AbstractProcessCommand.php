@@ -66,6 +66,8 @@ abstract class AbstractProcessCommand extends Command
             ConsoleOutputFormatter::NAME
         );
 
+        $this->addOption(Option::DEBUG, null, InputOption::VALUE_NONE, 'Display debug output.');
+
         $this->addOption(Option::MEMORY_LIMIT, null, InputOption::VALUE_REQUIRED, 'Memory limit for process',);
 
         $this->addOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchaged files cache');
