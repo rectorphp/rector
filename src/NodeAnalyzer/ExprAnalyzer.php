@@ -13,6 +13,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\Encapsed;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\NodeManipulator\ArrayManipulator;
@@ -68,7 +69,8 @@ final class ExprAnalyzer
     {
         if (! $expr instanceof Array_) {
             if ($expr instanceof Scalar) {
-                return false;
+                // string interpolation is true, otherwise false
+                return $expr instanceof Encapsed;
             }
 
             return ! $this->isAllowedConstFetchOrClassConstFetch($expr);
