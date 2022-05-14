@@ -73,51 +73,54 @@ CODE_SAMPLE
             return null;
         }
 
-        $previousStmt = null;
-        $hasChanged = false;
-
-        foreach ($stmts as $stmt) {
-            if ($previousStmt === null || ! $stmt instanceof Return_) {
-                $previousStmt = $stmt;
+        foreach ($stmts as $key => $stmt) {
+            if (! isset($stmts[$key - 1])) {
                 continue;
             }
 
+            if (! $stmt instanceof Return_) {
+                continue;
+            }
+
+            $previousStmt = $stmts[$key - 1];
             if ($this->shouldSkipStmt($stmt, $previousStmt)) {
-                $previousStmt = $stmt;
                 continue;
             }
 
-            /** @var Expression $previousStmt */
-            /** @var Assign|AssignOp $previousNode */
-            $previousNode = $previousStmt->expr;
-
-            /** @var Return_ $stmt */
-            if ($previousNode instanceof Assign) {
-                if ($this->isReturnWithVarAnnotation($stmt)) {
-                    continue;
-                }
-
-                $stmt->expr = $previousNode->expr;
-            } else {
-                $binaryClass = $this->assignAndBinaryMap->getAlternative($previousNode);
-                if ($binaryClass === null) {
-                    continue;
-                }
-
-                $stmt->expr = new $binaryClass($previousNode->var, $previousNode->expr);
+            if ($this->isReturnWithVarAnnotation($stmt)) {
+                continue;
             }
 
-            $this->removeNode($previousStmt);
-            $hasChanged = true;
-
-            $previousStmt = $stmt;
-        }
-
-        if ($hasChanged) {
-            return $node;
+            /**
+             * @var Expression $previousStmt
+             * @var Assign|AssignOp $assign
+             */
+            $assign = $previousStmt->expr;
+            return $this->processSimplifyUselessVariable($node, $stmt, $assign, $key);
         }
 
         return null;
+    }
+
+    private function processSimplifyUselessVariable(
+        FunctionLike $functionLike,
+        Return_ $return,
+        Assign|AssignOp $assign,
+        int $key
+    ): ?FunctionLike {
+        if (! $assign instanceof Assign) {
+            $binaryClass = $this->assignAndBinaryMap->getAlternative($assign);
+            if ($binaryClass === null) {
+                return null;
+            }
+
+            $return->expr = new $binaryClass($assign->var, $assign->expr);
+        } else {
+            $return->expr = $assign->expr;
+        }
+
+        unset($functionLike->stmts[$key - 1]);
+        return $functionLike;
     }
 
     private function shouldSkipStmt(Return_ $return, Stmt $previousStmt): bool
