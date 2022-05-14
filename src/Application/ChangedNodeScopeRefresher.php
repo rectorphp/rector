@@ -4,18 +4,18 @@ declare (strict_types=1);
 namespace Rector\Core\Application;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\MutatingScope;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
+use Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
@@ -28,18 +28,47 @@ final class ChangedNodeScopeRefresher
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver
      */
     private $phpStanNodeScopeResolver;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver $phpStanNodeScopeResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ScopeAnalyzer
+     */
+    private $scopeAnalyzer;
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer
+     */
+    private $unreachableStmtAnalyzer;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver $phpStanNodeScopeResolver, \Rector\Core\NodeAnalyzer\ScopeAnalyzer $scopeAnalyzer, \Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer $unreachableStmtAnalyzer, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
+        $this->scopeAnalyzer = $scopeAnalyzer;
+        $this->unreachableStmtAnalyzer = $unreachableStmtAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
-    /**
-     * @param \PhpParser\Node\Expr|\PhpParser\Node\Stmt|\PhpParser\Node $node
-     */
-    public function refresh($node, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, \PHPStan\Analyser\MutatingScope $mutatingScope) : void
+    public function refresh(\PhpParser\Node $node, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, ?\PHPStan\Analyser\MutatingScope $mutatingScope) : void
     {
         // nothing to refresh
-        if ($node instanceof \PhpParser\Node\Identifier) {
+        if (!$this->scopeAnalyzer->hasScope($node)) {
             return;
+        }
+        if (!$mutatingScope instanceof \PHPStan\Analyser\MutatingScope) {
+            /**
+             * Node does not has Scope, while:
+             *
+             * 1. Node is Scope aware
+             * 2. Its current Stmt is Reachable
+             */
+            $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
+            if (!$this->unreachableStmtAnalyzer->isStmtPHPStanUnreachable($currentStmt)) {
+                $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+                $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), $parent instanceof \PhpParser\Node ? \get_class($parent) : null);
+                throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
+            }
         }
         // note from flight: when we traverse ClassMethod, the scope must be already in Class_, otherwise it crashes
         // so we need to somehow get a parent scope that is already in the same place the $node is
@@ -48,26 +77,21 @@ final class ChangedNodeScopeRefresher
             $attributeGroup = new \PhpParser\Node\AttributeGroup([$node]);
             $node = new \PhpParser\Node\Stmt\Property(0, [], [], null, [$attributeGroup]);
         }
-        // phpstan cannot process for some reason
-        if ($node instanceof \PhpParser\Node\Stmt\Enum_) {
-            return;
-        }
-        if ($node instanceof \PhpParser\Node\Stmt) {
-            $stmts = [$node];
-        } elseif ($node instanceof \PhpParser\Node\Expr) {
-            $stmts = [new \PhpParser\Node\Stmt\Expression($node)];
-        } else {
-            if ($node instanceof \PhpParser\Node\Param) {
-                // param type cannot be refreshed
-                return;
-            }
-            if ($node instanceof \PhpParser\Node\Arg) {
-                // arg type cannot be refreshed
-                return;
-            }
-            $errorMessage = \sprintf('Complete parent node of "%s" be a stmt.', \get_class($node));
-            throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
-        }
+        $stmts = $this->resolveStmts($node);
         $this->phpStanNodeScopeResolver->processNodes($stmts, $smartFileInfo, $mutatingScope);
+    }
+    /**
+     * @return Stmt[]
+     */
+    private function resolveStmts(\PhpParser\Node $node) : array
+    {
+        if ($node instanceof \PhpParser\Node\Stmt) {
+            return [$node];
+        }
+        if ($node instanceof \PhpParser\Node\Expr) {
+            return [new \PhpParser\Node\Stmt\Expression($node)];
+        }
+        $errorMessage = \sprintf('Complete parent node of "%s" be a stmt.', \get_class($node));
+        throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
     }
 }
