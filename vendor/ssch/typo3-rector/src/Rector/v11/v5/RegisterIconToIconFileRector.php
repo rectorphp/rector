@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v11\v5;
 
-use RectorPrefix20220513\Nette\Utils\Strings;
+use RectorPrefix20220514\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
@@ -158,7 +158,7 @@ CODE_SAMPLE
             $stmts = [new \PhpParser\Node\Stmt\Return_($array)];
         }
         $changedIconsContent = $this->nodePrinter->prettyPrintFile($stmts);
-        $changedIconsContent = \RectorPrefix20220513\Nette\Utils\Strings::replace($changedIconsContent, self::REMOVE_EMPTY_LINES);
+        $changedIconsContent = \RectorPrefix20220514\Nette\Utils\Strings::replace($changedIconsContent, self::REMOVE_EMPTY_LINES);
         $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($iconsFilePath, $changedIconsContent));
     }
 }

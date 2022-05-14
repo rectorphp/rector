@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220513;
+namespace RectorPrefix20220514;
 
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
