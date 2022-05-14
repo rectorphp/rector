@@ -9,6 +9,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class UnreachableStmtAnalyzer
 {
+    /**
+     * in case of unreachable stmts, no other node will have available scope
+     * recursively check previous expressions, until we find nothing or is_unreachable
+     */
     public function isStmtPHPStanUnreachable(?Stmt $stmt): bool
     {
         if (! $stmt instanceof Stmt) {
