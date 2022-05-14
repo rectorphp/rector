@@ -7,12 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
 use Rector\CodeQuality\NodeAnalyzer\ReturnAnalyzer;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
@@ -72,14 +72,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\FunctionLike::class];
+        return [\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface::class];
     }
     /**
-     * @param FunctionLike $node
+     * @param StmtsAwareInterface $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $stmts = $node->getStmts();
+        $stmts = $node->stmts;
         if ($stmts === null) {
             return null;
         }
@@ -92,10 +92,10 @@ CODE_SAMPLE
             }
             $previousStmt = $stmts[$key - 1];
             if ($this->shouldSkipStmt($stmt, $previousStmt)) {
-                continue;
+                return null;
             }
             if ($this->isReturnWithVarAnnotation($stmt)) {
-                continue;
+                return null;
             }
             /**
              * @var Expression $previousStmt
@@ -109,7 +109,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $assign
      */
-    private function processSimplifyUselessVariable(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Stmt\Return_ $return, $assign, int $key) : ?\PhpParser\Node\FunctionLike
+    private function processSimplifyUselessVariable(\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmtsAware, \PhpParser\Node\Stmt\Return_ $return, $assign, int $key) : ?\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
     {
         if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
             $binaryClass = $this->assignAndBinaryMap->getAlternative($assign);
@@ -120,8 +120,8 @@ CODE_SAMPLE
         } else {
             $return->expr = $assign->expr;
         }
-        unset($functionLike->stmts[$key - 1]);
-        return $functionLike;
+        unset($stmtsAware->stmts[$key - 1]);
+        return $stmtsAware;
     }
     private function shouldSkipStmt(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\Stmt $previousStmt) : bool
     {
