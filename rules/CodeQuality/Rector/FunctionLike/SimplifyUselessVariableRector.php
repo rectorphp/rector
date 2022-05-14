@@ -8,12 +8,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
 use Rector\CodeQuality\NodeAnalyzer\ReturnAnalyzer;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
@@ -60,15 +60,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FunctionLike::class];
+        return [StmtsAwareInterface::class];
     }
 
     /**
-     * @param FunctionLike $node
+     * @param StmtsAwareInterface $node
      */
     public function refactor(Node $node): ?Node
     {
-        $stmts = $node->getStmts();
+        $stmts = $node->stmts;
         if ($stmts === null) {
             return null;
         }
@@ -84,11 +84,11 @@ CODE_SAMPLE
 
             $previousStmt = $stmts[$key - 1];
             if ($this->shouldSkipStmt($stmt, $previousStmt)) {
-                continue;
+                return null;
             }
 
             if ($this->isReturnWithVarAnnotation($stmt)) {
-                continue;
+                return null;
             }
 
             /**
@@ -103,11 +103,11 @@ CODE_SAMPLE
     }
 
     private function processSimplifyUselessVariable(
-        FunctionLike $functionLike,
+        StmtsAwareInterface $stmtsAware,
         Return_ $return,
         Assign|AssignOp $assign,
         int $key
-    ): ?FunctionLike {
+    ): ?StmtsAwareInterface {
         if (! $assign instanceof Assign) {
             $binaryClass = $this->assignAndBinaryMap->getAlternative($assign);
             if ($binaryClass === null) {
@@ -119,8 +119,8 @@ CODE_SAMPLE
             $return->expr = $assign->expr;
         }
 
-        unset($functionLike->stmts[$key - 1]);
-        return $functionLike;
+        unset($stmtsAware->stmts[$key - 1]);
+        return $stmtsAware;
     }
 
     private function shouldSkipStmt(Return_ $return, Stmt $previousStmt): bool
