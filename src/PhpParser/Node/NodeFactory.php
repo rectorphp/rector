@@ -178,9 +178,9 @@ final class NodeFactory
      */
     public function createArgs(array $values) : array
     {
-        \array_walk($values, function ($value) {
-            return $this->normalizeArgValue($value);
-        });
+        foreach ($values as $value) {
+            $this->normalizeArgValue($value);
+        }
         return $this->builderFactory->args($values);
     }
     /**

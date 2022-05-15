@@ -111,12 +111,12 @@ CODE_SAMPLE
             return $this->processArrowFunction($node);
         }
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $n) use($node) : bool {
-            $currentFunctionLike = $this->betterNodeFinder->findParentType($n, \PhpParser\Node\FunctionLike::class);
+        $returns = $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $subNode) use($node) : bool {
+            $currentFunctionLike = $this->betterNodeFinder->findParentType($subNode, \PhpParser\Node\FunctionLike::class);
             if ($currentFunctionLike === $node) {
-                return $n instanceof \PhpParser\Node\Stmt\Return_;
+                return $subNode instanceof \PhpParser\Node\Stmt\Return_;
             }
-            $currentReturn = $this->betterNodeFinder->findParentType($n, \PhpParser\Node\Stmt\Return_::class);
+            $currentReturn = $this->betterNodeFinder->findParentType($subNode, \PhpParser\Node\Stmt\Return_::class);
             if (!$currentReturn instanceof \PhpParser\Node\Stmt\Return_) {
                 return \false;
             }
@@ -124,7 +124,7 @@ CODE_SAMPLE
             if ($currentFunctionLike !== $node) {
                 return \false;
             }
-            return $n instanceof \PhpParser\Node\Stmt\Return_;
+            return $subNode instanceof \PhpParser\Node\Stmt\Return_;
         });
         $returnedStrictTypes = $this->returnStrictTypeAnalyzer->collectStrictReturnTypes($returns);
         if ($returnedStrictTypes === []) {

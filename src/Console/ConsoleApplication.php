@@ -106,7 +106,7 @@ final class ConsoleApplication extends \RectorPrefix20220515\Symfony\Component\C
         $inputDefinition->addOption(new \RectorPrefix20220515\Symfony\Component\Console\Input\InputOption(\Rector\Core\Configuration\Option::DEBUG, null, \RectorPrefix20220515\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Enable debug verbosity (-vvv)'));
         $inputDefinition->addOption(new \RectorPrefix20220515\Symfony\Component\Console\Input\InputOption(\Rector\Core\Configuration\Option::XDEBUG, null, \RectorPrefix20220515\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Allow running xdebug'));
         $inputDefinition->addOption(new \RectorPrefix20220515\Symfony\Component\Console\Input\InputOption(\Rector\Core\Configuration\Option::CLEAR_CACHE, null, \RectorPrefix20220515\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Clear cache'));
-        $inputDefinition->addOption(new \RectorPrefix20220515\Symfony\Component\Console\Input\InputOption('working-dir', null, \RectorPrefix20220515\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'If specified, use the given directory as working directory.'));
+        $inputDefinition->addOption(new \RectorPrefix20220515\Symfony\Component\Console\Input\InputOption(\Rector\Core\Configuration\Option::WORKING_DIR, null, \RectorPrefix20220515\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'If specified, use the given directory as working directory.'));
     }
     private function getDefaultConfigPath() : string
     {

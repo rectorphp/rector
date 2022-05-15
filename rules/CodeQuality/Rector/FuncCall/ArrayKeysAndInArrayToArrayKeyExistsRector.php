@@ -101,8 +101,8 @@ CODE_SAMPLE
                 return \true;
             }
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
-                return !(bool) $this->betterNodeFinder->find($node, function (\PhpParser\Node $n) use($expr) : bool {
-                    return $this->nodeComparator->areNodesEqual($expr, $n);
+                return !(bool) $this->betterNodeFinder->find($node, function (\PhpParser\Node $subNode) use($expr) : bool {
+                    return $this->nodeComparator->areNodesEqual($expr, $subNode);
                 });
             }
             if (!$this->nodeComparator->areNodesEqual($expr, $node->var)) {

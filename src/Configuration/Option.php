@@ -69,6 +69,10 @@ final class Option
      */
     public const CLEAR_CACHE = 'clear-cache';
     /**
+     * @var string
+     */
+    public const WORKING_DIR = 'working-dir';
+    /**
      * @deprecated Use @see \Rector\Config\RectorConfig::parallel() instead
      * @var string
      */

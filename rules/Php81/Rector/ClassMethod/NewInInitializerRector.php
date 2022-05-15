@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php81\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\NullableType;
@@ -102,8 +103,8 @@ CODE_SAMPLE
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
             $toPropertyAssigns = $this->betterNodeFinder->findClassMethodAssignsToLocalProperty($node, $paramName);
-            $toPropertyAssigns = \array_filter($toPropertyAssigns, function ($v) : bool {
-                return $v->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce;
+            $toPropertyAssigns = \array_filter($toPropertyAssigns, function (\PhpParser\Node\Expr\Assign $assign) : bool {
+                return $assign->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce;
             });
             foreach ($toPropertyAssigns as $toPropertyAssign) {
                 /** @var Coalesce $coalesce */
@@ -172,8 +173,8 @@ CODE_SAMPLE
         if ((array) $classMethod->stmts === []) {
             return [];
         }
-        return \array_filter($classMethod->params, function ($v) : bool {
-            return $v->type instanceof \PhpParser\Node\NullableType;
+        return \array_filter($classMethod->params, function (\PhpParser\Node\Param $param) : bool {
+            return $param->type instanceof \PhpParser\Node\NullableType;
         });
     }
 }

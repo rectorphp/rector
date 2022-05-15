@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\NodeFactory;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
@@ -57,6 +59,18 @@ final class PropertyTypeDecorator
         $propertyType = $this->typeNormalizer->generalizeConstantBoolTypes($propertyType);
         $this->decoratePropertyWithVarDoc($property, $propertyType);
         $this->decoratePropertyWithType($property, $propertyType);
+    }
+    /**
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $typeNode
+     */
+    public function decoratePropertyWithDocBlock(\PhpParser\Node\Stmt\Property $property, $typeNode) : void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        if ($phpDocInfo->getVarTagValueNode() !== null) {
+            return;
+        }
+        $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newType);
     }
     private function decoratePropertyWithVarDoc(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $propertyType) : void
     {

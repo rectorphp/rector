@@ -210,8 +210,8 @@ final class ReturnTypeInferer
             return $unionType;
         }
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, \PhpParser\Node\Stmt\Return_::class);
-        $returnsWithExpr = \array_filter($returns, function ($v) : bool {
-            return $v->expr instanceof \PhpParser\Node\Expr;
+        $returnsWithExpr = \array_filter($returns, function (\PhpParser\Node\Stmt\Return_ $return) : bool {
+            return $return->expr instanceof \PhpParser\Node\Expr;
         });
         if ($returns !== $returnsWithExpr) {
             return $unionType;
