@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220514;
+namespace RectorPrefix20220515;
 
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\IntegerType;

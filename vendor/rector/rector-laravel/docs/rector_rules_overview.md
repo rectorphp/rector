@@ -405,6 +405,31 @@ Replace `redirect()->back()` and `Redirect::back()` with `back()`
  }
 ```
 
+## RedirectRouteToToRouteHelperRector
+
+Replace `redirect()->route('home')` and `Redirect::route('home')` with `to_route('home')`
+
+- class: [`Rector\Laravel\Rector\MethodCall\RedirectRouteToToRouteHelperRector`](../src/Rector/MethodCall/RedirectRouteToToRouteHelperRector.php)
+
+```diff
+ use Illuminate\Support\Facades\Redirect;
+
+ class MyController
+ {
+     public function store()
+     {
+-        return redirect()->route('home')->with('error', 'Incorrect Details.')
++        return to_route('home')->with('error', 'Incorrect Details.')
+     }
+
+     public function update()
+     {
+-        return Redirect::route('home')->with('error', 'Incorrect Details.')
++        return to_route('home')->with('error', 'Incorrect Details.')
+     }
+ }
+```
+
 <br>
 
 ## RemoveAllOnDispatchingMethodsWithJobChainingRector

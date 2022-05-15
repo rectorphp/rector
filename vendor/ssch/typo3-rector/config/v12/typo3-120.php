@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220514;
+namespace RectorPrefix20220515;
 
 use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector;

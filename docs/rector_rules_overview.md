@@ -1,4 +1,4 @@
-# 511 Rules Overview
+# 512 Rules Overview
 
 <br>
 
@@ -73,6 +73,8 @@
 - [Php80](#php80) (17)
 
 - [Php81](#php81) (9)
+
+- [Php82](#php82) (1)
 
 - [PostRector](#postrector) (6)
 
@@ -5880,17 +5882,11 @@ Replace array spread with string key to array_merge function
 - class: [`Rector\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector`](../rules/DowngradePhp81/Rector/Array_/DowngradeArraySpreadStringKeyRector.php)
 
 ```diff
- class SomeClass
- {
-     public function run()
-     {
-         $parts = ['a' => 'b'];
-         $parts2 = ['c' => 'd'];
+ $parts = ['a' => 'b'];
+ $parts2 = ['c' => 'd'];
 
--        $result = [...$parts, ...$parts2];
-+        $result = array_merge($parts, $parts2);
-     }
- }
+-$result = [...$parts, ...$parts2];
++$result = array_merge($parts, $parts2);
 ```
 
 <br>
@@ -8605,6 +8601,28 @@ Refactor Spatie enum class to native Enum
 +    case draft = 'draft';
 +    case published = 'published';
 +    case archived = 'archived';
+ }
+```
+
+<br>
+
+## Php82
+
+### ReadOnlyClassRector
+
+Decorate read-only class with `readonly` attribute
+
+- class: [`Rector\Php82\Rector\Class_\ReadOnlyClassRector`](../rules/Php82/Rector/Class_/ReadOnlyClassRector.php)
+
+```diff
+-final class SomeClass
++final readonly class SomeClass
+ {
+     public function __construct(
+-        private readonly string $name
++        private string $name
+     ) {
+     }
  }
 ```
 
