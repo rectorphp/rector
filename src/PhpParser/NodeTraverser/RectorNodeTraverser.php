@@ -54,9 +54,7 @@ final class RectorNodeTraverser extends \PhpParser\NodeTraverser
         }
         // filer out by version
         $activePhpRectors = $this->phpVersionedFilter->filter($this->phpRectors);
-        foreach ($activePhpRectors as $activePhpRector) {
-            $this->addVisitor($activePhpRector);
-        }
+        $this->visitors = $this->visitors === [] ? $activePhpRectors : \array_merge($this->visitors, $activePhpRectors);
         $this->areNodeVisitorsPrepared = \true;
     }
 }
