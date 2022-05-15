@@ -30,7 +30,7 @@ final class EmptyConfigurableRectorChecker
             return;
         }
         $this->reportWarningMessage($emptyConfigurableRectorClasses);
-        $solutionMessage = \sprintf('Do you want to run them?%sConfigure them in `rector.php` with "...->configure(...);"', \PHP_EOL);
+        $solutionMessage = \sprintf('Do you want to run them?%sConfigure them in `rector.php` with "...$rectorConfig->ruleWithConfiguration(...);"', \PHP_EOL);
         $this->rectorOutputStyle->note($solutionMessage);
         if (!$this->rectorOutputStyle->isVerbose()) {
             // ensure there is new line after progress bar and report : "[OK] Rector is done!" with add a space
