@@ -23,7 +23,7 @@ abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRect
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            $errorMessage = \sprintf('Scope not available on "%s" node with parent node of "%s", but is required by a refactorWithScope() method of "%s" rule. Fix scope refresh on changed nodes first', \get_class($node), \get_class($parent), static::class);
+            $errorMessage = \sprintf('Scope not available on "%s" node with parent node of "%s", but is required by a refactorWithScope() method of "%s" rule. Fix scope refresh on changed nodes first', \get_class($node), $parent instanceof \PhpParser\Node ? \get_class($parent) : null, static::class);
             throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
         }
         return $this->refactorWithScope($node, $scope);
