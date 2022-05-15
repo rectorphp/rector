@@ -26,7 +26,7 @@ final class EmptyConfigurableRectorChecker
         $this->reportWarningMessage($emptyConfigurableRectorClasses);
 
         $solutionMessage = sprintf(
-            'Do you want to run them?%sConfigure them in `rector.php` with "...->configure(...);"',
+            'Do you want to run them?%sConfigure them in `rector.php` with "...$rectorConfig->ruleWithConfiguration(...);"',
             PHP_EOL
         );
         $this->rectorOutputStyle->note($solutionMessage);
