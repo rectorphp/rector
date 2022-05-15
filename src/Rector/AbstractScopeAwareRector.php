@@ -29,7 +29,7 @@ abstract class AbstractScopeAwareRector extends AbstractRector implements ScopeA
             $errorMessage = sprintf(
                 'Scope not available on "%s" node with parent node of "%s", but is required by a refactorWithScope() method of "%s" rule. Fix scope refresh on changed nodes first',
                 $node::class,
-                $parent::class,
+                $parent instanceof Node ? $parent::class : null,
                 static::class,
             );
 
