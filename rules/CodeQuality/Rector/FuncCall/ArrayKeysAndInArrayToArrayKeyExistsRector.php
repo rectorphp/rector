@@ -129,7 +129,7 @@ CODE_SAMPLE
             if (! $node instanceof Assign) {
                 return ! (bool) $this->betterNodeFinder->find(
                     $node,
-                    fn (Node $n): bool => $this->nodeComparator->areNodesEqual($expr, $n)
+                    fn (Node $subNode): bool => $this->nodeComparator->areNodesEqual($expr, $subNode)
                 );
             }
 

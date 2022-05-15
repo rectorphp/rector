@@ -102,14 +102,14 @@ CODE_SAMPLE
         }
 
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->find((array) $node->stmts, function (Node $n) use ($node): bool {
-            $currentFunctionLike = $this->betterNodeFinder->findParentType($n, FunctionLike::class);
+        $returns = $this->betterNodeFinder->find((array) $node->stmts, function (Node $subNode) use ($node): bool {
+            $currentFunctionLike = $this->betterNodeFinder->findParentType($subNode, FunctionLike::class);
 
             if ($currentFunctionLike === $node) {
-                return $n instanceof Return_;
+                return $subNode instanceof Return_;
             }
 
-            $currentReturn = $this->betterNodeFinder->findParentType($n, Return_::class);
+            $currentReturn = $this->betterNodeFinder->findParentType($subNode, Return_::class);
             if (! $currentReturn instanceof Return_) {
                 return false;
             }
@@ -119,7 +119,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $n instanceof Return_;
+            return $subNode instanceof Return_;
         });
 
         $returnedStrictTypes = $this->returnStrictTypeAnalyzer->collectStrictReturnTypes($returns);

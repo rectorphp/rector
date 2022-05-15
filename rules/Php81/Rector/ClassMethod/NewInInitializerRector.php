@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php81\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\NullableType;
@@ -101,7 +102,10 @@ CODE_SAMPLE
             $paramName = $this->getName($param->var);
 
             $toPropertyAssigns = $this->betterNodeFinder->findClassMethodAssignsToLocalProperty($node, $paramName);
-            $toPropertyAssigns = array_filter($toPropertyAssigns, fn ($v): bool => $v->expr instanceof Coalesce);
+            $toPropertyAssigns = array_filter(
+                $toPropertyAssigns,
+                fn (Assign $assign): bool => $assign->expr instanceof Coalesce
+            );
 
             foreach ($toPropertyAssigns as $toPropertyAssign) {
                 /** @var Coalesce $coalesce */
@@ -191,6 +195,6 @@ CODE_SAMPLE
             return [];
         }
 
-        return array_filter($classMethod->params, fn ($v): bool => $v->type instanceof NullableType);
+        return array_filter($classMethod->params, fn (Param $param): bool => $param->type instanceof NullableType);
     }
 }

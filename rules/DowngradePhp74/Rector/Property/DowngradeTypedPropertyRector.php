@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\CodeQuality\NodeFactory\PropertyTypeDecorator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeTypedPropertyRector extends AbstractRector
 {
     public function __construct(
-        private readonly PhpDocTypeChanger $phpDocTypeChanger
+        private readonly PropertyTypeDecorator $propertyTypeDecorator
     ) {
     }
 
@@ -72,20 +69,9 @@ CODE_SAMPLE
             $node->props[0]->default = null;
         }
 
-        $this->decoratePropertyWithDocBlock($node, $node->type);
+        $this->propertyTypeDecorator->decoratePropertyWithDocBlock($node, $node->type);
         $node->type = null;
 
         return $node;
-    }
-
-    private function decoratePropertyWithDocBlock(Property $property, ComplexType|Identifier|Name $typeNode): void
-    {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($phpDocInfo->getVarTagValueNode() !== null) {
-            return;
-        }
-
-        $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newType);
     }
 }

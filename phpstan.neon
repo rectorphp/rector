@@ -1,29 +1,5 @@
 includes:
-    - vendor/symplify/phpstan-rules/config/array-rules.neon
-    - vendor/symplify/phpstan-rules/config/code-complexity-rules.neon
-    - vendor/symplify/phpstan-rules/config/doctrine-rules.neon
-    - vendor/symplify/phpstan-rules/config/forbidden-static-rules.neon
-    - vendor/symplify/phpstan-rules/config/naming-rules.neon
-    - vendor/symplify/phpstan-rules/config/regex-rules.neon
-    - vendor/symplify/phpstan-rules/config/static-rules.neon
-    - vendor/symplify/phpstan-rules/packages/symfony/config/symfony-rules.neon
-    - vendor/symplify/phpstan-rules/config/test-rules.neon
-
-services:
-    -
-        class: Symplify\PHPStanRules\Rules\Enum\RequireConstantInMethodCallPositionRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            requiredConstantInMethodCall:
-                Symfony\Component\Console\Command\Command:
-                    addArgument: [0]
-                    addOption: [0]
-                Symfony\Component\Console\Input\InputInterface:
-                    getOption: [0]
-                    getArgument: [0]
-                PhpParser\Node:
-                    getAttribute: [0]
-                    setAttribute: [0]
+    - vendor/symplify/phpstan-rules/config/symplify-rules.neon
 
 parameters:
     level: 8
@@ -704,3 +680,30 @@ parameters:
         -
             message: '#Creating new PHPStan\\Reflection\\Php\\PhpParameterReflection is not covered by backward compatibility promise\. The class might change in a minor PHPStan version#'
             path: rules/DowngradePhp80/NodeAnalyzer/NamedToUnnamedArgs.php
+
+        -
+            message: '#Do not name "[a-z]", shorter than 2 chars#'
+            paths:
+                # override parent method named "p"
+                - src/PhpParser/Printer/BetterStandardPrinter.php
+                # regex
+                - rules/Php70/EregToPcreTransformer.php
+
+        # Symfony Finder filter
+        -
+            message: '#Instead of "Symfony\\Component\\Finder\\SplFileInfo" class/interface use "Symplify\\SmartFileSystem\\SmartFileInfo"#'
+            path: src/FileSystem/FilesFinder.php #113
+
+        # format specifiers definition rule
+        -
+            message: '#Modifier "%s" is not matching passed variable type "array<int, string>"\. The "string" type is expected \- see https\://dibiphp\.com/en/documentation\#toc\-modifiers\-for\-arrays#'
+            path: rules/CodingStyle/Rector/Encapsed/EncapsedStringsToSprintfRector.php #35
+
+        # PropertyFetches inside method are different
+        -
+            message: '#Content of method "processGreater(Left|Right)\(\)" is duplicated with method "processGreaterOrEqual(Left|Right)\(\)" in "Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector" class\. Use unique content or service instead#'
+            path: rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php
+
+        -
+            message: '#Instead of "DateTime" class/interface use "Nette\\Utils\\DateTime"#'
+            path: src/Application/VersionResolver.php

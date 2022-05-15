@@ -156,7 +156,7 @@ final class ConsoleApplication extends Application
         ));
 
         $inputDefinition->addOption(new InputOption(
-            'working-dir',
+            Option::WORKING_DIR,
             null,
             InputOption::VALUE_REQUIRED,
             'If specified, use the given directory as working directory.'
