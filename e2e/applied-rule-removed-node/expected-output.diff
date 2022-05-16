@@ -1,0 +1,40 @@
+2 files with changes
+====================
+
+1) src/DeadConstructor.php:1
+
+    ---------- begin diff ----------
+@@ @@
+
+ final class DeadConstructor
+ {
+-    public function __construct()
+-    {
+-    }
+ }
+    ----------- end diff -----------
+
+Applied rules:
+ * RemoveDeadConstructorRector
+
+
+2) src/AlwaysTrue.php:3
+
+    ---------- begin diff ----------
+@@ @@
+ {
+     public function run()
+     {
+-        if (1 === 1) {
+-        }
+-
+         return 'no';
+     }
+ }
+    ----------- end diff -----------
+
+Applied rules:
+ * RemoveAlwaysTrueIfConditionRector
+
+
+ [OK] 2 files would have changed (dry-run) by Rector
