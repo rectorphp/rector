@@ -113,7 +113,8 @@ final class ApplicationFileProcessor
      */
     public function processFiles(array $files, Configuration $configuration): array
     {
-        if ($configuration->shouldShowProgressBar()) {
+        $shouldShowProgressBar = $configuration->shouldShowProgressBar();
+        if ($shouldShowProgressBar) {
             $fileCount = count($files);
             $this->rectorOutputStyle->progressStart($fileCount);
         }
@@ -134,7 +135,7 @@ final class ApplicationFileProcessor
             }
 
             // progress bar +1
-            if ($configuration->shouldShowProgressBar()) {
+            if ($shouldShowProgressBar) {
                 $this->rectorOutputStyle->progressAdvance();
             }
         }
