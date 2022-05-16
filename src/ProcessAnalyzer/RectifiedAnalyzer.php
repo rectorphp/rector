@@ -7,6 +7,7 @@ namespace Rector\Core\ProcessAnalyzer;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\RectifiedNode;
@@ -23,6 +24,10 @@ final class RectifiedAnalyzer
      * @var array<string, RectifiedNode|null>
      */
     private array $previousFileWithNodes = [];
+
+    public function __construct(private readonly NodeComparator $nodeComparator)
+    {
+    }
 
     public function verify(RectorInterface $rector, Node $node, File $currentFile): ?RectifiedNode
     {
@@ -47,8 +52,12 @@ final class RectifiedAnalyzer
 
     private function shouldContinue(RectifiedNode $rectifiedNode, RectorInterface $rector, Node $node): bool
     {
+        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
         if ($rectifiedNode->getRectorClass() === $rector::class && $rectifiedNode->getNode() === $node) {
-            return false;
+            /**
+             * allow to revisit the Node with same Rector rule if Node is changed by other rule
+             */
+            return ! $this->nodeComparator->areNodesEqual($originalNode, $node);
         }
 
         if ($rector instanceof AbstractScopeAwareRector) {
@@ -56,7 +65,6 @@ final class RectifiedAnalyzer
             return $scope instanceof Scope;
         }
 
-        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
         if ($originalNode instanceof Node) {
             return true;
         }
