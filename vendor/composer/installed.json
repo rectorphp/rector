@@ -2644,12 +2644,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "ca53e28f0d94d43e1288faf6c960228a57c20d34"
+                "reference": "7b40c3731b63b5b4a22b91498b63b515ec2794ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/ca53e28f0d94d43e1288faf6c960228a57c20d34",
-                "reference": "ca53e28f0d94d43e1288faf6c960228a57c20d34",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/7b40c3731b63b5b4a22b91498b63b515ec2794ee",
+                "reference": "7b40c3731b63b5b4a22b91498b63b515ec2794ee",
                 "shasum": ""
             },
             "require": {
@@ -2668,6 +2668,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.4.4",
                 "rector\/rector-src": "dev-main",
+                "symfony\/routing": "^5.4",
                 "symfony\/security-core": "^5.4",
                 "symfony\/security-http": "^5.4",
                 "symplify\/easy-coding-standard": "^10.2",
@@ -2677,7 +2678,7 @@
                 "symplify\/rule-doc-generator": "^10.2",
                 "symplify\/vendor-patches": "^10.2"
             },
-            "time": "2022-05-11T13:35:59+00:00",
+            "time": "2022-05-16T18:59:56+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
