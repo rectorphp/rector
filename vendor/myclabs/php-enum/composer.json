@@ -15,12 +15,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220515\\MyCLabs\\Enum\\": "src\/"
+            "RectorPrefix20220516\\MyCLabs\\Enum\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220515\\MyCLabs\\Tests\\Enum\\": "tests\/"
+            "RectorPrefix20220516\\MyCLabs\\Tests\\Enum\\": "tests\/"
         }
     },
     "require": {

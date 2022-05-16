@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220515;
+namespace RectorPrefix20220516;
 
 use Rector\Config\RectorConfig;
 use Rector\Php71\Rector\Assign\AssignArrayToStringRector;
