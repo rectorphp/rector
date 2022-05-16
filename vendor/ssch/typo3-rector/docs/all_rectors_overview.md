@@ -1,4 +1,4 @@
-# 236 Rules Overview
+# 237 Rules Overview
 
 ## AddRenderTypeToSelectFieldRector
 
@@ -1340,6 +1340,26 @@ Use LocalizationFactory->getParsedData instead of GeneralUtility::readLLfile
  use TYPO3\CMS\Core\Utility\GeneralUtility;
 -$locallangs = GeneralUtility::readLLfile('EXT:foo/locallang.xml', 'de');
 +$locallangs = GeneralUtility::makeInstance(LocalizationFactory::class)->getParsedData('EXT:foo/locallang.xml', 'de');
+```
+
+<br>
+
+## MigrateColsToSizeForTcaTypeNoneRector
+
+Migrates option cols to size for TCA type none
+
+- class: [`Ssch\TYPO3Rector\Rector\v12\v0\MigrateColsToSizeForTcaTypeNoneRector`](../src/Rector/v12/v0/MigrateColsToSizeForTcaTypeNoneRector.php)
+
+```diff
+ 'columns' => [
+     'aColumn' => [
+         'config' => [
+             'type' => 'none',
+-            'cols' => 20,
++            'size' => 20,
+         ],
+     ],
+ ],
 ```
 
 <br>

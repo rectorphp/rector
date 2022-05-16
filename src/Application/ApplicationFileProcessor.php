@@ -162,7 +162,8 @@ final class ApplicationFileProcessor
      */
     public function processFiles(array $files, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
-        if ($configuration->shouldShowProgressBar()) {
+        $shouldShowProgressBar = $configuration->shouldShowProgressBar();
+        if ($shouldShowProgressBar) {
             $fileCount = \count($files);
             $this->rectorOutputStyle->progressStart($fileCount);
         }
@@ -176,7 +177,7 @@ final class ApplicationFileProcessor
                 $systemErrorsAndFileDiffs = $this->parametersMerger->merge($systemErrorsAndFileDiffs, $result);
             }
             // progress bar +1
-            if ($configuration->shouldShowProgressBar()) {
+            if ($shouldShowProgressBar) {
                 $this->rectorOutputStyle->progressAdvance();
             }
         }
