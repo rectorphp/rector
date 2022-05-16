@@ -6,6 +6,7 @@ namespace Rector\Core\ProcessAnalyzer;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\RectifiedNode;
@@ -21,6 +22,15 @@ final class RectifiedAnalyzer
      * @var array<string, RectifiedNode|null>
      */
     private $previousFileWithNodes = [];
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
+    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    {
+        $this->nodeComparator = $nodeComparator;
+    }
     public function verify(\Rector\Core\Contract\Rector\RectorInterface $rector, \PhpParser\Node $node, \Rector\Core\ValueObject\Application\File $currentFile) : ?\Rector\Core\ValueObject\RectifiedNode
     {
         $smartFileInfo = $currentFile->getSmartFileInfo();
@@ -40,14 +50,17 @@ final class RectifiedAnalyzer
     }
     private function shouldContinue(\Rector\Core\ValueObject\RectifiedNode $rectifiedNode, \Rector\Core\Contract\Rector\RectorInterface $rector, \PhpParser\Node $node) : bool
     {
+        $originalNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
         if ($rectifiedNode->getRectorClass() === \get_class($rector) && $rectifiedNode->getNode() === $node) {
-            return \false;
+            /**
+             * allow to revisit the Node with same Rector rule if Node is changed by other rule
+             */
+            return !$this->nodeComparator->areNodesEqual($originalNode, $node);
         }
         if ($rector instanceof \Rector\Core\Rector\AbstractScopeAwareRector) {
             $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
             return $scope instanceof \PHPStan\Analyser\Scope;
         }
-        $originalNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
         if ($originalNode instanceof \PhpParser\Node) {
             return \true;
         }
