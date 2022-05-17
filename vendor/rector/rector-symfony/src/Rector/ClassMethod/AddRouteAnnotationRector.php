@@ -11,7 +11,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\DataProvider\RouteMapProvider;
 use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
-use RectorPrefix20220516\Symfony\Component\Routing\Annotation\Route;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\AddRouteAnnotationRector\AddRouteAnnotationRectorTest
@@ -58,7 +57,7 @@ class AddRouteAnnotationRector extends \Rector\Core\Rector\AbstractRector
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(\RectorPrefix20220516\Symfony\Component\Routing\Annotation\Route::class);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Symfony\\Component\\Routing\\Annotation\\Route');
         if ($doctrineAnnotationTagValueNode !== null) {
             return null;
         }
