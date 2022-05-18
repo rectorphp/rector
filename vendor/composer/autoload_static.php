@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9151fbdd3cdbee623e6bb3f31898b1d5
+class ComposerStaticInit34b0635af259153602f9e53be537120c
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -2523,6 +2523,7 @@ class ComposerStaticInit9151fbdd3cdbee623e6bb3f31898b1d5
         'Rector\\Laravel\\Rector\\Class_\\UnifyModelDatesWithCastsRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/Class_/UnifyModelDatesWithCastsRector.php',
         'Rector\\Laravel\\Rector\\FuncCall\\FactoryFuncCallToStaticCallRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/FuncCall/FactoryFuncCallToStaticCallRector.php',
         'Rector\\Laravel\\Rector\\FuncCall\\HelperFuncCallToFacadeClassRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/FuncCall/HelperFuncCallToFacadeClassRector.php',
+        'Rector\\Laravel\\Rector\\FuncCall\\RemoveDumpDataDeadCodeRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/FuncCall/RemoveDumpDataDeadCodeRector.php',
         'Rector\\Laravel\\Rector\\MethodCall\\ChangeQueryWhereDateValueWithCarbonRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/ChangeQueryWhereDateValueWithCarbonRector.php',
         'Rector\\Laravel\\Rector\\MethodCall\\FactoryApplyingStatesRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/FactoryApplyingStatesRector.php',
         'Rector\\Laravel\\Rector\\MethodCall\\RedirectBackToBackHelperRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/RedirectBackToBackHelperRector.php',
@@ -3906,9 +3907,9 @@ class ComposerStaticInit9151fbdd3cdbee623e6bb3f31898b1d5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9151fbdd3cdbee623e6bb3f31898b1d5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9151fbdd3cdbee623e6bb3f31898b1d5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9151fbdd3cdbee623e6bb3f31898b1d5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit34b0635af259153602f9e53be537120c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit34b0635af259153602f9e53be537120c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit34b0635af259153602f9e53be537120c::$classMap;
 
         }, null, ClassLoader::class);
     }

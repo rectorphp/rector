@@ -2154,6 +2154,7 @@ return array(
     'Rector\\Laravel\\Rector\\Class_\\UnifyModelDatesWithCastsRector' => $vendorDir . '/rector/rector-laravel/src/Rector/Class_/UnifyModelDatesWithCastsRector.php',
     'Rector\\Laravel\\Rector\\FuncCall\\FactoryFuncCallToStaticCallRector' => $vendorDir . '/rector/rector-laravel/src/Rector/FuncCall/FactoryFuncCallToStaticCallRector.php',
     'Rector\\Laravel\\Rector\\FuncCall\\HelperFuncCallToFacadeClassRector' => $vendorDir . '/rector/rector-laravel/src/Rector/FuncCall/HelperFuncCallToFacadeClassRector.php',
+    'Rector\\Laravel\\Rector\\FuncCall\\RemoveDumpDataDeadCodeRector' => $vendorDir . '/rector/rector-laravel/src/Rector/FuncCall/RemoveDumpDataDeadCodeRector.php',
     'Rector\\Laravel\\Rector\\MethodCall\\ChangeQueryWhereDateValueWithCarbonRector' => $vendorDir . '/rector/rector-laravel/src/Rector/MethodCall/ChangeQueryWhereDateValueWithCarbonRector.php',
     'Rector\\Laravel\\Rector\\MethodCall\\FactoryApplyingStatesRector' => $vendorDir . '/rector/rector-laravel/src/Rector/MethodCall/FactoryApplyingStatesRector.php',
     'Rector\\Laravel\\Rector\\MethodCall\\RedirectBackToBackHelperRector' => $vendorDir . '/rector/rector-laravel/src/Rector/MethodCall/RedirectBackToBackHelperRector.php',

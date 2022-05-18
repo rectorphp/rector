@@ -404,6 +404,7 @@ Replace `redirect()->back()` and `Redirect::back()` with `back()`
      }
  }
 ```
+<br>
 
 ## RedirectRouteToToRouteHelperRector
 
@@ -448,6 +449,31 @@ Remove `allOnQueue()` and `allOnConnection()` methods used with job chaining, us
 +    ->onQueue('podcasts')
 +    ->onConnection('redis')
 +    ->dispatch();
+```
+
+<br>
+
+## RedirectRouteToToRouteHelperRector
+
+It will removes the dump data just like dd or dump functions from the code.
+
+- class: [`Rector\Laravel\Rector\FuncCall\RemoveDumpDataDeadCodeRector`](../src/Rector/FuncCall/RemoveDumpDataDeadCodeRector.php)
+
+```diff
+ class MyController
+ {
+     public function store()
+     {
+-        dd('test');
+        return true;
+     }
+
+     public function update()
+     {
+-        dump('test');
+        return true;
+     }
+ }
 ```
 
 <br>
