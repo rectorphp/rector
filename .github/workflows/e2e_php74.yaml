@@ -9,6 +9,9 @@ on:
         branches:
             - main
 
+permissions:
+  contents: read
+
 jobs:
     end_to_end_on_php74:
         runs-on: ubuntu-latest

@@ -6,6 +6,9 @@ on:
         branches:
             - main
 
+permissions:
+  contents: read
+
 jobs:
     standalone_rule_test:
         runs-on: ubuntu-latest

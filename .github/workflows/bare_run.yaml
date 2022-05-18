@@ -6,6 +6,9 @@ on:
         branches:
             - main
 
+permissions:
+  contents: read
+
 jobs:
     bare_run:
         runs-on: ubuntu-latest
