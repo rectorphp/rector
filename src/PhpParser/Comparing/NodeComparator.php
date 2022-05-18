@@ -6,7 +6,6 @@ namespace Rector\Core\PhpParser\Comparing;
 use PhpParser\Node;
 use Rector\Comments\CommentRemover;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeComparator
 {
     /**
@@ -47,13 +46,7 @@ final class NodeComparator
      */
     public function isNodeEqual(\PhpParser\Node $singleNode, array $availableNodes) : bool
     {
-        // remove comments, only content is relevant
-        $singleNode = clone $singleNode;
-        $singleNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, null);
         foreach ($availableNodes as $availableNode) {
-            // remove comments, only content is relevant
-            $availableNode = clone $availableNode;
-            $availableNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, null);
             if ($this->areNodesEqual($singleNode, $availableNode)) {
                 return \true;
             }
