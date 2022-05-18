@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\NodeAnalyzer;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -11,6 +12,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\CodeQuality\ValueObject\KeyAndExpr;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class VariableDimFetchAssignResolver
 {
     /**
@@ -18,9 +20,15 @@ final class VariableDimFetchAssignResolver
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeComparator = $nodeComparator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @param Stmt[] $stmts
@@ -46,13 +54,19 @@ final class VariableDimFetchAssignResolver
         }
         return $keysAndExprs;
     }
-    public function matchKeyOnArrayDimFetchOfVariable(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Expr
+    private function matchKeyOnArrayDimFetchOfVariable(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Expr
     {
         if (!$assign->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return null;
         }
         $arrayDimFetch = $assign->var;
         if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->var, $variable)) {
+            return null;
+        }
+        $isFoundInExpr = (bool) $this->betterNodeFinder->findFirst($assign->expr, function (\PhpParser\Node $subNode) use($variable) : bool {
+            return $this->nodeComparator->areNodesEqual($subNode, $variable);
+        });
+        if ($isFoundInExpr) {
             return null;
         }
         return $arrayDimFetch->dim;

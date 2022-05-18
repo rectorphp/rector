@@ -6,7 +6,7 @@ namespace Rector\Symfony\ValueObjectFactory;
 use Rector\Symfony\Exception\JsonRoutesNotExistsException;
 use Rector\Symfony\ValueObject\RouteMap\RouteMap;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
-use RectorPrefix20220517\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220518\Symplify\SmartFileSystem\SmartFileSystem;
 final class RouteMapFactory
 {
     /**
@@ -14,7 +14,7 @@ final class RouteMapFactory
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\RectorPrefix20220517\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\RectorPrefix20220518\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->smartFileSystem = $smartFileSystem;
     }

@@ -8,7 +8,7 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
-use RectorPrefix20220517\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220518\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements PhpParserNodeMapperInterface<Node\IntersectionType>
  */
