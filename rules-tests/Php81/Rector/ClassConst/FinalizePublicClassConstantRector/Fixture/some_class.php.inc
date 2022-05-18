@@ -15,7 +15,7 @@ namespace Rector\Tests\Php81\Rector\ClassConst\FinalizePublicClassConstantRector
 
 class SomeClass
 {
-    public final const NAME = 'value';
+    final public const NAME = 'value';
 }
 
 ?>

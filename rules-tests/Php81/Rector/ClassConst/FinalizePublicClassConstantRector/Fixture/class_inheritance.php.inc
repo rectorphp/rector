@@ -24,6 +24,6 @@ abstract class ParentClass
 
 class ChildClass extends ParentClass
 {
-    public final const TEST_CONSTANT = 'value2';
+    final public const TEST_CONSTANT = 'value2';
 }
 ?>

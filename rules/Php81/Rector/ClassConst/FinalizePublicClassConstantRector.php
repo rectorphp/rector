@@ -47,7 +47,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public final const NAME = 'value';
+    final public const NAME = 'value';
 }
 CODE_SAMPLE
             ),
