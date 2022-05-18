@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\Enum\ObjectReference;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -31,7 +31,8 @@ final class PropertyFetchFinder
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly ReflectionResolver $reflectionResolver,
         private readonly AstResolver $astResolver,
-        private readonly NodeTypeResolver $nodeTypeResolver
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 
@@ -69,25 +70,9 @@ final class PropertyFetchFinder
         $foundPropertyFetches = [];
 
         foreach ($propertyFetches as $propertyFetch) {
-            if ($propertyFetch instanceof PropertyFetch && ! $this->nodeNameResolver->isName(
-                $propertyFetch->var,
-                self::THIS
-            )) {
-                continue;
+            if ($this->propertyFetchAnalyzer->isLocalPropertyFetchName($propertyFetch, $paramName)) {
+                $foundPropertyFetches[] = $propertyFetch;
             }
-
-            if ($propertyFetch instanceof StaticPropertyFetch && ! $this->nodeNameResolver->isName(
-                $propertyFetch->class,
-                ObjectReference::SELF()->getValue()
-            )) {
-                continue;
-            }
-
-            if (! $this->nodeNameResolver->isName($propertyFetch->name, $paramName)) {
-                continue;
-            }
-
-            $foundPropertyFetches[] = $propertyFetch;
         }
 
         return $foundPropertyFetches;
