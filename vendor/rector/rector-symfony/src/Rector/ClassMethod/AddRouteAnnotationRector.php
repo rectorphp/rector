@@ -65,14 +65,14 @@ class AddRouteAnnotationRector extends \Rector\Core\Rector\AbstractRector
         $defaults = $symfonyRouteMetadata->getDefaults();
         unset($defaults['_controller']);
         if ($defaults !== []) {
-            switch (\true) {
-                case \is_string($default):
-                    $items['defaults'] = \sprintf('"%s"', $default);
-                    break;
-                default:
-                    $items['defaults'] = $default;
-                    break;
-            }
+            $items['defaults'] = new \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode(\array_map(static function ($default) {
+                switch (\true) {
+                    case \is_string($default):
+                        return \sprintf('"%s"', $default);
+                    default:
+                        return $default;
+                }
+            }, $defaults));
         }
         if ($symfonyRouteMetadata->getHost() !== '') {
             $items['host'] = \sprintf('"%s"', $symfonyRouteMetadata->getHost());

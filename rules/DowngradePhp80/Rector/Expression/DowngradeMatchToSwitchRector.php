@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp80\Rector\Expression;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
@@ -25,6 +26,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -107,6 +109,21 @@ CODE_SAMPLE
         }
         $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
         $switch = new \PhpParser\Node\Stmt\Switch_($match->cond, $switchCases);
+        $parentMatch = $match->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parentMatch instanceof \PhpParser\Node\Expr\ArrowFunction) {
+            $stmts = [new \PhpParser\Node\Stmt\Return_($match)];
+            $parentOfParentMatch = $parentMatch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            $parentMatch = $this->anonymousFunctionFactory->create($parentMatch->params, $stmts, $parentMatch->returnType, $parentMatch->static);
+            if ($parentOfParentMatch instanceof \PhpParser\Node\Arg) {
+                $parentOfParentMatch->value = $parentMatch;
+                return $node;
+            }
+            if ($parentOfParentMatch instanceof \PhpParser\Node\Expr\Assign) {
+                $parentOfParentMatch->expr = $parentMatch;
+                return $node;
+            }
+            return null;
+        }
         if ($node instanceof \PhpParser\Node\Expr\ArrayItem) {
             $node->value = new \PhpParser\Node\Expr\FuncCall($this->anonymousFunctionFactory->create([], [$switch], null));
             return $node;
