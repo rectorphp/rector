@@ -8435,7 +8435,7 @@ Add final to constants that does not have children
  class SomeClass
  {
 -    public const NAME = 'value';
-+    public final const NAME = 'value';
++    final public const NAME = 'value';
  }
 ```
 
