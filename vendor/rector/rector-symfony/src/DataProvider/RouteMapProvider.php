@@ -6,7 +6,7 @@ namespace Rector\Symfony\DataProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Symfony\ValueObject\RouteMap\RouteMap;
 use Rector\Symfony\ValueObjectFactory\RouteMapFactory;
-use RectorPrefix20220518\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220519\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class RouteMapProvider
 {
     /**
@@ -19,7 +19,7 @@ final class RouteMapProvider
      * @var \Rector\Symfony\ValueObjectFactory\RouteMapFactory
      */
     private $routeMapFactory;
-    public function __construct(\RectorPrefix20220518\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Symfony\ValueObjectFactory\RouteMapFactory $routeMapFactory)
+    public function __construct(\RectorPrefix20220519\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Symfony\ValueObjectFactory\RouteMapFactory $routeMapFactory)
     {
         $this->parameterProvider = $parameterProvider;
         $this->routeMapFactory = $routeMapFactory;

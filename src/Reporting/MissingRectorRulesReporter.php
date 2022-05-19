@@ -7,7 +7,7 @@ use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix20220518\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220519\Symfony\Component\Console\Command\Command;
 final class MissingRectorRulesReporter
 {
     /**
@@ -40,7 +40,7 @@ final class MissingRectorRulesReporter
             return null;
         }
         $this->report();
-        return \RectorPrefix20220518\Symfony\Component\Console\Command\Command::FAILURE;
+        return \RectorPrefix20220519\Symfony\Component\Console\Command\Command::FAILURE;
     }
     public function report() : void
     {

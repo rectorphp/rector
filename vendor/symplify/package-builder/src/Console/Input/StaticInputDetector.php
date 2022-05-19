@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220518\Symplify\PackageBuilder\Console\Input;
+namespace RectorPrefix20220519\Symplify\PackageBuilder\Console\Input;
 
-use RectorPrefix20220518\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix20220519\Symfony\Component\Console\Input\ArgvInput;
 /**
  * @api
  */
@@ -11,7 +11,7 @@ final class StaticInputDetector
 {
     public static function isDebug() : bool
     {
-        $argvInput = new \RectorPrefix20220518\Symfony\Component\Console\Input\ArgvInput();
+        $argvInput = new \RectorPrefix20220519\Symfony\Component\Console\Input\ArgvInput();
         return $argvInput->hasParameterOption(['--debug', '-v', '-vv', '-vvv']);
     }
 }

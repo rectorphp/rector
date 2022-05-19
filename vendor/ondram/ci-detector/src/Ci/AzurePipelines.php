@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220518\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220519\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220518\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220518\OndraM\CiDetector\Env;
-use RectorPrefix20220518\OndraM\CiDetector\TrinaryLogic;
-class AzurePipelines extends \RectorPrefix20220518\OndraM\CiDetector\Ci\AbstractCi
+use RectorPrefix20220519\OndraM\CiDetector\CiDetector;
+use RectorPrefix20220519\OndraM\CiDetector\Env;
+use RectorPrefix20220519\OndraM\CiDetector\TrinaryLogic;
+class AzurePipelines extends \RectorPrefix20220519\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220518\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(\RectorPrefix20220519\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('BUILD_DEFINITIONVERSION') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220518\OndraM\CiDetector\CiDetector::CI_AZURE_PIPELINES;
+        return \RectorPrefix20220519\OndraM\CiDetector\CiDetector::CI_AZURE_PIPELINES;
     }
-    public function isPullRequest() : \RectorPrefix20220518\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220519\OndraM\CiDetector\TrinaryLogic
     {
-        return \RectorPrefix20220518\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('BUILD_REASON') === 'PullRequest');
+        return \RectorPrefix20220519\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('BUILD_REASON') === 'PullRequest');
     }
     public function getBuildNumber() : string
     {

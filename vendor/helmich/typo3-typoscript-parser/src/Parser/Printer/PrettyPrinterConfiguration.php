@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220518\Helmich\TypoScriptParser\Parser\Printer;
+namespace RectorPrefix20220519\Helmich\TypoScriptParser\Parser\Printer;
 
 use InvalidArgumentException;
 use LogicException;
-use RectorPrefix20220518\Webmozart\Assert\Assert;
+use RectorPrefix20220519\Webmozart\Assert\Assert;
 /**
  * PrinterConfiguration
  *

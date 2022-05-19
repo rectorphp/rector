@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220518\Symplify\Skipper\SkipCriteriaResolver;
+namespace RectorPrefix20220519\Symplify\Skipper\SkipCriteriaResolver;
 
-use RectorPrefix20220518\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20220518\Symplify\Skipper\ValueObject\Option;
-use RectorPrefix20220518\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix20220519\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220519\Symplify\Skipper\ValueObject\Option;
+use RectorPrefix20220519\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 /**
  * @see \Symplify\Skipper\Tests\SkipCriteriaResolver\SkippedPathsResolver\SkippedPathsResolverTest
  */
@@ -23,7 +23,7 @@ final class SkippedPathsResolver
      * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
-    public function __construct(\RectorPrefix20220518\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220518\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
+    public function __construct(\RectorPrefix20220519\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220519\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
     {
         $this->parameterProvider = $parameterProvider;
         $this->pathNormalizer = $pathNormalizer;
@@ -36,7 +36,7 @@ final class SkippedPathsResolver
         if ($this->skippedPaths !== []) {
             return $this->skippedPaths;
         }
-        $skip = $this->parameterProvider->provideArrayParameter(\RectorPrefix20220518\Symplify\Skipper\ValueObject\Option::SKIP);
+        $skip = $this->parameterProvider->provideArrayParameter(\RectorPrefix20220519\Symplify\Skipper\ValueObject\Option::SKIP);
         foreach ($skip as $key => $value) {
             if (!\is_int($key)) {
                 continue;

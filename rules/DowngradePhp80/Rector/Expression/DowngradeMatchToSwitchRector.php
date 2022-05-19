@@ -88,62 +88,65 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\ArrayItem::class, \PhpParser\Node\Stmt\Echo_::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\Return_::class];
+        return [\PhpParser\Node\Stmt\Echo_::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param ArrayItem|Echo_|Expression|Return_ $node
+     * @param Echo_|Expression|Return_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->shouldSkipNode($node)) {
-            return null;
-        }
         $match = $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $subNode) : bool {
             return $subNode instanceof \PhpParser\Node\Expr\Match_;
         });
         if (!$match instanceof \PhpParser\Node\Expr\Match_) {
             return null;
         }
-        if ($this->shouldSkipMatch($match)) {
-            return null;
-        }
         $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
         $switch = new \PhpParser\Node\Stmt\Switch_($match->cond, $switchCases);
         $parentMatch = $match->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parentMatch instanceof \PhpParser\Node\Expr\ArrowFunction) {
-            $stmts = [new \PhpParser\Node\Stmt\Return_($match)];
-            $parentOfParentMatch = $parentMatch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            $parentMatch = $this->anonymousFunctionFactory->create($parentMatch->params, $stmts, $parentMatch->returnType, $parentMatch->static);
-            if ($parentOfParentMatch instanceof \PhpParser\Node\Arg) {
-                $parentOfParentMatch->value = $parentMatch;
-                return $node;
-            }
-            if ($parentOfParentMatch instanceof \PhpParser\Node\Expr\Assign) {
-                $parentOfParentMatch->expr = $parentMatch;
-                return $node;
-            }
-            return null;
+            return $this->refactorInArrowFunction($parentMatch, $match, $node);
         }
-        if ($node instanceof \PhpParser\Node\Expr\ArrayItem) {
-            $node->value = new \PhpParser\Node\Expr\FuncCall($this->anonymousFunctionFactory->create([], [$switch], null));
+        if ($parentMatch instanceof \PhpParser\Node\Expr\ArrayItem) {
+            $parentMatch->value = new \PhpParser\Node\Expr\FuncCall($this->anonymousFunctionFactory->create([], [$switch], null));
             return $node;
         }
         return $switch;
     }
-    private function shouldSkipNode(\PhpParser\Node $node) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     * @return \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|null
+     */
+    private function refactorInArrowFunction(\PhpParser\Node\Expr\ArrowFunction $arrowFunction, \PhpParser\Node\Expr\Match_ $match, $node)
     {
-        return $node instanceof \PhpParser\Node\Stmt\Return_ && !$node->expr instanceof \PhpParser\Node\Expr\Match_;
-    }
-    private function shouldSkipMatch(\PhpParser\Node\Expr\Match_ $match) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($match, function (\PhpParser\Node $subNode) : bool {
-            return $subNode instanceof \PhpParser\Node\Expr\ArrayItem && $subNode->unpack;
-        });
+        $parentOfParentMatch = $arrowFunction->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentOfParentMatch instanceof \PhpParser\Node) {
+            return null;
+        }
+        /**
+         * Yes, Pass Match_ object itself to Return_
+         * Let the Rule revisit the Match_ after the ArrowFunction converted to Closure_
+         */
+        $stmts = [new \PhpParser\Node\Stmt\Return_($match)];
+        $closure = $this->anonymousFunctionFactory->create($arrowFunction->params, $stmts, $arrowFunction->returnType, $arrowFunction->static);
+        if ($parentOfParentMatch instanceof \PhpParser\Node\Arg && $parentOfParentMatch->value === $arrowFunction) {
+            $parentOfParentMatch->value = $closure;
+            return $node;
+        }
+        if (($parentOfParentMatch instanceof \PhpParser\Node\Expr\Assign || $parentOfParentMatch instanceof \PhpParser\Node\Stmt\Expression || $parentOfParentMatch instanceof \PhpParser\Node\Stmt\Return_) && $parentOfParentMatch->expr === $arrowFunction) {
+            $parentOfParentMatch->expr = $closure;
+            return $node;
+        }
+        if ($parentOfParentMatch instanceof \PhpParser\Node\Expr\FuncCall && $parentOfParentMatch->name === $arrowFunction) {
+            $parentOfParentMatch->name = $closure;
+            return $node;
+        }
+        return null;
     }
     /**
      * @param MatchArm[] $matchArms
      * @return Case_[]
-     * @param \PhpParser\Node\Expr\ArrayItem|\PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
     private function createSwitchCasesFromMatchArms($node, array $matchArms) : array
     {
@@ -168,14 +171,17 @@ CODE_SAMPLE
     }
     /**
      * @return Stmt[]
-     * @param \PhpParser\Node\Expr\ArrayItem|\PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
     private function createSwitchStmts($node, \PhpParser\Node\MatchArm $matchArm) : array
     {
         $stmts = [];
-        if ($matchArm->body instanceof \PhpParser\Node\Expr\Throw_) {
+        $parentArrayItem = $this->betterNodeFinder->findParentType($matchArm, \PhpParser\Node\Expr\ArrayItem::class);
+        if ($parentArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            $stmts[] = new \PhpParser\Node\Stmt\Return_($matchArm->body);
+        } elseif ($matchArm->body instanceof \PhpParser\Node\Expr\Throw_) {
             $stmts[] = new \PhpParser\Node\Stmt\Expression($matchArm->body);
-        } elseif ($node instanceof \PhpParser\Node\Expr\ArrayItem || $node instanceof \PhpParser\Node\Stmt\Return_) {
+        } elseif ($node instanceof \PhpParser\Node\Stmt\Return_) {
             $stmts[] = new \PhpParser\Node\Stmt\Return_($matchArm->body);
         } elseif ($node instanceof \PhpParser\Node\Stmt\Echo_) {
             $stmts[] = new \PhpParser\Node\Stmt\Echo_([$matchArm->body]);
