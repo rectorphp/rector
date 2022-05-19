@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
@@ -161,6 +162,8 @@ CODE_SAMPLE
             if ($this->nodeComparator->areNodesEqual($default, $prevInitializedAssign->var)) {
                 return $assign;
             }
+        } else {
+            $match->arms[count($match->arms)] = new MatchArm(null, $prevInitializedAssign->expr);
         }
 
         $parentAssign = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
