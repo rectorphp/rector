@@ -105,7 +105,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($match);
+        if ($currentStmt !== $node) {
+            return null;
+        }
+
+        $switchCases = $this->createSwitchCasesFromMatchArms($node, $match);
         $switch = new Switch_($match->cond, $switchCases);
 
         $parentMatch = $match->getAttribute(AttributeKey::PARENT_NODE);
@@ -163,14 +168,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MatchArm[] $matchArms
      * @return Case_[]
      */
-    private function createSwitchCasesFromMatchArms(Echo_ | Expression | Return_ $node, array $matchArms): array
+    private function createSwitchCasesFromMatchArms(Echo_ | Expression | Return_ $node, Match_ $match): array
     {
         $switchCases = [];
+        $parentNode = $match->getAttribute(AttributeKey::PARENT_NODE);
 
-        foreach ($matchArms as $matchArm) {
+        foreach ($match->arms as $matchArm) {
             if (count((array) $matchArm->conds) > 1) {
                 $lastCase = null;
 
@@ -183,9 +188,9 @@ CODE_SAMPLE
                     throw new ShouldNotHappenException();
                 }
 
-                $lastCase->stmts = $this->createSwitchStmts($node, $matchArm);
+                $lastCase->stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
             } else {
-                $stmts = $this->createSwitchStmts($node, $matchArm);
+                $stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
                 $switchCases[] = new Case_($matchArm->conds[0] ?? null, $stmts);
             }
         }
@@ -196,12 +201,11 @@ CODE_SAMPLE
     /**
      * @return Stmt[]
      */
-    private function createSwitchStmts(Echo_ | Expression | Return_ $node, MatchArm $matchArm): array
+    private function createSwitchStmts(Echo_ | Expression | Return_ $node, MatchArm $matchArm, ?Node $parentNode): array
     {
         $stmts = [];
 
-        $parentArrayItem = $this->betterNodeFinder->findParentType($matchArm, ArrayItem::class);
-        if ($parentArrayItem instanceof ArrayItem) {
+        if ($parentNode instanceof ArrayItem) {
             $stmts[] = new Return_($matchArm->body);
         } elseif ($matchArm->body instanceof Throw_) {
             $stmts[] = new Expression($matchArm->body);
