@@ -92,24 +92,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ArrayItem::class, Echo_::class, Expression::class, Return_::class];
+        return [Echo_::class, Expression::class, Return_::class];
     }
 
     /**
-     * @param ArrayItem|Echo_|Expression|Return_ $node
+     * @param Echo_|Expression|Return_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipNode($node)) {
-            return null;
-        }
-
         $match = $this->betterNodeFinder->findFirst($node, fn (Node $subNode): bool => $subNode instanceof Match_);
         if (! $match instanceof Match_) {
-            return null;
-        }
-
-        if ($this->shouldSkipMatch($match)) {
             return null;
         }
 
@@ -118,57 +110,64 @@ CODE_SAMPLE
 
         $parentMatch = $match->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentMatch instanceof ArrowFunction) {
-            $stmts = [new Return_($match)];
-            $parentOfParentMatch = $parentMatch->getAttribute(AttributeKey::PARENT_NODE);
-            $parentMatch = $this->anonymousFunctionFactory->create(
-                $parentMatch->params,
-                $stmts,
-                $parentMatch->returnType,
-                $parentMatch->static
-            );
-
-            if ($parentOfParentMatch instanceof Arg) {
-                $parentOfParentMatch->value = $parentMatch;
-                return $node;
-            }
-
-            if ($parentOfParentMatch instanceof Assign) {
-                $parentOfParentMatch->expr = $parentMatch;
-                return $node;
-            }
-
-            return null;
+            return $this->refactorInArrowFunction($parentMatch, $match, $node);
         }
 
-        if ($node instanceof ArrayItem) {
-            $node->value = new FuncCall($this->anonymousFunctionFactory->create([], [$switch], null));
+        if ($parentMatch instanceof ArrayItem) {
+            $parentMatch->value = new FuncCall($this->anonymousFunctionFactory->create([], [$switch], null));
             return $node;
         }
 
         return $switch;
     }
 
-    private function shouldSkipNode(Node $node): bool
-    {
-        return $node instanceof Return_ && ! $node->expr instanceof Match_;
-    }
+    private function refactorInArrowFunction(
+        ArrowFunction $arrowFunction,
+        Match_ $match,
+        Echo_|Expression|Return_ $node
+    ): Echo_|Expression|Return_|null {
+        $parentOfParentMatch = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
 
-    private function shouldSkipMatch(Match_ $match): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $match,
-            fn (Node $subNode): bool => $subNode instanceof ArrayItem && $subNode->unpack
+        if (! $parentOfParentMatch instanceof Node) {
+            return null;
+        }
+
+        /**
+         * Yes, Pass Match_ object itself to Return_
+         * Let the Rule revisit the Match_ after the ArrowFunction converted to Closure_
+         */
+        $stmts = [new Return_($match)];
+        $closure = $this->anonymousFunctionFactory->create(
+            $arrowFunction->params,
+            $stmts,
+            $arrowFunction->returnType,
+            $arrowFunction->static
         );
+
+        if ($parentOfParentMatch instanceof Arg && $parentOfParentMatch->value === $arrowFunction) {
+            $parentOfParentMatch->value = $closure;
+            return $node;
+        }
+
+        if (($parentOfParentMatch instanceof Assign || $parentOfParentMatch instanceof Expression || $parentOfParentMatch instanceof Return_) && $parentOfParentMatch->expr === $arrowFunction) {
+            $parentOfParentMatch->expr = $closure;
+            return $node;
+        }
+
+        if ($parentOfParentMatch instanceof FuncCall && $parentOfParentMatch->name === $arrowFunction) {
+            $parentOfParentMatch->name = $closure;
+            return $node;
+        }
+
+        return null;
     }
 
     /**
      * @param MatchArm[] $matchArms
      * @return Case_[]
      */
-    private function createSwitchCasesFromMatchArms(
-        ArrayItem | Echo_ | Expression | Return_ $node,
-        array $matchArms
-    ): array {
+    private function createSwitchCasesFromMatchArms(Echo_ | Expression | Return_ $node, array $matchArms): array
+    {
         $switchCases = [];
 
         foreach ($matchArms as $matchArm) {
@@ -197,13 +196,16 @@ CODE_SAMPLE
     /**
      * @return Stmt[]
      */
-    private function createSwitchStmts(ArrayItem | Echo_ | Expression | Return_ $node, MatchArm $matchArm): array
+    private function createSwitchStmts(Echo_ | Expression | Return_ $node, MatchArm $matchArm): array
     {
         $stmts = [];
 
-        if ($matchArm->body instanceof Throw_) {
+        $parentArrayItem = $this->betterNodeFinder->findParentType($matchArm, ArrayItem::class);
+        if ($parentArrayItem instanceof ArrayItem) {
+            $stmts[] = new Return_($matchArm->body);
+        } elseif ($matchArm->body instanceof Throw_) {
             $stmts[] = new Expression($matchArm->body);
-        } elseif ($node instanceof ArrayItem || $node instanceof Return_) {
+        } elseif ($node instanceof Return_) {
             $stmts[] = new Return_($matchArm->body);
         } elseif ($node instanceof Echo_) {
             $stmts[] = new Echo_([$matchArm->body]);
