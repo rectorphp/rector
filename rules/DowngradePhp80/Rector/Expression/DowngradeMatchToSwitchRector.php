@@ -101,7 +101,11 @@ CODE_SAMPLE
         if (!$match instanceof \PhpParser\Node\Expr\Match_) {
             return null;
         }
-        $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($match);
+        if ($currentStmt !== $node) {
+            return null;
+        }
+        $switchCases = $this->createSwitchCasesFromMatchArms($node, $match);
         $switch = new \PhpParser\Node\Stmt\Switch_($match->cond, $switchCases);
         $parentMatch = $match->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parentMatch instanceof \PhpParser\Node\Expr\ArrowFunction) {
@@ -144,14 +148,14 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param MatchArm[] $matchArms
      * @return Case_[]
      * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
-    private function createSwitchCasesFromMatchArms($node, array $matchArms) : array
+    private function createSwitchCasesFromMatchArms($node, \PhpParser\Node\Expr\Match_ $match) : array
     {
         $switchCases = [];
-        foreach ($matchArms as $matchArm) {
+        $parentNode = $match->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        foreach ($match->arms as $matchArm) {
             if (\count((array) $matchArm->conds) > 1) {
                 $lastCase = null;
                 foreach ((array) $matchArm->conds as $matchArmCond) {
@@ -161,9 +165,9 @@ CODE_SAMPLE
                 if (!$lastCase instanceof \PhpParser\Node\Stmt\Case_) {
                     throw new \Rector\Core\Exception\ShouldNotHappenException();
                 }
-                $lastCase->stmts = $this->createSwitchStmts($node, $matchArm);
+                $lastCase->stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
             } else {
-                $stmts = $this->createSwitchStmts($node, $matchArm);
+                $stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
                 $switchCases[] = new \PhpParser\Node\Stmt\Case_($matchArm->conds[0] ?? null, $stmts);
             }
         }
@@ -173,11 +177,10 @@ CODE_SAMPLE
      * @return Stmt[]
      * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
-    private function createSwitchStmts($node, \PhpParser\Node\MatchArm $matchArm) : array
+    private function createSwitchStmts($node, \PhpParser\Node\MatchArm $matchArm, ?\PhpParser\Node $parentNode) : array
     {
         $stmts = [];
-        $parentArrayItem = $this->betterNodeFinder->findParentType($matchArm, \PhpParser\Node\Expr\ArrayItem::class);
-        if ($parentArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if ($parentNode instanceof \PhpParser\Node\Expr\ArrayItem) {
             $stmts[] = new \PhpParser\Node\Stmt\Return_($matchArm->body);
         } elseif ($matchArm->body instanceof \PhpParser\Node\Expr\Throw_) {
             $stmts[] = new \PhpParser\Node\Stmt\Expression($matchArm->body);
