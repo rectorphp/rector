@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220519;
+namespace RectorPrefix20220520;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -15,4 +15,4 @@ namespace RectorPrefix20220519;
  *
  * The TYPO3 project - inspiring people to share!
  */
-return ['TYPO3\\CMS\\Backend\\Form\\Element\\InputLinkElement' => \RectorPrefix20220519\TYPO3\CMS\Backend\Form\Element\LinkElement::class, 'TYPO3\\CMS\\Backend\\Form\\Element\\InputDateTimeElement' => \RectorPrefix20220519\TYPO3\CMS\Backend\Form\Element\DatetimeElement::class, 'TYPO3\\CMS\\Backend\\Form\\Element\\InputColorPickerElement' => \RectorPrefix20220519\TYPO3\CMS\Backend\Form\Element\ColorElement::class];
+return ['TYPO3\\CMS\\Backend\\Form\\Element\\InputLinkElement' => \RectorPrefix20220520\TYPO3\CMS\Backend\Form\Element\LinkElement::class, 'TYPO3\\CMS\\Backend\\Form\\Element\\InputDateTimeElement' => \RectorPrefix20220520\TYPO3\CMS\Backend\Form\Element\DatetimeElement::class, 'TYPO3\\CMS\\Backend\\Form\\Element\\InputColorPickerElement' => \RectorPrefix20220520\TYPO3\CMS\Backend\Form\Element\ColorElement::class];

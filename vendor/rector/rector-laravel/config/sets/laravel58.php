@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220519;
+namespace RectorPrefix20220520;
 
 use PHPStan\Type\BooleanType;
 use Rector\Config\RectorConfig;

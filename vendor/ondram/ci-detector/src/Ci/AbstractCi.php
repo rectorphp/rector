@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220519\OndraM\CiDetector\Ci;
+namespace RectorPrefix20220520\OndraM\CiDetector\Ci;
 
-use RectorPrefix20220519\OndraM\CiDetector\Env;
+use RectorPrefix20220520\OndraM\CiDetector\Env;
 /**
  * Unified adapter to retrieve environment variables from current continuous integration server
  */
-abstract class AbstractCi implements \RectorPrefix20220519\OndraM\CiDetector\Ci\CiInterface
+abstract class AbstractCi implements \RectorPrefix20220520\OndraM\CiDetector\Ci\CiInterface
 {
     /** @var Env */
     protected $env;
-    public function __construct(\RectorPrefix20220519\OndraM\CiDetector\Env $env)
+    public function __construct(\RectorPrefix20220520\OndraM\CiDetector\Env $env)
     {
         $this->env = $env;
     }

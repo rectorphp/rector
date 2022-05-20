@@ -11,6 +11,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\Php\PhpParameterReflection;
 use Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver;
+use Rector\DowngradePhp80\Reflection\SimplePhpParameterReflection;
 use Rector\NodeNameResolver\NodeNameResolver;
 use ReflectionFunction;
 final class NamedToUnnamedArgs
@@ -79,8 +80,7 @@ final class NamedToUnnamedArgs
             }
             /** @var ParameterReflection|PhpParameterReflection $parameterReflection */
             if ($functionLikeReflection instanceof \ReflectionFunction) {
-                // @todo since PHPStan 1.7.* add new InitializerExprTypeResolver() service as 1st arg - https://github.com/phpstan/phpstan-src/commit/c8b3926f005d008178d6d8c62aaca0200a6359a2#diff-ce65c81a2653b1f53bc416082582e248f629d65c066440d9c4edc5005d16af32
-                $parameterReflection = new \PHPStan\Reflection\Php\PhpParameterReflection($functionLikeReflection->getParameters()[$i], null, null);
+                $parameterReflection = new \Rector\DowngradePhp80\Reflection\SimplePhpParameterReflection($functionLikeReflection, $i);
             } else {
                 $parameterReflection = $parameters[$i];
             }

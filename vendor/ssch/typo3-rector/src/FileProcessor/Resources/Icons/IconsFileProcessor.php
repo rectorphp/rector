@@ -13,7 +13,6 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface;
 use Ssch\TYPO3Rector\Helper\FilesFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20220519\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.3/Feature-77349-AdditionalLocationsForExtensionIcons.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Resources\Icons\IconsProcessor\IconsProcessorTest
@@ -30,11 +29,6 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
      */
     private $filesFinder;
     /**
-     * @readonly
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
-     */
-    private $smartFileSystem;
-    /**
      * @var IconRectorInterface[]
      * @readonly
      */
@@ -42,10 +36,9 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     /**
      * @param IconRectorInterface[] $iconsRector
      */
-    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \RectorPrefix20220519\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, array $iconsRector)
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, array $iconsRector)
     {
         $this->filesFinder = $filesFinder;
-        $this->smartFileSystem = $smartFileSystem;
         $this->iconsRector = $iconsRector;
     }
     /**
@@ -69,7 +62,7 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
         if (!$extEmConfSmartFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
             return \false;
         }
-        return !$this->smartFileSystem->exists($this->createIconPath($file));
+        return !\file_exists($this->createIconPath($file));
     }
     public function getSupportedFileExtensions() : array
     {

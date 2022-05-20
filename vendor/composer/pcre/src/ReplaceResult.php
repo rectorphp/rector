@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20220519\Composer\Pcre;
+namespace RectorPrefix20220520\Composer\Pcre;
 
 final class ReplaceResult
 {

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220519\Symfony\Component\DependencyInjection\Exception;
+namespace RectorPrefix20220520\Symfony\Component\DependencyInjection\Exception;
 
 /**
  * Base OutOfBoundsException for Dependency Injection component.
  */
-class OutOfBoundsException extends \OutOfBoundsException implements \RectorPrefix20220519\Symfony\Component\DependencyInjection\Exception\ExceptionInterface
+class OutOfBoundsException extends \OutOfBoundsException implements \RectorPrefix20220520\Symfony\Component\DependencyInjection\Exception\ExceptionInterface
 {
 }
