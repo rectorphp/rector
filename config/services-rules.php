@@ -24,5 +24,6 @@ return static function (RectorConfig $rectorConfig): void {
             __DIR__ . '/../rules/*/Contract/*',
             __DIR__ . '/../rules/*/Exception/*',
             __DIR__ . '/../rules/*/Enum/*',
+            __DIR__ . '/../rules/DowngradePhp80/Reflection/SimplePhpParameterReflection.php',
         ]);
 };
