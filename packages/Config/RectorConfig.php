@@ -178,6 +178,12 @@ final class RectorConfig extends ContainerConfigurator
         $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, $filePath);
     }
 
+    public function symfonyContainerPhp(string $filePath): void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER, $filePath);
+    }
+
     public function symfonyRoutesJson(string $filePath): void
     {
         $parameters = $this->parameters();

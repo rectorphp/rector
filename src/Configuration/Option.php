@@ -73,6 +73,12 @@ final class Option
     public const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
 
     /**
+     * @internal Use @see \Rector\Config\RectorConfig::symfonyContainerPhp()
+     * @var string
+     */
+    public const SYMFONY_CONTAINER_PHP_PATH_PARAMETER = 'symfony_container_php_path';
+
+    /**
      * @deprecated Use @see \Rector\Config\RectorConfig::symfonyRoutesJson() instead
      * @var string
      */
