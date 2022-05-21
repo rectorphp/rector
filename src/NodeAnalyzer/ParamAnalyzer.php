@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\NullableType;
@@ -38,10 +39,18 @@ final class ParamAnalyzer
     public function isParamUsedInClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param) : bool
     {
         return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (\PhpParser\Node $node) use($param) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable && !$node instanceof \PhpParser\Node\Expr\Closure) {
                 return \false;
             }
-            return $this->nodeComparator->areNodesEqual($node, $param->var);
+            if ($node instanceof \PhpParser\Node\Expr\Variable) {
+                return $this->nodeComparator->areNodesEqual($node, $param->var);
+            }
+            foreach ($node->uses as $use) {
+                if ($this->nodeComparator->areNodesEqual($use->var, $param->var)) {
+                    return \true;
+                }
+            }
+            return \false;
         });
     }
     /**
