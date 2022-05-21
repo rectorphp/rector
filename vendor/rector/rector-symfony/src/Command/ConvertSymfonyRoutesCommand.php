@@ -40,6 +40,7 @@ final class ConvertSymfonyRoutesCommand extends \RectorPrefix20220521\Symfony\Co
             throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('Symfony container has no service "%s", maybe it is private', 'router'));
         }
         $router = $container->get('router');
+        \RectorPrefix20220521\Webmozart\Assert\Assert::isInstanceOf('Symfony\\Component\\Routing\\RouterInterface', $router);
         $routeCollection = $router->getRouteCollection();
         $routes = \array_map(static function ($route) : array {
             return ['path' => $route->getPath(), 'host' => $route->getHost(), 'schemes' => $route->getSchemes(), 'methods' => $route->getMethods(), 'defaults' => $route->getDefaults(), 'requirements' => $route->getRequirements(), 'condition' => $route->getCondition()];
