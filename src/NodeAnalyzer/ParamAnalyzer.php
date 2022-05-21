@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\NullableType;
@@ -28,11 +29,21 @@ final class ParamAnalyzer
         return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (Node $node) use (
             $param
         ): bool {
-            if (! $node instanceof Variable) {
+            if (! $node instanceof Variable && ! $node instanceof Closure) {
                 return false;
             }
 
-            return $this->nodeComparator->areNodesEqual($node, $param->var);
+            if ($node instanceof Variable) {
+                return $this->nodeComparator->areNodesEqual($node, $param->var);
+            }
+
+            foreach ($node->uses as $use) {
+                if ($this->nodeComparator->areNodesEqual($use->var, $param->var)) {
+                    return true;
+                }
+            }
+
+            return false;
         });
     }
 
