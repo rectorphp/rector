@@ -21,7 +21,7 @@ use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
-use RectorPrefix20220520\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20220521\Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -45,7 +45,7 @@ final class RemoveNonExistingVarAnnotationRector extends \Rector\Core\Rector\Abs
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
      */
     private $exprUsedInNodeAnalyzer;
-    public function __construct(\RectorPrefix20220520\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
+    public function __construct(\RectorPrefix20220521\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
     {
         $this->typeChecker = $typeChecker;
         $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;

@@ -18,7 +18,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220520\Webmozart\Assert\Assert;
+use RectorPrefix20220521\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ConstFetch\RemovePhpVersionIdCheckRector\RemovePhpVersionIdCheckRectorTest
  */
@@ -43,7 +43,7 @@ final class RemovePhpVersionIdCheckRector extends \Rector\Core\Rector\AbstractRe
     public function configure(array $configuration) : void
     {
         $phpVersion = $configuration[0];
-        \RectorPrefix20220520\Webmozart\Assert\Assert::integer($phpVersion);
+        \RectorPrefix20220521\Webmozart\Assert\Assert::integer($phpVersion);
         \Rector\Core\ValueObject\PhpVersion::assertValidValue($phpVersion);
         // ensure cast to (string) first to allow string like "8.0" value to be converted to the int value
         /** @var PhpVersion::* $phpVersion */

@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
-use RectorPrefix20220520\JetBrains\PhpStorm\Immutable;
+use RectorPrefix20220521\JetBrains\PhpStorm\Immutable;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use RectorPrefix20220520\Symplify\Skipper\ValueObject\Option as SkipperOption;
+use RectorPrefix20220521\Symplify\Skipper\ValueObject\Option as SkipperOption;
 #[Immutable]
 final class Option
 {
@@ -60,6 +60,11 @@ final class Option
      */
     public const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
     /**
+     * @internal Use @see \Rector\Config\RectorConfig::symfonyContainerPhp()
+     * @var string
+     */
+    public const SYMFONY_CONTAINER_PHP_PATH_PARAMETER = 'symfony_container_php_path';
+    /**
      * @deprecated Use @see \Rector\Config\RectorConfig::symfonyRoutesJson() instead
      * @var string
      */
@@ -91,7 +96,7 @@ final class Option
      * @deprecated Use @see \Rector\Config\RectorConfig::skip() instead
      * @var string
      */
-    public const SKIP = \RectorPrefix20220520\Symplify\Skipper\ValueObject\Option::SKIP;
+    public const SKIP = \RectorPrefix20220521\Symplify\Skipper\ValueObject\Option::SKIP;
     /**
      * @var string
      */
