@@ -33,9 +33,10 @@ final class NodeByTypeAndPositionCollector
         $nodesByTypeAndPosition = [];
 
         foreach ($assignedVariables as $assignedVariable) {
-            $startTokenPos = $assignedVariable->getAttribute(AttributeKey::START_TOKEN_POSITION);
+            $startTokenPos = $assignedVariable->getStartTokenPos();
 
-            if ($startTokenPos === null) {
+            // "-1" is empty value default
+            if ($startTokenPos === -1) {
                 continue;
             }
 
@@ -58,10 +59,10 @@ final class NodeByTypeAndPositionCollector
         }
 
         foreach ($assignedVariablesUse as $assignedVariableUse) {
-            /** @var int|null $startTokenPos */
-            $startTokenPos = $assignedVariableUse->getAttribute(AttributeKey::START_TOKEN_POSITION);
+            $startTokenPos = $assignedVariableUse->getStartTokenPos();
 
-            if ($startTokenPos === null) {
+            // "-1" is empty value default
+            if ($startTokenPos === -1) {
                 continue;
             }
 
