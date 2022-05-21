@@ -21,6 +21,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         // loaded from project itself
         'Psr\\Container\\ContainerInterface',
         'Symfony\\Component\\Routing\\RouterInterface',
+        'Symfony\\Component\\DependencyInjection\\Container',
     ]);
     // for testing
     $rectorConfig->import(__DIR__ . '/config/config.php');

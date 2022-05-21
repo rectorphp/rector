@@ -34,13 +34,14 @@ final class ConvertSymfonyRoutesCommand extends \RectorPrefix20220521\Symfony\Co
         $symfonyContainerPhp = $this->rectorConfigProvider->getSymfonyContainerPhp();
         \RectorPrefix20220521\Webmozart\Assert\Assert::fileExists($symfonyContainerPhp);
         $container = (require_once $symfonyContainerPhp);
-        \RectorPrefix20220521\Webmozart\Assert\Assert::isInstanceOf('Psr\\Container\\ContainerInterface', $container);
+        // this allows older Symfony versions, e.g. 2.8 did not have the PSR yet
+        \RectorPrefix20220521\Webmozart\Assert\Assert::isInstanceOf($container, 'Symfony\\Component\\DependencyInjection\\Container');
         /** @var ContainerInterface $container */
         if (!$container->has('router')) {
             throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('Symfony container has no service "%s", maybe it is private', 'router'));
         }
         $router = $container->get('router');
-        \RectorPrefix20220521\Webmozart\Assert\Assert::isInstanceOf('Symfony\\Component\\Routing\\RouterInterface', $router);
+        \RectorPrefix20220521\Webmozart\Assert\Assert::isInstanceOf($router, 'Symfony\\Component\\Routing\\RouterInterface');
         $routeCollection = $router->getRouteCollection();
         $routes = \array_map(static function ($route) : array {
             return ['path' => $route->getPath(), 'host' => $route->getHost(), 'schemes' => $route->getSchemes(), 'methods' => $route->getMethods(), 'defaults' => $route->getDefaults(), 'requirements' => $route->getRequirements(), 'condition' => $route->getCondition()];
