@@ -17,11 +17,6 @@ final class AttributeKey
      */
     public const SCOPE = 'scope';
     /**
-     * @deprecated Use @see \Rector\Naming\Naming\UseImportsResolver::resolveForNode() instead
-     * @var string
-     */
-    public const USE_NODES = 'useNodes';
-    /**
      * Internal php-parser name.
      * Do not change this even if you want!
      *

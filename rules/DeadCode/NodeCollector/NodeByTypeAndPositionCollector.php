@@ -36,8 +36,9 @@ final class NodeByTypeAndPositionCollector
     {
         $nodesByTypeAndPosition = [];
         foreach ($assignedVariables as $assignedVariable) {
-            $startTokenPos = $assignedVariable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);
-            if ($startTokenPos === null) {
+            $startTokenPos = $assignedVariable->getStartTokenPos();
+            // "-1" is empty value default
+            if ($startTokenPos === -1) {
                 continue;
             }
             // not in different scope, than previous one - e.g. if/while/else...
@@ -50,9 +51,9 @@ final class NodeByTypeAndPositionCollector
             $nodesByTypeAndPosition[] = new \Rector\DeadCode\ValueObject\VariableNodeUse($startTokenPos, $variableName, \Rector\DeadCode\ValueObject\VariableNodeUse::TYPE_ASSIGN, $assignedVariable, $nestingHash);
         }
         foreach ($assignedVariablesUse as $assignedVariableUse) {
-            /** @var int|null $startTokenPos */
-            $startTokenPos = $assignedVariableUse->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);
-            if ($startTokenPos === null) {
+            $startTokenPos = $assignedVariableUse->getStartTokenPos();
+            // "-1" is empty value default
+            if ($startTokenPos === -1) {
                 continue;
             }
             /** @var string $variableName */
