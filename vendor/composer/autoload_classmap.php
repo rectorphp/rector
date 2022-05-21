@@ -2907,6 +2907,7 @@ return array(
     'Rector\\Strict\\Rector\\Ternary\\DisallowedShortTernaryRuleFixerRector' => $baseDir . '/rules/Strict/Rector/Ternary/DisallowedShortTernaryRuleFixerRector.php',
     'Rector\\Symfony\\ApplicationMetadata\\ListenerServiceDefinitionProvider' => $vendorDir . '/rector/rector-symfony/src/ApplicationMetadata/ListenerServiceDefinitionProvider.php',
     'Rector\\Symfony\\Bridge\\NodeAnalyzer\\ControllerMethodAnalyzer' => $vendorDir . '/rector/rector-symfony/src/Bridge/NodeAnalyzer/ControllerMethodAnalyzer.php',
+    'Rector\\Symfony\\Bridge\\Symfony\\ContainerServiceProvider' => $vendorDir . '/rector/rector-symfony/src/Bridge/Symfony/ContainerServiceProvider.php',
     'Rector\\Symfony\\BundleClassResolver' => $vendorDir . '/rector/rector-symfony/src/BundleClassResolver.php',
     'Rector\\Symfony\\Command\\ConvertSymfonyRoutesCommand' => $vendorDir . '/rector/rector-symfony/src/Command/ConvertSymfonyRoutesCommand.php',
     'Rector\\Symfony\\Contract\\EventReferenceToMethodNameInterface' => $vendorDir . '/rector/rector-symfony/src/Contract/EventReferenceToMethodNameInterface.php',

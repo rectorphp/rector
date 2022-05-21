@@ -4,9 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Command;
 
 use RectorPrefix20220521\Nette\Utils\Json;
-use RectorPrefix20220521\Psr\Container\ContainerInterface;
-use Rector\Core\Configuration\RectorConfigProvider;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Symfony\Bridge\Symfony\ContainerServiceProvider;
 use RectorPrefix20220521\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220521\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220521\Symfony\Component\Console\Output\OutputInterface;
@@ -15,12 +13,12 @@ final class ConvertSymfonyRoutesCommand extends \RectorPrefix20220521\Symfony\Co
 {
     /**
      * @readonly
-     * @var \Rector\Core\Configuration\RectorConfigProvider
+     * @var \Rector\Symfony\Bridge\Symfony\ContainerServiceProvider
      */
-    private $rectorConfigProvider;
-    public function __construct(\Rector\Core\Configuration\RectorConfigProvider $rectorConfigProvider)
+    private $containerServiceProvider;
+    public function __construct(\Rector\Symfony\Bridge\Symfony\ContainerServiceProvider $containerServiceProvider)
     {
-        $this->rectorConfigProvider = $rectorConfigProvider;
+        $this->containerServiceProvider = $containerServiceProvider;
         parent::__construct();
     }
     protected function configure() : void
@@ -30,17 +28,7 @@ final class ConvertSymfonyRoutesCommand extends \RectorPrefix20220521\Symfony\Co
     }
     protected function execute(\RectorPrefix20220521\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220521\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
-        // @todo extract method
-        $symfonyContainerPhp = $this->rectorConfigProvider->getSymfonyContainerPhp();
-        \RectorPrefix20220521\Webmozart\Assert\Assert::fileExists($symfonyContainerPhp);
-        $container = (require_once $symfonyContainerPhp);
-        // this allows older Symfony versions, e.g. 2.8 did not have the PSR yet
-        \RectorPrefix20220521\Webmozart\Assert\Assert::isInstanceOf($container, 'Symfony\\Component\\DependencyInjection\\Container');
-        /** @var ContainerInterface $container */
-        if (!$container->has('router')) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('Symfony container has no service "%s", maybe it is private', 'router'));
-        }
-        $router = $container->get('router');
+        $router = $this->containerServiceProvider->provideByName('router');
         \RectorPrefix20220521\Webmozart\Assert\Assert::isInstanceOf($router, 'Symfony\\Component\\Routing\\RouterInterface');
         $routeCollection = $router->getRouteCollection();
         $routes = \array_map(static function ($route) : array {
