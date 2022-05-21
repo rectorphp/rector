@@ -2908,7 +2908,7 @@ return array(
     'Rector\\Symfony\\ApplicationMetadata\\ListenerServiceDefinitionProvider' => $vendorDir . '/rector/rector-symfony/src/ApplicationMetadata/ListenerServiceDefinitionProvider.php',
     'Rector\\Symfony\\Bridge\\NodeAnalyzer\\ControllerMethodAnalyzer' => $vendorDir . '/rector/rector-symfony/src/Bridge/NodeAnalyzer/ControllerMethodAnalyzer.php',
     'Rector\\Symfony\\BundleClassResolver' => $vendorDir . '/rector/rector-symfony/src/BundleClassResolver.php',
-    'Rector\\Symfony\\Command\\RectorRoutesExportCommand' => $vendorDir . '/rector/rector-symfony/src/Command/RectorRoutesExportCommand.php',
+    'Rector\\Symfony\\Command\\ConvertSymfonyRoutesCommand' => $vendorDir . '/rector/rector-symfony/src/Command/ConvertSymfonyRoutesCommand.php',
     'Rector\\Symfony\\Contract\\EventReferenceToMethodNameInterface' => $vendorDir . '/rector/rector-symfony/src/Contract/EventReferenceToMethodNameInterface.php',
     'Rector\\Symfony\\Contract\\Tag\\TagInterface' => $vendorDir . '/rector/rector-symfony/src/Contract/Tag/TagInterface.php',
     'Rector\\Symfony\\DataProvider\\RouteMapProvider' => $vendorDir . '/rector/rector-symfony/src/DataProvider/RouteMapProvider.php',
