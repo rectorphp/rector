@@ -21,7 +21,8 @@ final class ClassMethodPropertyFetchManipulator
     public function __construct(
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private readonly NodeNameResolver $nodeNameResolver,
-        private readonly BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly FunctionLikeManipulator $functionLikeManipulator
     ) {
     }
 
@@ -93,7 +94,7 @@ final class ClassMethodPropertyFetchManipulator
     {
         $assignExprs = [];
 
-        $paramNames = $this->getParamNames($classMethod);
+        $paramNames = $this->functionLikeManipulator->resolveParamNames($classMethod);
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
@@ -122,18 +123,5 @@ final class ClassMethodPropertyFetchManipulator
         );
 
         return $assignExprs;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getParamNames(ClassMethod $classMethod): array
-    {
-        $paramNames = [];
-        foreach ($classMethod->getParams() as $param) {
-            $paramNames[] = $this->nodeNameResolver->getName($param);
-        }
-
-        return $paramNames;
     }
 }

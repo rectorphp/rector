@@ -8,10 +8,10 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Core\NodeManipulator\FunctionLikeManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\PhpArray\ArrayFilter;
-use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ConflictingNameResolver
 {
@@ -24,8 +24,8 @@ final class ConflictingNameResolver
         private readonly ArrayFilter $arrayFilter,
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly ExpectedNameResolver $expectedNameResolver,
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
+        private readonly MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
+        private readonly FunctionLikeManipulator $functionLikeManipulator
     ) {
     }
 
@@ -67,7 +67,7 @@ final class ConflictingNameResolver
             return $this->conflictingVariableNamesByClassMethod[$classMethodHash];
         }
 
-        $paramNames = $this->collectParamNames($functionLike);
+        $paramNames = $this->functionLikeManipulator->resolveParamNames($functionLike);
         $newAssignNames = $this->resolveForNewAssigns($functionLike);
         $nonNewAssignNames = $this->resolveForNonNewAssigns($functionLike);
 
@@ -77,21 +77,6 @@ final class ConflictingNameResolver
         $this->conflictingVariableNamesByClassMethod[$classMethodHash] = $protectedNames;
 
         return $protectedNames;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function collectParamNames(ClassMethod | Function_ | Closure $functionLike): array
-    {
-        $paramNames = [];
-
-        // params
-        foreach ($functionLike->params as $param) {
-            $paramNames[] = $this->nodeNameResolver->getName($param);
-        }
-
-        return $paramNames;
     }
 
     /**
