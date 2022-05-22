@@ -153,9 +153,4 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER, $filePath);
     }
-    public function symfonyRoutesJson(string $filePath) : void
-    {
-        $parameters = $this->parameters();
-        $parameters->set(\Rector\Core\Configuration\Option::SYMFONY_ROUTES_JSON_PATH_PARAMETER, $filePath);
-    }
 }
