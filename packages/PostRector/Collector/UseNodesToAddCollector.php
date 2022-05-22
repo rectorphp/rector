@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\GroupUse;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Naming\Naming\UseImportsResolver;
@@ -64,11 +65,12 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
         $objectTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
         $uses = $this->useImportsResolver->resolveForNode($node);
         foreach ($uses as $use) {
+            $prefix = $use instanceof \PhpParser\Node\Stmt\GroupUse ? $use->prefix . '\\' : '';
             foreach ($use->uses as $useUse) {
                 if ($useUse->alias !== null) {
-                    $objectTypes[] = new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($useUse->alias->toString(), (string) $useUse->name);
+                    $objectTypes[] = new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($useUse->alias->toString(), $prefix . $useUse->name);
                 } else {
-                    $objectTypes[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType((string) $useUse->name);
+                    $objectTypes[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($prefix . $useUse->name);
                 }
             }
         }

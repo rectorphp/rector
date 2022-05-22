@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\UseImportsResolver;
@@ -88,7 +89,7 @@ CODE_SAMPLE
         return \strncmp($name, '\\', \strlen('\\')) === 0;
     }
     /**
-     * @param Use_[] $useNodes
+     * @param Use_[]|GroupUse[] $useNodes
      * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\FuncCall $node
      */
     private function getFullyQualifiedName(array $useNodes, $node) : ?string
@@ -99,19 +100,27 @@ CODE_SAMPLE
         $name = $node->name->toLowerString();
         $typeFilter = $node instanceof \PhpParser\Node\Expr\ConstFetch ? \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT : \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION;
         foreach ($useNodes as $useNode) {
+            $prefix = $this->resolvePrefix($useNode);
             if ($useNode->type !== $typeFilter) {
                 continue;
             }
             foreach ($useNode->uses as $useUse) {
-                if ($name === $useUse->name->toLowerString()) {
-                    return $useUse->name->toString();
+                if ($name === $prefix . $useUse->name->toLowerString()) {
+                    return $prefix . $useUse->name->toString();
                 }
                 $alias = $useUse->getAlias();
                 if ($name === $alias->toLowerString()) {
-                    return $useUse->name->toString();
+                    return $prefix . $useUse->name->toString();
                 }
             }
         }
         return null;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Use_|\PhpParser\Node\Stmt\GroupUse $useNode
+     */
+    private function resolvePrefix($useNode) : string
+    {
+        return $useNode instanceof \PhpParser\Node\Stmt\GroupUse ? $useNode->prefix . '\\' : '';
     }
 }

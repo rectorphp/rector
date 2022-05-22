@@ -5,6 +5,7 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
@@ -54,7 +55,7 @@ final class ClassAnnotationMatcher
         return $fullyQualifiedClass;
     }
     /**
-     * @param Use_[] $uses
+     * @param Use_[]|GroupUse[] $uses
      */
     private function resolveFullyQualifiedClass(array $uses, \PhpParser\Node $node, string $tag) : string
     {
@@ -74,26 +75,21 @@ final class ClassAnnotationMatcher
         return $this->useImportNameMatcher->matchNameWithUses($tag, $uses) ?? $tag;
     }
     /**
-     * @param Use_[] $uses
+     * @param Use_[]|GroupUse[] $uses
      */
     private function resolveAsAliased(array $uses, string $tag) : string
     {
         foreach ($uses as $use) {
+            $prefix = $use instanceof \PhpParser\Node\Stmt\GroupUse ? $use->prefix . '\\' : '';
             $useUses = $use->uses;
-            // skip group uses or empty
-            if (\count($useUses) !== 1) {
-                continue;
-            }
-            // uses already removed
-            if (!isset($useUses[0])) {
-                continue;
-            }
-            if (!$useUses[0]->alias instanceof \PhpParser\Node\Identifier) {
-                continue;
-            }
-            $alias = $useUses[0]->alias;
-            if ($alias->toString() === $tag) {
-                return $useUses[0]->name->toString();
+            foreach ($useUses as $useUse) {
+                if (!$useUse->alias instanceof \PhpParser\Node\Identifier) {
+                    continue;
+                }
+                $alias = $useUse->alias;
+                if ($alias->toString() === $tag) {
+                    return $prefix . $useUse->name->toString();
+                }
             }
         }
         return $this->useImportNameMatcher->matchNameWithUses($tag, $uses) ?? $tag;

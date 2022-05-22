@@ -23,6 +23,10 @@ final class MigrateRequiredFlagRector extends \Ssch\TYPO3Rector\Rector\Tca\Abstr
 {
     use TcaHelperTrait;
     /**
+     * @var string
+     */
+    private const REQUIRED = 'required';
+    /**
      * @codeCoverageIgnore
      */
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -60,13 +64,13 @@ CODE_SAMPLE
         /** @var String_ $evalStringNode */
         $evalStringNode = $evalArrayItem->value;
         $value = $evalStringNode->value;
-        if (!\Ssch\TYPO3Rector\Helper\StringUtility::inList($value, 'required')) {
+        if (!\Ssch\TYPO3Rector\Helper\StringUtility::inList($value, self::REQUIRED)) {
             return;
         }
         $evalList = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $value, \true);
         // Remove "required" from $evalList
         $evalList = \array_filter($evalList, static function (string $eval) {
-            return 'required' !== $eval;
+            return self::REQUIRED !== $eval;
         });
         if ([] !== $evalList) {
             // Write back filtered 'eval'
@@ -76,11 +80,11 @@ CODE_SAMPLE
             $this->removeNode($evalArrayItem);
         }
         // If required config exists already, remove it to avoid duplicate array items
-        $requiredItemToRemove = $this->extractArrayItemByKey($configArray, 'required');
+        $requiredItemToRemove = $this->extractArrayItemByKey($configArray, self::REQUIRED);
         if ($requiredItemToRemove instanceof \PhpParser\Node\Expr\ArrayItem) {
             $this->removeNode($requiredItemToRemove);
         }
-        $configArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('true')), new \PhpParser\Node\Scalar\String_('required'));
+        $configArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('true')), new \PhpParser\Node\Scalar\String_(self::REQUIRED));
         $this->hasAstBeenChanged = \true;
     }
 }

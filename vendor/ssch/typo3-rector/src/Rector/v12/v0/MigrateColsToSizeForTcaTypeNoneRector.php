@@ -45,7 +45,7 @@ CODE_SAMPLE
 CODE_SAMPLE
 )]);
     }
-    public function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
+    protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
     {
         $configArray = $this->extractSubArrayByKey($columnTca, self::CONFIG);
         if (!$configArray instanceof \PhpParser\Node\Expr\Array_) {
