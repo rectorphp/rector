@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\UseImportsResolver;
@@ -101,7 +102,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Use_[] $useNodes
+     * @param Use_[]|GroupUse[] $useNodes
      */
     private function getFullyQualifiedName(array $useNodes, ConstFetch|FuncCall $node): ?string
     {
@@ -113,22 +114,31 @@ CODE_SAMPLE
         $typeFilter = $node instanceof ConstFetch ? Use_::TYPE_CONSTANT : Use_::TYPE_FUNCTION;
 
         foreach ($useNodes as $useNode) {
+            $prefix = $this->resolvePrefix($useNode);
+
             if ($useNode->type !== $typeFilter) {
                 continue;
             }
 
             foreach ($useNode->uses as $useUse) {
-                if ($name === $useUse->name->toLowerString()) {
-                    return $useUse->name->toString();
+                if ($name === $prefix . $useUse->name->toLowerString()) {
+                    return $prefix . $useUse->name->toString();
                 }
 
                 $alias = $useUse->getAlias();
                 if ($name === $alias->toLowerString()) {
-                    return $useUse->name->toString();
+                    return $prefix . $useUse->name->toString();
                 }
             }
         }
 
         return null;
+    }
+
+    private function resolvePrefix(Use_|GroupUse $useNode): string
+    {
+        return $useNode instanceof GroupUse
+            ? $useNode->prefix . '\\'
+            : '';
     }
 }

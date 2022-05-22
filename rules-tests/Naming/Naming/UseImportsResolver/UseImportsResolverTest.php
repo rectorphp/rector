@@ -6,6 +6,7 @@ namespace Rector\Tests\Naming\Naming\UseImportsResolver;
 
 use Iterator;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Use_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\Testing\PHPUnit\AbstractTestCase;
@@ -45,7 +46,9 @@ final class UseImportsResolverTest extends AbstractTestCase
 
         foreach ($resolvedUses as $resolvedUse) {
             foreach ($resolvedUse->uses as $useUse) {
-                $stringUses[] = $useUse->name->tostring();
+                $stringUses[] = $resolvedUse instanceof Use_
+                    ? $useUse->name->tostring()
+                    : $resolvedUse->prefix->toString() . '\\' . $useUse->name->toString();
             }
         }
 

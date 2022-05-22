@@ -6,6 +6,7 @@ namespace Rector\StaticTypeMapper\Naming;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\NameScope;
@@ -81,7 +82,7 @@ final class NameScopeFactory
     }
 
     /**
-     * @param Use_[] $useNodes
+     * @param Use_[]|GroupUse[] $useNodes
      * @return array<string, string>
      */
     private function resolveUseNamesByAlias(array $useNodes): array
@@ -89,6 +90,9 @@ final class NameScopeFactory
         $useNamesByAlias = [];
 
         foreach ($useNodes as $useNode) {
+            $prefix = $useNode instanceof GroupUse
+                ? $useNode->prefix . '\\'
+                : '';
             foreach ($useNode->uses as $useUse) {
                 /** @var UseUse $useUse */
                 $aliasName = $useUse->getAlias()
@@ -97,7 +101,7 @@ final class NameScopeFactory
                 // uses must be lowercase, as PHPStan lowercases it
                 $lowercasedAliasName = strtolower($aliasName);
 
-                $useNamesByAlias[$lowercasedAliasName] = $useUse->name->toString();
+                $useNamesByAlias[$lowercasedAliasName] = $prefix . $useUse->name->toString();
             }
         }
 
