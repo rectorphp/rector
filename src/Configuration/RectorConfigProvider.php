@@ -26,4 +26,9 @@ final class RectorConfigProvider
     {
         return $this->parameterProvider->provideStringParameter(Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER);
     }
+
+    public function getSymfonyContainerXml(): string
+    {
+        return $this->parameterProvider->provideStringParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
+    }
 }
