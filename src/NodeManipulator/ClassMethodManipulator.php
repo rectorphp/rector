@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -14,7 +13,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
@@ -27,35 +25,8 @@ final class ClassMethodManipulator
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly NodeTypeResolver $nodeTypeResolver,
-        private readonly NodeComparator $nodeComparator,
-        private readonly FuncCallManipulator $funcCallManipulator,
         private readonly ReflectionResolver $reflectionResolver
     ) {
-    }
-
-    public function isParameterUsedInClassMethod(Param $param, ClassMethod $classMethod): bool
-    {
-        $isUsedDirectly = (bool) $this->betterNodeFinder->findFirst(
-            (array) $classMethod->stmts,
-            fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $param->var)
-        );
-
-        if ($isUsedDirectly) {
-            return true;
-        }
-
-        /** @var FuncCall[] $compactFuncCalls */
-        $compactFuncCalls = $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node): bool {
-            if (! $node instanceof FuncCall) {
-                return false;
-            }
-
-            return $this->nodeNameResolver->isName($node, 'compact');
-        });
-
-        $arguments = $this->funcCallManipulator->extractArgumentsFromCompactFuncCalls($compactFuncCalls);
-
-        return $this->nodeNameResolver->isNames($param, $arguments);
     }
 
     public function isNamedConstructor(ClassMethod $classMethod): bool

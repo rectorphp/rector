@@ -6,12 +6,12 @@ namespace Rector\DeadCode\NodeCollector;
 
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\NodeManipulator\ClassMethodManipulator;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 
 final class UnusedParameterResolver
 {
     public function __construct(
-        private readonly ClassMethodManipulator $classMethodManipulator
+        private readonly ParamAnalyzer $paramAnalyzer
     ) {
     }
 
@@ -30,7 +30,7 @@ final class UnusedParameterResolver
                 continue;
             }
 
-            if ($this->classMethodManipulator->isParameterUsedInClassMethod($param, $classMethod)) {
+            if ($this->paramAnalyzer->isParamUsedInClassMethod($classMethod, $param)) {
                 continue;
             }
 
