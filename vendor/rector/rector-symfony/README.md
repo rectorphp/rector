@@ -1,3 +1,4 @@
+
 # Rector Rules for Symfony
 
 See available [Symfony rules](/docs/rector_rules_overview.md)
@@ -29,6 +30,31 @@ return static function (RectorConfig $rectorConfig): void {
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ]);
 };
+```
+
+<br>
+
+## Configuration
+
+Some rules like `AddRouteAnnotationRector` require additional access to your Symfony container. The rule takes container service "router" to load metadata about your routes.
+
+```php
+use Rector\Config\RectorConfig;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->symfonyContainerPhp(__DIR__ . '/tests/symfony-container.php');
+};
+```
+
+The `tests/symfony-container.php` should provide your dependency injection container. The way you create the container is up to you. It can be as simple as:
+
+```php
+// tests/symfony-container.php
+
+$appKernel = new AppKernel('tests', false);
+$appKernel->boot();
+
+return $appKernel->getContainer();
 ```
 
 <br>

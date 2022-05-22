@@ -93,7 +93,7 @@ CODE_SAMPLE
         if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return null;
         }
-        $this->renamedClassesDataCollector->addOldToNewClasses(['Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Route' => 'Symfony\\Component\\Routing\\Annotation\\Route']);
+        $this->renamedClassesDataCollector->addOldToNewClasses(['Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Route' => \Rector\Symfony\Enum\SymfonyAnnotation::ROUTE]);
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
         // unset service, that is deprecated
         $values = $doctrineAnnotationTagValueNode->getValues();
