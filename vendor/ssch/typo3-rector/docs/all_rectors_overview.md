@@ -1,4 +1,4 @@
-# 237 Rules Overview
+# 239 Rules Overview
 
 ## AddRenderTypeToSelectFieldRector
 
@@ -1470,6 +1470,23 @@ Migrate last pieces of default extras
 
 <br>
 
+## MigrateNullFlagRector
+
+Migrate null flag
+
+- class: [`Ssch\TYPO3Rector\Rector\v12\v0\MigrateNullFlagRector`](../src/Rector/v12/v0/MigrateNullFlagRector.php)
+
+```diff
+ 'nullable_column' => [
+     'config' => [
+-        'eval' => 'null',
++        'nullable' => true,
+     ],
+ ],
+```
+
+<br>
+
 ## MigrateOptionsOfTypeGroupRector
 
 Migrate options if type group in TCA
@@ -1497,6 +1514,24 @@ Migrate options if type group in TCA
          ],
      ],
  ];
+```
+
+<br>
+
+## MigrateRequiredFlagRector
+
+Migrate required flag
+
+- class: [`Ssch\TYPO3Rector\Rector\v12\v0\MigrateRequiredFlagRector`](../src/Rector/v12/v0/MigrateRequiredFlagRector.php)
+
+```diff
+ 'required_column' => [
+     'config' => [
+-        'eval' => 'trim,required',
++        'eval' => 'trim',
++        'required' => true,
+     ],
+ ],
 ```
 
 <br>

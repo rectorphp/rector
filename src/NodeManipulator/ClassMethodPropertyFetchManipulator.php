@@ -31,11 +31,17 @@ final class ClassMethodPropertyFetchManipulator
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20220522\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeManipulator\FunctionLikeManipulator
+     */
+    private $functionLikeManipulator;
+    public function __construct(\RectorPrefix20220522\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->functionLikeManipulator = $functionLikeManipulator;
     }
     /**
      * In case the property name is different to param name:
@@ -90,7 +96,7 @@ final class ClassMethodPropertyFetchManipulator
     public function findAssignsToPropertyName(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : array
     {
         $assignExprs = [];
-        $paramNames = $this->getParamNames($classMethod);
+        $paramNames = $this->functionLikeManipulator->resolveParamNames($classMethod);
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) use($propertyName, &$assignExprs, $paramNames, $classMethod) : ?int {
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return null;
@@ -110,16 +116,5 @@ final class ClassMethodPropertyFetchManipulator
             return null;
         });
         return $assignExprs;
-    }
-    /**
-     * @return string[]
-     */
-    private function getParamNames(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
-    {
-        $paramNames = [];
-        foreach ($classMethod->getParams() as $param) {
-            $paramNames[] = $this->nodeNameResolver->getName($param);
-        }
-        return $paramNames;
     }
 }

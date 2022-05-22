@@ -61,4 +61,15 @@ final class FunctionLikeManipulator
         });
         return $returnedLocalPropertyNames;
     }
+    /**
+     * @return string[]
+     */
+    public function resolveParamNames(\PhpParser\Node\FunctionLike $functionLike) : array
+    {
+        $paramNames = [];
+        foreach ($functionLike->getParams() as $param) {
+            $paramNames[] = $this->nodeNameResolver->getName($param);
+        }
+        return $paramNames;
+    }
 }

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd4b614c7d67c00979c0548593ce91dbe
+class ComposerStaticInitb2c7887b6fb709b9bf756eb98162016c
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3734,6 +3734,8 @@ class ComposerStaticInitd4b614c7d67c00979c0548593ce91dbe
         'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v11/v5/SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\MigrateColsToSizeForTcaTypeNoneRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/MigrateColsToSizeForTcaTypeNoneRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\MigrateInternalTypeRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/MigrateInternalTypeRector.php',
+        'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\MigrateNullFlagRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/MigrateNullFlagRector.php',
+        'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\MigrateRequiredFlagRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/MigrateRequiredFlagRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\ReplacePreviewUrlMethodRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/ReplacePreviewUrlMethodRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveDivider2TabsConfigurationRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveDivider2TabsConfigurationRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveMethodCallConnectDbRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveMethodCallConnectDbRector.php',
@@ -3907,9 +3909,9 @@ class ComposerStaticInitd4b614c7d67c00979c0548593ce91dbe
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd4b614c7d67c00979c0548593ce91dbe::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd4b614c7d67c00979c0548593ce91dbe::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd4b614c7d67c00979c0548593ce91dbe::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb2c7887b6fb709b9bf756eb98162016c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb2c7887b6fb709b9bf756eb98162016c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb2c7887b6fb709b9bf756eb98162016c::$classMap;
 
         }, null, ClassLoader::class);
     }

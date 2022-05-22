@@ -153,6 +153,9 @@ CODE_SAMPLE
         if ($symfonyRouteMetadata->getCondition() !== '') {
             $items['condition'] = \sprintf('"%s"', $symfonyRouteMetadata->getCondition());
         }
+        if ($symfonyRouteMetadata->getRequirements() !== []) {
+            $items['requirements'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getRequirements());
+        }
         return $items;
     }
     private function matchSymfonyRouteMetadataByControllerReference(string $controllerReference) : ?\Rector\Symfony\ValueObject\SymfonyRouteMetadata

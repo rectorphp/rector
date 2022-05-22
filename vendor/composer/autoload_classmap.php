@@ -3365,6 +3365,8 @@ return array(
     'Ssch\\TYPO3Rector\\Rector\\v11\\v5\\SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v11/v5/SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\MigrateColsToSizeForTcaTypeNoneRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v12/v0/MigrateColsToSizeForTcaTypeNoneRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\MigrateInternalTypeRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v12/v0/MigrateInternalTypeRector.php',
+    'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\MigrateNullFlagRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v12/v0/MigrateNullFlagRector.php',
+    'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\MigrateRequiredFlagRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v12/v0/MigrateRequiredFlagRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\ReplacePreviewUrlMethodRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v12/v0/ReplacePreviewUrlMethodRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveDivider2TabsConfigurationRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveDivider2TabsConfigurationRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveMethodCallConnectDbRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveMethodCallConnectDbRector.php',

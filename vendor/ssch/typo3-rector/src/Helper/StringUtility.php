@@ -19,4 +19,15 @@ final class StringUtility
         $underScoredExtensionName = \ucwords($uppercase->toString());
         return \str_replace(' ', '', $underScoredExtensionName);
     }
+    /**
+     * Check if an item exists in a comma-separated list of items.
+     *
+     * @param string $list Comma-separated list of items (string)
+     * @param string $item Item to check for
+     * @return bool TRUE if $item is in $list
+     */
+    public static function inList(string $list, string $item) : bool
+    {
+        return \strpos(',' . $list . ',', ',' . $item . ',') !== \false;
+    }
 }

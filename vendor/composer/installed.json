@@ -2644,12 +2644,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "c45b34fe6b3fcb19dfae1d03dfd1bde48221004f"
+                "reference": "f6c3a514f6393f29c96b97d96d8733bc94c9917e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/c45b34fe6b3fcb19dfae1d03dfd1bde48221004f",
-                "reference": "c45b34fe6b3fcb19dfae1d03dfd1bde48221004f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/f6c3a514f6393f29c96b97d96d8733bc94c9917e",
+                "reference": "f6c3a514f6393f29c96b97d96d8733bc94c9917e",
                 "shasum": ""
             },
             "require": {
@@ -2679,7 +2679,7 @@
                 "symplify\/rule-doc-generator": "^10.2",
                 "symplify\/vendor-patches": "^10.2"
             },
-            "time": "2022-05-22T07:46:36+00:00",
+            "time": "2022-05-22T12:38:13+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2706,7 +2706,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.12.0"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/main"
             },
             "install-path": "..\/rector\/rector-symfony"
         },
@@ -2786,12 +2786,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "0da5602980a47f92f1a61e348c058f9abac207c4"
+                "reference": "7ab2af8604f9f23b043fdb1154803dfd0836aa89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/0da5602980a47f92f1a61e348c058f9abac207c4",
-                "reference": "0da5602980a47f92f1a61e348c058f9abac207c4",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/7ab2af8604f9f23b043fdb1154803dfd0836aa89",
+                "reference": "7ab2af8604f9f23b043fdb1154803dfd0836aa89",
                 "shasum": ""
             },
             "require": {
@@ -2821,7 +2821,7 @@
                 "symplify\/vendor-patches": "^10.2",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-05-22T05:35:54+00:00",
+            "time": "2022-05-22T14:29:55+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
