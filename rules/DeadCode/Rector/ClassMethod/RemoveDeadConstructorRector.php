@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -22,9 +23,15 @@ final class RemoveDeadConstructorRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\Core\NodeManipulator\ClassMethodManipulator
      */
     private $classMethodManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\ClassMethodManipulator $classMethodManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     */
+    private $paramAnalyzer;
+    public function __construct(\Rector\Core\NodeManipulator\ClassMethodManipulator $classMethodManipulator, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
     {
         $this->classMethodManipulator = $classMethodManipulator;
+        $this->paramAnalyzer = $paramAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -79,7 +86,7 @@ CODE_SAMPLE
         if ($classMethod->stmts !== []) {
             return \true;
         }
-        if ($this->classMethodManipulator->isPropertyPromotion($classMethod)) {
+        if ($this->paramAnalyzer->hasPropertyPromotion($classMethod->params)) {
             return \true;
         }
         return $this->classMethodManipulator->isNamedConstructor($classMethod);

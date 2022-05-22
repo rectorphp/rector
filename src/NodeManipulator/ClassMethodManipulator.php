@@ -105,16 +105,6 @@ final class ClassMethodManipulator
         $classMethod->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($paramName), null, new \PhpParser\Node\Name\FullyQualified($objectType->getClassName()));
         return $paramName;
     }
-    public function isPropertyPromotion(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
-    {
-        foreach ($classMethod->params as $param) {
-            /** @var Param $param */
-            if ($param->flags !== 0) {
-                return \true;
-            }
-        }
-        return \false;
-    }
     /**
      * @param string[] $possibleNames
      */
