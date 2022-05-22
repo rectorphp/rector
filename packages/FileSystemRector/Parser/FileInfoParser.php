@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\FileSystemRector\Parser;
 
-use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
@@ -21,7 +21,7 @@ final class FileInfoParser
     }
 
     /**
-     * @return Node[]
+     * @return Stmt[]
      */
     public function parseFileInfoToNodesAndDecorate(SmartFileInfo $smartFileInfo): array
     {
