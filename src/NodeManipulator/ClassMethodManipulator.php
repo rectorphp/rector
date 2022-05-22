@@ -105,18 +105,6 @@ final class ClassMethodManipulator
         return $paramName;
     }
 
-    public function isPropertyPromotion(ClassMethod $classMethod): bool
-    {
-        foreach ($classMethod->params as $param) {
-            /** @var Param $param */
-            if ($param->flags !== 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @param string[] $possibleNames
      */

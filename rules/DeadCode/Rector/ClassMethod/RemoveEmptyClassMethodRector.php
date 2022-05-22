@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -22,7 +23,8 @@ final class RemoveEmptyClassMethodRector extends AbstractRector
 {
     public function __construct(
         private readonly ClassMethodManipulator $classMethodManipulator,
-        private readonly ControllerClassMethodManipulator $controllerClassMethodManipulator
+        private readonly ControllerClassMethodManipulator $controllerClassMethodManipulator,
+        private readonly ParamAnalyzer $paramAnalyzer
     ) {
     }
 
@@ -121,7 +123,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->classMethodManipulator->isPropertyPromotion($classMethod)) {
+        if ($this->paramAnalyzer->hasPropertyPromotion($classMethod->params)) {
             return true;
         }
 
