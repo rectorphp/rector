@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileSystemRector\Parser;
 
-use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
@@ -33,7 +33,7 @@ final class FileInfoParser
         $this->rectorParser = $rectorParser;
     }
     /**
-     * @return Node[]
+     * @return Stmt[]
      */
     public function parseFileInfoToNodesAndDecorate(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
     {
