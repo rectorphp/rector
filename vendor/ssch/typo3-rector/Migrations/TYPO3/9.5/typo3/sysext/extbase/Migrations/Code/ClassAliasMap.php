@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220521;
+namespace RectorPrefix20220522;
 
 return [
     // TYPO3 v8 replacements

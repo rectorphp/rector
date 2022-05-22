@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220521\React\Promise\Timer;
+namespace RectorPrefix20220522\React\Promise\Timer;
 
 use RuntimeException;
 class TimeoutException extends \RuntimeException

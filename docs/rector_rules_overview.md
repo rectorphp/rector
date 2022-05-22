@@ -1875,7 +1875,9 @@ use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ConsistentPregDelimiterRector::class, [Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector::DELIMITER: '#']);
+    $rectorConfig->ruleWithConfiguration(ConsistentPregDelimiterRector::class, [
+        ConsistentPregDelimiterRector::DELIMITER => '#',
+    ]);
 };
 ```
 
@@ -2170,12 +2172,15 @@ Changes `$this->...` and static:: to self:: or vise versa for given types
 - class: [`Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector`](../rules/CodingStyle/Rector/MethodCall/PreferThisOrSelfMethodCallRector.php)
 
 ```php
+use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(PreferThisOrSelfMethodCallRector::class, [PHPUnit\Framework\TestCase: PreferenceSelfThis::PREFER_SELF()]);
+    $rectorConfig->ruleWithConfiguration(PreferThisOrSelfMethodCallRector::class, [
+        TestCase::class => PreferenceSelfThis::PREFER_SELF(),
+    ]);
 };
 ```
 
@@ -3513,7 +3518,9 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveUnusedPrivatePropertyRector::class, [Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector::REMOVE_ASSIGN_SIDE_EFFECT: true]);
+    $rectorConfig->ruleWithConfiguration(RemoveUnusedPrivatePropertyRector::class, [
+        RemoveUnusedPrivatePropertyRector::REMOVE_ASSIGN_SIDE_EFFECT => true,
+    ]);
 };
 ```
 
@@ -3774,7 +3781,9 @@ use Rector\Config\RectorConfig;
 use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddMethodParentCallRector::class, [ParentClassWithNewConstructor: '__construct']);
+    $rectorConfig->ruleWithConfiguration(AddMethodParentCallRector::class, [
+        'ParentClassWithNewConstructor' => '__construct',
+    ]);
 };
 ```
 
@@ -4739,7 +4748,10 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DowngradeParameterTypeWideningRector::class, [ContainerInterface: ['set', 'get', 'has', 'initialized'], SomeContainerInterface: ['set', 'has']]);
+    $rectorConfig->ruleWithConfiguration(DowngradeParameterTypeWideningRector::class, [
+        'ContainerInterface' => ['set', 'get', 'has', 'initialized'],
+        'SomeContainerInterface' => ['set', 'has'],
+    ]);
 };
 ```
 
@@ -7367,7 +7379,10 @@ use Rector\Config\RectorConfig;
 use Rector\Php71\Rector\Name\ReservedObjectRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReservedObjectRector::class, [ReservedObject: 'SmartObject', Object: 'AnotherSmartObject']);
+    $rectorConfig->ruleWithConfiguration(ReservedObjectRector::class, [
+        'ReservedObject' => 'SmartObject',
+        'Object' => 'AnotherSmartObject',
+    ]);
 };
 ```
 
@@ -7723,7 +7738,9 @@ use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddLiteralSeparatorToNumberRector::class, [Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector::LIMIT_VALUE: 1000000]);
+    $rectorConfig->ruleWithConfiguration(AddLiteralSeparatorToNumberRector::class, [
+        AddLiteralSeparatorToNumberRector::LIMIT_VALUE => 1000000,
+    ]);
 };
 ```
 
@@ -7985,7 +8002,9 @@ use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(TypedPropertyRector::class, [Rector\Php74\Rector\Property\TypedPropertyRector::INLINE_PUBLIC: false]);
+    $rectorConfig->ruleWithConfiguration(TypedPropertyRector::class, [
+        TypedPropertyRector::INLINE_PUBLIC => false,
+    ]);
 };
 ```
 
@@ -8153,7 +8172,9 @@ use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\DoctrineAnnotationClassToAttributeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DoctrineAnnotationClassToAttributeRector::class, [Rector\Php80\Rector\Class_\DoctrineAnnotationClassToAttributeRector::REMOVE_ANNOTATIONS: true]);
+    $rectorConfig->ruleWithConfiguration(DoctrineAnnotationClassToAttributeRector::class, [
+        DoctrineAnnotationClassToAttributeRector::REMOVE_ANNOTATIONS => true,
+    ]);
 };
 ```
 
@@ -9332,7 +9353,9 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [App\SomeOldClass: 'App\SomeNewClass']);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'App\SomeOldClass' => 'App\SomeNewClass',
+    ]);
 };
 ```
 
@@ -9370,7 +9393,10 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameConstantRector::class, [MYSQL_ASSOC: 'MYSQLI_ASSOC', OLD_CONSTANT: 'NEW_CONSTANT']);
+    $rectorConfig->ruleWithConfiguration(RenameConstantRector::class, [
+        'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
+        'OLD_CONSTANT' => 'NEW_CONSTANT',
+    ]);
 };
 ```
 
@@ -9402,7 +9428,9 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [view: 'Laravel\Templating\render']);
+    $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
+        'view' => 'Laravel\Templating\render',
+    ]);
 };
 ```
 
@@ -9459,7 +9487,9 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Namespace_\RenameNamespaceRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameNamespaceRector::class, [SomeOldNamespace: 'SomeNewNamespace']);
+    $rectorConfig->ruleWithConfiguration(RenameNamespaceRector::class, [
+        'SomeOldNamespace' => 'SomeNewNamespace',
+    ]);
 };
 ```
 
@@ -9545,7 +9575,9 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\String_\RenameStringRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [ROLE_PREVIOUS_ADMIN: 'IS_IMPERSONATOR']);
+    $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
+        'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
+    ]);
 };
 ```
 
@@ -9696,7 +9728,9 @@ use Rector\Config\RectorConfig;
 use Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(BooleanInBooleanNotRuleFixerRector::class, [Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector::TREAT_AS_NON_EMPTY: true]);
+    $rectorConfig->ruleWithConfiguration(BooleanInBooleanNotRuleFixerRector::class, [
+        BooleanInBooleanNotRuleFixerRector::TREAT_AS_NON_EMPTY => true,
+    ]);
 };
 ```
 
@@ -9732,7 +9766,9 @@ use Rector\Config\RectorConfig;
 use Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(BooleanInIfConditionRuleFixerRector::class, [Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector::TREAT_AS_NON_EMPTY: false]);
+    $rectorConfig->ruleWithConfiguration(BooleanInIfConditionRuleFixerRector::class, [
+        BooleanInIfConditionRuleFixerRector::TREAT_AS_NON_EMPTY => false,
+    ]);
 };
 ```
 
@@ -9768,7 +9804,9 @@ use Rector\Config\RectorConfig;
 use Rector\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(BooleanInTernaryOperatorRuleFixerRector::class, [Rector\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector::TREAT_AS_NON_EMPTY: false]);
+    $rectorConfig->ruleWithConfiguration(BooleanInTernaryOperatorRuleFixerRector::class, [
+        BooleanInTernaryOperatorRuleFixerRector::TREAT_AS_NON_EMPTY => false,
+    ]);
 };
 ```
 
@@ -9800,7 +9838,9 @@ use Rector\Config\RectorConfig;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DisallowedEmptyRuleFixerRector::class, [Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector::TREAT_AS_NON_EMPTY: false]);
+    $rectorConfig->ruleWithConfiguration(DisallowedEmptyRuleFixerRector::class, [
+        DisallowedEmptyRuleFixerRector::TREAT_AS_NON_EMPTY => false,
+    ]);
 };
 ```
 
@@ -9832,7 +9872,9 @@ use Rector\Config\RectorConfig;
 use Rector\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DisallowedShortTernaryRuleFixerRector::class, [Rector\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector::TREAT_AS_NON_EMPTY: false]);
+    $rectorConfig->ruleWithConfiguration(DisallowedShortTernaryRuleFixerRector::class, [
+        DisallowedShortTernaryRuleFixerRector::TREAT_AS_NON_EMPTY => false,
+    ]);
 };
 ```
 
@@ -9896,7 +9938,9 @@ use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\Class_\AddInterfaceByTraitRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddInterfaceByTraitRector::class, [SomeTrait: 'SomeInterface']);
+    $rectorConfig->ruleWithConfiguration(AddInterfaceByTraitRector::class, [
+        'SomeTrait' => 'SomeInterface',
+    ]);
 };
 ```
 
@@ -10162,7 +10206,9 @@ use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(FuncCallToConstFetchRector::class, [php_sapi_name: 'PHP_SAPI']);
+    $rectorConfig->ruleWithConfiguration(FuncCallToConstFetchRector::class, [
+        'php_sapi_name' => 'PHP_SAPI',
+    ]);
 };
 ```
 
@@ -10240,7 +10286,9 @@ use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\FuncCall\FuncCallToNewRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(FuncCallToNewRector::class, [collection: ['Collection']]);
+    $rectorConfig->ruleWithConfiguration(FuncCallToNewRector::class, [
+        'collection' => ['Collection'],
+    ]);
 };
 ```
 
@@ -10333,7 +10381,9 @@ use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\Class_\MergeInterfacesRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(MergeInterfacesRector::class, [SomeOldInterface: 'SomeInterface']);
+    $rectorConfig->ruleWithConfiguration(MergeInterfacesRector::class, [
+        'SomeOldInterface' => 'SomeInterface',
+    ]);
 };
 ```
 
@@ -10436,7 +10486,9 @@ use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(MethodCallToPropertyFetchRector::class, [someMethod: 'someProperty']);
+    $rectorConfig->ruleWithConfiguration(MethodCallToPropertyFetchRector::class, [
+        'someMethod' => 'someProperty',
+    ]);
 };
 ```
 
@@ -10845,7 +10897,9 @@ use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\ClassMethod\ReturnTypeWillChangeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReturnTypeWillChangeRector::class, [ArrayAccess: ['offsetGet']]);
+    $rectorConfig->ruleWithConfiguration(ReturnTypeWillChangeRector::class, [
+        ArrayAccess::class => ['offsetGet'],
+    ]);
 };
 ```
 
@@ -11098,7 +11152,9 @@ use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\String_\ToStringToMethodCallRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ToStringToMethodCallRector::class, [SomeObject: 'getPath']);
+    $rectorConfig->ruleWithConfiguration(ToStringToMethodCallRector::class, [
+        'SomeObject' => 'getPath',
+    ]);
 };
 ```
 
@@ -11398,7 +11454,9 @@ use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddVoidReturnTypeWhereNoReturnRector::class, [Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector::USE_PHPDOC: false]);
+    $rectorConfig->ruleWithConfiguration(AddVoidReturnTypeWhereNoReturnRector::class, [
+        AddVoidReturnTypeWhereNoReturnRector::USE_PHPDOC => false,
+    ]);
 };
 ```
 
@@ -11766,7 +11824,9 @@ use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(TypedPropertyFromAssignsRector::class, [Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector::INLINE_PUBLIC: false]);
+    $rectorConfig->ruleWithConfiguration(TypedPropertyFromAssignsRector::class, [
+        TypedPropertyFromAssignsRector::INLINE_PUBLIC => false,
+    ]);
 };
 ```
 
