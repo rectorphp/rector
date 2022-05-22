@@ -1,4 +1,3 @@
-
 # Rector Rules for Symfony
 
 See available [Symfony rules](/docs/rector_rules_overview.md)
@@ -36,6 +35,22 @@ return static function (RectorConfig $rectorConfig): void {
 
 ## Configuration
 
+Some rules like `StringFormTypeToClassRector` need access to your Symfony container dumped XML. It contains list of form types with their string names, so it can convert them to class references.
+
+How to add it? Check your `/var/cache` directory and find the XML file for your test env. Then add it in `rector.php`:
+
+```php
+use Rector\Config\RectorConfig;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->symfonyContainerXml(__DIR__ . '/var/cache/<env>/appProjectContainer.xml');
+};
+```
+
+That's it! Now you can run the `StringFormTypeToClassRector` and get your form classes converted safely.
+
+---
+
 Some rules like `AddRouteAnnotationRector` require additional access to your Symfony container. The rule takes container service "router" to load metadata about your routes.
 
 ```php
@@ -56,6 +71,13 @@ $appKernel->boot();
 
 return $appKernel->getContainer();
 ```
+
+The version of your Symfony can be quite old. Public methods are stable from Symfony 2 to through 6 and the router have not changed much. The `AddRouteAnnotationRector` rule was tested and developed on Symfony 2.8 project.
+
+---
+
+Note: in this case, container cache PHP file located in `/var/cache/<env>/appProjectContainer.php` is not enough. Why? Few services require Kernel to be set, e.g. routes that are resolved in lazy way. This container file is only dumped without Kernel and [would crash with missing "kernel" error](https://github.com/symfony/symfony/issues/19840). That's why the rule needs full blown container.
+
 
 <br>
 
