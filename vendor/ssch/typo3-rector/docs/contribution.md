@@ -12,7 +12,7 @@
 # Contributing
 
 Want to help? Great!
-Joing TYPO3 slack channel #ext-typo3-rector
+Joing TYPO3 slack channel [#ext-typo3-rector](https://typo3.slack.com/archives/C019R5LAA6A)
 
 ## Fork the project
 

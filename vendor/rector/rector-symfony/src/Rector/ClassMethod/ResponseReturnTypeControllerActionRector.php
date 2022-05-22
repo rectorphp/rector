@@ -8,6 +8,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
+use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -83,7 +84,7 @@ CODE_SAMPLE
         if ($node->returnType !== null) {
             return null;
         }
-        if (!$this->attrinationFinder->hasByOne($node, 'Symfony\\Component\\Routing\\Annotation\\Route')) {
+        if (!$this->attrinationFinder->hasByOne($node, \Rector\Symfony\Enum\SymfonyAnnotation::ROUTE)) {
             return null;
         }
         $node->returnType = new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\HttpFoundation\\Response');

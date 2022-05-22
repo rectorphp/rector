@@ -6,6 +6,12 @@ namespace Rector\Symfony\ValueObject;
 class SymfonyRouteMetadata
 {
     /**
+     * Format <class>::<method>
+     * @readonly
+     * @var string
+     */
+    private $controllerReference;
+    /**
      * @readonly
      * @var string
      */
@@ -16,42 +22,42 @@ class SymfonyRouteMetadata
      */
     private $path;
     /**
-     * @var mixed[]
+     * @var array<string, mixed>
      * @readonly
      */
-    private $defaults = [];
+    private $defaults;
     /**
-     * @var string[]
+     * @var array<string, mixed>
      * @readonly
      */
-    private $requirements = [];
-    /**
-     * @readonly
-     * @var string
-     */
-    private $host = '';
-    /**
-     * @var string[]
-     * @readonly
-     */
-    private $schemes = [];
-    /**
-     * @var string[]
-     * @readonly
-     */
-    private $methods = [];
+    private $requirements;
     /**
      * @readonly
      * @var string
      */
-    private $condition = '';
+    private $host;
     /**
-     * @param mixed[]  $defaults
-     * @param string[]  $requirements
-     * @param string[]  $schemes
-     * @param string[]  $methods
+     * @var string[]
+     * @readonly
      */
-    public function __construct(string $name, string $path, array $defaults = [], array $requirements = [], string $host = '', array $schemes = [], array $methods = [], string $condition = '')
+    private $schemes;
+    /**
+     * @var string[]
+     * @readonly
+     */
+    private $methods;
+    /**
+     * @readonly
+     * @var string
+     */
+    private $condition;
+    /**
+     * @param array<string, mixed> $defaults
+     * @param array<string, mixed> $requirements
+     * @param string[] $schemes
+     * @param string[] $methods
+     */
+    public function __construct(string $name, string $path, array $defaults, array $requirements, string $host, array $schemes, array $methods, string $condition)
     {
         $this->name = $name;
         $this->path = $path;
@@ -61,6 +67,7 @@ class SymfonyRouteMetadata
         $this->schemes = $schemes;
         $this->methods = $methods;
         $this->condition = $condition;
+        $this->controllerReference = $defaults['_controller'];
     }
     public function getName() : string
     {
@@ -71,11 +78,20 @@ class SymfonyRouteMetadata
         return $this->path;
     }
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function getDefaults() : array
     {
         return $this->defaults;
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public function getDefaultsWithoutController() : array
+    {
+        $defaults = $this->defaults;
+        unset($defaults['_controller']);
+        return $defaults;
     }
     /**
      * @return mixed
@@ -85,7 +101,7 @@ class SymfonyRouteMetadata
         return $this->defaults[$name] ?? null;
     }
     /**
-     * @return string[]
+     * @return array<string, mixed>
      */
     public function getRequirements() : array
     {
@@ -112,5 +128,12 @@ class SymfonyRouteMetadata
     public function getCondition() : string
     {
         return $this->condition;
+    }
+    /**
+     * Format <class>::<method>
+     */
+    public function getControllerReference() : string
+    {
+        return $this->controllerReference;
     }
 }

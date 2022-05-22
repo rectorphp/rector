@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9782dd56f9fe1f00f0b4d3f701f55955
+class ComposerStaticInit05cb8895e1954651c31b14af1c80af2a
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3277,14 +3277,14 @@ class ComposerStaticInit9782dd56f9fe1f00f0b4d3f701f55955
         'Rector\\Symfony\\ApplicationMetadata\\ListenerServiceDefinitionProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/ApplicationMetadata/ListenerServiceDefinitionProvider.php',
         'Rector\\Symfony\\Bridge\\NodeAnalyzer\\ControllerMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/Bridge/NodeAnalyzer/ControllerMethodAnalyzer.php',
         'Rector\\Symfony\\Bridge\\Symfony\\ContainerServiceProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Bridge/Symfony/ContainerServiceProvider.php',
+        'Rector\\Symfony\\Bridge\\Symfony\\Routing\\SymfonyRoutesProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Bridge/Symfony/Routing/SymfonyRoutesProvider.php',
         'Rector\\Symfony\\BundleClassResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/BundleClassResolver.php',
-        'Rector\\Symfony\\Command\\ConvertSymfonyRoutesCommand' => __DIR__ . '/..' . '/rector/rector-symfony/src/Command/ConvertSymfonyRoutesCommand.php',
+        'Rector\\Symfony\\Contract\\Bridge\\Symfony\\Routing\\SymfonyRoutesProviderInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/Bridge/Symfony/Routing/SymfonyRoutesProviderInterface.php',
         'Rector\\Symfony\\Contract\\EventReferenceToMethodNameInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/EventReferenceToMethodNameInterface.php',
         'Rector\\Symfony\\Contract\\Tag\\TagInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/Tag/TagInterface.php',
-        'Rector\\Symfony\\DataProvider\\RouteMapProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/DataProvider/RouteMapProvider.php',
         'Rector\\Symfony\\DataProvider\\ServiceMapProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/DataProvider/ServiceMapProvider.php',
+        'Rector\\Symfony\\Enum\\SymfonyAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',
         'Rector\\Symfony\\Exception\\InvalidConfigurationException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/InvalidConfigurationException.php',
-        'Rector\\Symfony\\Exception\\JsonRoutesNotExistsException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/JsonRoutesNotExistsException.php',
         'Rector\\Symfony\\Exception\\XmlContainerNotExistsException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/XmlContainerNotExistsException.php',
         'Rector\\Symfony\\FormHelper\\FormTypeStringToTypeProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/FormHelper/FormTypeStringToTypeProvider.php',
         'Rector\\Symfony\\Helper\\TemplateGuesser' => __DIR__ . '/..' . '/rector/rector-symfony/src/Helper/TemplateGuesser.php',
@@ -3390,7 +3390,6 @@ class ComposerStaticInit9782dd56f9fe1f00f0b4d3f701f55955
         'Rector\\Symfony\\TypeAnalyzer\\ControllerAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ControllerAnalyzer.php',
         'Rector\\Symfony\\TypeAnalyzer\\JMSDITypeResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/JMSDITypeResolver.php',
         'Rector\\Symfony\\TypeDeclaration\\ReturnTypeDeclarationUpdater' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeDeclaration/ReturnTypeDeclarationUpdater.php',
-        'Rector\\Symfony\\ValueObjectFactory\\RouteMapFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObjectFactory/RouteMapFactory.php',
         'Rector\\Symfony\\ValueObjectFactory\\ServiceMapFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObjectFactory/ServiceMapFactory.php',
         'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyRequestConstantMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyRequestConstantMap.php',
         'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyResponseConstantMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyResponseConstantMap.php',
@@ -3399,7 +3398,6 @@ class ComposerStaticInit9782dd56f9fe1f00f0b4d3f701f55955
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodNameWithPriority' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodNameWithPriority.php',
         'Rector\\Symfony\\ValueObject\\InvokableController\\ActiveClassElements' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/InvokableController/ActiveClassElements.php',
         'Rector\\Symfony\\ValueObject\\ReplaceServiceArgument' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ReplaceServiceArgument.php',
-        'Rector\\Symfony\\ValueObject\\RouteMap\\RouteMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/RouteMap/RouteMap.php',
         'Rector\\Symfony\\ValueObject\\ServiceDefinition' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ServiceDefinition.php',
         'Rector\\Symfony\\ValueObject\\ServiceMap\\ServiceMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ServiceMap/ServiceMap.php',
         'Rector\\Symfony\\ValueObject\\SymfonyRouteMetadata' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/SymfonyRouteMetadata.php',
@@ -3909,9 +3907,9 @@ class ComposerStaticInit9782dd56f9fe1f00f0b4d3f701f55955
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9782dd56f9fe1f00f0b4d3f701f55955::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9782dd56f9fe1f00f0b4d3f701f55955::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9782dd56f9fe1f00f0b4d3f701f55955::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit05cb8895e1954651c31b14af1c80af2a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit05cb8895e1954651c31b14af1c80af2a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit05cb8895e1954651c31b14af1c80af2a::$classMap;
 
         }, null, ClassLoader::class);
     }

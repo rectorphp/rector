@@ -19,6 +19,7 @@
         "symfony\/routing": "^5.4",
         "symfony\/security-core": "^5.4",
         "symfony\/security-http": "^5.4",
+        "symplify\/easy-ci": "^10.2",
         "symplify\/easy-coding-standard": "^10.2",
         "symplify\/monorepo-builder": "^10.2",
         "symplify\/phpstan-extensions": "^10.2",

@@ -666,7 +666,7 @@ use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\General\ExtEmConfRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ExtEmConfRector::class, [Ssch\TYPO3Rector\Rector\General\ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED: ['createDirs', 'uploadfolder']]);
+    $rectorConfig->ruleWithConfiguration(ExtEmConfRector::class, [ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => ['createDirs', 'uploadfolder']]);
 };
 ```
 
@@ -791,7 +791,7 @@ use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\ExtbasePersistenceTypoScriptRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ExtbasePersistenceTypoScriptRector::class, [Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\ExtbasePersistenceTypoScriptRector::FILENAME: 'path/to/Configuration/Extbase/Persistence/Classes.php']);
+    $rectorConfig->ruleWithConfiguration(ExtbasePersistenceTypoScriptRector::class, [ExtbasePersistenceTypoScriptRector::FILENAME => 'path/to/Configuration/Extbase/Persistence/Classes.php']);
 };
 ```
 
@@ -831,7 +831,7 @@ use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ExtensionComposerRector::class, [Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector::TYPO3_VERSION_CONSTRAINT: '^10.4']);
+    $rectorConfig->ruleWithConfiguration(ExtensionComposerRector::class, [ExtensionComposerRector::TYPO3_VERSION_CONSTRAINT => '^10.4']);
 };
 ```
 
@@ -1314,7 +1314,7 @@ use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(MethodGetInstanceToMakeInstanceCallRector::class, [Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector::CLASSES_GET_INSTANCE_TO_MAKE_INSTANCE: ['SomeClass']]);
+    $rectorConfig->ruleWithConfiguration(MethodGetInstanceToMakeInstanceCallRector::class, [MethodGetInstanceToMakeInstanceCallRector::CLASSES_GET_INSTANCE_TO_MAKE_INSTANCE => ['SomeClass']]);
 };
 ```
 
@@ -2545,7 +2545,7 @@ use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\RemoveCmsPackageDirFromExtraComposerRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveCmsPackageDirFromExtraComposerRector::class, [not_allowed: 'not_available']);
+    $rectorConfig->ruleWithConfiguration(RemoveCmsPackageDirFromExtraComposerRector::class, ['not_allowed' => 'not_available']);
 };
 ```
 
@@ -3310,7 +3310,7 @@ use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameClassMapAliasRector::class, [Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::CLASS_ALIAS_MAPS: 'config/Migrations/Code/ClassAliasMap.php']);
+    $rectorConfig->ruleWithConfiguration(RenameClassMapAliasRector::class, [RenameClassMapAliasRector::CLASS_ALIAS_MAPS => 'config/Migrations/Code/ClassAliasMap.php']);
 };
 ```
 
@@ -3410,7 +3410,7 @@ use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v9\v0\ReplaceAnnotationRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReplaceAnnotationRector::class, [Ssch\TYPO3Rector\Rector\v9\v0\ReplaceAnnotationRector::OLD_TO_NEW_ANNOTATIONS: ['transient' => 'TYPO3\CMS\Extbase\Annotation\ORM\Transient']]);
+    $rectorConfig->ruleWithConfiguration(ReplaceAnnotationRector::class, [ReplaceAnnotationRector::OLD_TO_NEW_ANNOTATIONS => ['transient' => 'TYPO3\CMS\Extbase\Annotation\ORM\Transient']]);
 };
 ```
 
@@ -3922,7 +3922,7 @@ use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v8\v4\SubstituteOldWizardIconsRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(SubstituteOldWizardIconsRector::class, [Ssch\TYPO3Rector\Rector\v8\v4\SubstituteOldWizardIconsRector::OLD_TO_NEW_FILE_LOCATIONS: ['add.gif' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_add.gif']]);
+    $rectorConfig->ruleWithConfiguration(SubstituteOldWizardIconsRector::class, [SubstituteOldWizardIconsRector::OLD_TO_NEW_FILE_LOCATIONS => ['add.gif' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_add.gif']]);
 };
 ```
 
