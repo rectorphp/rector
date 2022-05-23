@@ -183,11 +183,6 @@ final class AstResolver
         return $classMethod;
     }
 
-    public function resolveClassMethodFromMethodCall(MethodCall $methodCall): ?ClassMethod
-    {
-        return $this->resolveClassMethodFromCall($methodCall);
-    }
-
     public function resolveClassMethodFromCall(MethodCall | StaticCall $call): ?ClassMethod
     {
         if ($call instanceof MethodCall) {

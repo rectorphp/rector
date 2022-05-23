@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
@@ -29,7 +30,8 @@ final class ConstructorAssignDetector
         private readonly NodeTypeResolver $nodeTypeResolver,
         private readonly PropertyAssignMatcher $propertyAssignMatcher,
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private readonly AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer
+        private readonly AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 
@@ -66,6 +68,10 @@ final class ConstructorAssignDetector
 
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             });
+        }
+
+        if (! $isAssignedInConstructor) {
+            return $this->propertyFetchAnalyzer->isFilledViaMethodCallInConstructStmts($classLike, $propertyName);
         }
 
         return $isAssignedInConstructor;
