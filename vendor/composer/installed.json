@@ -2706,7 +2706,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.12.1"
             },
             "install-path": "..\/rector\/rector-symfony"
         },
@@ -2786,12 +2786,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "e34d2fb760d85c4da2a26e9ec62792ed2dd769e6"
+                "reference": "244ad9b967f54950d50d2b678e1f6f35437e1929"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/e34d2fb760d85c4da2a26e9ec62792ed2dd769e6",
-                "reference": "e34d2fb760d85c4da2a26e9ec62792ed2dd769e6",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/244ad9b967f54950d50d2b678e1f6f35437e1929",
+                "reference": "244ad9b967f54950d50d2b678e1f6f35437e1929",
                 "shasum": ""
             },
             "require": {
@@ -2821,7 +2821,7 @@
                 "symplify\/vendor-patches": "^10.2",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-05-22T21:37:02+00:00",
+            "time": "2022-05-23T12:38:12+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

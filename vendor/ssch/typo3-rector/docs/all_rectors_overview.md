@@ -1,4 +1,4 @@
-# 239 Rules Overview
+# 240 Rules Overview
 
 ## AddRenderTypeToSelectFieldRector
 
@@ -3362,6 +3362,19 @@ return static function (RectorConfig $rectorConfig): void {
 -    t3lib_div::makeInstance(\tx_cms_BackendLayout::class);
 +    GeneralUtility::makeInstance(\TYPO3\CMS\Backend\View\BackendLayoutView::class);
  }
+```
+
+<br>
+
+## RenameExtTypoScriptFilesFileRector
+
+Rename ext_typoscript_*.txt to ext_typoscript_*.typoscript
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\Resources\Files\Rector\RenameExtTypoScriptFilesFileRector`](../src/FileProcessor/Resources/Files/Rector/RenameExtTypoScriptFilesFileRector.php)
+
+```diff
+-ext_typoscript_constants.txt
++ext_typoscript_constants.typoscript
 ```
 
 <br>

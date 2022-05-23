@@ -53,6 +53,7 @@ It will create the skeleton for the rector with the class, test class, fixtures 
 - keep it flat! Use early returns (with null) in case your conditions for migration are not met
 - the `getNodeTypes` method is used to define the use case of the function to migrate. It helps as well acting like an early return (see example below)
 - helper functions and classes are provided via rector to make it easy for you to control further processing
+- here is a list of all php node types: https://github.com/rectorphp/php-parser-nodes-docs/blob/master/README.md
 
 ### Example
 

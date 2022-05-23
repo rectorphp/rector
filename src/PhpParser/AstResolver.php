@@ -200,10 +200,6 @@ final class AstResolver
         }
         return $classMethod;
     }
-    public function resolveClassMethodFromMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Stmt\ClassMethod
-    {
-        return $this->resolveClassMethodFromCall($methodCall);
-    }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
