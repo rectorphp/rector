@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79440-TcaChanges.html
- * @see Ssch\TYPO3Rector\Tests\Rector\v8\v6\MigrateSpecialConfigurationAndRemoveShowItemStylePointerConfigRectorTest\MigrateSpecialConfigurationAndRemoveShowItemStylePointerConfigRectorTest
+ * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\MigrateSpecialConfigurationAndRemoveShowItemStylePointerConfigRector\MigrateSpecialConfigurationAndRemoveShowItemStylePointerConfigRectorTest
  */
 final class MigrateSpecialConfigurationAndRemoveShowItemStylePointerConfigRector extends \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector
 {

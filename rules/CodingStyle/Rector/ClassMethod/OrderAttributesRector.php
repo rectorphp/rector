@@ -16,7 +16,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220522\Webmozart\Assert\Assert;
+use RectorPrefix20220523\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\OrderAttributesRector\SpecificOrder\OrderAttributesRectorTest
  */
@@ -94,8 +94,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration = [self::ALPHABETICALLY]) : void
     {
-        \RectorPrefix20220522\Webmozart\Assert\Assert::allString($configuration);
-        \RectorPrefix20220522\Webmozart\Assert\Assert::minCount($configuration, 1);
+        \RectorPrefix20220523\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220523\Webmozart\Assert\Assert::minCount($configuration, 1);
         $this->configuration = $this->isAlphabetically($configuration) ? $configuration : \array_flip($configuration);
     }
     /**
