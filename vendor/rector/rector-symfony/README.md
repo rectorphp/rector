@@ -35,6 +35,8 @@ return static function (RectorConfig $rectorConfig): void {
 
 ## Configuration
 
+### Provide Symfony XML Service List
+
 Some rules like `StringFormTypeToClassRector` need access to your Symfony container dumped XML. It contains list of form types with their string names, so it can convert them to class references.
 
 How to add it? Check your `/var/cache` directory and find the XML file for your test env. Then add it in `rector.php`:
@@ -50,6 +52,8 @@ return static function (RectorConfig $rectorConfig): void {
 That's it! Now you can run the `StringFormTypeToClassRector` and get your form classes converted safely.
 
 ---
+
+### Provide Symfony PHP Container
 
 Some rules like `AddRouteAnnotationRector` require additional access to your Symfony container. The rule takes container service "router" to load metadata about your routes.
 
