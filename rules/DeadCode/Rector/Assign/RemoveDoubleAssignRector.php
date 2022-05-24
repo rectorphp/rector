@@ -72,69 +72,58 @@ CODE_SAMPLE
             return null;
         }
 
-        $hasChanged = false;
-
-        $previousStmt = null;
-
+        $hasRemovedStmt = false;
         foreach ($stmts as $key => $stmt) {
+            if (! isset($stmts[$key + 1])) {
+                continue;
+            }
+
             if (! $stmt instanceof Expression) {
-                $previousStmt = $stmt;
                 continue;
             }
 
-            $expr = $stmt->expr;
-            if (! $expr instanceof Assign) {
-                $previousStmt = $stmt;
+            $nextStmt = $stmts[$key + 1];
+            if (! $nextStmt instanceof Expression) {
                 continue;
             }
 
-            if (! $expr->var instanceof Variable && ! $expr->var instanceof PropertyFetch && ! $expr->var instanceof StaticPropertyFetch) {
-                $previousStmt = $stmt;
+            if (! $stmt->expr instanceof Assign) {
                 continue;
             }
 
-            if (! $previousStmt instanceof Expression) {
-                $previousStmt = $stmt;
+            if (! $nextStmt->expr instanceof Assign) {
                 continue;
             }
 
-            if (! $previousStmt->expr instanceof Assign) {
-                $previousStmt = $stmt;
-                continue;
-            }
-
-            $previousAssign = $previousStmt->expr;
-            if (! $this->nodeComparator->areNodesEqual($previousAssign->var, $expr->var)) {
-                $previousStmt = $stmt;
+            $nextAssign = $nextStmt->expr;
+            if (! $this->nodeComparator->areNodesEqual($nextAssign->var, $stmt->expr->var)) {
                 continue;
             }
 
             // early check self referencing, ensure that variable not re-used
-            if ($this->isSelfReferencing($expr)) {
-                $previousStmt = $stmt;
+            if ($this->isSelfReferencing($nextAssign)) {
                 continue;
             }
 
             // detect call expression has side effect
             // no calls on right, could hide e.g. array_pop()|array_shift()
-            if ($this->sideEffectNodeDetector->detectCallExpr($previousAssign->expr)) {
-                $previousStmt = $stmt;
+            if ($this->sideEffectNodeDetector->detectCallExpr($stmt->expr->expr)) {
                 continue;
             }
 
-            // remove previous stmt, not current one as the current one is the override
-            unset($stmts[$key - 1]);
+            if (! $stmt->expr->var instanceof Variable && ! $stmt->expr->var instanceof PropertyFetch && ! $stmt->expr->var instanceof StaticPropertyFetch) {
+                continue;
+            }
 
-            $hasChanged = true;
+            // remove current Stmt if will be overriden in next stmt
+            $this->removeNode($stmt);
+            $hasRemovedStmt = true;
         }
 
-        if (! $hasChanged) {
+        if (! $hasRemovedStmt) {
             return null;
         }
 
-        ksort($stmts);
-
-        $node->stmts = $stmts;
         return $node;
     }
 
