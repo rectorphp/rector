@@ -16,10 +16,6 @@ final class SetTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        $this->markTestSkipped(
-            '@todo update rules to handle both rename + argumentt adding at the same time; otherwise lost during scope update'
-        );
-
         $this->doTestFileInfo($fileInfo);
     }
 

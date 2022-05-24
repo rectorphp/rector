@@ -193,14 +193,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $reflectionClass = $classReflection->getNativeReflection();
+        $nativeReflection = $classReflection->getNativeReflection();
 
-        if (! $reflectionClass->hasMethod($methodName)) {
+        if (! $nativeReflection->hasMethod($methodName)) {
             return null;
         }
 
         // Find the param we're looking for
-        return $reflectionClass->getMethod($methodName);
+        return $nativeReflection->getMethod($methodName);
     }
 
     private function getDifferentParamTypeFromReflectionMethod(

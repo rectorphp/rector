@@ -179,9 +179,9 @@ CODE_SAMPLE
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-        $reflectionClass = $classReflection->getNativeReflection();
+        $nativeReflection = $classReflection->getNativeReflection();
 
-        $reflectionMethod = $reflectionClass->getConstructor();
+        $reflectionMethod = $nativeReflection->getConstructor();
         if (! $reflectionMethod instanceof ReflectionMethod) {
             return true;
         }
