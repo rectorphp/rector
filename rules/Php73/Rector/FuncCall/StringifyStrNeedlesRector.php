@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\Encapsed;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -80,6 +81,9 @@ CODE_SAMPLE
             return null;
         }
         if ($needleArgValue instanceof \PhpParser\Node\Expr\Cast\String_) {
+            return null;
+        }
+        if ($needleArgValue instanceof \PhpParser\Node\Scalar\Encapsed) {
             return null;
         }
         $node->args[1]->value = new \PhpParser\Node\Expr\Cast\String_($node->args[1]->value);

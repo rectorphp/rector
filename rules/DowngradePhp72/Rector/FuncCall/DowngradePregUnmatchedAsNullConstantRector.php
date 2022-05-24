@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FuncCall;
 
-use RectorPrefix20220523\Nette\NotImplementedException;
+use RectorPrefix20220524\Nette\NotImplementedException;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -84,7 +84,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rect
         /** @var Variable $variable */
         $variable = $args[2]->value;
         if ($flags instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
-            $this->bitwiseFlagCleaner->cleanFuncCall($node, $flags, null, self::UNMATCHED_NULL_FLAG);
+            $this->bitwiseFlagCleaner->cleanFuncCall($node, $flags, self::UNMATCHED_NULL_FLAG, null);
             if (!$this->nodeComparator->areNodesEqual($flags, $args[3]->value)) {
                 return $this->handleEmptyStringToNullMatch($node, $variable);
             }
@@ -166,7 +166,7 @@ CODE_SAMPLE
             return $this->processInIf($parent, $funcCall, $replaceEmptystringToNull);
         }
         if (!$parent instanceof \PhpParser\Node) {
-            throw new \RectorPrefix20220523\Nette\NotImplementedException();
+            throw new \RectorPrefix20220524\Nette\NotImplementedException();
         }
         $if = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parent instanceof \PhpParser\Node\Expr\BooleanNot) {

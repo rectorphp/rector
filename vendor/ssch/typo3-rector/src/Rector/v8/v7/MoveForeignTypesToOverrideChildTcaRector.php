@@ -14,7 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220523\TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use RectorPrefix20220524\TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80000-InlineOverrideChildTca.html?highlight=foreign_types
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\MoveForeignTypesToOverrideChildTcaRector\MoveForeignTypesToOverrideChildTcaRectorTest
@@ -42,47 +42,6 @@ final class MoveForeignTypesToOverrideChildTcaRector extends \Rector\Core\Rector
      * @var string
      */
     private const OVERRIDE_CHILD_TCA = 'overrideChildTca';
-    /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA InlineOverrideChildTca', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-return [
-    'columns' => [
-        'aField' => [
-            'config' => [
-                'type' => 'inline',
-                'foreign_types' => [
-                    'aForeignType' => [
-                        'showitem' => 'aChildField',
-                    ],
-                ],
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-return [
-    'columns' => [
-        'aField' => [
-            'config' => [
-                'type' => 'inline',
-                'overrideChildTca' => [
-                    'types' => [
-                        'aForeignType' => [
-                            'showitem' => 'aChildField',
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-)]);
-    }
     /**
      * @return array<class-string<Node>>
      */
@@ -153,6 +112,47 @@ CODE_SAMPLE
             }
         }
         return $hasAstBeenChanged ? $node : null;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA InlineOverrideChildTca', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+return [
+    'columns' => [
+        'aField' => [
+            'config' => [
+                'type' => 'inline',
+                'foreign_types' => [
+                    'aForeignType' => [
+                        'showitem' => 'aChildField',
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+return [
+    'columns' => [
+        'aField' => [
+            'config' => [
+                'type' => 'inline',
+                'overrideChildTca' => [
+                    'types' => [
+                        'aForeignType' => [
+                            'showitem' => 'aChildField',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+)]);
     }
     private function extractConfigFromGetFileFieldTcaConfig(\PhpParser\Node $columnConfig) : \PhpParser\Node
     {

@@ -19,44 +19,6 @@ final class RemoveConfigMaxFromInputDateTimeFieldsRector extends \Rector\Core\Re
 {
     use TcaHelperTrait;
     /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition("Remove TCA config 'max' on inputDateTime fields", [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-    ],
-    'columns' => [
-        'date' => [
-            'exclude' => false,
-            'label' => 'Date',
-            'config' => [
-                'renderType' => 'inputDateTime',
-                'max' => 1,
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-    ],
-    'columns' => [
-        'date' => [
-            'exclude' => false,
-            'label' => 'Date',
-            'config' => [
-                'renderType' => 'inputDateTime',
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-)]);
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
@@ -119,6 +81,44 @@ CODE_SAMPLE
             }
         }
         return $hasAstBeenChanged ? $node : null;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition("Remove TCA config 'max' on inputDateTime fields", [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+    ],
+    'columns' => [
+        'date' => [
+            'exclude' => false,
+            'label' => 'Date',
+            'config' => [
+                'renderType' => 'inputDateTime',
+                'max' => 1,
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+    ],
+    'columns' => [
+        'date' => [
+            'exclude' => false,
+            'label' => 'Date',
+            'config' => [
+                'renderType' => 'inputDateTime',
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+)]);
     }
     private function isRenderTypeInputDateTime(\PhpParser\Node\Expr\Array_ $configValueArray) : bool
     {

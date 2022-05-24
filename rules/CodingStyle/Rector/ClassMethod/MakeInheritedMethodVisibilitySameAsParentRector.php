@@ -102,6 +102,7 @@ CODE_SAMPLE
                 if (!$nativeClassReflection->hasMethod($methodName)) {
                     continue;
                 }
+                /** @var ReflectionMethod $parentReflectionMethod */
                 $parentReflectionMethod = $nativeClassReflection->getMethod($methodName);
                 if ($this->isClassMethodCompatibleWithParentReflectionMethod($classMethod, $parentReflectionMethod)) {
                     continue;

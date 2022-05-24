@@ -19,28 +19,6 @@ final class RemoveSeliconFieldPathRector extends \Rector\Core\Rector\AbstractRec
 {
     use TcaHelperTrait;
     /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA option "selicon_field_path" removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-        'selicon_field' => 'icon',
-        'selicon_field_path' => 'uploads/media'
-    ],
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-        'selicon_field' => 'icon',
-    ],
-];
-CODE_SAMPLE
-)]);
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
@@ -77,5 +55,27 @@ CODE_SAMPLE
             }
         }
         return $hasAstBeenChanged ? $node : null;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA option "selicon_field_path" removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+        'selicon_field' => 'icon',
+        'selicon_field_path' => 'uploads/media'
+    ],
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+        'selicon_field' => 'icon',
+    ],
+];
+CODE_SAMPLE
+)]);
     }
 }

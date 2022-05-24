@@ -19,32 +19,6 @@ final class RemoveOptionVersioningFollowPagesRector extends \Rector\Core\Rector\
 {
     use TcaHelperTrait;
     /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA option versioning_followPages removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-        'versioningWS' => 2,
-        'versioning_followPages' => TRUE,
-    ],
-    'columns' => [
-    ]
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-        'versioningWS' => true,
-    ],
-    'columns' => [
-    ]
-];
-CODE_SAMPLE
-)]);
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
@@ -87,5 +61,31 @@ CODE_SAMPLE
             }
         }
         return $hasAstBeenChanged ? $node : null;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA option versioning_followPages removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+        'versioningWS' => 2,
+        'versioning_followPages' => TRUE,
+    ],
+    'columns' => [
+    ]
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+        'versioningWS' => true,
+    ],
+    'columns' => [
+    ]
+];
+CODE_SAMPLE
+)]);
     }
 }

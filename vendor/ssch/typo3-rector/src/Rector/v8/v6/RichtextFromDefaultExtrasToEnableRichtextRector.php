@@ -24,37 +24,6 @@ final class RichtextFromDefaultExtrasToEnableRichtextRector extends \Rector\Core
      */
     private $hasAstBeenChanged = \false;
     /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA richtext configuration in defaultExtras dropped', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-[
-    'columns' => [
-        'content' => [
-            'config' => [
-                'type' => 'text',
-            ],
-            'defaultExtras' => 'richtext:rte_transform',
-        ],
-    ],
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-[
-    'columns' => [
-        'content' => [
-            'config' => [
-                'type' => 'text',
-                'enableRichtext' => true,
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-)]);
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
@@ -114,6 +83,37 @@ CODE_SAMPLE
             }
         }
         return $this->hasAstBeenChanged ? $node : null;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA richtext configuration in defaultExtras dropped', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+[
+    'columns' => [
+        'content' => [
+            'config' => [
+                'type' => 'text',
+            ],
+            'defaultExtras' => 'richtext:rte_transform',
+        ],
+    ],
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+[
+    'columns' => [
+        'content' => [
+            'config' => [
+                'type' => 'text',
+                'enableRichtext' => true,
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+)]);
     }
     private function isRichtextInDefaultExtras(\PhpParser\Node\Expr\ArrayItem $configValueArrayItem) : bool
     {

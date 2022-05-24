@@ -30,55 +30,6 @@ final class MoveTypeGroupSuggestWizardToSuggestOptionsRector extends \Rector\Cor
      */
     private $hasAstBeenChanged = \false;
     /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate the "suggest" wizard in type=group to "hideSuggest" and "suggestOptions"', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-[
-    'columns' => [
-        'group_db_8' => [
-            'label' => 'group_db_8',
-            'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'tx_styleguide_staticdata',
-                'wizards' => [
-                    '_POSITION' => 'top',
-                    'suggest' => [
-                        'type' => 'suggest',
-                        'default' => [
-                            'pidList' => 42,
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-[
-    'columns' => [
-        'group_db_8' => [
-            'label' => 'group_db_8',
-            'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'tx_styleguide_staticdata',
-                'suggestOptions' => [
-                    'default' => [
-                        'pidList' => 42,
-                    ]
-                ],
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-)]);
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
@@ -138,6 +89,55 @@ CODE_SAMPLE
             }
         }
         return $this->hasAstBeenChanged ? $node : null;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate the "suggest" wizard in type=group to "hideSuggest" and "suggestOptions"', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+[
+    'columns' => [
+        'group_db_8' => [
+            'label' => 'group_db_8',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_styleguide_staticdata',
+                'wizards' => [
+                    '_POSITION' => 'top',
+                    'suggest' => [
+                        'type' => 'suggest',
+                        'default' => [
+                            'pidList' => 42,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+[
+    'columns' => [
+        'group_db_8' => [
+            'label' => 'group_db_8',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_styleguide_staticdata',
+                'suggestOptions' => [
+                    'default' => [
+                        'pidList' => 42,
+                    ]
+                ],
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+)]);
     }
     private function refactorWizards(\PhpParser\Node\Expr\Array_ $configArray) : bool
     {

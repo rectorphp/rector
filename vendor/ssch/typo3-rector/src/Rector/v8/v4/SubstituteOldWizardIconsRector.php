@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220523\Webmozart\Assert\Assert;
+use RectorPrefix20220524\Webmozart\Assert\Assert;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.4/Breaking-77630-RemoveWizardIcons.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v4\SubstituteOldWizardIconsRector\SubstituteOldWizardIconsRectorTest
@@ -29,49 +29,6 @@ final class SubstituteOldWizardIconsRector extends \Rector\Core\Rector\AbstractR
      * @var array<string, string>
      */
     private $oldToNewFileLocations = [];
-    /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('The TCA migration migrates the icon calls to the new output if used as wizard icon', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-    ],
-    'columns' => [
-        'bodytext' => [
-            'config' => [
-                'type' => 'text',
-                'wizards' => [
-                    't3editorHtml' => [
-                        'icon' => 'wizard_table.gif',
-                    ],
-                ],
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-    ],
-    'columns' => [
-        'bodytext' => [
-            'config' => [
-                'type' => 'text',
-                'wizards' => [
-                    't3editorHtml' => [
-                        'icon' => 'content-table',
-                    ],
-                ],
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-, [self::OLD_TO_NEW_FILE_LOCATIONS => ['add.gif' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_add.gif']])]);
-    }
     /**
      * @return array<class-string<Node>>
      */
@@ -165,9 +122,52 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $oldToNewFileLocations = $configuration[self::OLD_TO_NEW_FILE_LOCATIONS] ?? $configuration;
-        \RectorPrefix20220523\Webmozart\Assert\Assert::isArray($oldToNewFileLocations);
-        \RectorPrefix20220523\Webmozart\Assert\Assert::allString(\array_keys($oldToNewFileLocations));
-        \RectorPrefix20220523\Webmozart\Assert\Assert::allString($oldToNewFileLocations);
+        \RectorPrefix20220524\Webmozart\Assert\Assert::isArray($oldToNewFileLocations);
+        \RectorPrefix20220524\Webmozart\Assert\Assert::allString(\array_keys($oldToNewFileLocations));
+        \RectorPrefix20220524\Webmozart\Assert\Assert::allString($oldToNewFileLocations);
         $this->oldToNewFileLocations = $oldToNewFileLocations;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('The TCA migration migrates the icon calls to the new output if used as wizard icon', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+    ],
+    'columns' => [
+        'bodytext' => [
+            'config' => [
+                'type' => 'text',
+                'wizards' => [
+                    't3editorHtml' => [
+                        'icon' => 'wizard_table.gif',
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+    ],
+    'columns' => [
+        'bodytext' => [
+            'config' => [
+                'type' => 'text',
+                'wizards' => [
+                    't3editorHtml' => [
+                        'icon' => 'content-table',
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+, [self::OLD_TO_NEW_FILE_LOCATIONS => ['add.gif' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_add.gif']])]);
     }
 }

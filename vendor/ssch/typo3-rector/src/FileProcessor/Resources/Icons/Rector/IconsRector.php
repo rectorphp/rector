@@ -9,7 +9,7 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface;
-use RectorPrefix20220523\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220524\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class IconsRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface
@@ -24,7 +24,7 @@ final class IconsRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Reso
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(\RectorPrefix20220523\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    public function __construct(\RectorPrefix20220524\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->parameterProvider = $parameterProvider;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;

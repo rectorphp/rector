@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\PHPStan;
 
-use RectorPrefix20220523\Nette\Utils\Strings;
+use RectorPrefix20220524\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -178,7 +178,7 @@ final class ObjectTypeSpecifier
         if (\strncmp($objectType->getClassName(), $useUse->name->getLast() . '\\', \strlen($useUse->name->getLast() . '\\')) !== 0) {
             return null;
         }
-        $classNameWithoutLastUsePart = \RectorPrefix20220523\Nette\Utils\Strings::after($objectType->getClassName(), '\\', 1);
+        $classNameWithoutLastUsePart = \RectorPrefix20220524\Nette\Utils\Strings::after($objectType->getClassName(), '\\', 1);
         $connectedClassName = $prefix . $useUse->name->toString() . '\\' . $classNameWithoutLastUsePart;
         if (!$this->reflectionProvider->hasClass($connectedClassName)) {
             return null;

@@ -20,52 +20,6 @@ final class RemovedTcaSelectTreeOptionsRector extends \Rector\Core\Rector\Abstra
 {
     use TcaHelperTrait;
     /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removed TCA tree options: width, allowRecursiveMode, autoSizeMax', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-    ],
-    'columns' => [
-        'categories' => [
-            'config' => [
-                'type' => 'input',
-                'renderType' => 'selectTree',
-                'autoSizeMax' => 5,
-                'treeConfig' => [
-                    'appearance' => [
-                        'width' => 100,
-                        'allowRecursiveMode' => true
-                    ]
-                ]
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-    ],
-    'columns' => [
-        'categories' => [
-            'config' => [
-                'type' => 'input',
-                'renderType' => 'selectTree',
-                'size' => 5,
-                'treeConfig' => [
-                    'appearance' => []
-                ]
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-)]);
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
@@ -154,5 +108,51 @@ CODE_SAMPLE
             }
         }
         return $hasAstBeenChanged ? $node : null;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removed TCA tree options: width, allowRecursiveMode, autoSizeMax', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+    ],
+    'columns' => [
+        'categories' => [
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'selectTree',
+                'autoSizeMax' => 5,
+                'treeConfig' => [
+                    'appearance' => [
+                        'width' => 100,
+                        'allowRecursiveMode' => true
+                    ]
+                ]
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+    ],
+    'columns' => [
+        'categories' => [
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'selectTree',
+                'size' => 5,
+                'treeConfig' => [
+                    'appearance' => []
+                ]
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+)]);
     }
 }

@@ -20,7 +20,7 @@ final class BitwiseFlagCleaner
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function cleanFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr, \PhpParser\Node\Expr $expr = null, string $flag) : void
+    public function cleanFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr, string $flag, \PhpParser\Node\Expr $expr = null) : void
     {
         if ($bitwiseOr->left instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
             /** @var BitwiseOr $leftLeft */
@@ -34,7 +34,7 @@ final class BitwiseFlagCleaner
                 $bitwiseOr = new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($leftRight->left, $bitwiseOr->right);
             }
             if ($bitwiseOr->left instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
-                $this->cleanFuncCall($funcCall, $bitwiseOr->left, $bitwiseOr->right, $flag);
+                $this->cleanFuncCall($funcCall, $bitwiseOr->left, $flag, $bitwiseOr->right);
                 return;
             }
         }

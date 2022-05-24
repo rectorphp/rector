@@ -31,7 +31,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220523\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220524\Symfony\Contracts\Service\Attribute\Required;
 final class ReflectionResolver
 {
     /**

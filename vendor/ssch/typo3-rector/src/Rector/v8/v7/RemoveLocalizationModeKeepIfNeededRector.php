@@ -23,48 +23,6 @@ final class RemoveLocalizationModeKeepIfNeededRector extends \Rector\Core\Rector
      */
     private const LOCALIZATION_MODE = 'localizationMode';
     /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove localizationMode keep if allowLanguageSynchronization is enabled', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-return [
-    'columns' => [
-        'foo' => [
-            'label' => 'Bar',
-            'config' => [
-                'type' => 'inline',
-                'appearance' => [
-                    'behaviour' => [
-                        'localizationMode' => 'keep',
-                        'allowLanguageSynchronization' => true,
-                    ],
-                ],
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-return [
-    'columns' => [
-        'foo' => [
-            'label' => 'Bar',
-            'config' => [
-                'type' => 'inline',
-                'appearance' => [
-                    'behaviour' => [
-                        'allowLanguageSynchronization' => true,
-                    ],
-                ],
-            ],
-        ],
-    ],
-];
-CODE_SAMPLE
-)]);
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
@@ -145,6 +103,48 @@ CODE_SAMPLE
             }
         }
         return $hasAstBeenChanged ? $node : null;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove localizationMode keep if allowLanguageSynchronization is enabled', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+return [
+    'columns' => [
+        'foo' => [
+            'label' => 'Bar',
+            'config' => [
+                'type' => 'inline',
+                'appearance' => [
+                    'behaviour' => [
+                        'localizationMode' => 'keep',
+                        'allowLanguageSynchronization' => true,
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+return [
+    'columns' => [
+        'foo' => [
+            'label' => 'Bar',
+            'config' => [
+                'type' => 'inline',
+                'appearance' => [
+                    'behaviour' => [
+                        'allowLanguageSynchronization' => true,
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
+CODE_SAMPLE
+)]);
     }
     private function isLocalizationModeKeepAndAllowLanguageSynchronization(\PhpParser\Node\Expr\Array_ $behaviourConfigurationArray) : bool
     {

@@ -1,4 +1,4 @@
-# 240 Rules Overview
+# 241 Rules Overview
 
 ## AddRenderTypeToSelectFieldRector
 
@@ -2656,6 +2656,19 @@ Remove the default type for internal_type
          ],
      ],
  ];
+```
+
+<br>
+
+## RemoveDisableCharsetHeaderConfigTypoScriptRector
+
+Use array syntax for additionalHeaders
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v12\v0\RemoveDisableCharsetHeaderConfigTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/v12/v0/RemoveDisableCharsetHeaderConfigTypoScriptRector.php)
+
+```diff
+-config.disableCharsetHeader = true
++''
 ```
 
 <br>

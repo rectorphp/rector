@@ -21,34 +21,6 @@ final class MoveRequestUpdateOptionFromControlToColumnsRector extends \Rector\Co
 {
     use TcaHelperTrait;
     /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA ctrl field requestUpdate dropped', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-        'requestUpdate' => 'foo',
-    ],
-    'columns' => [
-        'foo' => []
-    ]
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-    ],
-    'columns' => [
-        'foo' => [
-            'onChange' => 'reload'
-        ]
-    ]
-];
-CODE_SAMPLE
-)]);
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
@@ -116,5 +88,33 @@ CODE_SAMPLE
             $columnItem->value->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('reload'), new \PhpParser\Node\Scalar\String_('onChange'));
         }
         return $node;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA ctrl field requestUpdate dropped', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+        'requestUpdate' => 'foo',
+    ],
+    'columns' => [
+        'foo' => []
+    ]
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+    ],
+    'columns' => [
+        'foo' => [
+            'onChange' => 'reload'
+        ]
+    ]
+];
+CODE_SAMPLE
+)]);
     }
 }

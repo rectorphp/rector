@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v8\v6;
 
-use RectorPrefix20220523\Nette\Utils\Strings;
+use RectorPrefix20220524\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -34,6 +34,32 @@ final class RefactorTCARector extends \Rector\Core\Rector\AbstractRector
      * @var array<string, string>
      */
     private const MAP_WIZARD_TO_CUSTOM_TYPE = ['select' => 'valuePicker', 'suggest' => 'suggestOptions', 'angle' => 'slider'];
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes() : array
+    {
+        return [\PhpParser\Node\Stmt\Return_::class];
+    }
+    /**
+     * @param Return_ $node
+     */
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    {
+        if (!$this->isFullTca($node)) {
+            return null;
+        }
+        $columns = $this->extractColumns($node);
+        if (!$columns instanceof \PhpParser\Node\Expr\ArrayItem) {
+            return null;
+        }
+        $items = $columns->value;
+        if (!$items instanceof \PhpParser\Node\Expr\Array_) {
+            return null;
+        }
+        $this->addFieldControlInsteadOfWizardsAddListEdit($items);
+        return $node;
+    }
     /**
      * @codeCoverageIgnore
      */
@@ -88,32 +114,6 @@ return [
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @return array<class-string<Node>>
-     */
-    public function getNodeTypes() : array
-    {
-        return [\PhpParser\Node\Stmt\Return_::class];
-    }
-    /**
-     * @param Return_ $node
-     */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
-    {
-        if (!$this->isFullTca($node)) {
-            return null;
-        }
-        $columns = $this->extractColumns($node);
-        if (!$columns instanceof \PhpParser\Node\Expr\ArrayItem) {
-            return null;
-        }
-        $items = $columns->value;
-        if (!$items instanceof \PhpParser\Node\Expr\Array_) {
-            return null;
-        }
-        $this->addFieldControlInsteadOfWizardsAddListEdit($items);
-        return $node;
-    }
     private function addFieldControlInsteadOfWizardsAddListEdit(\PhpParser\Node\Expr\Array_ $itemsArray) : void
     {
         foreach ($itemsArray->items as $fieldValue) {
@@ -144,7 +144,6 @@ CODE_SAMPLE
                 if ($this->isConfigType($configValueArray, 'input') && !$this->hasRenderType($configValueArray)) {
                     $this->refactorRenderTypeInputDateTime($configValue);
                 }
-                $configValueArray = $configValueArray;
                 foreach ($configValueArray->items as $configItemValue) {
                     if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                         continue;
@@ -171,7 +170,7 @@ CODE_SAMPLE
                         /** @var Expr $wizardItemValueKey */
                         $wizardItemValueKey = $wizardItemValue->key;
                         $validWizard = $this->isValidWizard($wizardItemValue);
-                        if ($validWizard || \RectorPrefix20220523\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($wizardItemValueKey), '_')) {
+                        if ($validWizard || \RectorPrefix20220524\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($wizardItemValueKey), '_')) {
                             --$remainingWizards;
                         }
                         if (!$validWizard) {

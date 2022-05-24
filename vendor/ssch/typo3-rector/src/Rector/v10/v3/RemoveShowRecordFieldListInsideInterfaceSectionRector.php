@@ -19,32 +19,6 @@ final class RemoveShowRecordFieldListInsideInterfaceSectionRector extends \Recto
 {
     use TcaHelperTrait;
     /**
-     * @codeCoverageIgnore
-     */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
-    {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove showRecordFieldList inside section interface', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-    ],
-    'interface' => [
-        'showRecordFieldList' => 'foo,bar,baz',
-    ],
-    'columns' => [
-    ],
-];
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-return [
-    'ctrl' => [
-    ],
-    'columns' => [
-    ],
-];
-CODE_SAMPLE
-)]);
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
@@ -87,5 +61,31 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove showRecordFieldList inside section interface', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+    ],
+    'interface' => [
+        'showRecordFieldList' => 'foo,bar,baz',
+    ],
+    'columns' => [
+    ],
+];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+return [
+    'ctrl' => [
+    ],
+    'columns' => [
+    ],
+];
+CODE_SAMPLE
+)]);
     }
 }

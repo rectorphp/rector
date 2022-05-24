@@ -64,7 +64,7 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/.Build/*',
     ]);
 
-    // This is used by the class \Ssch\TYPO3Rector\Rector\PostRector\FullQualifiedNamePostRector to force FQN in this paths and files
+    // This is used by the class \Ssch\TYPO3Rector\Rector\PostRector\FullQualifiedNamePostRector to force FQN in these paths and files
     $parameters->set(Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES, [
         # If you are targeting TYPO3 Version 11 use can now use Short namespace
         # @see namespace https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ExtensionArchitecture/ConfigurationFiles/Index.html
@@ -97,9 +97,9 @@ return static function (RectorConfig $rectorConfig): void {
 
     // Adapt your composer.json dependencies to the latest available version for the defined SetList
     // $rectorConfig->sets([
-    //    Typo3SetList::COMPOSER_PACKAGES_104_CORE
+    //    Typo3SetList::COMPOSER_PACKAGES_104_CORE,
     //    Typo3SetList::COMPOSER_PACKAGES_104_EXTENSIONS,
-    // );
+    // ]);
 
     // Rewrite your extbase persistence class mapping from typoscript into php according to official docs.
     // This processor will create a summarized file with all of the typoscript rewrites combined into a single file.
