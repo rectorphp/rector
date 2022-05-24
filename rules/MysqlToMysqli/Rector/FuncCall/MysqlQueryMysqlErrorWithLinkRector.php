@@ -118,7 +118,10 @@ CODE_SAMPLE
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;
             }
-            return $this->isObjectType($node->expr, new \PHPStan\Type\ObjectType('mysqli'));
+            if ($this->isObjectType($node->expr, new \PHPStan\Type\ObjectType('mysqli'))) {
+                return \true;
+            }
+            return $node->expr instanceof \PhpParser\Node\Expr\FuncCall && $this->nodeNameResolver->isName($node->expr, 'mysqli_connect');
         });
         if (!$connectionAssign instanceof \PhpParser\Node\Expr\Assign) {
             return null;

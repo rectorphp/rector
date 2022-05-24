@@ -178,12 +178,12 @@ CODE_SAMPLE
         if (!$classReflection->hasMethod($methodName)) {
             return null;
         }
-        $reflectionClass = $classReflection->getNativeReflection();
-        if (!$reflectionClass->hasMethod($methodName)) {
+        $nativeReflection = $classReflection->getNativeReflection();
+        if (!$nativeReflection->hasMethod($methodName)) {
             return null;
         }
         // Find the param we're looking for
-        return $reflectionClass->getMethod($methodName);
+        return $nativeReflection->getMethod($methodName);
     }
     private function getDifferentParamTypeFromReflectionMethod(\ReflectionMethod $reflectionMethod, string $paramName, string $paramTypeName) : ?string
     {

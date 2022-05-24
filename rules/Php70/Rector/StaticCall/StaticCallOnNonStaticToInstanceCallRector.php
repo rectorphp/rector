@@ -170,8 +170,8 @@ CODE_SAMPLE
             return \false;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        $reflectionClass = $classReflection->getNativeReflection();
-        $reflectionMethod = $reflectionClass->getConstructor();
+        $nativeReflection = $classReflection->getNativeReflection();
+        $reflectionMethod = $nativeReflection->getConstructor();
         if (!$reflectionMethod instanceof \ReflectionMethod) {
             return \true;
         }
