@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class UnreachableStmtAnalyzer
@@ -21,6 +22,12 @@ final class UnreachableStmtAnalyzer
             return \true;
         }
         $previousStmt = $stmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-        return $this->isStmtPHPStanUnreachable($previousStmt);
+        if (!$previousStmt instanceof \PhpParser\Node) {
+            return \false;
+        }
+        if ($previousStmt instanceof \PhpParser\Node\Stmt) {
+            return $this->isStmtPHPStanUnreachable($previousStmt);
+        }
+        return \true;
     }
 }
