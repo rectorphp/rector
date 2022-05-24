@@ -18,7 +18,7 @@ final class BitwiseFlagCleaner
     ) {
     }
 
-    public function cleanFuncCall(FuncCall $funcCall, BitwiseOr $bitwiseOr, Expr $expr = null, string $flag): void
+    public function cleanFuncCall(FuncCall $funcCall, BitwiseOr $bitwiseOr, string $flag, Expr $expr = null): void
     {
         if ($bitwiseOr->left instanceof BitwiseOr) {
             /** @var BitwiseOr $leftLeft */
@@ -36,7 +36,7 @@ final class BitwiseFlagCleaner
             }
 
             if ($bitwiseOr->left instanceof BitwiseOr) {
-                $this->cleanFuncCall($funcCall, $bitwiseOr->left, $bitwiseOr->right, $flag);
+                $this->cleanFuncCall($funcCall, $bitwiseOr->left, $flag, $bitwiseOr->right);
                 return;
             }
         }

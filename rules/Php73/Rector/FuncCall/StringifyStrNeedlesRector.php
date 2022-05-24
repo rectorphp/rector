@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\Encapsed;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -103,6 +104,10 @@ CODE_SAMPLE
         }
 
         if ($needleArgValue instanceof String_) {
+            return null;
+        }
+
+        if ($needleArgValue instanceof Encapsed) {
             return null;
         }
 
