@@ -15,6 +15,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class GetMockBuilderGetMockToCreateMockRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const USELESS_METHOD_NAMES = ['disableOriginalConstructor', 'onlyMethods', 'setMethods', 'setMethodsExcept'];
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove getMockBuilder() to createMock()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -61,15 +65,19 @@ CODE_SAMPLE
         if (!$node->var instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
-        $getMockBuilderMethodCall = $this->isName($node->var->name, 'disableOriginalConstructor') ? $node->var->var : $node->var;
-        if (!$getMockBuilderMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
+        // traverse up over useless methods until we reach the top one
+        $currentMethodCall = $node->var;
+        while ($currentMethodCall instanceof \PhpParser\Node\Expr\MethodCall && $this->isNames($currentMethodCall->name, self::USELESS_METHOD_NAMES)) {
+            $currentMethodCall = $currentMethodCall->var;
+        }
+        if (!$currentMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
-        if (!$this->isName($getMockBuilderMethodCall->name, 'getMockBuilder')) {
+        if (!$this->isName($currentMethodCall->name, 'getMockBuilder')) {
             return null;
         }
-        $args = $getMockBuilderMethodCall->args;
-        $thisVariable = $getMockBuilderMethodCall->var;
+        $args = $currentMethodCall->args;
+        $thisVariable = $currentMethodCall->var;
         return new \PhpParser\Node\Expr\MethodCall($thisVariable, 'createMock', $args);
     }
 }
