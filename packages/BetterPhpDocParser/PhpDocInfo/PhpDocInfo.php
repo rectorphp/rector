@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
@@ -406,7 +407,18 @@ final class PhpDocInfo
     }
     public function hasInheritDoc() : bool
     {
-        return $this->hasByNames(['inheritdoc', 'inheritDoc']);
+        if ($this->hasByNames(['inheritdoc', 'inheritDoc'])) {
+            return \true;
+        }
+        foreach ($this->phpDocNode->children as $children) {
+            if (!$children instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode) {
+                continue;
+            }
+            if (\in_array($children->text, ['{@inheritdoc}', '{@inheritDoc}'], \true)) {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * @deprecated
