@@ -11,11 +11,12 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassManipulator;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Renaming\Collector\MethodCallRenameCollector;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
@@ -27,7 +28,7 @@ use RectorPrefix20220525\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\RenameMethodRectorTest
  */
-final class RenameMethodRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class RenameMethodRector extends \Rector\Core\Rector\AbstractScopeAwareRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var MethodCallRenameInterface[]
@@ -82,17 +83,17 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
+        $classReflection = $scope->getClassReflection();
         foreach ($this->methodCallRenames as $methodCallRename) {
-            $implementsInterface = $this->classManipulator->hasParentMethodOrInterface($methodCallRename->getObjectType(), $methodCallRename->getOldMethod(), $methodCallRename->getNewMethod());
-            if ($implementsInterface) {
+            if (!$this->isName($node->name, $methodCallRename->getOldMethod())) {
+                continue;
+            }
+            if ($this->shouldKeepForParentInterface($methodCallRename, $node, $classReflection)) {
                 continue;
             }
             if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $methodCallRename->getObjectType())) {
-                continue;
-            }
-            if (!$this->isName($node->name, $methodCallRename->getOldMethod())) {
                 continue;
             }
             if ($this->shouldSkipClassMethod($node, $methodCallRename)) {
@@ -148,5 +149,22 @@ CODE_SAMPLE
             return \false;
         }
         return (bool) $classLike->getMethod($methodCallRename->getNewMethod());
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     */
+    private function shouldKeepForParentInterface(\Rector\Renaming\Contract\MethodCallRenameInterface $methodCallRename, $node, ?\PHPStan\Reflection\ClassReflection $classReflection) : bool
+    {
+        if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return \false;
+        }
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            return \false;
+        }
+        // interface can change current method, as parent contract is still valid
+        if (!$classReflection->isInterface()) {
+            return \false;
+        }
+        return $this->classManipulator->hasParentMethodOrInterface($methodCallRename->getObjectType(), $methodCallRename->getOldMethod(), $methodCallRename->getNewMethod());
     }
 }

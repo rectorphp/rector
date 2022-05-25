@@ -1,4 +1,4 @@
-# 22 Rules Overview
+# 24 Rules Overview
 
 ## AddArgumentDefaultValueRector
 
@@ -14,7 +14,11 @@ use Rector\Laravel\Rector\ClassMethod\AddArgumentDefaultValueRector;
 use Rector\Laravel\ValueObject\AddArgumentDefaultValue;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddArgumentDefaultValueRector::class, [Rector\Laravel\Rector\ClassMethod\AddArgumentDefaultValueRector::ADDED_ARGUMENTS: [new AddArgumentDefaultValue('SomeClass', 'someMethod', 0, false)]]);
+    $rectorConfig->ruleWithConfiguration(AddArgumentDefaultValueRector::class, [
+        AddArgumentDefaultValueRector::ADDED_ARGUMENTS => [
+            new AddArgumentDefaultValue('SomeClass', 'someMethod', 0, false),
+        ],
+    ]);
 };
 ```
 
@@ -322,7 +326,9 @@ use Rector\Config\RectorConfig;
 use Rector\Laravel\Rector\PropertyFetch\OptionalToNullsafeOperatorRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(OptionalToNullsafeOperatorRector::class, [Rector\Laravel\Rector\PropertyFetch\OptionalToNullsafeOperatorRector::EXCLUDE_METHODS: ['present']]);
+    $rectorConfig->ruleWithConfiguration(OptionalToNullsafeOperatorRector::class, [
+        OptionalToNullsafeOperatorRector::EXCLUDE_METHODS => ['present'],
+    ]);
 };
 ```
 
@@ -404,11 +410,12 @@ Replace `redirect()->back()` and `Redirect::back()` with `back()`
      }
  }
 ```
+
 <br>
 
 ## RedirectRouteToToRouteHelperRector
 
-Replace `redirect()->route('home')` and `Redirect::route('home')` with `to_route('home')`
+Replace `redirect()->route("home")` and `Redirect::route("home")` with `to_route("home")`
 
 - class: [`Rector\Laravel\Rector\MethodCall\RedirectRouteToToRouteHelperRector`](../src/Rector/MethodCall/RedirectRouteToToRouteHelperRector.php)
 
@@ -453,9 +460,9 @@ Remove `allOnQueue()` and `allOnConnection()` methods used with job chaining, us
 
 <br>
 
-## RedirectRouteToToRouteHelperRector
+## RemoveDumpDataDeadCodeRector
 
-It will removes the dump data just like dd or dump functions from the code.
+It will removes the dump data just like dd or dump functions from the code.`
 
 - class: [`Rector\Laravel\Rector\FuncCall\RemoveDumpDataDeadCodeRector`](../src/Rector/FuncCall/RemoveDumpDataDeadCodeRector.php)
 
@@ -465,13 +472,13 @@ It will removes the dump data just like dd or dump functions from the code.
      public function store()
      {
 -        dd('test');
-        return true;
+         return true;
      }
 
      public function update()
      {
 -        dump('test');
-        return true;
+         return true;
      }
  }
 ```
@@ -513,7 +520,9 @@ use Rector\Config\RectorConfig;
 use Rector\Laravel\Rector\StaticCall\RouteActionCallableRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RouteActionCallableRector::class, [Rector\Laravel\Rector\StaticCall\RouteActionCallableRector::NAMESPACE: 'App\Http\Controllers']);
+    $rectorConfig->ruleWithConfiguration(RouteActionCallableRector::class, [
+        RouteActionCallableRector::NAMESPACE => 'App\Http\Controllers',
+    ]);
 };
 ```
 

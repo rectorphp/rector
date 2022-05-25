@@ -16,10 +16,10 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\ClassAutoloadingException;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
@@ -35,7 +35,6 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector;
@@ -92,14 +91,9 @@ final class NodeTypeResolver
      */
     private $renamedClassesDataCollector;
     /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
-    public function __construct(\Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector $genericClassStringTypeCorrector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector $hasOffsetTypeCorrector, \Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, \Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver $identifierTypeResolver, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, array $nodeTypeResolvers)
+    public function __construct(\Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector $genericClassStringTypeCorrector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector $hasOffsetTypeCorrector, \Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, \Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver $identifierTypeResolver, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, array $nodeTypeResolvers)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->classAnalyzer = $classAnalyzer;
@@ -109,9 +103,10 @@ final class NodeTypeResolver
         $this->accessoryNonEmptyStringTypeCorrector = $accessoryNonEmptyStringTypeCorrector;
         $this->identifierTypeResolver = $identifierTypeResolver;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
-        $this->betterNodeFinder = $betterNodeFinder;
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
-            $this->addNodeTypeResolver($nodeTypeResolver);
+            foreach ($nodeTypeResolver->getNodeClasses() as $nodeClass) {
+                $this->nodeTypeResolvers[$nodeClass] = $nodeTypeResolver;
+            }
         }
     }
     /**
@@ -283,21 +278,22 @@ final class NodeTypeResolver
         if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             return $this->isObjectType($node->class, $objectType);
         }
-        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \false;
         }
-        return $this->isObjectType($class, $objectType);
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            return \false;
+        }
+        if ($classReflection->getName() === $objectType->getClassName()) {
+            return \true;
+        }
+        return $classReflection->isSubclassOf($objectType->getClassName());
     }
     private function isUnionTypeable(\PHPStan\Type\Type $first, \PHPStan\Type\Type $second) : bool
     {
         return !$first instanceof \PHPStan\Type\UnionType && !$second instanceof \PHPStan\Type\UnionType && !$second instanceof \PHPStan\Type\NullType;
-    }
-    private function addNodeTypeResolver(\Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface $nodeTypeResolver) : void
-    {
-        foreach ($nodeTypeResolver->getNodeClasses() as $nodeClass) {
-            $this->nodeTypeResolvers[$nodeClass] = $nodeTypeResolver;
-        }
     }
     private function isMatchingUnionType(\PHPStan\Type\Type $resolvedType, \PHPStan\Type\ObjectType $requiredObjectType) : bool
     {
