@@ -15,10 +15,6 @@ final class GenericTypeNodeAnalyzer
 
         foreach ($types as $type) {
             if ($type instanceof GenericTypeNode) {
-                if ($type->type->name === 'array') {
-                    continue;
-                }
-
                 return true;
             }
         }

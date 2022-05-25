@@ -20,6 +20,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
+use Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
@@ -29,6 +30,7 @@ final class DeadParamTagValueNodeAnalyzer
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly TypeComparator $typeComparator,
         private readonly GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer,
+        private readonly MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer
     ) {
     }
 
@@ -61,6 +63,10 @@ final class DeadParamTagValueNodeAnalyzer
 
         if (! $paramTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
             return $this->isEmptyDescription($paramTagValueNode, $param->type);
+        }
+
+        if ($this->mixedArrayTypeNodeAnalyzer->hasMixedArrayType($paramTagValueNode->type)) {
+            return false;
         }
 
         if (! $this->genericTypeNodeAnalyzer->hasGenericType($paramTagValueNode->type)) {
