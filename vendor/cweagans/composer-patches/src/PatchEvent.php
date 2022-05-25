@@ -4,11 +4,11 @@
  * @file
  * Dispatch events when patches are applied.
  */
-namespace RectorPrefix20220524\cweagans\Composer;
+namespace RectorPrefix20220525\cweagans\Composer;
 
-use RectorPrefix20220524\Composer\EventDispatcher\Event;
-use RectorPrefix20220524\Composer\Package\PackageInterface;
-class PatchEvent extends \RectorPrefix20220524\Composer\EventDispatcher\Event
+use RectorPrefix20220525\Composer\EventDispatcher\Event;
+use RectorPrefix20220525\Composer\Package\PackageInterface;
+class PatchEvent extends \RectorPrefix20220525\Composer\EventDispatcher\Event
 {
     /**
      * @var PackageInterface $package
@@ -30,7 +30,7 @@ class PatchEvent extends \RectorPrefix20220524\Composer\EventDispatcher\Event
      * @param string $url
      * @param string $description
      */
-    public function __construct($eventName, \RectorPrefix20220524\Composer\Package\PackageInterface $package, $url, $description)
+    public function __construct($eventName, \RectorPrefix20220525\Composer\Package\PackageInterface $package, $url, $description)
     {
         parent::__construct($eventName);
         $this->package = $package;

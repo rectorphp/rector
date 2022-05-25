@@ -12,9 +12,6 @@ final class GenericTypeNodeAnalyzer
         $types = $unionTypeNode->types;
         foreach ($types as $type) {
             if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
-                if ($type->type->name === 'array') {
-                    continue;
-                }
                 return \true;
             }
         }

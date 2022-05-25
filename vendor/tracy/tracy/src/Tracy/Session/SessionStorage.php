@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220524\Tracy;
+namespace RectorPrefix20220525\Tracy;
 
 interface SessionStorage
 {

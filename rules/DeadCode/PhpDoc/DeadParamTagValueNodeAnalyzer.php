@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
+use Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadParamTagValueNodeAnalyzer
@@ -38,11 +39,17 @@ final class DeadParamTagValueNodeAnalyzer
      * @var \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer
      */
     private $genericTypeNodeAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer
+     */
+    private $mixedArrayTypeNodeAnalyzer;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, \Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->typeComparator = $typeComparator;
         $this->genericTypeNodeAnalyzer = $genericTypeNodeAnalyzer;
+        $this->mixedArrayTypeNodeAnalyzer = $mixedArrayTypeNodeAnalyzer;
     }
     public function isDead(\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode $paramTagValueNode, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
@@ -64,6 +71,9 @@ final class DeadParamTagValueNodeAnalyzer
         }
         if (!$paramTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
             return $this->isEmptyDescription($paramTagValueNode, $param->type);
+        }
+        if ($this->mixedArrayTypeNodeAnalyzer->hasMixedArrayType($paramTagValueNode->type)) {
+            return \false;
         }
         if (!$this->genericTypeNodeAnalyzer->hasGenericType($paramTagValueNode->type)) {
             return $this->isEmptyDescription($paramTagValueNode, $param->type);
