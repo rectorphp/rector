@@ -4,7 +4,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeR
 
 use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\ParentClassWithDefinedReturnSecond;
 
-class SkipCurlyInheritDoc extends ParentClassWithDefinedReturnSecond
+class SkipInheritDoc extends ParentClassWithDefinedReturnSecond
 {
     /**
      * @inheritdoc
