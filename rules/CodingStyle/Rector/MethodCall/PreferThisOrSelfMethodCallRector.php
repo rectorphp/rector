@@ -87,7 +87,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typeToPreference as $type => $preference) {
-            if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType($type))) {
+            if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
+                $node,
+                new ObjectType($type)
+            )) {
                 continue;
             }
 

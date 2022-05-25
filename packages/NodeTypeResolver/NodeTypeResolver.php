@@ -17,10 +17,10 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\ClassAutoloadingException;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
@@ -36,7 +36,6 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector;
@@ -66,11 +65,12 @@ final class NodeTypeResolver
         private readonly AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector,
         private readonly IdentifierTypeResolver $identifierTypeResolver,
         private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
-        private readonly BetterNodeFinder $betterNodeFinder,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
-            $this->addNodeTypeResolver($nodeTypeResolver);
+            foreach ($nodeTypeResolver->getNodeClasses() as $nodeClass) {
+                $this->nodeTypeResolvers[$nodeClass] = $nodeTypeResolver;
+            }
         }
     }
 
@@ -285,24 +285,27 @@ final class NodeTypeResolver
             return $this->isObjectType($node->class, $objectType);
         }
 
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (! $class instanceof Class_) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return false;
         }
 
-        return $this->isObjectType($class, $objectType);
+        $classReflection = $scope->getClassReflection();
+
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        if ($classReflection->getName() === $objectType->getClassName()) {
+            return true;
+        }
+
+        return $classReflection->isSubclassOf($objectType->getClassName());
     }
 
     private function isUnionTypeable(Type $first, Type $second): bool
     {
         return ! $first instanceof UnionType && ! $second instanceof UnionType && ! $second instanceof NullType;
-    }
-
-    private function addNodeTypeResolver(NodeTypeResolverInterface $nodeTypeResolver): void
-    {
-        foreach ($nodeTypeResolver->getNodeClasses() as $nodeClass) {
-            $this->nodeTypeResolvers[$nodeClass] = $nodeTypeResolver;
-        }
     }
 
     private function isMatchingUnionType(Type $resolvedType, ObjectType $requiredObjectType): bool
