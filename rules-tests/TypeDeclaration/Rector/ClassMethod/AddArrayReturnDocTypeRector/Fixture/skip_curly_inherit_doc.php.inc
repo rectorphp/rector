@@ -7,7 +7,7 @@ use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\
 class SkipCurlyInheritDoc extends ParentClassWithDefinedReturnSecond
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getData()
     {
