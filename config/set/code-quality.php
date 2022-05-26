@@ -32,6 +32,7 @@ use Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector;
 use Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
+use Rector\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector;
 use Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector;
 use Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector;
 use Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector;
@@ -160,23 +161,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         'mbstrrpos' => 'mb_strrpos',
         'mbsubstr' => 'mb_substr',
     ]);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector::class);
-    $rectorConfig->rule(\Rector\Php52\Rector\Property\VarToPublicPropertyRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector::class);
-    $rectorConfig->rule(\Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector::class);
-    $rectorConfig->rule(\Rector\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector::class);
-    $rectorConfig->rule(\Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector::class);
+    $rectorConfig->rules([\Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector::class, \Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector::class, \Rector\Php52\Rector\Property\VarToPublicPropertyRector::class, \Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector::class, \Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector::class, \Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector::class, \Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector::class, \Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector::class, \Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector::class, \Rector\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector::class, \Rector\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector::class, \Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector::class, \Rector\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRector::class, \Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector::class, \Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector::class, \Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector::class, \Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector::class, \Rector\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector::class, \Rector\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector::class, \Rector\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector::class]);
 };
