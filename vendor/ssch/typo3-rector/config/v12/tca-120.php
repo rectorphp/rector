@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220525;
+namespace RectorPrefix20220526;
 
 use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v12\v0\MigrateNullFlagRector;

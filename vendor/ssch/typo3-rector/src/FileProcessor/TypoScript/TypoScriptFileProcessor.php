@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript;
 
-use RectorPrefix20220525\Helmich\TypoScriptParser\Parser\AST\NestedAssignment;
+use RectorPrefix20220526\Helmich\TypoScriptParser\Parser\AST\NestedAssignment;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
-use RectorPrefix20220525\Helmich\TypoScriptParser\Parser\ParseError;
-use RectorPrefix20220525\Helmich\TypoScriptParser\Parser\ParserInterface;
-use RectorPrefix20220525\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface;
-use RectorPrefix20220525\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration;
+use RectorPrefix20220526\Helmich\TypoScriptParser\Parser\ParseError;
+use RectorPrefix20220526\Helmich\TypoScriptParser\Parser\ParserInterface;
+use RectorPrefix20220526\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface;
+use RectorPrefix20220526\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration;
 use Helmich\TypoScriptParser\Parser\Traverser\Traverser;
-use RectorPrefix20220525\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
-use RectorPrefix20220525\Helmich\TypoScriptParser\Tokenizer\TokenizerException;
+use RectorPrefix20220526\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
+use RectorPrefix20220526\Helmich\TypoScriptParser\Tokenizer\TokenizerException;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Console\Output\RectorOutputStyle;
@@ -31,8 +31,8 @@ use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\TypoScriptRectorInterface
 use Ssch\TYPO3Rector\Contract\Processor\ConfigurableProcessorInterface;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Collector\RemoveTypoScriptStatementCollector;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector;
-use RectorPrefix20220525\Symfony\Component\Console\Output\BufferedOutput;
-use RectorPrefix20220525\Webmozart\Assert\Assert;
+use RectorPrefix20220526\Symfony\Component\Console\Output\BufferedOutput;
+use RectorPrefix20220526\Webmozart\Assert\Assert;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\TypoScriptProcessorTest
  */
@@ -109,7 +109,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      * @param TypoScriptRectorInterface[] $typoScriptRectors
      * @param TypoScriptPostRectorInterface[] $typoScriptPostRectors
      */
-    public function __construct(\RectorPrefix20220525\Helmich\TypoScriptParser\Parser\ParserInterface $typoscriptParser, \RectorPrefix20220525\Symfony\Component\Console\Output\BufferedOutput $output, \RectorPrefix20220525\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface $typoscriptPrinter, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory, \Ssch\TYPO3Rector\FileProcessor\TypoScript\Collector\RemoveTypoScriptStatementCollector $removeTypoScriptStatementCollector, array $typoScriptRectors = [], array $typoScriptPostRectors = [])
+    public function __construct(\RectorPrefix20220526\Helmich\TypoScriptParser\Parser\ParserInterface $typoscriptParser, \RectorPrefix20220526\Symfony\Component\Console\Output\BufferedOutput $output, \RectorPrefix20220526\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface $typoscriptPrinter, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory, \Ssch\TYPO3Rector\FileProcessor\TypoScript\Collector\RemoveTypoScriptStatementCollector $removeTypoScriptStatementCollector, array $typoScriptRectors = [], array $typoScriptPostRectors = [])
     {
         $this->typoscriptParser = $typoscriptParser;
         $this->output = $output;
@@ -153,8 +153,8 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
     public function configure(array $configuration) : void
     {
         $allowedFileExtensions = $configuration[self::ALLOWED_FILE_EXTENSIONS] ?? $configuration;
-        \RectorPrefix20220525\Webmozart\Assert\Assert::isArray($allowedFileExtensions);
-        \RectorPrefix20220525\Webmozart\Assert\Assert::allString($allowedFileExtensions);
+        \RectorPrefix20220526\Webmozart\Assert\Assert::isArray($allowedFileExtensions);
+        \RectorPrefix20220526\Webmozart\Assert\Assert::allString($allowedFileExtensions);
         $this->allowedFileExtensions = $allowedFileExtensions;
     }
     private function processFile(\Rector\Core\ValueObject\Application\File $file) : void
@@ -177,7 +177,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             $editorConfigConfigurationBuilder = \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder::create();
             $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createSpaceWithSize(4));
             $editorConfiguration = $this->editorConfigParser->extractConfigurationForFile($file, $editorConfigConfigurationBuilder);
-            $prettyPrinterConfiguration = \RectorPrefix20220525\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
+            $prettyPrinterConfiguration = \RectorPrefix20220526\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
             $prettyPrinterConfiguration = $prettyPrinterConfiguration->withEmptyLineBreaks();
             if ('tab' === $editorConfiguration->getIndentStyle()) {
                 $prettyPrinterConfiguration = $prettyPrinterConfiguration->withTabs();
@@ -193,9 +193,9 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             $oldFileContents = $file->getFileContent();
             $file->changeFileContent($typoScriptContent);
             $this->fileDiffs[] = $this->fileDiffFactory->createFileDiff($file, $oldFileContents, $file->getFileContent());
-        } catch (\RectorPrefix20220525\Helmich\TypoScriptParser\Tokenizer\TokenizerException $exception) {
+        } catch (\RectorPrefix20220526\Helmich\TypoScriptParser\Tokenizer\TokenizerException $exception) {
             return;
-        } catch (\RectorPrefix20220525\Helmich\TypoScriptParser\Parser\ParseError $exception) {
+        } catch (\RectorPrefix20220526\Helmich\TypoScriptParser\Parser\ParseError $exception) {
             $smartFileInfo = $file->getSmartFileInfo();
             $errorFile = $smartFileInfo->getRelativeFilePath();
             $this->rectorOutputStyle->warning(\sprintf('TypoScriptParser Error in: %s. File skipped.', $errorFile));
@@ -207,7 +207,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      */
     private function convertToPhpFileRectors() : array
     {
-        return \array_filter($this->typoScriptRectors, function (\RectorPrefix20220525\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : bool {
+        return \array_filter($this->typoScriptRectors, function (\RectorPrefix20220526\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : bool {
             return \is_a($visitor, \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface::class, \true);
         });
     }
@@ -241,7 +241,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             if (!$this->removeTypoScriptStatementCollector->shouldStatementBeRemoved($originalStatement, $file)) {
                 $printStatements[] = $originalStatement;
             }
-            if ($originalStatement instanceof \RectorPrefix20220525\Helmich\TypoScriptParser\Parser\AST\NestedAssignment) {
+            if ($originalStatement instanceof \RectorPrefix20220526\Helmich\TypoScriptParser\Parser\AST\NestedAssignment) {
                 $originalNestedStatements = [];
                 foreach ($originalStatement->statements as $nestedOriginalStatement) {
                     if (!$this->removeTypoScriptStatementCollector->shouldStatementBeRemoved($nestedOriginalStatement, $file)) {

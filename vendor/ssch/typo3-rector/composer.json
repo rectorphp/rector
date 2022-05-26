@@ -80,7 +80,7 @@
             "@fix-rector",
             "@fix-style"
         ],
-        "check-style": "@php vendor\/bin\/ecs ecs check --ansi",
+        "check-style": "@php vendor\/bin\/ecs check --ansi",
         "fix-style": "@php vendor\/bin\/ecs check --fix --ansi",
         "analyze": "@php vendor\/bin\/phpstan analyse --memory-limit=-1 --ansi --error-format symplify",
         "test": "@php vendor\/bin\/phpunit",
