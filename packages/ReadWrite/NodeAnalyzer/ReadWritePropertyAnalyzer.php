@@ -63,11 +63,11 @@ final class ReadWritePropertyAnalyzer
             return ! $this->assignManipulator->isLeftPartOfAssign($node);
         }
 
-        if (! $this->isArrayDimFetchInImpureFunction($parent, $node)) {
-            return ! $this->assignManipulator->isLeftPartOfAssign($node);
+        if ($this->assignManipulator->isLeftPartOfAssign($parent)) {
+            return false;
         }
 
-        return false;
+        return ! $this->isArrayDimFetchInImpureFunction($parent, $node);
     }
 
     private function isArrayDimFetchInImpureFunction(ArrayDimFetch $arrayDimFetch, Node $node): bool
