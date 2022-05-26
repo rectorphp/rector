@@ -32,6 +32,7 @@ use Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector;
 use Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
+use Rector\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector;
 use Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector;
 use Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector;
 use Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector;
@@ -162,23 +163,27 @@ return static function (RectorConfig $rectorConfig): void {
             'mbstrrpos' => 'mb_strrpos',
             'mbsubstr' => 'mb_substr',
         ]);
-    $rectorConfig->rule(SetTypeToCastRector::class);
-    $rectorConfig->rule(LogicalToBooleanRector::class);
-    $rectorConfig->rule(VarToPublicPropertyRector::class);
-    $rectorConfig->rule(IssetOnPropertyObjectToPropertyExistsRector::class);
-    $rectorConfig->rule(NewStaticToNewSelfRector::class);
-    $rectorConfig->rule(DateTimeToDateTimeInterfaceRector::class);
-    $rectorConfig->rule(UnwrapSprintfOneArgumentRector::class);
-    $rectorConfig->rule(SwitchNegatedTernaryRector::class);
-    $rectorConfig->rule(SingularSwitchToIfRector::class);
-    $rectorConfig->rule(SimplifyIfNullableReturnRector::class);
-    $rectorConfig->rule(NarrowUnionTypeDocRector::class);
-    $rectorConfig->rule(FuncGetArgsToVariadicParamRector::class);
-    $rectorConfig->rule(CallUserFuncToMethodCallRector::class);
-    $rectorConfig->rule(CallUserFuncWithArrowFunctionToInlineRector::class);
-    $rectorConfig->rule(CountArrayToEmptyArrayComparisonRector::class);
-    $rectorConfig->rule(FlipTypeControlToUseExclusiveTypeRector::class);
-    $rectorConfig->rule(ExplicitMethodCallOverMagicGetSetRector::class);
-    $rectorConfig->rule(DoWhileBreakFalseToIfElseRector::class);
-    $rectorConfig->rule(InlineArrayReturnAssignRector::class);
+
+    $rectorConfig->rules([
+        SetTypeToCastRector::class,
+        LogicalToBooleanRector::class,
+        VarToPublicPropertyRector::class,
+        IssetOnPropertyObjectToPropertyExistsRector::class,
+        NewStaticToNewSelfRector::class,
+        DateTimeToDateTimeInterfaceRector::class,
+        UnwrapSprintfOneArgumentRector::class,
+        SwitchNegatedTernaryRector::class,
+        SingularSwitchToIfRector::class,
+        SimplifyIfNullableReturnRector::class,
+        NarrowUnionTypeDocRector::class,
+        FuncGetArgsToVariadicParamRector::class,
+        CallUserFuncToMethodCallRector::class,
+        CallUserFuncWithArrowFunctionToInlineRector::class,
+        CountArrayToEmptyArrayComparisonRector::class,
+        FlipTypeControlToUseExclusiveTypeRector::class,
+        ExplicitMethodCallOverMagicGetSetRector::class,
+        DoWhileBreakFalseToIfElseRector::class,
+        InlineArrayReturnAssignRector::class,
+        InlineIsAInstanceOfRector::class,
+    ]);
 };
