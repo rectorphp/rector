@@ -25,13 +25,9 @@ final class ConsoleApplication extends \RectorPrefix20220527\Symfony\Component\C
     /**
      * @param Command[] $commands
      */
-    public function __construct(\RectorPrefix20220527\Symplify\PackageBuilder\Console\Command\CommandNaming $commandNaming, array $commands = [])
+    public function __construct(array $commands = [])
     {
         parent::__construct(self::NAME, \Rector\Core\Application\VersionResolver::PACKAGE_VERSION);
-        foreach ($commands as $command) {
-            $commandName = $commandNaming->resolveFromCommand($command);
-            $command->setName($commandName);
-        }
         $this->addCommands($commands);
         $this->setDefaultCommand(\RectorPrefix20220527\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(\Rector\Core\Console\Command\ProcessCommand::class));
     }

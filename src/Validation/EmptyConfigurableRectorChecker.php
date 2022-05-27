@@ -48,6 +48,6 @@ final class EmptyConfigurableRectorChecker
             $this->rectorOutputStyle->writeln(' * ' . $emptyConfigurableRectorClass);
         }
         // to take time to absorb it
-        \sleep(3);
+        \sleep(5);
     }
 }

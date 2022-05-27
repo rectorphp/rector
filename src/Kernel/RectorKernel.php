@@ -9,7 +9,6 @@ use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
-use Rector\Core\DependencyInjection\CompilerPass\VerifyRectorServiceExistsCompilerPass;
 use Rector\Core\Exception\ShouldNotHappenException;
 use RectorPrefix20220527\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerInterface;
@@ -75,7 +74,6 @@ final class RectorKernel implements \RectorPrefix20220527\Symplify\SymplifyKerne
         $compilerPasses[] = new \Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass();
         // add all merged arguments of Rector services
         $compilerPasses[] = new \Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector);
-        $compilerPasses[] = new \Rector\Core\DependencyInjection\CompilerPass\VerifyRectorServiceExistsCompilerPass();
         $compilerPasses[] = new \RectorPrefix20220527\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass();
         return $compilerPasses;
     }
@@ -84,12 +82,6 @@ final class RectorKernel implements \RectorPrefix20220527\Symplify\SymplifyKerne
      */
     private function createDefaultConfigFiles() : array
     {
-        $configFiles = [];
-        $configFiles[] = __DIR__ . '/../../config/config.php';
-        $configFiles[] = \RectorPrefix20220527\Symplify\Astral\ValueObject\AstralConfig::FILE_PATH;
-        $configFiles[] = \RectorPrefix20220527\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig::FILE_PATH;
-        $configFiles[] = \RectorPrefix20220527\Symplify\Skipper\ValueObject\SkipperConfig::FILE_PATH;
-        $configFiles[] = \RectorPrefix20220527\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig::FILE_PATH;
-        return $configFiles;
+        return [__DIR__ . '/../../config/config.php', \RectorPrefix20220527\Symplify\Astral\ValueObject\AstralConfig::FILE_PATH, \RectorPrefix20220527\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig::FILE_PATH, \RectorPrefix20220527\Symplify\Skipper\ValueObject\SkipperConfig::FILE_PATH, \RectorPrefix20220527\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig::FILE_PATH];
     }
 }

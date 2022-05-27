@@ -58,6 +58,7 @@ final class InitCommand extends \RectorPrefix20220527\Symfony\Component\Console\
     }
     protected function configure() : void
     {
+        $this->setName('init');
         $this->setDescription('Generate rector.php configuration file');
         $this->addOption(\Rector\Core\Configuration\Option::TEMPLATE_TYPE, null, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'A template type like default, nette, doctrine etc.', \Rector\Core\Template\DefaultResolver::TYPE);
     }

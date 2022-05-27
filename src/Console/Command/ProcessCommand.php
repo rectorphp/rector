@@ -23,7 +23,6 @@ use RectorPrefix20220527\Symfony\Component\Console\Application;
 use RectorPrefix20220527\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220527\Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
@@ -99,7 +98,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     }
     protected function configure() : void
     {
-        $this->setName(\RectorPrefix20220527\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(self::class));
+        $this->setName('process');
         $this->setDescription('Upgrades or refactors source code with provided rectors');
         parent::configure();
     }

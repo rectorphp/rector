@@ -11,7 +11,6 @@ use RectorPrefix20220527\React\Socket\ConnectionInterface;
 use RectorPrefix20220527\React\Socket\TcpServer;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\ProcessCommand;
-use Rector\Core\Console\Command\WorkerCommand;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\Command\WorkerCommandLineFactory;
@@ -26,7 +25,6 @@ use RectorPrefix20220527\Symplify\EasyParallel\Enum\ReactEvent;
 use RectorPrefix20220527\Symplify\EasyParallel\ValueObject\ParallelProcess;
 use RectorPrefix20220527\Symplify\EasyParallel\ValueObject\ProcessPool;
 use RectorPrefix20220527\Symplify\EasyParallel\ValueObject\Schedule;
-use RectorPrefix20220527\Symplify\PackageBuilder\Console\Command\CommandNaming;
 use RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 /**
@@ -114,7 +112,7 @@ final class ParallelFileProcessor
                 break;
             }
             $processIdentifier = \RectorPrefix20220527\Nette\Utils\Random::generate();
-            $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, \Rector\Core\Console\Command\ProcessCommand::class, \RectorPrefix20220527\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(\Rector\Core\Console\Command\WorkerCommand::class), $input, $processIdentifier, $serverPort);
+            $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, \Rector\Core\Console\Command\ProcessCommand::class, 'worker', $input, $processIdentifier, $serverPort);
             $parallelProcess = new \RectorPrefix20220527\Symplify\EasyParallel\ValueObject\ParallelProcess($workerCommandLine, $streamSelectLoop, $timeoutInSeconds);
             $parallelProcess->start(
                 // 1. callable on data

@@ -95,6 +95,7 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function ruleWithConfiguration(string $rectorClass, array $configuration) : void
     {
+        \RectorPrefix20220527\Webmozart\Assert\Assert::classExists($rectorClass);
         \RectorPrefix20220527\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
         \RectorPrefix20220527\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class);
         $services = $this->services();
@@ -112,6 +113,7 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
      */
     public function rule(string $rectorClass) : void
     {
+        \RectorPrefix20220527\Webmozart\Assert\Assert::classExists($rectorClass);
         \RectorPrefix20220527\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
         $services = $this->services();
         $services->set($rectorClass);

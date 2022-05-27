@@ -25,7 +25,7 @@ final class RectorContainerFactory
                 $warningMessage = \sprintf('Your "%s" config is using old syntax with "ContainerConfigurator".%sUpgrade to "RectorConfig" that allows better autocomplete and future standard.', $mainConfigFile, \PHP_EOL);
                 $symfonyStyle->warning($warningMessage);
                 // to make message noticable
-                \sleep(3);
+                \sleep(5);
             }
             /** @var ChangedFilesDetector $changedFilesDetector */
             $changedFilesDetector = $container->get(\Rector\Caching\Detector\ChangedFilesDetector::class);
