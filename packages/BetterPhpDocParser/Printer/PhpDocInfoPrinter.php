@@ -193,10 +193,13 @@ final class PhpDocInfoPrinter
                 return $this->standardPrintPhpDocChildNode($phpDocChildNode);
             }
             if ($phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode && $shouldReprintChildNode) {
-                $printedNode = (string) $phpDocChildNode;
-                // remove extra space between tags
-                $printedNode = \RectorPrefix20220527\Nette\Utils\Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
-                return self::NEWLINE_WITH_ASTERISK . ($printedNode === '' ? '' : ' ' . $printedNode);
+                $silentValue = $phpDocChildNode->value->getSilentValue();
+                if ($silentValue === null) {
+                    $printedNode = (string) $phpDocChildNode;
+                    // remove extra space between tags
+                    $printedNode = \RectorPrefix20220527\Nette\Utils\Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
+                    return self::NEWLINE_WITH_ASTERISK . ($printedNode === '' ? '' : ' ' . $printedNode);
+                }
             }
         }
         /** @var StartAndEnd|null $startAndEnd */
