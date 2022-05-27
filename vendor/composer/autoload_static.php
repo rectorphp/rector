@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcb35e254f08652faad722828c850129e
+class ComposerStaticInit2ab66d11b53f9eefc2121becfa7d9f0f
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -83,10 +83,8 @@ class ComposerStaticInitcb35e254f08652faad722828c850129e
             'RectorPrefix20220527\\Psr\\Cache\\' => 31,
             'RectorPrefix20220527\\OndraM\\CiDetector\\' => 39,
             'RectorPrefix20220527\\MyCLabs\\Enum\\' => 34,
-            'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\' => 48,
             'RectorPrefix20220527\\Helmich\\TypoScriptParser\\' => 46,
             'RectorPrefix20220527\\Evenement\\' => 31,
-            'RectorPrefix20220527\\Ergebnis\\Json\\Printer\\' => 43,
             'RectorPrefix20220527\\Doctrine\\Inflector\\' => 40,
             'RectorPrefix20220527\\Composer\\XdebugHandler\\' => 44,
             'RectorPrefix20220527\\Composer\\Semver\\' => 37,
@@ -324,10 +322,6 @@ class ComposerStaticInitcb35e254f08652faad722828c850129e
         array (
             0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src',
-        ),
         'RectorPrefix20220527\\Helmich\\TypoScriptParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/helmich/typo3-typoscript-parser/src',
@@ -335,10 +329,6 @@ class ComposerStaticInitcb35e254f08652faad722828c850129e
         'RectorPrefix20220527\\Evenement\\' => 
         array (
             0 => __DIR__ . '/..' . '/evenement/evenement/src/Evenement',
-        ),
-        'RectorPrefix20220527\\Ergebnis\\Json\\Printer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/ergebnis/json-printer/src',
         ),
         'RectorPrefix20220527\\Doctrine\\Inflector\\' => 
         array (
@@ -764,8 +754,6 @@ class ComposerStaticInitcb35e254f08652faad722828c850129e
         'RectorPrefix20220527\\Doctrine\\Inflector\\Rules\\Word' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/Rules/Word.php',
         'RectorPrefix20220527\\Doctrine\\Inflector\\RulesetInflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/RulesetInflector.php',
         'RectorPrefix20220527\\Doctrine\\Inflector\\WordInflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/WordInflector.php',
-        'RectorPrefix20220527\\Ergebnis\\Json\\Printer\\Printer' => __DIR__ . '/..' . '/ergebnis/json-printer/src/Printer.php',
-        'RectorPrefix20220527\\Ergebnis\\Json\\Printer\\PrinterInterface' => __DIR__ . '/..' . '/ergebnis/json-printer/src/PrinterInterface.php',
         'RectorPrefix20220527\\Evenement\\EventEmitter' => __DIR__ . '/..' . '/evenement/evenement/src/Evenement/EventEmitter.php',
         'RectorPrefix20220527\\Evenement\\EventEmitterInterface' => __DIR__ . '/..' . '/evenement/evenement/src/Evenement/EventEmitterInterface.php',
         'RectorPrefix20220527\\Evenement\\EventEmitterTrait' => __DIR__ . '/..' . '/evenement/evenement/src/Evenement/EventEmitterTrait.php',
@@ -825,23 +813,6 @@ class ComposerStaticInitcb35e254f08652faad722828c850129e
         'RectorPrefix20220527\\Helmich\\TypoScriptParser\\Tokenizer\\TokenizerInterface' => __DIR__ . '/..' . '/helmich/typo3-typoscript-parser/src/Tokenizer/TokenizerInterface.php',
         'RectorPrefix20220527\\Helmich\\TypoScriptParser\\Tokenizer\\UnknownOperatorException' => __DIR__ . '/..' . '/helmich/typo3-typoscript-parser/src/Tokenizer/UnknownOperatorException.php',
         'RectorPrefix20220527\\Helmich\\TypoScriptParser\\TypoScriptParserExtension' => __DIR__ . '/..' . '/helmich/typo3-typoscript-parser/src/TypoScriptParserExtension.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\BooleanDeclaration' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/BooleanDeclaration.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\Charset' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/Charset.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\Declaration' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/Declaration.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\EndOfLine' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/EndOfLine.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\Factory' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/Factory.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\GenericDeclaration' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/GenericDeclaration.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\IndentSize' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/IndentSize.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\IndentStyle' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/IndentStyle.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\InsertFinalNewline' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/InsertFinalNewline.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\MaxLineLength' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/MaxLineLength.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\TabWidth' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/TabWidth.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\TrimTrailingWhitespace' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/TrimTrailingWhitespace.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Declaration\\UnsetDeclaration' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Declaration/UnsetDeclaration.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\EditorConfig' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/EditorConfig.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\EditorConfigFile' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/EditorConfigFile.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Exception\\InvalidValue' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Exception/InvalidValue.php',
-        'RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\Section' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Section.php',
         'RectorPrefix20220527\\MyCLabs\\Enum\\Enum' => __DIR__ . '/..' . '/myclabs/php-enum/src/Enum.php',
         'RectorPrefix20220527\\MyCLabs\\Enum\\PHPUnit\\Comparator' => __DIR__ . '/..' . '/myclabs/php-enum/src/PHPUnit/Comparator.php',
         'RectorPrefix20220527\\Nette\\ArgumentOutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
@@ -2491,21 +2462,6 @@ class ComposerStaticInitcb35e254f08652faad722828c850129e
         'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
         'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
         'Rector\\FamilyTree\\ValueObject\\PropertyType' => __DIR__ . '/../..' . '/packages/FamilyTree/ValueObject/PropertyType.php',
-        'Rector\\FileFormatter\\Contract\\Formatter\\FileFormatterInterface' => __DIR__ . '/../..' . '/packages/FileFormatter/Contract/Formatter/FileFormatterInterface.php',
-        'Rector\\FileFormatter\\EditorConfig\\EditorConfigParser' => __DIR__ . '/../..' . '/packages/FileFormatter/EditorConfig/EditorConfigParser.php',
-        'Rector\\FileFormatter\\Enum\\IndentType' => __DIR__ . '/../..' . '/packages/FileFormatter/Enum/IndentType.php',
-        'Rector\\FileFormatter\\Exception\\InvalidIndentSizeException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/InvalidIndentSizeException.php',
-        'Rector\\FileFormatter\\Exception\\InvalidIndentStringException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/InvalidIndentStringException.php',
-        'Rector\\FileFormatter\\Exception\\InvalidIndentStyleException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/InvalidIndentStyleException.php',
-        'Rector\\FileFormatter\\Exception\\InvalidNewLineStringException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/InvalidNewLineStringException.php',
-        'Rector\\FileFormatter\\Exception\\ParseIndentException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/ParseIndentException.php',
-        'Rector\\FileFormatter\\FileFormatter' => __DIR__ . '/../..' . '/packages/FileFormatter/FileFormatter.php',
-        'Rector\\FileFormatter\\Formatter\\JsonFileFormatter' => __DIR__ . '/../..' . '/packages/FileFormatter/Formatter/JsonFileFormatter.php',
-        'Rector\\FileFormatter\\ValueObjectFactory\\EditorConfigConfigurationBuilder' => __DIR__ . '/../..' . '/packages/FileFormatter/ValueObjectFactory/EditorConfigConfigurationBuilder.php',
-        'Rector\\FileFormatter\\ValueObject\\EditorConfigConfiguration' => __DIR__ . '/../..' . '/packages/FileFormatter/ValueObject/EditorConfigConfiguration.php',
-        'Rector\\FileFormatter\\ValueObject\\EditorConfigOption' => __DIR__ . '/../..' . '/packages/FileFormatter/ValueObject/EditorConfigOption.php',
-        'Rector\\FileFormatter\\ValueObject\\Indent' => __DIR__ . '/../..' . '/packages/FileFormatter/ValueObject/Indent.php',
-        'Rector\\FileFormatter\\ValueObject\\NewLine' => __DIR__ . '/../..' . '/packages/FileFormatter/ValueObject/NewLine.php',
         'Rector\\FileSystemRector\\Contract\\AddedFileInterface' => __DIR__ . '/../..' . '/packages/FileSystemRector/Contract/AddedFileInterface.php',
         'Rector\\FileSystemRector\\Contract\\FileWithNodesInterface' => __DIR__ . '/../..' . '/packages/FileSystemRector/Contract/FileWithNodesInterface.php',
         'Rector\\FileSystemRector\\Parser\\FileInfoParser' => __DIR__ . '/../..' . '/packages/FileSystemRector/Parser/FileInfoParser.php',
@@ -3915,9 +3871,9 @@ class ComposerStaticInitcb35e254f08652faad722828c850129e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcb35e254f08652faad722828c850129e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcb35e254f08652faad722828c850129e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcb35e254f08652faad722828c850129e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2ab66d11b53f9eefc2121becfa7d9f0f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2ab66d11b53f9eefc2121becfa7d9f0f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2ab66d11b53f9eefc2121becfa7d9f0f::$classMap;
 
         }, null, ClassLoader::class);
     }

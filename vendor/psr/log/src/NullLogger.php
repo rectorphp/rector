@@ -23,7 +23,7 @@ class NullLogger extends \RectorPrefix20220527\Psr\Log\AbstractLogger
      *
      * @throws \Psr\Log\InvalidArgumentException
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []) : void
     {
         // noop
     }

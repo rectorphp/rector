@@ -14,7 +14,6 @@ use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
-use Rector\FileFormatter\FileFormatter;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Parallel\ValueObject\Bridge;
 use RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface;
@@ -47,11 +46,6 @@ final class ApplicationFileProcessor
      * @var \Rector\Core\Application\FileDecorator\FileDiffFileDecorator
      */
     private $fileDiffFileDecorator;
-    /**
-     * @readonly
-     * @var \Rector\FileFormatter\FileFormatter
-     */
-    private $fileFormatter;
     /**
      * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor
@@ -110,11 +104,10 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\RectorPrefix20220527\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \RectorPrefix20220527\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, \Rector\Parallel\Application\ParallelFileProcessor $parallelFileProcessor, \RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220527\Symplify\EasyParallel\ScheduleFactory $scheduleFactory, \RectorPrefix20220527\Symplify\EasyParallel\FileSystem\FilePathNormalizer $filePathNormalizer, \RectorPrefix20220527\Symplify\EasyParallel\CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
+    public function __construct(\RectorPrefix20220527\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \RectorPrefix20220527\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, \Rector\Parallel\Application\ParallelFileProcessor $parallelFileProcessor, \RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220527\Symplify\EasyParallel\ScheduleFactory $scheduleFactory, \RectorPrefix20220527\Symplify\EasyParallel\FileSystem\FilePathNormalizer $filePathNormalizer, \RectorPrefix20220527\Symplify\EasyParallel\CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
-        $this->fileFormatter = $fileFormatter;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->fileFactory = $fileFactory;
@@ -146,7 +139,6 @@ final class ApplicationFileProcessor
             // 2. PHPStan has to know about all files too
             $this->configurePHPStanNodeScopeResolver($files);
             $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
-            $this->fileFormatter->format($files);
             $this->fileDiffFileDecorator->decorate($files);
             $this->printFiles($files, $configuration);
         }

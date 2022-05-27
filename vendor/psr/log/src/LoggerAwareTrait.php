@@ -18,7 +18,7 @@ trait LoggerAwareTrait
      *
      * @param LoggerInterface $logger
      */
-    public function setLogger(\RectorPrefix20220527\Psr\Log\LoggerInterface $logger)
+    public function setLogger(\RectorPrefix20220527\Psr\Log\LoggerInterface $logger) : void
     {
         $this->logger = $logger;
     }

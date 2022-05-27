@@ -440,72 +440,6 @@
             "install-path": "..\/doctrine\/inflector"
         },
         {
-            "name": "ergebnis\/json-printer",
-            "version": "3.2.0",
-            "version_normalized": "3.2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/ergebnis\/json-printer.git",
-                "reference": "651cab2b7604a6b338d0d16749f5ea0851a68005"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/ergebnis\/json-printer\/zipball\/651cab2b7604a6b338d0d16749f5ea0851a68005",
-                "reference": "651cab2b7604a6b338d0d16749f5ea0851a68005",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "php": "^7.4 || ^8.0"
-            },
-            "require-dev": {
-                "ergebnis\/license": "^1.1.0",
-                "ergebnis\/php-cs-fixer-config": "^3.4.0",
-                "fakerphp\/faker": "^1.17.0",
-                "infection\/infection": "~0.25.5",
-                "phpunit\/phpunit": "^9.5.11",
-                "psalm\/plugin-phpunit": "~0.16.1",
-                "vimeo\/psalm": "^4.16.1"
-            },
-            "time": "2021-12-27T12:39:13+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "RectorPrefix20220527\\Ergebnis\\Json\\Printer\\": "src\/"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Andreas M\u00f6ller",
-                    "email": "am@localheinz.com"
-                }
-            ],
-            "description": "Provides a JSON printer, allowing for flexible indentation.",
-            "homepage": "https:\/\/github.com\/ergebnis\/json-printer",
-            "keywords": [
-                "formatter",
-                "json",
-                "printer"
-            ],
-            "support": {
-                "issues": "https:\/\/github.com\/ergebnis\/json-printer\/issues",
-                "source": "https:\/\/github.com\/ergebnis\/json-printer"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/github.com\/localheinz",
-                    "type": "github"
-                }
-            ],
-            "install-path": "..\/ergebnis\/json-printer"
-        },
-        {
             "name": "evenement\/evenement",
             "version": "v3.0.1",
             "version_normalized": "3.0.1.0",
@@ -619,58 +553,6 @@
                 }
             ],
             "install-path": "..\/helmich\/typo3-typoscript-parser"
-        },
-        {
-            "name": "idiosyncratic\/editorconfig",
-            "version": "0.1.3",
-            "version_normalized": "0.1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/idiosyncratic-code\/editorconfig-php.git",
-                "reference": "3445fa4a1e00f95630d4edc729c2effb116db19b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/idiosyncratic-code\/editorconfig-php\/zipball\/3445fa4a1e00f95630d4edc729c2effb116db19b",
-                "reference": "3445fa4a1e00f95630d4edc729c2effb116db19b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.3"
-            },
-            "require-dev": {
-                "idiosyncratic\/coding-standard": "^2.0",
-                "php-parallel-lint\/php-console-highlighter": "^0.5",
-                "php-parallel-lint\/php-parallel-lint": "^1.3",
-                "phploc\/phploc": "^7.0",
-                "phpstan\/phpstan": "^0.12",
-                "phpunit\/phpunit": "^9.5",
-                "sebastian\/phpcpd": "^6.0"
-            },
-            "time": "2021-06-02T16:24:34+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "RectorPrefix20220527\\Idiosyncratic\\EditorConfig\\": "src"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "ISC"
-            ],
-            "authors": [
-                {
-                    "name": "Jason Silkey",
-                    "email": "jason@jasonsilkey.com"
-                }
-            ],
-            "description": "PHP implementation of EditorConfig",
-            "support": {
-                "issues": "https:\/\/github.com\/idiosyncratic-code\/editorconfig-php\/issues",
-                "source": "https:\/\/github.com\/idiosyncratic-code\/editorconfig-php\/tree\/0.1.3"
-            },
-            "install-path": "..\/idiosyncratic\/editorconfig"
         },
         {
             "name": "myclabs\/php-enum",
@@ -1377,27 +1259,27 @@
         },
         {
             "name": "psr\/log",
-            "version": "2.0.0",
-            "version_normalized": "2.0.0.0",
+            "version": "3.0.0",
+            "version_normalized": "3.0.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/php-fig\/log.git",
-                "reference": "ef29f6d262798707a9edd554e2b82517ef3a9376"
+                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/php-fig\/log\/zipball\/ef29f6d262798707a9edd554e2b82517ef3a9376",
-                "reference": "ef29f6d262798707a9edd554e2b82517ef3a9376",
+                "url": "https:\/\/api.github.com\/repos\/php-fig\/log\/zipball\/fe5ea303b0887d5caefd3d431c3e61ad47037001",
+                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0.0"
             },
-            "time": "2021-07-14T16:41:46+00:00",
+            "time": "2021-07-14T16:46:02+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "3.x-dev"
                 }
             },
             "installation-source": "dist",
@@ -1424,7 +1306,7 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https:\/\/github.com\/php-fig\/log\/tree\/2.0.0"
+                "source": "https:\/\/github.com\/php-fig\/log\/tree\/3.0.0"
             },
             "install-path": "..\/psr\/log"
         },
@@ -2786,12 +2668,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "a5a13630b2f0d68e9286e8adfb84c001ff3a69de"
+                "reference": "8f232e2f49185e111dab67f32b256553e057c897"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/a5a13630b2f0d68e9286e8adfb84c001ff3a69de",
-                "reference": "a5a13630b2f0d68e9286e8adfb84c001ff3a69de",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/8f232e2f49185e111dab67f32b256553e057c897",
+                "reference": "8f232e2f49185e111dab67f32b256553e057c897",
                 "shasum": ""
             },
             "require": {
@@ -2811,7 +2693,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.5",
                 "rector\/rector-generator": "dev-main",
-                "rector\/rector-src": "dev-main#ffd84e6",
+                "rector\/rector-src": "dev-main#cb07c30",
                 "symfony\/console": "^6.0",
                 "symplify\/coding-standard": "^10.2",
                 "symplify\/easy-coding-standard": "^10.2",
@@ -2821,7 +2703,7 @@
                 "symplify\/vendor-patches": "^10.2",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-05-27T15:24:23+00:00",
+            "time": "2022-05-27T16:29:27+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

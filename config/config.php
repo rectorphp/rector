@@ -6,9 +6,6 @@ namespace RectorPrefix20220527;
 use RectorPrefix20220527\Composer\Semver\VersionParser;
 use RectorPrefix20220527\Doctrine\Inflector\Inflector;
 use RectorPrefix20220527\Doctrine\Inflector\Rules\English\InflectorFactory;
-use RectorPrefix20220527\Ergebnis\Json\Printer\Printer;
-use RectorPrefix20220527\Ergebnis\Json\Printer\PrinterInterface;
-use RectorPrefix20220527\Idiosyncratic\EditorConfig\EditorConfig;
 use RectorPrefix20220527\OndraM\CiDetector\CiDetector;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
@@ -139,7 +136,4 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $services->set(\PHPStan\Analyser\ScopeFactory::class)->factory([\RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createScopeFactory']);
     $services->set(\PHPStan\PhpDoc\TypeNodeResolver::class)->factory([\RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createTypeNodeResolver']);
     $services->set(\Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider::class)->factory([\RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
-    $services->set(\RectorPrefix20220527\Idiosyncratic\EditorConfig\EditorConfig::class);
-    $services->set(\RectorPrefix20220527\Ergebnis\Json\Printer\Printer::class);
-    $services->alias(\RectorPrefix20220527\Ergebnis\Json\Printer\PrinterInterface::class, \RectorPrefix20220527\Ergebnis\Json\Printer\Printer::class);
 };

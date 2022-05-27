@@ -12,6 +12,7 @@ use RectorPrefix20220527\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterCo
 use Helmich\TypoScriptParser\Parser\Traverser\Traverser;
 use RectorPrefix20220527\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
 use RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\TokenizerException;
+use RectorPrefix20220527\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Console\Output\RectorOutputStyle;
@@ -20,9 +21,6 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use Rector\FileFormatter\EditorConfig\EditorConfigParser;
-use Rector\FileFormatter\ValueObject\Indent;
-use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Parallel\ValueObject\Bridge;
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface;
@@ -72,11 +70,6 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
     private $currentFileProvider;
     /**
      * @readonly
-     * @var \Rector\FileFormatter\EditorConfig\EditorConfigParser
-     */
-    private $editorConfigParser;
-    /**
-     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
@@ -109,13 +102,12 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      * @param TypoScriptRectorInterface[] $typoScriptRectors
      * @param TypoScriptPostRectorInterface[] $typoScriptPostRectors
      */
-    public function __construct(\RectorPrefix20220527\Helmich\TypoScriptParser\Parser\ParserInterface $typoscriptParser, \RectorPrefix20220527\Symfony\Component\Console\Output\BufferedOutput $output, \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface $typoscriptPrinter, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory, \Ssch\TYPO3Rector\FileProcessor\TypoScript\Collector\RemoveTypoScriptStatementCollector $removeTypoScriptStatementCollector, array $typoScriptRectors = [], array $typoScriptPostRectors = [])
+    public function __construct(\RectorPrefix20220527\Helmich\TypoScriptParser\Parser\ParserInterface $typoscriptParser, \RectorPrefix20220527\Symfony\Component\Console\Output\BufferedOutput $output, \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface $typoscriptPrinter, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory, \Ssch\TYPO3Rector\FileProcessor\TypoScript\Collector\RemoveTypoScriptStatementCollector $removeTypoScriptStatementCollector, array $typoScriptRectors = [], array $typoScriptPostRectors = [])
     {
         $this->typoscriptParser = $typoscriptParser;
         $this->output = $output;
         $this->typoscriptPrinter = $typoscriptPrinter;
         $this->currentFileProvider = $currentFileProvider;
-        $this->editorConfigParser = $editorConfigParser;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->fileDiffFactory = $fileDiffFactory;
@@ -174,22 +166,23 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             if ([] === $typoscriptRectorsWithChange) {
                 return;
             }
-            $editorConfigConfigurationBuilder = new \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder();
-            $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createSpaceWithSize(4));
-            $editorConfiguration = $this->editorConfigParser->extractConfigurationForFile($file, $editorConfigConfigurationBuilder);
+            // keep original json format
+            $tabMatches = \RectorPrefix20220527\Nette\Utils\Strings::match($file->getFileContent(), "#^\n#");
+            $indentStyle = $tabMatches ? 'tab' : 'space';
             $prettyPrinterConfiguration = \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
             $prettyPrinterConfiguration = $prettyPrinterConfiguration->withEmptyLineBreaks();
-            if ('tab' === $editorConfiguration->getIndentStyle()) {
+            if ('tab' === $indentStyle) {
                 $prettyPrinterConfiguration = $prettyPrinterConfiguration->withTabs();
             } else {
-                $prettyPrinterConfiguration = $prettyPrinterConfiguration->withSpaceIndentation($editorConfiguration->getIndentSize());
+                // default indent
+                $prettyPrinterConfiguration = $prettyPrinterConfiguration->withSpaceIndentation(4);
             }
             $prettyPrinterConfiguration = $prettyPrinterConfiguration->withClosingGlobalStatement();
             $this->typoscriptPrinter->setPrettyPrinterConfiguration($prettyPrinterConfiguration);
             $printStatements = $this->filterRemovedStatements($originalStatements, $file);
             $this->typoscriptPrinter->printStatements($printStatements, $this->output);
             $newTypoScriptContent = $this->applyTypoScriptPostRectors($this->output->fetch());
-            $typoScriptContent = \rtrim($newTypoScriptContent) . $editorConfiguration->getNewLine();
+            $typoScriptContent = \rtrim($newTypoScriptContent) . "\n";
             $oldFileContents = $file->getFileContent();
             $file->changeFileContent($typoScriptContent);
             $this->fileDiffs[] = $this->fileDiffFactory->createFileDiff($file, $oldFileContents, $file->getFileContent());
