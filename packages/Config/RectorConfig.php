@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Config;
 
 use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\ValueObjectInliner;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\PhpVersion;
@@ -114,8 +115,17 @@ final class RectorConfig extends ContainerConfigurator
 
         $services = $this->services();
 
+        // decorate with value object inliner so Symfony understands, see https://getrector.org/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config
+        array_walk_recursive($configuration, function (&$value) {
+            if (is_object($value)) {
+                $value = ValueObjectInliner::inline($value);
+            }
+
+            return $value;
+        });
+
         $services->set($rectorClass)
-            ->configure($configuration);
+            ->call('configure', [$configuration]);
     }
 
     /**
