@@ -2132,7 +2132,6 @@ return array(
     'Rector\\FileFormatter\\Exception\\ParseIndentException' => $baseDir . '/packages/FileFormatter/Exception/ParseIndentException.php',
     'Rector\\FileFormatter\\FileFormatter' => $baseDir . '/packages/FileFormatter/FileFormatter.php',
     'Rector\\FileFormatter\\Formatter\\JsonFileFormatter' => $baseDir . '/packages/FileFormatter/Formatter/JsonFileFormatter.php',
-    'Rector\\FileFormatter\\Formatter\\XmlFileFormatter' => $baseDir . '/packages/FileFormatter/Formatter/XmlFileFormatter.php',
     'Rector\\FileFormatter\\Formatter\\YamlFileFormatter' => $baseDir . '/packages/FileFormatter/Formatter/YamlFileFormatter.php',
     'Rector\\FileFormatter\\ValueObjectFactory\\EditorConfigConfigurationBuilder' => $baseDir . '/packages/FileFormatter/ValueObjectFactory/EditorConfigConfigurationBuilder.php',
     'Rector\\FileFormatter\\ValueObject\\EditorConfigConfiguration' => $baseDir . '/packages/FileFormatter/ValueObject/EditorConfigConfiguration.php',

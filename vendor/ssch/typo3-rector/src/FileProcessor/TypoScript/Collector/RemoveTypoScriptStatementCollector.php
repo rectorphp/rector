@@ -24,12 +24,9 @@ final class RemoveTypoScriptStatementCollector
         if (!isset($this->statementsToBeRemoved[$file->getFilePath()])) {
             return \false;
         }
-        foreach ($this->statementsToBeRemoved[$file->getFilePath()] as $sourceLine => $statementToBeRemoved) {
-            if ($sourceLine === $originalStatement->sourceLine) {
-                return \true;
-            }
-        }
-        return \false;
+        $desiredSourceLine = $originalStatement->sourceLine;
+        $currentFileStatements = $this->statementsToBeRemoved[$file->getFilePath()];
+        return \array_key_exists($desiredSourceLine, $currentFileStatements);
     }
     public function reset() : void
     {

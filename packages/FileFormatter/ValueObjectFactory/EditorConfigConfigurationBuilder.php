@@ -20,7 +20,7 @@ final class EditorConfigConfigurationBuilder
     /**
      * @var int
      */
-    private $indentSize = 2;
+    private $indentSize = 4;
     /**
      * @var bool
      */
@@ -28,16 +28,12 @@ final class EditorConfigConfigurationBuilder
     /**
      * @param IndentType::* $indentStyle
      */
-    public function __construct(string $indentStyle = \Rector\FileFormatter\Enum\IndentType::SPACE, int $indentSize = 2, bool $insertFinalNewline = \true)
+    public function __construct(string $indentStyle = \Rector\FileFormatter\Enum\IndentType::SPACE, int $indentSize = 4, bool $insertFinalNewline = \true)
     {
         $this->indentStyle = $indentStyle;
         $this->indentSize = $indentSize;
         $this->insertFinalNewline = $insertFinalNewline;
         $this->newLine = \Rector\FileFormatter\ValueObject\NewLine::fromEditorConfig('lf');
-    }
-    public static function create() : self
-    {
-        return new self();
     }
     public function withNewLine(\Rector\FileFormatter\ValueObject\NewLine $newLine) : self
     {

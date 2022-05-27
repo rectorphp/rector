@@ -174,7 +174,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             if ([] === $typoscriptRectorsWithChange) {
                 return;
             }
-            $editorConfigConfigurationBuilder = \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder::create();
+            $editorConfigConfigurationBuilder = new \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder();
             $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createSpaceWithSize(4));
             $editorConfiguration = $this->editorConfigParser->extractConfigurationForFile($file, $editorConfigConfigurationBuilder);
             $prettyPrinterConfiguration = \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
@@ -208,7 +208,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
     private function convertToPhpFileRectors() : array
     {
         return \array_filter($this->typoScriptRectors, function (\RectorPrefix20220527\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : bool {
-            return \is_a($visitor, \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface::class, \true);
+            return $visitor instanceof \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface;
         });
     }
     private function convertTypoScriptToPhpFiles() : void

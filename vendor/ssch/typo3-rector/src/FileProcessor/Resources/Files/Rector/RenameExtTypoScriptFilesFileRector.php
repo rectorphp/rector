@@ -63,12 +63,12 @@ CODE_SAMPLE
         if ('ext_typoscript_constants.txt' === $smartFileInfo->getBasename()) {
             return \false;
         }
-        if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun() && \substr_compare($smartFileInfo->getBasename(), 'ext_typoscript_constants.txt', -\strlen('ext_typoscript_constants.txt')) === 0) {
+        if (!\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            return \true;
+        }
+        if (\substr_compare($smartFileInfo->getBasename(), 'ext_typoscript_constants.txt', -\strlen('ext_typoscript_constants.txt')) === 0) {
             return \false;
         }
-        if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun() && \substr_compare($smartFileInfo->getBasename(), 'ext_typoscript_setup.txt', -\strlen('ext_typoscript_setup.txt')) === 0) {
-            return \false;
-        }
-        return \true;
+        return \substr_compare($smartFileInfo->getBasename(), 'ext_typoscript_setup.txt', -\strlen('ext_typoscript_setup.txt')) !== 0;
     }
 }

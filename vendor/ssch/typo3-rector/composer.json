@@ -30,7 +30,7 @@
         "phpunit\/phpunit": "^9.5",
         "rector\/phpstan-rules": "^0.5",
         "rector\/rector-generator": "dev-main",
-        "rector\/rector-src": "dev-main#28fb30f",
+        "rector\/rector-src": "dev-main#ffd84e6",
         "symfony\/console": "^6.0",
         "symplify\/coding-standard": "^10.2",
         "symplify\/easy-coding-standard": "^10.2",
@@ -99,7 +99,7 @@
             ]
         },
         "branch-alias": {
-            "dev-main": "0.11-dev"
+            "dev-main": "0.13-dev"
         }
     },
     "conflict": {

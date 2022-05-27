@@ -16,7 +16,7 @@ final class LibFluidContentToLibContentElementRector extends \Ssch\TYPO3Rector\F
 {
     public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!\is_a($statement, \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\NestedAssignment::class) && !\is_a($statement, \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment::class)) {
+        if (!$statement instanceof \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\NestedAssignment && !$statement instanceof \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;
         }
         if ('lib.fluidContent' === $statement->object->relativeName) {

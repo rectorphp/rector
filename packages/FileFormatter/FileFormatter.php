@@ -53,7 +53,7 @@ final class FileFormatter
                 if (!$fileFormatter->supports($file)) {
                     continue;
                 }
-                $editorConfigConfigurationBuilder = $fileFormatter->createDefaultEditorConfigConfigurationBuilder();
+                $editorConfigConfigurationBuilder = new \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder();
                 $this->sniffOriginalFileContent($file, $editorConfigConfigurationBuilder);
                 $editorConfiguration = $this->createEditorConfiguration($file, $editorConfigConfigurationBuilder);
                 $fileFormatter->format($file, $editorConfiguration);
