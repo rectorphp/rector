@@ -1,6 +1,6 @@
 <?php
 
-if (PHP_VERSION_ID < 80000 && ! class_exists('ReflectionUnionType', false)) {
+if (! class_exists('ReflectionUnionType', false)) {
     class ReflectionUnionType extends ReflectionType
     {
         /** @return ReflectionType[] */
@@ -11,7 +11,7 @@ if (PHP_VERSION_ID < 80000 && ! class_exists('ReflectionUnionType', false)) {
     }
 }
 
-if (\PHP_VERSION_ID < 80000 && ! class_exists('Attribute', false)) {
+if (! class_exists('Attribute', false)) {
     #[Attribute(Attribute::TARGET_CLASS)]
     class Attribute
     {
@@ -72,7 +72,7 @@ if (\PHP_VERSION_ID < 80000 && ! class_exists('Attribute', false)) {
     }
 }
 
-if (\PHP_VERSION_ID < 80100 && ! class_exists('ReturnTypeWillChange', false)) {
+if (! class_exists('ReturnTypeWillChange', false)) {
     #[Attribute(Attribute::TARGET_METHOD)]
     final class ReturnTypeWillChange
     {
