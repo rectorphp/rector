@@ -2668,12 +2668,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "8f232e2f49185e111dab67f32b256553e057c897"
+                "reference": "1219aa92005714972d7a1a54fb44b00068f6e5fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/8f232e2f49185e111dab67f32b256553e057c897",
-                "reference": "8f232e2f49185e111dab67f32b256553e057c897",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/1219aa92005714972d7a1a54fb44b00068f6e5fb",
+                "reference": "1219aa92005714972d7a1a54fb44b00068f6e5fb",
                 "shasum": ""
             },
             "require": {
@@ -2693,7 +2693,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.5",
                 "rector\/rector-generator": "dev-main",
-                "rector\/rector-src": "dev-main#cb07c30",
+                "rector\/rector-src": "dev-main",
                 "symfony\/console": "^6.0",
                 "symplify\/coding-standard": "^10.2",
                 "symplify\/easy-coding-standard": "^10.2",
@@ -2703,7 +2703,7 @@
                 "symplify\/vendor-patches": "^10.2",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-05-27T16:29:27+00:00",
+            "time": "2022-05-27T16:50:58+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
