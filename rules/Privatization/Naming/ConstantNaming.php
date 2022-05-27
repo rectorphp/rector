@@ -14,7 +14,7 @@ final class ConstantNaming
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -30,7 +30,7 @@ final class ConstantNaming
     /**
      * @return string|null
      */
-    public function createFromVariable(Variable $variable)
+    public function createFromVariable(\PhpParser\Node\Expr\Variable $variable)
     {
         $variableName = $this->nodeNameResolver->getName($variable);
         if ($variableName === null) {
@@ -40,7 +40,7 @@ final class ConstantNaming
     }
     private function createUnderscoreUppercaseString(string $propertyName) : string
     {
-        $propertyNameUnicodeString = new UnicodeString($propertyName);
+        $propertyNameUnicodeString = new \RectorPrefix20220527\Symfony\Component\String\UnicodeString($propertyName);
         return $propertyNameUnicodeString->snake()->upper()->toString();
     }
 }

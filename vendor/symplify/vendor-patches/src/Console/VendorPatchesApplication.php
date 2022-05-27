@@ -5,7 +5,7 @@ namespace RectorPrefix20220527\Symplify\VendorPatches\Console;
 
 use RectorPrefix20220527\Symfony\Component\Console\Application;
 use RectorPrefix20220527\Symfony\Component\Console\Command\Command;
-final class VendorPatchesApplication extends Application
+final class VendorPatchesApplication extends \RectorPrefix20220527\Symfony\Component\Console\Application
 {
     /**
      * @param Command[] $commands

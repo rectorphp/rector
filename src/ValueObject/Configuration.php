@@ -5,7 +5,7 @@ namespace Rector\Core\ValueObject;
 
 use RectorPrefix20220527\JetBrains\PhpStorm\Immutable;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-#[\JetBrains\PhpStorm\Immutable]
+#[Immutable]
 final class Configuration
 {
     /**
@@ -27,7 +27,7 @@ final class Configuration
      * @readonly
      * @var string
      */
-    private $outputFormat = ConsoleOutputFormatter::NAME;
+    private $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;
     /**
      * @var string[]
      * @readonly
@@ -70,7 +70,7 @@ final class Configuration
      * @param string|null $parallelIdentifier
      * @param string|null $memoryLimit
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, $parallelPort = null, $parallelIdentifier = null, bool $isParallel = \false, $memoryLimit = null)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, $parallelPort = null, $parallelIdentifier = null, bool $isParallel = \false, $memoryLimit = null)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;

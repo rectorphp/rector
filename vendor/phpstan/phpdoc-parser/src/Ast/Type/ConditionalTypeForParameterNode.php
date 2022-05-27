@@ -28,6 +28,6 @@ class ConditionalTypeForParameterNode implements \PHPStan\PhpDocParser\Ast\Type\
     }
     public function __toString() : string
     {
-        return sprintf('(%s %s %s ? %s : %s)', $this->parameterName, $this->negated ? 'is not' : 'is', $this->targetType, $this->if, $this->else);
+        return \sprintf('(%s %s %s ? %s : %s)', $this->parameterName, $this->negated ? 'is not' : 'is', $this->targetType, $this->if, $this->else);
     }
 }

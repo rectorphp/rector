@@ -10,7 +10,7 @@ use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Resources\FileRectorInterface;
-final class ExtTypoScriptFileProcessor implements FileProcessorInterface
+final class ExtTypoScriptFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @var FileRectorInterface[]
@@ -24,20 +24,20 @@ final class ExtTypoScriptFileProcessor implements FileProcessorInterface
     {
         $this->filesRector = $filesRector;
     }
-    public function supports(File $file, Configuration $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         return \true;
     }
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(File $file, Configuration $configuration) : array
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
         foreach ($this->filesRector as $fileRector) {
             $fileRector->refactorFile($file);
         }
         // to keep parent contract with return values
-        return [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
+        return [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
     }
     public function getSupportedFileExtensions() : array
     {

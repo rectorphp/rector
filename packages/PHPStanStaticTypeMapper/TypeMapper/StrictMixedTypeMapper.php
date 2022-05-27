@@ -14,7 +14,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 /**
  * @implements TypeMapperInterface<StrictMixedType>
  */
-final class StrictMixedTypeMapper implements TypeMapperInterface
+final class StrictMixedTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
      * @var string
@@ -25,20 +25,20 @@ final class StrictMixedTypeMapper implements TypeMapperInterface
      */
     public function getNodeClass() : string
     {
-        return StrictMixedType::class;
+        return \PHPStan\Type\StrictMixedType::class;
     }
     /**
      * @param StrictMixedType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        return new IdentifierTypeNode(self::MIXED);
+        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(self::MIXED);
     }
     /**
      * @param StrictMixedType $type
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind) : ?Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
     {
-        return new Name(self::MIXED);
+        return new \PhpParser\Node\Name(self::MIXED);
     }
 }

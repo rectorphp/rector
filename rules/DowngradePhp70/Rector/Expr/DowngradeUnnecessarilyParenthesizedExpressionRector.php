@@ -21,24 +21,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp70\Rector\Expr\DowngradeUnnecessarilyParenthesizedExpressionRector\DowngradeUnnecessarilyParenthesizedExpressionRectorTest
  */
-final class DowngradeUnnecessarilyParenthesizedExpressionRector extends AbstractRector
+final class DowngradeUnnecessarilyParenthesizedExpressionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<class-string<Expr>>
      */
-    private const PARENTHESIZABLE_NODES = [ArrayDimFetch::class, PropertyFetch::class, MethodCall::class, StaticPropertyFetch::class, StaticCall::class, FuncCall::class];
+    private const PARENTHESIZABLE_NODES = [\PhpParser\Node\Expr\ArrayDimFetch::class, \PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticPropertyFetch::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\FuncCall::class];
     /**
      * @readonly
      * @var \Rector\DowngradePhp70\Tokenizer\WrappedInParenthesesAnalyzer
      */
     private $wrappedInParenthesesAnalyzer;
-    public function __construct(WrappedInParenthesesAnalyzer $wrappedInParenthesesAnalyzer)
+    public function __construct(\Rector\DowngradePhp70\Tokenizer\WrappedInParenthesesAnalyzer $wrappedInParenthesesAnalyzer)
     {
         $this->wrappedInParenthesesAnalyzer = $wrappedInParenthesesAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove parentheses around expressions allowed by Uniform variable syntax RFC where they are not necessary to prevent parse errors on PHP 5.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove parentheses around expressions allowed by Uniform variable syntax RFC where they are not necessary to prevent parse errors on PHP 5.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 ($f)['foo'];
 ($f)->foo;
 ($f)->foo();
@@ -63,19 +63,19 @@ CODE_SAMPLE
     {
         return [
             // TODO: Make PHPStan rules allow Expr namespace for its subclasses.
-            Expr::class,
+            \PhpParser\Node\Expr::class,
         ];
     }
     /**
      * @param ArrayDimFetch|PropertyFetch|MethodCall|StaticPropertyFetch|StaticCall|FuncCall $node
      */
-    public function refactor(Node $node) : ?Expr
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr
     {
         if (!\in_array(\get_class($node), self::PARENTHESIZABLE_NODES, \true)) {
             return null;
         }
         $leftSubNode = $this->getLeftSubNode($node);
-        if (!$leftSubNode instanceof Node) {
+        if (!$leftSubNode instanceof \PhpParser\Node) {
             return null;
         }
         if (!$this->wrappedInParenthesesAnalyzer->isParenthesized($this->file, $leftSubNode)) {
@@ -84,23 +84,23 @@ CODE_SAMPLE
         // Parenthesization is not part of the AST and Rector only re-generates code for AST nodes that changed.
         // Let’s remove the original node reference forcing the re-generation of the corresponding code.
         // The code generator will only put parentheses where strictly necessary, which other rules should handle.
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
-    private function getLeftSubNode(Node $node) : ?Node
+    private function getLeftSubNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         switch (\true) {
-            case $node instanceof ArrayDimFetch:
+            case $node instanceof \PhpParser\Node\Expr\ArrayDimFetch:
                 return $node->var;
-            case $node instanceof PropertyFetch:
+            case $node instanceof \PhpParser\Node\Expr\PropertyFetch:
                 return $node->var;
-            case $node instanceof MethodCall:
+            case $node instanceof \PhpParser\Node\Expr\MethodCall:
                 return $node->var;
-            case $node instanceof StaticPropertyFetch:
+            case $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch:
                 return $node->class;
-            case $node instanceof StaticCall:
+            case $node instanceof \PhpParser\Node\Expr\StaticCall:
                 return $node->class;
-            case $node instanceof FuncCall:
+            case $node instanceof \PhpParser\Node\Expr\FuncCall:
                 return $node->name;
             default:
                 return null;

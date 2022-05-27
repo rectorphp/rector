@@ -27,20 +27,20 @@ final class LocalConstantFinder
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function match(ClassConstFetch $classConstFetch) : ?Const_
+    public function match(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : ?\PhpParser\Node\Const_
     {
-        $class = $this->betterNodeFinder->findParentType($classConstFetch, Class_::class);
-        if (!$class instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($classConstFetch, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         $constantClassType = $this->nodeTypeResolver->getType($classConstFetch->class);
-        if (!$constantClassType instanceof TypeWithClassName) {
+        if (!$constantClassType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($class, $constantClassType->getClassName())) {
@@ -52,7 +52,7 @@ final class LocalConstantFinder
         }
         return $this->findConstantByName($class, $constatName);
     }
-    private function findConstantByName(Class_ $class, string $constatName) : ?Const_
+    private function findConstantByName(\PhpParser\Node\Stmt\Class_ $class, string $constatName) : ?\PhpParser\Node\Const_
     {
         foreach ($class->getConstants() as $classConsts) {
             foreach ($classConsts->consts as $const) {

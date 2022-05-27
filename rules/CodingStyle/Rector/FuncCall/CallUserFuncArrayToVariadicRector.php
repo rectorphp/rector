@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector\CallUserFuncArrayToVariadicRectorTest
  */
-final class CallUserFuncArrayToVariadicRector extends AbstractRector implements MinPhpVersionInterface
+final class CallUserFuncArrayToVariadicRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -35,14 +35,14 @@ final class CallUserFuncArrayToVariadicRector extends AbstractRector implements 
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory, ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->arrayCallableToMethodCallFactory = $arrayCallableToMethodCallFactory;
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace call_user_func_array() with variadic', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace call_user_func_array() with variadic', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -67,12 +67,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'call_user_func_array')) {
             return null;
@@ -86,37 +86,37 @@ CODE_SAMPLE
         /** @var Arg $secondArg */
         $secondArg = $node->getArgs()[1];
         $secondArgValue = $secondArg->value;
-        if ($firstArgValue instanceof String_) {
+        if ($firstArgValue instanceof \PhpParser\Node\Scalar\String_) {
             $functionName = $this->valueResolver->getValue($firstArgValue);
             return $this->createFuncCall($secondArgValue, $functionName);
         }
         // method call
-        if ($firstArgValue instanceof Array_) {
+        if ($firstArgValue instanceof \PhpParser\Node\Expr\Array_) {
             return $this->createMethodCall($firstArgValue, $secondArgValue);
         }
         return null;
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::ARRAY_SPREAD;
+        return \Rector\Core\ValueObject\PhpVersionFeature::ARRAY_SPREAD;
     }
-    private function createFuncCall(Expr $expr, string $functionName) : FuncCall
+    private function createFuncCall(\PhpParser\Node\Expr $expr, string $functionName) : \PhpParser\Node\Expr\FuncCall
     {
         $args = [];
         $args[] = $this->createUnpackedArg($expr);
         return $this->nodeFactory->createFuncCall($functionName, $args);
     }
-    private function createMethodCall(Array_ $array, Expr $secondExpr) : ?MethodCall
+    private function createMethodCall(\PhpParser\Node\Expr\Array_ $array, \PhpParser\Node\Expr $secondExpr) : ?\PhpParser\Node\Expr\MethodCall
     {
         $methodCall = $this->arrayCallableToMethodCallFactory->create($array);
-        if (!$methodCall instanceof MethodCall) {
+        if (!$methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         $methodCall->args[] = $this->createUnpackedArg($secondExpr);
         return $methodCall;
     }
-    private function createUnpackedArg(Expr $expr) : Arg
+    private function createUnpackedArg(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Arg
     {
-        return new Arg($expr, \false, \true);
+        return new \PhpParser\Node\Arg($expr, \false, \true);
     }
 }

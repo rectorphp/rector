@@ -26,7 +26,7 @@ final class StringToClassConstant
         $this->string = $string;
         $this->class = $class;
         $this->constant = $constant;
-        RectorAssert::className($class);
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getString() : string
     {

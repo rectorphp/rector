@@ -21,7 +21,7 @@ use RectorPrefix20220527\Symfony\Component\Process\Process;
  *
  * @final
  */
-class ProcessHelper extends Helper
+class ProcessHelper extends \RectorPrefix20220527\Symfony\Component\Console\Helper\Helper
 {
     /**
      * Runs an external process.
@@ -30,22 +30,22 @@ class ProcessHelper extends Helper
      * @param callable|null $callback A PHP callback to run whenever there is some
      *                                output available on STDOUT or STDERR
      */
-    public function run(OutputInterface $output, $cmd, string $error = null, callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE) : Process
+    public function run(\RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output, $cmd, string $error = null, callable $callback = null, int $verbosity = \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE) : \RectorPrefix20220527\Symfony\Component\Process\Process
     {
-        if (!\class_exists(Process::class)) {
+        if (!\class_exists(\RectorPrefix20220527\Symfony\Component\Process\Process::class)) {
             throw new \LogicException('The ProcessHelper cannot be run as the Process component is not installed. Try running "compose require symfony/process".');
         }
-        if ($output instanceof ConsoleOutputInterface) {
+        if ($output instanceof \RectorPrefix20220527\Symfony\Component\Console\Output\ConsoleOutputInterface) {
             $output = $output->getErrorOutput();
         }
         $formatter = $this->getHelperSet()->get('debug_formatter');
-        if ($cmd instanceof Process) {
+        if ($cmd instanceof \RectorPrefix20220527\Symfony\Component\Process\Process) {
             $cmd = [$cmd];
         }
         if (\is_string($cmd[0] ?? null)) {
-            $process = new Process($cmd);
+            $process = new \RectorPrefix20220527\Symfony\Component\Process\Process($cmd);
             $cmd = [];
-        } elseif (($cmd[0] ?? null) instanceof Process) {
+        } elseif (($cmd[0] ?? null) instanceof \RectorPrefix20220527\Symfony\Component\Process\Process) {
             $process = $cmd[0];
             unset($cmd[0]);
         } else {
@@ -81,25 +81,25 @@ class ProcessHelper extends Helper
      *
      * @see run()
      */
-    public function mustRun(OutputInterface $output, $cmd, string $error = null, callable $callback = null) : Process
+    public function mustRun(\RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output, $cmd, string $error = null, callable $callback = null) : \RectorPrefix20220527\Symfony\Component\Process\Process
     {
         $process = $this->run($output, $cmd, $error, $callback);
         if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
+            throw new \RectorPrefix20220527\Symfony\Component\Process\Exception\ProcessFailedException($process);
         }
         return $process;
     }
     /**
      * Wraps a Process callback to add debugging output.
      */
-    public function wrapCallback(OutputInterface $output, Process $process, callable $callback = null) : callable
+    public function wrapCallback(\RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20220527\Symfony\Component\Process\Process $process, callable $callback = null) : callable
     {
-        if ($output instanceof ConsoleOutputInterface) {
+        if ($output instanceof \RectorPrefix20220527\Symfony\Component\Console\Output\ConsoleOutputInterface) {
             $output = $output->getErrorOutput();
         }
         $formatter = $this->getHelperSet()->get('debug_formatter');
         return function ($type, $buffer) use($output, $process, $callback, $formatter) {
-            $output->write($formatter->progress(\spl_object_hash($process), $this->escapeString($buffer), Process::ERR === $type));
+            $output->write($formatter->progress(\spl_object_hash($process), $this->escapeString($buffer), \RectorPrefix20220527\Symfony\Component\Process\Process::ERR === $type));
             if (null !== $callback) {
                 $callback($type, $buffer);
             }

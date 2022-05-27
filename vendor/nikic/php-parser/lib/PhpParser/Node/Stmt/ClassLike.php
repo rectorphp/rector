@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-abstract class ClassLike extends Node\Stmt
+abstract class ClassLike extends \PhpParser\Node\Stmt
 {
     /** @var Node\Identifier|null Name */
     public $name;

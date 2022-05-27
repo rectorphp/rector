@@ -18,7 +18,7 @@ use RectorPrefix20220527\Symfony\Component\Config\Resource\ResourceInterface;
  *
  * @final
  */
-class ContainerParametersResource implements ResourceInterface
+class ContainerParametersResource implements \RectorPrefix20220527\Symfony\Component\Config\Resource\ResourceInterface
 {
     /**
      * @var mixed[]

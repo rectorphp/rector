@@ -12,15 +12,15 @@ use RectorPrefix20220527\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use RectorPrefix20220527\Symplify\SmartFileSystem\Json\JsonFileSystem;
 use RectorPrefix20220527\Symplify\VendorPatches\Console\VendorPatchesApplication;
 use function RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\service;
-return static function (ContainerConfigurator $containerConfigurator) : void {
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
     $services->load('RectorPrefix20220527\Symplify\\VendorPatches\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Kernel', __DIR__ . '/../src/ValueObject']);
-    $services->set(UnifiedDiffOutputBuilder::class)->args(['$addLineNumbers' => \true]);
-    $services->set(Differ::class)->args(['$outputBuilder' => service(UnifiedDiffOutputBuilder::class)]);
-    $services->set(VendorDirProvider::class);
-    $services->set(JsonFileSystem::class);
+    $services->set(\RectorPrefix20220527\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder::class)->args(['$addLineNumbers' => \true]);
+    $services->set(\RectorPrefix20220527\SebastianBergmann\Diff\Differ::class)->args(['$outputBuilder' => \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20220527\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder::class)]);
+    $services->set(\RectorPrefix20220527\Symplify\PackageBuilder\Composer\VendorDirProvider::class);
+    $services->set(\RectorPrefix20220527\Symplify\SmartFileSystem\Json\JsonFileSystem::class);
     // for autowired commands
-    $services->alias(Application::class, VendorPatchesApplication::class);
-    $services->set(ParametersMerger::class);
+    $services->alias(\RectorPrefix20220527\Symfony\Component\Console\Application::class, \RectorPrefix20220527\Symplify\VendorPatches\Console\VendorPatchesApplication::class);
+    $services->set(\RectorPrefix20220527\Symplify\PackageBuilder\Yaml\ParametersMerger::class);
 };

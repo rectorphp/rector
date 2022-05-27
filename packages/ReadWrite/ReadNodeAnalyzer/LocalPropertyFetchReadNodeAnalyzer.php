@@ -15,7 +15,7 @@ use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 /**
  * @implements ReadNodeAnalyzerInterface<PropertyFetch|StaticPropertyFetch>
  */
-final class LocalPropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterface
+final class LocalPropertyFetchReadNodeAnalyzer implements \Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface
 {
     /**
      * @readonly
@@ -37,21 +37,21 @@ final class LocalPropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterf
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer $justReadExprAnalyzer, PropertyFetchFinder $propertyFetchFinder, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer $justReadExprAnalyzer, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->justReadExprAnalyzer = $justReadExprAnalyzer;
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function supports(Expr $expr) : bool
+    public function supports(\PhpParser\Node\Expr $expr) : bool
     {
-        return $expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch;
+        return $expr instanceof \PhpParser\Node\Expr\PropertyFetch || $expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
     }
-    public function isRead(Expr $expr) : bool
+    public function isRead(\PhpParser\Node\Expr $expr) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($expr, Class_::class);
-        if (!$class instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             // assume worse to keep node protected
             return \true;
         }

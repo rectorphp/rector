@@ -8,7 +8,7 @@ final class NetteControlNaming
 {
     public function createVariableName(string $shortName) : string
     {
-        $variableNameUnicodeString = new UnicodeString($shortName);
+        $variableNameUnicodeString = new \RectorPrefix20220527\Symfony\Component\String\UnicodeString($shortName);
         $variableName = $variableNameUnicodeString->camel()->toString();
         if (\substr_compare($variableName, 'Form', -\strlen('Form')) === 0) {
             return $variableName;
@@ -17,7 +17,7 @@ final class NetteControlNaming
     }
     public function createCreateComponentClassMethodName(string $shortName) : string
     {
-        $shortNameUnicodeString = new UnicodeString($shortName);
+        $shortNameUnicodeString = new \RectorPrefix20220527\Symfony\Component\String\UnicodeString($shortName);
         $componentName = $shortNameUnicodeString->upper()->camel()->toString();
         return 'createComponent' . $componentName;
     }

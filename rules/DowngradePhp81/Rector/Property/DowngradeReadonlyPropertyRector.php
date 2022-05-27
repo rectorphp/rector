@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp81\Rector\Property\DowngradeReadonlyPropertyRector\DowngradeReadonlyPropertyRectorTest
  */
-final class DowngradeReadonlyPropertyRector extends AbstractRector
+final class DowngradeReadonlyPropertyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -28,7 +28,7 @@ final class DowngradeReadonlyPropertyRector extends AbstractRector
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(VisibilityManipulator $visibilityManipulator)
+    public function __construct(\Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
     {
         $this->visibilityManipulator = $visibilityManipulator;
     }
@@ -37,11 +37,11 @@ final class DowngradeReadonlyPropertyRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Property::class, Param::class];
+        return [\PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Param::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove "readonly" property type, add a "@readonly" tag instead', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove "readonly" property type, add a "@readonly" tag instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public readonly string $foo;
@@ -71,23 +71,23 @@ CODE_SAMPLE
     /**
      * @param Property|Param $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->visibilityManipulator->isReadonly($node)) {
             return null;
         }
-        if ($node instanceof Property) {
+        if ($node instanceof \PhpParser\Node\Stmt\Property) {
             $this->addPhpDocTag($node);
         }
         $this->visibilityManipulator->removeReadonly($node);
         return $node;
     }
-    private function addPhpDocTag(Property $property) : void
+    private function addPhpDocTag(\PhpParser\Node\Stmt\Property $property) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($phpDocInfo->hasByName(self::TAGNAME)) {
             return;
         }
-        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@' . self::TAGNAME, new GenericTagValueNode('')));
+        $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@' . self::TAGNAME, new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
     }
 }

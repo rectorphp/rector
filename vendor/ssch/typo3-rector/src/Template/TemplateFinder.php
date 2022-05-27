@@ -15,12 +15,12 @@ final class TemplateFinder
     {
         $this->templateDirectory = __DIR__ . '/../../templates/maker/';
     }
-    public function getCommand() : SmartFileInfo
+    public function getCommand() : \Symplify\SmartFileSystem\SmartFileInfo
     {
         return $this->createSmartFileInfo('Commands/Command.tpl');
     }
-    private function createSmartFileInfo(string $template) : SmartFileInfo
+    private function createSmartFileInfo(string $template) : \Symplify\SmartFileSystem\SmartFileInfo
     {
-        return new SmartFileInfo($this->templateDirectory . $template);
+        return new \Symplify\SmartFileSystem\SmartFileInfo($this->templateDirectory . $template);
     }
 }

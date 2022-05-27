@@ -9,11 +9,11 @@ final class StringUtility
     public static function prepareExtensionName(string $extensionName, int $delimiterPosition) : string
     {
         $extensionName = \substr($extensionName, $delimiterPosition + 1);
-        $stringy = u($extensionName);
+        $stringy = \RectorPrefix20220527\Symfony\Component\String\u($extensionName);
         $underscores = $stringy->snake();
         $lower = $underscores->lower();
         $underScoredExtensionName = \str_replace('_', ' ', $lower->toString());
-        $stringy = u($underScoredExtensionName);
+        $stringy = \RectorPrefix20220527\Symfony\Component\String\u($underScoredExtensionName);
         $trimmed = $stringy->trim();
         $uppercase = $trimmed->title();
         $underScoredExtensionName = \ucwords($uppercase->toString());

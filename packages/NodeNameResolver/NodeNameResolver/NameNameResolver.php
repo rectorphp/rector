@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @implements NodeNameResolverInterface<Name>
  */
-final class NameNameResolver implements NodeNameResolverInterface
+final class NameNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
      * @readonly
@@ -25,20 +25,20 @@ final class NameNameResolver implements NodeNameResolverInterface
     }
     public function getNode() : string
     {
-        return Name::class;
+        return \PhpParser\Node\Name::class;
     }
     /**
      * @param Name $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         // possible function parent
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof FuncCall) {
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parent instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->funcCallNameResolver->resolve($parent);
         }
-        $resolvedName = $node->getAttribute(AttributeKey::RESOLVED_NAME);
-        if ($resolvedName instanceof FullyQualified) {
+        $resolvedName = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME);
+        if ($resolvedName instanceof \PhpParser\Node\Name\FullyQualified) {
             return $resolvedName->toString();
         }
         return $node->toString();

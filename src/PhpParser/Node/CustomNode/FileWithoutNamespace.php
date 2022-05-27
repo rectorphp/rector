@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt;
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/commit/ed81c3ad0b9877e6122c79b4afda9d10f3994092
  */
-final class FileWithoutNamespace extends Stmt
+final class FileWithoutNamespace extends \PhpParser\Node\Stmt
 {
     /**
      * @var Stmt[]

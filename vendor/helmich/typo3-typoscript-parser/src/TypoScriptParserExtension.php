@@ -13,7 +13,7 @@ use RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\YamlFileLo
  * @package Helmich\TypoScriptParser
  * @codeCoverageIgnore
  */
-class TypoScriptParserExtension implements ExtensionInterface
+class TypoScriptParserExtension implements \RectorPrefix20220527\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
 {
     /**
      * Loads a specific configuration.
@@ -26,9 +26,9 @@ class TypoScriptParserExtension implements ExtensionInterface
      * @api
      * @psalm-suppress MissingReturnType Signature is determined by Symfony DI -- nothing to fix, here
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, \RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../config'));
+        $loader = new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, new \RectorPrefix20220527\Symfony\Component\Config\FileLocator(__DIR__ . '/../config'));
         $loader->load('services.yml');
     }
     /**

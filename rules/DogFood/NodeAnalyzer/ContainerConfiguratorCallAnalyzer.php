@@ -20,16 +20,16 @@ final class ContainerConfiguratorCallAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(ValueResolver $valueResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->valueResolver = $valueResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isMethodCallWithServicesSetConfiguredRectorRule(MethodCall $methodCall) : bool
+    public function isMethodCallWithServicesSetConfiguredRectorRule(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         return $this->nodeNameResolver->isName($methodCall->name, 'configure');
     }
-    public function isMethodCallWithServicesSetRectorRule(MethodCall $methodCall) : bool
+    public function isMethodCallWithServicesSetRectorRule(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if (!$this->isMethodCallNamed($methodCall, 'services', 'set')) {
             return \false;
@@ -39,11 +39,11 @@ final class ContainerConfiguratorCallAnalyzer
         if (!\is_string($serviceClass)) {
             return \false;
         }
-        return \is_a($serviceClass, RectorInterface::class, \true);
+        return \is_a($serviceClass, \Rector\Core\Contract\Rector\RectorInterface::class, \true);
     }
-    public function isMethodCallNamed(Expr $expr, string $variableName, string $methodName) : bool
+    public function isMethodCallNamed(\PhpParser\Node\Expr $expr, string $variableName, string $methodName) : bool
     {
-        if (!$expr instanceof MethodCall) {
+        if (!$expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($expr->var, $variableName)) {

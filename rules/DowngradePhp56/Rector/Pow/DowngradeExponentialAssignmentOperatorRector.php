@@ -14,25 +14,25 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp56\Rector\Pow\DowngradeExponentialAssignmentOperatorRector\DowngradeExponentialAssignmentOperatorRectorTest
  */
-final class DowngradeExponentialAssignmentOperatorRector extends AbstractRector
+final class DowngradeExponentialAssignmentOperatorRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove exponential assignment operator **=', [new CodeSample('$a **= 3;', '$a = pow($a, 3);')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove exponential assignment operator **=', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$a **= 3;', '$a = pow($a, 3);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Pow::class];
+        return [\PhpParser\Node\Expr\AssignOp\Pow::class];
     }
     /**
      * @param Pow $node
      */
-    public function refactor(Node $node) : Assign
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\Assign
     {
         $powFuncCall = $this->nodeFactory->createFuncCall('pow', [$node->var, $node->expr]);
-        return new Assign($node->var, $powFuncCall);
+        return new \PhpParser\Node\Expr\Assign($node->var, $powFuncCall);
     }
 }

@@ -23,7 +23,7 @@ final class RemovedAndAddedFilesCollector
      * @var MovedFile[]
      */
     private $movedFiles = [];
-    public function removeFile(SmartFileInfo $smartFileInfo) : void
+    public function removeFile(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : void
     {
         $this->removedFileInfos[] = $smartFileInfo;
     }
@@ -34,7 +34,7 @@ final class RemovedAndAddedFilesCollector
     {
         return $this->removedFileInfos;
     }
-    public function isFileRemoved(SmartFileInfo $smartFileInfo) : bool
+    public function isFileRemoved(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
     {
         // early assign to variable for increase performance
         // @see https://3v4l.org/FM3vY#focus=8.0.7 vs https://3v4l.org/JZW7b#focus=8.0.7
@@ -55,7 +55,7 @@ final class RemovedAndAddedFilesCollector
         }
         return \false;
     }
-    public function addAddedFile(AddedFileInterface $addedFile) : void
+    public function addAddedFile(\Rector\FileSystemRector\Contract\AddedFileInterface $addedFile) : void
     {
         $this->addedFiles[] = $addedFile;
     }
@@ -64,8 +64,8 @@ final class RemovedAndAddedFilesCollector
      */
     public function getAddedFilesWithContent() : array
     {
-        return \array_filter($this->addedFiles, function (AddedFileInterface $addedFile) : bool {
-            return $addedFile instanceof AddedFileWithContent;
+        return \array_filter($this->addedFiles, function (\Rector\FileSystemRector\Contract\AddedFileInterface $addedFile) : bool {
+            return $addedFile instanceof \Rector\FileSystemRector\ValueObject\AddedFileWithContent;
         });
     }
     /**
@@ -73,8 +73,8 @@ final class RemovedAndAddedFilesCollector
      */
     public function getAddedFilesWithNodes() : array
     {
-        return \array_filter($this->addedFiles, function (AddedFileInterface $addedFile) : bool {
-            return $addedFile instanceof AddedFileWithNodes;
+        return \array_filter($this->addedFiles, function (\Rector\FileSystemRector\Contract\AddedFileInterface $addedFile) : bool {
+            return $addedFile instanceof \Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
         });
     }
     public function getAffectedFilesCount() : int
@@ -98,9 +98,9 @@ final class RemovedAndAddedFilesCollector
         $this->movedFiles = [];
         $this->removedFileInfos = [];
     }
-    public function addMovedFile(File $file, string $newPathName) : void
+    public function addMovedFile(\Rector\Core\ValueObject\Application\File $file, string $newPathName) : void
     {
-        $this->movedFiles[] = new MovedFile($file, $newPathName);
+        $this->movedFiles[] = new \Rector\Core\ValueObject\Application\MovedFile($file, $newPathName);
     }
     /**
      * @return MovedFile[]

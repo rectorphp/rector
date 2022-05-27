@@ -21,7 +21,7 @@ class PhpExecutableFinder
     private $executableFinder;
     public function __construct()
     {
-        $this->executableFinder = new ExecutableFinder();
+        $this->executableFinder = new \RectorPrefix20220527\Symfony\Component\Process\ExecutableFinder();
     }
     /**
      * Finds The PHP executable.

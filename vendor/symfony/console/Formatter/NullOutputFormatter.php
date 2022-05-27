@@ -13,7 +13,7 @@ namespace RectorPrefix20220527\Symfony\Component\Console\Formatter;
 /**
  * @author Tien Xuan Vo <tien.xuan.vo@gmail.com>
  */
-final class NullOutputFormatter implements OutputFormatterInterface
+final class NullOutputFormatter implements \RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterInterface
 {
     private $style;
     /**
@@ -26,10 +26,10 @@ final class NullOutputFormatter implements OutputFormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function getStyle(string $name) : OutputFormatterStyleInterface
+    public function getStyle(string $name) : \RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
     {
         // to comply with the interface we must return a OutputFormatterStyleInterface
-        return $this->style ?? ($this->style = new NullOutputFormatterStyle());
+        return $this->style ?? ($this->style = new \RectorPrefix20220527\Symfony\Component\Console\Formatter\NullOutputFormatterStyle());
     }
     /**
      * {@inheritdoc}
@@ -55,7 +55,7 @@ final class NullOutputFormatter implements OutputFormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function setStyle(string $name, OutputFormatterStyleInterface $style) : void
+    public function setStyle(string $name, \RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style) : void
     {
         // do nothing
     }

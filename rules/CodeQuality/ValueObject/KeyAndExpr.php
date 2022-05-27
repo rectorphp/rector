@@ -16,16 +16,16 @@ final class KeyAndExpr
      * @var \PhpParser\Node\Expr
      */
     private $expr;
-    public function __construct(Expr $keyExpr, Expr $expr)
+    public function __construct(\PhpParser\Node\Expr $keyExpr, \PhpParser\Node\Expr $expr)
     {
         $this->keyExpr = $keyExpr;
         $this->expr = $expr;
     }
-    public function getKeyExpr() : Expr
+    public function getKeyExpr() : \PhpParser\Node\Expr
     {
         return $this->keyExpr;
     }
-    public function getExpr() : Expr
+    public function getExpr() : \PhpParser\Node\Expr
     {
         return $this->expr;
     }

@@ -15,15 +15,15 @@ final class ArrayCollectionAssignFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeFactory $nodeFactory)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function createFromPropertyName(string $toManyPropertyName) : Expression
+    public function createFromPropertyName(string $toManyPropertyName) : \PhpParser\Node\Stmt\Expression
     {
         $propertyFetch = $this->nodeFactory->createPropertyFetch('this', $toManyPropertyName);
-        $new = new New_(new FullyQualified('Doctrine\\Common\\Collections\\ArrayCollection'));
-        $assign = new Assign($propertyFetch, $new);
-        return new Expression($assign);
+        $new = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('Doctrine\\Common\\Collections\\ArrayCollection'));
+        $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, $new);
+        return new \PhpParser\Node\Stmt\Expression($assign);
     }
 }

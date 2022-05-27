@@ -23,12 +23,12 @@ final class ContainerConfiguratorEmptyAssignRemover
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
      */
     private $exprUsedInNextNodeAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->exprUsedInNextNodeAnalyzer = $exprUsedInNextNodeAnalyzer;
     }
-    public function removeFromClosure(Closure $closure) : void
+    public function removeFromClosure(\PhpParser\Node\Expr\Closure $closure) : void
     {
         foreach ($closure->getStmts() as $key => $stmt) {
             if (!$this->isHelperAssign($stmt)) {
@@ -51,16 +51,16 @@ final class ContainerConfiguratorEmptyAssignRemover
      * $services = $containerConfigurator->services();
      * $parameters = $containerConfigurator->parameters();
      */
-    private function isHelperAssign(Stmt $stmt) : bool
+    private function isHelperAssign(\PhpParser\Node\Stmt $stmt) : bool
     {
-        if (!$stmt instanceof Expression) {
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
             return \false;
         }
         $expression = $stmt->expr;
-        if (!$expression instanceof Assign) {
+        if (!$expression instanceof \PhpParser\Node\Expr\Assign) {
             return \false;
         }
-        if (!$expression->expr instanceof MethodCall) {
+        if (!$expression->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
         $methodCall = $expression->expr;

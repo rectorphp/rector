@@ -13,13 +13,13 @@ final class StrStartsWithFuncCallFactory
     /**
      * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot
      */
-    public function createStrStartsWith(StrStartsWith $strStartsWith)
+    public function createStrStartsWith(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith)
     {
-        $args = [new Arg($strStartsWith->getHaystackExpr()), new Arg($strStartsWith->getNeedleExpr())];
-        $funcCall = new FuncCall(new Name('str_starts_with'), $args);
+        $args = [new \PhpParser\Node\Arg($strStartsWith->getHaystackExpr()), new \PhpParser\Node\Arg($strStartsWith->getNeedleExpr())];
+        $funcCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('str_starts_with'), $args);
         if ($strStartsWith->isPositive()) {
             return $funcCall;
         }
-        return new BooleanNot($funcCall);
+        return new \PhpParser\Node\Expr\BooleanNot($funcCall);
     }
 }

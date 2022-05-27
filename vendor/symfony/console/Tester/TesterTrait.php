@@ -63,14 +63,14 @@ trait TesterTrait
     /**
      * Gets the input instance used by the last execution of the command or application.
      */
-    public function getInput() : InputInterface
+    public function getInput() : \RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface
     {
         return $this->input;
     }
     /**
      * Gets the output instance used by the last execution of the command or application.
      */
-    public function getOutput() : OutputInterface
+    public function getOutput() : \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface
     {
         return $this->output;
     }
@@ -85,7 +85,7 @@ trait TesterTrait
     }
     public function assertCommandIsSuccessful(string $message = '') : void
     {
-        Assert::assertThat($this->statusCode, new CommandIsSuccessful(), $message);
+        \RectorPrefix20220527\PHPUnit\Framework\Assert::assertThat($this->statusCode, new \RectorPrefix20220527\Symfony\Component\Console\Tester\Constraint\CommandIsSuccessful(), $message);
     }
     /**
      * Sets the user inputs.
@@ -113,7 +113,7 @@ trait TesterTrait
     {
         $this->captureStreamsIndependently = \array_key_exists('capture_stderr_separately', $options) && $options['capture_stderr_separately'];
         if (!$this->captureStreamsIndependently) {
-            $this->output = new StreamOutput(\fopen('php://memory', 'w', \false));
+            $this->output = new \RectorPrefix20220527\Symfony\Component\Console\Output\StreamOutput(\fopen('php://memory', 'w', \false));
             if (isset($options['decorated'])) {
                 $this->output->setDecorated($options['decorated']);
             }
@@ -121,8 +121,8 @@ trait TesterTrait
                 $this->output->setVerbosity($options['verbosity']);
             }
         } else {
-            $this->output = new ConsoleOutput($options['verbosity'] ?? ConsoleOutput::VERBOSITY_NORMAL, $options['decorated'] ?? null);
-            $errorOutput = new StreamOutput(\fopen('php://memory', 'w', \false));
+            $this->output = new \RectorPrefix20220527\Symfony\Component\Console\Output\ConsoleOutput($options['verbosity'] ?? \RectorPrefix20220527\Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL, $options['decorated'] ?? null);
+            $errorOutput = new \RectorPrefix20220527\Symfony\Component\Console\Output\StreamOutput(\fopen('php://memory', 'w', \false));
             $errorOutput->setFormatter($this->output->getFormatter());
             $errorOutput->setVerbosity($this->output->getVerbosity());
             $errorOutput->setDecorated($this->output->isDecorated());

@@ -18,7 +18,7 @@ use PhpParser\Lexer\TokenEmulator\NumericLiteralSeparatorEmulator;
 use PhpParser\Lexer\TokenEmulator\ReadonlyTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\ReverseEmulator;
 use PhpParser\Lexer\TokenEmulator\TokenEmulator;
-class Emulative extends Lexer
+class Emulative extends \PhpParser\Lexer
 {
     const PHP_7_3 = '7.3dev';
     const PHP_7_4 = '7.4dev';
@@ -40,7 +40,7 @@ class Emulative extends Lexer
         $this->targetPhpVersion = $options['phpVersion'] ?? \PhpParser\Lexer\Emulative::PHP_8_1;
         unset($options['phpVersion']);
         parent::__construct($options);
-        $emulators = [new FlexibleDocStringEmulator(), new FnTokenEmulator(), new MatchTokenEmulator(), new CoaleseEqualTokenEmulator(), new NumericLiteralSeparatorEmulator(), new NullsafeTokenEmulator(), new AttributeEmulator(), new EnumTokenEmulator(), new ReadonlyTokenEmulator(), new ExplicitOctalEmulator()];
+        $emulators = [new \PhpParser\Lexer\TokenEmulator\FlexibleDocStringEmulator(), new \PhpParser\Lexer\TokenEmulator\FnTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\MatchTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\CoaleseEqualTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\NumericLiteralSeparatorEmulator(), new \PhpParser\Lexer\TokenEmulator\NullsafeTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\AttributeEmulator(), new \PhpParser\Lexer\TokenEmulator\EnumTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\ReadonlyTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\ExplicitOctalEmulator()];
         // Collect emulators that are relevant for the PHP version we're running
         // and the PHP version we're targeting for emulation.
         foreach ($emulators as $emulator) {
@@ -49,12 +49,12 @@ class Emulative extends Lexer
                 $this->emulators[] = $emulator;
             } else {
                 if ($this->isReverseEmulationNeeded($emulatorPhpVersion)) {
-                    $this->emulators[] = new ReverseEmulator($emulator);
+                    $this->emulators[] = new \PhpParser\Lexer\TokenEmulator\ReverseEmulator($emulator);
                 }
             }
         }
     }
-    public function startLexing(string $code, ErrorHandler $errorHandler = null)
+    public function startLexing(string $code, \PhpParser\ErrorHandler $errorHandler = null)
     {
         $emulators = \array_filter($this->emulators, function ($emulator) use($code) {
             return $emulator->isEmulationNeeded($code);
@@ -68,7 +68,7 @@ class Emulative extends Lexer
         foreach ($emulators as $emulator) {
             $code = $emulator->preprocessCode($code, $this->patches);
         }
-        $collector = new ErrorHandler\Collecting();
+        $collector = new \PhpParser\ErrorHandler\Collecting();
         parent::startLexing($code, $collector);
         $this->sortPatches();
         $this->fixupTokens();

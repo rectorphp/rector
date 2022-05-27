@@ -15,7 +15,7 @@ final class RequireOptionalParamResolver
      */
     public function resolveFromReflection($functionLikeReflection) : array
     {
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
         $optionalParams = [];
         $requireParams = [];
         foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {

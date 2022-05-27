@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Deprecation-87200-EmailFinisherFormatContants.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v4\RemoveFormatConstantsEmailFinisherRector\RemoveFormatConstantsEmailFinisherRectorTest
  */
-final class RemoveFormatConstantsEmailFinisherRector extends AbstractRector
+final class RemoveFormatConstantsEmailFinisherRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -40,30 +40,30 @@ final class RemoveFormatConstantsEmailFinisherRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [ClassConstFetch::class];
+        return [\PhpParser\Node\Expr\ClassConstFetch::class];
     }
     /**
      * @param ClassConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node->class, new ObjectType('TYPO3\\CMS\\Form\\Domain\\Finishers\\EmailFinisher'))) {
+        if (!$this->isObjectType($node->class, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Form\\Domain\\Finishers\\EmailFinisher'))) {
             return null;
         }
         if (!$this->isNames($node->name, [self::FORMAT_HTML, 'FORMAT_PLAINTEXT'])) {
             return null;
         }
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Arg) {
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parent instanceof \PhpParser\Node\Arg) {
             $this->refactorSetOptionMethodCall($parent, $node);
         }
-        if ($parent instanceof ArrayItem) {
+        if ($parent instanceof \PhpParser\Node\Expr\ArrayItem) {
             $this->refactorArrayItemOption($parent, $node);
         }
-        if ($parent instanceof Assign) {
+        if ($parent instanceof \PhpParser\Node\Expr\Assign) {
             $this->refactorOptionAssignment($parent, $node);
         }
-        if ($parent instanceof Identical) {
+        if ($parent instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             $this->refactorCondition($parent, $node);
         }
         return null;
@@ -71,9 +71,9 @@ final class RemoveFormatConstantsEmailFinisherRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove constants FORMAT_PLAINTEXT and FORMAT_HTML of class TYPO3\\CMS\\Form\\Domain\\Finishers\\EmailFinisher', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove constants FORMAT_PLAINTEXT and FORMAT_HTML of class TYPO3\\CMS\\Form\\Domain\\Finishers\\EmailFinisher', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $this->setOption(self::FORMAT, EmailFinisher::FORMAT_HTML);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -81,10 +81,10 @@ $this->setOption('addHtmlPart', true);
 CODE_SAMPLE
 )]);
     }
-    private function refactorSetOptionMethodCall(Arg $parent, ClassConstFetch $node) : void
+    private function refactorSetOptionMethodCall(\PhpParser\Node\Arg $parent, \PhpParser\Node\Expr\ClassConstFetch $node) : void
     {
-        $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof MethodCall) {
+        $parent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node\Expr\MethodCall) {
             return;
         }
         if (!$this->isName($parent->name, 'setOption')) {
@@ -94,21 +94,21 @@ CODE_SAMPLE
             return;
         }
         $addHtmlPart = $this->isName($node->name, self::FORMAT_HTML);
-        $parent->args[0]->value = new String_(self::ADD_HTML_PART);
+        $parent->args[0]->value = new \PhpParser\Node\Scalar\String_(self::ADD_HTML_PART);
         $parent->args[1]->value = $addHtmlPart ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse();
     }
-    private function refactorArrayItemOption(ArrayItem $parent, ClassConstFetch $node) : void
+    private function refactorArrayItemOption(\PhpParser\Node\Expr\ArrayItem $parent, \PhpParser\Node\Expr\ClassConstFetch $node) : void
     {
         if (null === $parent->key || !$this->valueResolver->isValue($parent->key, self::FORMAT)) {
             return;
         }
         $addHtmlPart = $this->isName($node->name, self::FORMAT_HTML);
-        $parent->key = new String_(self::ADD_HTML_PART);
+        $parent->key = new \PhpParser\Node\Scalar\String_(self::ADD_HTML_PART);
         $parent->value = $addHtmlPart ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse();
     }
-    private function refactorOptionAssignment(Assign $parent, ClassConstFetch $node) : void
+    private function refactorOptionAssignment(\PhpParser\Node\Expr\Assign $parent, \PhpParser\Node\Expr\ClassConstFetch $node) : void
     {
-        if (!$parent->var instanceof ArrayDimFetch) {
+        if (!$parent->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return;
         }
         if (!$this->isName($parent->var->var, 'options')) {
@@ -118,12 +118,12 @@ CODE_SAMPLE
             return;
         }
         $addHtmlPart = $this->isName($node->name, self::FORMAT_HTML);
-        $parent->var->dim = new String_(self::ADD_HTML_PART);
+        $parent->var->dim = new \PhpParser\Node\Scalar\String_(self::ADD_HTML_PART);
         $parent->expr = $addHtmlPart ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse();
     }
-    private function refactorCondition(Identical $parent, ClassConstFetch $node) : void
+    private function refactorCondition(\PhpParser\Node\Expr\BinaryOp\Identical $parent, \PhpParser\Node\Expr\ClassConstFetch $node) : void
     {
-        if (!$parent->left instanceof ArrayDimFetch) {
+        if (!$parent->left instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return;
         }
         if (!$this->isName($parent->left->var, 'options')) {
@@ -133,7 +133,7 @@ CODE_SAMPLE
             return;
         }
         $addHtmlPart = $this->isName($node->name, self::FORMAT_HTML);
-        $parent->left->dim = new String_(self::ADD_HTML_PART);
+        $parent->left->dim = new \PhpParser\Node\Scalar\String_(self::ADD_HTML_PART);
         $parent->right = $addHtmlPart ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse();
     }
 }

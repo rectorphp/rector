@@ -99,12 +99,12 @@ final class Typo3SetList
      * @var string
      * @deprecated Use \Ssch\TYPO3Rector\Set\Extension\NimutTestingFrameworkSetList::NIMUT_TESTING_FRAMEWORK_TO_TYPO3_TESTING_FRAMEWORK
      */
-    public const NIMUT_TESTING_FRAMEWORK_TO_TYPO3_TESTING_FRAMEWORK = NimutTestingFrameworkSetList::NIMUT_TESTING_FRAMEWORK_TO_TYPO3_TESTING_FRAMEWORK;
+    public const NIMUT_TESTING_FRAMEWORK_TO_TYPO3_TESTING_FRAMEWORK = \Ssch\TYPO3Rector\Set\Extension\NimutTestingFrameworkSetList::NIMUT_TESTING_FRAMEWORK_TO_TYPO3_TESTING_FRAMEWORK;
     /**
      * @var string
      * @deprecated Use \Ssch\TYPO3Rector\Set\Extension\SolrSetList::SOLR_SOLR_PHP_CLIENT_TO_SOLARIUM
      */
-    public const SOLR_SOLR_PHP_CLIENT_TO_SOLARIUM = SolrSetList::SOLR_SOLR_PHP_CLIENT_TO_SOLARIUM;
+    public const SOLR_SOLR_PHP_CLIENT_TO_SOLARIUM = \Ssch\TYPO3Rector\Set\Extension\SolrSetList::SOLR_SOLR_PHP_CLIENT_TO_SOLARIUM;
     /**
      * @var string
      */

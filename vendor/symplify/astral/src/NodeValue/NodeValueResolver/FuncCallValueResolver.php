@@ -15,7 +15,7 @@ use RectorPrefix20220527\Symplify\Astral\Naming\SimpleNameResolver;
  *
  * @implements NodeValueResolverInterface<FuncCall>
  */
-final class FuncCallValueResolver implements NodeValueResolverInterface
+final class FuncCallValueResolver implements \RectorPrefix20220527\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface
 {
     /**
      * @var string[]
@@ -29,20 +29,20 @@ final class FuncCallValueResolver implements NodeValueResolverInterface
      * @var \PhpParser\ConstExprEvaluator
      */
     private $constExprEvaluator;
-    public function __construct(SimpleNameResolver $simpleNameResolver, ConstExprEvaluator $constExprEvaluator)
+    public function __construct(\RectorPrefix20220527\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \PhpParser\ConstExprEvaluator $constExprEvaluator)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->constExprEvaluator = $constExprEvaluator;
     }
     public function getType() : string
     {
-        return FuncCall::class;
+        return \PhpParser\Node\Expr\FuncCall::class;
     }
     /**
      * @param FuncCall $expr
      * @return mixed
      */
-    public function resolve(Expr $expr, string $currentFilePath)
+    public function resolve(\PhpParser\Node\Expr $expr, string $currentFilePath)
     {
         if ($this->simpleNameResolver->isName($expr, 'getcwd')) {
             return \dirname($currentFilePath);
@@ -52,7 +52,7 @@ final class FuncCallValueResolver implements NodeValueResolverInterface
         foreach ($args as $arg) {
             $arguments[] = $this->constExprEvaluator->evaluateDirectly($arg->value);
         }
-        if ($expr->name instanceof Name) {
+        if ($expr->name instanceof \PhpParser\Node\Name) {
             $functionName = (string) $expr->name;
             if (!$this->isAllowedFunctionName($functionName)) {
                 return null;
@@ -60,7 +60,7 @@ final class FuncCallValueResolver implements NodeValueResolverInterface
             if (\function_exists($functionName)) {
                 return $functionName(...$arguments);
             }
-            throw new ShouldNotHappenException();
+            throw new \RectorPrefix20220527\Symplify\Astral\Exception\ShouldNotHappenException();
         }
         return null;
     }

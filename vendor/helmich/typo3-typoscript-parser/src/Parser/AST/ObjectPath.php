@@ -46,11 +46,11 @@ class ObjectPath
      *
      * @return ObjectPath The path to the parent object.
      */
-    public function parent() : ObjectPath
+    public function parent() : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ObjectPath
     {
         $components = \explode('.', $this->absoluteName);
         if (\count($components) === 1) {
-            return new RootObjectPath();
+            return new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\RootObjectPath();
         }
         \array_pop($components);
         return new self(\implode('.', $components), $components[\count($components) - 1]);

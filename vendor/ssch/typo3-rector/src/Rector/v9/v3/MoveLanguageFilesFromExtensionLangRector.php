@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.3/Deprecation-84680-MoveLastLanguageFilesAwayFromExtlangAndRemoveExtlangCompletely.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v3\MoveLanguageFilesFromExtensionLangRector\MoveLanguageFilesFromExtensionLangRectorTest
  */
-final class MoveLanguageFilesFromExtensionLangRector extends AbstractRector
+final class MoveLanguageFilesFromExtensionLangRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<string, string>
@@ -23,12 +23,12 @@ final class MoveLanguageFilesFromExtensionLangRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [String_::class];
+        return [\PhpParser\Node\Scalar\String_::class];
     }
     /**
      * @param String_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $value = $this->valueResolver->getValue($node);
         if (!\is_string($value)) {
@@ -36,7 +36,7 @@ final class MoveLanguageFilesFromExtensionLangRector extends AbstractRector
         }
         foreach (self::MAPPING_OLD_TO_NEW_PATHS as $oldPath => $newPath) {
             if (\strpos($value, $oldPath) !== \false) {
-                return new String_(\str_replace($oldPath, $newPath, $value));
+                return new \PhpParser\Node\Scalar\String_(\str_replace($oldPath, $newPath, $value));
             }
         }
         return null;
@@ -44,9 +44,9 @@ final class MoveLanguageFilesFromExtensionLangRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Move language resources from ext:lang to their new locations', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move language resources from ext:lang to their new locations', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Localization\LanguageService;
 $languageService = new LanguageService();
 $languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.no_title');

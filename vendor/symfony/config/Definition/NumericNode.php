@@ -16,7 +16,7 @@ use RectorPrefix20220527\Symfony\Component\Config\Definition\Exception\InvalidCo
  *
  * @author David Jeanmonod <david.jeanmonod@gmail.com>
  */
-class NumericNode extends ScalarNode
+class NumericNode extends \RectorPrefix20220527\Symfony\Component\Config\Definition\ScalarNode
 {
     protected $min;
     protected $max;
@@ -24,7 +24,7 @@ class NumericNode extends ScalarNode
      * @param int|float $min
      * @param int|float $max
      */
-    public function __construct(?string $name, NodeInterface $parent = null, $min = null, $max = null, string $pathSeparator = BaseNode::DEFAULT_PATH_SEPARATOR)
+    public function __construct(?string $name, \RectorPrefix20220527\Symfony\Component\Config\Definition\NodeInterface $parent = null, $min = null, $max = null, string $pathSeparator = \RectorPrefix20220527\Symfony\Component\Config\Definition\BaseNode::DEFAULT_PATH_SEPARATOR)
     {
         parent::__construct($name, $parent, $pathSeparator);
         $this->min = $min;
@@ -46,7 +46,7 @@ class NumericNode extends ScalarNode
             $errorMsg = \sprintf('The value %s is too big for path "%s". Should be less than or equal to %s', $value, $this->getPath(), $this->max);
         }
         if (isset($errorMsg)) {
-            $ex = new InvalidConfigurationException($errorMsg);
+            $ex = new \RectorPrefix20220527\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException($errorMsg);
             $ex->setPath($this->getPath());
             throw $ex;
         }

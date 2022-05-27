@@ -31,9 +31,9 @@ final class FuncCallToMethodCall
     {
         return $this->oldFuncName;
     }
-    public function getNewObjectType() : ObjectType
+    public function getNewObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->newClassName);
+        return new \PHPStan\Type\ObjectType($this->newClassName);
     }
     public function getNewMethodName() : string
     {

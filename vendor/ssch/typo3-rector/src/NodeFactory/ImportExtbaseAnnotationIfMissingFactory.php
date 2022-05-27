@@ -28,24 +28,24 @@ final class ImportExtbaseAnnotationIfMissingFactory
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, UseNodesToAddCollector $useNodesToAddCollector, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function addExtbaseAliasAnnotationIfMissing(Node $node) : void
+    public function addExtbaseAliasAnnotationIfMissing(\PhpParser\Node $node) : void
     {
-        $namespace = $this->betterNodeFinder->findParentType($node, Namespace_::class);
-        $completeImportForPartialAnnotation = new CompleteImportForPartialAnnotation('TYPO3\\CMS\\Extbase\\Annotation', 'Extbase');
-        if ($namespace instanceof Namespace_ && $this->isImportMissing($namespace, $completeImportForPartialAnnotation)) {
-            $this->useNodesToAddCollector->addUseImport(new AliasedObjectType('Extbase', 'TYPO3\\CMS\\Extbase\\Annotation'));
+        $namespace = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);
+        $completeImportForPartialAnnotation = new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('TYPO3\\CMS\\Extbase\\Annotation', 'Extbase');
+        if ($namespace instanceof \PhpParser\Node\Stmt\Namespace_ && $this->isImportMissing($namespace, $completeImportForPartialAnnotation)) {
+            $this->useNodesToAddCollector->addUseImport(new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType('Extbase', 'TYPO3\\CMS\\Extbase\\Annotation'));
         }
     }
-    private function isImportMissing(Namespace_ $namespace, CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : bool
+    private function isImportMissing(\PhpParser\Node\Stmt\Namespace_ $namespace, \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : bool
     {
         foreach ($namespace->stmts as $stmt) {
-            if (!$stmt instanceof Use_) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Use_) {
                 continue;
             }
             $useUse = $stmt->uses[0];

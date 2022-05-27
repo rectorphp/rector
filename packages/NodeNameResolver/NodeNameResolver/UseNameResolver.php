@@ -11,7 +11,7 @@ use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeNameResolverInterface<Use_>
  */
-final class UseNameResolver implements NodeNameResolverInterface
+final class UseNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -20,18 +20,18 @@ final class UseNameResolver implements NodeNameResolverInterface
     /**
      * @required
      */
-    public function autowire(NodeNameResolver $nodeNameResolver) : void
+    public function autowire(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     public function getNode() : string
     {
-        return Use_::class;
+        return \PhpParser\Node\Stmt\Use_::class;
     }
     /**
      * @param Use_ $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         if ($node->uses === []) {
             return null;

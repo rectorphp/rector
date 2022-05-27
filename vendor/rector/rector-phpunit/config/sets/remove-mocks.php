@@ -19,9 +19,9 @@ use Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector;
  * @see https://steemit.com/php/@crell/don-t-use-mocking-libraries
  * @see https://davegebler.com/post/php/better-php-unit-testing-avoiding-mocks
  */
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(RemoveSetMethodsMethodCallRector::class);
-    $rectorConfig->rule(GetMockBuilderGetMockToCreateMockRector::class);
-    $rectorConfig->rule(RemoveExpectAnyFromMockRector::class);
-    $rectorConfig->rule(UseSpecificWillMethodRector::class);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(\Rector\PHPUnit\Rector\MethodCall\RemoveSetMethodsMethodCallRector::class);
+    $rectorConfig->rule(\Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector::class);
+    $rectorConfig->rule(\Rector\PHPUnit\Rector\MethodCall\RemoveExpectAnyFromMockRector::class);
+    $rectorConfig->rule(\Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector::class);
 };

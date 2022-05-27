@@ -5,7 +5,7 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v7\v1\GetTemporaryImageWithTextRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/../config.php');
-    $rectorConfig->rule(GetTemporaryImageWithTextRector::class);
+    $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v7\v1\GetTemporaryImageWithTextRector::class);
 };

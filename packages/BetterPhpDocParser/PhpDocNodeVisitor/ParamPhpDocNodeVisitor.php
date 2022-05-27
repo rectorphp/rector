@@ -9,26 +9,26 @@ use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use RectorPrefix20220527\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class ParamPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
+final class ParamPhpDocNodeVisitor extends \RectorPrefix20220527\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
     private $attributeMirrorer;
-    public function __construct(AttributeMirrorer $attributeMirrorer)
+    public function __construct(\Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
-        if (!$node instanceof ParamTagValueNode) {
+        if (!$node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode) {
             return null;
         }
-        if ($node instanceof VariadicAwareParamTagValueNode) {
+        if ($node instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode) {
             return null;
         }
-        $variadicAwareParamTagValueNode = new VariadicAwareParamTagValueNode($node->type, $node->isVariadic, $node->parameterName, $node->description);
+        $variadicAwareParamTagValueNode = new \Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode($node->type, $node->isVariadic, $node->parameterName, $node->description);
         $this->attributeMirrorer->mirror($node, $variadicAwareParamTagValueNode);
         return $variadicAwareParamTagValueNode;
     }

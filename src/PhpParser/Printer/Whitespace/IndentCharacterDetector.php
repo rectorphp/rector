@@ -18,7 +18,7 @@ final class IndentCharacterDetector
         foreach ($tokens as $token) {
             if ($token[0] === \T_WHITESPACE) {
                 $tokenContent = $token[1];
-                $tabMatches = Strings::matchAll($tokenContent, '#^\\t#m');
+                $tabMatches = \RectorPrefix20220527\Nette\Utils\Strings::matchAll($tokenContent, '#^\\t#m');
                 if ($tabMatches !== []) {
                     return "\t";
                 }

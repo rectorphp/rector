@@ -14,7 +14,7 @@ use RectorPrefix20220527\Symfony\Component\DependencyInjection\Definition;
 /**
  * Replaces env var placeholders by their current values.
  */
-class ResolveEnvPlaceholdersPass extends AbstractRecursivePass
+class ResolveEnvPlaceholdersPass extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
      * @param mixed $value
@@ -25,7 +25,7 @@ class ResolveEnvPlaceholdersPass extends AbstractRecursivePass
         if (\is_string($value)) {
             return $this->container->resolveEnvPlaceholders($value, \true);
         }
-        if ($value instanceof Definition) {
+        if ($value instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\Definition) {
             $changes = $value->getChanges();
             if (isset($changes['class'])) {
                 $value->setClass($this->container->resolveEnvPlaceholders($value->getClass(), \true));

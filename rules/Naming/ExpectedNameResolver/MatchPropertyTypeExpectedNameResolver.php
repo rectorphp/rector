@@ -45,7 +45,7 @@ final class MatchPropertyTypeExpectedNameResolver
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(PropertyNaming $propertyNaming, PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, PropertyManipulator $propertyManipulator, ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->propertyNaming = $propertyNaming;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -54,14 +54,14 @@ final class MatchPropertyTypeExpectedNameResolver
         $this->propertyManipulator = $propertyManipulator;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function resolve(Property $property) : ?string
+    public function resolve(\PhpParser\Node\Stmt\Property $property) : ?string
     {
-        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
-        if (!$class instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($property);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -70,7 +70,7 @@ final class MatchPropertyTypeExpectedNameResolver
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $expectedName = $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
-        if (!$expectedName instanceof ExpectedName) {
+        if (!$expectedName instanceof \Rector\Naming\ValueObject\ExpectedName) {
             return null;
         }
         // skip if already has suffix

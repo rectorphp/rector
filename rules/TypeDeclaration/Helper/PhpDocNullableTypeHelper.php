@@ -24,7 +24,7 @@ final class PhpDocNullableTypeHelper
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(StaticTypeMapper $staticTypeMapper, ValueResolver $valueResolver)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->valueResolver = $valueResolver;
@@ -32,9 +32,9 @@ final class PhpDocNullableTypeHelper
     /**
      * @return Type|null Returns null if it was not possible to resolve new php doc type or if update is not required
      */
-    public function resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserType(Type $phpDocType, Type $phpParserType) : ?Type
+    public function resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserType(\PHPStan\Type\Type $phpDocType, \PHPStan\Type\Type $phpParserType) : ?\PHPStan\Type\Type
     {
-        if ($phpParserType instanceof MixedType) {
+        if ($phpParserType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
         return $this->resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserTypeNullInfo($phpDocType, $this->isParserTypeContainingNullType($phpParserType));
@@ -42,28 +42,28 @@ final class PhpDocNullableTypeHelper
     /**
      * @return Type|null Returns null if it was not possible to resolve new php doc param type or if update is not required
      */
-    public function resolveUpdatedPhpDocTypeFromPhpDocTypeAndParamNode(Type $phpDocType, Param $param) : ?Type
+    public function resolveUpdatedPhpDocTypeFromPhpDocTypeAndParamNode(\PHPStan\Type\Type $phpDocType, \PhpParser\Node\Param $param) : ?\PHPStan\Type\Type
     {
         if ($param->type === null) {
             return null;
         }
         $phpParserType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        if ($phpParserType instanceof UnionType) {
-            $isPhpParserTypeContainingNullType = TypeCombinator::containsNull($phpParserType);
+        if ($phpParserType instanceof \PHPStan\Type\UnionType) {
+            $isPhpParserTypeContainingNullType = \PHPStan\Type\TypeCombinator::containsNull($phpParserType);
         } elseif ($param->default !== null) {
             $value = $this->valueResolver->getValue($param->default);
-            $isPhpParserTypeContainingNullType = $value === null || $param->default instanceof ConstFetch && $value === 'null';
+            $isPhpParserTypeContainingNullType = $value === null || $param->default instanceof \PhpParser\Node\Expr\ConstFetch && $value === 'null';
         } else {
             $isPhpParserTypeContainingNullType = \false;
         }
         $resolvedType = $this->resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserTypeNullInfo($phpDocType, $isPhpParserTypeContainingNullType);
-        if ($resolvedType instanceof UnionType) {
+        if ($resolvedType instanceof \PHPStan\Type\UnionType) {
             return $this->cleanNullableMixed($resolvedType);
         }
-        if ($resolvedType instanceof Type) {
+        if ($resolvedType instanceof \PHPStan\Type\Type) {
             return $resolvedType;
         }
-        if (!$phpDocType instanceof UnionType) {
+        if (!$phpDocType instanceof \PHPStan\Type\UnionType) {
             return null;
         }
         $cleanNullableMixed = $this->cleanNullableMixed($phpDocType);
@@ -72,15 +72,15 @@ final class PhpDocNullableTypeHelper
         }
         return $cleanNullableMixed;
     }
-    private function cleanNullableMixed(UnionType $unionType) : Type
+    private function cleanNullableMixed(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\Type
     {
-        if (!TypeCombinator::containsNull($unionType)) {
+        if (!\PHPStan\Type\TypeCombinator::containsNull($unionType)) {
             return $unionType;
         }
         $types = $unionType->getTypes();
         foreach ($types as $type) {
-            if ($type instanceof MixedType) {
-                return TypeCombinator::removeNull($unionType);
+            if ($type instanceof \PHPStan\Type\MixedType) {
+                return \PHPStan\Type\TypeCombinator::removeNull($unionType);
             }
         }
         return $unionType;
@@ -92,26 +92,26 @@ final class PhpDocNullableTypeHelper
     /**
      * @param Type[] $updatedDocTypes
      */
-    private function composeUpdatedPhpDocType(array $updatedDocTypes) : Type
+    private function composeUpdatedPhpDocType(array $updatedDocTypes) : \PHPStan\Type\Type
     {
-        return \count($updatedDocTypes) === 1 ? $updatedDocTypes[0] : new UnionType($updatedDocTypes);
+        return \count($updatedDocTypes) === 1 ? $updatedDocTypes[0] : new \PHPStan\Type\UnionType($updatedDocTypes);
     }
-    private function isParserTypeContainingNullType(Type $phpParserType) : bool
+    private function isParserTypeContainingNullType(\PHPStan\Type\Type $phpParserType) : bool
     {
-        if ($phpParserType instanceof UnionType) {
-            return TypeCombinator::containsNull($phpParserType);
+        if ($phpParserType instanceof \PHPStan\Type\UnionType) {
+            return \PHPStan\Type\TypeCombinator::containsNull($phpParserType);
         }
         return \false;
     }
-    private function resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserTypeNullInfo(Type $phpDocType, bool $isPhpParserTypeContainingNullType) : ?Type
+    private function resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserTypeNullInfo(\PHPStan\Type\Type $phpDocType, bool $isPhpParserTypeContainingNullType) : ?\PHPStan\Type\Type
     {
         /** @var array<(NullType | UnionType)> $updatedDocTypes */
         $updatedDocTypes = [];
         $phpDocTypeContainsNullType = \false;
-        if ($phpDocType instanceof UnionType) {
-            $phpDocTypeContainsNullType = TypeCombinator::containsNull($phpDocType);
+        if ($phpDocType instanceof \PHPStan\Type\UnionType) {
+            $phpDocTypeContainsNullType = \PHPStan\Type\TypeCombinator::containsNull($phpDocType);
             foreach ($phpDocType->getTypes() as $subType) {
-                if ($subType instanceof NullType) {
+                if ($subType instanceof \PHPStan\Type\NullType) {
                     continue;
                 }
                 $updatedDocTypes[] = $subType;
@@ -123,7 +123,7 @@ final class PhpDocNullableTypeHelper
             return null;
         }
         if ($isPhpParserTypeContainingNullType) {
-            $updatedDocTypes[] = new NullType();
+            $updatedDocTypes[] = new \PHPStan\Type\NullType();
         }
         return $this->composeUpdatedPhpDocType($updatedDocTypes);
     }

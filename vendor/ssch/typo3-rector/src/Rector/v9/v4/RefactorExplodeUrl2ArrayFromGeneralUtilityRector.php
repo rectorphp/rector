@@ -16,26 +16,26 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85801-GeneralUtilityexplodeUrl2Array-2ndMethodArgument.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\RefactorExplodeUrl2ArrayFromGeneralUtilityRector\RefactorExplodeUrl2ArrayFromGeneralUtilityRectorTest
  */
-final class RefactorExplodeUrl2ArrayFromGeneralUtilityRector extends AbstractRector
+final class RefactorExplodeUrl2ArrayFromGeneralUtilityRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Assign::class];
+        return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->expr instanceof StaticCall && !$node->expr instanceof MethodCall) {
+        if (!$node->expr instanceof \PhpParser\Node\Expr\StaticCall && !$node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         /** @var StaticCall|MethodCall $call */
         $call = $node->expr;
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isName($call->name, 'explodeUrl2Array')) {
@@ -56,9 +56,9 @@ final class RefactorExplodeUrl2ArrayFromGeneralUtilityRector extends AbstractRec
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove second argument of GeneralUtility::explodeUrl2Array if it is false or just use function parse_str if it is true', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove second argument of GeneralUtility::explodeUrl2Array if it is false or just use function parse_str if it is true', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $variable = GeneralUtility::explodeUrl2Array('https://www.domain.com', true);
 $variable2 = GeneralUtility::explodeUrl2Array('https://www.domain.com', false);
 CODE_SAMPLE

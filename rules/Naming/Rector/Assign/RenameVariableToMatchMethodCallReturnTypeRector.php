@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\RenameVariableToMatchMethodCallReturnTypeRectorTest
  */
-final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRector
+final class RenameVariableToMatchMethodCallReturnTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -74,7 +74,7 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, NamingConventionAnalyzer $namingConventionAnalyzer, VarTagValueNodeRenamer $varTagValueNodeRenamer, VariableAndCallAssignMatcher $variableAndCallAssignMatcher, VariableRenamer $variableRenamer, TypeUnwrapper $typeUnwrapper, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(\Rector\Naming\Guard\BreakingVariableRenameGuard $breakingVariableRenameGuard, \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver, \Rector\Naming\NamingConvention\NamingConventionAnalyzer $namingConventionAnalyzer, \Rector\Naming\PhpDoc\VarTagValueNodeRenamer $varTagValueNodeRenamer, \Rector\Naming\Matcher\VariableAndCallAssignMatcher $variableAndCallAssignMatcher, \Rector\Naming\VariableRenamer $variableRenamer, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->expectedNameResolver = $expectedNameResolver;
@@ -86,9 +86,9 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
         $this->reflectionProvider = $reflectionProvider;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Rename variable to match method return type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename variable to match method return type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
 public function run()
@@ -123,15 +123,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Assign::class];
+        return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $variableAndCallAssign = $this->variableAndCallAssignMatcher->match($node);
-        if (!$variableAndCallAssign instanceof VariableAndCallAssign) {
+        if (!$variableAndCallAssign instanceof \Rector\Naming\ValueObject\VariableAndCallAssign) {
             return null;
         }
         $call = $variableAndCallAssign->getCall();
@@ -156,16 +156,16 @@ CODE_SAMPLE
      */
     private function isMultipleCall($callNode) : bool
     {
-        $parentNode = $callNode->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $callNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         $callNodeClass = \get_class($callNode);
-        while ($parentNode instanceof Node) {
-            $usedNodes = $this->betterNodeFinder->find($parentNode, function (Node $node) use($callNodeClass, $callNode) : bool {
+        while ($parentNode instanceof \PhpParser\Node) {
+            $usedNodes = $this->betterNodeFinder->find($parentNode, function (\PhpParser\Node $node) use($callNodeClass, $callNode) : bool {
                 $nodeClass = \get_class($node);
                 if ($callNodeClass !== $nodeClass) {
                     return \false;
                 }
-                $usedNodeOriginalNode = $callNode->getAttribute(AttributeKey::ORIGINAL_NODE);
-                if (!$usedNodeOriginalNode instanceof Node) {
+                $usedNodeOriginalNode = $callNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+                if (!$usedNodeOriginalNode instanceof \PhpParser\Node) {
                     return \false;
                 }
                 if (\get_class($usedNodeOriginalNode) !== \get_class($callNode)) {
@@ -184,11 +184,11 @@ CODE_SAMPLE
             if (\count($usedNodes) > 1) {
                 return \true;
             }
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            $parentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         }
         return \false;
     }
-    private function shouldSkip(VariableAndCallAssign $variableAndCallAssign, string $expectedName) : bool
+    private function shouldSkip(\Rector\Naming\ValueObject\VariableAndCallAssign $variableAndCallAssign, string $expectedName) : bool
     {
         if ($this->namingConventionAnalyzer->isCallMatchingVariableName($variableAndCallAssign->getCall(), $variableAndCallAssign->getVariableName(), $expectedName)) {
             return \true;
@@ -198,7 +198,7 @@ CODE_SAMPLE
         }
         return $this->breakingVariableRenameGuard->shouldSkipVariable($variableAndCallAssign->getVariableName(), $expectedName, $variableAndCallAssign->getFunctionLike(), $variableAndCallAssign->getVariable());
     }
-    private function renameVariable(VariableAndCallAssign $variableAndCallAssign, string $expectedName) : void
+    private function renameVariable(\Rector\Naming\ValueObject\VariableAndCallAssign $variableAndCallAssign, string $expectedName) : void
     {
         $assign = $variableAndCallAssign->getAssign();
         $assignPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($assign);
@@ -212,10 +212,10 @@ CODE_SAMPLE
     {
         $callStaticType = $this->getType($expr);
         $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);
-        if (!$callStaticType instanceof ObjectType) {
+        if (!$callStaticType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }
-        if (\is_a($callStaticType->getClassName(), ClassLike::class, \true)) {
+        if (\is_a($callStaticType->getClassName(), \PhpParser\Node\Stmt\ClassLike::class, \true)) {
             return \false;
         }
         if (!$this->reflectionProvider->hasClass($callStaticType->getClassName())) {

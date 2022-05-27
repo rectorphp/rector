@@ -32,24 +32,24 @@ final class PatchDiffer
      * @var \SebastianBergmann\Diff\Differ
      */
     private $differ;
-    public function __construct(Differ $differ)
+    public function __construct(\RectorPrefix20220527\SebastianBergmann\Diff\Differ $differ)
     {
         $this->differ = $differ;
     }
-    public function diff(OldAndNewFileInfo $oldAndNewFileInfo) : string
+    public function diff(\RectorPrefix20220527\Symplify\VendorPatches\ValueObject\OldAndNewFileInfo $oldAndNewFileInfo) : string
     {
         $oldFileInfo = $oldAndNewFileInfo->getOldFileInfo();
         $newFileInfo = $oldAndNewFileInfo->getNewFileInfo();
         $diff = $this->differ->diff($oldFileInfo->getContents(), $newFileInfo->getContents());
         $patchedFileRelativePath = $this->resolveFileInfoPathRelativeFilePath($newFileInfo);
-        $clearedDiff = Strings::replace($diff, self::START_ORIGINAL_REGEX, '--- /dev/null');
-        return Strings::replace($clearedDiff, self::START_NEW_REGEX, '+++ ' . $patchedFileRelativePath);
+        $clearedDiff = \RectorPrefix20220527\Nette\Utils\Strings::replace($diff, self::START_ORIGINAL_REGEX, '--- /dev/null');
+        return \RectorPrefix20220527\Nette\Utils\Strings::replace($clearedDiff, self::START_NEW_REGEX, '+++ ' . $patchedFileRelativePath);
     }
-    private function resolveFileInfoPathRelativeFilePath(SmartFileInfo $beforeFileInfo) : string
+    private function resolveFileInfoPathRelativeFilePath(\Symplify\SmartFileSystem\SmartFileInfo $beforeFileInfo) : string
     {
-        $match = Strings::match($beforeFileInfo->getRealPath(), self::LOCAL_PATH_REGEX);
+        $match = \RectorPrefix20220527\Nette\Utils\Strings::match($beforeFileInfo->getRealPath(), self::LOCAL_PATH_REGEX);
         if (!isset($match['local_path'])) {
-            throw new ShouldNotHappenException();
+            throw new \RectorPrefix20220527\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
         }
         return '../' . $match['local_path'];
     }

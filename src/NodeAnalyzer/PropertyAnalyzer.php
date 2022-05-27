@@ -17,20 +17,20 @@ final class PropertyAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function hasForbiddenType(Property $property) : bool
+    public function hasForbiddenType(\PhpParser\Node\Stmt\Property $property) : bool
     {
         $propertyType = $this->nodeTypeResolver->getType($property);
-        if ($propertyType instanceof NullType) {
+        if ($propertyType instanceof \PHPStan\Type\NullType) {
             return \true;
         }
         if ($this->isCallableType($propertyType)) {
             return \true;
         }
-        if (!$propertyType instanceof UnionType) {
+        if (!$propertyType instanceof \PHPStan\Type\UnionType) {
             return \false;
         }
         $types = $propertyType->getTypes();
@@ -41,11 +41,11 @@ final class PropertyAnalyzer
         }
         return \false;
     }
-    private function isCallableType(Type $type) : bool
+    private function isCallableType(\PHPStan\Type\Type $type) : bool
     {
-        if ($type instanceof TypeWithClassName) {
+        if ($type instanceof \PHPStan\Type\TypeWithClassName) {
             return $type->getClassName() === 'Closure';
         }
-        return $type instanceof CallableType;
+        return $type instanceof \PHPStan\Type\CallableType;
     }
 }

@@ -17,7 +17,7 @@ trait NodeAttributes
     }
     public function hasAttribute(string $key) : bool
     {
-        return array_key_exists($key, $this->attributes);
+        return \array_key_exists($key, $this->attributes);
     }
     /**
      * @return mixed

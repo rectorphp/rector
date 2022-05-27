@@ -19,6 +19,6 @@ class GenericTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     }
     public function __toString() : string
     {
-        return $this->type . '<' . implode(', ', $this->genericTypes) . '>';
+        return $this->type . '<' . \implode(', ', $this->genericTypes) . '>';
     }
 }

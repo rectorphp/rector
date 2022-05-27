@@ -8,6 +8,6 @@ use PhpParser\Builder\Property;
  * @api
  * Fixed duplicated naming in php-parser and prevents confusion
  */
-final class PropertyBuilder extends Property
+final class PropertyBuilder extends \PhpParser\Builder\Property
 {
 }

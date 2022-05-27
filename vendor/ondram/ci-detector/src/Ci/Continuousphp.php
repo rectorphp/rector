@@ -6,19 +6,19 @@ namespace RectorPrefix20220527\OndraM\CiDetector\Ci;
 use RectorPrefix20220527\OndraM\CiDetector\CiDetector;
 use RectorPrefix20220527\OndraM\CiDetector\Env;
 use RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic;
-class Continuousphp extends AbstractCi
+class Continuousphp extends \RectorPrefix20220527\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(Env $env) : bool
+    public static function isDetected(\RectorPrefix20220527\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('CONTINUOUSPHP') === 'continuousphp';
     }
     public function getCiName() : string
     {
-        return CiDetector::CI_CONTINUOUSPHP;
+        return \RectorPrefix20220527\OndraM\CiDetector\CiDetector::CI_CONTINUOUSPHP;
     }
-    public function isPullRequest() : TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic
     {
-        return TrinaryLogic::createFromBoolean($this->env->getString('CPHP_PR_ID') !== '');
+        return \RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('CPHP_PR_ID') !== '');
     }
     public function getBuildNumber() : string
     {

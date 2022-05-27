@@ -26,7 +26,7 @@ final class NamedToUnnamedArgs
      * @var \Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver
      */
     private $defaultParameterValueResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, DefaultParameterValueResolver $defaultParameterValueResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver $defaultParameterValueResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->defaultParameterValueResolver = $defaultParameterValueResolver;
@@ -46,13 +46,13 @@ final class NamedToUnnamedArgs
                 continue;
             }
             foreach ($currentArgs as $currentArg) {
-                if (!$currentArg->name instanceof Identifier) {
+                if (!$currentArg->name instanceof \PhpParser\Node\Identifier) {
                     continue;
                 }
                 if (!$this->nodeNameResolver->isName($currentArg->name, $parameterReflectionName)) {
                     continue;
                 }
-                $unnamedArgs[$paramPosition] = new Arg($currentArg->value, $currentArg->byRef, $currentArg->unpack, $currentArg->getAttributes(), null);
+                $unnamedArgs[$paramPosition] = new \PhpParser\Node\Arg($currentArg->value, $currentArg->byRef, $currentArg->unpack, $currentArg->getAttributes(), null);
             }
         }
         return $unnamedArgs;
@@ -79,16 +79,16 @@ final class NamedToUnnamedArgs
                 continue;
             }
             /** @var ParameterReflection|PhpParameterReflection $parameterReflection */
-            if ($functionLikeReflection instanceof ReflectionFunction) {
-                $parameterReflection = new SimplePhpParameterReflection($functionLikeReflection, $i);
+            if ($functionLikeReflection instanceof \ReflectionFunction) {
+                $parameterReflection = new \Rector\DowngradePhp80\Reflection\SimplePhpParameterReflection($functionLikeReflection, $i);
             } else {
                 $parameterReflection = $parameters[$i];
             }
             $defaultValue = $this->defaultParameterValueResolver->resolveFromParameterReflection($parameterReflection);
-            if (!$defaultValue instanceof Expr) {
+            if (!$defaultValue instanceof \PhpParser\Node\Expr) {
                 continue;
             }
-            $unnamedArgs[$i] = new Arg($defaultValue, $parameterReflection->passedByReference()->yes(), $parameterReflection->isVariadic(), [], null);
+            $unnamedArgs[$i] = new \PhpParser\Node\Arg($defaultValue, $parameterReflection->passedByReference()->yes(), $parameterReflection->isVariadic(), [], null);
         }
         return $unnamedArgs;
     }

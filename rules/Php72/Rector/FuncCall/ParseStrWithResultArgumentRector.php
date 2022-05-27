@@ -19,15 +19,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector\ParseStrWithResultArgumentRectorTest
  */
-final class ParseStrWithResultArgumentRector extends AbstractRector implements MinPhpVersionInterface
+final class ParseStrWithResultArgumentRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::RESULT_ARG_IN_PARSE_STR;
+        return \Rector\Core\ValueObject\PhpVersionFeature::RESULT_ARG_IN_PARSE_STR;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use $result argument in parse_str() function', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use $result argument in parse_str() function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 parse_str($this->query);
 $data = get_defined_vars();
 CODE_SAMPLE
@@ -42,12 +42,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'parse_str')) {
             return null;
@@ -55,18 +55,18 @@ CODE_SAMPLE
         if (isset($node->args[1])) {
             return null;
         }
-        $resultVariable = new Variable('result');
-        $node->args[1] = new Arg($resultVariable);
+        $resultVariable = new \PhpParser\Node\Expr\Variable('result');
+        $node->args[1] = new \PhpParser\Node\Arg($resultVariable);
         $expression = $this->betterNodeFinder->resolveCurrentStatement($node);
-        if (!$expression instanceof Stmt) {
+        if (!$expression instanceof \PhpParser\Node\Stmt) {
             return null;
         }
-        $nextExpression = $expression->getAttribute(AttributeKey::NEXT_NODE);
+        $nextExpression = $expression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         if ($nextExpression === null) {
             return null;
         }
-        $this->traverseNodesWithCallable($nextExpression, function (Node $node) use($resultVariable) : ?Variable {
-            if (!$node instanceof FuncCall) {
+        $this->traverseNodesWithCallable($nextExpression, function (\PhpParser\Node $node) use($resultVariable) : ?Variable {
+            if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
                 return null;
             }
             if (!$this->isName($node, 'get_defined_vars')) {

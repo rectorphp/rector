@@ -28,19 +28,19 @@ final class AdditionalAutoloader
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
-    public function __construct(FileSystemGuard $fileSystemGuard, ParameterProvider $parameterProvider, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
+    public function __construct(\RectorPrefix20220527\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
     {
         $this->fileSystemGuard = $fileSystemGuard;
         $this->parameterProvider = $parameterProvider;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
-    public function autoloadInput(InputInterface $input) : void
+    public function autoloadInput(\RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input) : void
     {
-        if (!$input->hasOption(Option::AUTOLOAD_FILE)) {
+        if (!$input->hasOption(\Rector\Core\Configuration\Option::AUTOLOAD_FILE)) {
             return;
         }
         /** @var string|null $autoloadFile */
-        $autoloadFile = $input->getOption(Option::AUTOLOAD_FILE);
+        $autoloadFile = $input->getOption(\Rector\Core\Configuration\Option::AUTOLOAD_FILE);
         if ($autoloadFile === null) {
             return;
         }
@@ -49,7 +49,7 @@ final class AdditionalAutoloader
     }
     public function autoloadPaths() : void
     {
-        $autoloadPaths = $this->parameterProvider->provideArrayParameter(Option::AUTOLOAD_PATHS);
+        $autoloadPaths = $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::AUTOLOAD_PATHS);
         $this->dynamicSourceLocatorDecorator->addPaths($autoloadPaths);
     }
 }

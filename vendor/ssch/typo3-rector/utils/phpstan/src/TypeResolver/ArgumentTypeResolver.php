@@ -13,16 +13,16 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 final class ArgumentTypeResolver
 {
-    public function resolveFromMethodCall(MethodCall $methodCall, MethodReflection $methodReflection) : Type
+    public function resolveFromMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Reflection\MethodReflection $methodReflection) : \PHPStan\Type\Type
     {
         $arg = $methodCall->args[0]->value;
-        if (!$arg instanceof ClassConstFetch) {
-            return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
+        if (!$arg instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+            return \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
         }
         $class = $arg->class;
-        if ($class instanceof Expr) {
-            return new MixedType();
+        if ($class instanceof \PhpParser\Node\Expr) {
+            return new \PHPStan\Type\MixedType();
         }
-        return new ObjectType($class->toString());
+        return new \PHPStan\Type\ObjectType($class->toString());
     }
 }

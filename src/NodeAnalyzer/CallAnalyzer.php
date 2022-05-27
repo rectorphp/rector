@@ -22,7 +22,7 @@ final class CallAnalyzer
     /**
      * @var array<class-string<Expr>>
      */
-    private const OBJECT_CALL_TYPES = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
+    private const OBJECT_CALL_TYPES = [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\NullsafeMethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     /**
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
@@ -32,23 +32,23 @@ final class CallAnalyzer
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(NodeComparator $nodeComparator)
+    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeComparator = $nodeComparator;
     }
     /**
      * @required
      */
-    public function autowire(BetterNodeFinder $betterNodeFinder) : void
+    public function autowire(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder) : void
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function isObjectCall(Expr $expr) : bool
+    public function isObjectCall(\PhpParser\Node\Expr $expr) : bool
     {
-        if ($expr instanceof BooleanNot) {
+        if ($expr instanceof \PhpParser\Node\Expr\BooleanNot) {
             $expr = $expr->expr;
         }
-        if ($expr instanceof BinaryOp) {
+        if ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
             $isObjectCallLeft = $this->isObjectCall($expr->left);
             $isObjectCallRight = $this->isObjectCall($expr->right);
             return $isObjectCallLeft || $isObjectCallRight;
@@ -72,19 +72,19 @@ final class CallAnalyzer
         }
         return \false;
     }
-    public function isNewInstance(Expr $expr) : bool
+    public function isNewInstance(\PhpParser\Node\Expr $expr) : bool
     {
-        if ($expr instanceof Clone_ || $expr instanceof New_) {
+        if ($expr instanceof \PhpParser\Node\Expr\Clone_ || $expr instanceof \PhpParser\Node\Expr\New_) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstPrevious($expr, function (Node $node) use($expr) : bool {
-            if (!$node instanceof Assign) {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($expr, function (\PhpParser\Node $node) use($expr) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;
             }
             if (!$this->nodeComparator->areNodesEqual($node->var, $expr)) {
                 return \false;
             }
-            return $node->expr instanceof Clone_ || $node->expr instanceof New_;
+            return $node->expr instanceof \PhpParser\Node\Expr\Clone_ || $node->expr instanceof \PhpParser\Node\Expr\New_;
         });
     }
 }

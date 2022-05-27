@@ -8,7 +8,7 @@ use RectorPrefix20220527\OndraM\CiDetector\Exception\CiNotDetectedException;
 /**
  * Unified way to get environment variables from current continuous integration server
  */
-class CiDetector implements CiDetectorInterface
+class CiDetector implements \RectorPrefix20220527\OndraM\CiDetector\CiDetectorInterface
 {
     public const CI_APPVEYOR = 'AppVeyor';
     public const CI_AWS_CODEBUILD = 'AWS CodeBuild';
@@ -31,9 +31,9 @@ class CiDetector implements CiDetectorInterface
     private $environment;
     public final function __construct()
     {
-        $this->environment = new Env();
+        $this->environment = new \RectorPrefix20220527\OndraM\CiDetector\Env();
     }
-    public static function fromEnvironment(Env $environment) : self
+    public static function fromEnvironment(\RectorPrefix20220527\OndraM\CiDetector\Env $environment) : self
     {
         $detector = new static();
         $detector->environment = $environment;
@@ -44,11 +44,11 @@ class CiDetector implements CiDetectorInterface
         $ciServer = $this->detectCurrentCiServer();
         return $ciServer !== null;
     }
-    public function detect() : CiInterface
+    public function detect() : \RectorPrefix20220527\OndraM\CiDetector\Ci\CiInterface
     {
         $ciServer = $this->detectCurrentCiServer();
         if ($ciServer === null) {
-            throw new CiNotDetectedException('No CI server detected in current environment');
+            throw new \RectorPrefix20220527\OndraM\CiDetector\Exception\CiNotDetectedException('No CI server detected in current environment');
         }
         return $ciServer;
     }
@@ -57,9 +57,9 @@ class CiDetector implements CiDetectorInterface
      */
     protected function getCiServers() : array
     {
-        return [Ci\AppVeyor::class, Ci\AwsCodeBuild::class, Ci\AzurePipelines::class, Ci\Bamboo::class, Ci\BitbucketPipelines::class, Ci\Buddy::class, Ci\Circle::class, Ci\Codeship::class, Ci\Continuousphp::class, Ci\Drone::class, Ci\GitHubActions::class, Ci\GitLab::class, Ci\Jenkins::class, Ci\SourceHut::class, Ci\TeamCity::class, Ci\Travis::class, Ci\Wercker::class];
+        return [\RectorPrefix20220527\OndraM\CiDetector\Ci\AppVeyor::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\AwsCodeBuild::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\AzurePipelines::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\Bamboo::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\BitbucketPipelines::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\Buddy::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\Circle::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\Codeship::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\Continuousphp::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\Drone::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\GitHubActions::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\GitLab::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\Jenkins::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\SourceHut::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\TeamCity::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\Travis::class, \RectorPrefix20220527\OndraM\CiDetector\Ci\Wercker::class];
     }
-    protected function detectCurrentCiServer() : ?CiInterface
+    protected function detectCurrentCiServer() : ?\RectorPrefix20220527\OndraM\CiDetector\Ci\CiInterface
     {
         $ciServers = $this->getCiServers();
         foreach ($ciServers as $ciClass) {

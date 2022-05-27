@@ -11,7 +11,7 @@ use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\Enum\NetteFormMethodNameToControlType;
 use Rector\Nette\NodeAnalyzer\MethodCallManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
-final class OnVariableMethodCallsFormControlTypeResolver implements FormControlTypeResolverInterface
+final class OnVariableMethodCallsFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**
      * @readonly
@@ -28,7 +28,7 @@ final class OnVariableMethodCallsFormControlTypeResolver implements FormControlT
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(MethodCallManipulator $methodCallManipulator, NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver)
+    public function __construct(\Rector\Nette\NodeAnalyzer\MethodCallManipulator $methodCallManipulator, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->methodCallManipulator = $methodCallManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -37,9 +37,9 @@ final class OnVariableMethodCallsFormControlTypeResolver implements FormControlT
     /**
      * @return array<string, string>
      */
-    public function resolve(Node $node) : array
+    public function resolve(\PhpParser\Node $node) : array
     {
-        if (!$node instanceof Variable) {
+        if (!$node instanceof \PhpParser\Node\Expr\Variable) {
             return [];
         }
         $onFormMethodCalls = $this->methodCallManipulator->findMethodCallsOnVariable($node);
@@ -49,7 +49,7 @@ final class OnVariableMethodCallsFormControlTypeResolver implements FormControlT
             if ($methodName === null) {
                 continue;
             }
-            if (!isset(NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE[$methodName])) {
+            if (!isset(\Rector\Nette\Enum\NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE[$methodName])) {
                 continue;
             }
             if (!isset($onFormMethodCall->args[0])) {
@@ -57,7 +57,7 @@ final class OnVariableMethodCallsFormControlTypeResolver implements FormControlT
             }
             $addedInputName = $this->valueResolver->getValue($onFormMethodCall->args[0]->value);
             if (!\is_string($addedInputName)) {
-                throw new ShouldNotHappenException();
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             $methodNamesByInputNames[$addedInputName] = $methodName;
         }

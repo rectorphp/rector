@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector\RemoveUnusedConstructorParamRectorTest
  */
-final class RemoveUnusedConstructorParamRector extends AbstractRector
+final class RemoveUnusedConstructorParamRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -27,14 +27,14 @@ final class RemoveUnusedConstructorParamRector extends AbstractRector
      * @var \Rector\Removing\NodeManipulator\ComplexNodeRemover
      */
     private $complexNodeRemover;
-    public function __construct(ParamAnalyzer $paramAnalyzer, ComplexNodeRemover $complexNodeRemover)
+    public function __construct(\Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\Removing\NodeManipulator\ComplexNodeRemover $complexNodeRemover)
     {
         $this->paramAnalyzer = $paramAnalyzer;
         $this->complexNodeRemover = $complexNodeRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove unused parameter in constructor', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unused parameter in constructor', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $hey;
@@ -63,14 +63,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isName($node, MethodName::CONSTRUCT)) {
+        if (!$this->isName($node, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return null;
         }
         if ($node->params === []) {
@@ -79,8 +79,8 @@ CODE_SAMPLE
         if ($this->paramAnalyzer->hasPropertyPromotion($node->params)) {
             return null;
         }
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         if ($node->isAbstract()) {
@@ -88,7 +88,7 @@ CODE_SAMPLE
         }
         return $this->processRemoveParams($node);
     }
-    private function processRemoveParams(ClassMethod $classMethod) : ?ClassMethod
+    private function processRemoveParams(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
     {
         $paramKeysToBeRemoved = [];
         foreach ($classMethod->params as $key => $param) {

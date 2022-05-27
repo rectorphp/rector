@@ -21,21 +21,21 @@ final class ClassMethodReturnVendorLockResolver
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isVendorLocked(ClassMethod $classMethod) : bool
+    public function isVendorLocked(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         $methodName = $this->nodeNameResolver->getName($classMethod);
         return $this->isVendorLockedByAncestors($classReflection, $methodName);
     }
-    private function isVendorLockedByAncestors(ClassReflection $classReflection, string $methodName) : bool
+    private function isVendorLockedByAncestors(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
     {
         foreach ($classReflection->getAncestors() as $ancestorClassReflections) {
             if ($ancestorClassReflections === $classReflection) {
@@ -48,11 +48,11 @@ final class ClassMethodReturnVendorLockResolver
             }
             $parentClassMethodReflection = $ancestorClassReflections->getNativeMethod($methodName);
             $parametersAcceptor = $parentClassMethodReflection->getVariants()[0];
-            if (!$parametersAcceptor instanceof FunctionVariantWithPhpDocs) {
+            if (!$parametersAcceptor instanceof \PHPStan\Reflection\FunctionVariantWithPhpDocs) {
                 continue;
             }
             // here we count only on strict types, not on docs
-            return !$parametersAcceptor->getNativeReturnType() instanceof MixedType;
+            return !$parametersAcceptor->getNativeReturnType() instanceof \PHPStan\Type\MixedType;
         }
         return \false;
     }

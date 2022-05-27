@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Arguments\ValueObject;
 
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
-final class ReplaceFuncCallArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
+final class ReplaceFuncCallArgumentDefaultValue implements \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface
 {
     /**
      * @readonly

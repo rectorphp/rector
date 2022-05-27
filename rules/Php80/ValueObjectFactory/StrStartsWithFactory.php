@@ -14,11 +14,11 @@ final class StrStartsWithFactory
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function createFromFuncCall(FuncCall $funcCall, bool $isPositive) : ?StrStartsWith
+    public function createFromFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall, bool $isPositive) : ?\Rector\Php80\ValueObject\StrStartsWith
     {
         if (!$this->argsAnalyzer->isArgsInstanceInArgsPositions($funcCall->args, [0, 1])) {
             return null;
@@ -29,6 +29,6 @@ final class StrStartsWithFactory
         /** @var Arg $secondArg */
         $secondArg = $funcCall->args[1];
         $needle = $secondArg->value;
-        return new StrStartsWith($funcCall, $haystack, $needle, $isPositive);
+        return new \Rector\Php80\ValueObject\StrStartsWith($funcCall, $haystack, $needle, $isPositive);
     }
 }

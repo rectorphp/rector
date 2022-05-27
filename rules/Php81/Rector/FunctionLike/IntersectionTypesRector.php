@@ -20,15 +20,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php81\Rector\FunctionLike\IntersectionTypesRector\IntersectionTypesRectorTest
  */
-final class IntersectionTypesRector extends AbstractRector implements MinPhpVersionInterface
+final class IntersectionTypesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var bool
      */
     private $hasChanged = \false;
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change docs to intersection types, where possible (properties are covered by TypedPropertyRector (@todo))', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change docs to intersection types, where possible (properties are covered by TypedPropertyRector (@todo))', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -54,16 +54,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ArrowFunction::class, Closure::class, ClassMethod::class, Function_::class];
+        return [\PhpParser\Node\Expr\ArrowFunction::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class];
     }
     /**
      * @param ArrowFunction|Closure|ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if (!$phpDocInfo instanceof PhpDocInfo) {
+        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return null;
         }
         $this->refactorParamTypes($node, $phpDocInfo);
@@ -75,12 +75,12 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::INTERSECTION_TYPES;
+        return \Rector\Core\ValueObject\PhpVersionFeature::INTERSECTION_TYPES;
     }
     /**
      * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function refactorParamTypes($functionLike, PhpDocInfo $phpDocInfo) : void
+    private function refactorParamTypes($functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
         foreach ($functionLike->params as $param) {
             if ($param->type !== null) {
@@ -89,14 +89,14 @@ CODE_SAMPLE
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
             $paramType = $phpDocInfo->getParamType($paramName);
-            if (!$paramType instanceof IntersectionType) {
+            if (!$paramType instanceof \PHPStan\Type\IntersectionType) {
                 continue;
             }
             if (!$this->isIntersectionableType($paramType)) {
                 continue;
             }
-            $phpParserIntersectionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM());
-            if (!$phpParserIntersectionType instanceof Node\IntersectionType) {
+            $phpParserIntersectionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+            if (!$phpParserIntersectionType instanceof \PhpParser\Node\IntersectionType) {
                 continue;
             }
             $param->type = $phpParserIntersectionType;
@@ -106,10 +106,10 @@ CODE_SAMPLE
     /**
      * Only class-type are supported https://wiki.php.net/rfc/pure-intersection-types#supported_types
      */
-    private function isIntersectionableType(IntersectionType $intersectionType) : bool
+    private function isIntersectionableType(\PHPStan\Type\IntersectionType $intersectionType) : bool
     {
         foreach ($intersectionType->getTypes() as $intersectionedType) {
-            if ($intersectionedType instanceof TypeWithClassName) {
+            if ($intersectionedType instanceof \PHPStan\Type\TypeWithClassName) {
                 continue;
             }
             return \false;

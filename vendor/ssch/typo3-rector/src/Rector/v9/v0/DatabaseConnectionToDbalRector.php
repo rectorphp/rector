@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Ssch\TYPO3Rector\Tests\Rector\Core\Database\DatabaseConnectionToDbalTest
  */
-final class DatabaseConnectionToDbalRector extends AbstractRector
+final class DatabaseConnectionToDbalRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -30,7 +30,7 @@ final class DatabaseConnectionToDbalRector extends AbstractRector
     /**
      * @param DatabaseConnectionToDbalRefactoring[] $databaseConnectionRefactorings
      */
-    public function __construct(Typo3NodeResolver $typo3NodeResolver, array $databaseConnectionRefactorings)
+    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver, array $databaseConnectionRefactorings)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
         $this->databaseConnectionRefactorings = $databaseConnectionRefactorings;
@@ -40,12 +40,12 @@ final class DatabaseConnectionToDbalRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -68,9 +68,9 @@ final class DatabaseConnectionToDbalRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor legacy calls of DatabaseConnection to Dbal', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor legacy calls of DatabaseConnection to Dbal', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $GLOBALS['TYPO3_DB']->exec_INSERTquery(
             'pages',
             [
@@ -92,8 +92,8 @@ $connectionPool = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CM
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        return !$this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, Typo3NodeResolver::TYPO3_DB);
+        return !$this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO3_DB);
     }
 }

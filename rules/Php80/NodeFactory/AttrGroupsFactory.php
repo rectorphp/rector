@@ -13,7 +13,7 @@ final class AttrGroupsFactory
      * @var \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
-    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory)
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
     }

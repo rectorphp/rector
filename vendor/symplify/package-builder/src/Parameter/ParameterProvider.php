@@ -16,7 +16,7 @@ final class ParameterProvider
      * @var array<string, mixed>
      */
     private $parameters = [];
-    public function __construct(ContainerInterface $container)
+    public function __construct(\RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerInterface $container)
     {
         /** @var ParameterBag $parameterBag */
         $parameterBag = $container->getParameterBag();
@@ -89,6 +89,6 @@ final class ParameterProvider
         if (\array_key_exists($name, $this->parameters)) {
             return;
         }
-        throw new ParameterNotFoundException($name);
+        throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException($name);
     }
 }

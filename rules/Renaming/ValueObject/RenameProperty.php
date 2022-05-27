@@ -27,11 +27,11 @@ final class RenameProperty
         $this->type = $type;
         $this->oldProperty = $oldProperty;
         $this->newProperty = $newProperty;
-        RectorAssert::className($type);
+        \Rector\Core\Validation\RectorAssert::className($type);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->type);
+        return new \PHPStan\Type\ObjectType($this->type);
     }
     public function getOldProperty() : string
     {

@@ -13,7 +13,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 /**
  * @implements TypeMapperInterface<HasMethodType>
  */
-final class HasMethodTypeMapper implements TypeMapperInterface
+final class HasMethodTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
      * @readonly
@@ -29,19 +29,19 @@ final class HasMethodTypeMapper implements TypeMapperInterface
      */
     public function getNodeClass() : string
     {
-        return HasMethodType::class;
+        return \PHPStan\Type\Accessory\HasMethodType::class;
     }
     /**
      * @param HasMethodType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        return new IdentifierTypeNode('object');
+        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('object');
     }
     /**
      * @param HasMethodType $type
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind) : ?Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
     {
         return $this->objectWithoutClassTypeMapper->mapToPhpParserNode($type, $typeKind);
     }

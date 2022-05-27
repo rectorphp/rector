@@ -15,7 +15,7 @@ use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
-final class VariableConstructorFormControlTypeResolver implements FormControlTypeResolverInterface
+final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**
      * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
@@ -41,7 +41,7 @@ final class VariableConstructorFormControlTypeResolver implements FormControlTyp
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, AstResolver $astResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -51,9 +51,9 @@ final class VariableConstructorFormControlTypeResolver implements FormControlTyp
     /**
      * @return array<string, string>
      */
-    public function resolve(Node $node) : array
+    public function resolve(\PhpParser\Node $node) : array
     {
-        if (!$node instanceof Variable) {
+        if (!$node instanceof \PhpParser\Node\Expr\Variable) {
             return [];
         }
         // handled else-where
@@ -61,15 +61,15 @@ final class VariableConstructorFormControlTypeResolver implements FormControlTyp
             return [];
         }
         $formType = $this->nodeTypeResolver->getType($node);
-        if (!$formType instanceof TypeWithClassName) {
+        if (!$formType instanceof \PHPStan\Type\TypeWithClassName) {
             return [];
         }
         $formClassReflection = $this->reflectionProvider->getClass($formType->getClassName());
         if (!$formClassReflection->isSubclassOf('Nette\\Application\\UI\\Form')) {
             return [];
         }
-        $classMethod = $this->astResolver->resolveClassMethod($formType->getClassName(), MethodName::CONSTRUCT);
-        if (!$classMethod instanceof ClassMethod) {
+        $classMethod = $this->astResolver->resolveClassMethod($formType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($classMethod);
@@ -77,7 +77,7 @@ final class VariableConstructorFormControlTypeResolver implements FormControlTyp
     /**
      * @required
      */
-    public function autowire(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

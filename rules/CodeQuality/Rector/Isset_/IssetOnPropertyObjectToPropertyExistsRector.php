@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @changelog https://3v4l.org/TI8XL Change isset on property object to property_exists() with not null check
  */
-final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
+final class IssetOnPropertyObjectToPropertyExistsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -37,14 +37,14 @@ final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change isset on property object to property_exists() and not null check', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change isset on property object to property_exists() and not null check', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $x;
@@ -73,20 +73,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Isset_::class];
+        return [\PhpParser\Node\Expr\Isset_::class];
     }
     /**
      * @param Isset_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $newNodes = [];
         foreach ($node->vars as $issetVar) {
-            if (!$issetVar instanceof PropertyFetch) {
+            if (!$issetVar instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 continue;
             }
             // Ignore dynamically accessed properties ($o->$p)
-            if ($issetVar->name instanceof Variable) {
+            if ($issetVar->name instanceof \PhpParser\Node\Expr\Variable) {
                 continue;
             }
             // has property PHP 7.4 type?
@@ -98,7 +98,7 @@ CODE_SAMPLE
                 continue;
             }
             $propertyFetchVarType = $this->getType($issetVar->var);
-            if ($propertyFetchVarType instanceof TypeWithClassName) {
+            if ($propertyFetchVarType instanceof \PHPStan\Type\TypeWithClassName) {
                 if (!$this->reflectionProvider->hasClass($propertyFetchVarType->getClassName())) {
                     continue;
                 }
@@ -114,22 +114,22 @@ CODE_SAMPLE
         }
         return $this->nodeFactory->createReturnBooleanAnd($newNodes);
     }
-    private function replaceToPropertyExistsWithNullCheck(Expr $expr, string $property, PropertyFetch $propertyFetch) : BooleanAnd
+    private function replaceToPropertyExistsWithNullCheck(\PhpParser\Node\Expr $expr, string $property, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \PhpParser\Node\Expr\BinaryOp\BooleanAnd
     {
-        $args = [new Arg($expr), new Arg(new String_($property))];
+        $args = [new \PhpParser\Node\Arg($expr), new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_($property))];
         $propertyExistsFuncCall = $this->nodeFactory->createFuncCall('property_exists', $args);
-        return new BooleanAnd($propertyExistsFuncCall, $this->createNotIdenticalToNull($propertyFetch));
+        return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($propertyExistsFuncCall, $this->createNotIdenticalToNull($propertyFetch));
     }
-    private function createNotIdenticalToNull(PropertyFetch $propertyFetch) : NotIdentical
+    private function createNotIdenticalToNull(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \PhpParser\Node\Expr\BinaryOp\NotIdentical
     {
-        return new NotIdentical($propertyFetch, $this->nodeFactory->createNull());
+        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($propertyFetch, $this->nodeFactory->createNull());
     }
-    private function hasPropertyTypeDeclaration(PropertyFetch $propertyFetch) : bool
+    private function hasPropertyTypeDeclaration(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetch);
-        if (!$phpPropertyReflection instanceof PhpPropertyReflection) {
+        if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
             return \false;
         }
-        return !$phpPropertyReflection->getNativeType() instanceof MixedType;
+        return !$phpPropertyReflection->getNativeType() instanceof \PHPStan\Type\MixedType;
     }
 }

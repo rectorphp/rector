@@ -22,13 +22,13 @@ final class DefaultPropertyExprAssign
      * @var \PhpParser\Node\Expr
      */
     private $defaultExpr;
-    public function __construct(Expression $assignExpression, string $propertyName, Expr $defaultExpr)
+    public function __construct(\PhpParser\Node\Stmt\Expression $assignExpression, string $propertyName, \PhpParser\Node\Expr $defaultExpr)
     {
         $this->assignExpression = $assignExpression;
         $this->propertyName = $propertyName;
         $this->defaultExpr = $defaultExpr;
     }
-    public function getAssignExpression() : Expression
+    public function getAssignExpression() : \PhpParser\Node\Stmt\Expression
     {
         return $this->assignExpression;
     }
@@ -36,7 +36,7 @@ final class DefaultPropertyExprAssign
     {
         return $this->propertyName;
     }
-    public function getDefaultExpr() : Expr
+    public function getDefaultExpr() : \PhpParser\Node\Expr
     {
         return $this->defaultExpr;
     }

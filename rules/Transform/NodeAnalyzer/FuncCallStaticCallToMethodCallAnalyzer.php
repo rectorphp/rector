@@ -49,7 +49,7 @@ final class FuncCallStaticCallToMethodCallAnalyzer
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    public function __construct(TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver, PropertyNaming $propertyNaming, NodeNameResolver $nodeNameResolver, NodeFactory $nodeFactory, PropertyFetchFactory $propertyFetchFactory, PropertyToAddCollector $propertyToAddCollector)
+    public function __construct(\Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->typeProvidingExprFromClassResolver = $typeProvidingExprFromClassResolver;
         $this->propertyNaming = $propertyNaming;
@@ -62,24 +62,24 @@ final class FuncCallStaticCallToMethodCallAnalyzer
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable
      */
-    public function matchTypeProvidingExpr(Class_ $class, $functionLike, ObjectType $objectType)
+    public function matchTypeProvidingExpr(\PhpParser\Node\Stmt\Class_ $class, $functionLike, \PHPStan\Type\ObjectType $objectType)
     {
         $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass($class, $functionLike, $objectType);
         if ($expr !== null) {
-            if ($expr instanceof Variable) {
+            if ($expr instanceof \PhpParser\Node\Expr\Variable) {
                 $this->addClassMethodParamForVariable($expr, $objectType, $functionLike);
             }
             return $expr;
         }
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $propertyMetadata = new PropertyMetadata($propertyName, $objectType, Class_::MODIFIER_PRIVATE);
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $objectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         return $this->propertyFetchFactory->createFromType($objectType);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function addClassMethodParamForVariable(Variable $variable, ObjectType $objectType, $functionLike) : void
+    private function addClassMethodParamForVariable(\PhpParser\Node\Expr\Variable $variable, \PHPStan\Type\ObjectType $objectType, $functionLike) : void
     {
         /** @var string $variableName */
         $variableName = $this->nodeNameResolver->getName($variable);

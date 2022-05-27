@@ -12,11 +12,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector\RemoveAndTrueRectorTest
  */
-final class RemoveAndTrueRector extends AbstractRector
+final class RemoveAndTrueRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove and true that has no added value', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove and true that has no added value', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -41,12 +41,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [BooleanAnd::class];
+        return [\PhpParser\Node\Expr\BinaryOp\BooleanAnd::class];
     }
     /**
      * @param BooleanAnd $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->isTrueOrBooleanAndTrues($node->left)) {
             return $node->right;
@@ -56,12 +56,12 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isTrueOrBooleanAndTrues(Expr $expr) : bool
+    private function isTrueOrBooleanAndTrues(\PhpParser\Node\Expr $expr) : bool
     {
         if ($this->valueResolver->isTrue($expr)) {
             return \true;
         }
-        if (!$expr instanceof BooleanAnd) {
+        if (!$expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
             return \false;
         }
         if (!$this->isTrueOrBooleanAndTrues($expr->left)) {

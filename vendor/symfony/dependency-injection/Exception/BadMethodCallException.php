@@ -13,6 +13,6 @@ namespace RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception;
 /**
  * Base BadMethodCallException for Dependency Injection component.
  */
-class BadMethodCallException extends \BadMethodCallException implements ExceptionInterface
+class BadMethodCallException extends \BadMethodCallException implements \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\ExceptionInterface
 {
 }

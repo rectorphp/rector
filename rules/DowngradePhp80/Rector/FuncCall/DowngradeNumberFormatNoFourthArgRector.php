@@ -17,20 +17,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see Rector\Tests\DowngradePhp80\Rector\FuncCall\DowngradeNumberFormatNoFourthArgRector\DowngradeNumberFormatNoFourthArgRectorTest
  */
-final class DowngradeNumberFormatNoFourthArgRector extends AbstractRector
+final class DowngradeNumberFormatNoFourthArgRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade number_format arg to fill 4th arg when only 3rd arg filled', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade number_format arg to fill 4th arg when only 3rd arg filled', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -55,21 +55,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $reflectionFunction = new ReflectionFunction('number_format');
-        $node->args[3] = new Arg(new String_($reflectionFunction->getParameters()[3]->getDefaultValue()));
+        $reflectionFunction = new \ReflectionFunction('number_format');
+        $node->args[3] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_($reflectionFunction->getParameters()[3]->getDefaultValue()));
         return $node;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         if (!$this->nodeNameResolver->isName($funcCall, 'number_format')) {
             return \true;

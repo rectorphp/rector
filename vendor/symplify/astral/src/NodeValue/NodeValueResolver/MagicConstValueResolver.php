@@ -13,21 +13,21 @@ use RectorPrefix20220527\Symplify\Astral\Contract\NodeValueResolver\NodeValueRes
  *
  * @implements NodeValueResolverInterface<MagicConst>
  */
-final class MagicConstValueResolver implements NodeValueResolverInterface
+final class MagicConstValueResolver implements \RectorPrefix20220527\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface
 {
     public function getType() : string
     {
-        return MagicConst::class;
+        return \PhpParser\Node\Scalar\MagicConst::class;
     }
     /**
      * @param MagicConst $expr
      */
-    public function resolve(Expr $expr, string $currentFilePath) : ?string
+    public function resolve(\PhpParser\Node\Expr $expr, string $currentFilePath) : ?string
     {
-        if ($expr instanceof Dir) {
+        if ($expr instanceof \PhpParser\Node\Scalar\MagicConst\Dir) {
             return \dirname($currentFilePath);
         }
-        if ($expr instanceof File) {
+        if ($expr instanceof \PhpParser\Node\Scalar\MagicConst\File) {
             return $currentFilePath;
         }
         return null;

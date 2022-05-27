@@ -16,7 +16,7 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 /**
  * @implements PhpDocTypeMapperInterface<NullableTypeNode>
  */
-final class NullableTypeMapper implements PhpDocTypeMapperInterface
+final class NullableTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
 {
     /**
      * @readonly
@@ -28,24 +28,24 @@ final class NullableTypeMapper implements PhpDocTypeMapperInterface
      * @var \PHPStan\PhpDoc\TypeNodeResolver
      */
     private $typeNodeResolver;
-    public function __construct(\Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper $identifierTypeMapper, TypeNodeResolver $typeNodeResolver)
+    public function __construct(\Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper $identifierTypeMapper, \PHPStan\PhpDoc\TypeNodeResolver $typeNodeResolver)
     {
         $this->identifierTypeMapper = $identifierTypeMapper;
         $this->typeNodeResolver = $typeNodeResolver;
     }
     public function getNodeType() : string
     {
-        return NullableTypeNode::class;
+        return \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode::class;
     }
     /**
      * @param NullableTypeNode $typeNode
      */
-    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type
+    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
     {
         $type = $typeNode->type;
-        if ($type instanceof IdentifierTypeNode) {
+        if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             $type = $this->identifierTypeMapper->mapToPHPStanType($type, $node, $nameScope);
-            return new UnionType([new NullType(), $type]);
+            return new \PHPStan\Type\UnionType([new \PHPStan\Type\NullType(), $type]);
         }
         // fallback to PHPStan resolver
         return $this->typeNodeResolver->resolve($typeNode, $nameScope);

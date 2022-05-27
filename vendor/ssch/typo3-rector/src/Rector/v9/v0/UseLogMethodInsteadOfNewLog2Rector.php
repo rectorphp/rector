@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Deprecation-83121-LoggingMethodDataHandler-newlog2.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\UseLogMethodInsteadOfNewLog2Rector\UseLogMethodInsteadOfNewLog2RectorTest
  */
-final class UseLogMethodInsteadOfNewLog2Rector extends AbstractRector
+final class UseLogMethodInsteadOfNewLog2Rector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -33,35 +33,35 @@ final class UseLogMethodInsteadOfNewLog2Rector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\DataHandling\\DataHandler'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\DataHandling\\DataHandler'))) {
             return null;
         }
         if (!$this->isName($node->name, 'newlog2')) {
             return null;
         }
         if (!isset($node->args[3]) || isset($node->args[3]) && $this->valueResolver->isNull($node->args[3]->value)) {
-            $propArrayAssign = new Assign(new Variable('propArr'), $this->nodeFactory->createMethodCall($node->var, 'getRecordProperties', [$node->args[1], $node->args[2]]));
+            $propArrayAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('propArr'), $this->nodeFactory->createMethodCall($node->var, 'getRecordProperties', [$node->args[1], $node->args[2]]));
             $this->nodesToAddCollector->addNodeBeforeNode($propArrayAssign, $node);
-            $pidAssignExpression = new Expression(new Assign(new Variable(self::PID), new ArrayDimFetch(new Variable('propArr'), new String_(self::PID))));
-            $this->nodesToAddCollector->addNodesBeforeNode([$pidAssignExpression, new Nop()], $node);
+            $pidAssignExpression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PID), new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('propArr'), new \PhpParser\Node\Scalar\String_(self::PID))));
+            $this->nodesToAddCollector->addNodesBeforeNode([$pidAssignExpression, new \PhpParser\Node\Stmt\Nop()], $node);
         }
-        $node->name = new Identifier('log');
-        $node->args = $this->nodeFactory->createArgs([$node->args[1], $node->args[2], new LNumber(0), new LNumber(0), $node->args[4] ?? new LNumber(0), $node->args[0], new LNumber(-1), new Array_(), $this->nodeFactory->createMethodCall($node->var, 'eventPid', [$node->args[1], $node->args[2], isset($node->args[3]) && !$this->valueResolver->isNull($node->args[3]->value) ? $node->args[3] : new Variable(self::PID)])]);
+        $node->name = new \PhpParser\Node\Identifier('log');
+        $node->args = $this->nodeFactory->createArgs([$node->args[1], $node->args[2], new \PhpParser\Node\Scalar\LNumber(0), new \PhpParser\Node\Scalar\LNumber(0), $node->args[4] ?? new \PhpParser\Node\Scalar\LNumber(0), $node->args[0], new \PhpParser\Node\Scalar\LNumber(-1), new \PhpParser\Node\Expr\Array_(), $this->nodeFactory->createMethodCall($node->var, 'eventPid', [$node->args[1], $node->args[2], isset($node->args[3]) && !$this->valueResolver->isNull($node->args[3]->value) ? $node->args[3] : new \PhpParser\Node\Expr\Variable(self::PID)])]);
         return $node;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use log method instead of newlog2 from class DataHandler', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use log method instead of newlog2 from class DataHandler', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 

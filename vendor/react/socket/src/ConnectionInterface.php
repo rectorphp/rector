@@ -51,7 +51,7 @@ use RectorPrefix20220527\React\Stream\DuplexStreamInterface;
  * @see ServerInterface
  * @see ConnectorInterface
  */
-interface ConnectionInterface extends DuplexStreamInterface
+interface ConnectionInterface extends \RectorPrefix20220527\React\Stream\DuplexStreamInterface
 {
     /**
      * Returns the full remote address (URI) where this connection has been established with

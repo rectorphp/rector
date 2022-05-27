@@ -22,12 +22,12 @@ final class AddPropertyTypeDeclaration
      * @var \PHPStan\Type\Type
      */
     private $type;
-    public function __construct(string $class, string $propertyName, Type $type)
+    public function __construct(string $class, string $propertyName, \PHPStan\Type\Type $type)
     {
         $this->class = $class;
         $this->propertyName = $propertyName;
         $this->type = $type;
-        RectorAssert::className($class);
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getClass() : string
     {
@@ -37,7 +37,7 @@ final class AddPropertyTypeDeclaration
     {
         return $this->propertyName;
     }
-    public function getType() : Type
+    public function getType() : \PHPStan\Type\Type
     {
         return $this->type;
     }

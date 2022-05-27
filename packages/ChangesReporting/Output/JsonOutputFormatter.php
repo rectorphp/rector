@@ -10,7 +10,7 @@ use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Parallel\ValueObject\Bridge;
-final class JsonOutputFormatter implements OutputFormatterInterface
+final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Output\OutputFormatterInterface
 {
     /**
      * @var string
@@ -21,7 +21,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
-    public function __construct(RectorsChangelogResolver $rectorsChangelogResolver)
+    public function __construct(\Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
     {
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
@@ -29,7 +29,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     {
         return self::NAME;
     }
-    public function report(ProcessResult $processResult, Configuration $configuration) : void
+    public function report(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         $errorsJson = ['totals' => ['changed_files' => \count($processResult->getFileDiffs()), 'removed_and_added_files_count' => $processResult->getRemovedAndAddedFilesCount(), 'removed_node_count' => $processResult->getRemovedNodeCount()]];
         $fileDiffs = $processResult->getFileDiffs();
@@ -37,7 +37,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         foreach ($fileDiffs as $fileDiff) {
             $relativeFilePath = $fileDiff->getRelativeFilePath();
             $appliedRectorsWithChangelog = $this->rectorsChangelogResolver->resolve($fileDiff->getRectorClasses());
-            $errorsJson[Bridge::FILE_DIFFS][] = ['file' => $relativeFilePath, 'diff' => $fileDiff->getDiff(), 'applied_rectors' => $fileDiff->getRectorClasses(), 'applied_rectors_with_changelog' => $appliedRectorsWithChangelog];
+            $errorsJson[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS][] = ['file' => $relativeFilePath, 'diff' => $fileDiff->getDiff(), 'applied_rectors' => $fileDiff->getRectorClasses(), 'applied_rectors_with_changelog' => $appliedRectorsWithChangelog];
             // for Rector CI
             $errorsJson['changed_files'][] = $relativeFilePath;
         }
@@ -47,7 +47,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         if ($errorsData !== []) {
             $errorsJson['errors'] = $errorsData;
         }
-        $json = Json::encode($errorsJson, Json::PRETTY);
+        $json = \RectorPrefix20220527\Nette\Utils\Json::encode($errorsJson, \RectorPrefix20220527\Nette\Utils\Json::PRETTY);
         echo $json . \PHP_EOL;
     }
     /**

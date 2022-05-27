@@ -9,9 +9,9 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 final class DoctrineTypeAnalyzer
 {
-    public function isDoctrineCollectionWithIterableUnionType(Type $type) : bool
+    public function isDoctrineCollectionWithIterableUnionType(\PHPStan\Type\Type $type) : bool
     {
-        if (!$type instanceof UnionType) {
+        if (!$type instanceof \PHPStan\Type\UnionType) {
             return \false;
         }
         $arrayType = null;
@@ -20,7 +20,7 @@ final class DoctrineTypeAnalyzer
             if ($this->isCollectionObjectType($unionedType)) {
                 $hasDoctrineCollectionType = \true;
             }
-            if ($unionedType instanceof ArrayType) {
+            if ($unionedType instanceof \PHPStan\Type\ArrayType) {
                 $arrayType = $unionedType;
             }
         }
@@ -29,9 +29,9 @@ final class DoctrineTypeAnalyzer
         }
         return $arrayType !== null;
     }
-    private function isCollectionObjectType(Type $type) : bool
+    private function isCollectionObjectType(\PHPStan\Type\Type $type) : bool
     {
-        if (!$type instanceof TypeWithClassName) {
+        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }
         return $type->getClassName() === 'Doctrine\\Common\\Collections\\Collection';

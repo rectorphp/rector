@@ -16,7 +16,7 @@ use RectorPrefix20220527\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfi
 /**
  * @api
  */
-abstract class AbstractSymplifyKernel implements LightKernelInterface
+abstract class AbstractSymplifyKernel implements \RectorPrefix20220527\Symplify\SymplifyKernel\Contract\LightKernelInterface
 {
     /**
      * @var \Symfony\Component\DependencyInjection\Container|null
@@ -27,11 +27,11 @@ abstract class AbstractSymplifyKernel implements LightKernelInterface
      * @param CompilerPassInterface[] $compilerPasses
      * @param ExtensionInterface[] $extensions
      */
-    public function create(array $configFiles, array $compilerPasses = [], array $extensions = []) : ContainerInterface
+    public function create(array $configFiles, array $compilerPasses = [], array $extensions = []) : \RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerInterface
     {
-        $containerBuilderFactory = new ContainerBuilderFactory(new ParameterMergingLoaderFactory());
-        $compilerPasses[] = new AutowireArrayParameterCompilerPass();
-        $configFiles[] = SymplifyKernelConfig::FILE_PATH;
+        $containerBuilderFactory = new \RectorPrefix20220527\Symplify\SymplifyKernel\ContainerBuilderFactory(new \RectorPrefix20220527\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory());
+        $compilerPasses[] = new \RectorPrefix20220527\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass();
+        $configFiles[] = \RectorPrefix20220527\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfig::FILE_PATH;
         $containerBuilder = $containerBuilderFactory->create($configFiles, $compilerPasses, $extensions);
         $containerBuilder->compile();
         $this->container = $containerBuilder;
@@ -39,8 +39,8 @@ abstract class AbstractSymplifyKernel implements LightKernelInterface
     }
     public function getContainer() : \RectorPrefix20220527\Psr\Container\ContainerInterface
     {
-        if (!$this->container instanceof Container) {
-            throw new ShouldNotHappenException();
+        if (!$this->container instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\Container) {
+            throw new \RectorPrefix20220527\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
         }
         return $this->container;
     }

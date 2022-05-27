@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\Rector\Property\TypedPropertyFromColumnTypeRector\TypedPropertyFromColumnTypeRectorTest
  */
-final class TypedPropertyFromColumnTypeRector extends AbstractRector
+final class TypedPropertyFromColumnTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -49,7 +49,7 @@ final class TypedPropertyFromColumnTypeRector extends AbstractRector
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(PropertyTypeDecorator $propertyTypeDecorator, ColumnPropertyTypeResolver $columnPropertyTypeResolver, PhpDocTypeChanger $phpDocTypeChanger, NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver, PhpVersionProvider $phpVersionProvider)
+    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver $columnPropertyTypeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
         $this->columnPropertyTypeResolver = $columnPropertyTypeResolver;
@@ -57,9 +57,9 @@ final class TypedPropertyFromColumnTypeRector extends AbstractRector
         $this->nullabilityColumnPropertyTypeResolver = $nullabilityColumnPropertyTypeResolver;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Complete @var annotations or types based on @ORM\\Column', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete @var annotations or types based on @ORM\\Column', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 class SimpleColumn
@@ -88,33 +88,33 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      * @return \PhpParser\Node\Stmt\Property|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
         if ($node->type !== null) {
             return null;
         }
         $isNullable = $this->nullabilityColumnPropertyTypeResolver->isNullable($node);
         $propertyType = $this->columnPropertyTypeResolver->resolve($node, $isNullable);
-        if (!$propertyType instanceof Type || $propertyType instanceof MixedType) {
+        if (!$propertyType instanceof \PHPStan\Type\Type || $propertyType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
         // add default null if missing
-        if ($isNullable && !TypeCombinator::containsNull($propertyType)) {
-            $propertyType = TypeCombinator::addNull($propertyType);
+        if ($isNullable && !\PHPStan\Type\TypeCombinator::containsNull($propertyType)) {
+            $propertyType = \PHPStan\Type\TypeCombinator::addNull($propertyType);
         }
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY());
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
         if ($typeNode === null) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_74)) {
-            if ($propertyType instanceof UnionType) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_74)) {
+            if ($propertyType instanceof \PHPStan\Type\UnionType) {
                 $this->propertyTypeDecorator->decoratePropertyUnionType($propertyType, $typeNode, $node, $phpDocInfo);
                 return $node;
             }

@@ -21,24 +21,24 @@ final class ClassMethodReturnTypeResolver
      * @var \Symplify\Astral\Naming\SimpleNameResolver
      */
     private $simpleNameResolver;
-    public function __construct(SimpleNameResolver $simpleNameResolver)
+    public function __construct(\RectorPrefix20220527\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver)
     {
         $this->simpleNameResolver = $simpleNameResolver;
     }
-    public function resolve(ClassMethod $classMethod, Scope $scope) : Type
+    public function resolve(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
     {
         $methodName = $this->simpleNameResolver->getName($classMethod);
         if (!\is_string($methodName)) {
-            throw new ShouldNotHappenException();
+            throw new \RectorPrefix20220527\Symplify\Astral\Exception\ShouldNotHappenException();
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
-            return new MixedType();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            return new \PHPStan\Type\MixedType();
         }
         $methodReflection = $classReflection->getMethod($methodName, $scope);
-        $functionVariant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-        if (!$functionVariant instanceof FunctionVariant) {
-            return new MixedType();
+        $functionVariant = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        if (!$functionVariant instanceof \PHPStan\Reflection\FunctionVariant) {
+            return new \PHPStan\Type\MixedType();
         }
         return $functionVariant->getReturnType();
     }

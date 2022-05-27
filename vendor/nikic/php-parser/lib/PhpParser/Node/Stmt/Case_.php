@@ -5,7 +5,7 @@ namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-class Case_ extends Node\Stmt implements StmtsAwareInterface
+class Case_ extends \PhpParser\Node\Stmt implements \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
 {
     /** @var null|Node\Expr Condition (null for default) */
     public $cond;

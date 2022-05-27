@@ -5,7 +5,7 @@ namespace Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\Application\File;
-interface FluidRectorInterface extends RectorInterface
+interface FluidRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface
 {
-    public function transform(File $file) : void;
+    public function transform(\Rector\Core\ValueObject\Application\File $file) : void;
 }

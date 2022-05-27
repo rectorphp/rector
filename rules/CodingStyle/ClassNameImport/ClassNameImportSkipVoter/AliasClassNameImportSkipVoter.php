@@ -17,18 +17,18 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  *
  * use App\Something as SomeClass;
  */
-final class AliasClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
+final class AliasClassNameImportSkipVoter implements \Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface
 {
     /**
      * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\AliasUsesResolver
      */
     private $aliasUsesResolver;
-    public function __construct(AliasUsesResolver $aliasUsesResolver)
+    public function __construct(\Rector\CodingStyle\ClassNameImport\AliasUsesResolver $aliasUsesResolver)
     {
         $this->aliasUsesResolver = $aliasUsesResolver;
     }
-    public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
+    public function shouldSkip(\Rector\Core\ValueObject\Application\File $file, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool
     {
         $aliasedUses = $this->aliasUsesResolver->resolveFromNode($node);
         $shortNameLowered = $fullyQualifiedObjectType->getShortNameLowered();

@@ -14,12 +14,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class TemplateToFluidTemplateTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
 {
-    public function enterNode(Statement $statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof ObjectCreation) {
+        if (!$statement instanceof \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\ObjectCreation) {
             return;
         }
-        if (!$statement->value instanceof Scalar) {
+        if (!$statement->value instanceof \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Scalar) {
             return;
         }
         if ('TEMPLATE' !== $statement->value->value) {
@@ -27,9 +27,9 @@ final class TemplateToFluidTemplateTypoScriptRector extends \Ssch\TYPO3Rector\Fi
         }
         $statement->value->value = 'FLUIDTEMPLATE';
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Convert TEMPLATE to FLUIDTEMPLATE', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert TEMPLATE to FLUIDTEMPLATE', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 page.10 = TEMPLATE
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @changelog https://github.com/laravel/framework/pull/38481/files#diff-2310168aa86b70a22595ba784039cbdde829bd38245c9586eedd111dfd0f806d
  */
-final class SwiftSetBodyToHtmlPlainMethodCallRector extends AbstractRector
+final class SwiftSetBodyToHtmlPlainMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes setBody() method call on Swift_Message into a html() or plain() based on second argument', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes setBody() method call on Swift_Message into a html() or plain() based on second argument', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $message = new Swift_Message();
 
 $message->setBody('...', 'text/html');
@@ -43,14 +43,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Swift_Message'))) {
+        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Swift_Message'))) {
             return null;
         }
         if (!$this->isName($node->name, 'setBody')) {
@@ -58,17 +58,17 @@ CODE_SAMPLE
         }
         if (\count($node->args) === 2) {
             $firstArg = $node->args[1];
-            if (!$firstArg instanceof Arg) {
+            if (!$firstArg instanceof \PhpParser\Node\Arg) {
                 return null;
             }
             $secondArgValue = $this->valueResolver->getValue($firstArg->value);
             if ($secondArgValue === 'text/html') {
                 unset($node->args[1]);
-                $node->name = new Identifier('html');
+                $node->name = new \PhpParser\Node\Identifier('html');
                 return $node;
             }
         }
-        $node->name = new Identifier('plain');
+        $node->name = new \PhpParser\Node\Identifier('plain');
         return $node;
     }
 }

@@ -14,36 +14,36 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85759-GeneralUtilitygetHostName.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\GeneralUtilityGetHostNameToGetIndpEnvRector\GeneralUtilityGetHostNameToGetIndpEnvRectorTest
  */
-final class GeneralUtilityGetHostNameToGetIndpEnvRector extends AbstractRector
+final class GeneralUtilityGetHostNameToGetIndpEnvRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getHostname')) {
             return null;
         }
-        $node->name = new Identifier('getIndpEnv');
+        $node->name = new \PhpParser\Node\Identifier('getIndpEnv');
         $node->args = $this->nodeFactory->createArgs(['HTTP_HOST']);
         return $node;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition("Migrating method call GeneralUtility::getHostname() to GeneralUtility::getIndpEnv('HTTP_HOST')", [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition("Migrating method call GeneralUtility::getHostname() to GeneralUtility::getIndpEnv('HTTP_HOST')", [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 \TYPO3\CMS\Core\Utility\GeneralUtility::getHostname();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

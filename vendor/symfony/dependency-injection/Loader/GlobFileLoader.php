@@ -15,7 +15,7 @@ namespace RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class GlobFileLoader extends FileLoader
+class GlobFileLoader extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\FileLoader
 {
     /**
      * {@inheritdoc}

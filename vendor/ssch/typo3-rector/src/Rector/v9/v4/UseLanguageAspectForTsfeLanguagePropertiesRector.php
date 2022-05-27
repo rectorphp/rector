@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85543-Language-relatedPropertiesInTypoScriptFrontendControllerAndPageRepository.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\UseLanguageAspectForTsfeLanguagePropertiesRector\UseLanguageAspectForTsfeLanguagePropertiesRectorTest
  */
-final class UseLanguageAspectForTsfeLanguagePropertiesRector extends AbstractRector
+final class UseLanguageAspectForTsfeLanguagePropertiesRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<string, string>
@@ -27,7 +27,7 @@ final class UseLanguageAspectForTsfeLanguagePropertiesRector extends AbstractRec
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -36,12 +36,12 @@ final class UseLanguageAspectForTsfeLanguagePropertiesRector extends AbstractRec
      */
     public function getNodeTypes() : array
     {
-        return [PropertyFetch::class];
+        return [\PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
      * @param PropertyFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -49,9 +49,9 @@ final class UseLanguageAspectForTsfeLanguagePropertiesRector extends AbstractRec
         if (!$this->isNames($node->name, ['sys_language_uid', 'sys_language_content', 'sys_language_contentOL', 'sys_language_mode'])) {
             return null;
         }
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // Check if we have an assigment to the property, if so do not change it
-        if ($parentNode instanceof Assign && $parentNode->var instanceof PropertyFetch) {
+        if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return null;
         }
         $nodeName = $this->getName($node->name);
@@ -64,9 +64,9 @@ final class UseLanguageAspectForTsfeLanguagePropertiesRector extends AbstractRec
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use LanguageAspect instead of language properties of TSFE', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use LanguageAspect instead of language properties of TSFE', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $languageUid = $GLOBALS['TSFE']->sys_language_uid;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -76,12 +76,12 @@ $languageUid = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspe
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(PropertyFetch $propertyFetch) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
-        if ($this->isObjectType($propertyFetch->var, new ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
+        if ($this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return \false;
         }
-        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \false;
         }
         return !$this->typo3NodeResolver->isPropertyFetchOnParentVariableOfTypeTypoScriptFrontendController($propertyFetch);

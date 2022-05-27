@@ -78,18 +78,18 @@ final class Typo3NodeResolver
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(ValueResolver $valueResolver, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->valueResolver = $valueResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function isMethodCallOnGlobals(Node $node, string $methodCall, string $global) : bool
+    public function isMethodCallOnGlobals(\PhpParser\Node $node, string $methodCall, string $global) : bool
     {
-        if (!$node instanceof MethodCall) {
+        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
-        if (!$node->var instanceof ArrayDimFetch) {
+        if (!$node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($node->name, $methodCall)) {
@@ -103,12 +103,12 @@ final class Typo3NodeResolver
         }
         return $this->valueResolver->isValue($node->var->dim, $global);
     }
-    public function isAnyMethodCallOnGlobals(Node $node, string $global) : bool
+    public function isAnyMethodCallOnGlobals(\PhpParser\Node $node, string $global) : bool
     {
-        if (!$node instanceof MethodCall) {
+        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
-        if (!$node->var instanceof ArrayDimFetch) {
+        if (!$node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($node->var->var, self::GLOBALS)) {
@@ -119,12 +119,12 @@ final class Typo3NodeResolver
         }
         return $this->valueResolver->isValue($node->var->dim, $global);
     }
-    public function isTypo3Global(Node $node, string $global) : bool
+    public function isTypo3Global(\PhpParser\Node $node, string $global) : bool
     {
-        if (!$node instanceof ArrayDimFetch) {
+        if (!$node instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return \false;
         }
-        if ($node->var instanceof MethodCall) {
+        if ($node->var instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($node->var, self::GLOBALS)) {
@@ -138,7 +138,7 @@ final class Typo3NodeResolver
     /**
      * @param string[] $globals
      */
-    public function isTypo3Globals(Node $node, array $globals) : bool
+    public function isTypo3Globals(\PhpParser\Node $node, array $globals) : bool
     {
         foreach ($globals as $global) {
             if ($this->isTypo3Global($node, $global)) {
@@ -147,20 +147,20 @@ final class Typo3NodeResolver
         }
         return \false;
     }
-    public function isPropertyFetchOnParentVariableOfTypeTypoScriptFrontendController(Node $node) : bool
+    public function isPropertyFetchOnParentVariableOfTypeTypoScriptFrontendController(\PhpParser\Node $node) : bool
     {
         return $this->isPropertyFetchOnParentVariableOfType($node, 'TypoScriptFrontendController');
     }
-    public function isPropertyFetchOnParentVariableOfTypePageRepository(Node $node) : bool
+    public function isPropertyFetchOnParentVariableOfTypePageRepository(\PhpParser\Node $node) : bool
     {
         return $this->isPropertyFetchOnParentVariableOfType($node, 'PageRepository');
     }
-    public function isPropertyFetchOnAnyPropertyOfGlobals(Node $node, string $global) : bool
+    public function isPropertyFetchOnAnyPropertyOfGlobals(\PhpParser\Node $node, string $global) : bool
     {
-        if (!$node instanceof PropertyFetch) {
+        if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \false;
         }
-        if (!$node->var instanceof ArrayDimFetch) {
+        if (!$node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($node->var->var, self::GLOBALS)) {
@@ -171,19 +171,19 @@ final class Typo3NodeResolver
         }
         return $this->valueResolver->isValue($node->var->dim, $global);
     }
-    public function isMethodCallOnSysPageOfTSFE(Node $node) : bool
+    public function isMethodCallOnSysPageOfTSFE(\PhpParser\Node $node) : bool
     {
         return $this->isMethodCallOnPropertyOfGlobals($node, self::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'sys_page');
     }
-    public function isMethodCallOnPropertyOfGlobals(Node $node, string $global, string $property) : bool
+    public function isMethodCallOnPropertyOfGlobals(\PhpParser\Node $node, string $global, string $property) : bool
     {
-        if (!$node instanceof MethodCall) {
+        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
-        if (!$node->var instanceof PropertyFetch) {
+        if (!$node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \false;
         }
-        if (!$node->var->var instanceof ArrayDimFetch) {
+        if (!$node->var->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($node->var->var->var, self::GLOBALS)) {
@@ -197,21 +197,21 @@ final class Typo3NodeResolver
         }
         return $this->valueResolver->isValue($node->var->var->dim, $global);
     }
-    public function isMethodCallOnBackendUser(Node $node) : bool
+    public function isMethodCallOnBackendUser(\PhpParser\Node $node) : bool
     {
         return $this->isAnyMethodCallOnGlobals($node, self::BACKEND_USER);
     }
-    private function isPropertyFetchOnParentVariableOfType(Node $node, string $type) : bool
+    private function isPropertyFetchOnParentVariableOfType(\PhpParser\Node $node, string $type) : bool
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Assign) {
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Expr\Assign) {
             return \false;
         }
-        if (!$parentNode->expr instanceof PropertyFetch) {
+        if (!$parentNode->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \false;
         }
         $objectType = $this->nodeTypeResolver->getType($parentNode->expr->var);
-        if (!$objectType instanceof ObjectType) {
+        if (!$objectType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }
         return $type === $objectType->getClassName();

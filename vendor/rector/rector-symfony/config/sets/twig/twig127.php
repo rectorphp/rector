@@ -6,6 +6,6 @@ namespace RectorPrefix20220527;
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('Twig_Node', 'getLine', 'getTemplateLine'), new MethodCallRename('Twig_Node', 'getFilename', 'getTemplateName'), new MethodCallRename('Twig_Template', 'getSource', 'getSourceContext'), new MethodCallRename('Twig_Error', 'getTemplateFile', 'getTemplateName'), new MethodCallRename('Twig_Error', 'getTemplateName', 'setTemplateName')]);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [new \Rector\Renaming\ValueObject\MethodCallRename('Twig_Node', 'getLine', 'getTemplateLine'), new \Rector\Renaming\ValueObject\MethodCallRename('Twig_Node', 'getFilename', 'getTemplateName'), new \Rector\Renaming\ValueObject\MethodCallRename('Twig_Template', 'getSource', 'getSourceContext'), new \Rector\Renaming\ValueObject\MethodCallRename('Twig_Error', 'getTemplateFile', 'getTemplateName'), new \Rector\Renaming\ValueObject\MethodCallRename('Twig_Error', 'getTemplateName', 'setTemplateName')]);
 };

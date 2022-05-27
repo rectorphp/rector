@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector\WebTestCaseAssertSelectorTextContainsRectorTest
  */
-final class WebTestCaseAssertSelectorTextContainsRector extends AbstractRector
+final class WebTestCaseAssertSelectorTextContainsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -29,14 +29,14 @@ final class WebTestCaseAssertSelectorTextContainsRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(\Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->symfonyTestCaseAnalyzer = $symfonyTestCaseAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Simplify use of assertions in WebTestCase to assertSelectorTextContains()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify use of assertions in WebTestCase to assertSelectorTextContains()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -69,12 +69,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->symfonyTestCaseAnalyzer->isInWebTestCase($node)) {
             return null;
@@ -84,14 +84,14 @@ CODE_SAMPLE
         }
         $args = $node->getArgs();
         $firstArgValue = $args[1]->value;
-        if (!$firstArgValue instanceof MethodCall) {
+        if (!$firstArgValue instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         $methodCall = $firstArgValue;
         if (!$this->isName($methodCall->name, 'text')) {
             return null;
         }
-        if (!$methodCall->var instanceof MethodCall) {
+        if (!$methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         $nestedMethodCall = $methodCall->var;

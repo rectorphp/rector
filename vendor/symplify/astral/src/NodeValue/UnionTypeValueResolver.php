@@ -10,11 +10,11 @@ final class UnionTypeValueResolver
     /**
      * @return mixed[]
      */
-    public function resolveConstantTypes(UnionType $unionType) : array
+    public function resolveConstantTypes(\PHPStan\Type\UnionType $unionType) : array
     {
         $resolvedValues = [];
         foreach ($unionType->getTypes() as $unionedType) {
-            if (!$unionedType instanceof ConstantScalarType) {
+            if (!$unionedType instanceof \PHPStan\Type\ConstantScalarType) {
                 continue;
             }
             $resolvedValues[] = $unionedType->getValue();

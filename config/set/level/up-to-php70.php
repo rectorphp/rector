@@ -7,8 +7,8 @@ use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->sets([SetList::PHP_70, LevelSetList::UP_TO_PHP_56]);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->sets([\Rector\Set\ValueObject\SetList::PHP_70, \Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_56]);
     // parameter must be defined after import, to override imported param version
-    $rectorConfig->phpVersion(PhpVersion::PHP_70);
+    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_70);
 };

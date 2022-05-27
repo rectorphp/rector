@@ -8,7 +8,7 @@ final class EnumTokenEmulator extends \PhpParser\Lexer\TokenEmulator\KeywordEmul
 {
     public function getPhpVersion() : string
     {
-        return Emulative::PHP_8_1;
+        return \PhpParser\Lexer\Emulative::PHP_8_1;
     }
     public function getKeywordString() : string
     {

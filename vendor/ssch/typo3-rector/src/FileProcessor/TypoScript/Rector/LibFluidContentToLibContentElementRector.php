@@ -14,9 +14,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class LibFluidContentToLibContentElementRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
 {
-    public function enterNode(Statement $statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!\is_a($statement, NestedAssignment::class) && !\is_a($statement, Assignment::class)) {
+        if (!\is_a($statement, \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\NestedAssignment::class) && !\is_a($statement, \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment::class)) {
             return;
         }
         if ('lib.fluidContent' === $statement->object->relativeName) {
@@ -29,9 +29,9 @@ final class LibFluidContentToLibContentElementRector extends \Ssch\TYPO3Rector\F
             $statement->object->relativeName = 'contentElement';
         }
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Convert lib.fluidContent to lib.contentElement', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert lib.fluidContent to lib.contentElement', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 lib.fluidContent {
    templateRootPaths {
       200 = EXT:your_extension_key/Resources/Private/Templates/

@@ -10,9 +10,9 @@ use PhpParser\ErrorHandler;
  *
  * This is the default strategy used by all components.
  */
-class Throwing implements ErrorHandler
+class Throwing implements \PhpParser\ErrorHandler
 {
-    public function handleError(Error $error)
+    public function handleError(\PhpParser\Error $error)
     {
         throw $error;
     }

@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector\ArrayKeysAndInArrayToArrayKeyExistsRectorTest
  */
-final class ArrayKeysAndInArrayToArrayKeyExistsRector extends AbstractRector
+final class ArrayKeysAndInArrayToArrayKeyExistsRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace array_keys() and in_array() to array_key_exists()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace array_keys() and in_array() to array_key_exists()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 function run($packageName, $values)
 {
     $keys = array_keys($values);
@@ -40,12 +40,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->nodeNameResolver->isName($node, 'in_array')) {
             return null;
@@ -54,61 +54,61 @@ CODE_SAMPLE
         $secondArg = $args[1];
         $arrayVariable = $secondArg->value;
         $previousAssignArraysKeysFuncCall = $this->findPreviousAssignToArrayKeys($node, $arrayVariable);
-        if ($previousAssignArraysKeysFuncCall instanceof Assign) {
+        if ($previousAssignArraysKeysFuncCall instanceof \PhpParser\Node\Expr\Assign) {
             /** @var FuncCall $arrayKeysFuncCall */
             $arrayKeysFuncCall = $previousAssignArraysKeysFuncCall->expr;
             $this->removeNode($previousAssignArraysKeysFuncCall);
             return $this->createArrayKeyExists($node, $arrayKeysFuncCall);
         }
-        if ($arrayVariable instanceof FuncCall && $this->isName($arrayVariable, 'array_keys')) {
+        if ($arrayVariable instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($arrayVariable, 'array_keys')) {
             $arrayKeysFuncCallArgs = $arrayVariable->getArgs();
             if (\count($arrayKeysFuncCallArgs) > 1) {
                 return null;
             }
             // unwrap array func call
             $secondArg->value = $arrayKeysFuncCallArgs[0]->value;
-            $node->name = new Name('array_key_exists');
+            $node->name = new \PhpParser\Node\Name('array_key_exists');
             unset($node->args[2]);
             return $node;
         }
         return null;
     }
-    private function createArrayKeyExists(FuncCall $inArrayFuncCall, FuncCall $arrayKeysFuncCall) : ?FuncCall
+    private function createArrayKeyExists(\PhpParser\Node\Expr\FuncCall $inArrayFuncCall, \PhpParser\Node\Expr\FuncCall $arrayKeysFuncCall) : ?\PhpParser\Node\Expr\FuncCall
     {
         if (!isset($inArrayFuncCall->args[0])) {
             return null;
         }
-        if (!$inArrayFuncCall->args[0] instanceof Arg) {
+        if (!$inArrayFuncCall->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         if (!isset($arrayKeysFuncCall->args[0])) {
             return null;
         }
-        if (!$arrayKeysFuncCall->args[0] instanceof Arg) {
+        if (!$arrayKeysFuncCall->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $arguments = [$inArrayFuncCall->args[0], $arrayKeysFuncCall->args[0]];
-        return new FuncCall(new Name('array_key_exists'), $arguments);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_key_exists'), $arguments);
     }
     /**
      * @return null|\PhpParser\Node|\PhpParser\Node\FunctionLike
      */
-    private function findPreviousAssignToArrayKeys(FuncCall $funcCall, Expr $expr)
+    private function findPreviousAssignToArrayKeys(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr)
     {
-        return $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $node) use($expr) : bool {
+        return $this->betterNodeFinder->findFirstPrevious($funcCall, function (\PhpParser\Node $node) use($expr) : bool {
             // breaking out of scope
-            if ($node instanceof FunctionLike) {
+            if ($node instanceof \PhpParser\Node\FunctionLike) {
                 return \true;
             }
-            if (!$node instanceof Assign) {
-                return !(bool) $this->betterNodeFinder->find($node, function (Node $subNode) use($expr) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+                return !(bool) $this->betterNodeFinder->find($node, function (\PhpParser\Node $subNode) use($expr) : bool {
                     return $this->nodeComparator->areNodesEqual($expr, $subNode);
                 });
             }
             if (!$this->nodeComparator->areNodesEqual($expr, $node->var)) {
                 return \false;
             }
-            if (!$node->expr instanceof FuncCall) {
+            if (!$node->expr instanceof \PhpParser\Node\Expr\FuncCall) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($node->expr, 'array_keys');

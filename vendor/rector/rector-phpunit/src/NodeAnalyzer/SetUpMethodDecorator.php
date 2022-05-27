@@ -17,18 +17,18 @@ final class SetUpMethodDecorator
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(AstResolver $astResolver)
+    public function __construct(\Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->astResolver = $astResolver;
     }
-    public function decorate(ClassMethod $classMethod) : void
+    public function decorate(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         // skip test run
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return;
         }
-        $setUpClassMethod = $this->astResolver->resolveClassMethod('PHPUnit\\Framework\\TestCase', MethodName::SET_UP);
-        if (!$setUpClassMethod instanceof ClassMethod) {
+        $setUpClassMethod = $this->astResolver->resolveClassMethod('PHPUnit\\Framework\\TestCase', \Rector\Core\ValueObject\MethodName::SET_UP);
+        if (!$setUpClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
         $classMethod->returnType = $setUpClassMethod->returnType;

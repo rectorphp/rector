@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ArrayShapeFromConstantArrayReturnRector\ArrayShapeFromConstantArrayReturnRectorTest
  */
-final class ArrayShapeFromConstantArrayReturnRector extends AbstractRector
+final class ArrayShapeFromConstantArrayReturnRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @see https://regex101.com/r/WvUD0m/2
@@ -41,14 +41,14 @@ final class ArrayShapeFromConstantArrayReturnRector extends AbstractRector
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(ClassMethodReturnTypeResolver $classMethodReturnTypeResolver, PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(\RectorPrefix20220527\Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver $classMethodReturnTypeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->classMethodReturnTypeResolver = $classMethodReturnTypeResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add array shape exact types based on constant keys of array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add array shape exact types based on constant keys of array', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(string $name)
@@ -76,40 +76,40 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, \PhpParser\Node\Stmt\Return_::class);
         // exact one shape only
         if (\count($returns) !== 1) {
             return null;
         }
         $return = $returns[0];
-        if (!$return->expr instanceof Expr) {
+        if (!$return->expr instanceof \PhpParser\Node\Expr) {
             return null;
         }
         $returnExprType = $this->getType($return->expr);
-        if (!$returnExprType instanceof ConstantArrayType) {
+        if (!$returnExprType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return null;
         }
         if ($this->shouldSkip($returnExprType)) {
             return null;
         }
-        $returnType = $this->classMethodReturnTypeResolver->resolve($node, $node->getAttribute(AttributeKey::SCOPE));
-        if ($returnType instanceof ConstantArrayType) {
+        $returnType = $this->classMethodReturnTypeResolver->resolve($node, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));
+        if ($returnType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $returnExprTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($returnExprType, TypeKind::RETURN());
-        if ($returnExprTypeNode instanceof GenericTypeNode) {
+        $returnExprTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($returnExprType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        if ($returnExprTypeNode instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
             return null;
         }
-        if ($returnExprTypeNode instanceof SpacingAwareArrayTypeNode) {
+        if ($returnExprTypeNode instanceof \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode) {
             return null;
         }
         $hasChanged = $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $returnExprType);
@@ -118,28 +118,28 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkip(ConstantArrayType $constantArrayType) : bool
+    private function shouldSkip(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : bool
     {
         $keyType = $constantArrayType->getKeyType();
         // empty array
-        if ($keyType instanceof NeverType) {
+        if ($keyType instanceof \PHPStan\Type\NeverType) {
             return \true;
         }
-        $types = $keyType instanceof UnionType ? $keyType->getTypes() : [$keyType];
+        $types = $keyType instanceof \PHPStan\Type\UnionType ? $keyType->getTypes() : [$keyType];
         foreach ($types as $type) {
-            if (!$type instanceof ConstantStringType) {
+            if (!$type instanceof \PHPStan\Type\Constant\ConstantStringType) {
                 continue;
             }
             $value = $type->getValue();
             if (\trim($value) === '') {
                 return \true;
             }
-            if (StringUtils::isMatch($value, self::SKIPPED_CHAR_REGEX)) {
+            if (\Rector\Core\Util\StringUtils::isMatch($value, self::SKIPPED_CHAR_REGEX)) {
                 return \true;
             }
         }
         $itemType = $constantArrayType->getItemType();
-        if ($itemType instanceof ConstantArrayType) {
+        if ($itemType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return $this->shouldSkip($itemType);
         }
         return \false;

@@ -18,7 +18,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.4/Breaking-77630-RemoveWizardIcons.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v4\SubstituteOldWizardIconsRector\SubstituteOldWizardIconsRectorTest
  */
-final class SubstituteOldWizardIconsRector extends AbstractRector implements ConfigurableRectorInterface
+final class SubstituteOldWizardIconsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     use TcaHelperTrait;
     /**
@@ -34,28 +34,28 @@ final class SubstituteOldWizardIconsRector extends AbstractRector implements Con
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof ArrayItem) {
+        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         $items = $columnsArrayItem->value;
-        if (!$items instanceof Array_) {
+        if (!$items instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $oldFileNames = \array_keys($this->oldToNewFileLocations);
         $hasAstBeenChanged = \false;
         foreach ($items->items as $fieldValue) {
-            if (!$fieldValue instanceof ArrayItem) {
+            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
@@ -65,18 +65,18 @@ final class SubstituteOldWizardIconsRector extends AbstractRector implements Con
             if (null === $fieldName) {
                 continue;
             }
-            if (!$fieldValue->value instanceof Array_) {
+            if (!$fieldValue->value instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             foreach ($fieldValue->value->items as $configValue) {
                 if (null === $configValue) {
                     continue;
                 }
-                if (!$configValue->value instanceof Array_) {
+                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 foreach ($configValue->value->items as $configItemValue) {
-                    if (!$configItemValue instanceof ArrayItem) {
+                    if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                         continue;
                     }
                     if (null === $configItemValue->key) {
@@ -85,28 +85,28 @@ final class SubstituteOldWizardIconsRector extends AbstractRector implements Con
                     if (!$this->valueResolver->isValue($configItemValue->key, 'wizards')) {
                         continue;
                     }
-                    if (!$configItemValue->value instanceof Array_) {
+                    if (!$configItemValue->value instanceof \PhpParser\Node\Expr\Array_) {
                         continue;
                     }
                     foreach ($configItemValue->value->items as $wizardItemValue) {
                         if (null === $wizardItemValue) {
                             continue;
                         }
-                        if (!$wizardItemValue->value instanceof Array_) {
+                        if (!$wizardItemValue->value instanceof \PhpParser\Node\Expr\Array_) {
                             continue;
                         }
                         if (null === $wizardItemValue->key) {
                             continue;
                         }
                         foreach ($wizardItemValue->value->items as $wizardItemSubValue) {
-                            if (!$wizardItemSubValue instanceof ArrayItem) {
+                            if (!$wizardItemSubValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                                 continue;
                             }
                             if (null === $wizardItemSubValue->key) {
                                 continue;
                             }
                             if ($this->valueResolver->isValue($wizardItemSubValue->key, 'icon') && $this->valueResolver->isValues($wizardItemSubValue->value, $oldFileNames)) {
-                                $wizardItemSubValue->value = new String_($this->oldToNewFileLocations[$this->valueResolver->getValue($wizardItemSubValue->value)]);
+                                $wizardItemSubValue->value = new \PhpParser\Node\Scalar\String_($this->oldToNewFileLocations[$this->valueResolver->getValue($wizardItemSubValue->value)]);
                                 $hasAstBeenChanged = \true;
                             }
                         }
@@ -122,17 +122,17 @@ final class SubstituteOldWizardIconsRector extends AbstractRector implements Con
     public function configure(array $configuration) : void
     {
         $oldToNewFileLocations = $configuration[self::OLD_TO_NEW_FILE_LOCATIONS] ?? $configuration;
-        Assert::isArray($oldToNewFileLocations);
-        Assert::allString(\array_keys($oldToNewFileLocations));
-        Assert::allString($oldToNewFileLocations);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::isArray($oldToNewFileLocations);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString(\array_keys($oldToNewFileLocations));
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($oldToNewFileLocations);
         $this->oldToNewFileLocations = $oldToNewFileLocations;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('The TCA migration migrates the icon calls to the new output if used as wizard icon', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('The TCA migration migrates the icon calls to the new output if used as wizard icon', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
     ],

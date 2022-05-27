@@ -21,7 +21,7 @@ final class EventReferenceFactory
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(NodeFactory $nodeFactory, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->nodeFactory = $nodeFactory;
         $this->reflectionProvider = $reflectionProvider;
@@ -30,7 +30,7 @@ final class EventReferenceFactory
      * @param EventNameToClassAndConstant[] $eventNamesToClassConstants
      * @return String_|ClassConstFetch
      */
-    public function createEventName(string $eventName, array $eventNamesToClassConstants) : Node
+    public function createEventName(string $eventName, array $eventNamesToClassConstants) : \PhpParser\Node
     {
         if ($this->reflectionProvider->hasClass($eventName)) {
             return $this->nodeFactory->createClassConstReference($eventName);
@@ -42,6 +42,6 @@ final class EventReferenceFactory
             }
             return $this->nodeFactory->createClassConstFetch($eventNameToClassConstant->getEventClass(), $eventNameToClassConstant->getEventConstant());
         }
-        return new String_($eventName);
+        return new \PhpParser\Node\Scalar\String_($eventName);
     }
 }

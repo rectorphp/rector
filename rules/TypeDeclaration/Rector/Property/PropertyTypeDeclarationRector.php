@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\PropertyTypeDeclarationRectorTest
  */
-final class PropertyTypeDeclarationRector extends AbstractRector
+final class PropertyTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -44,16 +44,16 @@ final class PropertyTypeDeclarationRector extends AbstractRector
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(VarDocPropertyTypeInferer $varDocPropertyTypeInferer, PhpDocTypeChanger $phpDocTypeChanger, PropertyTypeOverrideGuard $propertyTypeOverrideGuard, PhpVersionProvider $phpVersionProvider)
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard $propertyTypeOverrideGuard, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->propertyTypeOverrideGuard = $propertyTypeOverrideGuard;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add @var to properties that are missing it', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add @var to properties that are missing it', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $value;
@@ -85,12 +85,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (\count($node->props) !== 1) {
             return null;
@@ -106,37 +106,37 @@ CODE_SAMPLE
             return null;
         }
         $type = $this->varDocPropertyTypeInferer->inferProperty($node);
-        if ($type instanceof MixedType) {
+        if ($type instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        if (!$node->isPrivate() && $type instanceof NullType) {
+        if (!$node->isPrivate() && $type instanceof \PHPStan\Type\NullType) {
             return null;
         }
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES) && $this->propertyTypeOverrideGuard->isLegal($node)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES) && $this->propertyTypeOverrideGuard->isLegal($node)) {
             $this->completeTypedProperty($type, $node);
             return $node;
         }
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
         return $node;
     }
-    private function isVarDocAlreadySet(PhpDocInfo $phpDocInfo) : bool
+    private function isVarDocAlreadySet(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
     {
         foreach (['@var', '@phpstan-var', '@psalm-var'] as $tagName) {
             $varType = $phpDocInfo->getVarType($tagName);
-            if (!$varType instanceof MixedType) {
+            if (!$varType instanceof \PHPStan\Type\MixedType) {
                 return \true;
             }
         }
         return \false;
     }
-    private function completeTypedProperty(Type $type, Property $property) : void
+    private function completeTypedProperty(\PHPStan\Type\Type $type, \PhpParser\Node\Stmt\Property $property) : void
     {
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY());
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
         if ($propertyTypeNode === null) {
             return;
         }
-        if ($propertyTypeNode instanceof UnionType) {
-            if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+        if ($propertyTypeNode instanceof \PhpParser\Node\UnionType) {
+            if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES)) {
                 $property->type = $propertyTypeNode;
                 return;
             }

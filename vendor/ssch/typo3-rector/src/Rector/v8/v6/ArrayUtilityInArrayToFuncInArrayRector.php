@@ -13,21 +13,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79316-DeprecateArrayUtilityinArray.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\ArrayUtilityInArrayToFuncInArrayRector\ArrayUtilityInArrayToFuncInArrayRectorTest
  */
-final class ArrayUtilityInArrayToFuncInArrayRector extends AbstractRector
+final class ArrayUtilityInArrayToFuncInArrayRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\ArrayUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ArrayUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'inArray')) {
@@ -38,8 +38,8 @@ final class ArrayUtilityInArrayToFuncInArrayRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Method inArray from ArrayUtility to in_array', [new CodeSample('ArrayUtility::inArray()', 'in_array')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Method inArray from ArrayUtility to in_array', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('ArrayUtility::inArray()', 'in_array')]);
     }
 }

@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.3/Deprecation-89866-Global-TYPO3-information-related-constants.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v3\UseClassTypo3InformationRector\UseClassTypo3InformationRectorTest
  */
-final class UseClassTypo3InformationRector extends AbstractRector
+final class UseClassTypo3InformationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string[]
@@ -23,12 +23,12 @@ final class UseClassTypo3InformationRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [ConstFetch::class];
+        return [\PhpParser\Node\Expr\ConstFetch::class];
     }
     /**
      * @param ConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isNames($node->name, self::CONSTANTS_TO_REFACTOR)) {
             return null;
@@ -54,9 +54,9 @@ final class UseClassTypo3InformationRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use class Typo3Information', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use class Typo3Information', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $urlGeneral = TYPO3_URL_GENERAL;
 $urlLicense = TYPO3_URL_LICENSE;
 $urlException = TYPO3_URL_EXCEPTION;

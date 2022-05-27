@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp71\Rector\ConstFetch\DowngradePhp71JsonConstRector\DowngradePhp71JsonConstRectorTest
  */
-final class DowngradePhp71JsonConstRector extends AbstractRector
+final class DowngradePhp71JsonConstRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string[]
@@ -26,13 +26,13 @@ final class DowngradePhp71JsonConstRector extends AbstractRector
      * @var \Rector\DowngradePhp72\NodeManipulator\JsonConstCleaner
      */
     private $jsonConstCleaner;
-    public function __construct(JsonConstCleaner $jsonConstCleaner)
+    public function __construct(\Rector\DowngradePhp72\NodeManipulator\JsonConstCleaner $jsonConstCleaner)
     {
         $this->jsonConstCleaner = $jsonConstCleaner;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove Json constant that available only in php 7.1', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove Json constant that available only in php 7.1', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 json_encode($content, JSON_UNESCAPED_LINE_TERMINATORS);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -45,12 +45,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ConstFetch::class, BitwiseOr::class];
+        return [\PhpParser\Node\Expr\ConstFetch::class, \PhpParser\Node\Expr\BinaryOp\BitwiseOr::class];
     }
     /**
      * @param ConstFetch|BitwiseOr $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         return $this->jsonConstCleaner->clean($node, self::CONSTANTS);
     }

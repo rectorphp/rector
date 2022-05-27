@@ -12,17 +12,17 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 /**
  * @implements TypeToCallReflectionResolverInterface<ClosureType>
  */
-final class ClosureTypeToCallReflectionResolver implements TypeToCallReflectionResolverInterface
+final class ClosureTypeToCallReflectionResolver implements \Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface
 {
-    public function supports(Type $type) : bool
+    public function supports(\PHPStan\Type\Type $type) : bool
     {
-        return $type instanceof ClosureType;
+        return $type instanceof \PHPStan\Type\ClosureType;
     }
     /**
      * @param ClosureType $type
      */
-    public function resolve(Type $type, Scope $scope) : NativeFunctionReflection
+    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope) : \PHPStan\Reflection\Native\NativeFunctionReflection
     {
-        return new NativeFunctionReflection('{closure}', $type->getCallableParametersAcceptors($scope), null, TrinaryLogic::createMaybe(), \false);
+        return new \PHPStan\Reflection\Native\NativeFunctionReflection('{closure}', $type->getCallableParametersAcceptors($scope), null, \PHPStan\TrinaryLogic::createMaybe(), \false);
     }
 }

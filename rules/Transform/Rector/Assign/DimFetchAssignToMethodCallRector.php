@@ -18,15 +18,15 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\Assign\DimFetchAssignToMethodCallRector\DimFetchAssignToMethodCallRectorTest
  */
-final class DimFetchAssignToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class DimFetchAssignToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var DimFetchAssignToMethodCall[]
      */
     private $dimFetchAssignToMethodCalls = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change magic array access add to $list[], to explicit $list->addMethod(...)', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change magic array access add to $list[], to explicit $list->addMethod(...)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
 
@@ -51,45 +51,45 @@ class RouterFactory
     }
 }
 CODE_SAMPLE
-, [new DimFetchAssignToMethodCall('Nette\\Application\\Routers\\RouteList', 'Nette\\Application\\Routers\\Route', 'addRoute')])]);
+, [new \Rector\Transform\ValueObject\DimFetchAssignToMethodCall('Nette\\Application\\Routers\\RouteList', 'Nette\\Application\\Routers\\Route', 'addRoute')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Assign::class];
+        return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->var instanceof ArrayDimFetch) {
+        if (!$node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return null;
         }
         $arrayDimFetch = $node->var;
-        if (!$arrayDimFetch->var instanceof Variable) {
+        if (!$arrayDimFetch->var instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
-        if (!$node->expr instanceof New_) {
+        if (!$node->expr instanceof \PhpParser\Node\Expr\New_) {
             return null;
         }
         $dimFetchAssignToMethodCall = $this->findDimFetchAssignToMethodCall($node);
-        if (!$dimFetchAssignToMethodCall instanceof DimFetchAssignToMethodCall) {
+        if (!$dimFetchAssignToMethodCall instanceof \Rector\Transform\ValueObject\DimFetchAssignToMethodCall) {
             return null;
         }
-        return new MethodCall($arrayDimFetch->var, $dimFetchAssignToMethodCall->getAddMethod(), $node->expr->args);
+        return new \PhpParser\Node\Expr\MethodCall($arrayDimFetch->var, $dimFetchAssignToMethodCall->getAddMethod(), $node->expr->args);
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        Assert::allIsAOf($configuration, DimFetchAssignToMethodCall::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\DimFetchAssignToMethodCall::class);
         $this->dimFetchAssignToMethodCalls = $configuration;
     }
-    private function findDimFetchAssignToMethodCall(Assign $assign) : ?DimFetchAssignToMethodCall
+    private function findDimFetchAssignToMethodCall(\PhpParser\Node\Expr\Assign $assign) : ?\Rector\Transform\ValueObject\DimFetchAssignToMethodCall
     {
         /** @var ArrayDimFetch $arrayDimFetch */
         $arrayDimFetch = $assign->var;

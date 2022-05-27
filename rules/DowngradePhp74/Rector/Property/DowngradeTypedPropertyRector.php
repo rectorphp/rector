@@ -14,14 +14,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  */
-final class DowngradeTypedPropertyRector extends AbstractRector
+final class DowngradeTypedPropertyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\CodeQuality\NodeFactory\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
-    public function __construct(PropertyTypeDecorator $propertyTypeDecorator)
+    public function __construct(\Rector\CodeQuality\NodeFactory\PropertyTypeDecorator $propertyTypeDecorator)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
     }
@@ -30,11 +30,11 @@ final class DowngradeTypedPropertyRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes property type definition from type definitions to `@var` annotations.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes property type definition from type definitions to `@var` annotations.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private string $property;
@@ -54,13 +54,13 @@ CODE_SAMPLE
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->type === null) {
             return null;
         }
         $default = $node->props[0]->default;
-        if ($node->type instanceof NullableType && $default instanceof Expr && $this->valueResolver->isNull($default)) {
+        if ($node->type instanceof \PhpParser\Node\NullableType && $default instanceof \PhpParser\Node\Expr && $this->valueResolver->isNull($default)) {
             $node->props[0]->default = null;
         }
         $this->propertyTypeDecorator->decoratePropertyWithDocBlock($node, $node->type);

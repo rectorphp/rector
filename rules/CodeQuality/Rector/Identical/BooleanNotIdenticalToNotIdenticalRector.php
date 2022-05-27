@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://3v4l.org/GoEPq
  * @see \Rector\Tests\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector\BooleanNotIdenticalToNotIdenticalRectorTest
  */
-final class BooleanNotIdenticalToNotIdenticalRector extends AbstractRector
+final class BooleanNotIdenticalToNotIdenticalRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Negated identical boolean compare to not identical compare (does not apply to non-bool values)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Negated identical boolean compare to not identical compare (does not apply to non-bool values)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -54,42 +54,42 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Identical::class, BooleanNot::class];
+        return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
      * @param Identical|BooleanNot $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof Identical) {
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             return $this->processIdentical($node);
         }
-        if ($node->expr instanceof Identical) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             $identical = $node->expr;
             $leftType = $this->getType($identical->left);
-            if (!$leftType instanceof BooleanType) {
+            if (!$leftType instanceof \PHPStan\Type\BooleanType) {
                 return null;
             }
             $rightType = $this->getType($identical->right);
-            if (!$rightType instanceof BooleanType) {
+            if (!$rightType instanceof \PHPStan\Type\BooleanType) {
                 return null;
             }
-            return new NotIdentical($identical->left, $identical->right);
+            return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($identical->left, $identical->right);
         }
         return null;
     }
-    private function processIdentical(Identical $identical) : ?NotIdentical
+    private function processIdentical(\PhpParser\Node\Expr\BinaryOp\Identical $identical) : ?\PhpParser\Node\Expr\BinaryOp\NotIdentical
     {
         $leftType = $this->getType($identical->left);
-        if (!$leftType instanceof BooleanType) {
+        if (!$leftType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }
         $rightType = $this->getType($identical->right);
-        if (!$rightType instanceof BooleanType) {
+        if (!$rightType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }
-        if ($identical->left instanceof BooleanNot) {
-            return new NotIdentical($identical->left->expr, $identical->right);
+        if ($identical->left instanceof \PhpParser\Node\Expr\BooleanNot) {
+            return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($identical->left->expr, $identical->right);
         }
         return null;
     }

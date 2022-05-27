@@ -16,6 +16,6 @@ class ArrayShapeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     }
     public function __toString() : string
     {
-        return 'array{' . implode(', ', $this->items) . '}';
+        return 'array{' . \implode(', ', $this->items) . '}';
     }
 }

@@ -5,7 +5,7 @@ namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
-abstract class AbstractGlobalConditionMatcher implements TyposcriptConditionMatcher
+abstract class AbstractGlobalConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
 {
     /**
      * @var array<string, string>
@@ -22,7 +22,7 @@ abstract class AbstractGlobalConditionMatcher implements TyposcriptConditionMatc
     protected function refactorTsfe(string $property, string $operator, string $value) : string
     {
         if (\strncmp($property, 'page', \strlen('page')) === 0) {
-            $parameters = ArrayUtility::trimExplode('|', $property, \true);
+            $parameters = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode('|', $property, \true);
             return \sprintf('page["%s"] %s %s', $parameters[1], self::OPERATOR_MAPPING[$operator], $value);
         }
         return \sprintf('getTSFE().%s %s %s', $property, self::OPERATOR_MAPPING[$operator], $value);

@@ -20,20 +20,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector\InlineArrayReturnAssignRectorTest
  */
-final class InlineArrayReturnAssignRector extends AbstractRector
+final class InlineArrayReturnAssignRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\VariableDimFetchAssignResolver
      */
     private $variableDimFetchAssignResolver;
-    public function __construct(VariableDimFetchAssignResolver $variableDimFetchAssignResolver)
+    public function __construct(\Rector\CodeQuality\NodeAnalyzer\VariableDimFetchAssignResolver $variableDimFetchAssignResolver)
     {
         $this->variableDimFetchAssignResolver = $variableDimFetchAssignResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Inline just in time array dim fetch assigns to direct return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Inline just in time array dim fetch assigns to direct return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 function getPerson()
 {
     $person = [];
@@ -59,12 +59,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StmtsAwareInterface::class];
+        return [\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $stmts = $node->stmts;
         if ($stmts === null) {
@@ -75,11 +75,11 @@ CODE_SAMPLE
         }
         $firstStmt = \array_shift($stmts);
         $variable = $this->matchVariableAssignOfEmptyArray($firstStmt);
-        if (!$variable instanceof Variable) {
+        if (!$variable instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         $lastStmt = \array_pop($stmts);
-        if (!$lastStmt instanceof Stmt) {
+        if (!$lastStmt instanceof \PhpParser\Node\Stmt) {
             return null;
         }
         if (!$this->isReturnOfVariable($lastStmt, $variable)) {
@@ -90,32 +90,32 @@ CODE_SAMPLE
             return null;
         }
         $array = $this->createArray($keysAndExprs);
-        $node->stmts = [new Return_($array)];
+        $node->stmts = [new \PhpParser\Node\Stmt\Return_($array)];
         return $node;
     }
-    private function matchVariableAssignOfEmptyArray(Stmt $stmt) : ?Variable
+    private function matchVariableAssignOfEmptyArray(\PhpParser\Node\Stmt $stmt) : ?\PhpParser\Node\Expr\Variable
     {
-        if (!$stmt instanceof Expression) {
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        if (!$stmt->expr instanceof Assign) {
+        if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
         $assign = $stmt->expr;
         if (!$this->valueResolver->isValue($assign->expr, [])) {
             return null;
         }
-        if (!$assign->var instanceof Variable) {
+        if (!$assign->var instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         return $assign->var;
     }
-    private function isReturnOfVariable(Stmt $stmt, Variable $variable) : bool
+    private function isReturnOfVariable(\PhpParser\Node\Stmt $stmt, \PhpParser\Node\Expr\Variable $variable) : bool
     {
-        if (!$stmt instanceof Return_) {
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Return_) {
             return \false;
         }
-        if (!$stmt->expr instanceof Variable) {
+        if (!$stmt->expr instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
         return $this->nodeComparator->areNodesEqual($stmt->expr, $variable);
@@ -123,12 +123,12 @@ CODE_SAMPLE
     /**
      * @param KeyAndExpr[] $keysAndExprs
      */
-    private function createArray(array $keysAndExprs) : Array_
+    private function createArray(array $keysAndExprs) : \PhpParser\Node\Expr\Array_
     {
         $arrayItems = [];
         foreach ($keysAndExprs as $keyAndExpr) {
-            $arrayItems[] = new ArrayItem($keyAndExpr->getExpr(), $keyAndExpr->getKeyExpr());
+            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($keyAndExpr->getExpr(), $keyAndExpr->getKeyExpr());
         }
-        return new Array_($arrayItems);
+        return new \PhpParser\Node\Expr\Array_($arrayItems);
     }
 }

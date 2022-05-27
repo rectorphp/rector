@@ -16,11 +16,11 @@ final class ClassChildAnalyzer
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
-    public function hasChildClassMethod(ClassReflection $classReflection, string $methodName) : bool
+    public function hasChildClassMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
     {
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
         foreach ($childrenClassReflections as $childClassReflection) {
@@ -28,7 +28,7 @@ final class ClassChildAnalyzer
                 continue;
             }
             $constructorReflectionMethod = $childClassReflection->getNativeMethod($methodName);
-            if (!$constructorReflectionMethod instanceof PhpMethodReflection) {
+            if (!$constructorReflectionMethod instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
                 continue;
             }
             $methodDeclaringClassReflection = $constructorReflectionMethod->getDeclaringClass();
@@ -38,14 +38,14 @@ final class ClassChildAnalyzer
         }
         return \false;
     }
-    public function hasParentClassMethod(ClassReflection $classReflection, string $methodName) : bool
+    public function hasParentClassMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
     {
         return $this->resolveParentClassMethods($classReflection, $methodName) !== [];
     }
     /**
      * Look both parent class and interface, yes, all PHP interface methods are abstract
      */
-    public function hasAbstractParentClassMethod(ClassReflection $classReflection, string $methodName) : bool
+    public function hasAbstractParentClassMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
     {
         $parentClassMethods = $this->resolveParentClassMethods($classReflection, $methodName);
         if ($parentClassMethods === []) {
@@ -58,25 +58,25 @@ final class ClassChildAnalyzer
         }
         return \false;
     }
-    public function resolveParentClassMethodReturnType(ClassReflection $classReflection, string $methodName) : Type
+    public function resolveParentClassMethodReturnType(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : \PHPStan\Type\Type
     {
         $parentClassMethods = $this->resolveParentClassMethods($classReflection, $methodName);
         if ($parentClassMethods === []) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         foreach ($parentClassMethods as $parentClassMethod) {
-            $parametersAcceptor = ParametersAcceptorSelector::selectSingle($parentClassMethod->getVariants());
+            $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($parentClassMethod->getVariants());
             $nativeReturnType = $parametersAcceptor->getNativeReturnType();
-            if (!$nativeReturnType instanceof MixedType) {
+            if (!$nativeReturnType instanceof \PHPStan\Type\MixedType) {
                 return $nativeReturnType;
             }
         }
-        return new MixedType();
+        return new \PHPStan\Type\MixedType();
     }
     /**
      * @return PhpMethodReflection[]
      */
-    public function resolveParentClassMethods(ClassReflection $classReflection, string $methodName) : array
+    public function resolveParentClassMethods(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : array
     {
         $parentClassMethods = [];
         $parents = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
@@ -85,7 +85,7 @@ final class ClassChildAnalyzer
                 continue;
             }
             $methodReflection = $parent->getNativeMethod($methodName);
-            if (!$methodReflection instanceof PhpMethodReflection) {
+            if (!$methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
                 continue;
             }
             $methodDeclaringMethodClass = $methodReflection->getDeclaringClass();

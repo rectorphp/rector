@@ -33,7 +33,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\ArgumentAdderRectorTest
  */
-final class ArgumentAdderRector extends AbstractRector implements ConfigurableRectorInterface
+final class ArgumentAdderRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var ArgumentAdder[]
@@ -63,16 +63,16 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, NodePrinterInterface $nodePrinter)
+    public function __construct(\Rector\Arguments\NodeAnalyzer\ArgumentAddingScope $argumentAddingScope, \Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector $changedArgumentsDetector, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->argumentAddingScope = $argumentAddingScope;
         $this->changedArgumentsDetector = $changedArgumentsDetector;
         $this->astResolver = $astResolver;
         $this->nodePrinter = $nodePrinter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('This Rector adds new default arguments in calls of defined methods and class types.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('This Rector adds new default arguments in calls of defined methods and class types.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $someObject = new SomeExampleClass;
 $someObject->someMethod();
 
@@ -94,20 +94,20 @@ class MyCustomClass extends SomeExampleClass
     }
 }
 CODE_SAMPLE
-, [new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', \true, new ObjectType('SomeType'))])]);
+, [new \Rector\Arguments\ValueObject\ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', \true, new \PHPStan\Type\ObjectType('SomeType'))])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class, ClassMethod::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
         $this->haveArgumentsChanged = \false;
         foreach ($this->addedArguments as $addedArgument) {
@@ -129,22 +129,22 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        Assert::allIsAOf($configuration, ArgumentAdder::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ArgumentAdder::class);
         $this->addedArguments = $configuration;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    private function isObjectTypeMatch($node, ObjectType $objectType) : bool
+    private function isObjectTypeMatch($node, \PHPStan\Type\ObjectType $objectType) : bool
     {
-        if ($node instanceof MethodCall) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->isObjectType($node->var, $objectType);
         }
-        if ($node instanceof StaticCall) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             return $this->isObjectType($node->class, $objectType);
         }
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$classLike instanceof Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }
         return $this->isObjectType($classLike, $objectType);
@@ -152,7 +152,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processPositionWithDefaultValues($node, ArgumentAdder $argumentAdder) : void
+    private function processPositionWithDefaultValues($node, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : void
     {
         if ($this->shouldSkipParameter($node, $argumentAdder)) {
             return;
@@ -160,11 +160,11 @@ CODE_SAMPLE
         $defaultValue = $argumentAdder->getArgumentDefaultValue();
         $argumentType = $argumentAdder->getArgumentType();
         $position = $argumentAdder->getPosition();
-        if ($node instanceof ClassMethod) {
+        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $this->addClassMethodParam($node, $argumentAdder, $defaultValue, $argumentType, $position);
             return;
         }
-        if ($node instanceof StaticCall) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             $this->processStaticCall($node, $position, $argumentAdder);
             return;
         }
@@ -173,9 +173,9 @@ CODE_SAMPLE
     /**
      * @param mixed $defaultValue
      */
-    private function processMethodCall(MethodCall $methodCall, $defaultValue, int $position) : void
+    private function processMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall, $defaultValue, int $position) : void
     {
-        $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
+        $arg = new \PhpParser\Node\Arg(\PhpParser\BuilderHelpers::normalizeValue($defaultValue));
         if (isset($methodCall->args[$position])) {
             return;
         }
@@ -196,29 +196,29 @@ CODE_SAMPLE
             return;
         }
         $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
-        if (!$classMethod instanceof ClassMethod) {
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
         for ($index = $lastPosition + 1; $index < $position; ++$index) {
             $param = $classMethod->params[$index];
-            if (!$param->default instanceof Expr) {
-                throw new ShouldNotHappenException('Previous position does not has default value');
+            if (!$param->default instanceof \PhpParser\Node\Expr) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException('Previous position does not has default value');
             }
             $default = $this->nodePrinter->print($param->default);
-            $node->args[$index] = new Arg(new ConstFetch(new Name($default)));
+            $node->args[$index] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($default)));
         }
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function shouldSkipParameter($node, ArgumentAdder $argumentAdder) : bool
+    private function shouldSkipParameter($node, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : bool
     {
         $position = $argumentAdder->getPosition();
         $argumentName = $argumentAdder->getArgumentName();
         if ($argumentName === null) {
             return \true;
         }
-        if ($node instanceof ClassMethod) {
+        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             // already added?
             if (!isset($node->params[$position])) {
                 return \false;
@@ -244,34 +244,34 @@ CODE_SAMPLE
     /**
      * @param mixed $defaultValue
      */
-    private function addClassMethodParam(ClassMethod $classMethod, ArgumentAdder $argumentAdder, $defaultValue, ?Type $type, int $position) : void
+    private function addClassMethodParam(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder, $defaultValue, ?\PHPStan\Type\Type $type, int $position) : void
     {
         $argumentName = $argumentAdder->getArgumentName();
         if ($argumentName === null) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $param = new Param(new Variable($argumentName), BuilderHelpers::normalizeValue($defaultValue));
+        $param = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($argumentName), \PhpParser\BuilderHelpers::normalizeValue($defaultValue));
         if ($type !== null) {
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM());
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
             $param->type = $typeNode;
         }
         $classMethod->params[$position] = $param;
         $this->haveArgumentsChanged = \true;
     }
-    private function processStaticCall(StaticCall $staticCall, int $position, ArgumentAdder $argumentAdder) : void
+    private function processStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall, int $position, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : void
     {
         $argumentName = $argumentAdder->getArgumentName();
         if ($argumentName === null) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if (!$staticCall->class instanceof Name) {
+        if (!$staticCall->class instanceof \PhpParser\Node\Name) {
             return;
         }
-        if (!$this->isName($staticCall->class, ObjectReference::PARENT()->getValue())) {
+        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
             return;
         }
         $this->fillGapBetweenWithDefaultValue($staticCall, $position);
-        $staticCall->args[$position] = new Arg(new Variable($argumentName));
+        $staticCall->args[$position] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Variable($argumentName));
         $this->haveArgumentsChanged = \true;
     }
 }

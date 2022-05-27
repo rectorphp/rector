@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.0/Breaking-69863-RemovedDeprecatedCodeFromExtfluid.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v0\ChangeMethodCallsForStandaloneViewRector\ChangeMethodCallsForStandaloneViewRectorTest
  */
-final class ChangeMethodCallsForStandaloneViewRector extends AbstractRector
+final class ChangeMethodCallsForStandaloneViewRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * class => [ oldMethod => newMethod ].
@@ -26,9 +26,9 @@ final class ChangeMethodCallsForStandaloneViewRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns method call names to new ones.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns method call names to new ones.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $someObject = new StandaloneView();
 $someObject->setLayoutRootPath();
 $someObject->getLayoutRootPath();
@@ -49,15 +49,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach (self::OLD_TO_NEW_METHODS_BY_CLASS as $type => $oldToNewMethods) {
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType($type))) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType($type))) {
                 continue;
             }
             foreach ($oldToNewMethods as $oldMethod => $newMethod) {
@@ -66,13 +66,13 @@ CODE_SAMPLE
                 }
                 if ($this->isNames($node->name, ['setPartialRootPath', 'setLayoutRootPath'])) {
                     $firstArgument = $node->args[0];
-                    $node->name = new Identifier($newMethod);
+                    $node->name = new \PhpParser\Node\Identifier($newMethod);
                     $array = $this->nodeFactory->createArray([$firstArgument->value]);
-                    $node->args = [new Arg($array)];
+                    $node->args = [new \PhpParser\Node\Arg($array)];
                     return $node;
                 }
                 if ($this->isNames($node->name, ['getLayoutRootPath', 'getPartialRootPath'])) {
-                    $node->name = new Identifier($newMethod);
+                    $node->name = new \PhpParser\Node\Identifier($newMethod);
                     return $this->nodeFactory->createFuncCall('array_shift', [$node]);
                 }
             }

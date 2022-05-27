@@ -16,11 +16,11 @@ use Rector\Nette\ValueObject\TemplateParametersAssigns;
  */
 final class ConditionalTemplateAssignReplacer
 {
-    public function processClassMethod(TemplateParametersAssigns $templateParametersAssigns) : void
+    public function processClassMethod(\Rector\Nette\ValueObject\TemplateParametersAssigns $templateParametersAssigns) : void
     {
         foreach ($templateParametersAssigns->getNonSingleParameterAssigns() as $parameterAssign) {
             $assign = $parameterAssign->getAssign();
-            $assign->var = new Variable($parameterAssign->getParameterName());
+            $assign->var = new \PhpParser\Node\Expr\Variable($parameterAssign->getParameterName());
         }
     }
 }

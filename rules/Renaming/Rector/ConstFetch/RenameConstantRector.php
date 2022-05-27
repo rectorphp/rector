@@ -14,15 +14,15 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\ConstFetch\RenameConstantRector\RenameConstantRectorTest
  */
-final class RenameConstantRector extends AbstractRector implements ConfigurableRectorInterface
+final class RenameConstantRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var array<string, string>
      */
     private $oldToNewConstants = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace constant by new ones', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace constant by new ones', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -47,18 +47,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ConstFetch::class];
+        return [\PhpParser\Node\Expr\ConstFetch::class];
     }
     /**
      * @param ConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->oldToNewConstants as $oldConstant => $newConstant) {
             if (!$this->isName($node->name, $oldConstant)) {
                 continue;
             }
-            $node->name = new Name($newConstant);
+            $node->name = new \PhpParser\Node\Name($newConstant);
             return $node;
         }
         return null;
@@ -68,8 +68,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        Assert::allString(\array_keys($configuration));
-        Assert::allString($configuration);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($configuration);
         /** @var array<string, string> $configuration */
         $this->oldToNewConstants = $configuration;
     }

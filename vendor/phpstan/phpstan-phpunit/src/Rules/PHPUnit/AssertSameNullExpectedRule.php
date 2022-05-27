@@ -15,27 +15,27 @@ use function strtolower;
 /**
  * @implements Rule<NodeAbstract>
  */
-class AssertSameNullExpectedRule implements Rule
+class AssertSameNullExpectedRule implements \PHPStan\Rules\Rule
 {
     public function getNodeType() : string
     {
-        return NodeAbstract::class;
+        return \PhpParser\NodeAbstract::class;
     }
-    public function processNode(Node $node, Scope $scope) : array
+    public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : array
     {
         if (!\PHPStan\Rules\PHPUnit\AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
             return [];
         }
         /** @var MethodCall|StaticCall $node */
         $node = $node;
-        if (count($node->getArgs()) < 2) {
+        if (\count($node->getArgs()) < 2) {
             return [];
         }
-        if (!$node->name instanceof Node\Identifier || strtolower($node->name->name) !== 'assertsame') {
+        if (!$node->name instanceof \PhpParser\Node\Identifier || \strtolower($node->name->name) !== 'assertsame') {
             return [];
         }
         $expectedArgumentValue = $node->getArgs()[0]->value;
-        if (!$expectedArgumentValue instanceof ConstFetch) {
+        if (!$expectedArgumentValue instanceof \PhpParser\Node\Expr\ConstFetch) {
             return [];
         }
         if ($expectedArgumentValue->name->toLowerString() === 'null') {

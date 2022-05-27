@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\SwiftCreateMessageToNewEmailRectorTest
  */
-final class SwiftCreateMessageToNewEmailRector extends AbstractRector
+final class SwiftCreateMessageToNewEmailRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes createMessage() into a new Symfony\\Component\\Mime\\Email', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes createMessage() into a new Symfony\\Component\\Mime\\Email', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $email = $this->swift->createMessage('message');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -34,45 +34,45 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        return new New_(new FullyQualified('Symfony\\Component\\Mime\\Email'));
+        return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Mime\\Email'));
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if (!$this->isName($methodCall->name, 'createMessage')) {
             return \true;
         }
         // If there is no property with a SwiftMailer type we should skip this class
         $swiftMailerProperty = $this->getSwiftMailerProperty($methodCall);
-        if (!$swiftMailerProperty instanceof Property) {
+        if (!$swiftMailerProperty instanceof \PhpParser\Node\Stmt\Property) {
             return \true;
         }
         $var = $methodCall->var;
-        if (!$var instanceof PropertyFetch) {
+        if (!$var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \true;
         }
         $propertyName = $this->getName($swiftMailerProperty);
         return !$this->isName($var, $propertyName);
     }
-    private function getSwiftMailerProperty(MethodCall $methodCall) : ?Property
+    private function getSwiftMailerProperty(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Stmt\Property
     {
-        $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
-        if (!$class instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         $properties = $class->getProperties();
         foreach ($properties as $property) {
             $propertyType = $this->nodeTypeResolver->getType($property);
-            if (!$propertyType instanceof ObjectType) {
+            if (!$propertyType instanceof \PHPStan\Type\ObjectType) {
                 continue;
             }
             if (!$propertyType->isInstanceOf('Swift_Mailer')->yes()) {

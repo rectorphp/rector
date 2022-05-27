@@ -22,113 +22,113 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Traversable;
 final class UnionTypeAnalyzer
 {
-    public function analyseForNullableAndIterable(UnionType $unionType) : ?UnionTypeAnalysis
+    public function analyseForNullableAndIterable(\PHPStan\Type\UnionType $unionType) : ?\Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis
     {
         $isNullableType = \false;
         $hasIterable = \false;
         $hasArray = \false;
         foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof IterableType) {
+            if ($unionedType instanceof \PHPStan\Type\IterableType) {
                 $hasIterable = \true;
                 continue;
             }
-            if ($unionedType instanceof ArrayType) {
+            if ($unionedType instanceof \PHPStan\Type\ArrayType) {
                 $hasArray = \true;
                 continue;
             }
-            if ($unionedType instanceof NullType) {
+            if ($unionedType instanceof \PHPStan\Type\NullType) {
                 $isNullableType = \true;
                 continue;
             }
-            if ($unionedType instanceof ObjectType && $unionedType->getClassName() === Traversable::class) {
+            if ($unionedType instanceof \PHPStan\Type\ObjectType && $unionedType->getClassName() === \Traversable::class) {
                 $hasIterable = \true;
                 continue;
             }
             return null;
         }
-        return new UnionTypeAnalysis($isNullableType, $hasIterable, $hasArray);
+        return new \Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis($isNullableType, $hasIterable, $hasArray);
     }
     /**
      * @return TypeWithClassName[]
      */
-    public function matchExclusiveTypesWithClassNames(UnionType $unionType) : array
+    public function matchExclusiveTypesWithClassNames(\PHPStan\Type\UnionType $unionType) : array
     {
         $typesWithClassNames = [];
         foreach ($unionType->getTypes() as $unionedType) {
-            if (!$unionedType instanceof TypeWithClassName) {
+            if (!$unionedType instanceof \PHPStan\Type\TypeWithClassName) {
                 return [];
             }
             $typesWithClassNames[] = $unionedType;
         }
         return $typesWithClassNames;
     }
-    public function hasObjectWithoutClassType(UnionType $unionType) : bool
+    public function hasObjectWithoutClassType(\PHPStan\Type\UnionType $unionType) : bool
     {
         $types = $unionType->getTypes();
         foreach ($types as $type) {
-            if ($type instanceof ObjectWithoutClassType) {
+            if ($type instanceof \PHPStan\Type\ObjectWithoutClassType) {
                 return \true;
             }
         }
         return \false;
     }
-    public function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(UnionType $unionType) : bool
+    public function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(\PHPStan\Type\UnionType $unionType) : bool
     {
         $types = $unionType->getTypes();
         foreach ($types as $type) {
-            if ($type instanceof ObjectWithoutClassType) {
+            if ($type instanceof \PHPStan\Type\ObjectWithoutClassType) {
                 continue;
             }
-            if (!$type instanceof FullyQualifiedObjectType) {
+            if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
                 return \false;
             }
         }
         return \true;
     }
-    public function isScalar(UnionType $unionType) : bool
+    public function isScalar(\PHPStan\Type\UnionType $unionType) : bool
     {
         $types = $unionType->getTypes();
         if (\count($types) !== 4) {
             return \false;
         }
         foreach ($types as $type) {
-            if ($type instanceof StringType && !$type instanceof ConstantStringType) {
+            if ($type instanceof \PHPStan\Type\StringType && !$type instanceof \PHPStan\Type\Constant\ConstantStringType) {
                 continue;
             }
-            if ($type instanceof FloatType) {
+            if ($type instanceof \PHPStan\Type\FloatType) {
                 continue;
             }
-            if ($type instanceof IntegerType) {
+            if ($type instanceof \PHPStan\Type\IntegerType) {
                 continue;
             }
-            if ($type instanceof BooleanType) {
+            if ($type instanceof \PHPStan\Type\BooleanType) {
                 continue;
             }
             return \false;
         }
         return \true;
     }
-    public function isNullable(UnionType $unionType, bool $checkTwoTypes = \false) : bool
+    public function isNullable(\PHPStan\Type\UnionType $unionType, bool $checkTwoTypes = \false) : bool
     {
         $types = $unionType->getTypes();
         if ($checkTwoTypes && \count($types) > 2) {
             return \false;
         }
         foreach ($types as $type) {
-            if ($type instanceof NullType) {
+            if ($type instanceof \PHPStan\Type\NullType) {
                 return \true;
             }
         }
         return \false;
     }
-    public function mapGenericToClassStringType(UnionType $unionType) : UnionType
+    public function mapGenericToClassStringType(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\UnionType
     {
         $types = $unionType->getTypes();
         foreach ($types as $key => $type) {
-            if ($type instanceof GenericClassStringType) {
-                $types[$key] = new ClassStringType();
+            if ($type instanceof \PHPStan\Type\Generic\GenericClassStringType) {
+                $types[$key] = new \PHPStan\Type\ClassStringType();
             }
         }
-        return new UnionType($types);
+        return new \PHPStan\Type\UnionType($types);
     }
 }

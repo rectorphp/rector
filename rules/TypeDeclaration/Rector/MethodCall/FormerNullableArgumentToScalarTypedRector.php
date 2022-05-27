@@ -22,20 +22,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector\FormerNullableArgumentToScalarTypedRectorTest
  */
-final class FormerNullableArgumentToScalarTypedRector extends AbstractRector
+final class FormerNullableArgumentToScalarTypedRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\CallTypeAnalyzer
      */
     private $callTypeAnalyzer;
-    public function __construct(CallTypeAnalyzer $callTypeAnalyzer)
+    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\CallTypeAnalyzer $callTypeAnalyzer)
     {
         $this->callTypeAnalyzer = $callTypeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change null in argument, that is now not nullable anymore', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change null in argument, that is now not nullable anymore', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -68,12 +68,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->args === []) {
             return null;
@@ -83,7 +83,7 @@ CODE_SAMPLE
             return null;
         }
         foreach ($node->args as $key => $arg) {
-            if (!$arg instanceof Arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
                 continue;
             }
             if (!$this->valueResolver->isNull($arg->value)) {
@@ -97,22 +97,22 @@ CODE_SAMPLE
     /**
      * @param Type[] $methodParameterTypes
      */
-    private function refactorArg(Arg $arg, array $methodParameterTypes, int $key) : void
+    private function refactorArg(\PhpParser\Node\Arg $arg, array $methodParameterTypes, int $key) : void
     {
         if (!isset($methodParameterTypes[$key])) {
             return;
         }
         $parameterType = $methodParameterTypes[$key];
-        if ($parameterType instanceof StringType) {
-            $arg->value = new String_('');
+        if ($parameterType instanceof \PHPStan\Type\StringType) {
+            $arg->value = new \PhpParser\Node\Scalar\String_('');
         }
-        if ($parameterType instanceof IntegerType) {
-            $arg->value = new LNumber(0);
+        if ($parameterType instanceof \PHPStan\Type\IntegerType) {
+            $arg->value = new \PhpParser\Node\Scalar\LNumber(0);
         }
-        if ($parameterType instanceof FloatType) {
-            $arg->value = new DNumber(0);
+        if ($parameterType instanceof \PHPStan\Type\FloatType) {
+            $arg->value = new \PhpParser\Node\Scalar\DNumber(0);
         }
-        if ($parameterType instanceof BooleanType) {
+        if ($parameterType instanceof \PHPStan\Type\BooleanType) {
             $arg->value = $this->nodeFactory->createFalse();
         }
     }

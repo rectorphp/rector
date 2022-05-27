@@ -42,7 +42,7 @@ final class VariableAndCallAssign
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function __construct(Variable $variable, $expr, Assign $assign, string $variableName, $functionLike)
+    public function __construct(\PhpParser\Node\Expr\Variable $variable, $expr, \PhpParser\Node\Expr\Assign $assign, string $variableName, $functionLike)
     {
         $this->variable = $variable;
         $this->expr = $expr;
@@ -50,7 +50,7 @@ final class VariableAndCallAssign
         $this->variableName = $variableName;
         $this->functionLike = $functionLike;
     }
-    public function getVariable() : Variable
+    public function getVariable() : \PhpParser\Node\Expr\Variable
     {
         return $this->variable;
     }
@@ -72,7 +72,7 @@ final class VariableAndCallAssign
     {
         return $this->functionLike;
     }
-    public function getAssign() : Assign
+    public function getAssign() : \PhpParser\Node\Expr\Assign
     {
         return $this->assign;
     }

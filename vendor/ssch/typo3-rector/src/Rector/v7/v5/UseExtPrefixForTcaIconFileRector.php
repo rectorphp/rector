@@ -19,15 +19,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.5/Deprecation-69754-TcaCtrlIconfileUsingRelativePathToExtAndFilenameOnly.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v5\UseExtPrefixForTcaIconFileRector\UseExtPrefixForTcaIconFileRectorTest
  */
-final class UseExtPrefixForTcaIconFileRector extends AbstractRector
+final class UseExtPrefixForTcaIconFileRector extends \Rector\Core\Rector\AbstractRector
 {
     use TcaHelperTrait;
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Deprecate relative path to extension directory and using filename only in TCA ctrl iconfile', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Deprecate relative path to extension directory and using filename only in TCA ctrl iconfile', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 [
     'ctrl' => [
         'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('my_extension') . 'Resources/Public/Icons/image.png'
@@ -48,26 +48,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $ctrlArrayItem = $this->extractCtrl($node);
-        if (!$ctrlArrayItem instanceof ArrayItem) {
+        if (!$ctrlArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         $ctrlItems = $ctrlArrayItem->value;
-        if (!$ctrlItems instanceof Array_) {
+        if (!$ctrlItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         foreach ($ctrlItems->items as $fieldValue) {
-            if (!$fieldValue instanceof ArrayItem) {
+            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
@@ -80,17 +80,17 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorIconFile(ArrayItem $fieldValue) : void
+    private function refactorIconFile(\PhpParser\Node\Expr\ArrayItem $fieldValue) : void
     {
         if (null === $fieldValue->value) {
             return;
         }
-        if ($fieldValue->value instanceof Concat) {
+        if ($fieldValue->value instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             $staticCall = $fieldValue->value->left;
-            if (!$staticCall instanceof StaticCall) {
+            if (!$staticCall instanceof \PhpParser\Node\Expr\StaticCall) {
                 return;
             }
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
                 return;
             }
             if (!$this->isName($staticCall->name, 'extRelPath')) {
@@ -104,16 +104,16 @@ CODE_SAMPLE
                 return;
             }
             $pathToFileNode = $fieldValue->value->right;
-            if (!$pathToFileNode instanceof String_) {
+            if (!$pathToFileNode instanceof \PhpParser\Node\Scalar\String_) {
                 return;
             }
             $pathToFile = $this->valueResolver->getValue($pathToFileNode);
             if (null === $pathToFile) {
                 return;
             }
-            $fieldValue->value = new String_(\sprintf('EXT:%s/%s', $extensionKey, \ltrim($pathToFile, '/')));
+            $fieldValue->value = new \PhpParser\Node\Scalar\String_(\sprintf('EXT:%s/%s', $extensionKey, \ltrim($pathToFile, '/')));
         }
-        if (!$fieldValue->value instanceof String_) {
+        if (!$fieldValue->value instanceof \PhpParser\Node\Scalar\String_) {
             return;
         }
         $pathToFile = $this->valueResolver->getValue($fieldValue->value);
@@ -123,6 +123,6 @@ CODE_SAMPLE
         if (\strpos((string) $pathToFile, '/') !== \false) {
             return;
         }
-        $fieldValue->value = new String_(\sprintf('EXT:t3skin/icons/gfx/i/%s', $pathToFile));
+        $fieldValue->value = new \PhpParser\Node\Scalar\String_(\sprintf('EXT:t3skin/icons/gfx/i/%s', $pathToFile));
     }
 }

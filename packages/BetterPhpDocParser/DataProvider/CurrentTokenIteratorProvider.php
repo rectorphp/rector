@@ -11,14 +11,14 @@ final class CurrentTokenIteratorProvider
      * @var \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator|null
      */
     private $betterTokenIterator;
-    public function setBetterTokenIterator(BetterTokenIterator $betterTokenIterator) : void
+    public function setBetterTokenIterator(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator) : void
     {
         $this->betterTokenIterator = $betterTokenIterator;
     }
-    public function provide() : BetterTokenIterator
+    public function provide() : \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator
     {
         if ($this->betterTokenIterator === null) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $this->betterTokenIterator;
     }

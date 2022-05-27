@@ -21,11 +21,11 @@ final class ReturnArrayClassMethodToYield
     {
         $this->type = $type;
         $this->method = $method;
-        RectorAssert::className($type);
+        \Rector\Core\Validation\RectorAssert::className($type);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->type);
+        return new \PHPStan\Type\ObjectType($this->type);
     }
     public function getMethod() : string
     {

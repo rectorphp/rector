@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\AnnotateMagicalControlArrayAccessRectorTest
  */
-final class AnnotateMagicalControlArrayAccessRector extends AbstractRector
+final class AnnotateMagicalControlArrayAccessRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -55,7 +55,7 @@ final class AnnotateMagicalControlArrayAccessRector extends AbstractRector
      * @var \Rector\Nette\NodeAnalyzer\AssignAnalyzer
      */
     private $assignAnalyzer;
-    public function __construct(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver, ArrayDimFetchRenamer $arrayDimFetchRenamer, ArrayDimFetchAnalyzer $arrayDimFetchAnalyzer, ControlDimFetchAnalyzer $controlDimFetchAnalyzer, NetteControlNaming $netteControlNaming, AssignAnalyzer $assignAnalyzer)
+    public function __construct(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver, \Rector\Nette\NodeAnalyzer\ArrayDimFetchRenamer $arrayDimFetchRenamer, \Rector\Nette\NodeAnalyzer\ArrayDimFetchAnalyzer $arrayDimFetchAnalyzer, \Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer $controlDimFetchAnalyzer, \Rector\Nette\Naming\NetteControlNaming $netteControlNaming, \Rector\Nette\NodeAnalyzer\AssignAnalyzer $assignAnalyzer)
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
         $this->arrayDimFetchRenamer = $arrayDimFetchRenamer;
@@ -69,11 +69,11 @@ final class AnnotateMagicalControlArrayAccessRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [ArrayDimFetch::class];
+        return [\PhpParser\Node\Expr\ArrayDimFetch::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change magic $this["some_component"] to variable assign with @var annotation', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change magic $this["some_component"] to variable assign with @var annotation', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
 
@@ -116,7 +116,7 @@ CODE_SAMPLE
     /**
      * @param ArrayDimFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -131,28 +131,28 @@ CODE_SAMPLE
         }
         $variableName = $this->netteControlNaming->createVariableName($controlName);
         $controlObjectType = $this->resolveControlType($node, $controlName);
-        if (!$controlObjectType instanceof ObjectType) {
+        if (!$controlObjectType instanceof \PHPStan\Type\ObjectType) {
             return null;
         }
         $this->assignAnalyzer->addAssignExpressionForFirstCase($variableName, $node, $controlObjectType);
-        $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
-        if ($classMethod instanceof ClassMethod) {
+        $classMethod = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
+        if ($classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $this->arrayDimFetchRenamer->renameToVariable($classMethod, $node, $variableName);
         }
-        return new Variable($variableName);
+        return new \PhpParser\Node\Expr\Variable($variableName);
     }
-    private function shouldSkip(ArrayDimFetch $arrayDimFetch) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {
         if ($this->arrayDimFetchAnalyzer->isBeingAssignedOrInitialized($arrayDimFetch)) {
             return \true;
         }
-        $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Isset_ && !$parent instanceof Unset_) {
+        $parent = $arrayDimFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node\Expr\Isset_ && !$parent instanceof \PhpParser\Node\Stmt\Unset_) {
             return \false;
         }
-        return !$arrayDimFetch->dim instanceof Variable;
+        return !$arrayDimFetch->dim instanceof \PhpParser\Node\Expr\Variable;
     }
-    private function resolveControlType(ArrayDimFetch $arrayDimFetch, string $controlName) : ?ObjectType
+    private function resolveControlType(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, string $controlName) : ?\PHPStan\Type\ObjectType
     {
         $controlTypes = $this->methodNamesByInputNamesResolver->resolveExpr($arrayDimFetch);
         if ($controlTypes === []) {
@@ -161,6 +161,6 @@ CODE_SAMPLE
         if (!isset($controlTypes[$controlName])) {
             return null;
         }
-        return new ObjectType($controlTypes[$controlName]);
+        return new \PHPStan\Type\ObjectType($controlTypes[$controlName]);
     }
 }

@@ -20,7 +20,7 @@ class NodeFinder
         if (!\is_array($nodes)) {
             $nodes = [$nodes];
         }
-        $visitor = new FindingVisitor($filter);
+        $visitor = new \PhpParser\NodeVisitor\FindingVisitor($filter);
         $traverser = new \PhpParser\NodeTraverser();
         $traverser->addVisitor($visitor);
         $traverser->traverse($nodes);
@@ -53,7 +53,7 @@ class NodeFinder
         if (!\is_array($nodes)) {
             $nodes = [$nodes];
         }
-        $visitor = new FirstFindingVisitor($filter);
+        $visitor = new \PhpParser\NodeVisitor\FirstFindingVisitor($filter);
         $traverser = new \PhpParser\NodeTraverser();
         $traverser->addVisitor($visitor);
         $traverser->traverse($nodes);

@@ -36,7 +36,7 @@ final class NeighbourClassLikePrinter
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(BetterNodeFinder $betterNodeFinder, BetterStandardPrinter $betterStandardPrinter, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -45,10 +45,10 @@ final class NeighbourClassLikePrinter
     /**
      * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $mainNode
      */
-    public function printClassLike(ClassLike $classLike, $mainNode, SmartFileInfo $smartFileInfo, ?File $file = null) : void
+    public function printClassLike(\PhpParser\Node\Stmt\ClassLike $classLike, $mainNode, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, ?\Rector\Core\ValueObject\Application\File $file = null) : void
     {
         $declares = $this->resolveDeclares($mainNode);
-        if ($mainNode instanceof FileWithoutNamespace) {
+        if ($mainNode instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
             $nodesToPrint = \array_merge($declares, [$classLike]);
         } else {
             // use new class in the namespace
@@ -57,10 +57,10 @@ final class NeighbourClassLikePrinter
         }
         $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
         $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($nodesToPrint);
-        $addedFileWithContent = new AddedFileWithContent($fileDestination, $printedFileContent);
+        $addedFileWithContent = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($fileDestination, $printedFileContent);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
     }
-    private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo) : string
+    private function createClassLikeFileDestination(\PhpParser\Node\Stmt\ClassLike $classLike, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : string
     {
         $currentDirectory = \dirname($smartFileInfo->getRealPath());
         return $currentDirectory . \DIRECTORY_SEPARATOR . $classLike->name . '.php';
@@ -71,8 +71,8 @@ final class NeighbourClassLikePrinter
      */
     private function resolveDeclares($mainNode) : array
     {
-        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class]);
-        if ($declare instanceof Declare_) {
+        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [\PhpParser\Node\Stmt\Declare_::class]);
+        if ($declare instanceof \PhpParser\Node\Stmt\Declare_) {
             return [$declare];
         }
         return [];

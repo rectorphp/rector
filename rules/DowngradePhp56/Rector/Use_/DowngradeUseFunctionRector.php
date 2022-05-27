@@ -19,20 +19,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp56\Rector\Use_\DowngradeUseFunctionRector\DowngradeUseFunctionRectorTest
  */
-final class DowngradeUseFunctionRector extends AbstractRector
+final class DowngradeUseFunctionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
-    public function __construct(UseImportsResolver $useImportsResolver)
+    public function __construct(\Rector\Naming\Naming\UseImportsResolver $useImportsResolver)
     {
         $this->useImportsResolver = $useImportsResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace imports of functions and constants', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace imports of functions and constants', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use function Foo\Bar\baz;
 
 $var = baz();
@@ -47,14 +47,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Use_::class, ConstFetch::class, FuncCall::class];
+        return [\PhpParser\Node\Stmt\Use_::class, \PhpParser\Node\Expr\ConstFetch::class, \PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param Use_|ConstFetch|FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof Use_) {
+        if ($node instanceof \PhpParser\Node\Stmt\Use_) {
             $this->refactorUse($node);
             return null;
         }
@@ -66,12 +66,12 @@ CODE_SAMPLE
         if ($name === null) {
             return null;
         }
-        $node->name = new FullyQualified($name);
+        $node->name = new \PhpParser\Node\Name\FullyQualified($name);
         return $node;
     }
-    private function refactorUse(Use_ $use) : void
+    private function refactorUse(\PhpParser\Node\Stmt\Use_ $use) : void
     {
-        if ($use->type === Use_::TYPE_FUNCTION || $use->type === Use_::TYPE_CONSTANT) {
+        if ($use->type === \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION || $use->type === \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT) {
             $this->removeNode($use);
         }
     }
@@ -94,11 +94,11 @@ CODE_SAMPLE
      */
     private function getFullyQualifiedName(array $useNodes, $node) : ?string
     {
-        if (!$node->name instanceof Name) {
+        if (!$node->name instanceof \PhpParser\Node\Name) {
             return null;
         }
         $name = $node->name->toLowerString();
-        $typeFilter = $node instanceof ConstFetch ? Use_::TYPE_CONSTANT : Use_::TYPE_FUNCTION;
+        $typeFilter = $node instanceof \PhpParser\Node\Expr\ConstFetch ? \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT : \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION;
         foreach ($useNodes as $useNode) {
             $prefix = $this->resolvePrefix($useNode);
             if ($useNode->type !== $typeFilter) {
@@ -121,6 +121,6 @@ CODE_SAMPLE
      */
     private function resolvePrefix($useNode) : string
     {
-        return $useNode instanceof GroupUse ? $useNode->prefix . '\\' : '';
+        return $useNode instanceof \PhpParser\Node\Stmt\GroupUse ? $useNode->prefix . '\\' : '';
     }
 }

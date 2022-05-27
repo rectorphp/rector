@@ -161,7 +161,7 @@ use RectorPrefix20220527\Evenement\EventEmitterInterface;
  *
  * @see EventEmitterInterface
  */
-interface ReadableStreamInterface extends EventEmitterInterface
+interface ReadableStreamInterface extends \RectorPrefix20220527\Evenement\EventEmitterInterface
 {
     /**
      * Checks whether this stream is in a readable state (not closed already).
@@ -318,7 +318,7 @@ interface ReadableStreamInterface extends EventEmitterInterface
      * @param array $options
      * @return WritableStreamInterface $dest stream as-is
      */
-    public function pipe(WritableStreamInterface $dest, array $options = array());
+    public function pipe(\RectorPrefix20220527\React\Stream\WritableStreamInterface $dest, array $options = array());
     /**
      * Closes the stream (forcefully).
      *

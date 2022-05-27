@@ -10,7 +10,7 @@ use RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-abstract class BinaryObjectOperator extends BinaryOperator
+abstract class BinaryObjectOperator extends \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryOperator
 {
     /**
      * The target object to reference to or copy from.

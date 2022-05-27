@@ -59,40 +59,40 @@ final class PropertyNaming
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(TypeUnwrapper $typeUnwrapper, RectorNamingInflector $rectorNamingInflector, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \Rector\Naming\RectorNamingInflector $rectorNamingInflector, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->typeUnwrapper = $typeUnwrapper;
         $this->rectorNamingInflector = $rectorNamingInflector;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function getExpectedNameFromMethodName(string $methodName) : ?ExpectedName
+    public function getExpectedNameFromMethodName(string $methodName) : ?\Rector\Naming\ValueObject\ExpectedName
     {
-        $matches = Strings::match($methodName, self::GET_PREFIX_REGEX);
+        $matches = \RectorPrefix20220527\Nette\Utils\Strings::match($methodName, self::GET_PREFIX_REGEX);
         if ($matches === null) {
             return null;
         }
         $originalName = \lcfirst($matches['root_name']);
-        return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
+        return new \Rector\Naming\ValueObject\ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
-    public function getExpectedNameFromType(Type $type) : ?ExpectedName
+    public function getExpectedNameFromType(\PHPStan\Type\Type $type) : ?\Rector\Naming\ValueObject\ExpectedName
     {
         $type = $this->typeUnwrapper->unwrapNullableType($type);
-        if (!$type instanceof TypeWithClassName) {
+        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
-        if ($type instanceof SelfObjectType) {
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType) {
             return null;
         }
-        if ($type instanceof StaticType) {
+        if ($type instanceof \PHPStan\Type\StaticType) {
             return null;
         }
-        $className = $type instanceof AliasedObjectType ? $type->getClassName() : $this->nodeTypeResolver->getFullyQualifiedClassName($type);
+        $className = $type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType ? $type->getClassName() : $this->nodeTypeResolver->getFullyQualifiedClassName($type);
         // generic types are usually mix of parent type and specific type - various way to handle it
-        if ($type instanceof GenericObjectType) {
+        if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
             return null;
         }
         foreach (self::EXCLUDED_CLASSES as $excludedClass) {
-            if (StringUtils::isMatch($className, $excludedClass)) {
+            if (\Rector\Core\Util\StringUtils::isMatch($className, $excludedClass)) {
                 return null;
             }
         }
@@ -103,23 +103,23 @@ final class PropertyNaming
             $shortClassName = \strtolower($shortClassName);
         }
         // remove "_"
-        $shortClassName = Strings::replace($shortClassName, '#_#', '');
+        $shortClassName = \RectorPrefix20220527\Nette\Utils\Strings::replace($shortClassName, '#_#', '');
         $shortClassName = $this->normalizeUpperCase($shortClassName);
         // prolong too short generic names with one namespace up
         $originalName = $this->prolongIfTooShort($shortClassName, $className);
-        return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
+        return new \Rector\Naming\ValueObject\ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
     /**
      * @param \PHPStan\Type\ThisType|\PHPStan\Type\ObjectType|string $objectType
      */
     public function fqnToVariableName($objectType) : string
     {
-        if ($objectType instanceof ThisType) {
+        if ($objectType instanceof \PHPStan\Type\ThisType) {
             $objectType = $objectType->getStaticObjectType();
         }
         $className = $this->resolveClassName($objectType);
         if (\strpos($className, '\\') !== \false) {
-            $shortClassName = (string) Strings::after($className, '\\', -1);
+            $shortClassName = (string) \RectorPrefix20220527\Nette\Utils\Strings::after($className, '\\', -1);
         } else {
             $shortClassName = $className;
         }
@@ -142,7 +142,7 @@ final class PropertyNaming
     private function resolveShortClassName(string $className) : string
     {
         if (\strpos($className, '\\') !== \false) {
-            return (string) Strings::after($className, '\\', -1);
+            return (string) \RectorPrefix20220527\Nette\Utils\Strings::after($className, '\\', -1);
         }
         return $className;
     }
@@ -150,15 +150,15 @@ final class PropertyNaming
     {
         // is SomeInterface
         if (\substr_compare($shortClassName, self::INTERFACE, -\strlen(self::INTERFACE)) === 0) {
-            $shortClassName = Strings::substring($shortClassName, 0, -\strlen(self::INTERFACE));
+            $shortClassName = \RectorPrefix20220527\Nette\Utils\Strings::substring($shortClassName, 0, -\strlen(self::INTERFACE));
         }
         // is ISomeClass
         if ($this->isPrefixedInterface($shortClassName)) {
-            $shortClassName = Strings::substring($shortClassName, 1);
+            $shortClassName = \RectorPrefix20220527\Nette\Utils\Strings::substring($shortClassName, 1);
         }
         // is AbstractClass
         if (\strncmp($shortClassName, 'Abstract', \strlen('Abstract')) === 0) {
-            $shortClassName = Strings::substring($shortClassName, \strlen('Abstract'));
+            $shortClassName = \RectorPrefix20220527\Nette\Utils\Strings::substring($shortClassName, \strlen('Abstract'));
         }
         return $shortClassName;
     }
@@ -177,8 +177,8 @@ final class PropertyNaming
     private function prolongIfTooShort(string $shortClassName, string $className) : string
     {
         if (\in_array($shortClassName, ['Factory', 'Repository'], \true)) {
-            $namespaceAbove = (string) Strings::after($className, '\\', -2);
-            $namespaceAbove = (string) Strings::before($namespaceAbove, '\\');
+            $namespaceAbove = (string) \RectorPrefix20220527\Nette\Utils\Strings::after($className, '\\', -2);
+            $namespaceAbove = (string) \RectorPrefix20220527\Nette\Utils\Strings::before($namespaceAbove, '\\');
             return \lcfirst($namespaceAbove) . $shortClassName;
         }
         return \lcfirst($shortClassName);
@@ -188,7 +188,7 @@ final class PropertyNaming
      */
     private function resolveClassName($objectType) : string
     {
-        if ($objectType instanceof ObjectType) {
+        if ($objectType instanceof \PHPStan\Type\ObjectType) {
             return $objectType->getClassName();
         }
         return $objectType;
@@ -198,28 +198,28 @@ final class PropertyNaming
         if (\strpos($fqn, '\\') === \false) {
             return $fqn;
         }
-        $lastNamePart = Strings::after($fqn, '\\', -1);
+        $lastNamePart = \RectorPrefix20220527\Nette\Utils\Strings::after($fqn, '\\', -1);
         if (!\is_string($lastNamePart)) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         if (\substr_compare($lastNamePart, self::INTERFACE, -\strlen(self::INTERFACE)) === 0) {
-            return Strings::substring($lastNamePart, 0, -\strlen(self::INTERFACE));
+            return \RectorPrefix20220527\Nette\Utils\Strings::substring($lastNamePart, 0, -\strlen(self::INTERFACE));
         }
         return $lastNamePart;
     }
     private function removeInterfaceSuffixPrefix(string $className, string $category) : string
     {
         // suffix
-        if (Strings::match($className, '#' . $category . '$#i')) {
-            return Strings::substring($className, 0, -\strlen($category));
+        if (\RectorPrefix20220527\Nette\Utils\Strings::match($className, '#' . $category . '$#i')) {
+            return \RectorPrefix20220527\Nette\Utils\Strings::substring($className, 0, -\strlen($category));
         }
         // prefix
-        if (Strings::match($className, '#^' . $category . '#i')) {
-            return Strings::substring($className, \strlen($category));
+        if (\RectorPrefix20220527\Nette\Utils\Strings::match($className, '#^' . $category . '#i')) {
+            return \RectorPrefix20220527\Nette\Utils\Strings::substring($className, \strlen($category));
         }
         // starts with "I\W+"?
-        if (StringUtils::isMatch($className, self::I_PREFIX_REGEX)) {
-            return Strings::substring($className, 1);
+        if (\Rector\Core\Util\StringUtils::isMatch($className, self::I_PREFIX_REGEX)) {
+            return \RectorPrefix20220527\Nette\Utils\Strings::substring($className, 1);
         }
         return $className;
     }

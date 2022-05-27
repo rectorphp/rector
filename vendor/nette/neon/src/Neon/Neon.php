@@ -13,7 +13,7 @@ namespace RectorPrefix20220527\Nette\Neon;
  */
 final class Neon
 {
-    public const BLOCK = Encoder::BLOCK;
+    public const BLOCK = \RectorPrefix20220527\Nette\Neon\Encoder::BLOCK;
     public const Chain = '!!chain';
     public const CHAIN = self::Chain;
     /**
@@ -21,7 +21,7 @@ final class Neon
      */
     public static function encode($value, bool $blockMode = \false, string $indentation = "\t") : string
     {
-        $encoder = new Encoder();
+        $encoder = new \RectorPrefix20220527\Nette\Neon\Encoder();
         $encoder->blockMode = $blockMode;
         $encoder->indentation = $indentation;
         return $encoder->encode($value);
@@ -32,7 +32,7 @@ final class Neon
      */
     public static function decode(string $input)
     {
-        $decoder = new Decoder();
+        $decoder = new \RectorPrefix20220527\Nette\Neon\Decoder();
         return $decoder->decode($input);
     }
     /**
@@ -42,7 +42,7 @@ final class Neon
     public static function decodeFile(string $file)
     {
         if (!\is_file($file)) {
-            throw new Exception("File '{$file}' does not exist.");
+            throw new \RectorPrefix20220527\Nette\Neon\Exception("File '{$file}' does not exist.");
         }
         $input = \file_get_contents($file);
         if (\substr($input, 0, 3) === "﻿") {

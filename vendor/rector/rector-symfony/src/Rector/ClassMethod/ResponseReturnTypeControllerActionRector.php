@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\ResponseReturnTypeControllerActionRector\ResponseReturnTypeControllerActionRectorTest
  */
-final class ResponseReturnTypeControllerActionRector extends AbstractRector
+final class ResponseReturnTypeControllerActionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -27,14 +27,14 @@ final class ResponseReturnTypeControllerActionRector extends AbstractRector
      * @var \Rector\Doctrine\NodeAnalyzer\AttrinationFinder
      */
     private $attrinationFinder;
-    public function __construct(ControllerAnalyzer $controllerAnalyzer, AttrinationFinder $attrinationFinder)
+    public function __construct(\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer, \Rector\Doctrine\NodeAnalyzer\AttrinationFinder $attrinationFinder)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->attrinationFinder = $attrinationFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add Response object return type to controller actions', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add Response object return type to controller actions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -68,12 +68,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->isPublic()) {
             return null;
@@ -84,10 +84,10 @@ CODE_SAMPLE
         if ($node->returnType !== null) {
             return null;
         }
-        if (!$this->attrinationFinder->hasByOne($node, SymfonyAnnotation::ROUTE)) {
+        if (!$this->attrinationFinder->hasByOne($node, \Rector\Symfony\Enum\SymfonyAnnotation::ROUTE)) {
             return null;
         }
-        $node->returnType = new FullyQualified('Symfony\\Component\\HttpFoundation\\Response');
+        $node->returnType = new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\HttpFoundation\\Response');
         return $node;
     }
 }

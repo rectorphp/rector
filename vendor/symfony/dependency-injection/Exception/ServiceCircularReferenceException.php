@@ -15,7 +15,7 @@ namespace RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ServiceCircularReferenceException extends RuntimeException
+class ServiceCircularReferenceException extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\RuntimeException
 {
     /**
      * @var string

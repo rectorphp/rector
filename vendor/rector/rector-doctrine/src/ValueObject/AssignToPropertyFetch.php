@@ -22,17 +22,17 @@ final class AssignToPropertyFetch
      * @var string
      */
     private $propertyName;
-    public function __construct(Assign $assign, PropertyFetch $propertyFetch, string $propertyName)
+    public function __construct(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\PropertyFetch $propertyFetch, string $propertyName)
     {
         $this->assign = $assign;
         $this->propertyFetch = $propertyFetch;
         $this->propertyName = $propertyName;
     }
-    public function getAssign() : Assign
+    public function getAssign() : \PhpParser\Node\Expr\Assign
     {
         return $this->assign;
     }
-    public function getPropertyFetch() : PropertyFetch
+    public function getPropertyFetch() : \PhpParser\Node\Expr\PropertyFetch
     {
         return $this->propertyFetch;
     }

@@ -30,16 +30,16 @@ final class TestingParser
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
-    public function __construct(ParameterProvider $parameterProvider, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
+    public function __construct(\RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
     {
         $this->parameterProvider = $parameterProvider;
         $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
-    public function parseFilePathToFile(string $filePath) : File
+    public function parseFilePathToFile(string $filePath) : \Rector\Core\ValueObject\Application\File
     {
-        $smartFileInfo = new SmartFileInfo($filePath);
-        $file = new File($smartFileInfo, $smartFileInfo->getContents());
+        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($filePath);
+        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
         $stmts = $this->rectorParser->parseFile($smartFileInfo);
         $file->hydrateStmtsAndTokens($stmts, $stmts, []);
         return $file;
@@ -51,10 +51,10 @@ final class TestingParser
     {
         // autoload file
         require_once $file;
-        $smartFileInfo = new SmartFileInfo($file);
-        $this->parameterProvider->changeParameter(Option::SOURCE, [$file]);
+        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($file);
+        $this->parameterProvider->changeParameter(\Rector\Core\Configuration\Option::SOURCE, [$file]);
         $nodes = $this->rectorParser->parseFile($smartFileInfo);
-        $file = new File($smartFileInfo, $smartFileInfo->getContents());
+        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
     }
 }

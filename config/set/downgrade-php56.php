@@ -10,11 +10,11 @@ use Rector\DowngradePhp56\Rector\FuncCall\DowngradeArrayFilterUseConstantRector;
 use Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialAssignmentOperatorRector;
 use Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialOperatorRector;
 use Rector\DowngradePhp56\Rector\Use_\DowngradeUseFunctionRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->phpVersion(PhpVersion::PHP_55);
-    $rectorConfig->rule(DowngradeArgumentUnpackingRector::class);
-    $rectorConfig->rule(DowngradeUseFunctionRector::class);
-    $rectorConfig->rule(DowngradeExponentialAssignmentOperatorRector::class);
-    $rectorConfig->rule(DowngradeExponentialOperatorRector::class);
-    $rectorConfig->rule(DowngradeArrayFilterUseConstantRector::class);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_55);
+    $rectorConfig->rule(\Rector\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp56\Rector\Use_\DowngradeUseFunctionRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialAssignmentOperatorRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialOperatorRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp56\Rector\FuncCall\DowngradeArrayFilterUseConstantRector::class);
 };

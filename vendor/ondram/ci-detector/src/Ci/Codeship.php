@@ -6,19 +6,19 @@ namespace RectorPrefix20220527\OndraM\CiDetector\Ci;
 use RectorPrefix20220527\OndraM\CiDetector\CiDetector;
 use RectorPrefix20220527\OndraM\CiDetector\Env;
 use RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic;
-class Codeship extends AbstractCi
+class Codeship extends \RectorPrefix20220527\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(Env $env) : bool
+    public static function isDetected(\RectorPrefix20220527\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('CI_NAME') === 'codeship';
     }
     public function getCiName() : string
     {
-        return CiDetector::CI_CODESHIP;
+        return \RectorPrefix20220527\OndraM\CiDetector\CiDetector::CI_CODESHIP;
     }
-    public function isPullRequest() : TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic
     {
-        return TrinaryLogic::createFromBoolean($this->env->getString('CI_PULL_REQUEST') !== 'false');
+        return \RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('CI_PULL_REQUEST') !== 'false');
     }
     public function getBuildNumber() : string
     {

@@ -48,8 +48,8 @@ final class ProcessResult
         $this->addedFilesCount = $addedFilesCount;
         $this->removedFilesCount = $removedFilesCount;
         $this->removedNodeCount = $removedNodeCount;
-        Assert::allIsAOf($fileDiffs, FileDiff::class);
-        Assert::allIsAOf($systemErrors, SystemError::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($fileDiffs, \Rector\Core\ValueObject\Reporting\FileDiff::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($systemErrors, \Rector\Core\ValueObject\Error\SystemError::class);
     }
     /**
      * @return FileDiff[]
@@ -88,7 +88,7 @@ final class ProcessResult
     {
         $fileInfos = [];
         foreach ($this->fileDiffs as $fileDiff) {
-            $fileInfos[] = new SmartFileInfo($fileDiff->getRelativeFilePath());
+            $fileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($fileDiff->getRelativeFilePath());
         }
         return \array_unique($fileInfos);
     }

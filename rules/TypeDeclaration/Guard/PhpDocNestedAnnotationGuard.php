@@ -22,7 +22,7 @@ final class PhpDocNestedAnnotationGuard
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
@@ -30,9 +30,9 @@ final class PhpDocNestedAnnotationGuard
      * Check if rector accidentally skipped annotation during parsing which it should not have (this bug is likely related to parsing of annotations
      * in phpstan / rector)
      */
-    public function isPhpDocCommentCorrectlyParsed(Node $node) : bool
+    public function isPhpDocCommentCorrectlyParsed(\PhpParser\Node $node) : bool
     {
-        $comments = $node->getAttribute(AttributeKey::COMMENTS, []);
+        $comments = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, []);
         if ((\is_array($comments) || $comments instanceof \Countable ? \count($comments) : 0) !== 1) {
             return \true;
         }
@@ -48,8 +48,8 @@ final class PhpDocNestedAnnotationGuard
     }
     public function hasAnnotationCountChanged(string $originalPhpDocText, string $updatedPhpDocText) : bool
     {
-        $originalAnnotationCount = \count(Strings::matchAll($originalPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
-        $reconstructedAnnotationCount = \count(Strings::matchAll($updatedPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
+        $originalAnnotationCount = \count(\RectorPrefix20220527\Nette\Utils\Strings::matchAll($originalPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
+        $reconstructedAnnotationCount = \count(\RectorPrefix20220527\Nette\Utils\Strings::matchAll($updatedPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
         return $originalAnnotationCount !== $reconstructedAnnotationCount;
     }
 }

@@ -17,5 +17,5 @@ interface NodeTypeResolverInterface
     /**
      * @param TNode $node
      */
-    public function resolve(Node $node) : Type;
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type;
 }

@@ -10,21 +10,21 @@ use Rector\Naming\ValueObject\PropertyRename;
 /**
  * @implements ConflictingNameGuardInterface<PropertyRename>
  */
-final class HasMagicGetSetGuard implements ConflictingNameGuardInterface
+final class HasMagicGetSetGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
 {
     /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @param PropertyRename $renameValueObject
      */
-    public function isConflicting(RenameValueObjectInterface $renameValueObject) : bool
+    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
     {
         if (!$this->reflectionProvider->hasClass($renameValueObject->getClassLikeName())) {
             return \false;

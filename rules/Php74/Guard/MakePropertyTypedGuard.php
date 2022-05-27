@@ -37,7 +37,7 @@ final class MakePropertyTypedGuard
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, PropertyAnalyzer $propertyAnalyzer, PropertyManipulator $propertyManipulator, ParentPropertyLookupGuard $parentPropertyLookupGuard, ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Privatization\Guard\ParentPropertyLookupGuard $parentPropertyLookupGuard, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyAnalyzer = $propertyAnalyzer;
@@ -45,7 +45,7 @@ final class MakePropertyTypedGuard
         $this->parentPropertyLookupGuard = $parentPropertyLookupGuard;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isLegal(Property $property, bool $inlinePublic = \true) : bool
+    public function isLegal(\PhpParser\Node\Stmt\Property $property, bool $inlinePublic = \true) : bool
     {
         if ($property->type !== null) {
             return \false;
@@ -54,7 +54,7 @@ final class MakePropertyTypedGuard
             return \false;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($property);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         /**
@@ -76,7 +76,7 @@ final class MakePropertyTypedGuard
         }
         return $this->isSafeProtectedProperty($property, $classReflection);
     }
-    private function isSafeProtectedProperty(Property $property, ClassReflection $classReflection) : bool
+    private function isSafeProtectedProperty(\PhpParser\Node\Stmt\Property $property, \PHPStan\Reflection\ClassReflection $classReflection) : bool
     {
         if (!$property->isProtected()) {
             return \false;

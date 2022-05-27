@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
-use Symplify\Astral\PhpParser\SmartPhpParser;
+use RectorPrefix20220527\Symplify\Astral\PhpParser\SmartPhpParser;
 final class ClassLikeAstResolver
 {
     /**
@@ -31,7 +31,7 @@ final class ClassLikeAstResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(SmartPhpParser $smartPhpParser, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20220527\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->smartPhpParser = $smartPhpParser;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -39,7 +39,7 @@ final class ClassLikeAstResolver
     /**
      * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
-    public function resolveClassFromClassReflection(ClassReflection $classReflection, string $className)
+    public function resolveClassFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection, string $className)
     {
         if ($classReflection->isBuiltin()) {
             return null;
@@ -61,7 +61,7 @@ final class ClassLikeAstResolver
             return null;
         }
         /** @var array<Class_|Trait_|Interface_> $classLikes */
-        $classLikes = $this->betterNodeFinder->findInstanceOf($stmts, ClassLike::class);
+        $classLikes = $this->betterNodeFinder->findInstanceOf($stmts, \PhpParser\Node\Stmt\ClassLike::class);
         $reflectionClassName = $classReflection->getName();
         foreach ($classLikes as $classLike) {
             if ($reflectionClassName !== $className) {

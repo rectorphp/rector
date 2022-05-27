@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\Astral\PhpParser;
+namespace RectorPrefix20220527\Symplify\Astral\PhpParser;
 
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeVisitor\NameResolver;
@@ -17,22 +17,22 @@ use PHPStan\Parser\SimpleParser;
  */
 final class SmartPhpParserFactory
 {
-    public function create() : \Symplify\Astral\PhpParser\SmartPhpParser
+    public function create() : \RectorPrefix20220527\Symplify\Astral\PhpParser\SmartPhpParser
     {
         $nativePhpParser = $this->createNativePhpParser();
         $cachedParser = $this->createPHPStanParser($nativePhpParser);
-        return new \Symplify\Astral\PhpParser\SmartPhpParser($cachedParser);
+        return new \RectorPrefix20220527\Symplify\Astral\PhpParser\SmartPhpParser($cachedParser);
     }
-    private function createNativePhpParser() : Parser
+    private function createNativePhpParser() : \PhpParser\Parser
     {
-        $parserFactory = new ParserFactory();
-        $lexerEmulative = new Emulative();
-        return $parserFactory->create(ParserFactory::PREFER_PHP7, $lexerEmulative);
+        $parserFactory = new \PhpParser\ParserFactory();
+        $lexerEmulative = new \PhpParser\Lexer\Emulative();
+        return $parserFactory->create(\PhpParser\ParserFactory::PREFER_PHP7, $lexerEmulative);
     }
-    private function createPHPStanParser(Parser $parser) : CachedParser
+    private function createPHPStanParser(\PhpParser\Parser $parser) : \PHPStan\Parser\CachedParser
     {
-        $nameResolver = new NameResolver();
-        $simpleParser = new SimpleParser($parser, $nameResolver);
-        return new CachedParser($simpleParser, 1024);
+        $nameResolver = new \PhpParser\NodeVisitor\NameResolver();
+        $simpleParser = new \PHPStan\Parser\SimpleParser($parser, $nameResolver);
+        return new \PHPStan\Parser\CachedParser($simpleParser, 1024);
     }
 }

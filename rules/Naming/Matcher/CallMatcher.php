@@ -15,15 +15,15 @@ final class CallMatcher
      * @return FuncCall|StaticCall|MethodCall|null
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Foreach_ $node
      */
-    public function matchCall($node) : ?Node
+    public function matchCall($node) : ?\PhpParser\Node
     {
-        if ($node->expr instanceof MethodCall) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return $node->expr;
         }
-        if ($node->expr instanceof StaticCall) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\StaticCall) {
             return $node->expr;
         }
-        if ($node->expr instanceof FuncCall) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return $node->expr;
         }
         return null;

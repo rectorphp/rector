@@ -18,15 +18,15 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\StaticCallToNewRectorTest
  */
-final class StaticCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
+final class StaticCallToNewRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var StaticCallToNew[]
      */
     private $staticCallsToNews = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change static call to new instance', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change static call to new instance', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,19 +44,19 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new StaticCallToNew('JsonResponse', 'create')])]);
+, [new \Rector\Transform\ValueObject\StaticCallToNew('JsonResponse', 'create')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param Node\Expr\StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->staticCallsToNews as $staticCallToNew) {
             if (!$this->isName($node->class, $staticCallToNew->getClass())) {
@@ -69,7 +69,7 @@ CODE_SAMPLE
             if ($class === null) {
                 continue;
             }
-            return new New_(new FullyQualified($class), $node->args);
+            return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($class), $node->args);
         }
         return $node;
     }
@@ -78,7 +78,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        Assert::allIsAOf($configuration, StaticCallToNew::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\StaticCallToNew::class);
         $this->staticCallsToNews = $configuration;
     }
 }

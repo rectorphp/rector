@@ -14,7 +14,7 @@ use RectorPrefix20220527\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.0/Breaking-72342-RemovedDeprecatedCodeFromGeneralUtility.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v0\RefactorRemovedMethodsFromGeneralUtilityRector\RefactorRemovedMethodsFromGeneralUtilityRectorTest
  */
-final class RefactorRemovedMethodsFromGeneralUtilityRector extends AbstractRector
+final class RefactorRemovedMethodsFromGeneralUtilityRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * List of nodes this class checks, classes that implements \PhpParser\Node See beautiful map of all nodes
@@ -27,12 +27,12 @@ final class RefactorRemovedMethodsFromGeneralUtilityRector extends AbstractRecto
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node->class, 'TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) {
             return null;
@@ -52,7 +52,7 @@ final class RefactorRemovedMethodsFromGeneralUtilityRector extends AbstractRecto
         }
         if ('array_merge' === $methodName) {
             [$arg1, $arg2] = $node->args;
-            return new Plus($arg1->value, $arg2->value);
+            return new \PhpParser\Node\Expr\BinaryOp\Plus($arg1->value, $arg2->value);
         }
         if ('cleanOutputBuffers' === $methodName) {
             return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'flushOutputBuffers');
@@ -65,8 +65,8 @@ final class RefactorRemovedMethodsFromGeneralUtilityRector extends AbstractRecto
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor removed methods from GeneralUtility.', [new CodeSample('GeneralUtility::gif_compress();', GraphicalFunctions::class . '::gifCompress();')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor removed methods from GeneralUtility.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('GeneralUtility::gif_compress();', \RectorPrefix20220527\TYPO3\CMS\Core\Imaging\GraphicalFunctions::class . '::gifCompress();')]);
     }
 }

@@ -33,14 +33,14 @@ final class TranslatablePropertyCollectorAndRemover
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(PhpDocTagRemover $phpDocTagRemover, PhpDocInfoFactory $phpDocInfoFactory, NodeRemover $nodeRemover, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeRemover = $nodeRemover;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function processClass(Class_ $class) : PropertyNamesAndPhpDocInfos
+    public function processClass(\PhpParser\Node\Stmt\Class_ $class) : \Rector\Doctrine\ValueObject\PropertyNamesAndPhpDocInfos
     {
         $propertyNameAndPhpDocInfos = [];
         foreach ($class->getProperties() as $property) {
@@ -50,14 +50,14 @@ final class TranslatablePropertyCollectorAndRemover
                 continue;
             }
             $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Gedmo\\Mapping\\Annotation\\Translatable');
-            if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+            if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
                 continue;
             }
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
             $propertyName = $this->nodeNameResolver->getName($property);
-            $propertyNameAndPhpDocInfos[] = new PropertyNameAndPhpDocInfo($propertyName, $phpDocInfo);
+            $propertyNameAndPhpDocInfos[] = new \Rector\Doctrine\ValueObject\PropertyNameAndPhpDocInfo($propertyName, $phpDocInfo);
             $this->nodeRemover->removeNode($property);
         }
-        return new PropertyNamesAndPhpDocInfos($propertyNameAndPhpDocInfos);
+        return new \Rector\Doctrine\ValueObject\PropertyNamesAndPhpDocInfos($propertyNameAndPhpDocInfos);
     }
 }

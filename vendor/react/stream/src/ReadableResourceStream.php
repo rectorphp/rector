@@ -6,7 +6,7 @@ use RectorPrefix20220527\Evenement\EventEmitter;
 use RectorPrefix20220527\React\EventLoop\Loop;
 use RectorPrefix20220527\React\EventLoop\LoopInterface;
 use InvalidArgumentException;
-final class ReadableResourceStream extends EventEmitter implements ReadableStreamInterface
+final class ReadableResourceStream extends \RectorPrefix20220527\Evenement\EventEmitter implements \RectorPrefix20220527\React\Stream\ReadableStreamInterface
 {
     /**
      * @var resource
@@ -35,15 +35,15 @@ final class ReadableResourceStream extends EventEmitter implements ReadableStrea
     private $bufferSize;
     private $closed = \false;
     private $listening = \false;
-    public function __construct($stream, LoopInterface $loop = null, $readChunkSize = null)
+    public function __construct($stream, \RectorPrefix20220527\React\EventLoop\LoopInterface $loop = null, $readChunkSize = null)
     {
         if (!\is_resource($stream) || \get_resource_type($stream) !== "stream") {
-            throw new InvalidArgumentException('First parameter must be a valid stream resource');
+            throw new \InvalidArgumentException('First parameter must be a valid stream resource');
         }
         // ensure resource is opened for reading (fopen mode must contain "r" or "+")
         $meta = \stream_get_meta_data($stream);
         if (isset($meta['mode']) && $meta['mode'] !== '' && \strpos($meta['mode'], 'r') === \strpos($meta['mode'], '+')) {
-            throw new InvalidArgumentException('Given stream resource is not opened in read mode');
+            throw new \InvalidArgumentException('Given stream resource is not opened in read mode');
         }
         // this class relies on non-blocking I/O in order to not interrupt the event loop
         // e.g. pipes on Windows do not support this: https://bugs.php.net/bug.php?id=47918
@@ -62,7 +62,7 @@ final class ReadableResourceStream extends EventEmitter implements ReadableStrea
             \stream_set_read_buffer($stream, 0);
         }
         $this->stream = $stream;
-        $this->loop = $loop ?: Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20220527\React\EventLoop\Loop::get();
         $this->bufferSize = $readChunkSize === null ? 65536 : (int) $readChunkSize;
         $this->resume();
     }
@@ -84,9 +84,9 @@ final class ReadableResourceStream extends EventEmitter implements ReadableStrea
             $this->listening = \true;
         }
     }
-    public function pipe(WritableStreamInterface $dest, array $options = array())
+    public function pipe(\RectorPrefix20220527\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
-        return Util::pipe($this, $dest, $options);
+        return \RectorPrefix20220527\React\Stream\Util::pipe($this, $dest, $options);
     }
     public function close()
     {

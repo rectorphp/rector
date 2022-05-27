@@ -68,7 +68,7 @@ final class ShortNameResolver
      * @var \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher
      */
     private $useImportNameMatcher;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, BetterNodeFinder $betterNodeFinder, UseImportNameMatcher $useImportNameMatcher)
+    public function __construct(\RectorPrefix20220527\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher $useImportNameMatcher)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -80,14 +80,14 @@ final class ShortNameResolver
     /**
      * @required
      */
-    public function autowire(PhpDocInfoFactory $phpDocInfoFactory) : void
+    public function autowire(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory) : void
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     /**
      * @return array<string, string>
      */
-    public function resolveFromFile(File $file) : array
+    public function resolveFromFile(\Rector\Core\ValueObject\Application\File $file) : array
     {
         $filePath = $file->getFilePath();
         if (isset($this->shortNamesByFilePath[$filePath])) {
@@ -101,15 +101,15 @@ final class ShortNameResolver
      * Collects all "class <SomeClass>", "trait <SomeTrait>" and "interface <SomeInterface>"
      * @return string[]
      */
-    public function resolveShortClassLikeNamesForNode(Node $node) : array
+    public function resolveShortClassLikeNamesForNode(\PhpParser\Node $node) : array
     {
-        $namespace = $this->betterNodeFinder->findParentType($node, Namespace_::class);
-        if (!$namespace instanceof Namespace_) {
+        $namespace = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);
+        if (!$namespace instanceof \PhpParser\Node\Stmt\Namespace_) {
             // only handle namespace nodes
             return [];
         }
         /** @var ClassLike[] $classLikes */
-        $classLikes = $this->betterNodeFinder->findInstanceOf($namespace, ClassLike::class);
+        $classLikes = $this->betterNodeFinder->findInstanceOf($namespace, \PhpParser\Node\Stmt\ClassLike::class);
         $shortClassLikeNames = [];
         foreach ($classLikes as $classLike) {
             $shortClassLikeNames[] = $this->nodeNameResolver->getShortName($classLike);
@@ -123,9 +123,9 @@ final class ShortNameResolver
     private function resolveForStmts(array $stmts) : array
     {
         $shortNamesToFullyQualifiedNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use(&$shortNamesToFullyQualifiedNames) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use(&$shortNamesToFullyQualifiedNames) {
             // class name is used!
-            if ($node instanceof ClassLike && $node->name instanceof Identifier) {
+            if ($node instanceof \PhpParser\Node\Stmt\ClassLike && $node->name instanceof \PhpParser\Node\Identifier) {
                 $fullyQualifiedName = $this->nodeNameResolver->getName($node);
                 if ($fullyQualifiedName === null) {
                     return null;
@@ -133,11 +133,11 @@ final class ShortNameResolver
                 $shortNamesToFullyQualifiedNames[$node->name->toString()] = $fullyQualifiedName;
                 return null;
             }
-            if (!$node instanceof Name) {
+            if (!$node instanceof \PhpParser\Node\Name) {
                 return null;
             }
-            $originalName = $node->getAttribute(AttributeKey::ORIGINAL_NAME);
-            if (!$originalName instanceof Name) {
+            $originalName = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
+            if (!$originalName instanceof \PhpParser\Node\Name) {
                 return null;
             }
             // already short
@@ -161,22 +161,22 @@ final class ShortNameResolver
     {
         $reflectionClass = $this->resolveNativeClassReflection($stmts);
         $shortNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use(&$shortNames) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use(&$shortNames) {
             // speed up for nodes that are
             $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-            if (!$phpDocInfo instanceof PhpDocInfo) {
+            if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
                 return null;
             }
-            $phpDocNodeTraverser = new PhpDocNodeTraverser();
+            $phpDocNodeTraverser = new \RectorPrefix20220527\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
             $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$shortNames) {
-                if ($node instanceof PhpDocTagNode) {
+                if ($node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
                     $shortName = \trim($node->name, '@');
-                    if (StringUtils::isMatch($shortName, self::BIG_LETTER_START_REGEX)) {
+                    if (\Rector\Core\Util\StringUtils::isMatch($shortName, self::BIG_LETTER_START_REGEX)) {
                         $shortNames[] = $shortName;
                     }
                     return null;
                 }
-                if ($node instanceof IdentifierTypeNode) {
+                if ($node instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
                     $shortNames[] = $node->name;
                 }
                 return null;
@@ -188,10 +188,10 @@ final class ShortNameResolver
     /**
      * @param Node[] $stmts
      */
-    private function resolveNativeClassReflection(array $stmts) : ?ReflectionClass
+    private function resolveNativeClassReflection(array $stmts) : ?\ReflectionClass
     {
-        $firstClassLike = $this->betterNodeFinder->findFirstInstanceOf($stmts, ClassLike::class);
-        if (!$firstClassLike instanceof ClassLike) {
+        $firstClassLike = $this->betterNodeFinder->findFirstInstanceOf($stmts, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$firstClassLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
         $className = (string) $this->nodeNameResolver->getName($firstClassLike);
@@ -206,13 +206,13 @@ final class ShortNameResolver
      * @param Stmt[] $stmts
      * @return array<string, string>
      */
-    private function fqnizeShortNames(array $shortNames, ?ReflectionClass $reflectionClass, array $stmts) : array
+    private function fqnizeShortNames(array $shortNames, ?\ReflectionClass $reflectionClass, array $stmts) : array
     {
         $shortNamesToFullyQualifiedNames = [];
         foreach ($shortNames as $shortName) {
             $stmtsMatchedName = $this->useImportNameMatcher->matchNameWithStmts($shortName, $stmts);
-            if ($reflectionClass instanceof ReflectionClass) {
-                $fullyQualifiedName = Reflection::expandClassName($shortName, $reflectionClass);
+            if ($reflectionClass instanceof \ReflectionClass) {
+                $fullyQualifiedName = \RectorPrefix20220527\Nette\Utils\Reflection::expandClassName($shortName, $reflectionClass);
             } elseif (\is_string($stmtsMatchedName)) {
                 $fullyQualifiedName = $stmtsMatchedName;
             } else {

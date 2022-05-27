@@ -61,7 +61,7 @@ final class VariableManipulator
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, VariableToConstantGuard $variableToConstantGuard, NodeComparator $nodeComparator, ExprAnalyzer $exprAnalyzer)
+    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20220527\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer)
     {
         $this->assignManipulator = $assignManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -74,19 +74,19 @@ final class VariableManipulator
     /**
      * @return Assign[]
      */
-    public function collectScalarOrArrayAssignsOfVariable(ClassMethod $classMethod) : array
+    public function collectScalarOrArrayAssignsOfVariable(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
-        $currentClass = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-        if (!$currentClass instanceof Class_) {
+        $currentClass = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
+        if (!$currentClass instanceof \PhpParser\Node\Stmt\Class_) {
             return [];
         }
         $currentClassName = (string) $this->nodeNameResolver->getName($currentClass);
         $assignsOfArrayToVariable = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use(&$assignsOfArrayToVariable, $currentClass, $currentClassName) {
-            if (!$node instanceof Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (\PhpParser\Node $node) use(&$assignsOfArrayToVariable, $currentClass, $currentClassName) {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return null;
             }
-            if (!$node->var instanceof Variable) {
+            if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
                 return null;
             }
             if ($this->exprAnalyzer->isDynamicExpr($node->expr)) {
@@ -98,10 +98,10 @@ final class VariableManipulator
             if ($this->isTestCaseExpectedVariable($node->var)) {
                 return null;
             }
-            if ($node->expr instanceof ConstFetch) {
+            if ($node->expr instanceof \PhpParser\Node\Expr\ConstFetch) {
                 return null;
             }
-            if ($node->expr instanceof ClassConstFetch && $this->isOutsideClass($node->expr, $currentClass, $currentClassName)) {
+            if ($node->expr instanceof \PhpParser\Node\Expr\ClassConstFetch && $this->isOutsideClass($node->expr, $currentClass, $currentClassName)) {
                 return null;
             }
             $assignsOfArrayToVariable[] = $node;
@@ -112,13 +112,13 @@ final class VariableManipulator
      * @param Assign[] $assignsOfArrayToVariable
      * @return Assign[]
      */
-    public function filterOutChangedVariables(array $assignsOfArrayToVariable, ClassMethod $classMethod) : array
+    public function filterOutChangedVariables(array $assignsOfArrayToVariable, \PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
-        return \array_filter($assignsOfArrayToVariable, function (Assign $assign) use($classMethod) : bool {
+        return \array_filter($assignsOfArrayToVariable, function (\PhpParser\Node\Expr\Assign $assign) use($classMethod) : bool {
             return $this->isReadOnlyVariable($classMethod, $assign);
         });
     }
-    private function isOutsideClass(ClassConstFetch $classConstFetch, Class_ $currentClass, string $currentClassName) : bool
+    private function isOutsideClass(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch, \PhpParser\Node\Stmt\Class_ $currentClass, string $currentClassName) : bool
     {
         /**
          * Dynamic class already checked on $this->exprAnalyzer->isDynamicValue() early
@@ -126,20 +126,20 @@ final class VariableManipulator
          */
         $class = $classConstFetch->class;
         if ($this->nodeNameResolver->isName($class, 'self')) {
-            return $currentClass->extends instanceof FullyQualified;
+            return $currentClass->extends instanceof \PhpParser\Node\Name\FullyQualified;
         }
         return !$this->nodeNameResolver->isName($class, $currentClassName);
     }
-    private function hasEncapsedStringPart(Expr $expr) : bool
+    private function hasEncapsedStringPart(\PhpParser\Node\Expr $expr) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($expr, function (Node $subNode) : bool {
-            return $subNode instanceof Encapsed || $subNode instanceof EncapsedStringPart;
+        return (bool) $this->betterNodeFinder->findFirst($expr, function (\PhpParser\Node $subNode) : bool {
+            return $subNode instanceof \PhpParser\Node\Scalar\Encapsed || $subNode instanceof \PhpParser\Node\Scalar\EncapsedStringPart;
         });
     }
-    private function isTestCaseExpectedVariable(Variable $variable) : bool
+    private function isTestCaseExpectedVariable(\PhpParser\Node\Expr\Variable $variable) : bool
     {
-        $classLike = $this->betterNodeFinder->findParentType($variable, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($variable, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return \false;
         }
         $className = (string) $this->nodeNameResolver->getName($classLike);
@@ -152,16 +152,16 @@ final class VariableManipulator
      * Inspiration
      * @see \Rector\Core\NodeManipulator\PropertyManipulator::isPropertyUsedInReadContext()
      */
-    private function isReadOnlyVariable(ClassMethod $classMethod, Assign $assign) : bool
+    private function isReadOnlyVariable(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\Assign $assign) : bool
     {
-        if (!$assign->var instanceof Variable) {
+        if (!$assign->var instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
         $variable = $assign->var;
         $variableUsages = $this->collectVariableUsages($classMethod, $variable, $assign);
         foreach ($variableUsages as $variableUsage) {
-            $parent = $variableUsage->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parent instanceof Arg && !$this->variableToConstantGuard->isReadArg($parent)) {
+            $parent = $variableUsage->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if ($parent instanceof \PhpParser\Node\Arg && !$this->variableToConstantGuard->isReadArg($parent)) {
                 return \false;
             }
             if (!$this->assignManipulator->isLeftPartOfAssign($variableUsage)) {
@@ -174,14 +174,14 @@ final class VariableManipulator
     /**
      * @return Variable[]
      */
-    private function collectVariableUsages(ClassMethod $classMethod, Variable $variable, Assign $assign) : array
+    private function collectVariableUsages(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Expr\Assign $assign) : array
     {
-        return $this->betterNodeFinder->find((array) $classMethod->getStmts(), function (Node $node) use($variable, $assign) : bool {
-            if (!$node instanceof Variable) {
+        return $this->betterNodeFinder->find((array) $classMethod->getStmts(), function (\PhpParser\Node $node) use($variable, $assign) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
                 return \false;
             }
             // skip initialization
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             if ($parentNode === $assign) {
                 return \false;
             }

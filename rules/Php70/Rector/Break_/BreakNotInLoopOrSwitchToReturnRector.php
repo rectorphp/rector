@@ -18,24 +18,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://3v4l.org/Qtelt
  * @see \Rector\Tests\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector\BreakNotInLoopOrSwitchToReturnRectorTest
  */
-final class BreakNotInLoopOrSwitchToReturnRector extends AbstractRector implements MinPhpVersionInterface
+final class BreakNotInLoopOrSwitchToReturnRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\NodeNestingScope\ContextAnalyzer
      */
     private $contextAnalyzer;
-    public function __construct(ContextAnalyzer $contextAnalyzer)
+    public function __construct(\Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer)
     {
         $this->contextAnalyzer = $contextAnalyzer;
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::NO_BREAK_OUTSIDE_LOOP;
+        return \Rector\Core\ValueObject\PhpVersionFeature::NO_BREAK_OUTSIDE_LOOP;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Convert break outside for/foreach/switch context to return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert break outside for/foreach/switch context to return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -68,12 +68,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Break_::class];
+        return [\PhpParser\Node\Stmt\Break_::class];
     }
     /**
      * @param Break_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->contextAnalyzer->isInLoop($node)) {
             return null;
@@ -82,7 +82,7 @@ CODE_SAMPLE
             return null;
         }
         if ($this->contextAnalyzer->isInIf($node)) {
-            return new Return_();
+            return new \PhpParser\Node\Stmt\Return_();
         }
         $this->removeNode($node);
         return $node;

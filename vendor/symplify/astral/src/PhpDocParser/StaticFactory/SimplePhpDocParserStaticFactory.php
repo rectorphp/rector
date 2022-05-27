@@ -13,9 +13,9 @@ use RectorPrefix20220527\Symplify\Astral\PhpDocParser\SimplePhpDocParser;
  */
 final class SimplePhpDocParserStaticFactory
 {
-    public static function create() : SimplePhpDocParser
+    public static function create() : \RectorPrefix20220527\Symplify\Astral\PhpDocParser\SimplePhpDocParser
     {
-        $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
-        return new SimplePhpDocParser($phpDocParser, new Lexer());
+        $phpDocParser = new \PHPStan\PhpDocParser\Parser\PhpDocParser(new \PHPStan\PhpDocParser\Parser\TypeParser(), new \PHPStan\PhpDocParser\Parser\ConstExprParser());
+        return new \RectorPrefix20220527\Symplify\Astral\PhpDocParser\SimplePhpDocParser($phpDocParser, new \PHPStan\PhpDocParser\Lexer\Lexer());
     }
 }

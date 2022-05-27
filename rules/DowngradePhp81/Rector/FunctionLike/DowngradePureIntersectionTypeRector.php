@@ -18,14 +18,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp81\Rector\FunctionLike\DowngradePureIntersectionTypeRector\DowngradePureIntersectionTypeRectorTest
  */
-final class DowngradePureIntersectionTypeRector extends AbstractRector
+final class DowngradePureIntersectionTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocFromTypeDeclarationDecorator;
-    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
     {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
     }
@@ -34,11 +34,11 @@ final class DowngradePureIntersectionTypeRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [ArrowFunction::class, ClassMethod::class, Closure::class, Function_::class];
+        return [\PhpParser\Node\Expr\ArrowFunction::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\Function_::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove the intersection type params and returns, add @param/@return tags instead', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove the intersection type params and returns, add @param/@return tags instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 function someFunction(): Foo&Bar
 {
 }
@@ -56,17 +56,17 @@ CODE_SAMPLE
     /**
      * @param ArrowFunction|ClassMethod|Closure|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $paramDecorated = \false;
         foreach ($node->getParams() as $param) {
-            if (!$param->type instanceof IntersectionType) {
+            if (!$param->type instanceof \PhpParser\Node\IntersectionType) {
                 continue;
             }
             $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node, [\PHPStan\Type\IntersectionType::class]);
             $paramDecorated = \true;
         }
-        if (!$node->returnType instanceof IntersectionType) {
+        if (!$node->returnType instanceof \PhpParser\Node\IntersectionType) {
             if ($paramDecorated) {
                 return $node;
             }

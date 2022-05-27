@@ -22,17 +22,17 @@ final class ClassNaming
      */
     public function getShortName($name) : string
     {
-        if ($name instanceof ClassLike) {
+        if ($name instanceof \PhpParser\Node\Stmt\ClassLike) {
             if ($name->name === null) {
                 return '';
             }
             return $this->getShortName($name->name);
         }
-        if ($name instanceof Name || $name instanceof Identifier) {
+        if ($name instanceof \PhpParser\Node\Name || $name instanceof \PhpParser\Node\Identifier) {
             $name = $name->toString();
         }
         $name = \trim($name, '\\');
-        $shortName = Strings::after($name, '\\', -1);
+        $shortName = \RectorPrefix20220527\Nette\Utils\Strings::after($name, '\\', -1);
         if (\is_string($shortName)) {
             return $shortName;
         }
@@ -41,6 +41,6 @@ final class ClassNaming
     public function getNamespace(string $fullyQualifiedName) : ?string
     {
         $fullyQualifiedName = \trim($fullyQualifiedName, '\\');
-        return Strings::before($fullyQualifiedName, '\\', -1);
+        return \RectorPrefix20220527\Nette\Utils\Strings::before($fullyQualifiedName, '\\', -1);
     }
 }

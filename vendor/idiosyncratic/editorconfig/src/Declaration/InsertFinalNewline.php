@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220527\Idiosyncratic\EditorConfig\Declaration;
 
-final class InsertFinalNewline extends BooleanDeclaration
+final class InsertFinalNewline extends \RectorPrefix20220527\Idiosyncratic\EditorConfig\Declaration\BooleanDeclaration
 {
     public function getName() : string
     {

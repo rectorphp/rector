@@ -28,7 +28,7 @@ class ArrayShapeItemNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     public function __toString() : string
     {
         if ($this->keyName !== null) {
-            return sprintf('%s%s: %s', (string) $this->keyName, $this->optional ? '?' : '', (string) $this->valueType);
+            return \sprintf('%s%s: %s', (string) $this->keyName, $this->optional ? '?' : '', (string) $this->valueType);
         }
         return (string) $this->valueType;
     }

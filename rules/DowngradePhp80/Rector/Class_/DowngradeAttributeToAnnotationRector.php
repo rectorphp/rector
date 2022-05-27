@@ -25,7 +25,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector\DowngradeAttributeToAnnotationRectorTest
  */
-final class DowngradeAttributeToAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
+final class DowngradeAttributeToAnnotationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var DowngradeAttributeToAnnotation[]
@@ -40,13 +40,13 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
      * @var \Rector\PhpAttribute\Printer\DoctrineAnnotationFactory
      */
     private $doctrineAnnotationFactory;
-    public function __construct(DoctrineAnnotationFactory $doctrineAnnotationFactory)
+    public function __construct(\Rector\PhpAttribute\Printer\DoctrineAnnotationFactory $doctrineAnnotationFactory)
     {
         $this->doctrineAnnotationFactory = $doctrineAnnotationFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor PHP attribute markers to annotations notation', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor PHP attribute markers to annotations notation', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Routing\Annotation\Route;
 
 class SymfonyRoute
@@ -70,31 +70,31 @@ class SymfonyRoute
     }
 }
 CODE_SAMPLE
-, [new DowngradeAttributeToAnnotation('Symfony\\Component\\Routing\\Annotation\\Route')])]);
+, [new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Symfony\\Component\\Routing\\Annotation\\Route')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class, ClassMethod::class, Property::class, Interface_::class, Param::class, Function_::class];
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\Interface_::class, \PhpParser\Node\Param::class, \PhpParser\Node\Stmt\Function_::class];
     }
     /**
      * @param Class_|ClassMethod|Property|Interface_|Param|Function_  $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->isDowngraded = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $key => $attribute) {
                 $attributeToAnnotation = $this->matchAttributeToAnnotation($attribute, $this->attributesToAnnotations);
-                if (!$attributeToAnnotation instanceof DowngradeAttributeToAnnotation) {
+                if (!$attributeToAnnotation instanceof \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation) {
                     continue;
                 }
                 unset($attrGroup->attrs[$key]);
                 if (\strpos($attributeToAnnotation->getTag(), '\\') === \false) {
-                    $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@' . $attributeToAnnotation->getTag(), new GenericTagValueNode('')));
+                    $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@' . $attributeToAnnotation->getTag(), new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
                 } else {
                     $doctrineAnnotation = $this->doctrineAnnotationFactory->createFromAttribute($attribute, $attributeToAnnotation->getTag());
                     $phpDocInfo->addTagValueNode($doctrineAnnotation);
@@ -114,7 +114,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        Assert::allIsAOf($configuration, DowngradeAttributeToAnnotation::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
         $this->attributesToAnnotations = $configuration;
     }
     /**
@@ -133,7 +133,7 @@ CODE_SAMPLE
     /**
      * @param DowngradeAttributeToAnnotation[] $attributesToAnnotations
      */
-    private function matchAttributeToAnnotation(Attribute $attribute, array $attributesToAnnotations) : ?DowngradeAttributeToAnnotation
+    private function matchAttributeToAnnotation(\PhpParser\Node\Attribute $attribute, array $attributesToAnnotations) : ?\Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation
     {
         foreach ($attributesToAnnotations as $attributeToAnnotation) {
             if (!$this->isName($attribute->name, $attributeToAnnotation->getAttributeClass())) {

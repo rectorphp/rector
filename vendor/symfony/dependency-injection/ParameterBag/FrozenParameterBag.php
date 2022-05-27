@@ -16,7 +16,7 @@ use RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\LogicEx
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class FrozenParameterBag extends ParameterBag
+class FrozenParameterBag extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\ParameterBag\ParameterBag
 {
     /**
      * For performance reasons, the constructor assumes that
@@ -36,14 +36,14 @@ class FrozenParameterBag extends ParameterBag
      */
     public function clear()
     {
-        throw new LogicException('Impossible to call clear() on a frozen ParameterBag.');
+        throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\LogicException('Impossible to call clear() on a frozen ParameterBag.');
     }
     /**
      * {@inheritdoc}
      */
     public function add(array $parameters)
     {
-        throw new LogicException('Impossible to call add() on a frozen ParameterBag.');
+        throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\LogicException('Impossible to call add() on a frozen ParameterBag.');
     }
     /**
      * {@inheritdoc}
@@ -51,13 +51,13 @@ class FrozenParameterBag extends ParameterBag
      */
     public function set(string $name, $value)
     {
-        throw new LogicException('Impossible to call set() on a frozen ParameterBag.');
+        throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\LogicException('Impossible to call set() on a frozen ParameterBag.');
     }
     /**
      * {@inheritdoc}
      */
     public function remove(string $name)
     {
-        throw new LogicException('Impossible to call remove() on a frozen ParameterBag.');
+        throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\LogicException('Impossible to call remove() on a frozen ParameterBag.');
     }
 }

@@ -20,7 +20,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\OrderAttributesRector\SpecificOrder\OrderAttributesRectorTest
  */
-final class OrderAttributesRector extends AbstractRector implements ConfigurableRectorInterface
+final class OrderAttributesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -30,9 +30,9 @@ final class OrderAttributesRector extends AbstractRector implements Configurable
      * @var array<string, int>|array<string>
      */
     private $configuration = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Order attributes by desired names', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Order attributes by desired names', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 #[Second]
 #[First]
 class Someclass
@@ -46,7 +46,7 @@ class Someclass
 {
 }
 CODE_SAMPLE
-, ['First', 'Second']), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+, ['First', 'Second']), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 #[BAttribute]
 #[AAttribute]
 class Someclass
@@ -67,12 +67,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class, Property::class, Param::class, ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Param::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Expr\ArrowFunction::class];
     }
     /**
      * @param ClassMethod|Property|Function_|Closure|Param|Class_|ArrowFunction $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->attrGroups === []) {
             return null;
@@ -94,8 +94,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration = [self::ALPHABETICALLY]) : void
     {
-        Assert::allString($configuration);
-        Assert::minCount($configuration, 1);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::minCount($configuration, 1);
         $this->configuration = $this->isAlphabetically($configuration) ? $configuration : \array_flip($configuration);
     }
     /**
@@ -104,7 +104,7 @@ CODE_SAMPLE
      */
     private function sortAlphabetically(array $originalAttrGroups) : array
     {
-        \usort($originalAttrGroups, function (AttributeGroup $firstAttributeGroup, AttributeGroup $secondAttributeGroup) : int {
+        \usort($originalAttrGroups, function (\PhpParser\Node\AttributeGroup $firstAttributeGroup, \PhpParser\Node\AttributeGroup $secondAttributeGroup) : int {
             $currentNamespace = $this->getName($firstAttributeGroup->attrs[0]->name);
             $nextNamespace = $this->getName($secondAttributeGroup->attrs[0]->name);
             return \strcmp($currentNamespace, $nextNamespace);
@@ -117,14 +117,14 @@ CODE_SAMPLE
      */
     private function sortBySpecificOrder(array $originalAttrGroups) : array
     {
-        \usort($originalAttrGroups, function (AttributeGroup $firstAttributeGroup, AttributeGroup $secondAttributeGroup) : int {
+        \usort($originalAttrGroups, function (\PhpParser\Node\AttributeGroup $firstAttributeGroup, \PhpParser\Node\AttributeGroup $secondAttributeGroup) : int {
             $firstAttributePosition = $this->resolveAttributeGroupPosition($firstAttributeGroup);
             $secondAttributePosition = $this->resolveAttributeGroupPosition($secondAttributeGroup);
             return $firstAttributePosition <=> $secondAttributePosition;
         });
         return $originalAttrGroups;
     }
-    private function resolveAttributeGroupPosition(AttributeGroup $attributeGroup) : int
+    private function resolveAttributeGroupPosition(\PhpParser\Node\AttributeGroup $attributeGroup) : int
     {
         $attrName = $this->getName($attributeGroup->attrs[0]->name);
         return (int) ($this->configuration[$attrName] ?? \count($this->configuration));

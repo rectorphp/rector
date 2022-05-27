@@ -32,18 +32,18 @@ final class ControllerRenderMethodAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(SimpleNameResolver $simpleNameResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
+    public function __construct(\RectorPrefix20220527\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isRenderMethod(ClassMethod $classMethod) : bool
+    public function isRenderMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         // nette one?
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         if ($this->isNetteRenderMethod($classReflection, $classMethod)) {
@@ -51,7 +51,7 @@ final class ControllerRenderMethodAnalyzer
         }
         return $this->isSymfonyRenderMethod($classReflection, $classMethod);
     }
-    private function isNetteRenderMethod(ClassReflection $classReflection, ClassMethod $classMethod) : bool
+    private function isNetteRenderMethod(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if (!$classReflection->isSubclassOf('Nette\\Application\\UI\\Control')) {
             return \false;
@@ -61,7 +61,7 @@ final class ControllerRenderMethodAnalyzer
         }
         return $this->simpleNameResolver->isNames($classMethod->name, ['render*', 'handle*', 'action*']);
     }
-    private function isSymfonyRenderMethod(ClassReflection $classReflection, ClassMethod $classMethod) : bool
+    private function isSymfonyRenderMethod(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if (!$classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller') && !$classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController')) {
             return \false;
@@ -76,7 +76,7 @@ final class ControllerRenderMethodAnalyzer
             return \true;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
-        if (!$phpDocInfo instanceof PhpDocInfo) {
+        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return \false;
         }
         return $phpDocInfo->hasByAnnotationClass('Symfony\\Component\\Routing\\Annotation\\Route');

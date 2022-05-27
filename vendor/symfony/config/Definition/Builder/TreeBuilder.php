@@ -16,13 +16,13 @@ use RectorPrefix20220527\Symfony\Component\Config\Definition\NodeInterface;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class TreeBuilder implements NodeParentInterface
+class TreeBuilder implements \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\NodeParentInterface
 {
     protected $tree;
     protected $root;
-    public function __construct(string $name, string $type = 'array', NodeBuilder $builder = null)
+    public function __construct(string $name, string $type = 'array', \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\NodeBuilder $builder = null)
     {
-        $builder = $builder ?? new NodeBuilder();
+        $builder = $builder ?? new \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\NodeBuilder();
         $this->root = $builder->node($name, $type)->setParent($this);
     }
     /**
@@ -37,7 +37,7 @@ class TreeBuilder implements NodeParentInterface
      *
      * @throws \RuntimeException
      */
-    public function buildTree() : NodeInterface
+    public function buildTree() : \RectorPrefix20220527\Symfony\Component\Config\Definition\NodeInterface
     {
         if (null !== $this->tree) {
             return $this->tree;

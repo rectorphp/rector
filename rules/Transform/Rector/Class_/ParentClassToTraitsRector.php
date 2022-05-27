@@ -21,7 +21,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\Transform\Rector\Class_\ParentClassToTraitsRector\ParentClassToTraitsRectorTest
  */
-final class ParentClassToTraitsRector extends AbstractRector implements ConfigurableRectorInterface
+final class ParentClassToTraitsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var ParentClassToTraits[]
@@ -37,14 +37,14 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(ClassInsertManipulator $classInsertManipulator, ClassAnalyzer $classAnalyzer)
+    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->classAnalyzer = $classAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replaces parent class to specific traits', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces parent class to specific traits', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass extends Nette\Object
 {
 }
@@ -55,22 +55,22 @@ class SomeClass
     use Nette\SmartObject;
 }
 CODE_SAMPLE
-, [new ParentClassToTraits('Nette\\Object', ['Nette\\SmartObject'])])]);
+, [new \Rector\Transform\ValueObject\ParentClassToTraits('Nette\\Object', ['Nette\\SmartObject'])])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $parentExtends = $node->extends;
-        if (!$parentExtends instanceof Name) {
+        if (!$parentExtends instanceof \PhpParser\Node\Name) {
             return null;
         }
         if ($this->classAnalyzer->isAnonymousClass($node)) {
@@ -93,10 +93,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        Assert::allIsAOf($configuration, ParentClassToTraits::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\ParentClassToTraits::class);
         $this->parentClassToTraits = $configuration;
     }
-    private function removeParentClass(Class_ $class) : void
+    private function removeParentClass(\PhpParser\Node\Stmt\Class_ $class) : void
     {
         $class->extends = null;
     }

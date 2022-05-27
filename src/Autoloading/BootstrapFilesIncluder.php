@@ -21,7 +21,7 @@ final class BootstrapFilesIncluder
      * @var \Rector\Core\FileSystem\FilesFinder
      */
     private $filesFinder;
-    public function __construct(ParameterProvider $parameterProvider, FilesFinder $filesFinder)
+    public function __construct(\RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\FileSystem\FilesFinder $filesFinder)
     {
         $this->parameterProvider = $parameterProvider;
         $this->filesFinder = $filesFinder;
@@ -32,18 +32,18 @@ final class BootstrapFilesIncluder
      */
     public function includeBootstrapFiles() : void
     {
-        $bootstrapFiles = $this->parameterProvider->provideArrayParameter(Option::BOOTSTRAP_FILES);
-        Assert::allString($bootstrapFiles);
+        $bootstrapFiles = $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($bootstrapFiles);
         /** @var string[] $bootstrapFiles */
         foreach ($bootstrapFiles as $bootstrapFile) {
             if (!\is_file($bootstrapFile)) {
-                throw new ShouldNotHappenException(\sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));
+                throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));
             }
             try {
                 require_once $bootstrapFile;
-            } catch (Throwable $throwable) {
+            } catch (\Throwable $throwable) {
                 $errorMessage = \sprintf('"%s" thrown in "%s" on line %d while loading bootstrap file %s: %s', \get_class($throwable), $throwable->getFile(), $throwable->getLine(), $bootstrapFile, $throwable->getMessage());
-                throw new ShouldNotHappenException($errorMessage, $throwable->getCode(), $throwable);
+                throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage, $throwable->getCode(), $throwable);
             }
         }
         $stubsRectorDirectory = \realpath(__DIR__ . '/../../stubs-rector');

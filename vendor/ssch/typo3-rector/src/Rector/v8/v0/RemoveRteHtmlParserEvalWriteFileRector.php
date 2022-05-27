@@ -16,21 +16,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.0/Breaking-72384-RemovedDeprecatedCodeFromHtmlParser.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v0\CoreRector\Html\RemoveRteHtmlParserEvalWriteFileRectorTest
  */
-final class RemoveRteHtmlParserEvalWriteFileRector extends AbstractRector
+final class RemoveRteHtmlParserEvalWriteFileRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall|MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Html\\RteHtmlParser'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Html\\RteHtmlParser'))) {
             return null;
         }
         if ($this->isName($node->name, 'evalWriteFile')) {
@@ -41,8 +41,8 @@ final class RemoveRteHtmlParserEvalWriteFileRector extends AbstractRector
             try {
                 $this->removeNode($node);
                 return $node;
-            } catch (ShouldNotHappenException $exception) {
-                $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
+                $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
                 $this->removeNode($parentNode);
                 return $node;
             }
@@ -52,9 +52,9 @@ final class RemoveRteHtmlParserEvalWriteFileRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('remove evalWriteFile method from RteHtmlparser.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('remove evalWriteFile method from RteHtmlparser.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Html\RteHtmlParser;
 
 final class RteHtmlParserRemovedMethods

@@ -82,7 +82,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
      * @var \Rector\Core\Util\MemoryLimiter
      */
     private $memoryLimiter;
-    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, MissingRectorRulesReporter $missingRectorRulesReporter, ApplicationFileProcessor $applicationFileProcessor, BootstrapFilesIncluder $bootstrapFilesIncluder, ProcessResultFactory $processResultFactory, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, OutputFormatterCollector $outputFormatterCollector, OutputStyleInterface $rectorOutputStyle, MemoryLimiter $memoryLimiter)
+    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\Util\MemoryLimiter $memoryLimiter)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -99,11 +99,11 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     }
     protected function configure() : void
     {
-        $this->setName(CommandNaming::classToName(self::class));
+        $this->setName(\RectorPrefix20220527\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(self::class));
         $this->setDescription('Upgrades or refactors source code with provided rectors');
         parent::configure();
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(\RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $exitCode = $this->missingRectorRulesReporter->reportIfMissing();
         if ($exitCode !== null) {
@@ -112,8 +112,8 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $configuration = $this->configurationFactory->createFromInput($input);
         $this->memoryLimiter->adjust($configuration);
         // disable console output in case of json output formatter
-        if ($configuration->getOutputFormat() === JsonOutputFormatter::NAME) {
-            $this->rectorOutputStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+        if ($configuration->getOutputFormat() === \Rector\ChangesReporting\Output\JsonOutputFormatter::NAME) {
+            $this->rectorOutputStyle->setVerbosity(\RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
         }
         // register autoloaded and included files
         $this->bootstrapFilesIncluder->includeBootstrapFiles();
@@ -138,23 +138,23 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->invalidateCacheForChangedAndErroredFiles($processResult);
         return $this->resolveReturnCode($processResult, $configuration);
     }
-    protected function initialize(InputInterface $input, OutputInterface $output) : void
+    protected function initialize(\RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output) : void
     {
         $application = $this->getApplication();
-        if (!$application instanceof Application) {
-            throw new ShouldNotHappenException();
+        if (!$application instanceof \RectorPrefix20220527\Symfony\Component\Console\Application) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $optionDebug = (bool) $input->getOption(Option::DEBUG);
+        $optionDebug = (bool) $input->getOption(\Rector\Core\Configuration\Option::DEBUG);
         if ($optionDebug) {
             $application->setCatchExceptions(\false);
         }
         // clear cache
-        $optionClearCache = (bool) $input->getOption(Option::CLEAR_CACHE);
+        $optionClearCache = (bool) $input->getOption(\Rector\Core\Configuration\Option::CLEAR_CACHE);
         if ($optionDebug || $optionClearCache) {
             $this->changedFilesDetector->clear();
         }
     }
-    private function invalidateCacheForChangedAndErroredFiles(ProcessResult $processResult) : void
+    private function invalidateCacheForChangedAndErroredFiles(\Rector\Core\ValueObject\ProcessResult $processResult) : void
     {
         foreach ($processResult->getChangedFileInfos() as $changedFileInfo) {
             $this->changedFilesDetector->invalidateFile($changedFileInfo);
@@ -164,20 +164,20 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
             if (!\is_string($errorFile)) {
                 continue;
             }
-            $errorFileInfo = new SmartFileInfo($errorFile);
+            $errorFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($errorFile);
             $this->changedFilesDetector->invalidateFile($errorFileInfo);
         }
     }
-    private function resolveReturnCode(ProcessResult $processResult, Configuration $configuration) : int
+    private function resolveReturnCode(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : int
     {
         // some system errors were found → fail
         if ($processResult->getErrors() !== []) {
-            return Command::FAILURE;
+            return \RectorPrefix20220527\Symfony\Component\Console\Command\Command::FAILURE;
         }
         // inverse error code for CI dry-run
         if (!$configuration->isDryRun()) {
-            return Command::SUCCESS;
+            return \RectorPrefix20220527\Symfony\Component\Console\Command\Command::SUCCESS;
         }
-        return $processResult->getFileDiffs() === [] ? Command::SUCCESS : Command::FAILURE;
+        return $processResult->getFileDiffs() === [] ? \RectorPrefix20220527\Symfony\Component\Console\Command\Command::SUCCESS : \RectorPrefix20220527\Symfony\Component\Console\Command\Command::FAILURE;
     }
 }

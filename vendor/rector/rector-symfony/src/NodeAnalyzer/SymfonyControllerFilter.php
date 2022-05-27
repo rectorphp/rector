@@ -10,9 +10,9 @@ final class SymfonyControllerFilter
     /**
      * @return ClassMethod[]
      */
-    public function filterActionMethods(Class_ $class) : array
+    public function filterActionMethods(\PhpParser\Node\Stmt\Class_ $class) : array
     {
-        return \array_filter($class->getMethods(), function (ClassMethod $classMethod) {
+        return \array_filter($class->getMethods(), function (\PhpParser\Node\Stmt\ClassMethod $classMethod) {
             if ($classMethod->isMagic()) {
                 return \false;
             }

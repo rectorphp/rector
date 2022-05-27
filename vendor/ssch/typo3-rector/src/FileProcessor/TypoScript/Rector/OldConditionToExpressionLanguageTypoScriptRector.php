@@ -31,14 +31,14 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3
     /**
      * @param TyposcriptConditionMatcher[] $conditionMatchers
      */
-    public function __construct(CurrentFileProvider $currentFileProvider, array $conditionMatchers = [])
+    public function __construct(\Rector\Core\Provider\CurrentFileProvider $currentFileProvider, array $conditionMatchers = [])
     {
         $this->currentFileProvider = $currentFileProvider;
         $this->conditionMatchers = $conditionMatchers;
     }
-    public function enterNode(Statement $statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof ConditionalStatement) {
+        if (!$statement instanceof \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
             return;
         }
         \preg_match_all('#\\[(.*)]#imU', $statement->condition, $conditions, \PREG_SET_ORDER);
@@ -74,8 +74,8 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3
         }
         $file = $this->currentFileProvider->getFile();
         $this->hasChanged = \true;
-        if ($file instanceof File) {
-            $file->addRectorClassWithLine(new RectorWithLineChange($this, $statement->sourceLine));
+        if ($file instanceof \Rector\Core\ValueObject\Application\File) {
+            $file->addRectorClassWithLine(new \Rector\ChangesReporting\ValueObject\RectorWithLineChange($this, $statement->sourceLine));
         }
         if ([] === $newConditions) {
             $statement->condition = '';
@@ -90,7 +90,7 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3
             return;
         }
         if (\count($operators) !== \count($newConditions) - 1) {
-            throw new LogicException('The count of operators must be exactly one less than the count of conditions');
+            throw new \LogicException('The count of operators must be exactly one less than the count of conditions');
         }
         \array_unshift($operators, '');
         $newCondition = '';
@@ -104,9 +104,9 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3
         }
         $statement->condition = \sprintf('[%s]', $newCondition);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Convert old conditions to Symfony Expression Language', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert old conditions to Symfony Expression Language', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 [globalVar = TSFE:id=17, TSFE:id=24]
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

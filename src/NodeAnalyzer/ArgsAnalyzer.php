@@ -16,7 +16,7 @@ final class ArgsAnalyzer
         if (!isset($args[$position])) {
             return \false;
         }
-        return $args[$position] instanceof Arg;
+        return $args[$position] instanceof \PhpParser\Node\Arg;
     }
     /**
      * @param Arg[]|VariadicPlaceholder[] $args
@@ -28,7 +28,7 @@ final class ArgsAnalyzer
             if (!isset($args[$position])) {
                 return \false;
             }
-            if ($args[$position] instanceof Arg) {
+            if ($args[$position] instanceof \PhpParser\Node\Arg) {
                 continue;
             }
             return \false;
@@ -41,10 +41,10 @@ final class ArgsAnalyzer
     public function hasNamedArg(array $args) : bool
     {
         foreach ($args as $arg) {
-            if (!$arg instanceof Arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
                 continue;
             }
-            if ($arg->name instanceof Identifier) {
+            if ($arg->name instanceof \PhpParser\Node\Identifier) {
                 return \true;
             }
         }

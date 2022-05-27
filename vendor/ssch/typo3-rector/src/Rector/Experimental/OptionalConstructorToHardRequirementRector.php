@@ -20,21 +20,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Feature-84112-SymfonyDependencyInjectionForCoreAndExtbase.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\Experimental\OptionalConstructorToHardRequirementRector\OptionalConstructorToHardRequirementRectorTest
  */
-final class OptionalConstructorToHardRequirementRector extends AbstractRector
+final class OptionalConstructorToHardRequirementRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isName($node, MethodName::CONSTRUCT)) {
+        if (!$this->isName($node, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return null;
         }
         if (!\is_iterable($node->stmts)) {
@@ -51,7 +51,7 @@ final class OptionalConstructorToHardRequirementRector extends AbstractRector
             if (!$this->valueResolver->isNull($param->default)) {
                 continue;
             }
-            if (!$param->type instanceof FullyQualified) {
+            if (!$param->type instanceof \PhpParser\Node\Name\FullyQualified) {
                 continue;
             }
             $paramName = $this->nodeNameResolver->getName($param->var);
@@ -63,29 +63,29 @@ final class OptionalConstructorToHardRequirementRector extends AbstractRector
         }
         $potentialStmtsToRemove = [];
         foreach ($node->stmts as $stmt) {
-            if (!$stmt instanceof Expression) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
-            if (!$stmt->expr instanceof Assign) {
+            if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
-            if (!$stmt->expr->expr instanceof Coalesce) {
+            if (!$stmt->expr->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
                 continue;
             }
             $variableName = $this->nodeNameResolver->getName($stmt->expr->var);
-            if ($stmt->expr->var instanceof Variable && null !== $variableName) {
+            if ($stmt->expr->var instanceof \PhpParser\Node\Expr\Variable && null !== $variableName) {
                 $potentialStmtsToRemove[$variableName] = $stmt;
             }
-            if (!$stmt->expr->var instanceof PropertyFetch) {
+            if (!$stmt->expr->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 continue;
             }
-            if (!$stmt->expr->expr->left instanceof Variable) {
+            if (!$stmt->expr->expr->left instanceof \PhpParser\Node\Expr\Variable) {
                 continue;
             }
             if (!$this->isNames($stmt->expr->expr->left, \array_keys($paramsToCheck))) {
                 continue;
             }
-            if ($stmt->expr->expr->right instanceof Coalesce) {
+            if ($stmt->expr->expr->right instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
                 // Reset param default value
                 $paramDefault = $this->nodeNameResolver->getName($stmt->expr->expr->left);
                 if (null === $paramDefault) {
@@ -97,13 +97,13 @@ final class OptionalConstructorToHardRequirementRector extends AbstractRector
             $stmt->expr->expr = $stmt->expr->expr->left;
         }
         foreach ($node->stmts as $stmt) {
-            if (!$stmt instanceof Expression) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
-            if (!$stmt->expr instanceof Assign) {
+            if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
-            if (!$stmt->expr->expr instanceof MethodCall) {
+            if (!$stmt->expr->expr instanceof \PhpParser\Node\Expr\MethodCall) {
                 continue;
             }
             if (!$this->isNames($stmt->expr->expr->var, \array_keys($potentialStmtsToRemove))) {
@@ -120,9 +120,9 @@ final class OptionalConstructorToHardRequirementRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Option constructor arguments to hard requirement', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Option constructor arguments to hard requirement', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;

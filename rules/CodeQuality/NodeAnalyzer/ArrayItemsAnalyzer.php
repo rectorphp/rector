@@ -9,7 +9,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 final class ArrayItemsAnalyzer
 {
-    public function hasArrayExclusiveDefinedVariableNames(Array_ $array, Scope $scope) : bool
+    public function hasArrayExclusiveDefinedVariableNames(\PhpParser\Node\Expr\Array_ $array, \PHPStan\Analyser\Scope $scope) : bool
     {
         foreach ($array->items as $arrayItem) {
             $variableName = $this->resolveStringValue($arrayItem);
@@ -23,7 +23,7 @@ final class ArrayItemsAnalyzer
         }
         return \true;
     }
-    public function hasArrayExclusiveUndefinedVariableNames(Array_ $array, Scope $scope) : bool
+    public function hasArrayExclusiveUndefinedVariableNames(\PhpParser\Node\Expr\Array_ $array, \PHPStan\Analyser\Scope $scope) : bool
     {
         foreach ($array->items as $arrayItem) {
             $variableName = $this->resolveStringValue($arrayItem);
@@ -37,12 +37,12 @@ final class ArrayItemsAnalyzer
         }
         return \true;
     }
-    private function resolveStringValue(?ArrayItem $arrayItem) : ?string
+    private function resolveStringValue(?\PhpParser\Node\Expr\ArrayItem $arrayItem) : ?string
     {
-        if (!$arrayItem instanceof ArrayItem) {
+        if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        if (!$arrayItem->value instanceof String_) {
+        if (!$arrayItem->value instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         return $arrayItem->value->value;

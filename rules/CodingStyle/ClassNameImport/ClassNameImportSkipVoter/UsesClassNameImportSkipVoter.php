@@ -16,7 +16,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  * if there is already:
  * - use App\Another\Product
  */
-final class UsesClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
+final class UsesClassNameImportSkipVoter implements \Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface
 {
     /**
      * @readonly
@@ -28,12 +28,12 @@ final class UsesClassNameImportSkipVoter implements ClassNameImportSkipVoterInte
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
-    public function __construct(UseNodesToAddCollector $useNodesToAddCollector, RenamedClassesDataCollector $renamedClassesDataCollector)
+    public function __construct(\Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
-    public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
+    public function shouldSkip(\Rector\Core\ValueObject\Application\File $file, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool
     {
         $useImportTypes = $this->useNodesToAddCollector->getUseImportTypesByNode($file, $node);
         foreach ($useImportTypes as $useImportType) {

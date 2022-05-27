@@ -60,7 +60,7 @@ final class FamilyRelationsAnalyzer
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, StaticTypeMapper $staticTypeMapper, AstResolver $astResolver)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20220527\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->privatesAccessor = $privatesAccessor;
@@ -72,7 +72,7 @@ final class FamilyRelationsAnalyzer
     /**
      * @return ClassReflection[]
      */
-    public function getChildrenOfClassReflection(ClassReflection $desiredClassReflection) : array
+    public function getChildrenOfClassReflection(\PHPStan\Reflection\ClassReflection $desiredClassReflection) : array
     {
         /** @var ClassReflection[] $classReflections */
         $classReflections = $this->privatesAccessor->getPrivateProperty($this->reflectionProvider, 'classes');
@@ -88,17 +88,17 @@ final class FamilyRelationsAnalyzer
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $propertyTypeNode
      */
-    public function getPossibleUnionPropertyType(Property $property, Type $varType, ?Scope $scope, $propertyTypeNode) : PropertyType
+    public function getPossibleUnionPropertyType(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $varType, ?\PHPStan\Analyser\Scope $scope, $propertyTypeNode) : \Rector\FamilyTree\ValueObject\PropertyType
     {
-        if ($varType instanceof UnionType) {
-            return new PropertyType($varType, $propertyTypeNode);
+        if ($varType instanceof \PHPStan\Type\UnionType) {
+            return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
         }
-        if (!$scope instanceof Scope) {
-            return new PropertyType($varType, $propertyTypeNode);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $ancestorClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -109,17 +109,17 @@ final class FamilyRelationsAnalyzer
                 continue;
             }
             $class = $this->astResolver->resolveClassFromClassReflection($ancestorClassReflection, $ancestorClassName);
-            if (!$class instanceof Class_) {
+            if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
                 continue;
             }
             if (!$this->isPropertyWritten($class->stmts, $propertyName, $kindPropertyFetch)) {
                 continue;
             }
-            $varType = new UnionType([$varType, new NullType()]);
-            $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::PROPERTY());
-            return new PropertyType($varType, $propertyTypeNode);
+            $varType = new \PHPStan\Type\UnionType([$varType, new \PHPStan\Type\NullType()]);
+            $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+            return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
         }
-        return new PropertyType($varType, $propertyTypeNode);
+        return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
     }
     /**
      * @return string[]
@@ -128,20 +128,20 @@ final class FamilyRelationsAnalyzer
     public function getClassLikeAncestorNames($classOrName) : array
     {
         $ancestorNames = [];
-        if ($classOrName instanceof Name) {
+        if ($classOrName instanceof \PhpParser\Node\Name) {
             $fullName = $this->nodeNameResolver->getName($classOrName);
             $classLike = $this->astResolver->resolveClassFromName($fullName);
         } else {
             $classLike = $classOrName;
         }
-        if ($classLike instanceof Interface_) {
+        if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
             foreach ($classLike->extends as $extendInterfaceName) {
                 $ancestorNames[] = $this->nodeNameResolver->getName($extendInterfaceName);
                 $ancestorNames = \array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendInterfaceName));
             }
         }
-        if ($classLike instanceof Class_) {
-            if ($classLike->extends instanceof Name) {
+        if ($classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            if ($classLike->extends instanceof \PhpParser\Node\Name) {
                 $extendName = $classLike->extends;
                 $ancestorNames[] = $this->nodeNameResolver->getName($extendName);
                 $ancestorNames = \array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendName));
@@ -154,17 +154,17 @@ final class FamilyRelationsAnalyzer
         /** @var string[] $ancestorNames */
         return $ancestorNames;
     }
-    private function getKindPropertyFetch(Property $property) : string
+    private function getKindPropertyFetch(\PhpParser\Node\Stmt\Property $property) : string
     {
-        return $property->isStatic() ? StaticPropertyFetch::class : PropertyFetch::class;
+        return $property->isStatic() ? \PhpParser\Node\Expr\StaticPropertyFetch::class : \PhpParser\Node\Expr\PropertyFetch::class;
     }
     /**
      * @param Stmt[] $stmts
      */
     private function isPropertyWritten(array $stmts, string $propertyName, string $kindPropertyFetch) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node) use($propertyName, $kindPropertyFetch) : bool {
-            if (!$node instanceof ClassMethod) {
+        return (bool) $this->betterNodeFinder->findFirst($stmts, function (\PhpParser\Node $node) use($propertyName, $kindPropertyFetch) : bool {
+            if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 return \false;
             }
             if ($this->nodeNameResolver->isName($node->name, 'autowire')) {
@@ -173,13 +173,13 @@ final class FamilyRelationsAnalyzer
             return $this->isPropertyAssignedInClassMethod($node, $propertyName, $kindPropertyFetch);
         });
     }
-    private function isPropertyAssignedInClassMethod(ClassMethod $classMethod, string $propertyName, string $kindPropertyFetch) : bool
+    private function isPropertyAssignedInClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName, string $kindPropertyFetch) : bool
     {
         if ($classMethod->stmts === null) {
             return \false;
         }
-        return (bool) $this->betterNodeFinder->findFirst($classMethod->stmts, function (Node $node) use($propertyName, $kindPropertyFetch) : bool {
-            if (!$node instanceof Assign) {
+        return (bool) $this->betterNodeFinder->findFirst($classMethod->stmts, function (\PhpParser\Node $node) use($propertyName, $kindPropertyFetch) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;
             }
             return $kindPropertyFetch === \get_class($node->var) && $this->nodeNameResolver->isName($node->var, $propertyName);

@@ -16,19 +16,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80445-DeprecatePrintContentMethods.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\RefactorPrintContentMethodsRector\RefactorPrintContentMethodsRectorTest
  */
-final class RefactorPrintContentMethodsRector extends AbstractRector
+final class RefactorPrintContentMethodsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -37,14 +37,14 @@ final class RefactorPrintContentMethodsRector extends AbstractRector
             return null;
         }
         if ($this->isPageLayoutControllerClass($node)) {
-            $echo = new Echo_([$this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($node->var, 'getModuleTemplate'), 'renderContent')]);
+            $echo = new \PhpParser\Node\Stmt\Echo_([$this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($node->var, 'getModuleTemplate'), 'renderContent')]);
         } else {
-            $echo = new Echo_([$this->nodeFactory->createPropertyFetch($node->var, 'content')]);
+            $echo = new \PhpParser\Node\Stmt\Echo_([$this->nodeFactory->createPropertyFetch($node->var, 'content')]);
         }
         try {
             $this->removeNode($node);
-        } catch (ShouldNotHappenException $exception) {
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
+            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             $this->removeNode($parentNode);
         }
         $this->nodesToAddCollector->addNodeBeforeNode($echo, $node);
@@ -53,9 +53,9 @@ final class RefactorPrintContentMethodsRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor printContent methods of classes TaskModuleController and PageLayoutController', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor printContent methods of classes TaskModuleController and PageLayoutController', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Backend\Controller\PageLayoutController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Taskcenter\Controller\TaskModuleController;
@@ -75,15 +75,15 @@ echo $taskLayoutController->content;
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if ($this->isPageLayoutControllerClass($methodCall)) {
             return \false;
         }
-        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Taskcenter\\Controller\\TaskModuleController'));
+        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Taskcenter\\Controller\\TaskModuleController'));
     }
-    private function isPageLayoutControllerClass(MethodCall $methodCall) : bool
+    private function isPageLayoutControllerClass(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Backend\\Controller\\PageLayoutController'));
+        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Controller\\PageLayoutController'));
     }
 }

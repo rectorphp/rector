@@ -15,7 +15,7 @@ namespace RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument;
  *
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-class TaggedIteratorArgument extends IteratorArgument
+class TaggedIteratorArgument extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\IteratorArgument
 {
     /**
      * @var string

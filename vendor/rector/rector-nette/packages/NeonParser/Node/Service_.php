@@ -62,10 +62,10 @@ final class Service_ extends \Rector\Nette\NeonParser\Node\AbstractVirtualNode
      */
     public function &getIterator() : \Generator
     {
-        if ($this->classLiteralNode instanceof LiteralNode) {
+        if ($this->classLiteralNode instanceof \RectorPrefix20220527\Nette\Neon\Node\LiteralNode) {
             (yield $this->classLiteralNode);
         }
-        if ($this->factoryLiteralNode instanceof LiteralNode) {
+        if ($this->factoryLiteralNode instanceof \RectorPrefix20220527\Nette\Neon\Node\LiteralNode) {
             (yield $this->factoryLiteralNode);
         }
         foreach ($this->setupMethodCalls as $setupMethodCall) {

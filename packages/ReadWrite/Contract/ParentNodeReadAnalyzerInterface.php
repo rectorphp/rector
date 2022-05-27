@@ -7,5 +7,5 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 interface ParentNodeReadAnalyzerInterface
 {
-    public function isRead(Expr $expr, Node $parentNode) : bool;
+    public function isRead(\PhpParser\Node\Expr $expr, \PhpParser\Node $parentNode) : bool;
 }

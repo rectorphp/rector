@@ -18,21 +18,21 @@ use RectorPrefix20220527\TYPO3\CMS\Core\Utility\PhpOptionsUtility;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.3/Deprecation-85102-PhpOptionsUtility.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v3\PhpOptionsUtilityRector\PhpOptionsUtilityRectorTest
  */
-final class PhpOptionsUtilityRector extends AbstractRector
+final class PhpOptionsUtilityRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\PhpOptionsUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\PhpOptionsUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['isSessionAutoStartEnabled', 'getIniValueBoolean'])) {
@@ -42,13 +42,13 @@ final class PhpOptionsUtilityRector extends AbstractRector
         if ($this->isName($node->name, 'getIniValueBoolean')) {
             $configOption = $this->valueResolver->getValue($node->args[0]->value);
         }
-        return $this->nodeFactory->createFuncCall('filter_var', [$this->nodeFactory->createFuncCall('ini_get', [$configOption]), new ConstFetch(new Name('FILTER_VALIDATE_BOOLEAN')), new Array_([new ArrayItem(new ConstFetch(new Name('FILTER_REQUIRE_SCALAR'))), new ArrayItem(new ConstFetch(new Name('FILTER_NULL_ON_FAILURE')))])]);
+        return $this->nodeFactory->createFuncCall('filter_var', [$this->nodeFactory->createFuncCall('ini_get', [$configOption]), new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('FILTER_VALIDATE_BOOLEAN')), new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('FILTER_REQUIRE_SCALAR'))), new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('FILTER_NULL_ON_FAILURE')))])]);
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor methods from PhpOptionsUtility', [new CodeSample('PhpOptionsUtility::isSessionAutoStartEnabled()', "filter_var(ini_get('session.auto_start'), FILTER_VALIDATE_BOOLEAN, [FILTER_REQUIRE_SCALAR, FILTER_NULL_ON_FAILURE])")]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor methods from PhpOptionsUtility', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('PhpOptionsUtility::isSessionAutoStartEnabled()', "filter_var(ini_get('session.auto_start'), FILTER_VALIDATE_BOOLEAN, [FILTER_REQUIRE_SCALAR, FILTER_NULL_ON_FAILURE])")]);
     }
 }

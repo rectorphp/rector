@@ -21,12 +21,12 @@ final class PropertyType
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $propertyTypeNode
      */
-    public function __construct(Type $varType, $propertyTypeNode)
+    public function __construct(\PHPStan\Type\Type $varType, $propertyTypeNode)
     {
         $this->varType = $varType;
         $this->propertyTypeNode = $propertyTypeNode;
     }
-    public function getVarType() : Type
+    public function getVarType() : \PHPStan\Type\Type
     {
         return $this->varType;
     }

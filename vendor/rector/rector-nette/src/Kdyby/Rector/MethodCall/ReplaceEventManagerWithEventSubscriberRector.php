@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Kdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\ReplaceEventManagerWithEventSubscriberRectorTest
  */
-final class ReplaceEventManagerWithEventSubscriberRector extends AbstractRector
+final class ReplaceEventManagerWithEventSubscriberRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -39,15 +39,15 @@ final class ReplaceEventManagerWithEventSubscriberRector extends AbstractRector
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(EventClassNaming $eventClassNaming, EventValueObjectClassFactory $eventValueObjectClassFactory, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    public function __construct(\Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Nette\Kdyby\NodeFactory\EventValueObjectClassFactory $eventValueObjectClassFactory, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->eventClassNaming = $eventClassNaming;
         $this->eventValueObjectClassFactory = $eventValueObjectClassFactory;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change Kdyby EventManager to EventDispatcher', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change Kdyby EventManager to EventDispatcher', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Kdyby\Events\EventManager;
 
 final class SomeClass
@@ -98,17 +98,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $node->name = new Identifier('dispatch');
+        $node->name = new \PhpParser\Node\Identifier('dispatch');
         $oldArgs = $node->args;
         $node->args = [];
         $eventReference = $oldArgs[0]->value;
@@ -118,19 +118,19 @@ CODE_SAMPLE
         }
         $eventClassName = $this->eventClassNaming->createEventClassNameFromClassPropertyReference($classAndStaticProperty);
         $args = $this->createNewArgs($oldArgs);
-        $new = new New_(new FullyQualified($eventClassName), $args);
-        $node->args[] = new Arg($new);
+        $new = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($eventClassName), $args);
+        $node->args[] = new \PhpParser\Node\Arg($new);
         // 3. create new event class with args
         $eventClassInNamespace = $this->eventValueObjectClassFactory->create($eventClassName, $args);
         $fileInfo = $this->file->getSmartFileInfo();
         $eventFileLocation = $this->eventClassNaming->resolveEventFileLocationFromClassNameAndFileInfo($eventClassName, $fileInfo);
-        $addedFileWithNodes = new AddedFileWithNodes($eventFileLocation, [$eventClassInNamespace]);
+        $addedFileWithNodes = new \Rector\FileSystemRector\ValueObject\AddedFileWithNodes($eventFileLocation, [$eventClassInNamespace]);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
         return $node;
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new ObjectType('Kdyby\\Events\\EventManager'))) {
+        if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Kdyby\\Events\\EventManager'))) {
             return \true;
         }
         return !$this->isName($methodCall->name, 'dispatchEvent');
@@ -142,18 +142,18 @@ CODE_SAMPLE
     private function createNewArgs(array $oldArgs) : array
     {
         $args = [];
-        if ($oldArgs[1]->value instanceof New_) {
+        if ($oldArgs[1]->value instanceof \PhpParser\Node\Expr\New_) {
             /** @var New_ $new */
             $new = $oldArgs[1]->value;
             $array = $new->args[0]->value;
-            if (!$array instanceof Array_) {
+            if (!$array instanceof \PhpParser\Node\Expr\Array_) {
                 return [];
             }
             foreach ($array->items as $arrayItem) {
-                if (!$arrayItem instanceof ArrayItem) {
+                if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                     continue;
                 }
-                $args[] = new Arg($arrayItem->value);
+                $args[] = new \PhpParser\Node\Arg($arrayItem->value);
             }
         }
         return $args;

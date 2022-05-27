@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/TYPO3/typo3/tree/v10.4.10/typo3/sysext/core/Resources/Public/Icons/T3Icons/svgs
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v4\UseIconsFromSubFolderInIconRegistryRector\UseIconsFromSubFolderInIconRegistryRectorTest
  */
-final class UseIconsFromSubFolderInIconRegistryRector extends AbstractRector
+final class UseIconsFromSubFolderInIconRegistryRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -25,14 +25,14 @@ final class UseIconsFromSubFolderInIconRegistryRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Imaging\\IconRegistry'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Imaging\\IconRegistry'))) {
             return null;
         }
         if (!$this->isName($node->name, 'registerIcon')) {
@@ -52,16 +52,16 @@ final class UseIconsFromSubFolderInIconRegistryRector extends AbstractRector
         if (\strncmp($source, 'typo3/sysext/core/Resources/Public/Icons/T3Icons/content/', \strlen('typo3/sysext/core/Resources/Public/Icons/T3Icons/content/')) !== 0) {
             return null;
         }
-        $options[self::SOURCE] = Strings::replace($source, '#typo3/sysext/core/Resources/Public/Icons/T3Icons/content/#i', 'typo3/sysext/core/Resources/Public/Icons/T3Icons/svgs/content/');
+        $options[self::SOURCE] = \RectorPrefix20220527\Nette\Utils\Strings::replace($source, '#typo3/sysext/core/Resources/Public/Icons/T3Icons/content/#i', 'typo3/sysext/core/Resources/Public/Icons/T3Icons/svgs/content/');
         $node->args[2]->value = $this->nodeFactory->createArray($options);
         return null;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use icons from subfolder in IconRegistry', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use icons from subfolder in IconRegistry', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class)
         ->registerIcon(
             'apps-pagetree-reference',
@@ -83,13 +83,13 @@ CODE_SAMPLE
 CODE_SAMPLE
 )]);
     }
-    private function isSvgIconProvider(MethodCall $methodCall) : bool
+    private function isSvgIconProvider(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         $iconProviderClassName = $this->valueResolver->getValue($methodCall->args[1]->value);
         if (null === $iconProviderClassName) {
             return \false;
         }
-        $iconProviderClassNameObjectType = new ObjectType($iconProviderClassName);
-        return $iconProviderClassNameObjectType->equals(new ObjectType('TYPO3\\CMS\\Core\\Imaging\\IconProvider\\SvgIconProvider'));
+        $iconProviderClassNameObjectType = new \PHPStan\Type\ObjectType($iconProviderClassName);
+        return $iconProviderClassNameObjectType->equals(new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Imaging\\IconProvider\\SvgIconProvider'));
     }
 }

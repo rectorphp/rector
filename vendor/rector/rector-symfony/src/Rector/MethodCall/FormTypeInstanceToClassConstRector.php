@@ -28,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\FormTypeInstanceToClassConstRectorTest
  */
-final class FormTypeInstanceToClassConstRector extends AbstractRector
+final class FormTypeInstanceToClassConstRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -55,7 +55,7 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
-    public function __construct(FormInstanceToFormClassConstFetchConverter $formInstanceToFormClassConstFetchConverter, FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, FormOptionsArrayMatcher $formOptionsArrayMatcher, FormCollectionAnalyzer $formCollectionAnalyzer, ControllerAnalyzer $controllerAnalyzer)
+    public function __construct(\Rector\Symfony\NodeAnalyzer\FormInstanceToFormClassConstFetchConverter $formInstanceToFormClassConstFetchConverter, \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher $formOptionsArrayMatcher, \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer $formCollectionAnalyzer, \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer)
     {
         $this->formInstanceToFormClassConstFetchConverter = $formInstanceToFormClassConstFetchConverter;
         $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
@@ -63,9 +63,9 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
         $this->formCollectionAnalyzer = $formCollectionAnalyzer;
         $this->controllerAnalyzer = $controllerAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes createForm(new FormType), add(new FormType) to ones with "FormType::class"', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes createForm(new FormType), add(new FormType) to ones with "FormType::class"', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class SomeController extends Controller
@@ -94,12 +94,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->controllerAnalyzer->isController($node->var) && $this->isName($node->name, 'createForm')) {
             return $this->formInstanceToFormClassConstFetchConverter->processNewInstance($node, 0, 2);
@@ -113,10 +113,10 @@ CODE_SAMPLE
         }
         return $this->formInstanceToFormClassConstFetchConverter->processNewInstance($node, 1, 2);
     }
-    private function refactorCollectionOptions(MethodCall $methodCall) : void
+    private function refactorCollectionOptions(\PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
         $optionsArray = $this->formOptionsArrayMatcher->match($methodCall);
-        if (!$optionsArray instanceof Array_) {
+        if (!$optionsArray instanceof \PhpParser\Node\Expr\Array_) {
             return;
         }
         foreach ($optionsArray->items as $arrayItem) {
@@ -129,11 +129,11 @@ CODE_SAMPLE
             if (!$this->valueResolver->isValues($arrayItem->key, ['entry', 'entry_type'])) {
                 continue;
             }
-            if (!$arrayItem->value instanceof New_) {
+            if (!$arrayItem->value instanceof \PhpParser\Node\Expr\New_) {
                 continue;
             }
             $newClass = $arrayItem->value->class;
-            if (!$newClass instanceof Name) {
+            if (!$newClass instanceof \PhpParser\Node\Name) {
                 continue;
             }
             $arrayItem->value = $this->nodeFactory->createClassConstReference($newClass->toString());

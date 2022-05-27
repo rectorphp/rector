@@ -27,11 +27,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector\RemoveUnreachableStatementRectorTest
  */
-final class RemoveUnreachableStatementRector extends AbstractRector
+final class RemoveUnreachableStatementRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove unreachable statements', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unreachable statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -58,12 +58,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StmtsAwareInterface::class];
+        return [\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->stmts === null) {
             return null;
@@ -86,7 +86,7 @@ CODE_SAMPLE
             if (!isset($stmts[$key - 1])) {
                 continue;
             }
-            if ($stmt instanceof Nop) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\Nop) {
                 continue;
             }
             $previousStmt = $stmts[$key - 1];
@@ -98,31 +98,31 @@ CODE_SAMPLE
         }
         return $stmts;
     }
-    private function shouldRemove(Stmt $previousStmt, Stmt $currentStmt) : bool
+    private function shouldRemove(\PhpParser\Node\Stmt $previousStmt, \PhpParser\Node\Stmt $currentStmt) : bool
     {
-        if ($currentStmt instanceof InlineHTML) {
+        if ($currentStmt instanceof \PhpParser\Node\Stmt\InlineHTML) {
             return \false;
         }
-        if ($previousStmt instanceof Throw_) {
+        if ($previousStmt instanceof \PhpParser\Node\Stmt\Throw_) {
             return \true;
         }
-        if ($previousStmt instanceof Expression && $previousStmt->expr instanceof Exit_) {
+        if ($previousStmt instanceof \PhpParser\Node\Stmt\Expression && $previousStmt->expr instanceof \PhpParser\Node\Expr\Exit_) {
             return \true;
         }
-        if ($previousStmt instanceof Goto_ && $currentStmt instanceof Label) {
+        if ($previousStmt instanceof \PhpParser\Node\Stmt\Goto_ && $currentStmt instanceof \PhpParser\Node\Stmt\Label) {
             return \false;
         }
-        if (\in_array(\get_class($previousStmt), [Return_::class, Break_::class, Continue_::class, Goto_::class], \true)) {
+        if (\in_array(\get_class($previousStmt), [\PhpParser\Node\Stmt\Return_::class, \PhpParser\Node\Stmt\Break_::class, \PhpParser\Node\Stmt\Continue_::class, \PhpParser\Node\Stmt\Goto_::class], \true)) {
             return \true;
         }
-        if (!$previousStmt instanceof TryCatch) {
+        if (!$previousStmt instanceof \PhpParser\Node\Stmt\TryCatch) {
             return \false;
         }
-        $isUnreachable = $currentStmt->getAttribute(AttributeKey::IS_UNREACHABLE);
+        $isUnreachable = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE);
         if ($isUnreachable !== \true) {
             return \false;
         }
-        if (!$previousStmt->finally instanceof Finally_) {
+        if (!$previousStmt->finally instanceof \PhpParser\Node\Stmt\Finally_) {
             return \false;
         }
         return $this->cleanNop($previousStmt->finally->stmts) !== [];
@@ -133,8 +133,8 @@ CODE_SAMPLE
      */
     private function cleanNop(array $stmts) : array
     {
-        return \array_filter($stmts, function (Stmt $stmt) : bool {
-            return !$stmt instanceof Nop;
+        return \array_filter($stmts, function (\PhpParser\Node\Stmt $stmt) : bool {
+            return !$stmt instanceof \PhpParser\Node\Stmt\Nop;
         });
     }
 }

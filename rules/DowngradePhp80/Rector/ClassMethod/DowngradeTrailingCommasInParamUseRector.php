@@ -22,20 +22,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\DowngradeTrailingCommasInParamUseRectorTest
  */
-final class DowngradeTrailingCommasInParamUseRector extends AbstractRector
+final class DowngradeTrailingCommasInParamUseRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer
      */
     private $followedByCommaAnalyzer;
-    public function __construct(FollowedByCommaAnalyzer $followedByCommaAnalyzer)
+    public function __construct(\Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer $followedByCommaAnalyzer)
     {
         $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove trailing commas in param or use list', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove trailing commas in param or use list', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(string $value1, string $value2,)
@@ -76,18 +76,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class, Closure::class, StaticCall::class, FuncCall::class, MethodCall::class, New_::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\New_::class];
     }
     /**
      * @param ClassMethod|Function_|Closure|FuncCall|MethodCall|StaticCall|New_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof MethodCall || $node instanceof FuncCall || $node instanceof StaticCall || $node instanceof New_) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\FuncCall || $node instanceof \PhpParser\Node\Expr\StaticCall || $node instanceof \PhpParser\Node\Expr\New_) {
             /** @var MethodCall|FuncCall|StaticCall|New_ $node */
             return $this->processArgs($node);
         }
-        if ($node instanceof Closure) {
+        if ($node instanceof \PhpParser\Node\Expr\Closure) {
             $this->processUses($node);
         }
         return $this->processParams($node);
@@ -95,7 +95,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $node
      */
-    private function processArgs($node) : ?Node
+    private function processArgs($node) : ?\PhpParser\Node
     {
         $args = $node->args;
         if ($args === []) {
@@ -103,7 +103,7 @@ CODE_SAMPLE
         }
         return $this->cleanTrailingComma($node, $args);
     }
-    private function processUses(Closure $node) : void
+    private function processUses(\PhpParser\Node\Expr\Closure $node) : void
     {
         if ($node->uses === []) {
             return;
@@ -113,7 +113,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function processParams($node) : ?Node
+    private function processParams($node) : ?\PhpParser\Node
     {
         if ($node->params === []) {
             return null;
@@ -124,7 +124,7 @@ CODE_SAMPLE
      * @param ClosureUse[]|Param[]|Arg[] $array
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function cleanTrailingComma($node, array $array) : ?Node
+    private function cleanTrailingComma($node, array $array) : ?\PhpParser\Node
     {
         \end($array);
         $lastPosition = \key($array);
@@ -132,8 +132,8 @@ CODE_SAMPLE
         if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
             return null;
         }
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, \false);
+        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        $last->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::FUNC_ARGS_TRAILING_COMMA, \false);
         return $node;
     }
 }

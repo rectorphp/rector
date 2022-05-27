@@ -22,12 +22,12 @@ use RectorPrefix20220527\Symfony\Component\Process\Process;
  *
  * @internal
  */
-class WindowsPipes extends AbstractPipes
+class WindowsPipes extends \RectorPrefix20220527\Symfony\Component\Process\Pipes\AbstractPipes
 {
     private $files = [];
     private $fileHandles = [];
     private $lockHandles = [];
-    private $readBytes = [Process::STDOUT => 0, Process::STDERR => 0];
+    private $readBytes = [\RectorPrefix20220527\Symfony\Component\Process\Process::STDOUT => 0, \RectorPrefix20220527\Symfony\Component\Process\Process::STDERR => 0];
     private $haveReadSupport;
     /**
      * @param mixed $input
@@ -40,7 +40,7 @@ class WindowsPipes extends AbstractPipes
             // Workaround for this problem is to use temporary files instead of pipes on Windows platform.
             //
             // @see https://bugs.php.net/51800
-            $pipes = [Process::STDOUT => Process::OUT, Process::STDERR => Process::ERR];
+            $pipes = [\RectorPrefix20220527\Symfony\Component\Process\Process::STDOUT => \RectorPrefix20220527\Symfony\Component\Process\Process::OUT, \RectorPrefix20220527\Symfony\Component\Process\Process::STDERR => \RectorPrefix20220527\Symfony\Component\Process\Process::ERR];
             $tmpDir = \sys_get_temp_dir();
             $lastError = 'unknown reason';
             \set_error_handler(function ($type, $msg) use(&$lastError) {
@@ -54,7 +54,7 @@ class WindowsPipes extends AbstractPipes
                             continue 2;
                         }
                         \restore_error_handler();
-                        throw new RuntimeException('A temporary file could not be opened to write the process output: ' . $lastError);
+                        throw new \RectorPrefix20220527\Symfony\Component\Process\Exception\RuntimeException('A temporary file could not be opened to write the process output: ' . $lastError);
                     }
                     if (!\flock($h, \LOCK_EX | \LOCK_NB)) {
                         continue 2;
@@ -122,9 +122,9 @@ class WindowsPipes extends AbstractPipes
         $read = $r = $e = [];
         if ($blocking) {
             if ($w) {
-                @\stream_select($r, $w, $e, 0, Process::TIMEOUT_PRECISION * 1000000.0);
+                @\stream_select($r, $w, $e, 0, \RectorPrefix20220527\Symfony\Component\Process\Process::TIMEOUT_PRECISION * 1000000.0);
             } elseif ($this->fileHandles) {
-                \usleep(Process::TIMEOUT_PRECISION * 1000000.0);
+                \usleep(\RectorPrefix20220527\Symfony\Component\Process\Process::TIMEOUT_PRECISION * 1000000.0);
             }
         }
         foreach ($this->fileHandles as $type => $fileHandle) {

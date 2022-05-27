@@ -11,12 +11,12 @@ use Rector\Symfony\Rector\MethodCall\FormIsValidRector;
 use Rector\Symfony\Rector\MethodCall\ProcessBuilderGetProcessRector;
 use Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 use Rector\Symfony\Rector\StaticCall\ProcessBuilderInstanceRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(ConstraintUrlOptionRector::class);
-    $rectorConfig->rule(FormIsValidRector::class);
-    $rectorConfig->rule(VarDumperTestTraitMethodArgsRector::class);
-    $rectorConfig->rule(ContainerBuilderCompileEnvArgumentRector::class);
-    $rectorConfig->rule(ProcessBuilderInstanceRector::class);
-    $rectorConfig->rule(ProcessBuilderGetProcessRector::class);
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['Symfony\\Component\\Validator\\Tests\\Constraints\\AbstractConstraintValidatorTest' => 'Symfony\\Component\\Validator\\Test\\ConstraintValidatorTestCase', 'Symfony\\Component\\Process\\ProcessBuilder' => 'Symfony\\Component\\Process\\Process']);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(\Rector\Symfony\Rector\ConstFetch\ConstraintUrlOptionRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\FormIsValidRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\StaticCall\ProcessBuilderInstanceRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\ProcessBuilderGetProcessRector::class);
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, ['Symfony\\Component\\Validator\\Tests\\Constraints\\AbstractConstraintValidatorTest' => 'Symfony\\Component\\Validator\\Test\\ConstraintValidatorTestCase', 'Symfony\\Component\\Process\\ProcessBuilder' => 'Symfony\\Component\\Process\\Process']);
 };

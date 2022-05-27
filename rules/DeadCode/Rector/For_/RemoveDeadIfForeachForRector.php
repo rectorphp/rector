@@ -17,20 +17,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\For_\RemoveDeadIfForeachForRector\RemoveDeadIfForeachForRectorTest
  */
-final class RemoveDeadIfForeachForRector extends AbstractRector
+final class RemoveDeadIfForeachForRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\EarlyReturn\NodeTransformer\ConditionInverter
      */
     private $conditionInverter;
-    public function __construct(ConditionInverter $conditionInverter)
+    public function __construct(\Rector\EarlyReturn\NodeTransformer\ConditionInverter $conditionInverter)
     {
         $this->conditionInverter = $conditionInverter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove if, foreach and for that does not do anything', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove if, foreach and for that does not do anything', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($someObject)
@@ -69,18 +69,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [For_::class, If_::class, Foreach_::class];
+        return [\PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Foreach_::class];
     }
     /**
      * @param For_|If_|Foreach_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof If_) {
+        if ($node instanceof \PhpParser\Node\Stmt\If_) {
             $this->processIf($node);
             return null;
         }
-        if ($node instanceof Foreach_) {
+        if ($node instanceof \PhpParser\Node\Stmt\Foreach_) {
             $this->processForeach($node);
             return null;
         }
@@ -91,7 +91,7 @@ CODE_SAMPLE
         $this->removeNode($node);
         return null;
     }
-    private function processIf(If_ $if) : void
+    private function processIf(\PhpParser\Node\Stmt\If_ $if) : void
     {
         if ($if->stmts !== []) {
             return;
@@ -110,7 +110,7 @@ CODE_SAMPLE
         }
         $this->removeNode($if);
     }
-    private function processForeach(Foreach_ $foreach) : void
+    private function processForeach(\PhpParser\Node\Stmt\Foreach_ $foreach) : void
     {
         if ($foreach->stmts !== []) {
             return;
@@ -120,12 +120,12 @@ CODE_SAMPLE
         }
         $this->removeNode($foreach);
     }
-    private function isNodeWithSideEffect(Expr $expr) : bool
+    private function isNodeWithSideEffect(\PhpParser\Node\Expr $expr) : bool
     {
-        if ($expr instanceof Variable) {
+        if ($expr instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
-        if ($expr instanceof Scalar) {
+        if ($expr instanceof \PhpParser\Node\Scalar) {
             return \false;
         }
         return !$this->valueResolver->isTrueOrFalse($expr);

@@ -16,7 +16,7 @@ use Rector\Core\Contract\Rector\PhpRectorInterface;
  * @see \Ssch\TYPO3Rector\PHPStan\Tests\Rules\AddCodeCoverageIgnoreForRectorDefinition\AddCodeCoverageIgnoreForRectorDefinitionTest
  * @implements Rule<ClassMethod>
  */
-final class AddCodeCoverageIgnoreForRectorDefinitionRule implements Rule
+final class AddCodeCoverageIgnoreForRectorDefinitionRule implements \PHPStan\Rules\Rule
 {
     /**
      * @var string
@@ -27,27 +27,27 @@ final class AddCodeCoverageIgnoreForRectorDefinitionRule implements Rule
      * @var \PHPStan\Type\FileTypeMapper
      */
     private $fileTypeMapper;
-    public function __construct(FileTypeMapper $fileTypeMapper)
+    public function __construct(\PHPStan\Type\FileTypeMapper $fileTypeMapper)
     {
         $this->fileTypeMapper = $fileTypeMapper;
     }
     public function getNodeType() : string
     {
-        return ClassMethod::class;
+        return \PhpParser\Node\Stmt\ClassMethod::class;
     }
     /**
      * @return string[]
      */
-    public function processNode(Node $node, Scope $scope) : array
+    public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : array
     {
         if (!$scope->isInClass()) {
-            throw new ShouldNotHappenException();
+            throw new \PHPStan\ShouldNotHappenException();
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return [];
         }
-        if (!$classReflection->isSubclassOf(PhpRectorInterface::class)) {
+        if (!$classReflection->isSubclassOf(\Rector\Core\Contract\Rector\PhpRectorInterface::class)) {
             return [];
         }
         $methodName = $node->name->toString();
@@ -56,7 +56,7 @@ final class AddCodeCoverageIgnoreForRectorDefinitionRule implements Rule
         }
         $className = $classReflection->getName();
         $docComment = $node->getDocComment();
-        if (!$docComment instanceof Doc) {
+        if (!$docComment instanceof \PhpParser\Comment\Doc) {
             return [\sprintf(self::ERROR_MESSAGE, $className)];
         }
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc($scope->getFile(), $classReflection->getName(), null, $methodName, $docComment->getText());

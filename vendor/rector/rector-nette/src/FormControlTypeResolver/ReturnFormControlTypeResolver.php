@@ -11,7 +11,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
 use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
-final class ReturnFormControlTypeResolver implements FormControlTypeResolverInterface
+final class ReturnFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**
      * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
@@ -22,30 +22,30 @@ final class ReturnFormControlTypeResolver implements FormControlTypeResolverInte
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @required
      */
-    public function autowire(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
     /**
      * @return array<string, string>
      */
-    public function resolve(Node $node) : array
+    public function resolve(\PhpParser\Node $node) : array
     {
-        if (!$node instanceof Return_) {
+        if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
             return [];
         }
-        if (!$node->expr instanceof Variable) {
+        if (!$node->expr instanceof \PhpParser\Node\Expr\Variable) {
             return [];
         }
         $initialAssign = $this->betterNodeFinder->findPreviousAssignToExpr($node->expr);
-        if (!$initialAssign instanceof Assign) {
+        if (!$initialAssign instanceof \PhpParser\Node\Expr\Assign) {
             return [];
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($node);

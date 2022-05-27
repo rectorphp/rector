@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Template;
 
 use Rector\Core\Contract\Template\TemplateResolverInterface;
-final class DefaultResolver implements TemplateResolverInterface
+final class DefaultResolver implements \Rector\Core\Contract\Template\TemplateResolverInterface
 {
     /**
      * @var string

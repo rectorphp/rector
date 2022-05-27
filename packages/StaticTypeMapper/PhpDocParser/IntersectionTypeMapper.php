@@ -15,7 +15,7 @@ use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements PhpDocTypeMapperInterface<IntersectionTypeNode>
  */
-final class IntersectionTypeMapper implements PhpDocTypeMapperInterface
+final class IntersectionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
 {
     /**
      * @var \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper
@@ -23,24 +23,24 @@ final class IntersectionTypeMapper implements PhpDocTypeMapperInterface
     private $phpDocTypeMapper;
     public function getNodeType() : string
     {
-        return IntersectionTypeNode::class;
+        return \PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode::class;
     }
     /**
      * @required
      */
-    public function autowire(PhpDocTypeMapper $phpDocTypeMapper) : void
+    public function autowire(\Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper $phpDocTypeMapper) : void
     {
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }
     /**
      * @param IntersectionTypeNode $typeNode
      */
-    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type
+    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
     {
         $intersectionedTypes = [];
         foreach ($typeNode->types as $intersectionedTypeNode) {
             $intersectionedTypes[] = $this->phpDocTypeMapper->mapToPHPStanType($intersectionedTypeNode, $node, $nameScope);
         }
-        return new IntersectionType($intersectionedTypes);
+        return new \PHPStan\Type\IntersectionType($intersectionedTypes);
     }
 }

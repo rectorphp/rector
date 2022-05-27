@@ -12,23 +12,23 @@ use RectorPrefix20220527\Symfony\Component\Yaml\Yaml;
 /**
  * @see \Rector\Tests\FileFormatter\Formatter\YamlFileFormatter\YamlFileFormatterTest
  */
-final class YamlFileFormatter implements FileFormatterInterface
+final class YamlFileFormatter implements \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface
 {
-    public function supports(File $file) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return \in_array($smartFileInfo->getExtension(), ['yaml', 'yml'], \true);
     }
-    public function format(File $file, EditorConfigConfiguration $editorConfigConfiguration) : void
+    public function format(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : void
     {
-        $yaml = Yaml::parse($file->getFileContent(), Yaml::PARSE_CUSTOM_TAGS);
-        $newFileContent = Yaml::dump($yaml, 99, $editorConfigConfiguration->getIndentSize());
+        $yaml = \RectorPrefix20220527\Symfony\Component\Yaml\Yaml::parse($file->getFileContent(), \RectorPrefix20220527\Symfony\Component\Yaml\Yaml::PARSE_CUSTOM_TAGS);
+        $newFileContent = \RectorPrefix20220527\Symfony\Component\Yaml\Yaml::dump($yaml, 99, $editorConfigConfiguration->getIndentSize());
         $file->changeFileContent($newFileContent);
     }
-    public function createDefaultEditorConfigConfigurationBuilder() : EditorConfigConfigurationBuilder
+    public function createDefaultEditorConfigConfigurationBuilder() : \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder
     {
-        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
-        $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(2));
+        $editorConfigConfigurationBuilder = new \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder();
+        $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createSpaceWithSize(2));
         return $editorConfigConfigurationBuilder;
     }
 }

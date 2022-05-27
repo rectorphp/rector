@@ -22,14 +22,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85971-DeprecatePageRepository-getFirstWebPage.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\UseGetMenuInsteadOfGetFirstWebPageRector\UseGetMenuInsteadOfGetFirstWebPageRectorTest
  */
-final class UseGetMenuInsteadOfGetFirstWebPageRector extends AbstractRector
+final class UseGetMenuInsteadOfGetFirstWebPageRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -38,12 +38,12 @@ final class UseGetMenuInsteadOfGetFirstWebPageRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -51,21 +51,21 @@ final class UseGetMenuInsteadOfGetFirstWebPageRector extends AbstractRector
         if (!$this->isName($node->name, 'getFirstWebPage')) {
             return null;
         }
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Assign) {
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
-        $rootLevelPagesVariable = new Variable('rootLevelPages');
+        $rootLevelPagesVariable = new \PhpParser\Node\Expr\Variable('rootLevelPages');
         $this->addRootLevelPagesAssignment($rootLevelPagesVariable, $node);
         $resetRootLevelPagesNode = $this->nodeFactory->createFuncCall('reset', [$rootLevelPagesVariable]);
-        $if = new If_(new BooleanNot(new Empty_($rootLevelPagesVariable)));
+        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Empty_($rootLevelPagesVariable)));
         $parentNode->expr = $resetRootLevelPagesNode;
-        $if->stmts[] = new Expression($parentNode);
+        $if->stmts[] = new \PhpParser\Node\Stmt\Expression($parentNode);
         $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
         try {
             $this->removeNode($node);
-        } catch (ShouldNotHappenException $exception) {
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
+            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             $this->removeNode($parentNode);
         }
         return null;
@@ -73,9 +73,9 @@ final class UseGetMenuInsteadOfGetFirstWebPageRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use method getMenu instead of getFirstWebPage', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use method getMenu instead of getFirstWebPage', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $theFirstPage = $GLOBALS['TSFE']->sys_page->getFirstWebPage(0);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -86,16 +86,16 @@ if (!empty($rootLevelPages)) {
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Frontend\\Page\\PageRepository'))) {
+        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Page\\PageRepository'))) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($methodCall, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'sys_page');
+        return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'sys_page');
     }
-    private function addRootLevelPagesAssignment(Variable $rootLevelPagesVariable, MethodCall $methodCall) : void
+    private function addRootLevelPagesAssignment(\PhpParser\Node\Expr\Variable $rootLevelPagesVariable, \PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
-        $rootLevelPagesAssign = new Assign($rootLevelPagesVariable, $this->nodeFactory->createMethodCall($methodCall->var, 'getMenu', [$methodCall->args[0], 'uid', 'sorting', '', \false]));
+        $rootLevelPagesAssign = new \PhpParser\Node\Expr\Assign($rootLevelPagesVariable, $this->nodeFactory->createMethodCall($methodCall->var, 'getMenu', [$methodCall->args[0], 'uid', 'sorting', '', \false]));
         $this->nodesToAddCollector->addNodeBeforeNode($rootLevelPagesAssign, $methodCall);
     }
 }

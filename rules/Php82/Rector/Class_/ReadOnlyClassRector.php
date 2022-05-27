@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php82\Rector\Class_\ReadOnlyClassRector\ReadOnlyClassRectorTest
  */
-final class ReadOnlyClassRector extends AbstractRector implements MinPhpVersionInterface
+final class ReadOnlyClassRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
@@ -43,15 +43,15 @@ final class ReadOnlyClassRector extends AbstractRector implements MinPhpVersionI
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
-    public function __construct(ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->classAnalyzer = $classAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Decorate read-only class with `readonly` attribute', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Decorate read-only class with `readonly` attribute', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function __construct(
@@ -76,19 +76,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         $this->visibilityManipulator->makeReadonly($node);
-        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod instanceof ClassMethod) {
+        $constructClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if ($constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             foreach ($constructClassMethod->getParams() as $param) {
                 $this->visibilityManipulator->removeReadonly($param);
             }
@@ -100,12 +100,12 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::READONLY_CLASS;
+        return \Rector\Core\ValueObject\PhpVersionFeature::READONLY_CLASS;
     }
-    private function shouldSkip(Class_ $class) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
         // need to have test fixture once feature added to  nikic/PHP-Parser
-        if ($this->visibilityManipulator->hasVisibility($class, Visibility::READONLY)) {
+        if ($this->visibilityManipulator->hasVisibility($class, \Rector\Core\ValueObject\Visibility::READONLY)) {
             return \true;
         }
         if ($this->classAnalyzer->isAnonymousClass($class)) {
@@ -121,8 +121,8 @@ CODE_SAMPLE
         if ($this->hasWritableProperty($properties)) {
             return \true;
         }
-        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof ClassMethod) {
+        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             // no __construct means no property promotion, skip if class has no property defined
             return $properties === [];
         }
@@ -133,7 +133,7 @@ CODE_SAMPLE
         }
         foreach ($params as $param) {
             // has non-property promotion, skip
-            if (!$this->visibilityManipulator->hasVisibility($param, Visibility::READONLY)) {
+            if (!$this->visibilityManipulator->hasVisibility($param, \Rector\Core\ValueObject\Visibility::READONLY)) {
                 return \true;
             }
         }

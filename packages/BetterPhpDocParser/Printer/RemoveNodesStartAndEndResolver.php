@@ -14,7 +14,7 @@ final class RemoveNodesStartAndEndResolver
      * @param mixed[] $tokens
      * @return StartAndEnd[]
      */
-    public function resolve(PhpDocNode $originalPhpDocNode, PhpDocNode $currentPhpDocNode, array $tokens) : array
+    public function resolve(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $originalPhpDocNode, \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $currentPhpDocNode, array $tokens) : array
     {
         $removedNodePositions = [];
         /** @var PhpDocChildNode[] $removedChildNodes */
@@ -22,15 +22,15 @@ final class RemoveNodesStartAndEndResolver
         $lastEndPosition = null;
         foreach ($removedChildNodes as $removedChildNode) {
             /** @var StartAndEnd|null $removedPhpDocNodeInfo */
-            $removedPhpDocNodeInfo = $removedChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
+            $removedPhpDocNodeInfo = $removedChildNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
             // it's not there when comment block has empty row "\s\*\n"
-            if (!$removedPhpDocNodeInfo instanceof StartAndEnd) {
+            if (!$removedPhpDocNodeInfo instanceof \Rector\BetterPhpDocParser\ValueObject\StartAndEnd) {
                 continue;
             }
             // change start position to start of the line, so the whole line is removed
             $seekPosition = $removedPhpDocNodeInfo->getStart();
-            while ($seekPosition >= 0 && $tokens[$seekPosition][1] !== Lexer::TOKEN_HORIZONTAL_WS) {
-                if ($tokens[$seekPosition][1] === Lexer::TOKEN_PHPDOC_EOL) {
+            while ($seekPosition >= 0 && $tokens[$seekPosition][1] !== \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_HORIZONTAL_WS) {
+                if ($tokens[$seekPosition][1] === \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL) {
                     break;
                 }
                 // do not colide
@@ -40,7 +40,7 @@ final class RemoveNodesStartAndEndResolver
                 --$seekPosition;
             }
             $lastEndPosition = $removedPhpDocNodeInfo->getEnd();
-            $removedNodePositions[] = new StartAndEnd(\max(0, $seekPosition - 1), $removedPhpDocNodeInfo->getEnd());
+            $removedNodePositions[] = new \Rector\BetterPhpDocParser\ValueObject\StartAndEnd(\max(0, $seekPosition - 1), $removedPhpDocNodeInfo->getEnd());
         }
         return $removedNodePositions;
     }

@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector\RemoveAlwaysTrueIfConditionRectorTest
  */
-final class RemoveAlwaysTrueIfConditionRector extends AbstractRector
+final class RemoveAlwaysTrueIfConditionRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove if condition that is always true', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove if condition that is always true', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function go()
@@ -48,13 +48,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
      * @param If_ $node
      * @return \PhpParser\Node\Stmt\If_|null|mixed[]
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
         if ($node->else !== null) {
             return null;
@@ -64,7 +64,7 @@ CODE_SAMPLE
             return null;
         }
         $conditionStaticType = $this->getType($node->cond);
-        if (!$conditionStaticType instanceof ConstantBooleanType) {
+        if (!$conditionStaticType instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
             return null;
         }
         if (!$conditionStaticType->getValue()) {

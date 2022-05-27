@@ -5,14 +5,14 @@ namespace RectorPrefix20220527\Doctrine\Inflector\Rules\NorwegianBokmal;
 
 use RectorPrefix20220527\Doctrine\Inflector\GenericLanguageInflectorFactory;
 use RectorPrefix20220527\Doctrine\Inflector\Rules\Ruleset;
-final class InflectorFactory extends GenericLanguageInflectorFactory
+final class InflectorFactory extends \RectorPrefix20220527\Doctrine\Inflector\GenericLanguageInflectorFactory
 {
-    protected function getSingularRuleset() : Ruleset
+    protected function getSingularRuleset() : \RectorPrefix20220527\Doctrine\Inflector\Rules\Ruleset
     {
-        return Rules::getSingularRuleset();
+        return \RectorPrefix20220527\Doctrine\Inflector\Rules\NorwegianBokmal\Rules::getSingularRuleset();
     }
-    protected function getPluralRuleset() : Ruleset
+    protected function getPluralRuleset() : \RectorPrefix20220527\Doctrine\Inflector\Rules\Ruleset
     {
-        return Rules::getPluralRuleset();
+        return \RectorPrefix20220527\Doctrine\Inflector\Rules\NorwegianBokmal\Rules::getPluralRuleset();
     }
 }

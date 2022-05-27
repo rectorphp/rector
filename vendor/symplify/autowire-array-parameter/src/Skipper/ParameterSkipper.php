@@ -27,12 +27,12 @@ final class ParameterSkipper
     /**
      * @param string[] $excludedFatalClasses
      */
-    public function __construct(ParameterTypeResolver $parameterTypeResolver, array $excludedFatalClasses)
+    public function __construct(\RectorPrefix20220527\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver $parameterTypeResolver, array $excludedFatalClasses)
     {
         $this->parameterTypeResolver = $parameterTypeResolver;
         $this->excludedFatalClasses = \array_merge(self::DEFAULT_EXCLUDED_FATAL_CLASSES, $excludedFatalClasses);
     }
-    public function shouldSkipParameter(ReflectionMethod $reflectionMethod, Definition $definition, ReflectionParameter $reflectionParameter) : bool
+    public function shouldSkipParameter(\ReflectionMethod $reflectionMethod, \RectorPrefix20220527\Symfony\Component\DependencyInjection\Definition $definition, \ReflectionParameter $reflectionParameter) : bool
     {
         if (!$this->isArrayType($reflectionParameter)) {
             return \true;
@@ -58,13 +58,13 @@ final class ParameterSkipper
         }
         return \is_a($definition->getClass(), $parameterType, \true);
     }
-    private function isArrayType(ReflectionParameter $reflectionParameter) : bool
+    private function isArrayType(\ReflectionParameter $reflectionParameter) : bool
     {
         if ($reflectionParameter->getType() === null) {
             return \false;
         }
         $reflectionParameterType = $reflectionParameter->getType();
-        if (!$reflectionParameterType instanceof ReflectionNamedType) {
+        if (!$reflectionParameterType instanceof \ReflectionNamedType) {
             return \false;
         }
         return $reflectionParameterType->getName() === 'array';

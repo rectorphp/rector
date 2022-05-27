@@ -27,9 +27,9 @@ final class ServiceFactory
     /**
      * @return \Rector\Nette\NeonParser\Node\Service_|null
      */
-    public function create(Node $node)
+    public function create(\RectorPrefix20220527\Nette\Neon\Node $node)
     {
-        if (!$node instanceof ArrayItemNode) {
+        if (!$node instanceof \RectorPrefix20220527\Nette\Neon\Node\ArrayItemNode) {
             return null;
         }
         $class = $this->resolveArrayItemByKeyword($node, self::CLASS_KEYWORD);
@@ -40,28 +40,28 @@ final class ServiceFactory
             return null;
         }
         $setupMethodCalls = $this->resolveSetupMethodCalls($className, $node);
-        return new Service_($className, $class, $factory, $setupMethodCalls);
+        return new \Rector\Nette\NeonParser\Node\Service_($className, $class, $factory, $setupMethodCalls);
     }
     /**
      * @return \Nette\Neon\Node\LiteralNode|null
      */
-    private function resolveArrayItemByKeyword(ArrayItemNode $arrayItemNode, string $keyword)
+    private function resolveArrayItemByKeyword(\RectorPrefix20220527\Nette\Neon\Node\ArrayItemNode $arrayItemNode, string $keyword)
     {
-        if (!$arrayItemNode->value instanceof ArrayNode) {
+        if (!$arrayItemNode->value instanceof \RectorPrefix20220527\Nette\Neon\Node\ArrayNode) {
             return null;
         }
         $arrayNode = $arrayItemNode->value;
         foreach ($arrayNode->items as $arrayItemNode) {
-            if (!$arrayItemNode->key instanceof LiteralNode) {
+            if (!$arrayItemNode->key instanceof \RectorPrefix20220527\Nette\Neon\Node\LiteralNode) {
                 continue;
             }
             if ($arrayItemNode->key->toString() !== $keyword) {
                 continue;
             }
-            if ($arrayItemNode->value instanceof EntityNode) {
+            if ($arrayItemNode->value instanceof \RectorPrefix20220527\Nette\Neon\Node\EntityNode) {
                 return $arrayItemNode->value->value;
             }
-            if ($arrayItemNode->value instanceof LiteralNode) {
+            if ($arrayItemNode->value instanceof \RectorPrefix20220527\Nette\Neon\Node\LiteralNode) {
                 return $arrayItemNode->value;
             }
         }
@@ -70,31 +70,31 @@ final class ServiceFactory
     /**
      * @return SetupMethodCall[]
      */
-    private function resolveSetupMethodCalls(string $className, ArrayItemNode $arrayItemNode) : array
+    private function resolveSetupMethodCalls(string $className, \RectorPrefix20220527\Nette\Neon\Node\ArrayItemNode $arrayItemNode) : array
     {
-        if (!$arrayItemNode->value instanceof ArrayNode) {
+        if (!$arrayItemNode->value instanceof \RectorPrefix20220527\Nette\Neon\Node\ArrayNode) {
             return [];
         }
         $setupMethodCalls = [];
         $arrayNode = $arrayItemNode->value;
         foreach ($arrayNode->items as $arrayItemNode) {
-            if ($arrayItemNode->key instanceof LiteralNode) {
+            if ($arrayItemNode->key instanceof \RectorPrefix20220527\Nette\Neon\Node\LiteralNode) {
                 if ($arrayItemNode->key->toString() !== self::SETUP_KEYWORD) {
                     continue;
                 }
-                if (!$arrayItemNode->value instanceof ArrayNode) {
+                if (!$arrayItemNode->value instanceof \RectorPrefix20220527\Nette\Neon\Node\ArrayNode) {
                     continue;
                 }
                 foreach ($arrayItemNode->value->items as $setupArrayItemNode) {
-                    if ($setupArrayItemNode->value instanceof EntityNode) {
+                    if ($setupArrayItemNode->value instanceof \RectorPrefix20220527\Nette\Neon\Node\EntityNode) {
                         // probably method call
                         $entityNode = $setupArrayItemNode->value;
-                        if ($entityNode->value instanceof LiteralNode) {
+                        if ($entityNode->value instanceof \RectorPrefix20220527\Nette\Neon\Node\LiteralNode) {
                             // not a method call - probably property assign
                             if (\strncmp($entityNode->value->toString(), '$', \strlen('$')) === 0) {
                                 continue;
                             }
-                            $setupMethodCalls[] = new SetupMethodCall($className, $entityNode->value, $entityNode);
+                            $setupMethodCalls[] = new \Rector\Nette\NeonParser\Node\Service_\SetupMethodCall($className, $entityNode->value, $entityNode);
                         }
                     }
                 }

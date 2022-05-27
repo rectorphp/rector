@@ -14,7 +14,7 @@ use Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector\FluidRectorInterface;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Fluid\FluidProcessorTest
  */
-final class FluidFileProcessor implements FileProcessorInterface
+final class FluidFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @var FluidRectorInterface[]
@@ -29,12 +29,12 @@ final class FluidFileProcessor implements FileProcessorInterface
     /**
      * @param FluidRectorInterface[] $fluidRectors
      */
-    public function __construct(array $fluidRectors, FileDiffFactory $fileDiffFactory)
+    public function __construct(array $fluidRectors, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory)
     {
         $this->fluidRectors = $fluidRectors;
         $this->fileDiffFactory = $fileDiffFactory;
     }
-    public function supports(File $file, Configuration $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         if ([] === $this->fluidRectors) {
             return \false;
@@ -45,16 +45,16 @@ final class FluidFileProcessor implements FileProcessorInterface
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(File $file, Configuration $configuration) : array
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
-        $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
+        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
         $oldFileContents = $file->getFileContent();
         foreach ($this->fluidRectors as $fluidRector) {
             $fluidRector->transform($file);
         }
         if ($oldFileContents !== $file->getFileContent()) {
             $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldFileContents, $file->getFileContent());
-            $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS][] = $fileDiff;
+            $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS][] = $fileDiff;
         }
         return $systemErrorsAndFileDiffs;
     }

@@ -16,7 +16,7 @@ use RectorPrefix20220527\Symfony\Component\Config\Exception\LoaderLoadException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Loader implements LoaderInterface
+abstract class Loader implements \RectorPrefix20220527\Symfony\Component\Config\Loader\LoaderInterface
 {
     protected $resolver;
     protected $env;
@@ -27,14 +27,14 @@ abstract class Loader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function getResolver() : LoaderResolverInterface
+    public function getResolver() : \RectorPrefix20220527\Symfony\Component\Config\Loader\LoaderResolverInterface
     {
         return $this->resolver;
     }
     /**
      * {@inheritdoc}
      */
-    public function setResolver(LoaderResolverInterface $resolver)
+    public function setResolver(\RectorPrefix20220527\Symfony\Component\Config\Loader\LoaderResolverInterface $resolver)
     {
         $this->resolver = $resolver;
     }
@@ -54,14 +54,14 @@ abstract class Loader implements LoaderInterface
      * @throws LoaderLoadException If no loader is found
      * @param mixed $resource
      */
-    public function resolve($resource, string $type = null) : LoaderInterface
+    public function resolve($resource, string $type = null) : \RectorPrefix20220527\Symfony\Component\Config\Loader\LoaderInterface
     {
         if ($this->supports($resource, $type)) {
             return $this;
         }
         $loader = null === $this->resolver ? \false : $this->resolver->resolve($resource, $type);
         if (\false === $loader) {
-            throw new LoaderLoadException($resource, null, 0, null, $type);
+            throw new \RectorPrefix20220527\Symfony\Component\Config\Exception\LoaderLoadException($resource, null, 0, null, $type);
         }
         return $loader;
     }

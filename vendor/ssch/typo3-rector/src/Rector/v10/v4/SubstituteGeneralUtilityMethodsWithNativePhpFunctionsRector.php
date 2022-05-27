@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.4/Deprecation-91001-VariousMethodsWithinGeneralUtility.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v4\SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRector\SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRectorTest
  */
-final class SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRector extends AbstractRector
+final class SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string[]
@@ -26,14 +26,14 @@ final class SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRector extends 
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, self::METHOD_CALL_TO_REFACTOR)) {
@@ -50,16 +50,16 @@ final class SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRector extends 
             return $this->nodeFactory->createFuncCall('inet_ntop', [$this->nodeFactory->createFuncCall('inet_pton', $node->args)]);
         }
         if ('milliseconds' === $nodeName) {
-            return $this->nodeFactory->createFuncCall('round', [new Mul($this->nodeFactory->createFuncCall('microtime', [$this->nodeFactory->createArg($this->nodeFactory->createTrue())]), new LNumber(1000))]);
+            return $this->nodeFactory->createFuncCall('round', [new \PhpParser\Node\Expr\BinaryOp\Mul($this->nodeFactory->createFuncCall('microtime', [$this->nodeFactory->createArg($this->nodeFactory->createTrue())]), new \PhpParser\Node\Scalar\LNumber(1000))]);
         }
         return null;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Substitute deprecated method calls of class GeneralUtility', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Substitute deprecated method calls of class GeneralUtility', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 $hex = '127.0.0.1';

@@ -7,7 +7,7 @@ use RectorPrefix20220527\React\Stream\WritableStreamInterface;
 /**
  * The Encoder / Serializer can be used to write any value, encode it as a JSON text and forward it to an output stream
  */
-class Encoder extends EventEmitter implements WritableStreamInterface
+class Encoder extends \RectorPrefix20220527\Evenement\EventEmitter implements \RectorPrefix20220527\React\Stream\WritableStreamInterface
 {
     private $output;
     private $options;
@@ -20,7 +20,7 @@ class Encoder extends EventEmitter implements WritableStreamInterface
      * @throws \InvalidArgumentException
      * @throws \BadMethodCallException
      */
-    public function __construct(WritableStreamInterface $output, $options = 0, $depth = 512)
+    public function __construct(\RectorPrefix20220527\React\Stream\WritableStreamInterface $output, $options = 0, $depth = 512)
     {
         // @codeCoverageIgnoreStart
         if (\defined('JSON_PRETTY_PRINT') && $options & \JSON_PRETTY_PRINT) {

@@ -29,6 +29,6 @@ final class Pattern
     }
     public function matches(string $word) : bool
     {
-        return preg_match($this->getRegex(), $word) === 1;
+        return \preg_match($this->getRegex(), $word) === 1;
     }
 }

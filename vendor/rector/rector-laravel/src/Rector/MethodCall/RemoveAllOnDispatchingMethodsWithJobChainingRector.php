@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Laravel\Tests\Rector\MethodCall\RemoveAllOnDispatchingMethodsWithJobChainingRector\RemoveAllOnDispatchingMethodsWithJobChainingRectorTest
  */
-final class RemoveAllOnDispatchingMethodsWithJobChainingRector extends AbstractRector
+final class RemoveAllOnDispatchingMethodsWithJobChainingRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -31,13 +31,13 @@ final class RemoveAllOnDispatchingMethodsWithJobChainingRector extends AbstractR
      * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
-    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
+    public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
     {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove allOnQueue() and allOnConnection() methods used with job chaining, use the onQueue() and onConnection() methods instead.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove allOnQueue() and allOnConnection() methods used with job chaining, use the onQueue() and onConnection() methods instead.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 Job::withChain([
     new ChainJob(),
 ])
@@ -60,23 +60,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isNames($node->name, \array_keys(self::SWAPPED_METHODS))) {
             return null;
         }
         $rootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($node);
-        if (!$this->isObjectType($rootExpr, new ObjectType('Illuminate\\Foundation\\Bus\\Dispatchable'))) {
+        if (!$this->isObjectType($rootExpr, new \PHPStan\Type\ObjectType('Illuminate\\Foundation\\Bus\\Dispatchable'))) {
             return null;
         }
         // Note that this change only affects code using the withChain method.
-        $callerNode = $rootExpr->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$callerNode instanceof StaticCall) {
+        $callerNode = $rootExpr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$callerNode instanceof \PhpParser\Node\Expr\StaticCall) {
             return null;
         }
         if (!$this->isName($callerNode->name, 'withChain')) {
@@ -89,11 +89,11 @@ CODE_SAMPLE
         // These methods should be called before calling the dispatch method.
         $end = $node->var;
         $current = $node->var;
-        while ($current instanceof MethodCall) {
+        while ($current instanceof \PhpParser\Node\Expr\MethodCall) {
             if ($this->isName($current->name, self::DISPATCH)) {
                 $var = $current->var;
                 $current->var = $node;
-                $node->name = new Identifier(self::SWAPPED_METHODS[$this->getName($node->name)]);
+                $node->name = new \PhpParser\Node\Identifier(self::SWAPPED_METHODS[$this->getName($node->name)]);
                 $node->var = $var;
                 break;
             }

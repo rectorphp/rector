@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.3/Deprecation-91806-BackendUtilityViewOnClick.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v3\RemoveBackendUtilityViewOnClickUsageRector\RemoveBackendUtilityViewOnClickUsageRectorTest
  */
-final class RemoveBackendUtilityViewOnClickUsageRector extends AbstractRector
+final class RemoveBackendUtilityViewOnClickUsageRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -28,7 +28,7 @@ final class RemoveBackendUtilityViewOnClickUsageRector extends AbstractRector
      * @var \Rector\Core\Console\Output\RectorOutputStyle
      */
     private $rectorOutputStyle;
-    public function __construct(RectorOutputStyle $rectorOutputStyle)
+    public function __construct(\Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle)
     {
         $this->rectorOutputStyle = $rectorOutputStyle;
     }
@@ -37,19 +37,19 @@ final class RemoveBackendUtilityViewOnClickUsageRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param Node\Expr\StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         if (isset($node->args[6])) {
             $varName = $this->nodeNameResolver->getName($node->args[6]->value) ?? '';
-            $dispatchArgs = new Array_([new ArrayItem(new Variable($varName), $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Backend\\Routing\\PreviewUriBuilder', 'OPTION_SWITCH_FOCUS'))]);
+            $dispatchArgs = new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Variable($varName), $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Backend\\Routing\\PreviewUriBuilder', 'OPTION_SWITCH_FOCUS'))]);
         }
         $createCallArgs = [$node->args[0], $node->args[4] ?? null];
         $createCallArgs = \array_filter($createCallArgs);
@@ -70,9 +70,9 @@ final class RemoveBackendUtilityViewOnClickUsageRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Resolve usages of BackendUtility::viewOnClick to new method', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Resolve usages of BackendUtility::viewOnClick to new method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $onclick = BackendUtility::viewOnClick(
     $pageId, $backPath, $rootLine, $section,
     $viewUri, $getVars, $switchFocus
@@ -89,9 +89,9 @@ $onclick = PreviewUriBuilder::create($pageId, $viewUri)
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(StaticCall $staticCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return \true;
         }
         return !$this->isName($staticCall->name, 'viewOnClick');

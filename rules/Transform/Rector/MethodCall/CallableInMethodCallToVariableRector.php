@@ -20,7 +20,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector\CallableInMethodCallToVariableRectorTest
  */
-final class CallableInMethodCallToVariableRector extends AbstractRector implements ConfigurableRectorInterface
+final class CallableInMethodCallToVariableRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var CallableInMethodCallToVariable[]
@@ -31,13 +31,13 @@ final class CallableInMethodCallToVariableRector extends AbstractRector implemen
      * @var \Rector\Transform\NodeFactory\UnwrapClosureFactory
      */
     private $unwrapClosureFactory;
-    public function __construct(UnwrapClosureFactory $unwrapClosureFactory)
+    public function __construct(\Rector\Transform\NodeFactory\UnwrapClosureFactory $unwrapClosureFactory)
     {
         $this->unwrapClosureFactory = $unwrapClosureFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change a callable in method call to standalone variable assign', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change a callable in method call to standalone variable assign', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -60,19 +60,19 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [new CallableInMethodCallToVariable('Nette\\Caching\\Cache', 'save', 1)])]);
+, [new \Rector\Transform\ValueObject\CallableInMethodCallToVariable('Nette\\Caching\\Cache', 'save', 1)])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?MethodCall
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\MethodCall
     {
         foreach ($this->callableInMethodCallToVariable as $singleCallableInMethodCallToVariable) {
             if (!$this->isObjectType($node->var, $singleCallableInMethodCallToVariable->getObjectType())) {
@@ -82,15 +82,15 @@ CODE_SAMPLE
             if (!isset($node->args[$position])) {
                 continue;
             }
-            if (!$node->args[$position] instanceof Arg) {
+            if (!$node->args[$position] instanceof \PhpParser\Node\Arg) {
                 continue;
             }
             $arg = $node->args[$position];
             $argValueType = $this->getType($arg->value);
-            if (!$argValueType instanceof ClosureType) {
+            if (!$argValueType instanceof \PHPStan\Type\ClosureType) {
                 continue;
             }
-            $resultVariable = new Variable('result');
+            $resultVariable = new \PhpParser\Node\Expr\Variable('result');
             $unwrappedNodes = $this->unwrapClosureFactory->createAssign($resultVariable, $arg);
             $arg->value = $resultVariable;
             $this->nodesToAddCollector->addNodesBeforeNode($unwrappedNodes, $node);
@@ -103,7 +103,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        Assert::allIsAOf($configuration, CallableInMethodCallToVariable::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\CallableInMethodCallToVariable::class);
         $this->callableInMethodCallToVariable = $configuration;
     }
 }

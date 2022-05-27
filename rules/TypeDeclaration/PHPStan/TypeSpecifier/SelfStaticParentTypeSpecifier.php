@@ -13,33 +13,33 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\TypeDeclaration\Contract\PHPStan\TypeWithClassTypeSpecifierInterface;
-final class SelfStaticParentTypeSpecifier implements TypeWithClassTypeSpecifierInterface
+final class SelfStaticParentTypeSpecifier implements \Rector\TypeDeclaration\Contract\PHPStan\TypeWithClassTypeSpecifierInterface
 {
-    public function match(ObjectType $objectType, Scope $scope) : bool
+    public function match(\PHPStan\Type\ObjectType $objectType, \PHPStan\Analyser\Scope $scope) : bool
     {
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
-        return ObjectReference::isValid($objectType->getClassName());
+        return \Rector\Core\Enum\ObjectReference::isValid($objectType->getClassName());
     }
-    public function resolveObjectReferenceType(ObjectType $objectType, Scope $scope) : TypeWithClassName
+    public function resolveObjectReferenceType(\PHPStan\Type\ObjectType $objectType, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\TypeWithClassName
     {
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $classReference = $objectType->getClassName();
-        if (ObjectReference::STATIC()->getValue() === $classReference) {
-            return new StaticType($classReflection);
+        if (\Rector\Core\Enum\ObjectReference::STATIC()->getValue() === $classReference) {
+            return new \PHPStan\Type\StaticType($classReflection);
         }
-        if (ObjectReference::SELF()->getValue() === $classReference) {
-            return new SelfObjectType($classReference, null, $classReflection);
+        if (\Rector\Core\Enum\ObjectReference::SELF()->getValue() === $classReference) {
+            return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($classReference, null, $classReflection);
         }
         $parentClassReflection = $classReflection->getParentClass();
-        if (!$parentClassReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
+        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        return new ParentStaticType($parentClassReflection);
+        return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($parentClassReflection);
     }
 }

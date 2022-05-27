@@ -5,8 +5,8 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
         # swiftmailer 60
         'Swift_Mime_Message' => 'Swift_Mime_SimpleMessage',
     ]);

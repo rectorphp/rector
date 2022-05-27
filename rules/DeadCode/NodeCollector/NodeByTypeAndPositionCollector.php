@@ -22,7 +22,7 @@ final class NodeByTypeAndPositionCollector
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(FlowOfControlLocator $flowOfControlLocator, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNestingScope\FlowOfControlLocator $flowOfControlLocator, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->flowOfControlLocator = $flowOfControlLocator;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -32,7 +32,7 @@ final class NodeByTypeAndPositionCollector
      * @param Variable[] $assignedVariablesUse
      * @return VariableNodeUse[]
      */
-    public function collectNodesByTypeAndPosition(array $assignedVariables, array $assignedVariablesUse, FunctionLike $functionLike) : array
+    public function collectNodesByTypeAndPosition(array $assignedVariables, array $assignedVariablesUse, \PhpParser\Node\FunctionLike $functionLike) : array
     {
         $nodesByTypeAndPosition = [];
         foreach ($assignedVariables as $assignedVariable) {
@@ -44,11 +44,11 @@ final class NodeByTypeAndPositionCollector
             // not in different scope, than previous one - e.g. if/while/else...
             // get nesting level to $classMethodNode
             /** @var Assign $assign */
-            $assign = $assignedVariable->getAttribute(AttributeKey::PARENT_NODE);
+            $assign = $assignedVariable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             $nestingHash = $this->flowOfControlLocator->resolveNestingHashFromFunctionLike($functionLike, $assign);
             /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($assignedVariable);
-            $nodesByTypeAndPosition[] = new VariableNodeUse($startTokenPos, $variableName, VariableNodeUse::TYPE_ASSIGN, $assignedVariable, $nestingHash);
+            $nodesByTypeAndPosition[] = new \Rector\DeadCode\ValueObject\VariableNodeUse($startTokenPos, $variableName, \Rector\DeadCode\ValueObject\VariableNodeUse::TYPE_ASSIGN, $assignedVariable, $nestingHash);
         }
         foreach ($assignedVariablesUse as $assignedVariableUse) {
             $startTokenPos = $assignedVariableUse->getStartTokenPos();
@@ -58,7 +58,7 @@ final class NodeByTypeAndPositionCollector
             }
             /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($assignedVariableUse);
-            $nodesByTypeAndPosition[] = new VariableNodeUse($startTokenPos, $variableName, VariableNodeUse::TYPE_USE, $assignedVariableUse);
+            $nodesByTypeAndPosition[] = new \Rector\DeadCode\ValueObject\VariableNodeUse($startTokenPos, $variableName, \Rector\DeadCode\ValueObject\VariableNodeUse::TYPE_USE, $assignedVariableUse);
         }
         return $this->sortByStart($nodesByTypeAndPosition);
     }
@@ -68,7 +68,7 @@ final class NodeByTypeAndPositionCollector
      */
     private function sortByStart(array $nodesByTypeAndPosition) : array
     {
-        \usort($nodesByTypeAndPosition, function (VariableNodeUse $firstVariableNodeUse, VariableNodeUse $secondVariableNodeUse) : int {
+        \usort($nodesByTypeAndPosition, function (\Rector\DeadCode\ValueObject\VariableNodeUse $firstVariableNodeUse, \Rector\DeadCode\ValueObject\VariableNodeUse $secondVariableNodeUse) : int {
             return $firstVariableNodeUse->getStartTokenPosition() <=> $secondVariableNodeUse->getStartTokenPosition();
         });
         return $nodesByTypeAndPosition;

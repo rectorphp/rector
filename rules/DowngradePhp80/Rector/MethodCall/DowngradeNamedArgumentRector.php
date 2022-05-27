@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector\DowngradeNamedArgumentRectorTest
  */
-final class DowngradeNamedArgumentRector extends AbstractRector
+final class DowngradeNamedArgumentRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -37,7 +37,7 @@ final class DowngradeNamedArgumentRector extends AbstractRector
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ReflectionResolver $reflectionResolver, UnnamedArgumentResolver $unnamedArgumentResolver, ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\DowngradePhp80\NodeAnalyzer\UnnamedArgumentResolver $unnamedArgumentResolver, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->unnamedArgumentResolver = $unnamedArgumentResolver;
@@ -48,11 +48,11 @@ final class DowngradeNamedArgumentRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class, New_::class, FuncCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\FuncCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove named argument', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove named argument', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -83,7 +83,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall|New_|FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $args = $node->args;
         if ($this->shouldSkip($args)) {
@@ -96,14 +96,14 @@ CODE_SAMPLE
      * @param Arg[] $args
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $node
      */
-    private function removeNamedArguments($node, array $args) : ?Node
+    private function removeNamedArguments($node, array $args) : ?\PhpParser\Node
     {
-        if ($node instanceof New_) {
+        if ($node instanceof \PhpParser\Node\Expr\New_) {
             $functionLikeReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($node);
         } else {
             $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         }
-        if (!$functionLikeReflection instanceof MethodReflection && !$functionLikeReflection instanceof FunctionReflection) {
+        if (!$functionLikeReflection instanceof \PHPStan\Reflection\MethodReflection && !$functionLikeReflection instanceof \PHPStan\Reflection\FunctionReflection) {
             return null;
         }
         $unnamedArgs = $this->unnamedArgumentResolver->resolveFromReflection($functionLikeReflection, $args);

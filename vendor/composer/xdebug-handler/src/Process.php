@@ -35,9 +35,9 @@ class Process
             return "'" . \str_replace("'", "'\\''", $arg) . "'";
         }
         $quote = \strpbrk($arg, " \t") !== \false || $arg === '';
-        $arg = Preg::replace('/(\\\\*)"/', '$1$1\\"', $arg, -1, $dquotes);
+        $arg = \RectorPrefix20220527\Composer\Pcre\Preg::replace('/(\\\\*)"/', '$1$1\\"', $arg, -1, $dquotes);
         if ($meta) {
-            $meta = $dquotes || Preg::isMatch('/%[^%]+%/', $arg);
+            $meta = $dquotes || \RectorPrefix20220527\Composer\Pcre\Preg::isMatch('/%[^%]+%/', $arg);
             if (!$meta) {
                 $quote = $quote || \strpbrk($arg, '^&|<>()') !== \false;
             } elseif ($module && !$dquotes && $quote) {
@@ -45,10 +45,10 @@ class Process
             }
         }
         if ($quote) {
-            $arg = '"' . Preg::replace('/(\\\\*)$/', '$1$1', $arg) . '"';
+            $arg = '"' . \RectorPrefix20220527\Composer\Pcre\Preg::replace('/(\\\\*)$/', '$1$1', $arg) . '"';
         }
         if ($meta) {
-            $arg = Preg::replace('/(["^&|<>()%])/', '^$1', $arg);
+            $arg = \RectorPrefix20220527\Composer\Pcre\Preg::replace('/(["^&|<>()%])/', '^$1', $arg);
         }
         return $arg;
     }

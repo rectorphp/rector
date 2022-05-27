@@ -17,21 +17,21 @@ final class UseImportsResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return Use_[]|GroupUse[]
      */
-    public function resolveForNode(Node $node) : array
+    public function resolveForNode(\PhpParser\Node $node) : array
     {
-        $namespace = $this->betterNodeFinder->findParentByTypes($node, [Namespace_::class, FileWithoutNamespace::class]);
-        if (!$namespace instanceof Node) {
+        $namespace = $this->betterNodeFinder->findParentByTypes($node, [\PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class]);
+        if (!$namespace instanceof \PhpParser\Node) {
             return [];
         }
-        return \array_filter($namespace->stmts, function (Stmt $stmt) : bool {
-            return $stmt instanceof Use_ || $stmt instanceof GroupUse;
+        return \array_filter($namespace->stmts, function (\PhpParser\Node\Stmt $stmt) : bool {
+            return $stmt instanceof \PhpParser\Node\Stmt\Use_ || $stmt instanceof \PhpParser\Node\Stmt\GroupUse;
         });
     }
 }

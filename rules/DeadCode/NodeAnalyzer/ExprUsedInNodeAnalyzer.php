@@ -33,29 +33,29 @@ final class ExprUsedInNodeAnalyzer
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(NodeComparator $nodeComparator, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, CompactFuncCallAnalyzer $compactFuncCallAnalyzer, NodePrinterInterface $nodePrinter)
+    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer $compactFuncCallAnalyzer, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->nodeComparator = $nodeComparator;
         $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
         $this->nodePrinter = $nodePrinter;
     }
-    public function isUsed(Node $node, Expr $expr) : bool
+    public function isUsed(\PhpParser\Node $node, \PhpParser\Node\Expr $expr) : bool
     {
-        if ($node instanceof Include_) {
+        if ($node instanceof \PhpParser\Node\Expr\Include_) {
             return \true;
         }
         // variable as variable variable need mark as used
-        if ($node instanceof Variable && $expr instanceof Variable) {
+        if ($node instanceof \PhpParser\Node\Expr\Variable && $expr instanceof \PhpParser\Node\Expr\Variable) {
             $print = $this->nodePrinter->print($node);
             if (\strncmp($print, '${$', \strlen('${$')) === 0) {
                 return \true;
             }
         }
-        if ($node instanceof FuncCall && $expr instanceof Variable) {
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall && $expr instanceof \PhpParser\Node\Expr\Variable) {
             return $this->compactFuncCallAnalyzer->isInCompact($node, $expr);
         }
-        if ($expr instanceof Variable) {
+        if ($expr instanceof \PhpParser\Node\Expr\Variable) {
             return $this->usedVariableNameAnalyzer->isVariableNamed($node, $expr);
         }
         return $this->nodeComparator->areNodesEqual($node, $expr);

@@ -7,7 +7,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220527\Tracy;
 
-class NativeSession implements SessionStorage
+class NativeSession implements \RectorPrefix20220527\Tracy\SessionStorage
 {
     public function isAvailable() : bool
     {

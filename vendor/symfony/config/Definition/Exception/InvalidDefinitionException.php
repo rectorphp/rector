@@ -15,6 +15,6 @@ namespace RectorPrefix20220527\Symfony\Component\Config\Definition\Exception;
  *
  * @author Victor Berchet <victor.berchet@suumit.com>
  */
-class InvalidDefinitionException extends Exception
+class InvalidDefinitionException extends \RectorPrefix20220527\Symfony\Component\Config\Definition\Exception\Exception
 {
 }

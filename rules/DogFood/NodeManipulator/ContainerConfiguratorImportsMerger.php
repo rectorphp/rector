@@ -26,21 +26,21 @@ final class ContainerConfiguratorImportsMerger
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeFactory $nodeFactory)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;
     }
-    public function merge(Closure $closure) : void
+    public function merge(\PhpParser\Node\Expr\Closure $closure) : void
     {
         $setConstantFetches = [];
         $lastImportKey = null;
         foreach ($closure->getStmts() as $key => $stmt) {
-            if (!$stmt instanceof Expression) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
             $expr = $stmt->expr;
-            if (!$expr instanceof MethodCall) {
+            if (!$expr instanceof \PhpParser\Node\Expr\MethodCall) {
                 continue;
             }
             if (!$this->nodeNameResolver->isName($expr->name, 'import')) {
@@ -48,7 +48,7 @@ final class ContainerConfiguratorImportsMerger
             }
             $importArg = $expr->getArgs();
             $argValue = $importArg[0]->value;
-            if (!$argValue instanceof ClassConstFetch) {
+            if (!$argValue instanceof \PhpParser\Node\Expr\ClassConstFetch) {
                 continue;
             }
             $setConstantFetches[] = $argValue;
@@ -59,8 +59,8 @@ final class ContainerConfiguratorImportsMerger
             return;
         }
         $args = $this->nodeFactory->createArgs([$setConstantFetches]);
-        $setsMethodCall = new MethodCall(new Variable(self::RECTOR_CONFIG_VARIABLE), 'sets', $args);
-        $closure->stmts[$lastImportKey] = new Expression($setsMethodCall);
+        $setsMethodCall = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::RECTOR_CONFIG_VARIABLE), 'sets', $args);
+        $closure->stmts[$lastImportKey] = new \PhpParser\Node\Stmt\Expression($setsMethodCall);
         \ksort($closure->stmts);
     }
 }

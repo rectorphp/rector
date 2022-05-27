@@ -17,7 +17,7 @@ final class LiteralCallLikeConstFetchReplacer
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeFactory $nodeFactory)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
@@ -28,14 +28,14 @@ final class LiteralCallLikeConstFetchReplacer
      * @param array<string|int, string> $constantMap
      * @return null|\PhpParser\Node\Expr\CallLike
      */
-    public function replaceArgOnPosition(CallLike $callLike, int $argPosition, string $className, array $constantMap)
+    public function replaceArgOnPosition(\PhpParser\Node\Expr\CallLike $callLike, int $argPosition, string $className, array $constantMap)
     {
         $args = $callLike->getArgs();
         if (!isset($args[$argPosition])) {
             return null;
         }
         $arg = $args[$argPosition];
-        if (!$arg->value instanceof String_ && !$arg->value instanceof LNumber) {
+        if (!$arg->value instanceof \PhpParser\Node\Scalar\String_ && !$arg->value instanceof \PhpParser\Node\Scalar\LNumber) {
             return null;
         }
         $scalar = $arg->value;

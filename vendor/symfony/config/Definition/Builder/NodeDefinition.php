@@ -18,7 +18,7 @@ use RectorPrefix20220527\Symfony\Component\Config\Definition\NodeInterface;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-abstract class NodeDefinition implements NodeParentInterface
+abstract class NodeDefinition implements \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\NodeParentInterface
 {
     protected $name;
     protected $normalization;
@@ -32,10 +32,10 @@ abstract class NodeDefinition implements NodeParentInterface
     protected $nullEquivalent;
     protected $trueEquivalent = \true;
     protected $falseEquivalent = \false;
-    protected $pathSeparator = BaseNode::DEFAULT_PATH_SEPARATOR;
+    protected $pathSeparator = \RectorPrefix20220527\Symfony\Component\Config\Definition\BaseNode::DEFAULT_PATH_SEPARATOR;
     protected $parent;
     protected $attributes = [];
-    public function __construct(?string $name, NodeParentInterface $parent = null)
+    public function __construct(?string $name, \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\NodeParentInterface $parent = null)
     {
         $this->parent = $parent;
         $this->name = $name;
@@ -45,7 +45,7 @@ abstract class NodeDefinition implements NodeParentInterface
      *
      * @return $this
      */
-    public function setParent(NodeParentInterface $parent)
+    public function setParent(\RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\NodeParentInterface $parent)
     {
         $this->parent = $parent;
         return $this;
@@ -91,19 +91,19 @@ abstract class NodeDefinition implements NodeParentInterface
     /**
      * Creates the node.
      */
-    public function getNode(bool $forceRootNode = \false) : NodeInterface
+    public function getNode(bool $forceRootNode = \false) : \RectorPrefix20220527\Symfony\Component\Config\Definition\NodeInterface
     {
         if ($forceRootNode) {
             $this->parent = null;
         }
         if (null !== $this->normalization) {
-            $this->normalization->before = ExprBuilder::buildExpressions($this->normalization->before);
+            $this->normalization->before = \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\ExprBuilder::buildExpressions($this->normalization->before);
         }
         if (null !== $this->validation) {
-            $this->validation->rules = ExprBuilder::buildExpressions($this->validation->rules);
+            $this->validation->rules = \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\ExprBuilder::buildExpressions($this->validation->rules);
         }
         $node = $this->createNode();
-        if ($node instanceof BaseNode) {
+        if ($node instanceof \RectorPrefix20220527\Symfony\Component\Config\Definition\BaseNode) {
             $node->setAttributes($this->attributes);
         }
         return $node;
@@ -210,7 +210,7 @@ abstract class NodeDefinition implements NodeParentInterface
     /**
      * Sets an expression to run before the normalization.
      */
-    public function beforeNormalization() : ExprBuilder
+    public function beforeNormalization() : \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\ExprBuilder
     {
         return $this->normalization()->before();
     }
@@ -231,7 +231,7 @@ abstract class NodeDefinition implements NodeParentInterface
      * modify it.
      * An exception should be thrown when the node is not valid.
      */
-    public function validate() : ExprBuilder
+    public function validate() : \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\ExprBuilder
     {
         return $this->validation()->rule();
     }
@@ -248,30 +248,30 @@ abstract class NodeDefinition implements NodeParentInterface
     /**
      * Gets the builder for validation rules.
      */
-    protected function validation() : ValidationBuilder
+    protected function validation() : \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\ValidationBuilder
     {
         if (null === $this->validation) {
-            $this->validation = new ValidationBuilder($this);
+            $this->validation = new \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\ValidationBuilder($this);
         }
         return $this->validation;
     }
     /**
      * Gets the builder for merging rules.
      */
-    protected function merge() : MergeBuilder
+    protected function merge() : \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\MergeBuilder
     {
         if (null === $this->merge) {
-            $this->merge = new MergeBuilder($this);
+            $this->merge = new \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\MergeBuilder($this);
         }
         return $this->merge;
     }
     /**
      * Gets the builder for normalization rules.
      */
-    protected function normalization() : NormalizationBuilder
+    protected function normalization() : \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\NormalizationBuilder
     {
         if (null === $this->normalization) {
-            $this->normalization = new NormalizationBuilder($this);
+            $this->normalization = new \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\NormalizationBuilder($this);
         }
         return $this->normalization;
     }
@@ -280,7 +280,7 @@ abstract class NodeDefinition implements NodeParentInterface
      *
      * @throws InvalidDefinitionException When the definition is invalid
      */
-    protected abstract function createNode() : NodeInterface;
+    protected abstract function createNode() : \RectorPrefix20220527\Symfony\Component\Config\Definition\NodeInterface;
     /**
      * Set PathSeparator to use.
      *
@@ -288,7 +288,7 @@ abstract class NodeDefinition implements NodeParentInterface
      */
     public function setPathSeparator(string $separator)
     {
-        if ($this instanceof ParentNodeDefinitionInterface) {
+        if ($this instanceof \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface) {
             foreach ($this->getChildNodeDefinitions() as $child) {
                 $child->setPathSeparator($separator);
             }

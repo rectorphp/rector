@@ -53,26 +53,26 @@ final class NewLine
     }
     public static function fromSingleCharacter(string $content) : self
     {
-        $matches = Strings::match($content, self::VALID_NEWLINE_REGEX);
+        $matches = \RectorPrefix20220527\Nette\Utils\Strings::match($content, self::VALID_NEWLINE_REGEX);
         if ($matches === null) {
-            throw InvalidNewLineStringException::fromString($content);
+            throw \Rector\FileFormatter\Exception\InvalidNewLineStringException::fromString($content);
         }
         return new self($content);
     }
     public static function fromContent(string $content) : self
     {
-        $match = Strings::match($content, self::NEWLINE_REGEX);
+        $match = \RectorPrefix20220527\Nette\Utils\Strings::match($content, self::NEWLINE_REGEX);
         if (isset($match['newLine'])) {
             return self::fromSingleCharacter($match['newLine']);
         }
-        return self::fromSingleCharacter(PHP_EOL);
+        return self::fromSingleCharacter(\PHP_EOL);
     }
     public static function fromEditorConfig(string $endOfLine) : self
     {
         if (!\array_key_exists($endOfLine, self::ALLOWED_END_OF_LINE)) {
             $allowedEndOfLineValues = \array_keys(self::ALLOWED_END_OF_LINE);
             $message = \sprintf('The endOfLine "%s" is not allowed. Allowed are "%s"', $endOfLine, \implode(',', $allowedEndOfLineValues));
-            throw InvalidNewLineStringException::create($message);
+            throw \Rector\FileFormatter\Exception\InvalidNewLineStringException::create($message);
         }
         return self::fromSingleCharacter(self::ALLOWED_END_OF_LINE[$endOfLine]);
     }

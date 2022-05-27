@@ -34,13 +34,13 @@ final class ConstructClassMethodFactory
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, StaticTypeMapper $staticTypeMapper)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function createFromPublicClassProperties(Class_ $class) : ?ClassMethod
+    public function createFromPublicClassProperties(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node\Stmt\ClassMethod
     {
         $publicProperties = $this->resolvePublicProperties($class);
         if ($publicProperties === []) {
@@ -54,7 +54,7 @@ final class ConstructClassMethodFactory
             $params[] = $this->createParam($publicProperty, $propertyName);
             $assigns[] = $this->createAssign($propertyName);
         }
-        $methodBuilder = new MethodBuilder(MethodName::CONSTRUCT);
+        $methodBuilder = new \RectorPrefix20220527\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
         $methodBuilder->makePublic();
         $methodBuilder->addParams($params);
         $methodBuilder->addStmts($assigns);
@@ -63,7 +63,7 @@ final class ConstructClassMethodFactory
     /**
      * @return Property[]
      */
-    private function resolvePublicProperties(Class_ $class) : array
+    private function resolvePublicProperties(\PhpParser\Node\Stmt\Class_ $class) : array
     {
         $publicProperties = [];
         foreach ($class->getProperties() as $property) {
@@ -74,19 +74,19 @@ final class ConstructClassMethodFactory
         }
         return $publicProperties;
     }
-    private function createAssign(string $name) : Expression
+    private function createAssign(string $name) : \PhpParser\Node\Stmt\Expression
     {
-        $propertyFetch = new PropertyFetch(new Variable('this'), $name);
-        $variable = new Variable($name);
-        $assign = new Assign($propertyFetch, $variable);
-        return new Expression($assign);
+        $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $name);
+        $variable = new \PhpParser\Node\Expr\Variable($name);
+        $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, $variable);
+        return new \PhpParser\Node\Stmt\Expression($assign);
     }
-    private function createParam(Property $property, string $propertyName) : Param
+    private function createParam(\PhpParser\Node\Stmt\Property $property, string $propertyName) : \PhpParser\Node\Param
     {
         $propertyType = $this->nodeTypeResolver->getType($property);
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY());
-        $paramVariable = new Variable($propertyName);
-        $param = new Param($paramVariable);
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+        $paramVariable = new \PhpParser\Node\Expr\Variable($propertyName);
+        $param = new \PhpParser\Node\Param($paramVariable);
         $param->type = $propertyTypeNode;
         return $param;
     }

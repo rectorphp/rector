@@ -13,7 +13,7 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 /**
  * @see \Rector\Tests\FileFormatter\Formatter\XmlFileFormatter\XmlFileFormatterTest
  */
-final class XmlFileFormatter implements FileFormatterInterface
+final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface
 {
     /**
      * @see https://regex101.com/r/uTmMcr/1
@@ -46,12 +46,12 @@ final class XmlFileFormatter implements FileFormatterInterface
      * @var bool
      */
     private $preserveWhitespace = \false;
-    public function supports(File $file) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return $smartFileInfo->getExtension() === 'xml';
     }
-    public function format(File $file, EditorConfigConfiguration $editorConfigConfiguration) : void
+    public function format(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : void
     {
         $this->padChar = $editorConfigConfiguration->getIndentStyleCharacter();
         $this->indent = $editorConfigConfiguration->getIndentSize();
@@ -59,13 +59,13 @@ final class XmlFileFormatter implements FileFormatterInterface
         $newFileContent .= $editorConfigConfiguration->getFinalNewline();
         $file->changeFileContent($newFileContent);
     }
-    public function createDefaultEditorConfigConfigurationBuilder() : EditorConfigConfigurationBuilder
+    public function createDefaultEditorConfigConfigurationBuilder() : \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder
     {
-        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
-        $editorConfigConfigurationBuilder->withIndent(Indent::createTab());
+        $editorConfigConfigurationBuilder = new \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder();
+        $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createTab());
         return $editorConfigConfigurationBuilder;
     }
-    private function formatXml(string $xml, EditorConfigConfiguration $editorConfigConfiguration) : string
+    private function formatXml(string $xml, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : string
     {
         $output = '';
         $this->depth = 0;
@@ -83,10 +83,10 @@ final class XmlFileFormatter implements FileFormatterInterface
      */
     private function getXmlParts(string $xml) : array
     {
-        $withNewLines = Strings::replace(\trim($xml), self::XML_PARTS_REGEX, "\$1\n\$2\$3");
+        $withNewLines = \RectorPrefix20220527\Nette\Utils\Strings::replace(\trim($xml), self::XML_PARTS_REGEX, "\$1\n\$2\$3");
         return \explode("\n", $withNewLines);
     }
-    private function getOutputForPart(string $part, EditorConfigConfiguration $editorConfigConfiguration) : string
+    private function getOutputForPart(string $part, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : string
     {
         $output = '';
         $this->runPre($part);
@@ -123,11 +123,11 @@ final class XmlFileFormatter implements FileFormatterInterface
     }
     private function isOpeningTag(string $part) : bool
     {
-        return StringUtils::isMatch($part, self::IS_OPENING_TAG_REGEX);
+        return \Rector\Core\Util\StringUtils::isMatch($part, self::IS_OPENING_TAG_REGEX);
     }
     private function isClosingTag(string $part) : bool
     {
-        return StringUtils::isMatch($part, self::IS_CLOSING_TAG_REGEX);
+        return \Rector\Core\Util\StringUtils::isMatch($part, self::IS_CLOSING_TAG_REGEX);
     }
     private function isOpeningCdataTag(string $part) : bool
     {

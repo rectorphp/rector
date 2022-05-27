@@ -51,7 +51,7 @@ final class ObjectTypeSpecifier
     /**
      * @param TypeWithClassTypeSpecifierInterface[] $typeWithClassTypeSpecifiers
      */
-    public function __construct(ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, array $typeWithClassTypeSpecifiers, NameScopeFactory $nameScopeFactory)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver, array $typeWithClassTypeSpecifiers, \Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->useImportsResolver = $useImportsResolver;
@@ -62,11 +62,11 @@ final class ObjectTypeSpecifier
      * @param \PHPStan\Analyser\Scope|null $scope
      * @return \PHPStan\Type\TypeWithClassName|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType|\PHPStan\Type\UnionType|\PHPStan\Type\MixedType
      */
-    public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, $scope)
+    public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, $scope)
     {
         $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
         // @todo reuse name scope
-        if ($scope instanceof Scope) {
+        if ($scope instanceof \PHPStan\Analyser\Scope) {
             foreach ($this->typeWithClassTypeSpecifiers as $typeWithClassTypeSpecifier) {
                 if ($typeWithClassTypeSpecifier->match($objectType, $scope)) {
                     return $typeWithClassTypeSpecifier->resolveObjectReferenceType($objectType, $scope);
@@ -76,9 +76,9 @@ final class ObjectTypeSpecifier
         $uses = $this->useImportsResolver->resolveForNode($node);
         if ($uses === []) {
             if (!$this->reflectionProvider->hasClass($objectType->getClassName())) {
-                return new NonExistingObjectType($objectType->getClassName());
+                return new \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType($objectType->getClassName());
             }
-            return new FullyQualifiedObjectType($objectType->getClassName(), null, $objectType->getClassReflection());
+            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($objectType->getClassName(), null, $objectType->getClassReflection());
         }
         $aliasedObjectType = $this->matchAliasedObjectType($node, $objectType, $uses);
         if ($aliasedObjectType !== null) {
@@ -90,23 +90,23 @@ final class ObjectTypeSpecifier
         }
         $className = \ltrim($objectType->getClassName(), '\\');
         if ($this->reflectionProvider->hasClass($className)) {
-            return new FullyQualifiedObjectType($className);
+            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
         }
         // invalid type
-        return new NonExistingObjectType($className);
+        return new \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType($className);
     }
     /**
      * @param Use_[]|GroupUse[] $uses
      */
-    private function matchAliasedObjectType(Node $node, ObjectType $objectType, array $uses) : ?AliasedObjectType
+    private function matchAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, array $uses) : ?\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType
     {
         if ($uses === []) {
             return null;
         }
         $className = $objectType->getClassName();
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         foreach ($uses as $use) {
-            $prefix = $use instanceof GroupUse ? $use->prefix . '\\' : '';
+            $prefix = $use instanceof \PhpParser\Node\Stmt\GroupUse ? $use->prefix . '\\' : '';
             foreach ($use->uses as $useUse) {
                 if ($useUse->alias === null) {
                     continue;
@@ -115,26 +115,26 @@ final class ObjectTypeSpecifier
                 $alias = $useUse->alias->toString();
                 $fullyQualifiedName = $prefix . $useUse->name->toString();
                 $processAliasedObject = $this->processAliasedObject($alias, $className, $useName, $parent, $fullyQualifiedName);
-                if ($processAliasedObject instanceof AliasedObjectType) {
+                if ($processAliasedObject instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
                     return $processAliasedObject;
                 }
             }
         }
         return null;
     }
-    private function processAliasedObject(string $alias, string $className, string $useName, ?Node $parentNode, string $fullyQualifiedName) : ?AliasedObjectType
+    private function processAliasedObject(string $alias, string $className, string $useName, ?\PhpParser\Node $parentNode, string $fullyQualifiedName) : ?\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType
     {
         // A. is alias in use statement matching this class alias
         if ($alias === $className) {
-            return new AliasedObjectType($alias, $fullyQualifiedName);
+            return new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($alias, $fullyQualifiedName);
         }
         // B. is aliased classes matching the class name and parent node is MethodCall/StaticCall
-        if ($useName === $className && ($parentNode instanceof MethodCall || $parentNode instanceof StaticCall)) {
-            return new AliasedObjectType($useName, $fullyQualifiedName);
+        if ($useName === $className && ($parentNode instanceof \PhpParser\Node\Expr\MethodCall || $parentNode instanceof \PhpParser\Node\Expr\StaticCall)) {
+            return new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($useName, $fullyQualifiedName);
         }
         // C. is aliased classes matching the class name
         if ($useName === $className) {
-            return new AliasedObjectType($alias, $fullyQualifiedName);
+            return new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($alias, $fullyQualifiedName);
         }
         return null;
     }
@@ -142,13 +142,13 @@ final class ObjectTypeSpecifier
      * @param Use_[]|GroupUse[] $uses
      * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|null
      */
-    private function matchShortenedObjectType(ObjectType $objectType, array $uses)
+    private function matchShortenedObjectType(\PHPStan\Type\ObjectType $objectType, array $uses)
     {
         if ($uses === []) {
             return null;
         }
         foreach ($uses as $use) {
-            $prefix = $use instanceof GroupUse ? $use->prefix . '\\' : '';
+            $prefix = $use instanceof \PhpParser\Node\Stmt\GroupUse ? $use->prefix . '\\' : '';
             foreach ($use->uses as $useUse) {
                 if ($useUse->alias !== null) {
                     continue;
@@ -158,27 +158,27 @@ final class ObjectTypeSpecifier
                     return $partialNamespaceObjectType;
                 }
                 $partialNamespaceObjectType = $this->matchClassWithLastUseImportPart($prefix, $objectType, $useUse);
-                if ($partialNamespaceObjectType instanceof FullyQualifiedObjectType) {
+                if ($partialNamespaceObjectType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
                     // keep Generic items
-                    if ($objectType instanceof GenericObjectType) {
-                        return new ShortenedGenericObjectType($objectType->getClassName(), $objectType->getTypes(), $partialNamespaceObjectType->getClassName());
+                    if ($objectType instanceof \PHPStan\Type\Generic\GenericObjectType) {
+                        return new \Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType($objectType->getClassName(), $objectType->getTypes(), $partialNamespaceObjectType->getClassName());
                     }
                     return $partialNamespaceObjectType->getShortNameType();
                 }
-                if ($partialNamespaceObjectType instanceof ShortenedObjectType) {
+                if ($partialNamespaceObjectType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
                     return $partialNamespaceObjectType;
                 }
             }
         }
         return null;
     }
-    private function matchPartialNamespaceObjectType(string $prefix, ObjectType $objectType, UseUse $useUse) : ?ShortenedObjectType
+    private function matchPartialNamespaceObjectType(string $prefix, \PHPStan\Type\ObjectType $objectType, \PhpParser\Node\Stmt\UseUse $useUse) : ?\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType
     {
         // partial namespace
         if (\strncmp($objectType->getClassName(), $useUse->name->getLast() . '\\', \strlen($useUse->name->getLast() . '\\')) !== 0) {
             return null;
         }
-        $classNameWithoutLastUsePart = Strings::after($objectType->getClassName(), '\\', 1);
+        $classNameWithoutLastUsePart = \RectorPrefix20220527\Nette\Utils\Strings::after($objectType->getClassName(), '\\', 1);
         $connectedClassName = $prefix . $useUse->name->toString() . '\\' . $classNameWithoutLastUsePart;
         if (!$this->reflectionProvider->hasClass($connectedClassName)) {
             return null;
@@ -186,12 +186,12 @@ final class ObjectTypeSpecifier
         if ($objectType->getClassName() === $connectedClassName) {
             return null;
         }
-        return new ShortenedObjectType($objectType->getClassName(), $connectedClassName);
+        return new \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType($objectType->getClassName(), $connectedClassName);
     }
     /**
      * @return FullyQualifiedObjectType|ShortenedObjectType|null
      */
-    private function matchClassWithLastUseImportPart(string $prefix, ObjectType $objectType, UseUse $useUse) : ?ObjectType
+    private function matchClassWithLastUseImportPart(string $prefix, \PHPStan\Type\ObjectType $objectType, \PhpParser\Node\Stmt\UseUse $useUse) : ?\PHPStan\Type\ObjectType
     {
         if ($useUse->name->getLast() !== $objectType->getClassName()) {
             return null;
@@ -200,8 +200,8 @@ final class ObjectTypeSpecifier
             return null;
         }
         if ($objectType->getClassName() === $prefix . $useUse->name->toString()) {
-            return new FullyQualifiedObjectType($objectType->getClassName());
+            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($objectType->getClassName());
         }
-        return new ShortenedObjectType($objectType->getClassName(), $prefix . $useUse->name->toString());
+        return new \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType($objectType->getClassName(), $prefix . $useUse->name->toString());
     }
 }

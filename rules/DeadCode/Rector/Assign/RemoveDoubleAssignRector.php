@@ -23,20 +23,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Assign\RemoveDoubleAssignRector\RemoveDoubleAssignRectorTest
  */
-final class RemoveDoubleAssignRector extends AbstractRector
+final class RemoveDoubleAssignRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;
-    public function __construct(SideEffectNodeDetector $sideEffectNodeDetector)
+    public function __construct(\Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector)
     {
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Simplify useless double assigns', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify useless double assigns', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $value = 1;
 $value = 1;
 CODE_SAMPLE
@@ -47,12 +47,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Foreach_::class, FileWithoutNamespace::class, ClassMethod::class, Function_::class, Closure::class, If_::class, Namespace_::class];
+        return [\PhpParser\Node\Stmt\Foreach_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Namespace_::class];
     }
     /**
      * @param Foreach_|FileWithoutNamespace|If_|Namespace_|ClassMethod|Function_|Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $stmts = $node->stmts;
         if ($stmts === null) {
@@ -63,17 +63,17 @@ CODE_SAMPLE
             if (!isset($stmts[$key + 1])) {
                 continue;
             }
-            if (!$stmt instanceof Expression) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
             $nextStmt = $stmts[$key + 1];
-            if (!$nextStmt instanceof Expression) {
+            if (!$nextStmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
-            if (!$stmt->expr instanceof Assign) {
+            if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
-            if (!$nextStmt->expr instanceof Assign) {
+            if (!$nextStmt->expr instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
             $nextAssign = $nextStmt->expr;
@@ -89,7 +89,7 @@ CODE_SAMPLE
             if ($this->sideEffectNodeDetector->detectCallExpr($stmt->expr->expr)) {
                 continue;
             }
-            if (!$stmt->expr->var instanceof Variable && !$stmt->expr->var instanceof PropertyFetch && !$stmt->expr->var instanceof StaticPropertyFetch) {
+            if (!$stmt->expr->var instanceof \PhpParser\Node\Expr\Variable && !$stmt->expr->var instanceof \PhpParser\Node\Expr\PropertyFetch && !$stmt->expr->var instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
                 continue;
             }
             // remove current Stmt if will be overriden in next stmt
@@ -101,9 +101,9 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function isSelfReferencing(Assign $assign) : bool
+    private function isSelfReferencing(\PhpParser\Node\Expr\Assign $assign) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $subNode) use($assign) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (\PhpParser\Node $subNode) use($assign) : bool {
             return $this->nodeComparator->areNodesEqual($assign->var, $subNode);
         });
     }

@@ -6,7 +6,7 @@ namespace Rector\Renaming\ValueObject;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Validation\RectorAssert;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
-final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
+final class MethodCallRenameWithArrayKey implements \Rector\Renaming\Contract\MethodCallRenameInterface
 {
     /**
      * @readonly
@@ -36,15 +36,15 @@ final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
         $this->oldMethod = $oldMethod;
         $this->newMethod = $newMethod;
         $this->arrayKey = $arrayKey;
-        RectorAssert::className($class);
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getClass() : string
     {
         return $this->class;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     public function getOldMethod() : string
     {

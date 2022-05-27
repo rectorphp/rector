@@ -20,7 +20,7 @@ final class RectorParser
      * @var \PHPStan\Parser\Parser
      */
     private $parser;
-    public function __construct(Lexer $lexer, Parser $parser)
+    public function __construct(\PhpParser\Lexer $lexer, \PHPStan\Parser\Parser $parser)
     {
         $this->lexer = $lexer;
         $this->parser = $parser;
@@ -28,14 +28,14 @@ final class RectorParser
     /**
      * @return Stmt[]
      */
-    public function parseFile(SmartFileInfo $smartFileInfo) : array
+    public function parseFile(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
     {
         return $this->parser->parseFile($smartFileInfo->getRealPath());
     }
-    public function parseFileToStmtsAndTokens(SmartFileInfo $smartFileInfo) : StmtsAndTokens
+    public function parseFileToStmtsAndTokens(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : \Rector\Core\PhpParser\ValueObject\StmtsAndTokens
     {
         $stmts = $this->parseFile($smartFileInfo);
         $tokens = $this->lexer->getTokens();
-        return new StmtsAndTokens($stmts, $tokens);
+        return new \Rector\Core\PhpParser\ValueObject\StmtsAndTokens($stmts, $tokens);
     }
 }

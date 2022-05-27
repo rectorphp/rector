@@ -29,7 +29,7 @@ final class FormFieldsFinder
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -37,7 +37,7 @@ final class FormFieldsFinder
     /**
      * @return FormField[]
      */
-    public function find(Class_ $class, Variable $form) : array
+    public function find(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\Variable $form) : array
     {
         $formFields = [];
         foreach ($class->getMethods() as $classMethod) {
@@ -46,15 +46,15 @@ final class FormFieldsFinder
                 continue;
             }
             foreach ($stmts as $stmt) {
-                if (!$stmt instanceof Expression) {
+                if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                     continue;
                 }
                 $methodCall = $this->findMethodCall($stmt);
-                if (!$methodCall instanceof MethodCall) {
+                if (!$methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
                     continue;
                 }
                 $addFieldMethodCall = $this->findAddFieldMethodCall($methodCall);
-                if (!$addFieldMethodCall instanceof MethodCall) {
+                if (!$addFieldMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
                     continue;
                 }
                 if (!$this->isFormAddFieldMethodCall($addFieldMethodCall, $form)) {
@@ -65,51 +65,51 @@ final class FormFieldsFinder
         }
         return $formFields;
     }
-    private function findMethodCall(Expression $expression) : ?MethodCall
+    private function findMethodCall(\PhpParser\Node\Stmt\Expression $expression) : ?\PhpParser\Node\Expr\MethodCall
     {
         $methodCall = null;
-        if ($expression->expr instanceof MethodCall) {
+        if ($expression->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             $methodCall = $expression->expr;
-        } elseif ($expression->expr instanceof Assign && $expression->expr->expr instanceof MethodCall) {
+        } elseif ($expression->expr instanceof \PhpParser\Node\Expr\Assign && $expression->expr->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             $methodCall = $expression->expr->expr;
         }
         return $methodCall;
     }
-    private function findAddFieldMethodCall(MethodCall $methodCall) : ?MethodCall
+    private function findAddFieldMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
-        if ($methodCall->var instanceof Variable) {
+        if ($methodCall->var instanceof \PhpParser\Node\Expr\Variable) {
             // skip submit buttons
-            if ($this->nodeTypeResolver->isObjectType($methodCall, new ObjectType('Nette\\Forms\\Controls\\SubmitButton'))) {
+            if ($this->nodeTypeResolver->isObjectType($methodCall, new \PHPStan\Type\ObjectType('Nette\\Forms\\Controls\\SubmitButton'))) {
                 return null;
             }
-            if ($this->nodeTypeResolver->isObjectType($methodCall, new ObjectType('Nette\\Forms\\Container'))) {
+            if ($this->nodeTypeResolver->isObjectType($methodCall, new \PHPStan\Type\ObjectType('Nette\\Forms\\Container'))) {
                 return $methodCall;
             }
             // skip groups, renderers, translator etc.
-            if ($this->nodeTypeResolver->isObjectType($methodCall, new ObjectType('Nette\\Forms\\Controls\\BaseControl'))) {
+            if ($this->nodeTypeResolver->isObjectType($methodCall, new \PHPStan\Type\ObjectType('Nette\\Forms\\Controls\\BaseControl'))) {
                 return $methodCall;
             }
             return null;
         }
-        if ($methodCall->var instanceof MethodCall) {
+        if ($methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->findAddFieldMethodCall($methodCall->var);
         }
         return null;
     }
-    private function isFormAddFieldMethodCall(MethodCall $addFieldMethodCall, Variable $form) : bool
+    private function isFormAddFieldMethodCall(\PhpParser\Node\Expr\MethodCall $addFieldMethodCall, \PhpParser\Node\Expr\Variable $form) : bool
     {
         $methodCallVariable = $this->findMethodCallVariable($addFieldMethodCall);
-        if (!$methodCallVariable instanceof Variable) {
+        if (!$methodCallVariable instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
         return $methodCallVariable->name === $form->name;
     }
-    private function findMethodCallVariable(MethodCall $methodCall) : ?Variable
+    private function findMethodCallVariable(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\Variable
     {
-        if ($methodCall->var instanceof Variable) {
+        if ($methodCall->var instanceof \PhpParser\Node\Expr\Variable) {
             return $methodCall->var;
         }
-        if ($methodCall->var instanceof MethodCall) {
+        if ($methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->findMethodCallVariable($methodCall->var);
         }
         return null;
@@ -118,26 +118,26 @@ final class FormFieldsFinder
      * @param FormField[] $formFields
      * @return FormField[]
      */
-    private function addFormField(array $formFields, MethodCall $addFieldMethodCall, MethodCall $methodCall) : array
+    private function addFormField(array $formFields, \PhpParser\Node\Expr\MethodCall $addFieldMethodCall, \PhpParser\Node\Expr\MethodCall $methodCall) : array
     {
         $arg = $addFieldMethodCall->args[0] ?? null;
         if (!$arg) {
             return $formFields;
         }
         $name = $arg->value;
-        if (!$name instanceof String_) {
+        if (!$name instanceof \PhpParser\Node\Scalar\String_) {
             return $formFields;
         }
-        $formFields[] = new FormField($name->value, $this->resolveFieldType($this->nodeNameResolver->getName($addFieldMethodCall->name)), $this->isFieldRequired($methodCall));
+        $formFields[] = new \Rector\Nette\ValueObject\FormField($name->value, $this->resolveFieldType($this->nodeNameResolver->getName($addFieldMethodCall->name)), $this->isFieldRequired($methodCall));
         return $formFields;
     }
-    private function isFieldRequired(MethodCall $methodCall) : bool
+    private function isFieldRequired(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if ($methodCall->name instanceof Identifier && $methodCall->name->name === 'setRequired') {
+        if ($methodCall->name instanceof \PhpParser\Node\Identifier && $methodCall->name->name === 'setRequired') {
             // TODO addRule(Form:FILLED) is also required
             return \true;
         }
-        if ($methodCall->var instanceof MethodCall) {
+        if ($methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->isFieldRequired($methodCall->var);
         }
         return \false;

@@ -15,19 +15,19 @@ final class IconArrayItemFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeFactory $nodeFactory)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
     /**
      * @param array<string, mixed> $iconConfiguration
      */
-    public function create(array $iconConfiguration, string $iconIdentifier) : ArrayItem
+    public function create(array $iconConfiguration, string $iconIdentifier) : \PhpParser\Node\Expr\ArrayItem
     {
         $value = $this->nodeFactory->createArray($iconConfiguration);
-        $key = new String_($iconIdentifier);
+        $key = new \PhpParser\Node\Scalar\String_($iconIdentifier);
         // hack to make array item print on a new line
-        $attributes = [AttributeKey::COMMENTS => [new Comment(\PHP_EOL)]];
-        return new ArrayItem($value, $key, \false, $attributes);
+        $attributes = [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]];
+        return new \PhpParser\Node\Expr\ArrayItem($value, $key, \false, $attributes);
     }
 }

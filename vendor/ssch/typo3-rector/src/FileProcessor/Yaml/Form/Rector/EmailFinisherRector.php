@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Feature-80420-AllowMultipleRecipientsInEmailFinisher.html
  */
-final class EmailFinisherRector implements FormYamlRectorInterface
+final class EmailFinisherRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface
 {
     /**
      * @var string
@@ -39,7 +39,7 @@ final class EmailFinisherRector implements FormYamlRectorInterface
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(CurrentFileProvider $currentFileProvider)
+    public function __construct(\Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
     {
         $this->currentFileProvider = $currentFileProvider;
     }
@@ -62,15 +62,15 @@ final class EmailFinisherRector implements FormYamlRectorInterface
             }
         }
         $file = $this->currentFileProvider->getFile();
-        if (($appliedForFinishers || $appliedForVariants) && $file instanceof File) {
+        if (($appliedForFinishers || $appliedForVariants) && $file instanceof \Rector\Core\ValueObject\Application\File) {
             // TODO: How to get the line number of the file?
-            $file->addRectorClassWithLine(new RectorWithLineChange($this, 0));
+            $file->addRectorClassWithLine(new \Rector\ChangesReporting\ValueObject\RectorWithLineChange($this, 0));
         }
         return $yaml;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Convert single recipient values to array for EmailFinisher', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert single recipient values to array for EmailFinisher', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 finishers:
   -
     options:

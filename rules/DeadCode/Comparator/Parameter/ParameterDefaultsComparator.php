@@ -20,12 +20,12 @@ final class ParameterDefaultsComparator
      * @var \Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver
      */
     private $defaultParameterValueResolver;
-    public function __construct(NodeComparator $nodeComparator, DefaultParameterValueResolver $defaultParameterValueResolver)
+    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver $defaultParameterValueResolver)
     {
         $this->nodeComparator = $nodeComparator;
         $this->defaultParameterValueResolver = $defaultParameterValueResolver;
     }
-    public function areDefaultValuesDifferent(ParameterReflection $parameterReflection, Param $param) : bool
+    public function areDefaultValuesDifferent(\PHPStan\Reflection\ParameterReflection $parameterReflection, \PhpParser\Node\Param $param) : bool
     {
         if ($parameterReflection->getDefaultValue() === null && $param->default === null) {
             return \false;
@@ -38,7 +38,7 @@ final class ParameterDefaultsComparator
         $firstParameterValue = $this->defaultParameterValueResolver->resolveFromParameterReflection($parameterReflection);
         return !$this->nodeComparator->areNodesEqual($paramDefault, $firstParameterValue);
     }
-    private function isMutuallyExclusiveNull(ParameterReflection $parameterReflection, Param $param) : bool
+    private function isMutuallyExclusiveNull(\PHPStan\Reflection\ParameterReflection $parameterReflection, \PhpParser\Node\Param $param) : bool
     {
         if ($parameterReflection->getDefaultValue() === null && $param->default !== null) {
             return \true;

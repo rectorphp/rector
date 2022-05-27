@@ -13,16 +13,16 @@ final class ClassConstAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * Detects "SomeClass::class"
      */
-    public function isClassConstReference(Expr $expr, string $className) : bool
+    public function isClassConstReference(\PhpParser\Node\Expr $expr, string $className) : bool
     {
-        if (!$expr instanceof ClassConstFetch) {
+        if (!$expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($expr->name, 'class')) {

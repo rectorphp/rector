@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\StaticCallOnNonStaticToInstanceCallRectorTest
  */
-final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector implements MinPhpVersionInterface
+final class StaticCallOnNonStaticToInstanceCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -51,7 +51,7 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector imp
      * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
-    public function __construct(StaticAnalyzer $staticAnalyzer, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, ParentClassScopeResolver $parentClassScopeResolver)
+    public function __construct(\Rector\NodeCollector\StaticAnalyzer $staticAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)
     {
         $this->staticAnalyzer = $staticAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
@@ -60,11 +60,11 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector imp
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::INSTANCE_CALL;
+        return \Rector\Core\ValueObject\PhpVersionFeature::INSTANCE_CALL;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes static call to instance call, where not useful', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes static call to instance call, where not useful', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class Something
 {
     public function doWork()
@@ -103,14 +103,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->name instanceof Expr) {
+        if ($node->name instanceof \PhpParser\Node\Expr) {
             return null;
         }
         $methodName = $this->getName($node->name);
@@ -125,36 +125,36 @@ CODE_SAMPLE
             return null;
         }
         if ($this->isInstantiable($className)) {
-            $new = new New_($node->class);
-            return new MethodCall($new, $node->name, $node->args);
+            $new = new \PhpParser\Node\Expr\New_($node->class);
+            return new \PhpParser\Node\Expr\MethodCall($new, $node->name, $node->args);
         }
         return null;
     }
-    private function resolveStaticCallClassName(StaticCall $staticCall) : ?string
+    private function resolveStaticCallClassName(\PhpParser\Node\Expr\StaticCall $staticCall) : ?string
     {
-        if ($staticCall->class instanceof PropertyFetch) {
+        if ($staticCall->class instanceof \PhpParser\Node\Expr\PropertyFetch) {
             $objectType = $this->getType($staticCall->class);
-            if ($objectType instanceof ObjectType) {
+            if ($objectType instanceof \PHPStan\Type\ObjectType) {
                 return $objectType->getClassName();
             }
         }
         return $this->getName($staticCall->class);
     }
-    private function shouldSkip(string $methodName, string $className, StaticCall $staticCall) : bool
+    private function shouldSkip(string $methodName, string $className, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
         $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
         if ($isStaticMethod) {
             return \true;
         }
         $className = $this->getName($staticCall->class);
-        if (ObjectReference::isValid($className)) {
+        if (\Rector\Core\Enum\ObjectReference::isValid($className)) {
             return \true;
         }
         if ($className === 'class') {
             return \true;
         }
-        $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \true;
         }
         $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($scope);
@@ -166,13 +166,13 @@ CODE_SAMPLE
             return \false;
         }
         $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, '__callStatic', null);
-        if ($methodReflection instanceof MethodReflection) {
+        if ($methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return \false;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
         $nativeReflection = $classReflection->getNativeReflection();
         $reflectionMethod = $nativeReflection->getConstructor();
-        if (!$reflectionMethod instanceof ReflectionMethod) {
+        if (!$reflectionMethod instanceof \ReflectionMethod) {
             return \true;
         }
         if (!$reflectionMethod->isPublic()) {

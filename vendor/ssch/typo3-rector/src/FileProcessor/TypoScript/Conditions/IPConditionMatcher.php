@@ -5,7 +5,7 @@ namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
-final class IPConditionMatcher implements TyposcriptConditionMatcher
+final class IPConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
 {
     /**
      * @var string
@@ -17,7 +17,7 @@ final class IPConditionMatcher implements TyposcriptConditionMatcher
         if (!\is_array($matches)) {
             return $condition;
         }
-        $values = ArrayUtility::trimExplode(',', $matches[1], \true);
+        $values = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $matches[1], \true);
         return \sprintf('ip("%s")', \implode(',', $values));
     }
     public function shouldApply(string $condition) : bool

@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php55\Rector\FuncCall\PregReplaceEModifierRector\PregReplaceEModifierRectorTest
  */
-final class PregReplaceEModifierRector extends AbstractRector implements MinPhpVersionInterface
+final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -39,7 +39,7 @@ final class PregReplaceEModifierRector extends AbstractRector implements MinPhpV
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory, RegexMatcher $regexMatcher, ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory, \Rector\Php55\RegexMatcher $regexMatcher, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
         $this->regexMatcher = $regexMatcher;
@@ -47,11 +47,11 @@ final class PregReplaceEModifierRector extends AbstractRector implements MinPhpV
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::PREG_REPLACE_CALLBACK_E_MODIFIER;
+        return \Rector\Core\ValueObject\PhpVersionFeature::PREG_REPLACE_CALLBACK_E_MODIFIER;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('The /e modifier is no longer supported, use preg_replace_callback instead', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('The /e modifier is no longer supported, use preg_replace_callback instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -78,12 +78,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'preg_replace')) {
             return null;
@@ -95,17 +95,17 @@ CODE_SAMPLE
         $firstArgument = $node->args[0];
         $firstArgumentValue = $firstArgument->value;
         $patternWithoutE = $this->regexMatcher->resolvePatternExpressionWithoutEIfFound($firstArgumentValue);
-        if (!$patternWithoutE instanceof Expr) {
+        if (!$patternWithoutE instanceof \PhpParser\Node\Expr) {
             return null;
         }
         /** @var Arg $secondArgument */
         $secondArgument = $node->args[1];
         $secondArgumentValue = $secondArgument->value;
         $anonymousFunction = $this->anonymousFunctionFactory->createAnonymousFunctionFromString($secondArgumentValue);
-        if (!$anonymousFunction instanceof Closure) {
+        if (!$anonymousFunction instanceof \PhpParser\Node\Expr\Closure) {
             return null;
         }
-        $node->name = new Name('preg_replace_callback');
+        $node->name = new \PhpParser\Node\Name('preg_replace_callback');
         $firstArgument->value = $patternWithoutE;
         $secondArgument->value = $anonymousFunction;
         return $node;

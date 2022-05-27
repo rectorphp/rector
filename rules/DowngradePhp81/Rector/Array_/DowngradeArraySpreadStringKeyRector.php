@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector\DowngradeArraySpreadStringKeyRectorTest
  */
-final class DowngradeArraySpreadStringKeyRector extends AbstractScopeAwareRector
+final class DowngradeArraySpreadStringKeyRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -31,14 +31,14 @@ final class DowngradeArraySpreadStringKeyRector extends AbstractScopeAwareRector
      * @var \Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer
      */
     private $arraySpreadAnalyzer;
-    public function __construct(ArrayMergeFromArraySpreadFactory $arrayMergeFromArraySpreadFactory, ArraySpreadAnalyzer $arraySpreadAnalyzer)
+    public function __construct(\Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory $arrayMergeFromArraySpreadFactory, \Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer $arraySpreadAnalyzer)
     {
         $this->arrayMergeFromArraySpreadFactory = $arrayMergeFromArraySpreadFactory;
         $this->arraySpreadAnalyzer = $arraySpreadAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace array spread with string key to array_merge function', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace array spread with string key to array_merge function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $parts = ['a' => 'b'];
 $parts2 = ['c' => 'd'];
 
@@ -57,33 +57,33 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Array_::class];
+        return [\PhpParser\Node\Expr\Array_::class];
     }
     /**
      * @param Array_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
         if ($this->shouldSkipArray($node)) {
             return null;
         }
         return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope, $this->file);
     }
-    private function shouldSkipArray(Array_ $array) : bool
+    private function shouldSkipArray(\PhpParser\Node\Expr\Array_ $array) : bool
     {
         if (!$this->arraySpreadAnalyzer->isArrayWithUnpack($array)) {
             return \true;
         }
         foreach ($array->items as $item) {
-            if (!$item instanceof ArrayItem) {
+            if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             $type = $this->nodeTypeResolver->getType($item->value);
-            if (!$type instanceof ArrayType) {
+            if (!$type instanceof \PHPStan\Type\ArrayType) {
                 continue;
             }
             $keyType = $type->getKeyType();
-            if ($keyType instanceof IntegerType) {
+            if ($keyType instanceof \PHPStan\Type\IntegerType) {
                 return \true;
             }
         }

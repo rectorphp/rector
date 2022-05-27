@@ -13,6 +13,6 @@ namespace RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception;
 /**
  * Base OutOfBoundsException for Dependency Injection component.
  */
-class OutOfBoundsException extends \OutOfBoundsException implements ExceptionInterface
+class OutOfBoundsException extends \OutOfBoundsException implements \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\ExceptionInterface
 {
 }

@@ -13,32 +13,32 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\MethodCall\RedirectToRouteRector\RedirectToRouteRectorTest
  */
-final class RedirectToRouteRector extends AbstractRector
+final class RedirectToRouteRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
-    public function __construct(ControllerAnalyzer $controllerAnalyzer)
+    public function __construct(\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns redirect to route to short helper method in Controller in Symfony', [new CodeSample('$this->redirect($this->generateUrl("homepage"));', '$this->redirectToRoute("homepage");')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns redirect to route to short helper method in Controller in Symfony', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->redirect($this->generateUrl("homepage"));', '$this->redirectToRoute("homepage");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->controllerAnalyzer->isInsideController($node)) {
             return null;
@@ -50,11 +50,11 @@ final class RedirectToRouteRector extends AbstractRector
             return null;
         }
         $firstArg = $node->args[0];
-        if (!$firstArg instanceof Arg) {
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $argumentValue = $firstArg->value;
-        if (!$argumentValue instanceof MethodCall) {
+        if (!$argumentValue instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         if (!$this->isName($argumentValue->name, 'generateUrl')) {
@@ -65,14 +65,14 @@ final class RedirectToRouteRector extends AbstractRector
     /**
      * @return mixed[]
      */
-    private function resolveArguments(MethodCall $methodCall) : array
+    private function resolveArguments(\PhpParser\Node\Expr\MethodCall $methodCall) : array
     {
         $firstArg = $methodCall->args[0];
-        if (!$firstArg instanceof Arg) {
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
             return [];
         }
         $generateUrlNode = $firstArg->value;
-        if (!$generateUrlNode instanceof MethodCall) {
+        if (!$generateUrlNode instanceof \PhpParser\Node\Expr\MethodCall) {
             return [];
         }
         $arguments = [];

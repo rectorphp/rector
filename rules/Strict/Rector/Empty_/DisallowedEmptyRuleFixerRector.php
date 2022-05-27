@@ -17,21 +17,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector\DisallowedEmptyRuleFixerRectorTest
  */
-final class DisallowedEmptyRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
+final class DisallowedEmptyRuleFixerRector extends \Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector
 {
     /**
      * @readonly
      * @var \Rector\Strict\NodeFactory\ExactCompareFactory
      */
     private $exactCompareFactory;
-    public function __construct(ExactCompareFactory $exactCompareFactory)
+    public function __construct(\Rector\Strict\NodeFactory\ExactCompareFactory $exactCompareFactory)
     {
         $this->exactCompareFactory = $exactCompareFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\\Rules\\DisallowedConstructs\\DisallowedEmptyRule');
-        return new RuleDefinition($errorMessage, [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition($errorMessage, [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeEmptyArray
 {
     public function run(array $items)
@@ -56,22 +56,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Empty_::class, BooleanNot::class];
+        return [\PhpParser\Node\Expr\Empty_::class, \PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
      * @param Empty_|BooleanNot $node
      * @return \PhpParser\Node\Expr|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
-        if ($node instanceof BooleanNot) {
+        if ($node instanceof \PhpParser\Node\Expr\BooleanNot) {
             return $this->refactorBooleanNot($node, $scope);
         }
-        if ($node->expr instanceof ArrayDimFetch) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return null;
         }
         return $this->refactorEmpty($node, $scope, $this->treatAsNonEmpty);
@@ -79,9 +79,9 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Expr|null
      */
-    private function refactorBooleanNot(BooleanNot $booleanNot, Scope $scope)
+    private function refactorBooleanNot(\PhpParser\Node\Expr\BooleanNot $booleanNot, \PHPStan\Analyser\Scope $scope)
     {
-        if (!$booleanNot->expr instanceof Empty_) {
+        if (!$booleanNot->expr instanceof \PhpParser\Node\Expr\Empty_) {
             return null;
         }
         $empty = $booleanNot->expr;
@@ -91,7 +91,7 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Expr|null
      */
-    private function refactorEmpty(Empty_ $empty, Scope $scope, bool $treatAsNonEmpty)
+    private function refactorEmpty(\PhpParser\Node\Expr\Empty_ $empty, \PHPStan\Analyser\Scope $scope, bool $treatAsNonEmpty)
     {
         $exprType = $scope->getType($empty->expr);
         return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr, $treatAsNonEmpty);

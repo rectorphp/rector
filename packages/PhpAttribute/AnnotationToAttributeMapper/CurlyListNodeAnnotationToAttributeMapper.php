@@ -15,7 +15,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @implements AnnotationToAttributeMapperInterface<CurlyListNode>
  */
-final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttributeMapperInterface
+final class CurlyListNodeAnnotationToAttributeMapper implements \Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface
 {
     /**
      * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
@@ -25,7 +25,7 @@ final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttr
      * Avoid circular reference
      * @required
      */
-    public function autowire(AnnotationToAttributeMapper $annotationToAttributeMapper) : void
+    public function autowire(\Rector\PhpAttribute\AnnotationToAttributeMapper $annotationToAttributeMapper) : void
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
     }
@@ -34,7 +34,7 @@ final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttr
      */
     public function isCandidate($value) : bool
     {
-        return $value instanceof CurlyListNode;
+        return $value instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
     }
     /**
      * @param CurlyListNode $value
@@ -45,17 +45,17 @@ final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttr
         foreach ($value->getValuesWithExplicitSilentAndWithoutQuotes() as $key => $singleValue) {
             $valueExpr = $this->annotationToAttributeMapper->map($singleValue);
             // remove node
-            if ($valueExpr === DocTagNodeState::REMOVE_ARRAY) {
+            if ($valueExpr === \Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY) {
                 continue;
             }
-            Assert::isInstanceOf($valueExpr, Expr::class);
+            \RectorPrefix20220527\Webmozart\Assert\Assert::isInstanceOf($valueExpr, \PhpParser\Node\Expr::class);
             $keyExpr = null;
             if (!\is_int($key)) {
                 $keyExpr = $this->annotationToAttributeMapper->map($key);
-                Assert::isInstanceOf($keyExpr, Expr::class);
+                \RectorPrefix20220527\Webmozart\Assert\Assert::isInstanceOf($keyExpr, \PhpParser\Node\Expr::class);
             }
-            $arrayItems[] = new ArrayItem($valueExpr, $keyExpr);
+            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($valueExpr, $keyExpr);
         }
-        return new Array_($arrayItems);
+        return new \PhpParser\Node\Expr\Array_($arrayItems);
     }
 }

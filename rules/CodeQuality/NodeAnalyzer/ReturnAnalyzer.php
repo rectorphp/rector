@@ -13,14 +13,14 @@ final class ReturnAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function hasByRefReturn(Return_ $return) : bool
+    public function hasByRefReturn(\PhpParser\Node\Stmt\Return_ $return) : bool
     {
-        $parentFunctionLike = $this->betterNodeFinder->findParentType($return, FunctionLike::class);
-        if ($parentFunctionLike instanceof FunctionLike) {
+        $parentFunctionLike = $this->betterNodeFinder->findParentType($return, \PhpParser\Node\FunctionLike::class);
+        if ($parentFunctionLike instanceof \PhpParser\Node\FunctionLike) {
             return $parentFunctionLike->returnsByRef();
         }
         return \false;

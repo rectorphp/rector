@@ -5,6 +5,6 @@ namespace RectorPrefix20220527;
 
 use Rector\CakePHP\Set\CakePHPSetList;
 use Rector\Config\RectorConfig;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->sets([CakePHPSetList::CAKEPHP_30, CakePHPSetList::CAKEPHP_34]);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->sets([\Rector\CakePHP\Set\CakePHPSetList::CAKEPHP_30, \Rector\CakePHP\Set\CakePHPSetList::CAKEPHP_34]);
 };

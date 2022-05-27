@@ -12,9 +12,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AdditionalHeadersToArrayTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
 {
-    public function enterNode(Statement $statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof Assignment) {
+        if (!$statement instanceof \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;
         }
         if (\substr_compare($statement->object->relativeName, 'additionalHeaders', -\strlen('additionalHeaders')) !== 0) {
@@ -23,9 +23,9 @@ final class AdditionalHeadersToArrayTypoScriptRector extends \Ssch\TYPO3Rector\F
         $this->hasChanged = \true;
         $statement->object->relativeName = 'additionalHeaders.10.header';
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use array syntax for additionalHeaders', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use array syntax for additionalHeaders', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 config.additionalHeaders = Content-type:application/json
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

@@ -20,7 +20,7 @@ use RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class LazyCommand extends Command
+final class LazyCommand extends \RectorPrefix20220527\Symfony\Component\Console\Command\Command
 {
     private $command;
     /**
@@ -37,14 +37,14 @@ final class LazyCommand extends Command
     {
         $this->getCommand()->ignoreValidationErrors();
     }
-    public function setApplication(Application $application = null) : void
+    public function setApplication(\RectorPrefix20220527\Symfony\Component\Console\Application $application = null) : void
     {
         if ($this->command instanceof parent) {
             $this->command->setApplication($application);
         }
         parent::setApplication($application);
     }
-    public function setHelperSet(HelperSet $helperSet) : void
+    public function setHelperSet(\RectorPrefix20220527\Symfony\Component\Console\Helper\HelperSet $helperSet) : void
     {
         if ($this->command instanceof parent) {
             $this->command->setHelperSet($helperSet);
@@ -55,11 +55,11 @@ final class LazyCommand extends Command
     {
         return $this->isEnabled ?? $this->getCommand()->isEnabled();
     }
-    public function run(InputInterface $input, OutputInterface $output) : int
+    public function run(\RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         return $this->getCommand()->run($input, $output);
     }
-    public function complete(CompletionInput $input, CompletionSuggestions $suggestions) : void
+    public function complete(\RectorPrefix20220527\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20220527\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
     {
         $this->getCommand()->complete($input, $suggestions);
     }
@@ -87,11 +87,11 @@ final class LazyCommand extends Command
         $this->getCommand()->setDefinition($definition);
         return $this;
     }
-    public function getDefinition() : InputDefinition
+    public function getDefinition() : \RectorPrefix20220527\Symfony\Component\Console\Input\InputDefinition
     {
         return $this->getCommand()->getDefinition();
     }
-    public function getNativeDefinition() : InputDefinition
+    public function getNativeDefinition() : \RectorPrefix20220527\Symfony\Component\Console\Input\InputDefinition
     {
         return $this->getCommand()->getNativeDefinition();
     }

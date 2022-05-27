@@ -18,10 +18,10 @@ use RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Francesco Levorato <git@flevour.net>
  */
-final class ConsoleTerminateEvent extends ConsoleEvent
+final class ConsoleTerminateEvent extends \RectorPrefix20220527\Symfony\Component\Console\Event\ConsoleEvent
 {
     private int $exitCode;
-    public function __construct(Command $command, InputInterface $input, OutputInterface $output, int $exitCode)
+    public function __construct(\RectorPrefix20220527\Symfony\Component\Console\Command\Command $command, \RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output, int $exitCode)
     {
         parent::__construct($command, $input, $output);
         $this->setExitCode($exitCode);

@@ -38,7 +38,7 @@ final class ObjectToResourceReturn
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, NodeFactory $nodeFactory)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -48,9 +48,9 @@ final class ObjectToResourceReturn
     /**
      * @param string[] $collectionObjectToResource
      */
-    public function refactor(Instanceof_ $instanceof, array $collectionObjectToResource) : ?BooleanOr
+    public function refactor(\PhpParser\Node\Expr\Instanceof_ $instanceof, array $collectionObjectToResource) : ?\PhpParser\Node\Expr\BinaryOp\BooleanOr
     {
-        if (!$instanceof->class instanceof FullyQualified) {
+        if (!$instanceof->class instanceof \PhpParser\Node\Name\FullyQualified) {
             return null;
         }
         $className = $instanceof->class->toString();
@@ -58,22 +58,22 @@ final class ObjectToResourceReturn
             if ($singleCollectionObjectToResource !== $className) {
                 continue;
             }
-            $binaryOp = $this->betterNodeFinder->findParentType($instanceof, BinaryOp::class);
+            $binaryOp = $this->betterNodeFinder->findParentType($instanceof, \PhpParser\Node\Expr\BinaryOp::class);
             if ($this->hasIsResourceCheck($instanceof->expr, $binaryOp)) {
                 continue;
             }
-            return new BooleanOr($this->nodeFactory->createFuncCall('is_resource', [$instanceof->expr]), $instanceof);
+            return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($this->nodeFactory->createFuncCall('is_resource', [$instanceof->expr]), $instanceof);
         }
         return null;
     }
-    private function hasIsResourceCheck(Expr $expr, ?BinaryOp $binaryOp) : bool
+    private function hasIsResourceCheck(\PhpParser\Node\Expr $expr, ?\PhpParser\Node\Expr\BinaryOp $binaryOp) : bool
     {
-        if ($binaryOp instanceof BinaryOp) {
-            return (bool) $this->betterNodeFinder->findFirst($binaryOp, function (Node $subNode) use($expr) : bool {
-                if (!$subNode instanceof FuncCall) {
+        if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp) {
+            return (bool) $this->betterNodeFinder->findFirst($binaryOp, function (\PhpParser\Node $subNode) use($expr) : bool {
+                if (!$subNode instanceof \PhpParser\Node\Expr\FuncCall) {
                     return \false;
                 }
-                if (!$subNode->name instanceof Name) {
+                if (!$subNode->name instanceof \PhpParser\Node\Name) {
                     return \false;
                 }
                 if (!$this->nodeNameResolver->isName($subNode->name, 'is_resource')) {
@@ -82,7 +82,7 @@ final class ObjectToResourceReturn
                 if (!isset($subNode->args[0])) {
                     return \false;
                 }
-                if (!$subNode->args[0] instanceof Arg) {
+                if (!$subNode->args[0] instanceof \PhpParser\Node\Arg) {
                     return \false;
                 }
                 return $this->nodeComparator->areNodesEqual($subNode->args[0], $expr);

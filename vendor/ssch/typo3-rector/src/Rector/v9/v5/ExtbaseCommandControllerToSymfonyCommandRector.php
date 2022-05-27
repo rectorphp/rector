@@ -32,7 +32,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  * @changelog https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommandRector\ExtbaseCommandControllerToSymfonyCommandRectorTest
  */
-final class ExtbaseCommandControllerToSymfonyCommandRector extends AbstractRector
+final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -78,7 +78,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends AbstractRecto
      * @var \Ssch\TYPO3Rector\NodeAnalyzer\CommandMethodDecorator
      */
     private $commandMethodDecorator;
-    public function __construct(RectorParser $rectorParser, FilesFinder $filesFinder, SimplePhpParser $simplePhpParser, TemplateFinder $templateFinder, NodePrinterInterface $nodePrinter, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, CommandArrayDecorator $commandArrayDecorator, CommandMethodDecorator $commandMethodDecorator)
+    public function __construct(\Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Ssch\TYPO3Rector\NodeAnalyzer\CommandArrayDecorator $commandArrayDecorator, \Ssch\TYPO3Rector\NodeAnalyzer\CommandMethodDecorator $commandMethodDecorator)
     {
         $this->rectorParser = $rectorParser;
         $this->filesFinder = $filesFinder;
@@ -94,14 +94,14 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends AbstractRecto
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node, new ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\CommandController'))) {
+        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\CommandController'))) {
             return null;
         }
         $commandClassMethods = $this->findCommandMethods($node);
@@ -114,7 +114,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends AbstractRecto
         // This is super hacky, but for now i have no other idea to test it here
         $currentSmartFileInfo = $this->file->getSmartFileInfo();
         $extEmConfFileInfo = $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($currentSmartFileInfo);
-        if (!$extEmConfFileInfo instanceof SmartFileInfo) {
+        if (!$extEmConfFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
             return null;
         }
         $extensionDirectory = \dirname($extEmConfFileInfo->getRealPath());
@@ -126,7 +126,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends AbstractRecto
         // Collect all new commands
         $newCommandsWithFullQualifiedNamespace = [];
         foreach ($commandClassMethods as $commandMethod) {
-            if (!$commandMethod instanceof ClassMethod) {
+            if (!$commandMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 continue;
             }
             $commandMethodName = $this->getName($commandMethod->name);
@@ -139,18 +139,18 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends AbstractRecto
             $commandPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($commandMethod);
             $paramTags = $commandPhpDocInfo->getParamTagValueNodes();
             /** @var PhpDocTextNode[] $descriptionPhpDocNodes */
-            $descriptionPhpDocNodes = $commandPhpDocInfo->getByType(PhpDocTextNode::class);
+            $descriptionPhpDocNodes = $commandPhpDocInfo->getByType(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode::class);
             $methodParameters = $commandMethod->params;
             if (!isset($descriptionPhpDocNodes[0])) {
                 continue;
             }
             $commandDescription = $descriptionPhpDocNodes[0]->text;
             $commandTemplate = $this->templateFinder->getCommand();
-            $commandName = Strings::firstUpper($commandMethodName);
+            $commandName = \RectorPrefix20220527\Nette\Utils\Strings::firstUpper($commandMethodName);
             $commandContent = $commandTemplate->getContents();
             $filePath = \sprintf('%s/Classes/Command/%s.php', $extensionDirectory, $commandName);
             // Do not overwrite existing file
-            if (\file_exists($filePath) && !StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            if (\file_exists($filePath) && !\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 continue;
             }
             $commandVariables = $this->createCommandVariables($commandNamespace, $commandName, $commandDescription, $commandMethod);
@@ -159,15 +159,15 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends AbstractRecto
             $commandContent = \str_replace(\array_keys($commandVariables), $commandVariables, $commandContent);
             $stmts = $this->simplePhpParser->parseString($commandContent);
             $inputArguments = $this->createInputArguments($methodParameters, $paramTags);
-            $this->traverseNodesWithCallable($stmts, function (Node $node) use($inputArguments) {
-                if (!$node instanceof ClassMethod) {
+            $this->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use($inputArguments) {
+                if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
                     return null;
                 }
                 $this->commandMethodDecorator->decorate($node, $inputArguments);
             });
             $changedSetConfigContent = $this->nodePrinter->prettyPrintFile($stmts);
-            $this->removedAndAddedFilesCollector->addAddedFile(new AddedFileWithContent($filePath, $changedSetConfigContent));
-            $newCommandName = \sprintf('%s:%s', Strings::lower($vendorName), Strings::lower($commandName));
+            $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($filePath, $changedSetConfigContent));
+            $newCommandName = \sprintf('%s:%s', \RectorPrefix20220527\Nette\Utils\Strings::lower($vendorName), \RectorPrefix20220527\Nette\Utils\Strings::lower($commandName));
             $newCommandsWithFullQualifiedNamespace[$newCommandName] = \sprintf('%s\\%s', $commandNamespace, $commandName);
         }
         $this->addNewCommandsToCommandsFile($commandsFilePath, $newCommandsWithFullQualifiedNamespace);
@@ -176,9 +176,9 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends AbstractRecto
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Migrate from extbase CommandController to Symfony Command', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate from extbase CommandController to Symfony Command', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Mvc\Controller\CommandController;
 
 final class TestCommand extends CommandController
@@ -218,9 +218,9 @@ CODE_SAMPLE
     /**
      * @return ClassMethod[]
      */
-    private function findCommandMethods(Class_ $class) : array
+    private function findCommandMethods(\PhpParser\Node\Stmt\Class_ $class) : array
     {
-        return \array_filter($class->getMethods(), function (ClassMethod $classMethod) {
+        return \array_filter($class->getMethods(), function (\PhpParser\Node\Stmt\ClassMethod $classMethod) {
             if (!$classMethod->isPublic()) {
                 return \false;
             }
@@ -233,23 +233,23 @@ CODE_SAMPLE
     private function addNewCommandsToCommandsFile(string $commandsFilePath, array $newCommandsWithFullQualifiedNamespace) : void
     {
         if (\file_exists($commandsFilePath)) {
-            $commandsSmartFileInfo = new SmartFileInfo($commandsFilePath);
+            $commandsSmartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($commandsFilePath);
             $stmts = $this->rectorParser->parseFile($commandsSmartFileInfo);
-            $this->traverseNodesWithCallable($stmts, function (Node $node) use($newCommandsWithFullQualifiedNamespace) {
-                if (!$node instanceof Array_) {
+            $this->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use($newCommandsWithFullQualifiedNamespace) {
+                if (!$node instanceof \PhpParser\Node\Expr\Array_) {
                     return null;
                 }
                 $this->commandArrayDecorator->decorateArray($node, $newCommandsWithFullQualifiedNamespace);
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CHILDREN;
             });
         } else {
-            $array = new Array_();
+            $array = new \PhpParser\Node\Expr\Array_();
             $this->commandArrayDecorator->decorateArray($array, $newCommandsWithFullQualifiedNamespace);
-            $stmts = [new Return_($array)];
+            $stmts = [new \PhpParser\Node\Stmt\Return_($array)];
         }
         $changedCommandsContent = $this->nodePrinter->prettyPrintFile($stmts);
-        $changedCommandsContent = Strings::replace($changedCommandsContent, self::REMOVE_EMPTY_LINES, '');
-        $this->removedAndAddedFilesCollector->addAddedFile(new AddedFileWithContent($commandsFilePath, $changedCommandsContent));
+        $changedCommandsContent = \RectorPrefix20220527\Nette\Utils\Strings::replace($changedCommandsContent, self::REMOVE_EMPTY_LINES, '');
+        $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($commandsFilePath, $changedCommandsContent));
     }
     /**
      * @param array<int, Node\Param> $methodParameters
@@ -265,14 +265,14 @@ CODE_SAMPLE
             if (null === $methodParamName) {
                 continue;
             }
-            $inputArguments[$methodParamName] = ['name' => $methodParamName, 'description' => null !== $paramTag ? $paramTag->description : '', 'mode' => null !== $methodParameter->default ? InputArgument::OPTIONAL : InputArgument::REQUIRED, 'default' => $methodParameter->default];
+            $inputArguments[$methodParamName] = ['name' => $methodParamName, 'description' => null !== $paramTag ? $paramTag->description : '', 'mode' => null !== $methodParameter->default ? \RectorPrefix20220527\Symfony\Component\Console\Input\InputArgument::OPTIONAL : \RectorPrefix20220527\Symfony\Component\Console\Input\InputArgument::REQUIRED, 'default' => $methodParameter->default];
         }
         return $inputArguments;
     }
     /**
      * @return array<string, mixed>
      */
-    private function createCommandVariables(string $commandNamespace, string $commandName, string $commandDescription, ClassMethod $commandMethod) : array
+    private function createCommandVariables(string $commandNamespace, string $commandName, string $commandDescription, \PhpParser\Node\Stmt\ClassMethod $commandMethod) : array
     {
         return ['__TEMPLATE_NAMESPACE__' => \ltrim($commandNamespace, '\\'), '__TEMPLATE_COMMAND_NAME__' => $commandName, '__TEMPLATE_DESCRIPTION__' => $commandDescription, '__TEMPLATE_COMMAND_BODY__' => $this->nodePrinter->prettyPrint((array) $commandMethod->stmts)];
     }

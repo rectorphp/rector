@@ -16,11 +16,11 @@ final class StmtManipulator
     {
         $normalizedStmts = [];
         foreach ($stmts as $stmt) {
-            if ($stmt instanceof Expression) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 $normalizedStmts[] = $stmt;
                 continue;
             }
-            $normalizedStmts[] = new Expression($stmt);
+            $normalizedStmts[] = new \PhpParser\Node\Stmt\Expression($stmt);
         }
         return $normalizedStmts;
     }

@@ -12,7 +12,7 @@ final class VersionGuard
      * @var \Composer\Semver\VersionParser
      */
     private $versionParser;
-    public function __construct(VersionParser $versionParser)
+    public function __construct(\RectorPrefix20220527\Composer\Semver\VersionParser $versionParser)
     {
         $this->versionParser = $versionParser;
     }

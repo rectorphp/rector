@@ -23,22 +23,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @changelog https://www.php.net/setcookie https://wiki.php.net/rfc/same-site-cookie
  */
-final class SetCookieRector extends AbstractRector implements MinPhpVersionInterface
+final class SetCookieRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * Conversion table from argument index to options name
      * @var array<int, string>
      */
     private const KNOWN_OPTIONS = [2 => 'expires', 3 => 'path', 4 => 'domain', 5 => 'secure', 6 => 'httponly'];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Convert setcookie argument to PHP7.3 option array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert setcookie argument to PHP7.3 option array', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 setcookie('name', $value, 360);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 setcookie('name', $value, ['expires' => 360]);
 CODE_SAMPLE
-), new CodeSample(<<<'CODE_SAMPLE'
+), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 setcookie('name', $name, 0, '', '', true, true);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -51,12 +51,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -66,9 +66,9 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::SETCOOKIE_ACCEPT_ARRAY_OPTIONS;
+        return \Rector\Core\ValueObject\PhpVersionFeature::SETCOOKIE_ACCEPT_ARRAY_OPTIONS;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         if (!$this->isNames($funcCall, ['setcookie', 'setrawcookie'])) {
             return \true;
@@ -77,18 +77,18 @@ CODE_SAMPLE
         if ($argsCount <= 2) {
             return \true;
         }
-        if ($funcCall->args[2] instanceof Arg && $funcCall->args[2]->value instanceof Array_) {
+        if ($funcCall->args[2] instanceof \PhpParser\Node\Arg && $funcCall->args[2]->value instanceof \PhpParser\Node\Expr\Array_) {
             return \true;
         }
         if ($argsCount === 3) {
-            return $funcCall->args[2] instanceof Arg && $funcCall->args[2]->value instanceof Variable;
+            return $funcCall->args[2] instanceof \PhpParser\Node\Arg && $funcCall->args[2]->value instanceof \PhpParser\Node\Expr\Variable;
         }
         return \false;
     }
     /**
      * @return Arg[]|VariadicPlaceholder[]
      */
-    private function composeNewArgs(FuncCall $funcCall) : array
+    private function composeNewArgs(\PhpParser\Node\Expr\FuncCall $funcCall) : array
     {
         $items = [];
         $args = $funcCall->args;
@@ -98,10 +98,10 @@ CODE_SAMPLE
         unset($args[0]);
         unset($args[1]);
         foreach ($args as $idx => $arg) {
-            $newKey = new String_(self::KNOWN_OPTIONS[$idx]);
-            $items[] = new ArrayItem($arg->value, $newKey);
+            $newKey = new \PhpParser\Node\Scalar\String_(self::KNOWN_OPTIONS[$idx]);
+            $items[] = new \PhpParser\Node\Expr\ArrayItem($arg->value, $newKey);
         }
-        $newArgs[] = new Arg(new Array_($items));
+        $newArgs[] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Array_($items));
         return $newArgs;
     }
 }

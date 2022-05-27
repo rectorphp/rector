@@ -5,7 +5,7 @@ namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
-final class ApplicationContextConditionMatcher implements TyposcriptConditionMatcher
+final class ApplicationContextConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
 {
     /**
      * @var string
@@ -17,7 +17,7 @@ final class ApplicationContextConditionMatcher implements TyposcriptConditionMat
         if (!\is_array($matches)) {
             return $condition;
         }
-        $values = ArrayUtility::trimExplode(',', $matches[1], \true);
+        $values = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $matches[1], \true);
         $newConditions = [];
         foreach ($values as $value) {
             if ($this->isRegularExpression($value)) {

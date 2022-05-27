@@ -13,6 +13,6 @@ namespace RectorPrefix20220527\Symfony\Component\Filesystem\Exception;
 /**
  * @author Théo Fidry <theo.fidry@gmail.com>
  */
-class RuntimeException extends \RuntimeException implements ExceptionInterface
+class RuntimeException extends \RuntimeException implements \RectorPrefix20220527\Symfony\Component\Filesystem\Exception\ExceptionInterface
 {
 }

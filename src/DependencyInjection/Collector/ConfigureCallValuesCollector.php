@@ -28,8 +28,8 @@ final class ConfigureCallValuesCollector
     private $symfonyStyle;
     public function __construct()
     {
-        $this->parametersMerger = new ParametersMerger();
-        $symfonyStyleFactory = new SymfonyStyleFactory();
+        $this->parametersMerger = new \RectorPrefix20220527\Symplify\PackageBuilder\Yaml\ParametersMerger();
+        $symfonyStyleFactory = new \RectorPrefix20220527\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory();
         $this->symfonyStyle = $symfonyStyleFactory->create();
     }
     /**
@@ -42,7 +42,7 @@ final class ConfigureCallValuesCollector
     /**
      * @param class-string<ConfigurableRectorInterface> $className
      */
-    public function collectFromServiceAndClassName(string $className, Definition $definition) : void
+    public function collectFromServiceAndClassName(string $className, \RectorPrefix20220527\Symfony\Component\DependencyInjection\Definition $definition) : void
     {
         foreach ($definition->getMethodCalls() as $methodCall) {
             if ($methodCall[0] !== 'configure') {
@@ -65,7 +65,7 @@ final class ConfigureCallValuesCollector
                 if (\is_string($firstKey) && \is_array($configureValue[$firstKey])) {
                     // has class some public constants?
                     // fixes bug when 1 item is unwrapped and treated as constant key, without rule having public constant
-                    $classReflection = new ReflectionClass($rectorClass);
+                    $classReflection = new \ReflectionClass($rectorClass);
                     $reflectionClassConstants = $classReflection->getReflectionConstants();
                     $result = [];
                     \array_walk($reflectionClassConstants, function ($value) use(&$result) {

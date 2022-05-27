@@ -24,7 +24,7 @@ use RectorPrefix20220527\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ContainerConfigurator extends AbstractConfigurator
+class ContainerConfigurator extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     public const FACTORY = 'container';
     private $container;
@@ -49,7 +49,7 @@ class ContainerConfigurator extends AbstractConfigurator
      * @var string|null
      */
     private $env;
-    public function __construct(ContainerBuilder $container, PhpFileLoader $loader, array &$instanceof, string $path, string $file, string $env = null)
+    public function __construct(\RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerBuilder $container, \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\PhpFileLoader $loader, array &$instanceof, string $path, string $file, string $env = null)
     {
         $this->container = $container;
         $this->loader = $loader;
@@ -61,10 +61,10 @@ class ContainerConfigurator extends AbstractConfigurator
     public final function extension(string $namespace, array $config)
     {
         if (!$this->container->hasExtension($namespace)) {
-            $extensions = \array_filter(\array_map(function (ExtensionInterface $ext) {
+            $extensions = \array_filter(\array_map(function (\RectorPrefix20220527\Symfony\Component\DependencyInjection\Extension\ExtensionInterface $ext) {
                 return $ext->getAlias();
             }, $this->container->getExtensions()));
-            throw new InvalidArgumentException(\sprintf('There is no extension able to load the configuration for "%s" (in "%s"). Looked for namespace "%s", found "%s".', $namespace, $this->file, $namespace, $extensions ? \implode('", "', $extensions) : 'none'));
+            throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('There is no extension able to load the configuration for "%s" (in "%s"). Looked for namespace "%s", found "%s".', $namespace, $this->file, $namespace, $extensions ? \implode('", "', $extensions) : 'none'));
         }
         $this->container->loadFromExtension($namespace, static::processValue($config));
     }
@@ -76,13 +76,13 @@ class ContainerConfigurator extends AbstractConfigurator
         $this->loader->setCurrentDir(\dirname($this->path));
         $this->loader->import($resource, $type, $ignoreErrors, $this->file);
     }
-    public final function parameters() : ParametersConfigurator
+    public final function parameters() : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\ParametersConfigurator
     {
-        return new ParametersConfigurator($this->container);
+        return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\ParametersConfigurator($this->container);
     }
-    public final function services() : ServicesConfigurator
+    public final function services() : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator
     {
-        return new ServicesConfigurator($this->container, $this->loader, $this->instanceof, $this->path, $this->anonymousCount);
+        return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator($this->container, $this->loader, $this->instanceof, $this->path, $this->anonymousCount);
     }
     /**
      * Get the current environment to be able to write conditional configuration.
@@ -109,81 +109,81 @@ class ContainerConfigurator extends AbstractConfigurator
 /**
  * Creates a parameter.
  */
-function param(string $name) : ParamConfigurator
+function param(string $name) : \RectorPrefix20220527\Symfony\Component\Config\Loader\ParamConfigurator
 {
-    return new ParamConfigurator($name);
+    return new \RectorPrefix20220527\Symfony\Component\Config\Loader\ParamConfigurator($name);
 }
 /**
  * Creates a reference to a service.
  */
-function service(string $serviceId) : ReferenceConfigurator
+function service(string $serviceId) : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator
 {
-    return new ReferenceConfigurator($serviceId);
+    return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator($serviceId);
 }
 /**
  * Creates an inline service.
  */
-function inline_service(string $class = null) : InlineServiceConfigurator
+function inline_service(string $class = null) : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
 {
-    return new InlineServiceConfigurator(new Definition($class));
+    return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator(new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Definition($class));
 }
 /**
  * Creates a service locator.
  *
  * @param ReferenceConfigurator[] $values
  */
-function service_locator(array $values) : ServiceLocatorArgument
+function service_locator(array $values) : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument
 {
-    return new ServiceLocatorArgument(AbstractConfigurator::processValue($values, \true));
+    return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument(\RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator::processValue($values, \true));
 }
 /**
  * Creates a lazy iterator.
  *
  * @param ReferenceConfigurator[] $values
  */
-function iterator(array $values) : IteratorArgument
+function iterator(array $values) : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\IteratorArgument
 {
-    return new IteratorArgument(AbstractConfigurator::processValue($values, \true));
+    return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\IteratorArgument(\RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator::processValue($values, \true));
 }
 /**
  * Creates a lazy iterator by tag name.
  */
-function tagged_iterator(string $tag, string $indexAttribute = null, string $defaultIndexMethod = null, string $defaultPriorityMethod = null) : TaggedIteratorArgument
+function tagged_iterator(string $tag, string $indexAttribute = null, string $defaultIndexMethod = null, string $defaultPriorityMethod = null) : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument
 {
-    return new TaggedIteratorArgument($tag, $indexAttribute, $defaultIndexMethod, \false, $defaultPriorityMethod);
+    return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($tag, $indexAttribute, $defaultIndexMethod, \false, $defaultPriorityMethod);
 }
 /**
  * Creates a service locator by tag name.
  */
-function tagged_locator(string $tag, string $indexAttribute = null, string $defaultIndexMethod = null, string $defaultPriorityMethod = null) : ServiceLocatorArgument
+function tagged_locator(string $tag, string $indexAttribute = null, string $defaultIndexMethod = null, string $defaultPriorityMethod = null) : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument
 {
-    return new ServiceLocatorArgument(new TaggedIteratorArgument($tag, $indexAttribute, $defaultIndexMethod, \true, $defaultPriorityMethod));
+    return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument(new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($tag, $indexAttribute, $defaultIndexMethod, \true, $defaultPriorityMethod));
 }
 /**
  * Creates an expression.
  */
-function expr(string $expression) : Expression
+function expr(string $expression) : \RectorPrefix20220527\Symfony\Component\ExpressionLanguage\Expression
 {
-    return new Expression($expression);
+    return new \RectorPrefix20220527\Symfony\Component\ExpressionLanguage\Expression($expression);
 }
 /**
  * Creates an abstract argument.
  */
-function abstract_arg(string $description) : AbstractArgument
+function abstract_arg(string $description) : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\AbstractArgument
 {
-    return new AbstractArgument($description);
+    return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\AbstractArgument($description);
 }
 /**
  * Creates an environment variable reference.
  */
-function env(string $name) : EnvConfigurator
+function env(string $name) : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\EnvConfigurator
 {
-    return new EnvConfigurator($name);
+    return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\EnvConfigurator($name);
 }
 /**
  * Creates a closure service reference.
  */
-function service_closure(string $serviceId) : ClosureReferenceConfigurator
+function service_closure(string $serviceId) : \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\ClosureReferenceConfigurator
 {
-    return new ClosureReferenceConfigurator($serviceId);
+    return new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\ClosureReferenceConfigurator($serviceId);
 }

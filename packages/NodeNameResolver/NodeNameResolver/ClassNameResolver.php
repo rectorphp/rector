@@ -12,7 +12,7 @@ use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeNameResolverInterface<ClassLike>
  */
-final class ClassNameResolver implements NodeNameResolverInterface
+final class ClassNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -21,20 +21,20 @@ final class ClassNameResolver implements NodeNameResolverInterface
     /**
      * @required
      */
-    public function autowire(NodeNameResolver $nodeNameResolver) : void
+    public function autowire(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     public function getNode() : string
     {
-        return ClassLike::class;
+        return \PhpParser\Node\Stmt\ClassLike::class;
     }
     /**
      * @param ClassLike $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
-        if ($node->namespacedName instanceof Name) {
+        if ($node->namespacedName instanceof \PhpParser\Node\Name) {
             return $node->namespacedName->toString();
         }
         if ($node->name === null) {

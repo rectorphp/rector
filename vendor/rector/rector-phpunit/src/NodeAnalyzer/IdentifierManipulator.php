@@ -24,7 +24,7 @@ final class IdentifierManipulator
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -38,7 +38,7 @@ final class IdentifierManipulator
         if (!\is_string($oldNodeMethodName)) {
             return \false;
         }
-        $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
+        $node->name = new \PhpParser\Node\Identifier($renameMethodMap[$oldNodeMethodName]);
         return \true;
     }
     /**
@@ -46,7 +46,7 @@ final class IdentifierManipulator
      */
     private function resolveOldMethodName($node) : ?string
     {
-        if ($node instanceof StaticCall || $node instanceof MethodCall) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall || $node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->nodeNameResolver->getName($node->name);
         }
         return $this->nodeNameResolver->getName($node);

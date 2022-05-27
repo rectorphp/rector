@@ -25,7 +25,7 @@ use SplObjectStorage;
  * @see https://gist.github.com/1688204
  * @deprecated 1.2.0, use [`ExtEvLoop`](#extevloop) instead.
  */
-final class ExtLibevLoop implements LoopInterface
+final class ExtLibevLoop implements \RectorPrefix20220527\React\EventLoop\LoopInterface
 {
     private $loop;
     private $futureTickQueue;
@@ -38,12 +38,12 @@ final class ExtLibevLoop implements LoopInterface
     public function __construct()
     {
         if (!\class_exists('RectorPrefix20220527\\libev\\EventLoop', \false)) {
-            throw new BadMethodCallException('Cannot create ExtLibevLoop, ext-libev extension missing');
+            throw new \BadMethodCallException('Cannot create ExtLibevLoop, ext-libev extension missing');
         }
-        $this->loop = new EventLoop();
-        $this->futureTickQueue = new FutureTickQueue();
-        $this->timerEvents = new SplObjectStorage();
-        $this->signals = new SignalsHandler();
+        $this->loop = new \RectorPrefix20220527\libev\EventLoop();
+        $this->futureTickQueue = new \RectorPrefix20220527\React\EventLoop\Tick\FutureTickQueue();
+        $this->timerEvents = new \SplObjectStorage();
+        $this->signals = new \RectorPrefix20220527\React\EventLoop\SignalsHandler();
     }
     public function addReadStream($stream, $listener)
     {
@@ -53,7 +53,7 @@ final class ExtLibevLoop implements LoopInterface
         $callback = function () use($stream, $listener) {
             \call_user_func($listener, $stream);
         };
-        $event = new IOEvent($callback, $stream, IOEvent::READ);
+        $event = new \RectorPrefix20220527\libev\IOEvent($callback, $stream, \RectorPrefix20220527\libev\IOEvent::READ);
         $this->loop->add($event);
         $this->readEvents[(int) $stream] = $event;
     }
@@ -65,7 +65,7 @@ final class ExtLibevLoop implements LoopInterface
         $callback = function () use($stream, $listener) {
             \call_user_func($listener, $stream);
         };
-        $event = new IOEvent($callback, $stream, IOEvent::WRITE);
+        $event = new \RectorPrefix20220527\libev\IOEvent($callback, $stream, \RectorPrefix20220527\libev\IOEvent::WRITE);
         $this->loop->add($event);
         $this->writeEvents[(int) $stream] = $event;
     }
@@ -89,7 +89,7 @@ final class ExtLibevLoop implements LoopInterface
     }
     public function addTimer($interval, $callback)
     {
-        $timer = new Timer($interval, $callback, \false);
+        $timer = new \RectorPrefix20220527\React\EventLoop\Timer\Timer($interval, $callback, \false);
         $that = $this;
         $timers = $this->timerEvents;
         $callback = function () use($timer, $timers, $that) {
@@ -98,23 +98,23 @@ final class ExtLibevLoop implements LoopInterface
                 $that->cancelTimer($timer);
             }
         };
-        $event = new TimerEvent($callback, $timer->getInterval());
+        $event = new \RectorPrefix20220527\libev\TimerEvent($callback, $timer->getInterval());
         $this->timerEvents->attach($timer, $event);
         $this->loop->add($event);
         return $timer;
     }
     public function addPeriodicTimer($interval, $callback)
     {
-        $timer = new Timer($interval, $callback, \true);
+        $timer = new \RectorPrefix20220527\React\EventLoop\Timer\Timer($interval, $callback, \true);
         $callback = function () use($timer) {
             \call_user_func($timer->getCallback(), $timer);
         };
-        $event = new TimerEvent($callback, $timer->getInterval(), $timer->getInterval());
+        $event = new \RectorPrefix20220527\libev\TimerEvent($callback, $timer->getInterval(), $timer->getInterval());
         $this->timerEvents->attach($timer, $event);
         $this->loop->add($event);
         return $timer;
     }
-    public function cancelTimer(TimerInterface $timer)
+    public function cancelTimer(\RectorPrefix20220527\React\EventLoop\TimerInterface $timer)
     {
         if (isset($this->timerEvents[$timer])) {
             $this->loop->remove($this->timerEvents[$timer]);
@@ -130,7 +130,7 @@ final class ExtLibevLoop implements LoopInterface
         $this->signals->add($signal, $listener);
         if (!isset($this->signalEvents[$signal])) {
             $signals = $this->signals;
-            $this->signalEvents[$signal] = new SignalEvent(function () use($signals, $signal) {
+            $this->signalEvents[$signal] = new \RectorPrefix20220527\libev\SignalEvent(function () use($signals, $signal) {
                 $signals->call($signal);
             }, $signal);
             $this->loop->add($this->signalEvents[$signal]);
@@ -150,9 +150,9 @@ final class ExtLibevLoop implements LoopInterface
         $this->running = \true;
         while ($this->running) {
             $this->futureTickQueue->tick();
-            $flags = EventLoop::RUN_ONCE;
+            $flags = \RectorPrefix20220527\libev\EventLoop::RUN_ONCE;
             if (!$this->running || !$this->futureTickQueue->isEmpty()) {
-                $flags |= EventLoop::RUN_NOWAIT;
+                $flags |= \RectorPrefix20220527\libev\EventLoop::RUN_NOWAIT;
             } elseif (!$this->readEvents && !$this->writeEvents && !$this->timerEvents->count() && $this->signals->isEmpty()) {
                 break;
             }

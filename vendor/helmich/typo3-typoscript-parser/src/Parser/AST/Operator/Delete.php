@@ -13,6 +13,6 @@ namespace RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-class Delete extends UnaryOperator
+class Delete extends \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\UnaryOperator
 {
 }

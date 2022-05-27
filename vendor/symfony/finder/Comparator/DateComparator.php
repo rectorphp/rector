@@ -15,7 +15,7 @@ namespace RectorPrefix20220527\Symfony\Component\Finder\Comparator;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class DateComparator extends Comparator
+class DateComparator extends \RectorPrefix20220527\Symfony\Component\Finder\Comparator\Comparator
 {
     /**
      * @param string $test A comparison string

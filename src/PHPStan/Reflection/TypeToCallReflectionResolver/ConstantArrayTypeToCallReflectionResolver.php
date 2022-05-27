@@ -19,28 +19,28 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
  *
  * @implements TypeToCallReflectionResolverInterface<ConstantArrayType>
  */
-final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallReflectionResolverInterface
+final class ConstantArrayTypeToCallReflectionResolver implements \Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface
 {
     /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function supports(Type $type) : bool
+    public function supports(\PHPStan\Type\Type $type) : bool
     {
-        return $type instanceof ConstantArrayType;
+        return $type instanceof \PHPStan\Type\Constant\ConstantArrayType;
     }
     /**
      * @param ConstantArrayType $type
      */
-    public function resolve(Type $type, Scope $scope) : ?MethodReflection
+    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope) : ?\PHPStan\Reflection\MethodReflection
     {
         $constantArrayTypeAndMethod = $this->findTypeAndMethodName($type);
-        if (!$constantArrayTypeAndMethod instanceof ConstantArrayTypeAndMethod) {
+        if (!$constantArrayTypeAndMethod instanceof \PHPStan\Type\Constant\ConstantArrayTypeAndMethod) {
             return null;
         }
         if ($constantArrayTypeAndMethod->isUnknown()) {
@@ -59,7 +59,7 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
     /**
      * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/Constant/ConstantArrayType.php#L209
      */
-    private function findTypeAndMethodName(ConstantArrayType $constantArrayType) : ?ConstantArrayTypeAndMethod
+    private function findTypeAndMethodName(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : ?\PHPStan\Type\Constant\ConstantArrayTypeAndMethod
     {
         if (!$this->areKeyTypesValid($constantArrayType)) {
             return null;
@@ -69,37 +69,37 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
         }
         $classOrObjectType = $constantArrayType->getValueTypes()[0];
         $methodType = $constantArrayType->getValueTypes()[1];
-        if (!$methodType instanceof ConstantStringType) {
-            return ConstantArrayTypeAndMethod::createUnknown();
+        if (!$methodType instanceof \PHPStan\Type\Constant\ConstantStringType) {
+            return \PHPStan\Type\Constant\ConstantArrayTypeAndMethod::createUnknown();
         }
-        $objectWithoutClassType = new ObjectWithoutClassType();
-        if ($classOrObjectType instanceof ConstantStringType) {
+        $objectWithoutClassType = new \PHPStan\Type\ObjectWithoutClassType();
+        if ($classOrObjectType instanceof \PHPStan\Type\Constant\ConstantStringType) {
             $value = $classOrObjectType->getValue();
             if (!$this->reflectionProvider->hasClass($value)) {
-                return ConstantArrayTypeAndMethod::createUnknown();
+                return \PHPStan\Type\Constant\ConstantArrayTypeAndMethod::createUnknown();
             }
             $classReflection = $this->reflectionProvider->getClass($value);
-            $type = new ObjectType($classReflection->getName());
+            $type = new \PHPStan\Type\ObjectType($classReflection->getName());
         } elseif ($objectWithoutClassType->isSuperTypeOf($classOrObjectType)->yes()) {
             $type = $classOrObjectType;
         } else {
-            return ConstantArrayTypeAndMethod::createUnknown();
+            return \PHPStan\Type\Constant\ConstantArrayTypeAndMethod::createUnknown();
         }
         $trinaryLogic = $type->hasMethod($methodType->getValue());
         if (!$trinaryLogic->no()) {
-            return ConstantArrayTypeAndMethod::createConcrete($type, $methodType->getValue(), $trinaryLogic);
+            return \PHPStan\Type\Constant\ConstantArrayTypeAndMethod::createConcrete($type, $methodType->getValue(), $trinaryLogic);
         }
         return null;
     }
-    private function areKeyTypesValid(ConstantArrayType $constantArrayType) : bool
+    private function areKeyTypesValid(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : bool
     {
         $keyTypes = $constantArrayType->getKeyTypes();
         if (\count($keyTypes) !== 2) {
             return \false;
         }
-        if ($keyTypes[0]->isSuperTypeOf(new ConstantIntegerType(0))->no()) {
+        if ($keyTypes[0]->isSuperTypeOf(new \PHPStan\Type\Constant\ConstantIntegerType(0))->no()) {
             return \false;
         }
-        return !$keyTypes[1]->isSuperTypeOf(new ConstantIntegerType(1))->no();
+        return !$keyTypes[1]->isSuperTypeOf(new \PHPStan\Type\Constant\ConstantIntegerType(1))->no();
     }
 }

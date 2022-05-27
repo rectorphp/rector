@@ -19,15 +19,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector\IsObjectOnIncompleteClassRectorTest
  */
-final class IsObjectOnIncompleteClassRector extends AbstractRector implements MinPhpVersionInterface
+final class IsObjectOnIncompleteClassRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::INVERTED_BOOL_IS_OBJECT_INCOMPLETE_CLASS;
+        return \Rector\Core\ValueObject\PhpVersionFeature::INVERTED_BOOL_IS_OBJECT_INCOMPLETE_CLASS;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Incomplete class returns inverted bool on is_object()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Incomplete class returns inverted bool on is_object()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = is_object($incompleteObject);
 CODE_SAMPLE
@@ -42,21 +42,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'is_object')) {
             return null;
         }
-        $incompleteClassObjectType = new ObjectType('__PHP_Incomplete_Class');
+        $incompleteClassObjectType = new \PHPStan\Type\ObjectType('__PHP_Incomplete_Class');
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof Arg) {
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         if (!$this->isObjectType($node->args[0]->value, $incompleteClassObjectType)) {
@@ -65,11 +65,11 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        return new BooleanNot($node);
+        return new \PhpParser\Node\Expr\BooleanNot($node);
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
-        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentNode instanceof BooleanNot;
+        $parentNode = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        return $parentNode instanceof \PhpParser\Node\Expr\BooleanNot;
     }
 }

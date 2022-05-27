@@ -17,7 +17,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\RectorGenerator\Tests\RectorGenerator\GenerateCommandInteractiveModeTest
  */
-final class GenerateCommand extends Command
+final class GenerateCommand extends \RectorPrefix20220527\Symfony\Component\Console\Command\Command
 {
     /**
      * @readonly
@@ -44,7 +44,7 @@ final class GenerateCommand extends Command
      * @var \Rector\RectorGenerator\Generator\RectorGenerator
      */
     private $rectorGenerator;
-    public function __construct(ConfigFilesystem $configFilesystem, SymfonyStyle $symfonyStyle, TemplateVariablesFactory $templateVariablesFactory, RectorRecipeProvider $rectorRecipeProvider, RectorGenerator $rectorGenerator)
+    public function __construct(\Rector\RectorGenerator\FileSystem\ConfigFilesystem $configFilesystem, \RectorPrefix20220527\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\RectorGenerator\TemplateVariablesFactory $templateVariablesFactory, \Rector\RectorGenerator\Provider\RectorRecipeProvider $rectorRecipeProvider, \Rector\RectorGenerator\Generator\RectorGenerator $rectorGenerator)
     {
         $this->configFilesystem = $configFilesystem;
         $this->symfonyStyle = $symfonyStyle;
@@ -58,7 +58,7 @@ final class GenerateCommand extends Command
         $this->setName('generate');
         $this->setDescription('[DEV] Create a new Rector, in a proper location, with new tests');
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(\RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $rectorRecipe = $this->rectorRecipeProvider->provide();
         $targetDirectory = \getcwd();
@@ -70,7 +70,7 @@ final class GenerateCommand extends Command
         $setFilePath = $rectorRecipe->getSetFilePath();
         if ($setFilePath !== null) {
             $templateVariables = $this->templateVariablesFactory->createFromRectorRecipe($rectorRecipe);
-            $this->configFilesystem->appendRectorServiceToSet($setFilePath, $templateVariables, NamePattern::RECTOR_FQN_NAME_PATTERN);
+            $this->configFilesystem->appendRectorServiceToSet($setFilePath, $templateVariables, \Rector\RectorGenerator\ValueObject\NamePattern::RECTOR_FQN_NAME_PATTERN);
         }
         $testCaseDirectoryPath = $this->resolveTestCaseDirectoryPath($generatedFilePaths);
         $this->printSuccess($rectorRecipe->getName(), $generatedFilePaths, $testCaseDirectoryPath);
@@ -85,10 +85,10 @@ final class GenerateCommand extends Command
             if (!$this->isGeneratedFilePathTestCase($generatedFilePath)) {
                 continue;
             }
-            $generatedFileInfo = new SmartFileInfo($generatedFilePath);
+            $generatedFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($generatedFilePath);
             return \dirname($generatedFileInfo->getRelativeFilePathFromCwd());
         }
-        throw new ShouldNotHappenException();
+        throw new \Rector\RectorGenerator\Exception\ShouldNotHappenException();
     }
     /**
      * @param string[] $generatedFilePaths
@@ -99,7 +99,7 @@ final class GenerateCommand extends Command
         $this->symfonyStyle->title($message);
         \sort($generatedFilePaths);
         foreach ($generatedFilePaths as $generatedFilePath) {
-            $fileInfo = new SmartFileInfo($generatedFilePath);
+            $fileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($generatedFilePath);
             $relativeFilePath = $fileInfo->getRelativeFilePathFromCwd();
             $this->symfonyStyle->writeln(' * ' . $relativeFilePath);
         }

@@ -39,14 +39,14 @@ final class FormInstanceToFormClassConstFetchConverter
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition) : ?Node
+    public function processNewInstance(\PhpParser\Node\Expr\MethodCall $methodCall, int $position, int $optionsPosition) : ?\PhpParser\Node
     {
         $args = $methodCall->getArgs();
         if (!isset($args[$position])) {
@@ -57,9 +57,9 @@ final class FormInstanceToFormClassConstFetchConverter
         if ($formClassName === null) {
             return null;
         }
-        if ($argValue instanceof New_ && $argValue->args !== []) {
+        if ($argValue instanceof \PhpParser\Node\Expr\New_ && $argValue->args !== []) {
             $methodCall = $this->moveArgumentsToOptions($methodCall, $position, $optionsPosition, $formClassName, $argValue->getArgs());
-            if (!$methodCall instanceof MethodCall) {
+            if (!$methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
                 return null;
             }
         }
@@ -71,20 +71,20 @@ final class FormInstanceToFormClassConstFetchConverter
     /**
      * @param Arg[] $argNodes
      */
-    private function moveArgumentsToOptions(MethodCall $methodCall, int $position, int $optionsPosition, string $className, array $argNodes) : ?MethodCall
+    private function moveArgumentsToOptions(\PhpParser\Node\Expr\MethodCall $methodCall, int $position, int $optionsPosition, string $className, array $argNodes) : ?\PhpParser\Node\Expr\MethodCall
     {
         $namesToArgs = $this->resolveNamesToArgs($className, $argNodes);
         // set default data in between
         if ($position + 1 !== $optionsPosition && !isset($methodCall->args[$position + 1])) {
-            $methodCall->args[$position + 1] = new Arg($this->nodeFactory->createNull());
+            $methodCall->args[$position + 1] = new \PhpParser\Node\Arg($this->nodeFactory->createNull());
         }
         // @todo decopule and name, so I know what it is
         if (!isset($methodCall->args[$optionsPosition])) {
-            $array = new Array_();
+            $array = new \PhpParser\Node\Expr\Array_();
             foreach ($namesToArgs as $name => $arg) {
-                $array->items[] = new ArrayItem($arg->value, new String_($name));
+                $array->items[] = new \PhpParser\Node\Expr\ArrayItem($arg->value, new \PhpParser\Node\Scalar\String_($name));
             }
-            $methodCall->args[$optionsPosition] = new Arg($array);
+            $methodCall->args[$optionsPosition] = new \PhpParser\Node\Arg($array);
         }
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
@@ -108,7 +108,7 @@ final class FormInstanceToFormClassConstFetchConverter
         $classReflection = $this->reflectionProvider->getClass($className);
         $reflectionClass = $classReflection->getNativeReflection();
         $constructorReflectionMethod = $reflectionClass->getConstructor();
-        if (!$constructorReflectionMethod instanceof ReflectionMethod) {
+        if (!$constructorReflectionMethod instanceof \ReflectionMethod) {
             return [];
         }
         $namesToArgs = [];
@@ -117,14 +117,14 @@ final class FormInstanceToFormClassConstFetchConverter
         }
         return $namesToArgs;
     }
-    private function resolveFormClassName(Expr $expr) : ?string
+    private function resolveFormClassName(\PhpParser\Node\Expr $expr) : ?string
     {
-        if ($expr instanceof New_) {
+        if ($expr instanceof \PhpParser\Node\Expr\New_) {
             // we can only process direct name
             return $this->nodeNameResolver->getName($expr->class);
         }
         $exprType = $this->nodeTypeResolver->getType($expr);
-        if ($exprType instanceof TypeWithClassName) {
+        if ($exprType instanceof \PHPStan\Type\TypeWithClassName) {
             return $exprType->getClassName();
         }
         return null;

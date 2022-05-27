@@ -71,10 +71,10 @@ class Alias
     {
         if ('' !== $message) {
             if (\preg_match('#[\\r\\n]|\\*/#', $message)) {
-                throw new InvalidArgumentException('Invalid characters found in deprecation template.');
+                throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('Invalid characters found in deprecation template.');
             }
             if (\strpos($message, '%alias_id%') === \false) {
-                throw new InvalidArgumentException('The deprecation template must contain the "%alias_id%" placeholder.');
+                throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('The deprecation template must contain the "%alias_id%" placeholder.');
             }
         }
         $this->deprecation = ['package' => $package, 'version' => $version, 'message' => $message ?: self::DEFAULT_DEPRECATION_TEMPLATE];

@@ -11,8 +11,8 @@ final class SymfonyRouteTagValueNodeFactory
     /**
      * @param array<string, mixed> $items
      */
-    public function createFromItems(array $items) : DoctrineAnnotationTagValueNode
+    public function createFromItems(array $items) : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
     {
-        return new DoctrineAnnotationTagValueNode(new IdentifierTypeNode(SymfonyAnnotation::ROUTE), null, $items, 'path');
+        return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(\Rector\Symfony\Enum\SymfonyAnnotation::ROUTE), null, $items, 'path');
     }
 }

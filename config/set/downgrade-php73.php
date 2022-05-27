@@ -12,13 +12,13 @@ use Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCalls
 use Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector;
 use Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector;
 use Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->phpVersion(PhpVersion::PHP_72);
-    $rectorConfig->rule(DowngradeFlexibleHeredocSyntaxRector::class);
-    $rectorConfig->rule(DowngradeListReferenceAssignmentRector::class);
-    $rectorConfig->rule(DowngradeTrailingCommasInFunctionCallsRector::class);
-    $rectorConfig->rule(DowngradeArrayKeyFirstLastRector::class);
-    $rectorConfig->rule(SetCookieOptionsArrayToArgumentsRector::class);
-    $rectorConfig->rule(DowngradeIsCountableRector::class);
-    $rectorConfig->rule(DowngradePhp73JsonConstRector::class);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_72);
+    $rectorConfig->rule(\Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp73\Rector\FuncCall\DowngradeIsCountableRector::class);
+    $rectorConfig->rule(\Rector\DowngradePhp73\Rector\ConstFetch\DowngradePhp73JsonConstRector::class);
 };

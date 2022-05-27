@@ -21,12 +21,12 @@ interface Visitor
      * @param Statement $statement
      * @return void
      */
-    public function enterNode(Statement $statement) : void;
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void;
     /**
      * @param Statement $statement
      * @return void
      */
-    public function exitNode(Statement $statement) : void;
+    public function exitNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void;
     /**
      * @param Statement[] $statements
      * @return void

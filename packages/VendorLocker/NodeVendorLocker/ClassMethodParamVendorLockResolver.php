@@ -31,7 +31,7 @@ final class ClassMethodParamVendorLockResolver
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, PathNormalizer $pathNormalizer, FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220527\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;
@@ -41,26 +41,26 @@ final class ClassMethodParamVendorLockResolver
     /**
      * Includes non-vendor classes
      */
-    public function isSoftLocked(ClassMethod $classMethod) : bool
+    public function isSoftLocked(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if ($this->isVendorLocked($classMethod)) {
             return \true;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
         return $this->hasClassMethodLockMatchingFileName($classReflection, $methodName, '');
     }
-    public function isVendorLocked(ClassMethod $classMethod) : bool
+    public function isVendorLocked(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if ($classMethod->isMagic()) {
             return \true;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         /** @var string $methodName */
@@ -76,7 +76,7 @@ final class ClassMethodParamVendorLockResolver
         $methodName = $this->nodeNameResolver->getName($classMethod);
         return $this->hasClassMethodLockMatchingFileName($classReflection, $methodName, '/vendor/');
     }
-    private function hasTraitMethodVendorLock(ClassReflection $classReflection, string $methodName) : bool
+    private function hasTraitMethodVendorLock(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
     {
         $relatedReflectionClasses = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
         foreach ($relatedReflectionClasses as $relatedReflectionClass) {
@@ -94,7 +94,7 @@ final class ClassMethodParamVendorLockResolver
      * Better skip it, as PHPStan has access only to just analyzed classes.
      * This might change type, that works for current class, but breaks another implementer.
      */
-    private function hasParentInterfaceMethod(ClassReflection $classReflection, string $methodName) : bool
+    private function hasParentInterfaceMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
     {
         foreach ($classReflection->getInterfaces() as $interfaceClassReflection) {
             if ($interfaceClassReflection->hasMethod($methodName)) {
@@ -103,7 +103,7 @@ final class ClassMethodParamVendorLockResolver
         }
         return \false;
     }
-    private function hasClassMethodLockMatchingFileName(ClassReflection $classReflection, string $methodName, string $filePathPartName) : bool
+    private function hasClassMethodLockMatchingFileName(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName, string $filePathPartName) : bool
     {
         $ancestorClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         foreach ($ancestorClassReflections as $ancestorClassReflection) {

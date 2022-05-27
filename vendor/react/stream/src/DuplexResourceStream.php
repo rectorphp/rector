@@ -6,7 +6,7 @@ use RectorPrefix20220527\Evenement\EventEmitter;
 use RectorPrefix20220527\React\EventLoop\Loop;
 use RectorPrefix20220527\React\EventLoop\LoopInterface;
 use InvalidArgumentException;
-final class DuplexResourceStream extends EventEmitter implements DuplexStreamInterface
+final class DuplexResourceStream extends \RectorPrefix20220527\Evenement\EventEmitter implements \RectorPrefix20220527\React\Stream\DuplexStreamInterface
 {
     private $stream;
     /** @var LoopInterface */
@@ -33,15 +33,15 @@ final class DuplexResourceStream extends EventEmitter implements DuplexStreamInt
     private $writable = \true;
     private $closing = \false;
     private $listening = \false;
-    public function __construct($stream, LoopInterface $loop = null, $readChunkSize = null, WritableStreamInterface $buffer = null)
+    public function __construct($stream, \RectorPrefix20220527\React\EventLoop\LoopInterface $loop = null, $readChunkSize = null, \RectorPrefix20220527\React\Stream\WritableStreamInterface $buffer = null)
     {
         if (!\is_resource($stream) || \get_resource_type($stream) !== "stream") {
-            throw new InvalidArgumentException('First parameter must be a valid stream resource');
+            throw new \InvalidArgumentException('First parameter must be a valid stream resource');
         }
         // ensure resource is opened for reading and wrting (fopen mode must contain "+")
         $meta = \stream_get_meta_data($stream);
         if (isset($meta['mode']) && $meta['mode'] !== '' && \strpos($meta['mode'], '+') === \false) {
-            throw new InvalidArgumentException('Given stream resource is not opened in read and write mode');
+            throw new \InvalidArgumentException('Given stream resource is not opened in read and write mode');
         }
         // this class relies on non-blocking I/O in order to not interrupt the event loop
         // e.g. pipes on Windows do not support this: https://bugs.php.net/bug.php?id=47918
@@ -60,10 +60,10 @@ final class DuplexResourceStream extends EventEmitter implements DuplexStreamInt
             \stream_set_read_buffer($stream, 0);
         }
         if ($buffer === null) {
-            $buffer = new WritableResourceStream($stream, $loop);
+            $buffer = new \RectorPrefix20220527\React\Stream\WritableResourceStream($stream, $loop);
         }
         $this->stream = $stream;
-        $this->loop = $loop ?: Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20220527\React\EventLoop\Loop::get();
         $this->bufferSize = $readChunkSize === null ? 65536 : (int) $readChunkSize;
         $this->buffer = $buffer;
         $that = $this;
@@ -132,9 +132,9 @@ final class DuplexResourceStream extends EventEmitter implements DuplexStreamInt
         $this->pause();
         $this->buffer->end($data);
     }
-    public function pipe(WritableStreamInterface $dest, array $options = array())
+    public function pipe(\RectorPrefix20220527\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
-        return Util::pipe($this, $dest, $options);
+        return \RectorPrefix20220527\React\Stream\Util::pipe($this, $dest, $options);
     }
     /** @internal */
     public function handleData($stream)

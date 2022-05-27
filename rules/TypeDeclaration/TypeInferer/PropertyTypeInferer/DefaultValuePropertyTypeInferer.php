@@ -17,15 +17,15 @@ final class DefaultValuePropertyTypeInferer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function inferProperty(Property $property) : ?Type
+    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
     {
         $propertyProperty = $property->props[0];
         if ($propertyProperty->default === null) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         return $this->nodeTypeResolver->getType($propertyProperty->default);
     }

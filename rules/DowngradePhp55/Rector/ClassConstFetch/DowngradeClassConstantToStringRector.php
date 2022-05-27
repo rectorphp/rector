@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see Rector\Tests\DowngradePhp55\Rector\ClassConstFetch\DowngradeClassConstantToStringRector\DowngradeClassConstantToStringRectorTest
  */
-final class DowngradeClassConstantToStringRector extends AbstractRector
+final class DowngradeClassConstantToStringRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace <class>::class constant by string class names', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace <class>::class constant by string class names', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class AnotherClass
 {
 }
@@ -51,20 +51,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassConstFetch::class];
+        return [\PhpParser\Node\Expr\ClassConstFetch::class];
     }
     /**
      * @param ClassConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->name instanceof Identifier) {
+        if (!$node->name instanceof \PhpParser\Node\Identifier) {
             return null;
         }
         if (\strtolower($node->name->name) !== 'class') {
             return null;
         }
-        if (!$node->class instanceof Name) {
+        if (!$node->class instanceof \PhpParser\Node\Name) {
             return null;
         }
         $className = $node->class->toString();
@@ -85,6 +85,6 @@ CODE_SAMPLE
         if ($func !== null) {
             return $this->nodeFactory->createFuncCall($func);
         }
-        return new String_($className);
+        return new \PhpParser\Node\Scalar\String_($className);
     }
 }

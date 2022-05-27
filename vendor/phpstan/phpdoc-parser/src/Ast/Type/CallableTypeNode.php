@@ -22,7 +22,7 @@ class CallableTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     }
     public function __toString() : string
     {
-        $parameters = implode(', ', $this->parameters);
+        $parameters = \implode(', ', $this->parameters);
         return "{$this->identifier}({$parameters}): {$this->returnType}";
     }
 }

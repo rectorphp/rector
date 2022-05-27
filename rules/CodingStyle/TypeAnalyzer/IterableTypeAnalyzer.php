@@ -9,15 +9,15 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 final class IterableTypeAnalyzer
 {
-    public function detect(Type $type) : bool
+    public function detect(\PHPStan\Type\Type $type) : bool
     {
-        if ($type instanceof ArrayType) {
+        if ($type instanceof \PHPStan\Type\ArrayType) {
             return \true;
         }
-        if ($type instanceof IterableType) {
+        if ($type instanceof \PHPStan\Type\IterableType) {
             return \true;
         }
-        if ($type instanceof UnionType) {
+        if ($type instanceof \PHPStan\Type\UnionType) {
             foreach ($type->getTypes() as $unionedType) {
                 if (!$this->detect($unionedType)) {
                     return \false;

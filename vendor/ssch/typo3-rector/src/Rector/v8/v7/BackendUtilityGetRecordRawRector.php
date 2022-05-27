@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80317-DeprecateBackendUtilityGetRecordRaw.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\BackendUtilityGetRecordRawRector\BackendUtilityGetRecordRawRectorTest
  */
-final class BackendUtilityGetRecordRawRector extends AbstractRector
+final class BackendUtilityGetRecordRawRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -30,14 +30,14 @@ final class BackendUtilityGetRecordRawRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getRecordRaw')) {
@@ -47,16 +47,16 @@ final class BackendUtilityGetRecordRawRector extends AbstractRector
         $args = $node->args;
         [$firstArgument, $secondArgument, $thirdArgument] = $args;
         $queryBuilderAssign = $this->createQueryBuilderCall($firstArgument);
-        $queryBuilderRemoveRestrictions = $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(new Variable(self::QUERY_BUILDER), 'getRestrictions'), 'removeAll');
-        $this->nodesToAddCollector->addNodesBeforeNode([new Nop(), $queryBuilderAssign, $queryBuilderRemoveRestrictions, new Nop()], $node);
+        $queryBuilderRemoveRestrictions = $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable(self::QUERY_BUILDER), 'getRestrictions'), 'removeAll');
+        $this->nodesToAddCollector->addNodesBeforeNode([new \PhpParser\Node\Stmt\Nop(), $queryBuilderAssign, $queryBuilderRemoveRestrictions, new \PhpParser\Node\Stmt\Nop()], $node);
         return $this->fetchQueryBuilderResults($firstArgument, $secondArgument, $thirdArgument);
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Migrate the method BackendUtility::editOnClick() to use UriBuilder API', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate the method BackendUtility::editOnClick() to use UriBuilder API', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $table = 'fe_users';
 $where = 'uid > 5';
 $fields = ['uid', 'pid'];
@@ -78,14 +78,14 @@ $record = $queryBuilder->select(GeneralUtility::trimExplode(',', $fields, true))
 CODE_SAMPLE
 )]);
     }
-    private function createQueryBuilderCall(Arg $firstArgument) : Assign
+    private function createQueryBuilderCall(\PhpParser\Node\Arg $firstArgument) : \PhpParser\Node\Expr\Assign
     {
         $queryBuilder = $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Database\\ConnectionPool')]), 'getQueryBuilderForTable', [$this->nodeFactory->createArg($firstArgument->value)]);
-        return new Assign(new Variable(self::QUERY_BUILDER), $queryBuilder);
+        return new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::QUERY_BUILDER), $queryBuilder);
     }
-    private function fetchQueryBuilderResults(Arg $table, Arg $where, Arg $fields) : MethodCall
+    private function fetchQueryBuilderResults(\PhpParser\Node\Arg $table, \PhpParser\Node\Arg $where, \PhpParser\Node\Arg $fields) : \PhpParser\Node\Expr\MethodCall
     {
-        $queryBuilder = new Variable(self::QUERY_BUILDER);
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($queryBuilder, 'select', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'trimExplode', [new String_(','), $this->nodeFactory->createArg($fields->value), $this->nodeFactory->createTrue()])]), 'from', [$this->nodeFactory->createArg($table->value)]), 'where', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'stripLogicalOperatorPrefix', [$this->nodeFactory->createArg($where->value)])]), 'execute'), 'fetch');
+        $queryBuilder = new \PhpParser\Node\Expr\Variable(self::QUERY_BUILDER);
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($queryBuilder, 'select', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'trimExplode', [new \PhpParser\Node\Scalar\String_(','), $this->nodeFactory->createArg($fields->value), $this->nodeFactory->createTrue()])]), 'from', [$this->nodeFactory->createArg($table->value)]), 'where', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'stripLogicalOperatorPrefix', [$this->nodeFactory->createArg($where->value)])]), 'execute'), 'fetch');
     }
 }

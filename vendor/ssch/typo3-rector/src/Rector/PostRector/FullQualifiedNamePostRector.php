@@ -23,7 +23,7 @@ use RectorPrefix20220527\Symplify\Skipper\Matcher\FileInfoMatcher;
 /**
  * @see \Ssch\TYPO3Rector\Tests\Rector\PostRector\FullQualifiedNamePostRector\FullQualifiedNamePostRectorTest
  */
-final class FullQualifiedNamePostRector extends AbstractPostRector
+final class FullQualifiedNamePostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
      * @readonly
@@ -55,7 +55,7 @@ final class FullQualifiedNamePostRector extends AbstractPostRector
      * @var \Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
-    public function __construct(ParameterProvider $parameterProvider, CurrentFileProvider $currentFileProvider, BetterNodeFinder $betterNodeFinder, NodeRemover $nodeRemover, ClassNameImportSkipper $classNameImportSkipper, FileInfoMatcher $fileInfoMatcher)
+    public function __construct(\RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \RectorPrefix20220527\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
     {
         $this->parameterProvider = $parameterProvider;
         $this->currentFileProvider = $currentFileProvider;
@@ -65,23 +65,23 @@ final class FullQualifiedNamePostRector extends AbstractPostRector
         $this->fileInfoMatcher = $fileInfoMatcher;
         $this->changeNameImportingPostRectorSkipConfiguration($this->parameterProvider);
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof File) {
+        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
             return null;
         }
         if ($this->shouldSkip($file)) {
             return null;
         }
-        if (!$node instanceof Name) {
+        if (!$node instanceof \PhpParser\Node\Name) {
             return null;
         }
         return $this->processNodeName($node, $file);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use fully qualified names', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use fully qualified names', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use \TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 ExtensionUtility::configurePlugin(
@@ -117,58 +117,58 @@ CODE_SAMPLE
     {
         return 880;
     }
-    private function processNodeName(Name $name, File $file) : Node
+    private function processNodeName(\PhpParser\Node\Name $name, \Rector\Core\ValueObject\Application\File $file) : \PhpParser\Node
     {
         if ($name->isSpecialClassName()) {
             return $name;
         }
         /** @var Use_[] $currentUses */
-        $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), Use_::class);
+        $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), \PhpParser\Node\Stmt\Use_::class);
         if (!$this->shouldApplyFullQualifiedNamespace($name, $currentUses)) {
             return $name;
         }
         foreach ($currentUses as $currentUse) {
             $this->nodeRemover->removeNode($currentUse);
         }
-        return new FullyQualified($name);
+        return new \PhpParser\Node\Name\FullyQualified($name);
     }
     /**
      * @param Use_[] $currentUses
      */
-    private function shouldApplyFullQualifiedNamespace(Name $name, array $currentUses) : bool
+    private function shouldApplyFullQualifiedNamespace(\PhpParser\Node\Name $name, array $currentUses) : bool
     {
         if ($this->classNameImportSkipper->isFoundInUse($name, $currentUses)) {
             return \true;
         }
         return $this->classNameImportSkipper->isAlreadyImported($name, $currentUses);
     }
-    private function shouldSkip(File $file) : bool
+    private function shouldSkip(\Rector\Core\ValueObject\Application\File $file) : bool
     {
-        if (!$this->parameterProvider->hasParameter(Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES)) {
+        if (!$this->parameterProvider->hasParameter(\Ssch\TYPO3Rector\Configuration\Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES)) {
             return \true;
         }
-        $filesAndDirectories = $this->parameterProvider->provideArrayParameter(Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES);
+        $filesAndDirectories = $this->parameterProvider->provideArrayParameter(\Ssch\TYPO3Rector\Configuration\Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES);
         return !$this->fileInfoMatcher->doesFileInfoMatchPatterns($file->getSmartFileInfo(), $filesAndDirectories);
     }
-    private function changeNameImportingPostRectorSkipConfiguration(ParameterProvider $parameterProvider) : void
+    private function changeNameImportingPostRectorSkipConfiguration(\RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider) : void
     {
-        if (!$parameterProvider->hasParameter(Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES)) {
+        if (!$parameterProvider->hasParameter(\Ssch\TYPO3Rector\Configuration\Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES)) {
             return;
         }
-        $useFullQualifiedClassNamePaths = $parameterProvider->provideArrayParameter(Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES);
+        $useFullQualifiedClassNamePaths = $parameterProvider->provideArrayParameter(\Ssch\TYPO3Rector\Configuration\Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES);
         if ([] === $useFullQualifiedClassNamePaths) {
             return;
         }
-        $skipConfiguration = $parameterProvider->hasParameter(Option::SKIP) ? $parameterProvider->provideArrayParameter(Option::SKIP) : [];
-        $nameImportingPostRectorConfiguration = \array_search(NameImportingPostRector::class, $skipConfiguration, \true);
+        $skipConfiguration = $parameterProvider->hasParameter(\Rector\Core\Configuration\Option::SKIP) ? $parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::SKIP) : [];
+        $nameImportingPostRectorConfiguration = \array_search(\Rector\PostRector\Rector\NameImportingPostRector::class, $skipConfiguration, \true);
         // Do nothing because NameImportingPostRector is skipped totally
         if (\false !== $nameImportingPostRectorConfiguration && !\is_array($skipConfiguration[$nameImportingPostRectorConfiguration])) {
             return;
         }
-        if (!\array_key_exists(NameImportingPostRector::class, $skipConfiguration)) {
-            $skipConfiguration[NameImportingPostRector::class] = [];
+        if (!\array_key_exists(\Rector\PostRector\Rector\NameImportingPostRector::class, $skipConfiguration)) {
+            $skipConfiguration[\Rector\PostRector\Rector\NameImportingPostRector::class] = [];
         }
-        $skipConfiguration[NameImportingPostRector::class] = \array_merge($skipConfiguration[NameImportingPostRector::class], $useFullQualifiedClassNamePaths);
-        $parameterProvider->changeParameter(Option::SKIP, $skipConfiguration);
+        $skipConfiguration[\Rector\PostRector\Rector\NameImportingPostRector::class] = \array_merge($skipConfiguration[\Rector\PostRector\Rector\NameImportingPostRector::class], $useFullQualifiedClassNamePaths);
+        $parameterProvider->changeParameter(\Rector\Core\Configuration\Option::SKIP, $skipConfiguration);
     }
 }

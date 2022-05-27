@@ -10,6 +10,6 @@
  */
 namespace RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-class ClosureReferenceConfigurator extends ReferenceConfigurator
+class ClosureReferenceConfigurator extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator
 {
 }

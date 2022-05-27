@@ -25,7 +25,7 @@ final class PrivatesAccessor
             return $value;
         }
         $errorMessage = \sprintf('The type "%s" is required, but "%s" type given', $valueClassName, \get_class($value));
-        throw new InvalidPrivatePropertyTypeException($errorMessage);
+        throw new \RectorPrefix20220527\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException($errorMessage);
     }
     /**
      * @return mixed
@@ -49,7 +49,7 @@ final class PrivatesAccessor
             return;
         }
         $errorMessage = \sprintf('The type "%s" is required, but "%s" type given', $valueClassName, \get_class($value));
-        throw new InvalidPrivatePropertyTypeException($errorMessage);
+        throw new \RectorPrefix20220527\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException($errorMessage);
     }
     /**
      * @param mixed $value
@@ -60,16 +60,16 @@ final class PrivatesAccessor
         $propertyReflection->setAccessible(\true);
         $propertyReflection->setValue($object, $value);
     }
-    private function resolvePropertyReflection(object $object, string $propertyName) : ReflectionProperty
+    private function resolvePropertyReflection(object $object, string $propertyName) : \ReflectionProperty
     {
         if (\property_exists($object, $propertyName)) {
-            return new ReflectionProperty($object, $propertyName);
+            return new \ReflectionProperty($object, $propertyName);
         }
         $parentClass = \get_parent_class($object);
         if ($parentClass !== \false) {
-            return new ReflectionProperty($parentClass, $propertyName);
+            return new \ReflectionProperty($parentClass, $propertyName);
         }
         $errorMessage = \sprintf('Property "$%s" was not found in "%s" class', $propertyName, \get_class($object));
-        throw new MissingPrivatePropertyException($errorMessage);
+        throw new \RectorPrefix20220527\Symplify\PackageBuilder\Exception\MissingPrivatePropertyException($errorMessage);
     }
 }

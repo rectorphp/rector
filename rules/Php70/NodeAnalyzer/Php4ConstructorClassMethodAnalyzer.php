@@ -8,7 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 final class Php4ConstructorClassMethodAnalyzer
 {
-    public function detect(ClassMethod $classMethod, Scope $scope) : bool
+    public function detect(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : bool
     {
         // catch only classes without namespace
         if ($scope->getNamespace() !== null) {
@@ -21,7 +21,7 @@ final class Php4ConstructorClassMethodAnalyzer
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         return !$classReflection->isAnonymous();

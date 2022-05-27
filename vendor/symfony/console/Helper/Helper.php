@@ -17,20 +17,20 @@ use RectorPrefix20220527\Symfony\Component\String\UnicodeString;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Helper implements HelperInterface
+abstract class Helper implements \RectorPrefix20220527\Symfony\Component\Console\Helper\HelperInterface
 {
     protected $helperSet = null;
     /**
      * {@inheritdoc}
      */
-    public function setHelperSet(HelperSet $helperSet = null)
+    public function setHelperSet(\RectorPrefix20220527\Symfony\Component\Console\Helper\HelperSet $helperSet = null)
     {
         $this->helperSet = $helperSet;
     }
     /**
      * {@inheritdoc}
      */
-    public function getHelperSet() : ?HelperSet
+    public function getHelperSet() : ?\RectorPrefix20220527\Symfony\Component\Console\Helper\HelperSet
     {
         return $this->helperSet;
     }
@@ -42,7 +42,7 @@ abstract class Helper implements HelperInterface
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new UnicodeString($string))->width(\false);
+            return (new \RectorPrefix20220527\Symfony\Component\String\UnicodeString($string))->width(\false);
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -57,7 +57,7 @@ abstract class Helper implements HelperInterface
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new UnicodeString($string))->length();
+            return (new \RectorPrefix20220527\Symfony\Component\String\UnicodeString($string))->length();
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -105,14 +105,14 @@ abstract class Helper implements HelperInterface
         }
         return \sprintf('%d B', $memory);
     }
-    public static function removeDecoration(OutputFormatterInterface $formatter, ?string $string)
+    public static function removeDecoration(\RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
     {
         $isDecorated = $formatter->isDecorated();
         $formatter->setDecorated(\false);
         // remove <...> formatting
         $string = $formatter->format($string ?? '');
         // remove already formatted characters
-        $string = \preg_replace("/\x1b\\[[^m]*m/", '', $string ?? '');
+        $string = \preg_replace("/\33\\[[^m]*m/", '', $string ?? '');
         $formatter->setDecorated($isDecorated);
         return $string;
     }

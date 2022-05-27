@@ -11,5 +11,5 @@ interface ScopeAwarePhpRectorInterface extends \Rector\Core\Contract\Rector\PhpR
      * Process Node of matched type with its PHPStan scope
      * @return Node|Node[]|null
      */
-    public function refactorWithScope(Node $node, Scope $scope);
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope);
 }

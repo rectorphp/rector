@@ -11,17 +11,17 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 /**
  * @implements PhpParserNodeMapperInterface<String_>
  */
-final class StringNodeMapper implements PhpParserNodeMapperInterface
+final class StringNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
 {
     public function getNodeType() : string
     {
-        return String_::class;
+        return \PhpParser\Node\Scalar\String_::class;
     }
     /**
      * @param String_ $node
      */
-    public function mapToPHPStan(Node $node) : Type
+    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
-        return new StringType();
+        return new \PHPStan\Type\StringType();
     }
 }

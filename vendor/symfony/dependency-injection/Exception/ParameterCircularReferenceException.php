@@ -15,7 +15,7 @@ namespace RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParameterCircularReferenceException extends RuntimeException
+class ParameterCircularReferenceException extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\RuntimeException
 {
     /**
      * @var mixed[]

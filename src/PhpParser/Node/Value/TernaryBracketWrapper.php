@@ -7,9 +7,9 @@ use PhpParser\Node\Expr\Ternary;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class TernaryBracketWrapper
 {
-    public function wrapWithBracket(Ternary $ternary) : void
+    public function wrapWithBracket(\PhpParser\Node\Expr\Ternary $ternary) : void
     {
-        $ternary->setAttribute(AttributeKey::KIND, 'wrapped_with_brackets');
-        $ternary->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $ternary->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, 'wrapped_with_brackets');
+        $ternary->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
     }
 }

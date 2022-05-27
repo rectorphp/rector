@@ -11,17 +11,17 @@ final class AccessoryNonEmptyStringTypeCorrector
     /**
      * @return \PHPStan\Type\Type|\PHPStan\Type\IntersectionType
      */
-    public function correct(Type $mainType)
+    public function correct(\PHPStan\Type\Type $mainType)
     {
-        if (!$mainType instanceof IntersectionType) {
+        if (!$mainType instanceof \PHPStan\Type\IntersectionType) {
             return $mainType;
         }
-        if (!$mainType->isSubTypeOf(new AccessoryNonEmptyStringType())->yes()) {
+        if (!$mainType->isSubTypeOf(new \PHPStan\Type\Accessory\AccessoryNonEmptyStringType())->yes()) {
             return $mainType;
         }
         $clearIntersectionedTypes = [];
         foreach ($mainType->getTypes() as $intersectionedType) {
-            if ($intersectionedType instanceof AccessoryNonEmptyStringType) {
+            if ($intersectionedType instanceof \PHPStan\Type\Accessory\AccessoryNonEmptyStringType) {
                 continue;
             }
             $clearIntersectionedTypes[] = $intersectionedType;
@@ -29,6 +29,6 @@ final class AccessoryNonEmptyStringTypeCorrector
         if (\count($clearIntersectionedTypes) === 1) {
             return $clearIntersectionedTypes[0];
         }
-        return new IntersectionType($clearIntersectionedTypes);
+        return new \PHPStan\Type\IntersectionType($clearIntersectionedTypes);
     }
 }

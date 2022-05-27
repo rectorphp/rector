@@ -16,16 +16,16 @@ final class ContentExprAndNeedleExpr
      * @var \PhpParser\Node\Expr
      */
     private $needleExpr;
-    public function __construct(Expr $contentExpr, Expr $needleExpr)
+    public function __construct(\PhpParser\Node\Expr $contentExpr, \PhpParser\Node\Expr $needleExpr)
     {
         $this->contentExpr = $contentExpr;
         $this->needleExpr = $needleExpr;
     }
-    public function getContentExpr() : Expr
+    public function getContentExpr() : \PhpParser\Node\Expr
     {
         return $this->contentExpr;
     }
-    public function getNeedleExpr() : Expr
+    public function getNeedleExpr() : \PhpParser\Node\Expr
     {
         return $this->needleExpr;
     }

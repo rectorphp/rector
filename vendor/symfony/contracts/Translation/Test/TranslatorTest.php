@@ -26,7 +26,7 @@ use RectorPrefix20220527\Symfony\Contracts\Translation\TranslatorTrait;
  *
  * @author Clemens Tolboom clemens@build2be.nl
  */
-class TranslatorTest extends TestCase
+class TranslatorTest extends \RectorPrefix20220527\PHPUnit\Framework\TestCase
 {
     private $defaultLocale;
     protected function setUp() : void
@@ -38,9 +38,9 @@ class TranslatorTest extends TestCase
     {
         \Locale::setDefault($this->defaultLocale);
     }
-    public function getTranslator() : TranslatorInterface
+    public function getTranslator() : \RectorPrefix20220527\Symfony\Contracts\Translation\TranslatorInterface
     {
-        return new class implements TranslatorInterface
+        return new class implements \RectorPrefix20220527\Symfony\Contracts\Translation\TranslatorInterface
         {
             use TranslatorTrait;
         };

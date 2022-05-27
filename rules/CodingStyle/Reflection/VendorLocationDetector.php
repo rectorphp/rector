@@ -12,11 +12,11 @@ final class VendorLocationDetector
      * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
-    public function __construct(PathNormalizer $pathNormalizer)
+    public function __construct(\RectorPrefix20220527\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
     {
         $this->pathNormalizer = $pathNormalizer;
     }
-    public function detectMethodReflection(MethodReflection $methodReflection) : bool
+    public function detectMethodReflection(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {
         $declaringClassReflection = $methodReflection->getDeclaringClass();
         $fileName = $declaringClassReflection->getFileName();

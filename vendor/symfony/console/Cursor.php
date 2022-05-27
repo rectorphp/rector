@@ -21,7 +21,7 @@ final class Cursor
     /**
      * @param resource|null $input
      */
-    public function __construct(OutputInterface $output, $input = null)
+    public function __construct(\RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output, $input = null)
     {
         $this->output = $output;
         $this->input = $input ?? (\defined('STDIN') ? \STDIN : \fopen('php://input', 'r+'));
@@ -31,7 +31,7 @@ final class Cursor
      */
     public function moveUp(int $lines = 1)
     {
-        $this->output->write(\sprintf("\x1b[%dA", $lines));
+        $this->output->write(\sprintf("\33[%dA", $lines));
         return $this;
     }
     /**
@@ -39,7 +39,7 @@ final class Cursor
      */
     public function moveDown(int $lines = 1)
     {
-        $this->output->write(\sprintf("\x1b[%dB", $lines));
+        $this->output->write(\sprintf("\33[%dB", $lines));
         return $this;
     }
     /**
@@ -47,7 +47,7 @@ final class Cursor
      */
     public function moveRight(int $columns = 1)
     {
-        $this->output->write(\sprintf("\x1b[%dC", $columns));
+        $this->output->write(\sprintf("\33[%dC", $columns));
         return $this;
     }
     /**
@@ -55,7 +55,7 @@ final class Cursor
      */
     public function moveLeft(int $columns = 1)
     {
-        $this->output->write(\sprintf("\x1b[%dD", $columns));
+        $this->output->write(\sprintf("\33[%dD", $columns));
         return $this;
     }
     /**
@@ -63,7 +63,7 @@ final class Cursor
      */
     public function moveToColumn(int $column)
     {
-        $this->output->write(\sprintf("\x1b[%dG", $column));
+        $this->output->write(\sprintf("\33[%dG", $column));
         return $this;
     }
     /**
@@ -71,7 +71,7 @@ final class Cursor
      */
     public function moveToPosition(int $column, int $row)
     {
-        $this->output->write(\sprintf("\x1b[%d;%dH", $row + 1, $column));
+        $this->output->write(\sprintf("\33[%d;%dH", $row + 1, $column));
         return $this;
     }
     /**
@@ -79,7 +79,7 @@ final class Cursor
      */
     public function savePosition()
     {
-        $this->output->write("\x1b7");
+        $this->output->write("\0337");
         return $this;
     }
     /**
@@ -87,7 +87,7 @@ final class Cursor
      */
     public function restorePosition()
     {
-        $this->output->write("\x1b8");
+        $this->output->write("\338");
         return $this;
     }
     /**
@@ -95,7 +95,7 @@ final class Cursor
      */
     public function hide()
     {
-        $this->output->write("\x1b[?25l");
+        $this->output->write("\33[?25l");
         return $this;
     }
     /**
@@ -103,7 +103,7 @@ final class Cursor
      */
     public function show()
     {
-        $this->output->write("\x1b[?25h\x1b[?0c");
+        $this->output->write("\33[?25h\33[?0c");
         return $this;
     }
     /**
@@ -113,7 +113,7 @@ final class Cursor
      */
     public function clearLine()
     {
-        $this->output->write("\x1b[2K");
+        $this->output->write("\33[2K");
         return $this;
     }
     /**
@@ -121,7 +121,7 @@ final class Cursor
      */
     public function clearLineAfter() : self
     {
-        $this->output->write("\x1b[K");
+        $this->output->write("\33[K");
         return $this;
     }
     /**
@@ -131,7 +131,7 @@ final class Cursor
      */
     public function clearOutput()
     {
-        $this->output->write("\x1b[0J");
+        $this->output->write("\33[0J");
         return $this;
     }
     /**
@@ -141,7 +141,7 @@ final class Cursor
      */
     public function clearScreen()
     {
-        $this->output->write("\x1b[2J");
+        $this->output->write("\33[2J");
         return $this;
     }
     /**
@@ -158,10 +158,10 @@ final class Cursor
         }
         $sttyMode = \shell_exec('stty -g');
         \shell_exec('stty -icanon -echo');
-        @\fwrite($this->input, "\x1b[6n");
+        @\fwrite($this->input, "\33[6n");
         $code = \trim(\fread($this->input, 1024));
         \shell_exec(\sprintf('stty %s', $sttyMode));
-        \sscanf($code, "\x1b[%d;%dR", $row, $col);
+        \sscanf($code, "\33[%d;%dR", $row, $col);
         return [$col, $row];
     }
 }

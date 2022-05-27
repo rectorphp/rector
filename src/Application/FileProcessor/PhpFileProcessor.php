@@ -21,7 +21,7 @@ use Rector\Parallel\ValueObject\Bridge;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Throwable;
-final class PhpFileProcessor implements FileProcessorInterface
+final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @readonly
@@ -63,7 +63,7 @@ final class PhpFileProcessor implements FileProcessorInterface
      * @var \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory
      */
     private $errorFactory;
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle, FileDiffFileDecorator $fileDiffFileDecorator, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory)
+    public function __construct(\Rector\Core\PhpParser\Printer\FormatPerservingPrinter $formatPerservingPrinter, \Rector\Core\Application\FileProcessor $fileProcessor, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor, \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory $errorFactory)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
@@ -77,14 +77,14 @@ final class PhpFileProcessor implements FileProcessorInterface
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(File $file, Configuration $configuration) : array
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
-        $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
+        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
         // 1. parse files to nodes
         $parsingSystemErrors = $this->parseFileAndDecorateNodes($file);
         if ($parsingSystemErrors !== []) {
             // we cannot process this file as the parsing and type resolving itself went wrong
-            $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
+            $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
             return $systemErrorsAndFileDiffs;
         }
         // 2. change nodes with Rectors
@@ -102,13 +102,13 @@ final class PhpFileProcessor implements FileProcessorInterface
         } while ($file->hasChanged());
         // return json here
         $fileDiff = $file->getFileDiff();
-        if (!$fileDiff instanceof FileDiff) {
+        if (!$fileDiff instanceof \Rector\Core\ValueObject\Reporting\FileDiff) {
             return $systemErrorsAndFileDiffs;
         }
-        $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] = [$fileDiff];
+        $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] = [$fileDiff];
         return $systemErrorsAndFileDiffs;
     }
-    public function supports(File $file, Configuration $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return $smartFileInfo->hasSuffixes($configuration->getFileExtensions());
@@ -120,7 +120,7 @@ final class PhpFileProcessor implements FileProcessorInterface
     {
         return ['php'];
     }
-    private function refactorNodesWithRectors(File $file, Configuration $configuration) : void
+    private function refactorNodesWithRectors(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         $this->currentFileProvider->setFile($file);
         $this->fileProcessor->refactor($file, $configuration);
@@ -128,31 +128,31 @@ final class PhpFileProcessor implements FileProcessorInterface
     /**
      * @return SystemError[]
      */
-    private function parseFileAndDecorateNodes(File $file) : array
+    private function parseFileAndDecorateNodes(\Rector\Core\ValueObject\Application\File $file) : array
     {
         $this->currentFileProvider->setFile($file);
         $this->notifyFile($file);
         try {
             $this->fileProcessor->parseFileInfoToLocalCache($file);
-        } catch (ShouldNotHappenException $shouldNotHappenException) {
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
             throw $shouldNotHappenException;
-        } catch (AnalysedCodeException $analysedCodeException) {
+        } catch (\PHPStan\AnalysedCodeException $analysedCodeException) {
             // inform about missing classes in tests
-            if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $analysedCodeException;
             }
             $autoloadSystemError = $this->errorFactory->createAutoloadError($analysedCodeException, $file->getSmartFileInfo());
             return [$autoloadSystemError];
-        } catch (Throwable $throwable) {
-            if ($this->rectorOutputStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        } catch (\Throwable $throwable) {
+            if ($this->rectorOutputStyle->isVerbose() || \Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
-            $systemError = new SystemError($throwable->getMessage(), $file->getRelativeFilePath(), $throwable->getLine());
+            $systemError = new \Rector\Core\ValueObject\Error\SystemError($throwable->getMessage(), $file->getRelativeFilePath(), $throwable->getLine());
             return [$systemError];
         }
         return [];
     }
-    private function printFile(File $file, Configuration $configuration) : void
+    private function printFile(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
@@ -163,7 +163,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         $file->changeFileContent($newContent);
         $this->fileDiffFileDecorator->decorate([$file]);
     }
-    private function notifyFile(File $file) : void
+    private function notifyFile(\Rector\Core\ValueObject\Application\File $file) : void
     {
         if (!$this->rectorOutputStyle->isVerbose()) {
             return;

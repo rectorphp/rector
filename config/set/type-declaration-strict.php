@@ -14,15 +14,15 @@ use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(AddClosureReturnTypeRector::class);
-    $rectorConfig->rule(ReturnTypeFromStrictTypedPropertyRector::class);
-    $rectorConfig->rule(TypedPropertyFromStrictConstructorRector::class);
-    $rectorConfig->rule(ParamTypeFromStrictTypedPropertyRector::class);
-    $rectorConfig->rule(ReturnTypeFromStrictTypedCallRector::class);
-    $rectorConfig->rule(AddVoidReturnTypeWhereNoReturnRector::class);
-    $rectorConfig->rule(ReturnTypeFromReturnNewRector::class);
-    $rectorConfig->rule(TypedPropertyFromStrictGetterMethodReturnTypeRector::class);
-    $rectorConfig->rule(AddMethodCallBasedStrictParamTypeRector::class);
-    $rectorConfig->rule(ArrayShapeFromConstantArrayReturnRector::class);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(\Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector::class);
+    $rectorConfig->rule(\Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector::class);
+    $rectorConfig->rule(\Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector::class);
+    $rectorConfig->rule(\Rector\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector::class);
+    $rectorConfig->rule(\Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector::class);
+    $rectorConfig->rule(\Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector::class);
+    $rectorConfig->rule(\Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector::class);
+    $rectorConfig->rule(\Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector::class);
+    $rectorConfig->rule(\Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector::class);
+    $rectorConfig->rule(\Rector\TypeDeclaration\Rector\ClassMethod\ArrayShapeFromConstantArrayReturnRector::class);
 };

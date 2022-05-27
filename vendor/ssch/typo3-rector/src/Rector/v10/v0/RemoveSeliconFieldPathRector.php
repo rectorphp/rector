@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Breaking-87937-TCAOption_selicon_field_path_removed.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v0\RemoveSeliconFieldPathRector\RemoveSeliconFieldPathRectorTest
  */
-final class RemoveSeliconFieldPathRector extends AbstractRector
+final class RemoveSeliconFieldPathRector extends \Rector\Core\Rector\AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -23,27 +23,27 @@ final class RemoveSeliconFieldPathRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $ctrlArrayItem = $this->extractCtrl($node);
-        if (!$ctrlArrayItem instanceof ArrayItem) {
+        if (!$ctrlArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         $items = $ctrlArrayItem->value;
-        if (!$items instanceof Array_) {
+        if (!$items instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($items->items as $fieldValue) {
-            if (!$fieldValue instanceof ArrayItem) {
+            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
@@ -59,9 +59,9 @@ final class RemoveSeliconFieldPathRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('TCA option "selicon_field_path" removed', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA option "selicon_field_path" removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
         'selicon_field' => 'icon',

@@ -36,7 +36,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\DoctrineTypedPropertyRectorTest
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\ImportedTest
  */
-final class TypedPropertyRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
+final class TypedPropertyRector extends \Rector\Core\Rector\AbstractScopeAwareRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
@@ -92,7 +92,7 @@ final class TypedPropertyRector extends AbstractScopeAwareRector implements Allo
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
-    public function __construct(VarDocPropertyTypeInferer $varDocPropertyTypeInferer, VendorLockResolver $vendorLockResolver, DoctrineTypeAnalyzer $doctrineTypeAnalyzer, VarTagRemover $varTagRemover, FamilyRelationsAnalyzer $familyRelationsAnalyzer, ObjectTypeAnalyzer $objectTypeAnalyzer, MakePropertyTypedGuard $makePropertyTypedGuard, ConstructorAssignDetector $constructorAssignDetector)
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer $objectTypeAnalyzer, \Rector\Php74\Guard\MakePropertyTypedGuard $makePropertyTypedGuard, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
@@ -107,9 +107,9 @@ final class TypedPropertyRector extends AbstractScopeAwareRector implements Allo
     {
         $this->inlinePublic = $configuration[self::INLINE_PUBLIC] ?? (bool) \current($configuration);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes property type by `@var` annotations or default value.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes property type by `@var` annotations or default value.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -135,24 +135,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
         if (!$this->makePropertyTypedGuard->isLegal($node, $this->inlinePublic)) {
             return null;
         }
         $varType = $this->varDocPropertyTypeInferer->inferProperty($node);
-        if ($varType instanceof MixedType) {
+        if ($varType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
         if ($this->objectTypeAnalyzer->isSpecial($varType)) {
             return null;
         }
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::PROPERTY());
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
         if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
             return null;
         }
@@ -167,18 +167,18 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::TYPED_PROPERTIES;
+        return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $node
      */
-    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, Property $property) : bool
+    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property) : bool
     {
-        if (!$node instanceof Node) {
+        if (!$node instanceof \PhpParser\Node) {
             return \true;
         }
         // false positive
-        if (!$node instanceof Name) {
+        if (!$node instanceof \PhpParser\Node\Name) {
             return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
         }
         if (!$this->isName($node, 'mixed')) {
@@ -186,7 +186,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function removeDefaultValueForDoctrineCollection(Property $property, Type $propertyType) : void
+    private function removeDefaultValueForDoctrineCollection(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $propertyType) : void
     {
         if (!$this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($propertyType)) {
             return;
@@ -194,12 +194,12 @@ CODE_SAMPLE
         $onlyProperty = $property->props[0];
         $onlyProperty->default = null;
     }
-    private function addDefaultValueNullForNullableType(Property $property, Type $propertyType) : void
+    private function addDefaultValueNullForNullableType(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $propertyType) : void
     {
-        if (!$propertyType instanceof UnionType) {
+        if (!$propertyType instanceof \PHPStan\Type\UnionType) {
             return;
         }
-        if (!$propertyType->isSuperTypeOf(new NullType())->yes()) {
+        if (!$propertyType->isSuperTypeOf(new \PHPStan\Type\NullType())->yes()) {
             return;
         }
         $onlyProperty = $property->props[0];
@@ -207,8 +207,8 @@ CODE_SAMPLE
         if ($onlyProperty->default !== null) {
             return;
         }
-        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return;
         }
         $propertyName = $this->nodeNameResolver->getName($property);

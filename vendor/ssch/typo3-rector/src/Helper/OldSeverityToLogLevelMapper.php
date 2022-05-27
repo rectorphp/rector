@@ -12,11 +12,11 @@ final class OldSeverityToLogLevelMapper
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeFactory $nodeFactory)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function mapSeverityToLogLevel(int $severityValue) : ClassConstFetch
+    public function mapSeverityToLogLevel(int $severityValue) : \PhpParser\Node\Expr\ClassConstFetch
     {
         if (0 === $severityValue) {
             return $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Log\\LogLevel', 'INFO');

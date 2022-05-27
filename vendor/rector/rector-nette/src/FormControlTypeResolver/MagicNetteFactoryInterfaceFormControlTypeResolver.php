@@ -17,7 +17,7 @@ use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
-final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormControlTypeResolverInterface
+final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**
      * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
@@ -43,7 +43,7 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ReflectionProvider $reflectionProvider, AstResolver $astResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -53,20 +53,20 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
     /**
      * @required
      */
-    public function autowire(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
     /**
      * @return array<string, string>
      */
-    public function resolve(Node $node) : array
+    public function resolve(\PhpParser\Node $node) : array
     {
-        if (!$node instanceof MethodCall) {
+        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return [];
         }
         // skip constructor, handled elsewhere
-        if ($this->nodeNameResolver->isName($node->name, MethodName::CONSTRUCT)) {
+        if ($this->nodeNameResolver->isName($node->name, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return [];
         }
         $methodName = $this->nodeNameResolver->getName($node->name);
@@ -74,23 +74,23 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
             return [];
         }
         $classReflection = $this->resolveClassReflectionByExpr($node->var);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return [];
         }
         $returnedType = $this->nodeTypeResolver->getType($node);
-        if (!$returnedType instanceof TypeWithClassName) {
+        if (!$returnedType instanceof \PHPStan\Type\TypeWithClassName) {
             return [];
         }
-        $classMethod = $this->astResolver->resolveClassMethod($returnedType->getClassName(), MethodName::CONSTRUCT);
-        if (!$classMethod instanceof ClassMethod) {
+        $classMethod = $this->astResolver->resolveClassMethod($returnedType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($classMethod);
     }
-    private function resolveClassReflectionByExpr(Expr $expr) : ?ClassReflection
+    private function resolveClassReflectionByExpr(\PhpParser\Node\Expr $expr) : ?\PHPStan\Reflection\ClassReflection
     {
         $staticType = $this->nodeTypeResolver->getType($expr);
-        if (!$staticType instanceof TypeWithClassName) {
+        if (!$staticType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
         if (!$this->reflectionProvider->hasClass($staticType->getClassName())) {

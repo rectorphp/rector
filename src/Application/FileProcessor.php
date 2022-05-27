@@ -37,7 +37,7 @@ final class FileProcessor
      * @var \Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser
      */
     private $fileWithoutNamespaceNodeTraverser;
-    public function __construct(AffectedFilesCollector $affectedFilesCollector, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, RectorParser $rectorParser, RectorNodeTraverser $rectorNodeTraverser, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
+    public function __construct(\Rector\ChangesReporting\Collector\AffectedFilesCollector $affectedFilesCollector, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser $rectorNodeTraverser, \Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
     {
         $this->affectedFilesCollector = $affectedFilesCollector;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
@@ -45,7 +45,7 @@ final class FileProcessor
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->fileWithoutNamespaceNodeTraverser = $fileWithoutNamespaceNodeTraverser;
     }
-    public function parseFileInfoToLocalCache(File $file) : void
+    public function parseFileInfoToLocalCache(\Rector\Core\ValueObject\Application\File $file) : void
     {
         // store tokens by absolute path, so we don't have to print them right now
         $smartFileInfo = $file->getSmartFileInfo();
@@ -55,7 +55,7 @@ final class FileProcessor
         $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $oldStmts);
         $file->hydrateStmtsAndTokens($newStmts, $oldStmts, $oldTokens);
     }
-    public function refactor(File $file, Configuration $configuration) : void
+    public function refactor(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         $newStmts = $this->fileWithoutNamespaceNodeTraverser->traverse($file->getNewStmts());
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);

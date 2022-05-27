@@ -56,7 +56,7 @@ final class CpuCoreCountProvider
         if ($cpuinfo === \false) {
             return null;
         }
-        $matches = Strings::matchAll($cpuinfo, self::PROCESSOR_REGEX);
+        $matches = \RectorPrefix20220527\Nette\Utils\Strings::matchAll($cpuinfo, self::PROCESSOR_REGEX);
         if ($matches === []) {
             return 0;
         }

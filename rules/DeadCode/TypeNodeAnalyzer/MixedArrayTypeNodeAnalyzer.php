@@ -8,13 +8,13 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 final class MixedArrayTypeNodeAnalyzer
 {
-    public function hasMixedArrayType(UnionTypeNode $unionTypeNode) : bool
+    public function hasMixedArrayType(\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $unionTypeNode) : bool
     {
         $types = $unionTypeNode->types;
         foreach ($types as $type) {
-            if ($type instanceof SpacingAwareArrayTypeNode) {
+            if ($type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode) {
                 $typeNode = $type->type;
-                if (!$typeNode instanceof IdentifierTypeNode) {
+                if (!$typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
                     continue;
                 }
                 if ($typeNode->name === 'mixed') {

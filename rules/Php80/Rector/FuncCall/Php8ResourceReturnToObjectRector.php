@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\FuncCall\Php8ResourceReturnToObjectRector\Php8ResourceReturnToObjectRectorTest
  */
-final class Php8ResourceReturnToObjectRector extends AbstractRector implements MinPhpVersionInterface
+final class Php8ResourceReturnToObjectRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var array<string, string>
@@ -83,13 +83,13 @@ final class Php8ResourceReturnToObjectRector extends AbstractRector implements M
      * @var \Rector\Php80\NodeManipulator\ResourceReturnToObject
      */
     private $resourceReturnToObject;
-    public function __construct(ResourceReturnToObject $resourceReturnToObject)
+    public function __construct(\Rector\Php80\NodeManipulator\ResourceReturnToObject $resourceReturnToObject)
     {
         $this->resourceReturnToObject = $resourceReturnToObject;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change is_resource() to instanceof Object', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change is_resource() to instanceof Object', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -116,17 +116,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class, BooleanOr::class];
+        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\BinaryOp\BooleanOr::class];
     }
     /**
      * @param FuncCall|BooleanOr $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         return $this->resourceReturnToObject->refactor($node, self::COLLECTION_FUNCTION_TO_RETURN_OBJECT);
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::PHP8_RESOURCE_TO_OBJECT;
+        return \Rector\Core\ValueObject\PhpVersionFeature::PHP8_RESOURCE_TO_OBJECT;
     }
 }

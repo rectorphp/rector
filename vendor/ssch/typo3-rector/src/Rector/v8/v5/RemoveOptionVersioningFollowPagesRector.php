@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.5/Deprecation-78524-TCAOptionVersioning_followPagesRemoved.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v5\RemoveOptionVersioningFollowPagesRector\RemoveOptionVersioningFollowPagesRectorTest
  */
-final class RemoveOptionVersioningFollowPagesRector extends AbstractRector
+final class RemoveOptionVersioningFollowPagesRector extends \Rector\Core\Rector\AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -23,27 +23,27 @@ final class RemoveOptionVersioningFollowPagesRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $ctrlArrayItem = $this->extractCtrl($node);
-        if (!$ctrlArrayItem instanceof ArrayItem) {
+        if (!$ctrlArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         $ctrlItems = $ctrlArrayItem->value;
-        if (!$ctrlItems instanceof Array_) {
+        if (!$ctrlItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($ctrlItems->items as $fieldValue) {
-            if (!$fieldValue instanceof ArrayItem) {
+            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
@@ -65,9 +65,9 @@ final class RemoveOptionVersioningFollowPagesRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('TCA option versioning_followPages removed', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA option versioning_followPages removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
         'versioningWS' => 2,

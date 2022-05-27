@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Laravel\Tests\Rector\ClassMethod\AddParentRegisterToEventServiceProviderRector\AddParentRegisterToEventServiceProviderRectorTest
  */
-final class AddParentRegisterToEventServiceProviderRector extends AbstractRector
+final class AddParentRegisterToEventServiceProviderRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -28,13 +28,13 @@ final class AddParentRegisterToEventServiceProviderRector extends AbstractRector
      * @var \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer
      */
     private $staticCallAnalyzer;
-    public function __construct(StaticCallAnalyzer $staticCallAnalyzer)
+    public function __construct(\Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer)
     {
         $this->staticCallAnalyzer = $staticCallAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add parent::register(); call to register() class method in child of Illuminate\\Foundation\\Support\\Providers\\EventServiceProvider', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add parent::register(); call to register() class method in child of Illuminate\\Foundation\\Support\\Providers\\EventServiceProvider', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -62,25 +62,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
-        if (!$this->isObjectType($classLike, new ObjectType('Illuminate\\Foundation\\Support\\Providers\\EventServiceProvider'))) {
+        if (!$this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Illuminate\\Foundation\\Support\\Providers\\EventServiceProvider'))) {
             return null;
         }
         if (!$this->isName($node->name, self::REGISTER)) {
             return null;
         }
         foreach ((array) $node->stmts as $key => $classMethodStmt) {
-            if ($classMethodStmt instanceof Expression) {
+            if ($classMethodStmt instanceof \PhpParser\Node\Stmt\Expression) {
                 $classMethodStmt = $classMethodStmt->expr;
             }
             if (!$this->staticCallAnalyzer->isParentCallNamed($classMethodStmt, self::REGISTER)) {
@@ -92,7 +92,7 @@ CODE_SAMPLE
             unset($node->stmts[$key]);
         }
         $staticCall = $this->nodeFactory->createStaticCall('parent', self::REGISTER);
-        $parentStaticCallExpression = new Expression($staticCall);
+        $parentStaticCallExpression = new \PhpParser\Node\Stmt\Expression($staticCall);
         $node->stmts = \array_merge([$parentStaticCallExpression], (array) $node->stmts);
         return $node;
     }

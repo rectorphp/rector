@@ -17,13 +17,13 @@ if (\PHP_VERSION_ID >= 80100) {
 if (\defined('MYSQLI_REFRESH_SLAVE') && !\defined('MYSQLI_REFRESH_REPLICA')) {
     \define('MYSQLI_REFRESH_REPLICA', 64);
 }
-if (!\function_exists('array_is_list')) {
+if (!\function_exists('RectorPrefix20220527\\array_is_list')) {
     function array_is_list(array $array) : bool
     {
-        return p\Php81::array_is_list($array);
+        return \RectorPrefix20220527\Symfony\Polyfill\Php81\Php81::array_is_list($array);
     }
 }
-if (!\function_exists('enum_exists')) {
+if (!\function_exists('RectorPrefix20220527\\enum_exists')) {
     function enum_exists(string $enum, bool $autoload = \true) : bool
     {
         return $autoload && \class_exists($enum) && \false;

@@ -26,8 +26,8 @@ final class SimpleCallableNodeTraverser
         if (!\is_array($nodes)) {
             $nodes = [$nodes];
         }
-        $nodeTraverser = new NodeTraverser();
-        $callableNodeVisitor = new CallableNodeVisitor($callable);
+        $nodeTraverser = new \PhpParser\NodeTraverser();
+        $callableNodeVisitor = new \RectorPrefix20220527\Symplify\Astral\NodeVisitor\CallableNodeVisitor($callable);
         $nodeTraverser->addVisitor($callableNodeVisitor);
         $nodeTraverser->traverse($nodes);
     }

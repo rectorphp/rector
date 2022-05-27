@@ -19,20 +19,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php74\Rector\Closure\ClosureToArrowFunctionRector\ClosureToArrowFunctionRectorTest
  */
-final class ClosureToArrowFunctionRector extends AbstractRector implements MinPhpVersionInterface
+final class ClosureToArrowFunctionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer
      */
     private $closureArrowFunctionAnalyzer;
-    public function __construct(ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
+    public function __construct(\Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
     {
         $this->closureArrowFunctionAnalyzer = $closureArrowFunctionAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change closure to arrow function', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change closure to arrow function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($meetups)
@@ -59,30 +59,30 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Closure::class];
+        return [\PhpParser\Node\Expr\Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $returnExpr = $this->closureArrowFunctionAnalyzer->matchArrowFunctionExpr($node);
-        if (!$returnExpr instanceof Expr) {
+        if (!$returnExpr instanceof \PhpParser\Node\Expr) {
             return null;
         }
-        $arrowFunction = new ArrowFunction(['params' => $node->params, 'returnType' => $node->returnType, 'byRef' => $node->byRef, 'expr' => $returnExpr]);
+        $arrowFunction = new \PhpParser\Node\Expr\ArrowFunction(['params' => $node->params, 'returnType' => $node->returnType, 'byRef' => $node->byRef, 'expr' => $returnExpr]);
         if ($node->static) {
             $arrowFunction->static = \true;
         }
-        $comments = $node->stmts[0]->getAttribute(AttributeKey::COMMENTS) ?? [];
+        $comments = $node->stmts[0]->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS) ?? [];
         if ($comments !== []) {
             $this->mirrorComments($arrowFunction->expr, $node->stmts[0]);
-            $arrowFunction->setAttribute(AttributeKey::COMMENT_CLOSURE_RETURN_MIRRORED, \true);
+            $arrowFunction->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENT_CLOSURE_RETURN_MIRRORED, \true);
         }
         return $arrowFunction;
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::ARROW_FUNCTION;
+        return \Rector\Core\ValueObject\PhpVersionFeature::ARROW_FUNCTION;
     }
 }

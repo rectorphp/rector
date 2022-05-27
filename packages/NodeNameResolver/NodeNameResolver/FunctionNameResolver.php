@@ -11,20 +11,20 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @implements NodeNameResolverInterface<Function_>
  */
-final class FunctionNameResolver implements NodeNameResolverInterface
+final class FunctionNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     public function getNode() : string
     {
-        return Function_::class;
+        return \PhpParser\Node\Stmt\Function_::class;
     }
     /**
      * @param Function_ $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         $bareName = (string) $node->name;
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return $bareName;
         }
         $namespaceName = $scope->getNamespace();

@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\VersionBonding\PhpVersionedFilter;
-final class RectorNodeTraverser extends NodeTraverser
+final class RectorNodeTraverser extends \PhpParser\NodeTraverser
 {
     /**
      * @var bool
@@ -26,7 +26,7 @@ final class RectorNodeTraverser extends NodeTraverser
     /**
      * @param PhpRectorInterface[] $phpRectors
      */
-    public function __construct(array $phpRectors, PhpVersionedFilter $phpVersionedFilter)
+    public function __construct(array $phpRectors, \Rector\VersionBonding\PhpVersionedFilter $phpVersionedFilter)
     {
         $this->phpRectors = $phpRectors;
         $this->phpVersionedFilter = $phpVersionedFilter;

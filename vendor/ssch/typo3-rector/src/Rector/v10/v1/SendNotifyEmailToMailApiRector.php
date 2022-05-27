@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.1/Deprecation-88850-ContentObjectRendererSendNotifyEmail.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v1\SendNotifyEmailToMailApiRector\SendNotifyEmailToMailApiRectorTest
  */
-final class SendNotifyEmailToMailApiRector extends AbstractRector
+final class SendNotifyEmailToMailApiRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -72,14 +72,14 @@ final class SendNotifyEmailToMailApiRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
+        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
             return null;
         }
         if (!$this->isName($node->name, 'sendNotifyEmail')) {
@@ -99,14 +99,14 @@ final class SendNotifyEmailToMailApiRector extends AbstractRector
         $ifMessageNotEmpty->stmts[] = $this->ifParsedRecipients();
         $ifMessageNotEmpty->stmts[] = $this->createSuccessTrue();
         $this->nodesToAddCollector->addNodeBeforeNode($ifMessageNotEmpty, $node);
-        return new Variable(self::SUCCESS);
+        return new \PhpParser\Node\Expr\Variable(self::SUCCESS);
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor ContentObjectRenderer::sendNotifyEmail to MailMessage-API', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor ContentObjectRenderer::sendNotifyEmail to MailMessage-API', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $GLOBALS['TSFE']->cObj->sendNotifyEmail("Subject\nMessage", 'max.mustermann@domain.com', 'max.mustermann@domain.com', 'max.mustermann@domain.com');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -138,76 +138,76 @@ if ($message !== '') {
 CODE_SAMPLE
 )]);
     }
-    private function initializeSuccessVariable() : Node
+    private function initializeSuccessVariable() : \PhpParser\Node
     {
-        return new Expression(new Assign(new Variable(self::SUCCESS), $this->nodeFactory->createFalse()));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::SUCCESS), $this->nodeFactory->createFalse()));
     }
-    private function initializeMailClass() : Node
+    private function initializeMailClass() : \PhpParser\Node
     {
-        return new Expression(new Assign(new Variable(self::MAIL), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Mail\\MailMessage')])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::MAIL), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Mail\\MailMessage')])));
     }
-    private function trimMessage(MethodCall $methodCall) : Node
+    private function trimMessage(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
     {
-        return new Assign(new Variable(self::MESSAGE), $this->nodeFactory->createFuncCall(self::TRIM, [$methodCall->args[0]]));
+        return new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::MESSAGE), $this->nodeFactory->createFuncCall(self::TRIM, [$methodCall->args[0]]));
     }
-    private function trimSenderName(MethodCall $methodCall) : Node
+    private function trimSenderName(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
     {
-        return new Expression(new Assign(new Variable('senderName'), $this->nodeFactory->createFuncCall(self::TRIM, [$methodCall->args[4] ?? new ConstFetch(new Name('null'))])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('senderName'), $this->nodeFactory->createFuncCall(self::TRIM, [$methodCall->args[4] ?? new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null'))])));
     }
-    private function trimSenderAddress(MethodCall $methodCall) : Node
+    private function trimSenderAddress(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
     {
-        return new Expression(new Assign(new Variable(self::SENDER_ADDRESS), $this->nodeFactory->createFuncCall(self::TRIM, [$methodCall->args[3]])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::SENDER_ADDRESS), $this->nodeFactory->createFuncCall(self::TRIM, [$methodCall->args[3]])));
     }
-    private function mailFromMethodCall() : MethodCall
+    private function mailFromMethodCall() : \PhpParser\Node\Expr\MethodCall
     {
-        return $this->nodeFactory->createMethodCall(self::MAIL, 'from', [new New_(new FullyQualified('Symfony\\Component\\Mime\\Address'), [$this->nodeFactory->createArg(new Variable(self::SENDER_ADDRESS)), $this->nodeFactory->createArg(new Variable('senderName'))])]);
+        return $this->nodeFactory->createMethodCall(self::MAIL, 'from', [new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Mime\\Address'), [$this->nodeFactory->createArg(new \PhpParser\Node\Expr\Variable(self::SENDER_ADDRESS)), $this->nodeFactory->createArg(new \PhpParser\Node\Expr\Variable('senderName'))])]);
     }
-    private function ifSenderAddress() : Node
+    private function ifSenderAddress() : \PhpParser\Node
     {
         $mailFromMethodCall = $this->mailFromMethodCall();
-        $ifSenderName = new If_(new NotIdentical(new Variable(self::SENDER_ADDRESS), new String_('')));
-        $ifSenderName->stmts[0] = new Expression($mailFromMethodCall);
+        $ifSenderName = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\NotIdentical(new \PhpParser\Node\Expr\Variable(self::SENDER_ADDRESS), new \PhpParser\Node\Scalar\String_('')));
+        $ifSenderName->stmts[0] = new \PhpParser\Node\Stmt\Expression($mailFromMethodCall);
         return $ifSenderName;
     }
-    private function messageNotEmpty() : If_
+    private function messageNotEmpty() : \PhpParser\Node\Stmt\If_
     {
-        return new If_(new NotIdentical(new Variable(self::MESSAGE), new String_('')));
+        return new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\NotIdentical(new \PhpParser\Node\Expr\Variable(self::MESSAGE), new \PhpParser\Node\Scalar\String_('')));
     }
-    private function messageParts() : Expression
+    private function messageParts() : \PhpParser\Node\Stmt\Expression
     {
-        return new Expression(new Assign(new Variable(self::MESSAGE_PARTS), $this->nodeFactory->createFuncCall('explode', [new ConstFetch(new Name('LF')), new Variable(self::MESSAGE), new LNumber(2)])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::MESSAGE_PARTS), $this->nodeFactory->createFuncCall('explode', [new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('LF')), new \PhpParser\Node\Expr\Variable(self::MESSAGE), new \PhpParser\Node\Scalar\LNumber(2)])));
     }
-    private function subjectFromMessageParts() : Expression
+    private function subjectFromMessageParts() : \PhpParser\Node\Stmt\Expression
     {
-        return new Expression(new Assign(new Variable(self::SUBJECT), $this->nodeFactory->createFuncCall(self::TRIM, [new ArrayDimFetch(new Variable(self::MESSAGE_PARTS), new LNumber(0))])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::SUBJECT), $this->nodeFactory->createFuncCall(self::TRIM, [new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::MESSAGE_PARTS), new \PhpParser\Node\Scalar\LNumber(0))])));
     }
-    private function bodyFromMessageParts() : Expression
+    private function bodyFromMessageParts() : \PhpParser\Node\Stmt\Expression
     {
-        return new Expression(new Assign(new Variable('plainMessage'), $this->nodeFactory->createFuncCall(self::TRIM, [new ArrayDimFetch(new Variable(self::MESSAGE_PARTS), new LNumber(1))])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('plainMessage'), $this->nodeFactory->createFuncCall(self::TRIM, [new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::MESSAGE_PARTS), new \PhpParser\Node\Scalar\LNumber(1))])));
     }
-    private function parsedRecipients(MethodCall $methodCall) : Expression
+    private function parsedRecipients(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Stmt\Expression
     {
-        return new Expression(new Assign(new Variable(self::PARSED_RECIPIENTS), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\MailUtility', 'parseAddresses', [$methodCall->args[1]])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARSED_RECIPIENTS), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\MailUtility', 'parseAddresses', [$methodCall->args[1]])));
     }
-    private function ifParsedRecipients() : If_
+    private function ifParsedRecipients() : \PhpParser\Node\Stmt\If_
     {
-        $ifParsedRecipients = new If_(new BooleanNot(new Empty_(new Variable(self::PARSED_RECIPIENTS))));
-        $ifParsedRecipients->stmts[] = new Expression($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(self::MAIL, 'to', [new Arg(new Variable(self::PARSED_RECIPIENTS), \false, \true)]), self::SUBJECT, [new Variable(self::SUBJECT)]), 'text', [new Variable('plainMessage')]));
-        $ifParsedRecipients->stmts[] = new Expression($this->nodeFactory->createMethodCall(self::MAIL, 'send'));
+        $ifParsedRecipients = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Empty_(new \PhpParser\Node\Expr\Variable(self::PARSED_RECIPIENTS))));
+        $ifParsedRecipients->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(self::MAIL, 'to', [new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Variable(self::PARSED_RECIPIENTS), \false, \true)]), self::SUBJECT, [new \PhpParser\Node\Expr\Variable(self::SUBJECT)]), 'text', [new \PhpParser\Node\Expr\Variable('plainMessage')]));
+        $ifParsedRecipients->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall(self::MAIL, 'send'));
         return $ifParsedRecipients;
     }
-    private function createSuccessTrue() : Expression
+    private function createSuccessTrue() : \PhpParser\Node\Stmt\Expression
     {
-        return new Expression(new Assign(new Variable(self::SUCCESS), $this->nodeFactory->createTrue()));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::SUCCESS), $this->nodeFactory->createTrue()));
     }
-    private function parsedReplyTo(Expr $replyTo) : Node
+    private function parsedReplyTo(\PhpParser\Node\Expr $replyTo) : \PhpParser\Node
     {
-        return new Expression(new Assign(new Variable(self::PARSED_REPLY_TO), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\MailUtility', 'parseAddresses', [$replyTo])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARSED_REPLY_TO), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\MailUtility', 'parseAddresses', [$replyTo])));
     }
-    private function methodReplyTo() : Node
+    private function methodReplyTo() : \PhpParser\Node
     {
-        $if = new If_(new BooleanNot(new Empty_(new Variable(self::PARSED_REPLY_TO))));
-        $if->stmts[] = new Expression($this->nodeFactory->createMethodCall(self::MAIL, 'setReplyTo', [new Variable(self::PARSED_REPLY_TO)]));
+        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Empty_(new \PhpParser\Node\Expr\Variable(self::PARSED_REPLY_TO))));
+        $if->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall(self::MAIL, 'setReplyTo', [new \PhpParser\Node\Expr\Variable(self::PARSED_REPLY_TO)]));
         return $if;
     }
 }

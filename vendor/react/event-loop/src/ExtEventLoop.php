@@ -19,7 +19,7 @@ use SplObjectStorage;
  *
  * @link https://pecl.php.net/package/event
  */
-final class ExtEventLoop implements LoopInterface
+final class ExtEventLoop implements \RectorPrefix20220527\React\EventLoop\LoopInterface
 {
     private $eventBase;
     private $futureTickQueue;
@@ -38,7 +38,7 @@ final class ExtEventLoop implements LoopInterface
     public function __construct()
     {
         if (!\class_exists('EventBase', \false)) {
-            throw new BadMethodCallException('Cannot create ExtEventLoop, ext-event extension missing');
+            throw new \BadMethodCallException('Cannot create ExtEventLoop, ext-event extension missing');
         }
         // support arbitrary file descriptors and not just sockets
         // Windows only has limited file descriptor support, so do not require this (will fail otherwise)
@@ -47,10 +47,10 @@ final class ExtEventLoop implements LoopInterface
         if (\DIRECTORY_SEPARATOR !== '\\') {
             $config->requireFeatures(\EventConfig::FEATURE_FDS);
         }
-        $this->eventBase = new EventBase($config);
-        $this->futureTickQueue = new FutureTickQueue();
-        $this->timerEvents = new SplObjectStorage();
-        $this->signals = new SignalsHandler();
+        $this->eventBase = new \EventBase($config);
+        $this->futureTickQueue = new \RectorPrefix20220527\React\EventLoop\Tick\FutureTickQueue();
+        $this->timerEvents = new \SplObjectStorage();
+        $this->signals = new \RectorPrefix20220527\React\EventLoop\SignalsHandler();
         $this->createTimerCallback();
         $this->createStreamCallback();
     }
@@ -69,7 +69,7 @@ final class ExtEventLoop implements LoopInterface
         if (isset($this->readListeners[$key])) {
             return;
         }
-        $event = new Event($this->eventBase, $stream, Event::PERSIST | Event::READ, $this->streamCallback);
+        $event = new \Event($this->eventBase, $stream, \Event::PERSIST | \Event::READ, $this->streamCallback);
         $event->add();
         $this->readEvents[$key] = $event;
         $this->readListeners[$key] = $listener;
@@ -85,7 +85,7 @@ final class ExtEventLoop implements LoopInterface
         if (isset($this->writeListeners[$key])) {
             return;
         }
-        $event = new Event($this->eventBase, $stream, Event::PERSIST | Event::WRITE, $this->streamCallback);
+        $event = new \Event($this->eventBase, $stream, \Event::PERSIST | \Event::WRITE, $this->streamCallback);
         $event->add();
         $this->writeEvents[$key] = $event;
         $this->writeListeners[$key] = $listener;
@@ -113,17 +113,17 @@ final class ExtEventLoop implements LoopInterface
     }
     public function addTimer($interval, $callback)
     {
-        $timer = new Timer($interval, $callback, \false);
+        $timer = new \RectorPrefix20220527\React\EventLoop\Timer\Timer($interval, $callback, \false);
         $this->scheduleTimer($timer);
         return $timer;
     }
     public function addPeriodicTimer($interval, $callback)
     {
-        $timer = new Timer($interval, $callback, \true);
+        $timer = new \RectorPrefix20220527\React\EventLoop\Timer\Timer($interval, $callback, \true);
         $this->scheduleTimer($timer);
         return $timer;
     }
-    public function cancelTimer(TimerInterface $timer)
+    public function cancelTimer(\RectorPrefix20220527\React\EventLoop\TimerInterface $timer)
     {
         if ($this->timerEvents->contains($timer)) {
             $this->timerEvents[$timer]->free();
@@ -138,7 +138,7 @@ final class ExtEventLoop implements LoopInterface
     {
         $this->signals->add($signal, $listener);
         if (!isset($this->signalEvents[$signal])) {
-            $this->signalEvents[$signal] = Event::signal($this->eventBase, $signal, array($this->signals, 'call'));
+            $this->signalEvents[$signal] = \Event::signal($this->eventBase, $signal, array($this->signals, 'call'));
             $this->signalEvents[$signal]->add();
         }
     }
@@ -155,9 +155,9 @@ final class ExtEventLoop implements LoopInterface
         $this->running = \true;
         while ($this->running) {
             $this->futureTickQueue->tick();
-            $flags = EventBase::LOOP_ONCE;
+            $flags = \EventBase::LOOP_ONCE;
             if (!$this->running || !$this->futureTickQueue->isEmpty()) {
-                $flags |= EventBase::LOOP_NONBLOCK;
+                $flags |= \EventBase::LOOP_NONBLOCK;
             } elseif (!$this->readEvents && !$this->writeEvents && !$this->timerEvents->count() && $this->signals->isEmpty()) {
                 break;
             }
@@ -173,13 +173,13 @@ final class ExtEventLoop implements LoopInterface
      *
      * @param TimerInterface $timer
      */
-    private function scheduleTimer(TimerInterface $timer)
+    private function scheduleTimer(\RectorPrefix20220527\React\EventLoop\TimerInterface $timer)
     {
-        $flags = Event::TIMEOUT;
+        $flags = \Event::TIMEOUT;
         if ($timer->isPeriodic()) {
-            $flags |= Event::PERSIST;
+            $flags |= \Event::PERSIST;
         }
-        $event = new Event($this->eventBase, -1, $flags, $this->timerCallback, $timer);
+        $event = new \Event($this->eventBase, -1, $flags, $this->timerCallback, $timer);
         $this->timerEvents[$timer] = $event;
         $event->add($timer->getInterval());
     }
@@ -213,10 +213,10 @@ final class ExtEventLoop implements LoopInterface
         $write =& $this->writeListeners;
         $this->streamCallback = function ($stream, $flags) use(&$read, &$write) {
             $key = (int) $stream;
-            if (Event::READ === (Event::READ & $flags) && isset($read[$key])) {
+            if (\Event::READ === (\Event::READ & $flags) && isset($read[$key])) {
                 \call_user_func($read[$key], $stream);
             }
-            if (Event::WRITE === (Event::WRITE & $flags) && isset($write[$key])) {
+            if (\Event::WRITE === (\Event::WRITE & $flags) && isset($write[$key])) {
                 \call_user_func($write[$key], $stream);
             }
         };

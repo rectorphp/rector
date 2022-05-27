@@ -17,15 +17,15 @@ final class AliasNameResolver
     {
         $this->useImportsResolver = $useImportsResolver;
     }
-    public function resolveByName(Name $name) : ?string
+    public function resolveByName(\PhpParser\Node\Name $name) : ?string
     {
         $uses = $this->useImportsResolver->resolveForNode($name);
         $nameString = $name->toString();
         foreach ($uses as $use) {
-            $prefix = $use instanceof GroupUse ? $use->prefix . '\\' : '';
+            $prefix = $use instanceof \PhpParser\Node\Stmt\GroupUse ? $use->prefix . '\\' : '';
             $useUses = $use->uses;
             foreach ($useUses as $useUse) {
-                if (!$useUse->alias instanceof Identifier) {
+                if (!$useUse->alias instanceof \PhpParser\Node\Identifier) {
                     continue;
                 }
                 $name = $prefix . $useUse->name->toString();

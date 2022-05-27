@@ -15,16 +15,16 @@ use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(ChangeNestedForeachIfsToEarlyContinueRector::class);
-    $rectorConfig->rule(ChangeAndIfToEarlyReturnRector::class);
-    $rectorConfig->rule(ChangeIfElseValueAssignToEarlyReturnRector::class);
-    $rectorConfig->rule(ChangeNestedIfsToEarlyReturnRector::class);
-    $rectorConfig->rule(RemoveAlwaysElseRector::class);
-    $rectorConfig->rule(ReturnBinaryAndToEarlyReturnRector::class);
-    $rectorConfig->rule(ChangeOrIfReturnToEarlyReturnRector::class);
-    $rectorConfig->rule(ChangeOrIfContinueToMultiContinueRector::class);
-    $rectorConfig->rule(ReturnAfterToEarlyOnBreakRector::class);
-    $rectorConfig->rule(PreparedValueToEarlyReturnRector::class);
-    $rectorConfig->rule(ReturnBinaryOrToEarlyReturnRector::class);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector::class);
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector::class);
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector::class);
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector::class);
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector::class);
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector::class);
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\If_\ChangeOrIfReturnToEarlyReturnRector::class);
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector::class);
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\Foreach_\ReturnAfterToEarlyOnBreakRector::class);
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector::class);
+    $rectorConfig->rule(\Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector::class);
 };

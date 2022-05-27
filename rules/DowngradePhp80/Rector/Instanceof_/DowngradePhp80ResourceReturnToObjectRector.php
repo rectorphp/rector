@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\Instanceof_\DowngradePhp80ResourceReturnToObjectRector\DowngradePhp80ResourceReturnToObjectRectorTest
  */
-final class DowngradePhp80ResourceReturnToObjectRector extends AbstractRector
+final class DowngradePhp80ResourceReturnToObjectRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string[]
@@ -53,13 +53,13 @@ final class DowngradePhp80ResourceReturnToObjectRector extends AbstractRector
      * @var \Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn
      */
     private $objectToResourceReturn;
-    public function __construct(ObjectToResourceReturn $objectToResourceReturn)
+    public function __construct(\Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn $objectToResourceReturn)
     {
         $this->objectToResourceReturn = $objectToResourceReturn;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('change instanceof Object to is_resource', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('change instanceof Object to is_resource', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($obj)
@@ -84,12 +84,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Instanceof_::class];
+        return [\PhpParser\Node\Expr\Instanceof_::class];
     }
     /**
      * @param Instanceof_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         return $this->objectToResourceReturn->refactor($node, self::COLLECTION_OBJECT_TO_RESOURCE);
     }

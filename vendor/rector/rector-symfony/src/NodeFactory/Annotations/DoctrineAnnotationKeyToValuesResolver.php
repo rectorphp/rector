@@ -14,19 +14,19 @@ final class DoctrineAnnotationKeyToValuesResolver
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
     /**
      * @return array<string|null, mixed>
      */
-    public function resolveFromExpr(Expr $expr) : array
+    public function resolveFromExpr(\PhpParser\Node\Expr $expr) : array
     {
         $annotationKeyToValues = [];
-        if ($expr instanceof Array_) {
+        if ($expr instanceof \PhpParser\Node\Expr\Array_) {
             foreach ($expr->items as $arrayItem) {
-                if (!$arrayItem instanceof ArrayItem) {
+                if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                     continue;
                 }
                 $key = $this->resolveKey($arrayItem);
@@ -39,9 +39,9 @@ final class DoctrineAnnotationKeyToValuesResolver
         }
         return $annotationKeyToValues;
     }
-    private function resolveKey(ArrayItem $arrayItem) : ?string
+    private function resolveKey(\PhpParser\Node\Expr\ArrayItem $arrayItem) : ?string
     {
-        if (!$arrayItem->key instanceof Expr) {
+        if (!$arrayItem->key instanceof \PhpParser\Node\Expr) {
             return null;
         }
         return $this->valueResolver->getValue($arrayItem->key);

@@ -22,19 +22,19 @@ final class Traverser
      * @param  callable(Node): (Node|int|null)|null  $enter
      * @param  callable(Node): (Node|int|null)|null  $leave
      */
-    public function traverse(Node $node, ?callable $enter = null, ?callable $leave = null) : Node
+    public function traverse(\RectorPrefix20220527\Nette\Neon\Node $node, ?callable $enter = null, ?callable $leave = null) : \RectorPrefix20220527\Nette\Neon\Node
     {
         $this->enter = $enter;
         $this->leave = $leave;
         $this->stop = \false;
         return $this->traverseNode($node);
     }
-    private function traverseNode(Node $node) : Node
+    private function traverseNode(\RectorPrefix20220527\Nette\Neon\Node $node) : \RectorPrefix20220527\Nette\Neon\Node
     {
         $children = \true;
         if ($this->enter) {
             $res = ($this->enter)($node);
-            if ($res instanceof Node) {
+            if ($res instanceof \RectorPrefix20220527\Nette\Neon\Node) {
                 $node = $res;
             } elseif ($res === self::DontTraverseChildren) {
                 $children = \false;
@@ -53,7 +53,7 @@ final class Traverser
         }
         if (!$this->stop && $this->leave) {
             $res = ($this->leave)($node);
-            if ($res instanceof Node) {
+            if ($res instanceof \RectorPrefix20220527\Nette\Neon\Node) {
                 $node = $res;
             } elseif ($res === self::StopTraversal) {
                 $this->stop = \true;

@@ -21,15 +21,15 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\FunctionLike\FileGetContentsAndJsonDecodeToStaticCallRector\FileGetContentsAndJsonDecodeToStaticCallRectorTest
  */
-final class FileGetContentsAndJsonDecodeToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class FileGetContentsAndJsonDecodeToStaticCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var \Rector\Transform\ValueObject\StaticCallRecipe
      */
     private $staticCallRecipe;
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Merge 2 function calls to static call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Merge 2 function calls to static call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function load($filePath)
@@ -48,19 +48,19 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [new StaticCallRecipe('FileLoader', 'loadJson')])]);
+, [new \Rector\Transform\ValueObject\StaticCallRecipe('FileLoader', 'loadJson')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [FunctionLike::class];
+        return [\PhpParser\Node\FunctionLike::class];
     }
     /**
      * @param FunctionLike $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $stmts = $node->getStmts();
         if ($stmts === null) {
@@ -87,38 +87,38 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $staticCallRecipe = $configuration[0] ?? null;
-        Assert::isInstanceOf($staticCallRecipe, StaticCallRecipe::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::isInstanceOf($staticCallRecipe, \Rector\Transform\ValueObject\StaticCallRecipe::class);
         $this->staticCallRecipe = $staticCallRecipe;
     }
-    private function createStaticCall(FuncCall $fileGetContentsFuncCall) : StaticCall
+    private function createStaticCall(\PhpParser\Node\Expr\FuncCall $fileGetContentsFuncCall) : \PhpParser\Node\Expr\StaticCall
     {
-        $fullyQualified = new FullyQualified($this->staticCallRecipe->getClassName());
-        return new StaticCall($fullyQualified, $this->staticCallRecipe->getMethodName(), $fileGetContentsFuncCall->getArgs());
+        $fullyQualified = new \PhpParser\Node\Name\FullyQualified($this->staticCallRecipe->getClassName());
+        return new \PhpParser\Node\Expr\StaticCall($fullyQualified, $this->staticCallRecipe->getMethodName(), $fileGetContentsFuncCall->getArgs());
     }
-    private function processStmt(?Stmt $previousStmt, Stmt $currentStmt) : bool
+    private function processStmt(?\PhpParser\Node\Stmt $previousStmt, \PhpParser\Node\Stmt $currentStmt) : bool
     {
-        if (!$previousStmt instanceof Expression) {
+        if (!$previousStmt instanceof \PhpParser\Node\Stmt\Expression) {
             return \false;
         }
         $previousExpr = $previousStmt->expr;
-        if (!$previousExpr instanceof Assign) {
+        if (!$previousExpr instanceof \PhpParser\Node\Expr\Assign) {
             return \false;
         }
         $previousAssign = $previousExpr;
-        if (!$previousAssign->expr instanceof FuncCall) {
+        if (!$previousAssign->expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return \false;
         }
         if (!$this->isName($previousAssign->expr, 'file_get_contents')) {
             return \false;
         }
         $fileGetContentsFuncCall = $previousAssign->expr;
-        if ($currentStmt instanceof Return_) {
+        if ($currentStmt instanceof \PhpParser\Node\Stmt\Return_) {
             return $this->refactorReturnAndAssign($currentStmt, $fileGetContentsFuncCall);
         }
-        if (!$currentStmt instanceof Expression) {
+        if (!$currentStmt instanceof \PhpParser\Node\Stmt\Expression) {
             return \false;
         }
-        if (!$currentStmt->expr instanceof Assign) {
+        if (!$currentStmt->expr instanceof \PhpParser\Node\Expr\Assign) {
             return \false;
         }
         return $this->refactorReturnAndAssign($currentStmt->expr, $fileGetContentsFuncCall);
@@ -126,9 +126,9 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Return_|\PhpParser\Node\Expr\Assign $currentStmt
      */
-    private function refactorReturnAndAssign($currentStmt, FuncCall $fileGetContentsFuncCall) : bool
+    private function refactorReturnAndAssign($currentStmt, \PhpParser\Node\Expr\FuncCall $fileGetContentsFuncCall) : bool
     {
-        if (!$currentStmt->expr instanceof FuncCall) {
+        if (!$currentStmt->expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return \false;
         }
         if (!$this->isName($currentStmt->expr, 'json_decode')) {

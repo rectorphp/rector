@@ -21,23 +21,23 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\ReplaceExtKeyWithExtensionKeyRector\ReplaceExtKeyWithExtensionKeyFromComposerJsonNameRectorTest
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\ReplaceExtKeyWithExtensionKeyRector\ReplaceExtKeyWithExtensionKeyFromComposerJsonExtensionKeyExtraSectionRectorTest
  */
-final class ReplaceExtKeyWithExtensionKeyRector extends AbstractRector
+final class ReplaceExtKeyWithExtensionKeyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;
-    public function __construct(FilesFinder $filesFinder)
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder)
     {
         $this->filesFinder = $filesFinder;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace $_EXTKEY with extension key', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace $_EXTKEY with extension key', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 ExtensionUtility::configurePlugin(
     'Foo.'.$_EXTKEY,
     'ArticleTeaser',
@@ -62,12 +62,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Variable::class];
+        return [\PhpParser\Node\Expr\Variable::class];
     }
     /**
      * @param Variable $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $fileInfo = $this->file->getSmartFileInfo();
         if ($this->filesFinder->isExtEmconf($fileInfo)) {
@@ -77,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
         $extEmConf = $this->createExtensionKeyFromFolder($fileInfo);
-        if (!$extEmConf instanceof SmartFileInfo) {
+        if (!$extEmConf instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
             return null;
         }
         if ($this->isAssignment($node)) {
@@ -87,27 +87,27 @@ CODE_SAMPLE
         if (null === $extensionKey) {
             $extensionKey = \basename($extEmConf->getRealPathDirectory());
         }
-        return new String_($extensionKey);
+        return new \PhpParser\Node\Scalar\String_($extensionKey);
     }
-    private function isExtensionKeyVariable(Variable $variable) : bool
+    private function isExtensionKeyVariable(\PhpParser\Node\Expr\Variable $variable) : bool
     {
         return $this->isName($variable, '_EXTKEY');
     }
-    private function createExtensionKeyFromFolder(SmartFileInfo $fileInfo) : ?SmartFileInfo
+    private function createExtensionKeyFromFolder(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : ?\Symplify\SmartFileSystem\SmartFileInfo
     {
         return $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($fileInfo);
     }
-    private function isAssignment(Variable $node) : bool
+    private function isAssignment(\PhpParser\Node\Expr\Variable $node) : bool
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // Check if we have an assigment to the property, if so do not change it
-        return $parentNode instanceof Assign && $parentNode->var === $node;
+        return $parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var === $node;
     }
-    private function resolveExtensionKeyByComposerJson(SmartFileInfo $extEmConf) : ?string
+    private function resolveExtensionKeyByComposerJson(\Symplify\SmartFileSystem\SmartFileInfo $extEmConf) : ?string
     {
         try {
-            $composerJson = new SmartFileInfo($extEmConf->getRealPathDirectory() . '/composer.json');
-            $json = Json::decode($composerJson->getContents(), Json::FORCE_ARRAY);
+            $composerJson = new \Symplify\SmartFileSystem\SmartFileInfo($extEmConf->getRealPathDirectory() . '/composer.json');
+            $json = \RectorPrefix20220527\Nette\Utils\Json::decode($composerJson->getContents(), \RectorPrefix20220527\Nette\Utils\Json::FORCE_ARRAY);
             if (isset($json['extra']['typo3/cms']['extension-key'])) {
                 return $json['extra']['typo3/cms']['extension-key'];
             }
@@ -115,7 +115,7 @@ CODE_SAMPLE
                 [, $extensionKey] = \explode('/', (string) $json['name'], 2);
                 return \str_replace('-', '_', $extensionKey);
             }
-        } catch (FileNotFoundException $exception) {
+        } catch (\RectorPrefix20220527\Symplify\SmartFileSystem\Exception\FileNotFoundException $exception) {
             return null;
         }
         return null;

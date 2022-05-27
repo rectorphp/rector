@@ -18,13 +18,13 @@ final class OldAndNewFileInfo
      * @var string
      */
     private $packageName;
-    public function __construct(SmartFileInfo $oldFileInfo, SmartFileInfo $newFileInfo, string $packageName)
+    public function __construct(\Symplify\SmartFileSystem\SmartFileInfo $oldFileInfo, \Symplify\SmartFileSystem\SmartFileInfo $newFileInfo, string $packageName)
     {
         $this->oldFileInfo = $oldFileInfo;
         $this->newFileInfo = $newFileInfo;
         $this->packageName = $packageName;
     }
-    public function getOldFileInfo() : SmartFileInfo
+    public function getOldFileInfo() : \Symplify\SmartFileSystem\SmartFileInfo
     {
         return $this->oldFileInfo;
     }
@@ -36,7 +36,7 @@ final class OldAndNewFileInfo
     {
         return $this->newFileInfo->getRelativeFilePathFromCwd();
     }
-    public function getNewFileInfo() : SmartFileInfo
+    public function getNewFileInfo() : \Symplify\SmartFileSystem\SmartFileInfo
     {
         return $this->newFileInfo;
     }

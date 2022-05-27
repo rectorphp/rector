@@ -8,7 +8,7 @@ class ParseError extends \Exception
 {
     /** @var int|null */
     private $sourceLine;
-    public function __construct(string $message = "", int $code = 0, ?int $line = null, Exception $previous = null)
+    public function __construct(string $message = "", int $code = 0, ?int $line = null, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->sourceLine = $line;

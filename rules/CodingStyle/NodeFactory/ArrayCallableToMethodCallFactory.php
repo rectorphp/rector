@@ -18,35 +18,35 @@ final class ArrayCallableToMethodCallFactory
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function create(Array_ $array) : ?MethodCall
+    public function create(\PhpParser\Node\Expr\Array_ $array) : ?\PhpParser\Node\Expr\MethodCall
     {
         if (\count($array->items) !== 2) {
             return null;
         }
         $firstItem = $array->items[0];
         $secondItem = $array->items[1];
-        if (!$firstItem instanceof ArrayItem) {
+        if (!$firstItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        if (!$secondItem instanceof ArrayItem) {
+        if (!$secondItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        if (!$secondItem->value instanceof String_) {
+        if (!$secondItem->value instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
-        if (!$firstItem->value instanceof PropertyFetch && !$firstItem->value instanceof Variable) {
+        if (!$firstItem->value instanceof \PhpParser\Node\Expr\PropertyFetch && !$firstItem->value instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         $firstItemType = $this->nodeTypeResolver->getType($firstItem->value);
-        if (!$firstItemType instanceof TypeWithClassName) {
+        if (!$firstItemType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
         $string = $secondItem->value;
         $methodName = $string->value;
-        return new MethodCall($firstItem->value, $methodName);
+        return new \PhpParser\Node\Expr\MethodCall($firstItem->value, $methodName);
     }
 }

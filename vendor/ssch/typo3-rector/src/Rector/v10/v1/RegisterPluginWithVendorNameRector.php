@@ -16,21 +16,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.1/Deprecation-88995-CallingRegisterPluginWithVendorName.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v1\RegisterPluginWithVendorNameRector\RegisterPluginWithVendorNameRectorTest
  */
-final class RegisterPluginWithVendorNameRector extends AbstractRector
+final class RegisterPluginWithVendorNameRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'registerPlugin')) {
@@ -41,9 +41,9 @@ final class RegisterPluginWithVendorNameRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove vendor name from registerPlugin call', [new CodeSample('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility' . '::registerPlugin(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove vendor name from registerPlugin call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility' . '::registerPlugin(
    \'TYPO3.CMS.Form\',
    \'Formframework\',
    \'Form\',
@@ -55,12 +55,12 @@ final class RegisterPluginWithVendorNameRector extends AbstractRector
    \'content-form\',
 );')]);
     }
-    private function removeVendorNameIfNeeded(StaticCall $staticCall) : ?Node
+    private function removeVendorNameIfNeeded(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node
     {
         $extensionNameArgumentValue = $staticCall->getArgs()[0]->value;
         $extensionName = $this->valueResolver->getValue($extensionNameArgumentValue);
         $fileInfo = $this->file->getSmartFileInfo();
-        if ($extensionNameArgumentValue instanceof Concat && $this->isPotentiallyUndefinedExtensionKeyVariable($extensionNameArgumentValue)) {
+        if ($extensionNameArgumentValue instanceof \PhpParser\Node\Expr\BinaryOp\Concat && $this->isPotentiallyUndefinedExtensionKeyVariable($extensionNameArgumentValue)) {
             $extensionName = $this->valueResolver->getValue($extensionNameArgumentValue->left) . \basename($fileInfo->getRelativeDirectoryPath());
         }
         if (!\is_string($extensionName)) {
@@ -70,13 +70,13 @@ final class RegisterPluginWithVendorNameRector extends AbstractRector
         if (\false === $delimiterPosition) {
             return null;
         }
-        $extensionName = StringUtility::prepareExtensionName($extensionName, $delimiterPosition);
+        $extensionName = \Ssch\TYPO3Rector\Helper\StringUtility::prepareExtensionName($extensionName, $delimiterPosition);
         $staticCall->args[0] = $this->nodeFactory->createArg($extensionName);
         return $staticCall;
     }
-    private function isPotentiallyUndefinedExtensionKeyVariable(Concat $extensionNameArgumentValue) : bool
+    private function isPotentiallyUndefinedExtensionKeyVariable(\PhpParser\Node\Expr\BinaryOp\Concat $extensionNameArgumentValue) : bool
     {
-        if (!$extensionNameArgumentValue->right instanceof Variable) {
+        if (!$extensionNameArgumentValue->right instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
         if (null !== $this->valueResolver->getValue($extensionNameArgumentValue->right)) {

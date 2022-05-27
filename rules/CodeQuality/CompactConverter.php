@@ -18,15 +18,15 @@ final class CompactConverter
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
-    public function hasAllArgumentsNamed(FuncCall $funcCall) : bool
+    public function hasAllArgumentsNamed(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         foreach ($funcCall->args as $arg) {
             // VariadicPlaceholder doesn't has name, so it return false directly
-            if (!$arg instanceof Arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
                 return \false;
             }
             /** @var string|null $variableName */
@@ -37,19 +37,19 @@ final class CompactConverter
         }
         return \true;
     }
-    public function convertToArray(FuncCall $funcCall) : Array_
+    public function convertToArray(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\Array_
     {
-        $array = new Array_();
+        $array = new \PhpParser\Node\Expr\Array_();
         foreach ($funcCall->args as $arg) {
-            if (!$arg instanceof Arg) {
-                throw new ShouldNotHappenException();
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             /** @var string|null $variableName */
             $variableName = $this->valueResolver->getValue($arg->value);
             if (!\is_string($variableName)) {
-                throw new ShouldNotHappenException();
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            $array->items[] = new ArrayItem(new Variable($variableName), new String_($variableName));
+            $array->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Variable($variableName), new \PhpParser\Node\Scalar\String_($variableName));
         }
         return $array;
     }

@@ -5,12 +5,12 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Rector\Core\Bootstrap\ExtensionConfigResolver;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/services.php');
     $rectorConfig->import(__DIR__ . '/services-rules.php');
     $rectorConfig->import(__DIR__ . '/services-packages.php');
     $rectorConfig->import(__DIR__ . '/parameters.php');
-    $extensionConfigResolver = new ExtensionConfigResolver();
+    $extensionConfigResolver = new \Rector\Core\Bootstrap\ExtensionConfigResolver();
     $extensionConfigFiles = $extensionConfigResolver->provide();
     foreach ($extensionConfigFiles as $extensionConfigFile) {
         $rectorConfig->import($extensionConfigFile->getRealPath());

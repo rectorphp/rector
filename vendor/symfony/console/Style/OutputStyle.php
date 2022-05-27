@@ -19,10 +19,10 @@ use RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-abstract class OutputStyle implements OutputInterface, StyleInterface
+abstract class OutputStyle implements \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface, \RectorPrefix20220527\Symfony\Component\Console\Style\StyleInterface
 {
     private $output;
-    public function __construct(OutputInterface $output)
+    public function __construct(\RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output)
     {
         $this->output = $output;
     }
@@ -33,9 +33,9 @@ abstract class OutputStyle implements OutputInterface, StyleInterface
     {
         $this->output->write(\str_repeat(\PHP_EOL, $count));
     }
-    public function createProgressBar(int $max = 0) : ProgressBar
+    public function createProgressBar(int $max = 0) : \RectorPrefix20220527\Symfony\Component\Console\Helper\ProgressBar
     {
-        return new ProgressBar($this->output, $max);
+        return new \RectorPrefix20220527\Symfony\Component\Console\Helper\ProgressBar($this->output, $max);
     }
     /**
      * {@inheritdoc}
@@ -84,14 +84,14 @@ abstract class OutputStyle implements OutputInterface, StyleInterface
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(OutputFormatterInterface $formatter)
+    public function setFormatter(\RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
     {
         $this->output->setFormatter($formatter);
     }
     /**
      * {@inheritdoc}
      */
-    public function getFormatter() : OutputFormatterInterface
+    public function getFormatter() : \RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterInterface
     {
         return $this->output->getFormatter();
     }
@@ -125,7 +125,7 @@ abstract class OutputStyle implements OutputInterface, StyleInterface
     }
     protected function getErrorOutput()
     {
-        if (!$this->output instanceof ConsoleOutputInterface) {
+        if (!$this->output instanceof \RectorPrefix20220527\Symfony\Component\Console\Output\ConsoleOutputInterface) {
             return $this->output;
         }
         return $this->output->getErrorOutput();

@@ -7,9 +7,9 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector;
 use Rector\Symfony\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector;
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md
-return static function (RectorConfig $rectorConfig) : void {
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     # https://github.com/symfony/symfony/pull/33775
-    $rectorConfig->rule(ConsoleExecuteReturnIntRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector::class);
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md#security
-    $rectorConfig->rule(AuthorizationCheckerIsGrantedExtractorRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector::class);
 };

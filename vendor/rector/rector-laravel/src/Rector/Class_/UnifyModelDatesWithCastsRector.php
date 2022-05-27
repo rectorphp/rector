@@ -21,20 +21,20 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
  *
  * @see \Rector\Laravel\Tests\Rector\Class_\UnifyModelDatesWithCastsRector\UnifyModelDatesWithCastsRectorTest
  */
-final class UnifyModelDatesWithCastsRector extends AbstractRector
+final class UnifyModelDatesWithCastsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
-    public function __construct(ClassInsertManipulator $classInsertManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator)
     {
         $this->classInsertManipulator = $classInsertManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Unify Model $dates property with $casts', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Unify Model $dates property with $casts', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Database\Eloquent\Model;
 
 class Person extends Model
@@ -63,22 +63,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Illuminate\\Database\\Eloquent\\Model'))) {
+        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Illuminate\\Database\\Eloquent\\Model'))) {
             return null;
         }
         $datesProperty = $node->getProperty('dates');
-        if (!$datesProperty instanceof Property) {
+        if (!$datesProperty instanceof \PhpParser\Node\Stmt\Property) {
             return null;
         }
         $datesPropertyProperty = $datesProperty->props[0];
-        if (!$datesPropertyProperty->default instanceof Array_) {
+        if (!$datesPropertyProperty->default instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $dates = $this->valueResolver->getValue($datesPropertyProperty->default);
@@ -90,27 +90,27 @@ CODE_SAMPLE
         }
         $castsProperty = $node->getProperty('casts');
         // add property $casts if not exists
-        if (!$castsProperty instanceof Property) {
+        if (!$castsProperty instanceof \PhpParser\Node\Stmt\Property) {
             $castsProperty = $this->createCastsProperty();
             $this->classInsertManipulator->addAsFirstMethod($node, $castsProperty);
         }
         $castsPropertyProperty = $castsProperty->props[0];
-        if (!$castsPropertyProperty->default instanceof Array_) {
+        if (!$castsPropertyProperty->default instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $casts = $this->valueResolver->getValue($castsPropertyProperty->default);
         // exclude attributes added in $casts
         $missingDates = \array_diff($dates, \array_keys($casts));
-        Assert::allString($missingDates);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($missingDates);
         foreach ($missingDates as $missingDate) {
-            $castsPropertyProperty->default->items[] = new ArrayItem(new String_('datetime'), new String_($missingDate));
+            $castsPropertyProperty->default->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('datetime'), new \PhpParser\Node\Scalar\String_($missingDate));
         }
         $this->nodeRemover->removeNode($datesProperty);
         return null;
     }
-    private function createCastsProperty() : Property
+    private function createCastsProperty() : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new PropertyBuilder('casts');
+        $propertyBuilder = new \RectorPrefix20220527\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder('casts');
         $propertyBuilder->makeProtected();
         $propertyBuilder->setDefault([]);
         $property = $propertyBuilder->getNode();

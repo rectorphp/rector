@@ -20,20 +20,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\Class_\LatteVarTypesBasedOnPresenterTemplateParametersRector\LatteVarTypesBasedOnPresenterTemplateParametersRectorTest
  */
-final class LatteVarTypesBasedOnPresenterTemplateParametersRector extends AbstractRector
+final class LatteVarTypesBasedOnPresenterTemplateParametersRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    public function __construct(\Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Adds latte {varType}s based on presenter $this->template parameters', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Adds latte {varType}s based on presenter $this->template parameters', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 // presenters/SomePresenter.php
 <?php
 
@@ -78,14 +78,14 @@ CODE_SAMPLE
     }
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
-        if (!$this->nodeTypeResolver->isObjectType($node, new ObjectType('Nette\\Application\\UI\\Presenter'))) {
+        if (!$this->nodeTypeResolver->isObjectType($node, new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Presenter'))) {
             return null;
         }
         if ($node->name === null) {
@@ -112,7 +112,7 @@ CODE_SAMPLE
     /**
      * @return LatteVariableType[]
      */
-    private function findVarTypesForAction(ClassMethod $method) : array
+    private function findVarTypesForAction(\PhpParser\Node\Stmt\ClassMethod $method) : array
     {
         $varTypes = [];
         $stmts = $method->getStmts();
@@ -120,13 +120,13 @@ CODE_SAMPLE
             return [];
         }
         foreach ($stmts as $stmt) {
-            if (!$stmt instanceof Expression) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
-            if (!$stmt->expr instanceof Assign) {
+            if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
-            if (!$stmt->expr->var instanceof PropertyFetch) {
+            if (!$stmt->expr->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 continue;
             }
             /** @var PropertyFetch $propertyFetch */
@@ -135,7 +135,7 @@ CODE_SAMPLE
                 continue;
             }
             $staticType = $this->getType($stmt->expr->expr);
-            $varTypes[] = new LatteVariableType((string) $this->getName($propertyFetch->name), $staticType->describe(VerbosityLevel::typeOnly()));
+            $varTypes[] = new \Rector\Nette\ValueObject\LatteVariableType((string) $this->getName($propertyFetch->name), $staticType->describe(\PHPStan\Type\VerbosityLevel::typeOnly()));
         }
         return $varTypes;
     }
@@ -158,7 +158,7 @@ CODE_SAMPLE
                 $varTypeContentParts[] = '{varType ' . $varType->getType() . ' $' . $varType->getName() . '}';
             }
             $content = \implode("\n", $varTypeContentParts) . "\n\n" . $content;
-            $addedFileWithContent = new AddedFileWithContent($templateFilePath, $content);
+            $addedFileWithContent = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($templateFilePath, $content);
             $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
         }
     }

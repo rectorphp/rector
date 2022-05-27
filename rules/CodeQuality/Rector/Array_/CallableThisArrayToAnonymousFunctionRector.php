@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\CallableThisArrayToAnonymousFunctionRectorTest
  */
-final class CallableThisArrayToAnonymousFunctionRector extends AbstractScopeAwareRector
+final class CallableThisArrayToAnonymousFunctionRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -38,15 +38,15 @@ final class CallableThisArrayToAnonymousFunctionRector extends AbstractScopeAwar
      * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher
      */
     private $arrayCallableMethodMatcher;
-    public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory, ReflectionResolver $reflectionResolver, ArrayCallableMethodMatcher $arrayCallableMethodMatcher)
+    public function __construct(\Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher $arrayCallableMethodMatcher)
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
         $this->reflectionResolver = $reflectionResolver;
         $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Convert [$this, "method"] to proper anonymous function', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert [$this, "method"] to proper anonymous function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -89,19 +89,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Array_::class];
+        return [\PhpParser\Node\Expr\Array_::class];
     }
     /**
      * @param Array_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
         $arrayCallable = $this->arrayCallableMethodMatcher->match($node);
-        if (!$arrayCallable instanceof ArrayCallable) {
+        if (!$arrayCallable instanceof \Rector\NodeCollector\ValueObject\ArrayCallable) {
             return null;
         }
         $phpMethodReflection = $this->reflectionResolver->resolveMethodReflection($arrayCallable->getClass(), $arrayCallable->getMethod(), $scope);
-        if (!$phpMethodReflection instanceof PhpMethodReflection) {
+        if (!$phpMethodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
             return null;
         }
         return $this->anonymousFunctionFactory->createFromPhpMethodReflection($phpMethodReflection, $arrayCallable->getCallerExpr());

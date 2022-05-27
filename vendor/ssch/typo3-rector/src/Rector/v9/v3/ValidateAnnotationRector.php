@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.3/Deprecation-83167-ReplaceValidateWithTYPO3CMSExtbaseAnnotationValidate.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v3\ValidateAnnotationRector\ValidateAnnotationRectorTest
  */
-final class ValidateAnnotationRector extends AbstractRector
+final class ValidateAnnotationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -33,7 +33,7 @@ final class ValidateAnnotationRector extends AbstractRector
      * @var \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory
      */
     private $importExtbaseAnnotationIfMissingFactory;
-    public function __construct(PhpDocTagRemover $phpDocTagRemover, ImportExtbaseAnnotationIfMissingFactory $importExtbaseAnnotationIfMissingFactory)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory $importExtbaseAnnotationIfMissingFactory)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->importExtbaseAnnotationIfMissingFactory = $importExtbaseAnnotationIfMissingFactory;
@@ -43,12 +43,12 @@ final class ValidateAnnotationRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Property::class, ClassMethod::class];
+        return [\PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param Property|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if (!$phpDocInfo->hasByName(self::OLD_ANNOTATION)) {
@@ -65,9 +65,9 @@ final class ValidateAnnotationRector extends AbstractRector
             }
             $validators = \array_map('trim', $validators);
             foreach ($validators as $validator) {
-                if ($node instanceof Property) {
+                if ($node instanceof \PhpParser\Node\Stmt\Property) {
                     $phpDocInfo->addPhpDocTagNode($this->createPropertyAnnotation($validator));
-                } elseif ($node instanceof ClassMethod) {
+                } elseif ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
                     $phpDocInfo->addPhpDocTagNode($this->createMethodAnnotation($validator));
                 }
             }
@@ -79,9 +79,9 @@ final class ValidateAnnotationRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns properties with `@validate` to properties with `@TYPO3\\CMS\\Extbase\\Annotation\\Validate`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns properties with `@validate` to properties with `@TYPO3\\CMS\\Extbase\\Annotation\\Validate`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 /**
  * @validate NotEmpty
  * @validate StringLength(minimum=0, maximum=255)
@@ -98,7 +98,7 @@ private $someProperty;
 CODE_SAMPLE
 )]);
     }
-    private function createPropertyAnnotation(string $validatorAnnotation) : PhpDocTagNode
+    private function createPropertyAnnotation(string $validatorAnnotation) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode
     {
         if (\strpos($validatorAnnotation, '(') !== \false) {
             \preg_match_all('#(?P<validatorName>.*)(?<=[\\w])\\s*\\((?P<validatorOptions>.*)\\)#', $validatorAnnotation, $matches);
@@ -120,16 +120,16 @@ CODE_SAMPLE
         } else {
             $annotation = \sprintf('@Extbase\\Validate("%s")', $validatorAnnotation);
         }
-        return new PhpDocTagNode($annotation, $this->createEmptyTagValueNode());
+        return new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($annotation, $this->createEmptyTagValueNode());
     }
-    private function createMethodAnnotation(string $validatorAnnotation) : PhpDocTagNode
+    private function createMethodAnnotation(string $validatorAnnotation) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode
     {
         [$param, $validator] = \explode(' ', $validatorAnnotation);
         $annotation = \sprintf('@Extbase\\Validate("%s", param="%s")', $validator, \ltrim($param, '$'));
-        return new PhpDocTagNode($annotation, $this->createEmptyTagValueNode());
+        return new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($annotation, $this->createEmptyTagValueNode());
     }
-    private function createEmptyTagValueNode() : GenericTagValueNode
+    private function createEmptyTagValueNode() : \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode
     {
-        return new GenericTagValueNode('');
+        return new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('');
     }
 }

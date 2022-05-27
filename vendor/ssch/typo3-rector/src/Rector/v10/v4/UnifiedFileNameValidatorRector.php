@@ -14,24 +14,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.4/Deprecation-90147-UnifiedFileNameValidator.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v4\UnifiedFileNameValidatorRector\UnifiedFileNameValidatorRectorTest
  */
-final class UnifiedFileNameValidatorRector extends AbstractRector
+final class UnifiedFileNameValidatorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [ConstFetch::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\ConstFetch::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param ConstFetch|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        if ($node instanceof StaticCall && $this->isMethodVerifyFilenameAgainstDenyPattern($node)) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall && $this->isMethodVerifyFilenameAgainstDenyPattern($node)) {
             return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Resource\\Security\\FileNameValidator')]), 'isValid', $node->args);
         }
         if ($this->isConstFileDenyPatternDefault($node)) {
@@ -42,9 +42,9 @@ final class UnifiedFileNameValidatorRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('GeneralUtility::verifyFilenameAgainstDenyPattern GeneralUtility::makeInstance(FileNameValidator::class)->isValid($filename)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('GeneralUtility::verifyFilenameAgainstDenyPattern GeneralUtility::makeInstance(FileNameValidator::class)->isValid($filename)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 $filename = 'somefile.php';
@@ -74,7 +74,7 @@ CODE_SAMPLE
      */
     public function isMethodVerifyFilenameAgainstDenyPattern($node) : bool
     {
-        return $node instanceof StaticCall && $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) && $this->isName($node->name, 'verifyFilenameAgainstDenyPattern');
+        return $node instanceof \PhpParser\Node\Expr\StaticCall && $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) && $this->isName($node->name, 'verifyFilenameAgainstDenyPattern');
     }
     /**
      * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\StaticCall $node
@@ -91,6 +91,6 @@ CODE_SAMPLE
      */
     private function isConstFileDenyPatternDefault($node) : bool
     {
-        return $node instanceof ConstFetch && $this->isName($node->name, 'FILE_DENY_PATTERN_DEFAULT');
+        return $node instanceof \PhpParser\Node\Expr\ConstFetch && $this->isName($node->name, 'FILE_DENY_PATTERN_DEFAULT');
     }
 }

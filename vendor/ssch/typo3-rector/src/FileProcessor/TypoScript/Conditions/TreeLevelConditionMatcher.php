@@ -5,7 +5,7 @@ namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
-final class TreeLevelConditionMatcher implements TyposcriptConditionMatcher
+final class TreeLevelConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
 {
     /**
      * @var string
@@ -17,7 +17,7 @@ final class TreeLevelConditionMatcher implements TyposcriptConditionMatcher
         if (!\is_array($matches)) {
             return $condition;
         }
-        $values = ArrayUtility::trimExplode(',', $matches[1], \true);
+        $values = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $matches[1], \true);
         return \sprintf('tree.level in [%s]', \implode(',', $values));
     }
     public function shouldApply(string $condition) : bool

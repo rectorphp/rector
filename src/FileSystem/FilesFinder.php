@@ -58,7 +58,7 @@ final class FilesFinder
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, FinderSanitizer $finderSanitizer, FileSystemFilter $fileSystemFilter, SkippedPathsResolver $skippedPathsResolver, UnchangedFilesFilter $unchangedFilesFilter, ParameterProvider $parameterProvider)
+    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, \RectorPrefix20220527\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20220527\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter, \RectorPrefix20220527\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver, \Rector\Caching\UnchangedFilesFilter $unchangedFilesFilter, \RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->finderSanitizer = $finderSanitizer;
@@ -90,7 +90,7 @@ final class FilesFinder
         if ($directories === []) {
             return [];
         }
-        $finder = Finder::create()->files()->size('> 0')->in($directories)->sortByName();
+        $finder = \RectorPrefix20220527\Symfony\Component\Finder\Finder::create()->files()->size('> 0')->in($directories)->sortByName();
         if ($this->hasFollowLinks()) {
             $finder->followLinks();
         }
@@ -110,13 +110,13 @@ final class FilesFinder
         $suffixesPattern = \implode('|', $suffixes);
         return '#\\.(' . $suffixesPattern . ')$#';
     }
-    private function addFilterWithExcludedPaths(Finder $finder) : void
+    private function addFilterWithExcludedPaths(\RectorPrefix20220527\Symfony\Component\Finder\Finder $finder) : void
     {
         $excludePaths = $this->skippedPathsResolver->resolve();
         if ($excludePaths === []) {
             return;
         }
-        $finder->filter(function (SplFileInfo $splFileInfo) use($excludePaths) : bool {
+        $finder->filter(function (\RectorPrefix20220527\Symfony\Component\Finder\SplFileInfo $splFileInfo) use($excludePaths) : bool {
             /** @var string|false $realPath */
             $realPath = $splFileInfo->getRealPath();
             if ($realPath === \false) {
@@ -129,7 +129,7 @@ final class FilesFinder
             foreach ($excludePaths as $excludePath) {
                 // make the path work accross different OSes
                 $excludePath = \str_replace('\\', '/', $excludePath);
-                if (StringUtils::isMatch($realPath, '#' . \preg_quote($excludePath, '#') . '#')) {
+                if (\Rector\Core\Util\StringUtils::isMatch($realPath, '#' . \preg_quote($excludePath, '#') . '#')) {
                     return \false;
                 }
                 $excludePath = $this->normalizeForFnmatch($excludePath);
@@ -147,20 +147,20 @@ final class FilesFinder
     private function normalizeForFnmatch(string $path) : string
     {
         // ends with *
-        if (StringUtils::isMatch($path, self::ENDS_WITH_ASTERISK_REGEX)) {
+        if (\Rector\Core\Util\StringUtils::isMatch($path, self::ENDS_WITH_ASTERISK_REGEX)) {
             return '*' . $path;
         }
         // starts with *
-        if (StringUtils::isMatch($path, self::STARTS_WITH_ASTERISK_REGEX)) {
+        if (\Rector\Core\Util\StringUtils::isMatch($path, self::STARTS_WITH_ASTERISK_REGEX)) {
             return $path . '*';
         }
         return $path;
     }
     private function hasFollowLinks() : bool
     {
-        if (!$this->parameterProvider->hasParameter(Option::FOLLOW_SYMLINKS)) {
+        if (!$this->parameterProvider->hasParameter(\Rector\Core\Configuration\Option::FOLLOW_SYMLINKS)) {
             return \true;
         }
-        return $this->parameterProvider->provideBoolParameter(Option::FOLLOW_SYMLINKS);
+        return $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::FOLLOW_SYMLINKS);
     }
 }

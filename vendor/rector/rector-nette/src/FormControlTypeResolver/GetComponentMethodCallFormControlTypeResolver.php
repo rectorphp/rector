@@ -16,7 +16,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
-final class GetComponentMethodCallFormControlTypeResolver implements FormControlTypeResolverInterface
+final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**
      * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
@@ -42,7 +42,7 @@ final class GetComponentMethodCallFormControlTypeResolver implements FormControl
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ValueResolver $valueResolver, AstResolver $astResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -52,16 +52,16 @@ final class GetComponentMethodCallFormControlTypeResolver implements FormControl
     /**
      * @required
      */
-    public function autowire(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
     /**
      * @return array<string, string>
      */
-    public function resolve(Node $node) : array
+    public function resolve(\PhpParser\Node $node) : array
     {
-        if (!$node instanceof MethodCall) {
+        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return [];
         }
         if (!$this->nodeNameResolver->isName($node->name, 'getComponent')) {
@@ -69,17 +69,17 @@ final class GetComponentMethodCallFormControlTypeResolver implements FormControl
         }
         $createComponentClassMethodName = $this->createCreateComponentMethodName($node);
         $staticType = $this->nodeTypeResolver->getType($node);
-        if (!$staticType instanceof FullyQualifiedObjectType) {
+        if (!$staticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
             return [];
         }
         // combine constructor + method body name
         $constructorClassMethodData = [];
-        $constructorClassMethod = $this->astResolver->resolveClassMethod($staticType->getClassName(), MethodName::CONSTRUCT);
+        $constructorClassMethod = $this->astResolver->resolveClassMethod($staticType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
         if ($constructorClassMethod !== null) {
             $constructorClassMethodData = $this->methodNamesByInputNamesResolver->resolveExpr($constructorClassMethod);
         }
         $callerType = $this->nodeTypeResolver->getType($node->var);
-        if (!$callerType instanceof TypeWithClassName) {
+        if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
             return $constructorClassMethodData;
         }
         $createComponentClassMethodData = [];
@@ -89,12 +89,12 @@ final class GetComponentMethodCallFormControlTypeResolver implements FormControl
         }
         return \array_merge($constructorClassMethodData, $createComponentClassMethodData);
     }
-    private function createCreateComponentMethodName(MethodCall $methodCall) : string
+    private function createCreateComponentMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : string
     {
         $firstArgumentValue = $methodCall->args[0]->value;
         $componentName = $this->valueResolver->getValue($firstArgumentValue);
         if (!\is_string($componentName)) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return 'createComponent' . \ucfirst($componentName);
     }

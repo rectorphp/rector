@@ -14,20 +14,20 @@ final class IdentifierTypeResolver
     /**
      * @return \PHPStan\Type\StringType|\PHPStan\Type\BooleanType|\PHPStan\Type\IntegerType|\PHPStan\Type\FloatType|\PHPStan\Type\MixedType
      */
-    public function resolve(Identifier $identifier)
+    public function resolve(\PhpParser\Node\Identifier $identifier)
     {
         if ($identifier->toLowerString() === 'string') {
-            return new StringType();
+            return new \PHPStan\Type\StringType();
         }
         if ($identifier->toLowerString() === 'bool') {
-            return new BooleanType();
+            return new \PHPStan\Type\BooleanType();
         }
         if ($identifier->toLowerString() === 'int') {
-            return new IntegerType();
+            return new \PHPStan\Type\IntegerType();
         }
         if ($identifier->toLowerString() === 'float') {
-            return new FloatType();
+            return new \PHPStan\Type\FloatType();
         }
-        return new MixedType();
+        return new \PHPStan\Type\MixedType();
     }
 }

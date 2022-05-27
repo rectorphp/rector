@@ -19,5 +19,5 @@ interface CiDetectorInterface
      *
      * @throws CiNotDetectedException
      */
-    public function detect() : CiInterface;
+    public function detect() : \RectorPrefix20220527\OndraM\CiDetector\Ci\CiInterface;
 }

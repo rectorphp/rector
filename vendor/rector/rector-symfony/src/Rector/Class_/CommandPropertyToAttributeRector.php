@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\CommandPropertyToAttributeRectorTest
  */
-final class CommandPropertyToAttributeRector extends AbstractRector implements MinPhpVersionInterface
+final class CommandPropertyToAttributeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     private const ATTRIBUTE = 'Symfony\\Component\\Console\\Attribute\\AsCommand';
     /**
@@ -41,7 +41,7 @@ final class CommandPropertyToAttributeRector extends AbstractRector implements M
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
@@ -49,11 +49,11 @@ final class CommandPropertyToAttributeRector extends AbstractRector implements M
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::ATTRIBUTES;
+        return \Rector\Core\ValueObject\PhpVersionFeature::ATTRIBUTES;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add Symfony\\Component\\Console\\Attribute\\AsCommand to Symfony Commands and remove the deprecated properties', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add Symfony\\Component\\Console\\Attribute\\AsCommand to Symfony Commands and remove the deprecated properties', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SunshineCommand extends \Symfony\Component\Console\Command\Command
 {
     /** @var string|null */
@@ -73,14 +73,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
         if (!$this->reflectionProvider->hasClass(self::ATTRIBUTE)) {
@@ -91,7 +91,7 @@ CODE_SAMPLE
         }
         $defaultName = null;
         $property = $node->getProperty('defaultName');
-        if ($property instanceof Property) {
+        if ($property instanceof \PhpParser\Node\Stmt\Property) {
             $defaultName = $this->getValueFromProperty($property);
             if ($defaultName !== null) {
                 $this->removeNode($property);
@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
         $defaultDescription = null;
         $property = $node->getProperty('defaultDescription');
-        if ($property instanceof Property) {
+        if ($property instanceof \PhpParser\Node\Stmt\Property) {
             $defaultDescription = $this->getValueFromProperty($property);
             if ($defaultDescription !== null) {
                 $this->removeNode($property);
@@ -111,22 +111,22 @@ CODE_SAMPLE
         $node->attrGroups[] = $this->createAttributeGroup($defaultName, $defaultDescription);
         return $node;
     }
-    private function createAttributeGroup(string $defaultName, ?string $defaultDescription) : AttributeGroup
+    private function createAttributeGroup(string $defaultName, ?string $defaultDescription) : \PhpParser\Node\AttributeGroup
     {
         $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(self::ATTRIBUTE);
-        $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultName));
+        $attributeGroup->attrs[0]->args[] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_($defaultName));
         if ($defaultDescription !== null) {
-            $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultDescription));
+            $attributeGroup->attrs[0]->args[] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_($defaultDescription));
         }
         return $attributeGroup;
     }
-    private function getValueFromProperty(Property $property) : ?string
+    private function getValueFromProperty(\PhpParser\Node\Stmt\Property $property) : ?string
     {
         if (\count($property->props) !== 1) {
             return null;
         }
         $propertyProperty = $property->props[0];
-        if ($propertyProperty->default instanceof String_) {
+        if ($propertyProperty->default instanceof \PhpParser\Node\Scalar\String_) {
             return $propertyProperty->default->value;
         }
         return null;

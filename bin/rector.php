@@ -20,9 +20,9 @@ use RectorPrefix20220527\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 \error_reporting(\E_ALL);
 \ini_set('display_errors', 'stderr');
 \gc_disable();
-\define('RectorPrefix20220527\\__RECTOR_RUNNING__', \true);
+\define('__RECTOR_RUNNING__', \true);
 // Require Composer autoload.php
-$autoloadIncluder = new AutoloadIncluder();
+$autoloadIncluder = new \RectorPrefix20220527\AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 final class AutoloadIncluder
 {
@@ -33,7 +33,7 @@ final class AutoloadIncluder
     public function includeDependencyOrRepositoryVendorAutoloadIfExists() : void
     {
         // Rector's vendor is already loaded
-        if (\class_exists(RectorKernel::class)) {
+        if (\class_exists(\Rector\Core\Kernel\RectorKernel::class)) {
             return;
         }
         // in Rector develop repository
@@ -95,6 +95,7 @@ final class AutoloadIncluder
         require_once $filePath;
     }
 }
+\class_alias('RectorPrefix20220527\\AutoloadIncluder', 'AutoloadIncluder', \false);
 if (\file_exists(__DIR__ . '/../preload.php') && \is_dir(__DIR__ . '/../vendor')) {
     require_once __DIR__ . '/../preload.php';
 }
@@ -103,26 +104,26 @@ $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-auto
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadRectorInstalledAsGlobalDependency();
 $autoloadIncluder->autoloadFromCommandLine();
-$rectorConfigsResolver = new RectorConfigsResolver();
+$rectorConfigsResolver = new \Rector\Core\Bootstrap\RectorConfigsResolver();
 try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();
-    $rectorContainerFactory = new RectorContainerFactory();
+    $rectorContainerFactory = new \Rector\Core\DependencyInjection\RectorContainerFactory();
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (\Throwable $throwable) {
     // for json output
-    $argvInput = new ArgvInput();
-    $outputFormat = $argvInput->getParameterOption('--' . Option::OUTPUT_FORMAT);
+    $argvInput = new \RectorPrefix20220527\Symfony\Component\Console\Input\ArgvInput();
+    $outputFormat = $argvInput->getParameterOption('--' . \Rector\Core\Configuration\Option::OUTPUT_FORMAT);
     // report fatal error in json format
-    if ($outputFormat === JsonOutputFormatter::NAME) {
-        echo Json::encode(['fatal_errors' => [$throwable->getMessage()]]);
+    if ($outputFormat === \Rector\ChangesReporting\Output\JsonOutputFormatter::NAME) {
+        echo \RectorPrefix20220527\Nette\Utils\Json::encode(['fatal_errors' => [$throwable->getMessage()]]);
     } else {
         // report fatal errors in console format
-        $rectorConsoleOutputStyleFactory = new RectorConsoleOutputStyleFactory(new PrivatesCaller());
+        $rectorConsoleOutputStyleFactory = new \Rector\Core\Console\Style\RectorConsoleOutputStyleFactory(new \RectorPrefix20220527\Symplify\PackageBuilder\Reflection\PrivatesCaller());
         $rectorConsoleOutputStyle = $rectorConsoleOutputStyleFactory->create();
         $rectorConsoleOutputStyle->error($throwable->getMessage());
     }
-    exit(Command::FAILURE);
+    exit(\RectorPrefix20220527\Symfony\Component\Console\Command\Command::FAILURE);
 }
 /** @var ConsoleApplication $application */
-$application = $container->get(ConsoleApplication::class);
+$application = $container->get(\Rector\Core\Console\ConsoleApplication::class);
 exit($application->run());

@@ -13,7 +13,7 @@ use RectorPrefix20220527\Symplify\VendorPatches\Console\GenerateCommandReporter;
 use RectorPrefix20220527\Symplify\VendorPatches\Differ\PatchDiffer;
 use RectorPrefix20220527\Symplify\VendorPatches\Finder\OldToNewFilesFinder;
 use RectorPrefix20220527\Symplify\VendorPatches\PatchFileFactory;
-final class GenerateCommand extends AbstractSymplifyCommand
+final class GenerateCommand extends \RectorPrefix20220527\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand
 {
     /**
      * @var \Symplify\VendorPatches\Finder\OldToNewFilesFinder
@@ -39,7 +39,7 @@ final class GenerateCommand extends AbstractSymplifyCommand
      * @var \Symplify\VendorPatches\Console\GenerateCommandReporter
      */
     private $generateCommandReporter;
-    public function __construct(OldToNewFilesFinder $oldToNewFilesFinder, PatchDiffer $patchDiffer, ComposerPatchesConfigurationUpdater $composerPatchesConfigurationUpdater, VendorDirProvider $vendorDirProvider, PatchFileFactory $patchFileFactory, GenerateCommandReporter $generateCommandReporter)
+    public function __construct(\RectorPrefix20220527\Symplify\VendorPatches\Finder\OldToNewFilesFinder $oldToNewFilesFinder, \RectorPrefix20220527\Symplify\VendorPatches\Differ\PatchDiffer $patchDiffer, \RectorPrefix20220527\Symplify\VendorPatches\Composer\ComposerPatchesConfigurationUpdater $composerPatchesConfigurationUpdater, \RectorPrefix20220527\Symplify\PackageBuilder\Composer\VendorDirProvider $vendorDirProvider, \RectorPrefix20220527\Symplify\VendorPatches\PatchFileFactory $patchFileFactory, \RectorPrefix20220527\Symplify\VendorPatches\Console\GenerateCommandReporter $generateCommandReporter)
     {
         $this->oldToNewFilesFinder = $oldToNewFilesFinder;
         $this->patchDiffer = $patchDiffer;
@@ -51,10 +51,10 @@ final class GenerateCommand extends AbstractSymplifyCommand
     }
     protected function configure() : void
     {
-        $this->setName(CommandNaming::classToName(self::class));
+        $this->setName(\RectorPrefix20220527\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(self::class));
         $this->setDescription('Generate patches from /vendor directory');
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(\RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $vendorDirectory = $this->vendorDirProvider->provide();
         $oldAndNewFileInfos = $this->oldToNewFilesFinder->find($vendorDirectory);

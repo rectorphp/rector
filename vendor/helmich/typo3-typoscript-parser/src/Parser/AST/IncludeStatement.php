@@ -9,6 +9,6 @@ namespace RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST
  */
-abstract class IncludeStatement extends Statement
+abstract class IncludeStatement extends \Helmich\TypoScriptParser\Parser\AST\Statement
 {
 }

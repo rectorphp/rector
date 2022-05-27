@@ -36,14 +36,14 @@ trait ServiceSubscriberTrait
             if (self::class !== $method->getDeclaringClass()->name) {
                 continue;
             }
-            if (!($attribute = (\method_exists($method, 'getAttributes') ? $method->getAttributes(SubscribedService::class) : [])[0] ?? null)) {
+            if (!($attribute = (\method_exists($method, 'getAttributes') ? $method->getAttributes(\RectorPrefix20220527\Symfony\Contracts\Service\Attribute\SubscribedService::class) : [])[0] ?? null)) {
                 continue;
             }
             if ($method->isStatic() || $method->isAbstract() || $method->isGenerator() || $method->isInternal() || $method->getNumberOfRequiredParameters()) {
-                throw new \LogicException(\sprintf('Cannot use "%s" on method "%s::%s()" (can only be used on non-static, non-abstract methods with no parameters).', SubscribedService::class, self::class, $method->name));
+                throw new \LogicException(\sprintf('Cannot use "%s" on method "%s::%s()" (can only be used on non-static, non-abstract methods with no parameters).', \RectorPrefix20220527\Symfony\Contracts\Service\Attribute\SubscribedService::class, self::class, $method->name));
             }
             if (!($returnType = $method->getReturnType())) {
-                throw new \LogicException(\sprintf('Cannot use "%s" on methods without a return type in "%s::%s()".', SubscribedService::class, $method->name, self::class));
+                throw new \LogicException(\sprintf('Cannot use "%s" on methods without a return type in "%s::%s()".', \RectorPrefix20220527\Symfony\Contracts\Service\Attribute\SubscribedService::class, $method->name, self::class));
             }
             $serviceId = $returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType;
             if ($returnType->allowsNull()) {
@@ -56,7 +56,7 @@ trait ServiceSubscriberTrait
     /**
      * @required
      */
-    public function setContainer(ContainerInterface $container) : ?ContainerInterface
+    public function setContainer(\RectorPrefix20220527\Psr\Container\ContainerInterface $container) : ?\RectorPrefix20220527\Psr\Container\ContainerInterface
     {
         $this->container = $container;
         if (\method_exists(\get_parent_class(self::class) ?: '', __FUNCTION__)) {

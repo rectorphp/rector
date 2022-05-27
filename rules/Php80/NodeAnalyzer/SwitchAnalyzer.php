@@ -23,7 +23,7 @@ final class SwitchAnalyzer
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
@@ -35,7 +35,7 @@ final class SwitchAnalyzer
     {
         $types = [];
         foreach ($cases as $case) {
-            if ($case->cond instanceof Expr) {
+            if ($case->cond instanceof \PhpParser\Node\Expr) {
                 $types[] = $this->nodeTypeResolver->getType($case->cond);
             }
         }
@@ -45,7 +45,7 @@ final class SwitchAnalyzer
         $uniqueTypes = $this->typeFactory->uniquateTypes($types);
         return \count($uniqueTypes) > 1;
     }
-    public function hasEachCaseBreak(Switch_ $switch) : bool
+    public function hasEachCaseBreak(\PhpParser\Node\Stmt\Switch_ $switch) : bool
     {
         $totalCases = \count($switch->cases);
         if ($totalCases === 1) {
@@ -62,14 +62,14 @@ final class SwitchAnalyzer
         }
         return \true;
     }
-    public function hasEachCaseSingleStmt(Switch_ $switch) : bool
+    public function hasEachCaseSingleStmt(\PhpParser\Node\Stmt\Switch_ $switch) : bool
     {
         foreach ($switch->cases as $case) {
             if ($case->cond === null) {
                 continue;
             }
-            $stmtsWithoutBreak = \array_filter($case->stmts, function (Node $node) : bool {
-                return !$node instanceof Break_;
+            $stmtsWithoutBreak = \array_filter($case->stmts, function (\PhpParser\Node $node) : bool {
+                return !$node instanceof \PhpParser\Node\Stmt\Break_;
             });
             if (\count($stmtsWithoutBreak) !== 1) {
                 return \false;
@@ -77,37 +77,37 @@ final class SwitchAnalyzer
         }
         return \true;
     }
-    public function hasDefaultSingleStmt(Switch_ $switch) : bool
+    public function hasDefaultSingleStmt(\PhpParser\Node\Stmt\Switch_ $switch) : bool
     {
         foreach ($switch->cases as $case) {
             if ($case->cond === null) {
-                $stmtsWithoutBreak = \array_filter($case->stmts, function (Node $node) : bool {
-                    return !$node instanceof Break_;
+                $stmtsWithoutBreak = \array_filter($case->stmts, function (\PhpParser\Node $node) : bool {
+                    return !$node instanceof \PhpParser\Node\Stmt\Break_;
                 });
                 return \count($stmtsWithoutBreak) === 1;
             }
         }
         return \false;
     }
-    private function hasBreakOrReturnOrEmpty(Case_ $case) : bool
+    private function hasBreakOrReturnOrEmpty(\PhpParser\Node\Stmt\Case_ $case) : bool
     {
         if ($case->stmts === []) {
             return \true;
         }
         foreach ($case->stmts as $caseStmt) {
-            if ($caseStmt instanceof Break_) {
+            if ($caseStmt instanceof \PhpParser\Node\Stmt\Break_) {
                 return \true;
             }
-            if ($caseStmt instanceof Return_) {
+            if ($caseStmt instanceof \PhpParser\Node\Stmt\Return_) {
                 return \true;
             }
         }
         return \false;
     }
-    private function containsCaseReturn(Case_ $case) : bool
+    private function containsCaseReturn(\PhpParser\Node\Stmt\Case_ $case) : bool
     {
         foreach ($case->stmts as $stmt) {
-            if ($stmt instanceof Return_) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\Return_) {
                 return \true;
             }
         }

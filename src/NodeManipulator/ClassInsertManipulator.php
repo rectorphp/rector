@@ -19,7 +19,7 @@ final class ClassInsertManipulator
     /**
      * @var array<class-string<Stmt>>
      */
-    private const BEFORE_TRAIT_TYPES = [TraitUse::class, Property::class, ClassMethod::class];
+    private const BEFORE_TRAIT_TYPES = [\PhpParser\Node\Stmt\TraitUse::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\ClassMethod::class];
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
@@ -30,7 +30,7 @@ final class ClassInsertManipulator
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -38,7 +38,7 @@ final class ClassInsertManipulator
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod $stmt
      */
-    public function addAsFirstMethod(Class_ $class, $stmt) : void
+    public function addAsFirstMethod(\PhpParser\Node\Stmt\Class_ $class, $stmt) : void
     {
         if ($this->isSuccessToInsertBeforeFirstMethod($class, $stmt)) {
             return;
@@ -48,7 +48,7 @@ final class ClassInsertManipulator
         }
         $class->stmts[] = $stmt;
     }
-    public function addConstantToClass(Class_ $class, string $constantName, ClassConst $classConst) : void
+    public function addConstantToClass(\PhpParser\Node\Stmt\Class_ $class, string $constantName, \PhpParser\Node\Stmt\ClassConst $classConst) : void
     {
         if ($this->hasClassConstant($class, $constantName)) {
             return;
@@ -58,7 +58,7 @@ final class ClassInsertManipulator
     /**
      * @param Property[] $properties
      */
-    public function addPropertiesToClass(Class_ $class, array $properties) : void
+    public function addPropertiesToClass(\PhpParser\Node\Stmt\Class_ $class, array $properties) : void
     {
         foreach ($properties as $property) {
             $this->addAsFirstMethod($class, $property);
@@ -67,34 +67,34 @@ final class ClassInsertManipulator
     /**
      * @internal Use PropertyAdder service instead
      */
-    public function addPropertyToClass(Class_ $class, string $name, ?Type $type) : void
+    public function addPropertyToClass(\PhpParser\Node\Stmt\Class_ $class, string $name, ?\PHPStan\Type\Type $type) : void
     {
         $existingProperty = $class->getProperty($name);
-        if ($existingProperty instanceof Property) {
+        if ($existingProperty instanceof \PhpParser\Node\Stmt\Property) {
             return;
         }
         $property = $this->nodeFactory->createPrivatePropertyFromNameAndType($name, $type);
         $this->addAsFirstMethod($class, $property);
     }
-    public function addInjectPropertyToClass(Class_ $class, PropertyMetadata $propertyMetadata) : void
+    public function addInjectPropertyToClass(\PhpParser\Node\Stmt\Class_ $class, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata) : void
     {
         $existingProperty = $class->getProperty($propertyMetadata->getName());
-        if ($existingProperty instanceof Property) {
+        if ($existingProperty instanceof \PhpParser\Node\Stmt\Property) {
             return;
         }
         $property = $this->nodeFactory->createPublicInjectPropertyFromNameAndType($propertyMetadata->getName(), $propertyMetadata->getType());
         $this->addAsFirstMethod($class, $property);
     }
-    public function addAsFirstTrait(Class_ $class, string $traitName) : void
+    public function addAsFirstTrait(\PhpParser\Node\Stmt\Class_ $class, string $traitName) : void
     {
-        $traitUse = new TraitUse([new FullyQualified($traitName)]);
+        $traitUse = new \PhpParser\Node\Stmt\TraitUse([new \PhpParser\Node\Name\FullyQualified($traitName)]);
         $this->addTraitUse($class, $traitUse);
     }
     /**
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    private function insertBefore(array $stmts, Stmt $stmt, int $key) : array
+    private function insertBefore(array $stmts, \PhpParser\Node\Stmt $stmt, int $key) : array
     {
         \array_splice($stmts, $key, 0, [$stmt]);
         return $stmts;
@@ -102,10 +102,10 @@ final class ClassInsertManipulator
     /**
      * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $stmt
      */
-    private function isSuccessToInsertBeforeFirstMethod(Class_ $class, $stmt) : bool
+    private function isSuccessToInsertBeforeFirstMethod(\PhpParser\Node\Stmt\Class_ $class, $stmt) : bool
     {
         foreach ($class->stmts as $key => $classStmt) {
-            if (!$classStmt instanceof ClassMethod) {
+            if (!$classStmt instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 continue;
             }
             $class->stmts = $this->insertBefore($class->stmts, $stmt, $key);
@@ -116,11 +116,11 @@ final class ClassInsertManipulator
     /**
      * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $stmt
      */
-    private function isSuccessToInsertAfterLastProperty(Class_ $class, $stmt) : bool
+    private function isSuccessToInsertAfterLastProperty(\PhpParser\Node\Stmt\Class_ $class, $stmt) : bool
     {
         $previousElement = null;
         foreach ($class->stmts as $key => $classStmt) {
-            if ($previousElement instanceof Property && !$classStmt instanceof Property) {
+            if ($previousElement instanceof \PhpParser\Node\Stmt\Property && !$classStmt instanceof \PhpParser\Node\Stmt\Property) {
                 $class->stmts = $this->insertBefore($class->stmts, $stmt, $key);
                 return \true;
             }
@@ -128,7 +128,7 @@ final class ClassInsertManipulator
         }
         return \false;
     }
-    private function hasClassConstant(Class_ $class, string $constantName) : bool
+    private function hasClassConstant(\PhpParser\Node\Stmt\Class_ $class, string $constantName) : bool
     {
         foreach ($class->getConstants() as $classConst) {
             if ($this->nodeNameResolver->isName($classConst, $constantName)) {
@@ -137,7 +137,7 @@ final class ClassInsertManipulator
         }
         return \false;
     }
-    private function addTraitUse(Class_ $class, TraitUse $traitUse) : void
+    private function addTraitUse(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\TraitUse $traitUse) : void
     {
         foreach (self::BEFORE_TRAIT_TYPES as $type) {
             foreach ($class->stmts as $key => $classStmt) {

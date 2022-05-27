@@ -7,8 +7,8 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector;
 use Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(ContainerGetToConstructorInjectionRector::class);
-    $rectorConfig->rule(GetParameterToConstructorInjectionRector::class);
-    $rectorConfig->rule(GetToConstructorInjectionRector::class);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector::class);
+    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector::class);
 };

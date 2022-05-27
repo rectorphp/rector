@@ -20,7 +20,7 @@ final class AttributeGroupNamedArgumentManipulator
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
@@ -39,7 +39,7 @@ final class AttributeGroupNamedArgumentManipulator
         }
         return $attributeGroups;
     }
-    private function processReplaceAttr(Attribute $attribute, string $attrName) : void
+    private function processReplaceAttr(\PhpParser\Node\Attribute $attribute, string $attrName) : void
     {
         foreach (self::SPECIAL_CLASS_TYPES as $classType => $specialClasssType) {
             if ($attrName !== $classType && $attrName !== $specialClasssType['common_aliased']) {
@@ -60,7 +60,7 @@ final class AttributeGroupNamedArgumentManipulator
             if (!$currentArg->value instanceof $specialClasssType['value']) {
                 continue;
             }
-            $currentArg->name = new Identifier($specialClasssType['name']);
+            $currentArg->name = new \PhpParser\Node\Identifier($specialClasssType['name']);
         }
     }
 }

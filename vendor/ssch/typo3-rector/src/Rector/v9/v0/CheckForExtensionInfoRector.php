@@ -15,19 +15,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Breaking-82505-MergedEXTinfo_pagetsconfigToEXTinfo.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\CheckForExtensionInfoRector\CheckForExtensionInfoRectorTest
  */
-final class CheckForExtensionInfoRector extends AbstractRector
+final class CheckForExtensionInfoRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isExtensionManagementUtilityIsLoaded($node) && !$this->isPackageManagerIsActivePackage($node)) {
             return null;
@@ -36,15 +36,15 @@ final class CheckForExtensionInfoRector extends AbstractRector
         if (!$this->valueResolver->isValue($firstArgument->value, 'info_pagetsconfig')) {
             return null;
         }
-        $firstArgument->value = new String_('info');
+        $firstArgument->value = new \PhpParser\Node\Scalar\String_('info');
         return $node;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change the extensions to check for info instead of info_pagetsconfig.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change the extensions to check for info instead of info_pagetsconfig.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 if(ExtensionManagementUtility::isLoaded('info_pagetsconfig')) {
 
 }
@@ -72,13 +72,13 @@ CODE_SAMPLE
      */
     private function isExtensionManagementUtilityIsLoaded($call) : bool
     {
-        return $call instanceof StaticCall && $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) && $this->isName($call->name, 'isLoaded');
+        return $call instanceof \PhpParser\Node\Expr\StaticCall && $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) && $this->isName($call->name, 'isLoaded');
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
     private function isPackageManagerIsActivePackage($call) : bool
     {
-        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new ObjectType('TYPO3\\CMS\\Core\\Package\\PackageManager')) && $this->isName($call->name, 'isPackageActive');
+        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Package\\PackageManager')) && $this->isName($call->name, 'isPackageActive');
     }
 }

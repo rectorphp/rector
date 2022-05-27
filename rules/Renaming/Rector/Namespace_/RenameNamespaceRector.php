@@ -28,12 +28,12 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
  */
-final class RenameNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
+final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var array<class-string<Node>>
      */
-    private const ONLY_CHANGE_DOCBLOCK_NODE = [Property::class, ClassMethod::class, Function_::class, Expression::class, ClassLike::class, FileWithoutNamespace::class];
+    private const ONLY_CHANGE_DOCBLOCK_NODE = [\PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\ClassLike::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class];
     /**
      * @var array<string, string>
      */
@@ -52,14 +52,14 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
      * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNamespaceRenamer
      */
     private $docBlockNamespaceRenamer;
-    public function __construct(NamespaceMatcher $namespaceMatcher, DocBlockNamespaceRenamer $docBlockNamespaceRenamer)
+    public function __construct(\Rector\Naming\NamespaceMatcher $namespaceMatcher, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNamespaceRenamer $docBlockNamespaceRenamer)
     {
         $this->namespaceMatcher = $namespaceMatcher;
         $this->docBlockNamespaceRenamer = $docBlockNamespaceRenamer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replaces old namespace by new one.', [new ConfiguredCodeSample('$someObject = new SomeOldNamespace\\SomeClass;', '$someObject = new SomeNewNamespace\\SomeClass;', ['SomeOldNamespace' => 'SomeNewNamespace'])]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces old namespace by new one.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample('$someObject = new SomeOldNamespace\\SomeClass;', '$someObject = new SomeNewNamespace\\SomeClass;', ['SomeOldNamespace' => 'SomeNewNamespace'])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -67,12 +67,12 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
     public function getNodeTypes() : array
     {
         $item3Unpacked = self::ONLY_CHANGE_DOCBLOCK_NODE;
-        return \array_merge([Namespace_::class, Use_::class, Name::class], $item3Unpacked);
+        return \array_merge([\PhpParser\Node\Stmt\Namespace_::class, \PhpParser\Node\Stmt\Use_::class, \PhpParser\Node\Name::class], $item3Unpacked);
     }
     /**
      * @param Namespace_|Use_|Name|Property|ClassMethod|Function_|Expression|ClassLike|FileWithoutNamespace $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (\in_array(\get_class($node), self::ONLY_CHANGE_DOCBLOCK_NODE, \true)) {
             /** @var Property|ClassMethod|Function_|Expression|ClassLike|FileWithoutNamespace $node */
@@ -84,32 +84,32 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
             return null;
         }
         $renamedNamespaceValueObject = $this->namespaceMatcher->matchRenamedNamespace($name, $this->oldToNewNamespaces);
-        if (!$renamedNamespaceValueObject instanceof RenamedNamespace) {
+        if (!$renamedNamespaceValueObject instanceof \Rector\Renaming\ValueObject\RenamedNamespace) {
             return null;
         }
         if ($this->isClassFullyQualifiedName($node)) {
             return null;
         }
-        if ($node instanceof Namespace_) {
+        if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
             $newName = $renamedNamespaceValueObject->getNameInNewNamespace();
-            $node->name = new Name($newName);
+            $node->name = new \PhpParser\Node\Name($newName);
             $this->isChangedInNamespaces[$newName] = \true;
             return $node;
         }
-        if ($node instanceof Use_) {
+        if ($node instanceof \PhpParser\Node\Stmt\Use_) {
             $newName = $renamedNamespaceValueObject->getNameInNewNamespace();
-            $node->uses[0]->name = new Name($newName);
+            $node->uses[0]->name = new \PhpParser\Node\Name($newName);
             return $node;
         }
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // already resolved above
-        if ($parent instanceof Namespace_) {
+        if ($parent instanceof \PhpParser\Node\Stmt\Namespace_) {
             return null;
         }
-        if (!$parent instanceof UseUse) {
+        if (!$parent instanceof \PhpParser\Node\Stmt\UseUse) {
             return $this->processFullyQualified($node, $renamedNamespaceValueObject);
         }
-        if ($parent->type !== Use_::TYPE_UNKNOWN) {
+        if ($parent->type !== \PhpParser\Node\Stmt\Use_::TYPE_UNKNOWN) {
             return $this->processFullyQualified($node, $renamedNamespaceValueObject);
         }
         return null;
@@ -119,12 +119,12 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
      */
     public function configure(array $configuration) : void
     {
-        Assert::allStringNotEmpty(\array_keys($configuration));
-        Assert::allStringNotEmpty($configuration);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allStringNotEmpty(\array_keys($configuration));
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allStringNotEmpty($configuration);
         /** @var array<string, string> $configuration */
         $this->oldToNewNamespaces = $configuration;
     }
-    private function processFullyQualified(Name $name, RenamedNamespace $renamedNamespace) : ?FullyQualified
+    private function processFullyQualified(\PhpParser\Node\Name $name, \Rector\Renaming\ValueObject\RenamedNamespace $renamedNamespace) : ?\PhpParser\Node\Name\FullyQualified
     {
         if (\strncmp($name->toString(), $renamedNamespace->getNewNamespace() . '\\', \strlen($renamedNamespace->getNewNamespace() . '\\')) === 0) {
             return null;
@@ -132,10 +132,10 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
         $nameInNewNamespace = $renamedNamespace->getNameInNewNamespace();
         $values = \array_values($this->oldToNewNamespaces);
         if (!isset($this->isChangedInNamespaces[$nameInNewNamespace])) {
-            return new FullyQualified($nameInNewNamespace);
+            return new \PhpParser\Node\Name\FullyQualified($nameInNewNamespace);
         }
         if (!\in_array($nameInNewNamespace, $values, \true)) {
-            return new FullyQualified($nameInNewNamespace);
+            return new \PhpParser\Node\Name\FullyQualified($nameInNewNamespace);
         }
         return null;
     }
@@ -143,13 +143,13 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
      * Checks for "new \ClassNoNamespace;"
      * This should be skipped, not a namespace.
      */
-    private function isClassFullyQualifiedName(Node $node) : bool
+    private function isClassFullyQualifiedName(\PhpParser\Node $node) : bool
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node) {
             return \false;
         }
-        if (!$parentNode instanceof New_) {
+        if (!$parentNode instanceof \PhpParser\Node\Expr\New_) {
             return \false;
         }
         /** @var FullyQualified $fullyQualifiedNode */

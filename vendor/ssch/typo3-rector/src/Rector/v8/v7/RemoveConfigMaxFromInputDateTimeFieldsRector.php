@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80027-RemoveTCAConfigMaxOnInputDateTimeFields.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\RemoveConfigMaxFromInputDateTimeFieldsRector\RemoveConfigMaxFromInputDateTimeFieldsRectorTest
  */
-final class RemoveConfigMaxFromInputDateTimeFieldsRector extends AbstractRector
+final class RemoveConfigMaxFromInputDateTimeFieldsRector extends \Rector\Core\Rector\AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -23,33 +23,33 @@ final class RemoveConfigMaxFromInputDateTimeFieldsRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof ArrayItem) {
+        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         $columnItems = $columnsArrayItem->value;
-        if (!$columnItems instanceof Array_) {
+        if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($columnItems->items as $columnItem) {
-            if (!$columnItem instanceof ArrayItem) {
+            if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $columnItem->key) {
                 continue;
             }
-            if (!$columnItem->value instanceof Array_) {
+            if (!$columnItem->value instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             foreach ($columnItem->value->items as $configValue) {
@@ -59,14 +59,14 @@ final class RemoveConfigMaxFromInputDateTimeFieldsRector extends AbstractRector
                 if (null === $configValue->key) {
                     continue;
                 }
-                if (!$configValue->value instanceof Array_) {
+                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 if (!$this->isRenderTypeInputDateTime($configValue->value)) {
                     continue;
                 }
                 foreach ($configValue->value->items as $configItemValue) {
-                    if (!$configItemValue instanceof ArrayItem) {
+                    if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                         continue;
                     }
                     if (null === $configItemValue->key) {
@@ -85,9 +85,9 @@ final class RemoveConfigMaxFromInputDateTimeFieldsRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition("Remove TCA config 'max' on inputDateTime fields", [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition("Remove TCA config 'max' on inputDateTime fields", [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
     ],
@@ -120,10 +120,10 @@ return [
 CODE_SAMPLE
 )]);
     }
-    private function isRenderTypeInputDateTime(Array_ $configValueArray) : bool
+    private function isRenderTypeInputDateTime(\PhpParser\Node\Expr\Array_ $configValueArray) : bool
     {
         foreach ($configValueArray->items as $configItemValue) {
-            if (!$configItemValue instanceof ArrayItem) {
+            if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $configItemValue->key) {

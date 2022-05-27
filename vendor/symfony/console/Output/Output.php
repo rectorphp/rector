@@ -25,7 +25,7 @@ use RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterInte
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Output implements OutputInterface
+abstract class Output implements \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface
 {
     /**
      * @var int
@@ -37,23 +37,23 @@ abstract class Output implements OutputInterface
      * @param bool                          $decorated Whether to decorate messages
      * @param OutputFormatterInterface|null $formatter Output formatter instance (null to use default OutputFormatter)
      */
-    public function __construct(?int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = \false, OutputFormatterInterface $formatter = null)
+    public function __construct(?int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = \false, \RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter = null)
     {
         $this->verbosity = $verbosity ?? self::VERBOSITY_NORMAL;
-        $this->formatter = $formatter ?? new OutputFormatter();
+        $this->formatter = $formatter ?? new \RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatter();
         $this->formatter->setDecorated($decorated);
     }
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(OutputFormatterInterface $formatter)
+    public function setFormatter(\RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
     {
         $this->formatter = $formatter;
     }
     /**
      * {@inheritdoc}
      */
-    public function getFormatter() : OutputFormatterInterface
+    public function getFormatter() : \RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterInterface
     {
         return $this->formatter;
     }
@@ -139,12 +139,12 @@ abstract class Output implements OutputInterface
         }
         foreach ($messages as $message) {
             switch ($type) {
-                case OutputInterface::OUTPUT_NORMAL:
+                case \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface::OUTPUT_NORMAL:
                     $message = $this->formatter->format($message);
                     break;
-                case OutputInterface::OUTPUT_RAW:
+                case \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface::OUTPUT_RAW:
                     break;
-                case OutputInterface::OUTPUT_PLAIN:
+                case \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface::OUTPUT_PLAIN:
                     $message = \strip_tags($this->formatter->format($message));
                     break;
             }

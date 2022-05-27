@@ -15,40 +15,40 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
  * Same as Symfony container configurator, with patched return type for "set()" method for easier DX.
  * It is an alias for internal class that is prefixed during build, so it's basically for keeping stable public API.
  */
-final class RectorConfig extends ContainerConfigurator
+final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator
 {
     /**
      * @param string[] $paths
      */
     public function paths(array $paths) : void
     {
-        Assert::allString($paths);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($paths);
         $parameters = $this->parameters();
-        $parameters->set(Option::PATHS, $paths);
+        $parameters->set(\Rector\Core\Configuration\Option::PATHS, $paths);
     }
     /**
      * @param string[] $sets
      */
     public function sets(array $sets) : void
     {
-        Assert::allString($sets);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($sets);
         foreach ($sets as $set) {
-            Assert::fileExists($set);
+            \RectorPrefix20220527\Webmozart\Assert\Assert::fileExists($set);
             $this->import($set);
         }
     }
     public function disableParallel() : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::PARALLEL, \false);
+        $parameters->set(\Rector\Core\Configuration\Option::PARALLEL, \false);
     }
     public function parallel(int $seconds = 120, int $maxNumberOfProcess = 16, int $jobSize = 20) : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::PARALLEL, \true);
-        $parameters->set(Option::PARALLEL_TIMEOUT_IN_SECONDS, $seconds);
-        $parameters->set(Option::PARALLEL_MAX_NUMBER_OF_PROCESSES, $maxNumberOfProcess);
-        $parameters->set(Option::PARALLEL_JOB_SIZE, $jobSize);
+        $parameters->set(\Rector\Core\Configuration\Option::PARALLEL, \true);
+        $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_TIMEOUT_IN_SECONDS, $seconds);
+        $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_MAX_NUMBER_OF_PROCESSES, $maxNumberOfProcess);
+        $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_JOB_SIZE, $jobSize);
     }
     /**
      * @param array<int|string, mixed> $criteria
@@ -56,27 +56,27 @@ final class RectorConfig extends ContainerConfigurator
     public function skip(array $criteria) : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::SKIP, $criteria);
+        $parameters->set(\Rector\Core\Configuration\Option::SKIP, $criteria);
     }
     public function importNames() : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::AUTO_IMPORT_NAMES, \true);
+        $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \true);
     }
     public function importShortClasses() : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::IMPORT_SHORT_CLASSES, \true);
+        $parameters->set(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES, \true);
     }
     public function disableImportShortClasses() : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::IMPORT_SHORT_CLASSES, \false);
+        $parameters->set(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES, \false);
     }
     public function disableImportNames() : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::AUTO_IMPORT_NAMES, \false);
+        $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \false);
     }
     /**
      * Set PHPStan custom config to load extensions and custom configuration to Rector.
@@ -84,9 +84,9 @@ final class RectorConfig extends ContainerConfigurator
      */
     public function phpstanConfig(string $filePath) : void
     {
-        Assert::fileExists($filePath);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::fileExists($filePath);
         $parameters = $this->parameters();
-        $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, $filePath);
+        $parameters->set(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH, $filePath);
     }
     /**
      * @param class-string<ConfigurableRectorInterface&RectorInterface> $rectorClass
@@ -94,13 +94,13 @@ final class RectorConfig extends ContainerConfigurator
      */
     public function ruleWithConfiguration(string $rectorClass, array $configuration) : void
     {
-        Assert::isAOf($rectorClass, RectorInterface::class);
-        Assert::isAOf($rectorClass, ConfigurableRectorInterface::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class);
         $services = $this->services();
         // decorate with value object inliner so Symfony understands, see https://getrector.org/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config
         \array_walk_recursive($configuration, function (&$value) {
             if (\is_object($value)) {
-                $value = ValueObjectInliner::inline($value);
+                $value = \Rector\Core\Configuration\ValueObjectInliner::inline($value);
             }
             return $value;
         });
@@ -111,7 +111,7 @@ final class RectorConfig extends ContainerConfigurator
      */
     public function rule(string $rectorClass) : void
     {
-        Assert::isAOf($rectorClass, RectorInterface::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
         $services = $this->services();
         $services->set($rectorClass);
     }
@@ -120,7 +120,7 @@ final class RectorConfig extends ContainerConfigurator
      */
     public function rules(array $rectorClasses) : void
     {
-        Assert::allString($rectorClasses);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($rectorClasses);
         foreach ($rectorClasses as $rectorClass) {
             $this->rule($rectorClass);
         }
@@ -131,34 +131,34 @@ final class RectorConfig extends ContainerConfigurator
     public function phpVersion(int $phpVersion) : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::PHP_VERSION_FEATURES, $phpVersion);
+        $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, $phpVersion);
     }
     /**
      * @param string[] $autoloadPaths
      */
     public function autoloadPaths(array $autoloadPaths) : void
     {
-        Assert::allString($autoloadPaths);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($autoloadPaths);
         $parameters = $this->parameters();
-        $parameters->set(Option::AUTOLOAD_PATHS, $autoloadPaths);
+        $parameters->set(\Rector\Core\Configuration\Option::AUTOLOAD_PATHS, $autoloadPaths);
     }
     /**
      * @param string[] $bootstrapFiles
      */
     public function bootstrapFiles(array $bootstrapFiles) : void
     {
-        Assert::allString($bootstrapFiles);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($bootstrapFiles);
         $parameters = $this->parameters();
-        $parameters->set(Option::BOOTSTRAP_FILES, $bootstrapFiles);
+        $parameters->set(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES, $bootstrapFiles);
     }
     public function symfonyContainerXml(string $filePath) : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, $filePath);
+        $parameters->set(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, $filePath);
     }
     public function symfonyContainerPhp(string $filePath) : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER, $filePath);
+        $parameters->set(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER, $filePath);
     }
 }

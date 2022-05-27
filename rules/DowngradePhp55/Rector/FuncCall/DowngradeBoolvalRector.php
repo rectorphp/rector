@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp55\Rector\FuncCall\DowngradeBoolvalRector\DowngradeBoolvalRectorTest
  */
-final class DowngradeBoolvalRector extends AbstractRector
+final class DowngradeBoolvalRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -38,13 +38,13 @@ final class DowngradeBoolvalRector extends AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace boolval() by type casting to boolean', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace boolval() by type casting to boolean', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $bool = boolval($value);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -57,34 +57,34 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->isName($node, self::BOOLVAL)) {
             return $this->refactorBoolval($node);
         }
         return $this->refactorAsCallback($node);
     }
-    private function refactorBoolval(FuncCall $funcCall) : ?Bool_
+    private function refactorBoolval(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\Cast\Bool_
     {
         if (!isset($funcCall->args[0])) {
             return null;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
-        return new Bool_($funcCall->args[0]->value);
+        return new \PhpParser\Node\Expr\Cast\Bool_($funcCall->args[0]->value);
     }
-    private function refactorAsCallback(FuncCall $funcCall) : ?FuncCall
+    private function refactorAsCallback(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
         $functionLikeReflection = null;
         $refactored = \false;
         foreach ($funcCall->args as $position => $arg) {
-            if (!$arg instanceof Arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
                 continue;
             }
             if (!$this->isBoolvalReference($arg)) {
@@ -92,7 +92,7 @@ CODE_SAMPLE
             }
             if ($functionLikeReflection === null) {
                 $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($funcCall);
-                if (!$functionLikeReflection instanceof FunctionReflection) {
+                if (!$functionLikeReflection instanceof \PHPStan\Reflection\FunctionReflection) {
                     break;
                 }
             }
@@ -104,18 +104,18 @@ CODE_SAMPLE
         }
         return $refactored ? $funcCall : null;
     }
-    private function isBoolvalReference(Arg $arg) : bool
+    private function isBoolvalReference(\PhpParser\Node\Arg $arg) : bool
     {
-        if (!$arg->value instanceof String_) {
+        if (!$arg->value instanceof \PhpParser\Node\Scalar\String_) {
             return \false;
         }
         return \strtolower($arg->value->value) === self::BOOLVAL;
     }
-    private function getParameterType(FunctionReflection $functionReflection, FuncCall $funcCall, int $position) : ?Type
+    private function getParameterType(\PHPStan\Reflection\FunctionReflection $functionReflection, \PhpParser\Node\Expr\FuncCall $funcCall, int $position) : ?\PHPStan\Type\Type
     {
         try {
-            $parametersAcceptor = ParametersAcceptorSelector::selectFromArgs($funcCall->getAttribute(AttributeKey::SCOPE), $funcCall->args, $functionReflection->getVariants());
-        } catch (ShouldNotHappenException $exception) {
+            $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectFromArgs($funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE), $funcCall->args, $functionReflection->getVariants());
+        } catch (\PHPStan\ShouldNotHappenException $exception) {
             return null;
         }
         $parameters = $parametersAcceptor->getParameters();
@@ -124,20 +124,20 @@ CODE_SAMPLE
         }
         return $parameters[$position]->getType();
     }
-    private function isCallable(?Type $type) : bool
+    private function isCallable(?\PHPStan\Type\Type $type) : bool
     {
-        if (!$type instanceof Type) {
+        if (!$type instanceof \PHPStan\Type\Type) {
             return \false;
         }
-        $trinaryLogic = $type->accepts(new CallableType(), \false);
+        $trinaryLogic = $type->accepts(new \PHPStan\Type\CallableType(), \false);
         return $trinaryLogic->yes();
     }
-    private function createBoolCastClosure() : Closure
+    private function createBoolCastClosure() : \PhpParser\Node\Expr\Closure
     {
-        $variable = new Variable('value');
-        $closure = new Closure();
-        $closure->params[] = new Param($variable);
-        $closure->stmts[] = new Return_(new Bool_($variable));
+        $variable = new \PhpParser\Node\Expr\Variable('value');
+        $closure = new \PhpParser\Node\Expr\Closure();
+        $closure->params[] = new \PhpParser\Node\Param($variable);
+        $closure->stmts[] = new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Expr\Cast\Bool_($variable));
         return $closure;
     }
 }

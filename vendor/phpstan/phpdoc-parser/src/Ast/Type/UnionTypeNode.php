@@ -16,6 +16,6 @@ class UnionTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     }
     public function __toString() : string
     {
-        return '(' . implode(' | ', $this->types) . ')';
+        return '(' . \implode(' | ', $this->types) . ')';
     }
 }

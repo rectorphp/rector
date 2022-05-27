@@ -19,24 +19,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php81\Rector\Class_\SpatieEnumClassToEnumRector\SpatieEnumClassToEnumRectorTest
  */
-final class SpatieEnumClassToEnumRector extends AbstractRector implements MinPhpVersionInterface
+final class SpatieEnumClassToEnumRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\Php81\NodeFactory\EnumFactory
      */
     private $enumFactory;
-    public function __construct(EnumFactory $enumFactory)
+    public function __construct(\Rector\Php81\NodeFactory\EnumFactory $enumFactory)
     {
         $this->enumFactory = $enumFactory;
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::ENUM;
+        return \Rector\Core\ValueObject\PhpVersionFeature::ENUM;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor Spatie enum class to native Enum', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor Spatie enum class to native Enum', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use \Spatie\Enum\Enum;
 
 /**
@@ -63,14 +63,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Enum_
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\Enum_
     {
-        if (!$this->isObjectType($node, new ObjectType('Spatie\\Enum\\Enum'))) {
+        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Spatie\\Enum\\Enum'))) {
             return null;
         }
         return $this->enumFactory->createFromSpatieClass($node);

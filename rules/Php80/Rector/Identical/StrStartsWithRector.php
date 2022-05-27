@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Identical\StrStartsWithRector\StrStartsWithRectorTest
  */
-final class StrStartsWithRector extends AbstractRector implements MinPhpVersionInterface
+final class StrStartsWithRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var StrStartWithMatchAndRefactorInterface[]
@@ -37,11 +37,11 @@ final class StrStartsWithRector extends AbstractRector implements MinPhpVersionI
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::STR_STARTS_WITH;
+        return \Rector\Core\ValueObject\PhpVersionFeature::STR_STARTS_WITH;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change helper functions to str_starts_with()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change helper functions to str_starts_with()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -70,16 +70,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Identical::class, NotIdentical::class];
+        return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class];
     }
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->strStartWithMatchAndRefactors as $strStartWithMatchAndRefactor) {
             $strStartsWithValueObject = $strStartWithMatchAndRefactor->match($node);
-            if (!$strStartsWithValueObject instanceof StrStartsWith) {
+            if (!$strStartsWithValueObject instanceof \Rector\Php80\ValueObject\StrStartsWith) {
                 continue;
             }
             return $strStartWithMatchAndRefactor->refactorStrStartsWith($strStartsWithValueObject);

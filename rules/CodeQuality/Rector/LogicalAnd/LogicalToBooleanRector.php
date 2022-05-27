@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector\LogicalToBooleanRectorTest
  */
-final class LogicalToBooleanRector extends AbstractRector
+final class LogicalToBooleanRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change OR, AND to ||, && with more common understanding', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change OR, AND to ||, && with more common understanding', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 if ($f = false or true) {
     return $f;
 }
@@ -37,12 +37,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [LogicalOr::class, LogicalAnd::class];
+        return [\PhpParser\Node\Expr\BinaryOp\LogicalOr::class, \PhpParser\Node\Expr\BinaryOp\LogicalAnd::class];
     }
     /**
      * @param LogicalOr|LogicalAnd $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         return $this->refactorLogicalToBoolean($node);
     }
@@ -52,15 +52,15 @@ CODE_SAMPLE
      */
     private function refactorLogicalToBoolean($node)
     {
-        if ($node->left instanceof LogicalOr || $node->left instanceof LogicalAnd) {
+        if ($node->left instanceof \PhpParser\Node\Expr\BinaryOp\LogicalOr || $node->left instanceof \PhpParser\Node\Expr\BinaryOp\LogicalAnd) {
             $node->left = $this->refactorLogicalToBoolean($node->left);
         }
-        if ($node->right instanceof LogicalOr || $node->right instanceof LogicalAnd) {
+        if ($node->right instanceof \PhpParser\Node\Expr\BinaryOp\LogicalOr || $node->right instanceof \PhpParser\Node\Expr\BinaryOp\LogicalAnd) {
             $node->right = $this->refactorLogicalToBoolean($node->right);
         }
-        if ($node instanceof LogicalOr) {
-            return new BooleanOr($node->left, $node->right);
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\LogicalOr) {
+            return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($node->left, $node->right);
         }
-        return new BooleanAnd($node->left, $node->right);
+        return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($node->left, $node->right);
     }
 }

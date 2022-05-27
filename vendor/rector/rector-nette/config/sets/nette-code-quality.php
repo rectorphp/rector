@@ -10,11 +10,11 @@ use Rector\Nette\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRect
 use Rector\Nette\Rector\Assign\MakeGetComponentAssignAnnotatedRector;
 use Rector\Nette\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector;
 use Rector\Nette\Rector\Identical\SubstrMinusToStringEndsWithRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(TemplateMagicAssignToExplicitVariableArrayRector::class);
-    $rectorConfig->rule(MakeGetComponentAssignAnnotatedRector::class);
-    $rectorConfig->rule(AnnotateMagicalControlArrayAccessRector::class);
-    $rectorConfig->rule(ArrayAccessSetControlToAddComponentMethodCallRector::class);
-    $rectorConfig->rule(ArrayAccessGetControlToGetComponentMethodCallRector::class);
-    $rectorConfig->rule(SubstrMinusToStringEndsWithRector::class);
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(\Rector\Nette\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector::class);
+    $rectorConfig->rule(\Rector\Nette\Rector\Assign\MakeGetComponentAssignAnnotatedRector::class);
+    $rectorConfig->rule(\Rector\Nette\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector::class);
+    $rectorConfig->rule(\Rector\Nette\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector::class);
+    $rectorConfig->rule(\Rector\Nette\Rector\Assign\ArrayAccessGetControlToGetComponentMethodCallRector::class);
+    $rectorConfig->rule(\Rector\Nette\Rector\Identical\SubstrMinusToStringEndsWithRector::class);
 };

@@ -13,20 +13,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterfaceRector\DowngradePreviouslyImplementedInterfaceRectorTest
  */
-final class DowngradePreviouslyImplementedInterfaceRector extends AbstractRector
+final class DowngradePreviouslyImplementedInterfaceRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade previously implemented interface', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade previously implemented interface', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 interface ContainerExceptionInterface extends Throwable
 {
 }
@@ -51,12 +51,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Interface_::class];
+        return [\PhpParser\Node\Stmt\Interface_::class];
     }
     /**
      * @param Interface_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $extends = $node->extends;
         if ($extends === []) {
@@ -68,7 +68,7 @@ CODE_SAMPLE
         $collectInterfaces = [];
         $isCleaned = \false;
         foreach ($extends as $key => $extend) {
-            if (!$extend instanceof FullyQualified) {
+            if (!$extend instanceof \PhpParser\Node\Name\FullyQualified) {
                 continue;
             }
             if (\in_array($extend->toString(), $collectInterfaces, \true)) {

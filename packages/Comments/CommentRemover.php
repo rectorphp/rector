@@ -15,7 +15,7 @@ final class CommentRemover
      * @var \Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser
      */
     private $commentRemovingNodeTraverser;
-    public function __construct(CommentRemovingNodeTraverser $commentRemovingNodeTraverser)
+    public function __construct(\Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser $commentRemovingNodeTraverser)
     {
         $this->commentRemovingNodeTraverser = $commentRemovingNodeTraverser;
     }

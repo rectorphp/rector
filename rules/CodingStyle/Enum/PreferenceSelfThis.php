@@ -8,7 +8,7 @@ use RectorPrefix20220527\MyCLabs\Enum\Enum;
  * @method static PreferenceSelfThis PREFER_THIS()
  * @method static PreferenceSelfThis PREFER_SELF()
  */
-final class PreferenceSelfThis extends Enum
+final class PreferenceSelfThis extends \RectorPrefix20220527\MyCLabs\Enum\Enum
 {
     /**
      * @api

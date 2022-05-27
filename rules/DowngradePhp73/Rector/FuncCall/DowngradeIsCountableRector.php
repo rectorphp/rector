@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp73\Rector\FuncCall\DowngradeIsCountableRector\DowngradeIsCountableRectorTest
  */
-final class DowngradeIsCountableRector extends AbstractRector
+final class DowngradeIsCountableRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade is_countable() to former version', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade is_countable() to former version', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $items = [];
 return is_countable($items);
 CODE_SAMPLE
@@ -36,12 +36,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'is_countable')) {
             return null;
@@ -49,11 +49,11 @@ CODE_SAMPLE
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof Arg) {
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $isArrayFuncCall = $this->nodeFactory->createFuncCall('is_array', $node->args);
-        $instanceof = new Instanceof_($node->args[0]->value, new FullyQualified('Countable'));
-        return new BooleanOr($isArrayFuncCall, $instanceof);
+        $instanceof = new \PhpParser\Node\Expr\Instanceof_($node->args[0]->value, new \PhpParser\Node\Name\FullyQualified('Countable'));
+        return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($isArrayFuncCall, $instanceof);
     }
 }

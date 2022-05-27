@@ -7,10 +7,10 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 final class PropertyDefaultAssignDetector
 {
-    public function detect(ClassLike $classLike, string $propertyName) : bool
+    public function detect(\PhpParser\Node\Stmt\ClassLike $classLike, string $propertyName) : bool
     {
         $property = $classLike->getProperty($propertyName);
-        if (!$property instanceof Property) {
+        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
             return \false;
         }
         return $property->props[0]->default !== null;

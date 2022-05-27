@@ -20,9 +20,9 @@ final class MatchFactory
     /**
      * @param CondAndExpr[] $condAndExprs
      */
-    public function createFromCondAndExprs(Expr $condExpr, array $condAndExprs) : Match_
+    public function createFromCondAndExprs(\PhpParser\Node\Expr $condExpr, array $condAndExprs) : \PhpParser\Node\Expr\Match_
     {
         $matchArms = $this->matchArmsFactory->createFromCondAndExprs($condAndExprs);
-        return new Match_($condExpr, $matchArms);
+        return new \PhpParser\Node\Expr\Match_($condExpr, $matchArms);
     }
 }

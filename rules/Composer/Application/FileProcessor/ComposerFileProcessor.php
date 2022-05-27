@@ -15,7 +15,7 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix20220527\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use RectorPrefix20220527\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class ComposerFileProcessor implements FileProcessorInterface
+final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @readonly
@@ -40,7 +40,7 @@ final class ComposerFileProcessor implements FileProcessorInterface
     /**
      * @param ComposerRectorInterface[] $composerRectors
      */
-    public function __construct(ComposerJsonFactory $composerJsonFactory, ComposerJsonPrinter $composerJsonPrinter, FileDiffFactory $fileDiffFactory, array $composerRectors)
+    public function __construct(\RectorPrefix20220527\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20220527\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter $composerJsonPrinter, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory, array $composerRectors)
     {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->composerJsonPrinter = $composerJsonPrinter;
@@ -50,9 +50,9 @@ final class ComposerFileProcessor implements FileProcessorInterface
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(File $file, Configuration $configuration) : array
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
-        $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
+        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
         if ($this->composerRectors === []) {
             return $systemErrorsAndFileDiffs;
         }
@@ -71,10 +71,10 @@ final class ComposerFileProcessor implements FileProcessorInterface
         $changedFileContent = $this->composerJsonPrinter->printToString($composerJson);
         $file->changeFileContent($changedFileContent);
         $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldFileContents, $changedFileContent);
-        $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] = [$fileDiff];
+        $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] = [$fileDiff];
         return $systemErrorsAndFileDiffs;
     }
-    public function supports(File $file, Configuration $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->isJsonInTests($smartFileInfo)) {
@@ -89,9 +89,9 @@ final class ComposerFileProcessor implements FileProcessorInterface
     {
         return ['json'];
     }
-    private function isJsonInTests(SmartFileInfo $fileInfo) : bool
+    private function isJsonInTests(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : bool
     {
-        if (!StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if (!\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return \false;
         }
         return $fileInfo->hasSuffixes(['json']);

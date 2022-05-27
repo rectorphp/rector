@@ -29,22 +29,22 @@ final class ClassWithPublicPropertiesFactory
         $namespace = \implode('\\', $namespaceParts);
         $namespaceBuilder = null;
         if ($namespace !== '') {
-            $namespaceBuilder = new NamespaceBuilder($namespace);
+            $namespaceBuilder = new \RectorPrefix20220527\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder($namespace);
         }
-        $classBuilder = new ClassBuilder($className);
+        $classBuilder = new \RectorPrefix20220527\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder($className);
         if ($parent !== null && $parent !== '') {
             $classBuilder->extend($this->fixFullyQualifiedName($parent));
         }
         foreach ($traits as $trait) {
-            $classBuilder->addStmt(new TraitUseBuilder($this->fixFullyQualifiedName($trait)));
+            $classBuilder->addStmt(new \RectorPrefix20220527\Symplify\Astral\ValueObject\NodeBuilder\TraitUseBuilder($this->fixFullyQualifiedName($trait)));
         }
         foreach ($properties as $propertyName => $propertySettings) {
             $propertyType = $propertySettings['type'];
             $nullable = $propertySettings['nullable'] ?? \false;
             if ($nullable) {
-                $propertyType = new NullableType($propertyType);
+                $propertyType = new \PhpParser\Node\NullableType($propertyType);
             }
-            $propertyBuilder = new PropertyBuilder($propertyName);
+            $propertyBuilder = new \RectorPrefix20220527\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($propertyName);
             $propertyBuilder->setType($propertyType);
             $classBuilder->addStmt($propertyBuilder);
         }

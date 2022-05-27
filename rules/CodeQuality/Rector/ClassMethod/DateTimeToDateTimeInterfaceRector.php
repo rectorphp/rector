@@ -29,12 +29,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector\DateTimeToDateTimeInterfaceRectorTest
  */
-final class DateTimeToDateTimeInterfaceRector extends AbstractRector implements MinPhpVersionInterface
+final class DateTimeToDateTimeInterfaceRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string[]
      */
-    private const METHODS_RETURNING_CLASS_INSTANCE_MAP = ['add', 'modify', MethodName::SET_STATE, 'setDate', 'setISODate', 'setTime', 'setTimestamp', 'setTimezone', 'sub'];
+    private const METHODS_RETURNING_CLASS_INSTANCE_MAP = ['add', 'modify', \Rector\Core\ValueObject\MethodName::SET_STATE, 'setDate', 'setISODate', 'setTime', 'setTimestamp', 'setTimezone', 'sub'];
     /**
      * @var string
      */
@@ -64,7 +64,7 @@ final class DateTimeToDateTimeInterfaceRector extends AbstractRector implements 
      * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
      */
     private $callAnalyzer;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ParamAnalyzer $paramAnalyzer, ClassMethodReturnTypeManipulator $classMethodReturnTypeManipulator, ClassMethodParameterTypeManipulator $classMethodParameterTypeManipulator, CallAnalyzer $callAnalyzer)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\CodeQuality\NodeManipulator\ClassMethodReturnTypeManipulator $classMethodReturnTypeManipulator, \Rector\CodeQuality\NodeManipulator\ClassMethodParameterTypeManipulator $classMethodParameterTypeManipulator, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->paramAnalyzer = $paramAnalyzer;
@@ -72,9 +72,9 @@ final class DateTimeToDateTimeInterfaceRector extends AbstractRector implements 
         $this->classMethodParameterTypeManipulator = $classMethodParameterTypeManipulator;
         $this->callAnalyzer = $callAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes DateTime type-hint to DateTimeInterface', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes DateTime type-hint to DateTimeInterface', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass {
     public function methodWithDateTime(\DateTime $dateTime)
     {
@@ -100,92 +100,92 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Property::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param ClassMethod|Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof ClassMethod) {
+        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return $this->refactorClassMethod($node);
         }
         return $this->refactorProperty($node);
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::DATE_TIME_INTERFACE;
+        return \Rector\Core\ValueObject\PhpVersionFeature::DATE_TIME_INTERFACE;
     }
-    private function refactorProperty(Property $property) : ?Node
+    private function refactorProperty(\PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node
     {
         $type = $property->type;
         if ($type === null) {
             return null;
         }
         $isNullable = \false;
-        if ($type instanceof NullableType) {
+        if ($type instanceof \PhpParser\Node\NullableType) {
             $isNullable = \true;
             $type = $type->type;
         }
-        if (!$this->isObjectType($type, new ObjectType(self::DATE_TIME))) {
+        if (!$this->isObjectType($type, new \PHPStan\Type\ObjectType(self::DATE_TIME))) {
             return null;
         }
         $types = $this->determinePhpDocTypes($property->type);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, new UnionType($types));
-        $property->type = new FullyQualified('DateTimeInterface');
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, new \PHPStan\Type\UnionType($types));
+        $property->type = new \PhpParser\Node\Name\FullyQualified('DateTimeInterface');
         if ($isNullable) {
-            $property->type = new NullableType($property->type);
+            $property->type = new \PhpParser\Node\NullableType($property->type);
         }
         return $property;
     }
     /**
      * @return Type[]
      */
-    private function determinePhpDocTypes(?Node $node) : array
+    private function determinePhpDocTypes(?\PhpParser\Node $node) : array
     {
-        $types = [new ObjectType(self::DATE_TIME), new ObjectType('DateTimeImmutable')];
+        $types = [new \PHPStan\Type\ObjectType(self::DATE_TIME), new \PHPStan\Type\ObjectType('DateTimeImmutable')];
         if ($this->canHaveNullType($node)) {
-            $types[] = new NullType();
+            $types[] = new \PHPStan\Type\NullType();
         }
         return $types;
     }
-    private function canHaveNullType(?Node $node) : bool
+    private function canHaveNullType(?\PhpParser\Node $node) : bool
     {
-        if ($node instanceof Param) {
+        if ($node instanceof \PhpParser\Node\Param) {
             return $this->paramAnalyzer->isNullable($node);
         }
-        return $node instanceof NullableType;
+        return $node instanceof \PhpParser\Node\NullableType;
     }
-    private function refactorClassMethod(ClassMethod $classMethod) : ?ClassMethod
+    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
     {
         if ($this->shouldSkipExactlyReturnDateTime($classMethod)) {
             return null;
         }
-        $fromObjectType = new ObjectType(self::DATE_TIME);
-        $fullyQualified = new FullyQualified('DateTimeInterface');
-        $unionType = new UnionType([new ObjectType(self::DATE_TIME), new ObjectType('DateTimeImmutable')]);
+        $fromObjectType = new \PHPStan\Type\ObjectType(self::DATE_TIME);
+        $fullyQualified = new \PhpParser\Node\Name\FullyQualified('DateTimeInterface');
+        $unionType = new \PHPStan\Type\UnionType([new \PHPStan\Type\ObjectType(self::DATE_TIME), new \PHPStan\Type\ObjectType('DateTimeImmutable')]);
         $this->classMethodParameterTypeManipulator->refactorFunctionParameters($classMethod, $fromObjectType, $fullyQualified, $unionType, self::METHODS_RETURNING_CLASS_INSTANCE_MAP);
-        if (!$classMethod->returnType instanceof Node) {
+        if (!$classMethod->returnType instanceof \PhpParser\Node) {
             return null;
         }
         return $this->classMethodReturnTypeManipulator->refactorFunctionReturnType($classMethod, $fromObjectType, $fullyQualified, $unionType);
     }
-    private function shouldSkipExactlyReturnDateTime(ClassMethod $classMethod) : bool
+    private function shouldSkipExactlyReturnDateTime(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        $return = $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (Node $node) : bool {
-            return $node instanceof Return_;
+        $return = $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (\PhpParser\Node $node) : bool {
+            return $node instanceof \PhpParser\Node\Stmt\Return_;
         });
-        if (!$return instanceof Return_) {
+        if (!$return instanceof \PhpParser\Node\Stmt\Return_) {
             return \false;
         }
-        if (!$return->expr instanceof Expr) {
+        if (!$return->expr instanceof \PhpParser\Node\Expr) {
             return \false;
         }
         if (!$this->callAnalyzer->isNewInstance($return->expr)) {
             return \false;
         }
         $type = $this->nodeTypeResolver->getType($return->expr);
-        return $type instanceof ObjectType && $type->getClassName() === self::DATE_TIME;
+        return $type instanceof \PHPStan\Type\ObjectType && $type->getClassName() === self::DATE_TIME;
     }
 }

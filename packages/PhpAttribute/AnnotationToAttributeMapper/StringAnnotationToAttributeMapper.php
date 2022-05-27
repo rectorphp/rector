@@ -13,7 +13,7 @@ use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 /**
  * @implements AnnotationToAttributeMapperInterface<string>
  */
-final class StringAnnotationToAttributeMapper implements AnnotationToAttributeMapperInterface
+final class StringAnnotationToAttributeMapper implements \Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface
 {
     /**
      * @param mixed $value
@@ -25,26 +25,26 @@ final class StringAnnotationToAttributeMapper implements AnnotationToAttributeMa
     /**
      * @param string $value
      */
-    public function map($value) : Expr
+    public function map($value) : \PhpParser\Node\Expr
     {
         if (\strtolower($value) === 'true') {
-            return new ConstFetch(new Name('true'));
+            return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('true'));
         }
         if (\strtolower($value) === 'false') {
-            return new ConstFetch(new Name('false'));
+            return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('false'));
         }
         if (\strtolower($value) === 'null') {
-            return new ConstFetch(new Name('null'));
+            return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null'));
         }
         // number as string to number
         if (\is_numeric($value) && \strlen((string) (int) $value) === \strlen($value)) {
-            return LNumber::fromString($value);
+            return \PhpParser\Node\Scalar\LNumber::fromString($value);
         }
         if (\strpos($value, "'") !== \false && \strpos($value, "\n") === \false) {
-            $kind = String_::KIND_DOUBLE_QUOTED;
+            $kind = \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED;
         } else {
-            $kind = String_::KIND_SINGLE_QUOTED;
+            $kind = \PhpParser\Node\Scalar\String_::KIND_SINGLE_QUOTED;
         }
-        return new String_($value, [AttributeKey::KIND => $kind]);
+        return new \PhpParser\Node\Scalar\String_($value, [\Rector\NodeTypeResolver\Node\AttributeKey::KIND => $kind]);
     }
 }

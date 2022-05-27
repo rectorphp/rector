@@ -29,7 +29,7 @@ final class UsedImportsResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useImportsTraverser = $useImportsTraverser;
@@ -38,10 +38,10 @@ final class UsedImportsResolver
     /**
      * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
-    public function resolveForNode(Node $node) : array
+    public function resolveForNode(\PhpParser\Node $node) : array
     {
-        $namespace = $node instanceof Namespace_ ? $node : $this->betterNodeFinder->findParentType($node, Namespace_::class);
-        if ($namespace instanceof Namespace_) {
+        $namespace = $node instanceof \PhpParser\Node\Stmt\Namespace_ ? $node : $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);
+        if ($namespace instanceof \PhpParser\Node\Stmt\Namespace_) {
             return $this->resolveForNamespace($namespace);
         }
         return [];
@@ -54,18 +54,18 @@ final class UsedImportsResolver
     {
         $usedImports = [];
         /** @var Class_|null $class */
-        $class = $this->betterNodeFinder->findFirstInstanceOf($stmts, Class_::class);
+        $class = $this->betterNodeFinder->findFirstInstanceOf($stmts, \PhpParser\Node\Stmt\Class_::class);
         // add class itself
         // is not anonymous class
-        if ($class instanceof Class_) {
+        if ($class instanceof \PhpParser\Node\Stmt\Class_) {
             $className = (string) $this->nodeNameResolver->getName($class);
-            $usedImports[] = new FullyQualifiedObjectType($className);
+            $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
         }
-        $this->useImportsTraverser->traverserStmts($stmts, function (UseUse $useUse, string $name) use(&$usedImports) : void {
+        $this->useImportsTraverser->traverserStmts($stmts, function (\PhpParser\Node\Stmt\UseUse $useUse, string $name) use(&$usedImports) : void {
             if ($useUse->alias !== null) {
-                $usedImports[] = new AliasedObjectType($useUse->alias->toString(), $name);
+                $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($useUse->alias->toString(), $name);
             } else {
-                $usedImports[] = new FullyQualifiedObjectType($name);
+                $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($name);
             }
         });
         return $usedImports;
@@ -77,15 +77,15 @@ final class UsedImportsResolver
     public function resolveFunctionImportsForStmts(array $stmts) : array
     {
         $usedFunctionImports = [];
-        $this->useImportsTraverser->traverserStmtsForFunctions($stmts, function (UseUse $useUse, string $name) use(&$usedFunctionImports) : void {
-            $usedFunctionImports[] = new FullyQualifiedObjectType($name);
+        $this->useImportsTraverser->traverserStmtsForFunctions($stmts, function (\PhpParser\Node\Stmt\UseUse $useUse, string $name) use(&$usedFunctionImports) : void {
+            $usedFunctionImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($name);
         });
         return $usedFunctionImports;
     }
     /**
      * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
-    private function resolveForNamespace(Namespace_ $namespace) : array
+    private function resolveForNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace) : array
     {
         return $this->resolveForStmts($namespace->stmts);
     }

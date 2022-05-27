@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79440-TcaChanges.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\MigrateLastPiecesOfDefaultExtrasRector\MigrateLastPiecesOfDefaultExtrasRectorTest
  */
-final class MigrateLastPiecesOfDefaultExtrasRector extends AbstractRector
+final class MigrateLastPiecesOfDefaultExtrasRector extends \Rector\Core\Rector\AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -29,41 +29,41 @@ final class MigrateLastPiecesOfDefaultExtrasRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof ArrayItem) {
+        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         $columnItems = $columnsArrayItem->value;
-        if (!$columnItems instanceof Array_) {
+        if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $this->refactorDefaultExtras($columnItems);
         $types = $this->extractTypes($node);
-        if (!$types instanceof ArrayItem) {
+        if (!$types instanceof \PhpParser\Node\Expr\ArrayItem) {
             return $this->hasAstBeenChanged ? $node : null;
         }
         $typesItems = $types->value;
-        if (!$typesItems instanceof Array_) {
+        if (!$typesItems instanceof \PhpParser\Node\Expr\Array_) {
             return $this->hasAstBeenChanged ? $node : null;
         }
         foreach ($typesItems->items as $typesItem) {
-            if (!$typesItem instanceof ArrayItem) {
+            if (!$typesItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $typesItem->key) {
                 continue;
             }
-            if (!$typesItem->value instanceof Array_) {
+            if (!$typesItem->value instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             foreach ($typesItem->value->items as $configValue) {
@@ -76,7 +76,7 @@ final class MigrateLastPiecesOfDefaultExtrasRector extends AbstractRector
                 if (!$this->valueResolver->isValue($configValue->key, 'columnsOverrides')) {
                     continue;
                 }
-                if (!$configValue->value instanceof Array_) {
+                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 $this->refactorDefaultExtras($configValue->value);
@@ -87,9 +87,9 @@ final class MigrateLastPiecesOfDefaultExtrasRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Migrate last pieces of default extras', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate last pieces of default extras', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return [
             'ctrl' => [],
             'columns' => [
@@ -157,16 +157,16 @@ return [
 CODE_SAMPLE
 )]);
     }
-    private function refactorDefaultExtras(Array_ $columnItemsArray) : void
+    private function refactorDefaultExtras(\PhpParser\Node\Expr\Array_ $columnItemsArray) : void
     {
         foreach ($columnItemsArray->items as $columnItem) {
-            if (!$columnItem instanceof ArrayItem) {
+            if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $columnItem->key) {
                 continue;
             }
-            if (!$columnItem->value instanceof Array_) {
+            if (!$columnItem->value instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             $additionalConfigItems = [];
@@ -184,14 +184,14 @@ CODE_SAMPLE
                 if (!\is_string($defaultExtras)) {
                     continue;
                 }
-                $defaultExtrasArray = ArrayUtility::trimExplode(':', $defaultExtras, \true);
+                $defaultExtrasArray = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(':', $defaultExtras, \true);
                 foreach ($defaultExtrasArray as $defaultExtrasSetting) {
                     if ('nowrap' === $defaultExtrasSetting) {
-                        $additionalConfigItems[] = new ArrayItem(new String_('off'), new String_('wrap'));
+                        $additionalConfigItems[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('off'), new \PhpParser\Node\Scalar\String_('wrap'));
                     } elseif ('enable-tab' === $defaultExtrasSetting) {
-                        $additionalConfigItems[] = new ArrayItem($this->nodeFactory->createTrue(), new String_('enableTabulator'));
+                        $additionalConfigItems[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createTrue(), new \PhpParser\Node\Scalar\String_('enableTabulator'));
                     } elseif ('fixed-font' === $defaultExtrasSetting) {
-                        $additionalConfigItems[] = new ArrayItem($this->nodeFactory->createTrue(), new String_('fixedFont'));
+                        $additionalConfigItems[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createTrue(), new \PhpParser\Node\Scalar\String_('fixedFont'));
                     }
                 }
                 // Remove the defaultExtras
@@ -200,11 +200,11 @@ CODE_SAMPLE
             if ([] !== $additionalConfigItems) {
                 $this->hasAstBeenChanged = \true;
                 $config = $this->extractArrayItemByKey($columnItem->value, 'config');
-                if (!$config instanceof ArrayItem) {
-                    $config = new ArrayItem(new Array_(), new String_('config'));
+                if (!$config instanceof \PhpParser\Node\Expr\ArrayItem) {
+                    $config = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Array_(), new \PhpParser\Node\Scalar\String_('config'));
                     $columnItem->value->items[] = $config;
                 }
-                if (!$config->value instanceof Array_) {
+                if (!$config->value instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 foreach ($additionalConfigItems as $additionalConfigItem) {

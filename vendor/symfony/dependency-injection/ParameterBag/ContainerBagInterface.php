@@ -17,7 +17,7 @@ use RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\Paramet
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface ContainerBagInterface extends ContainerInterface
+interface ContainerBagInterface extends \RectorPrefix20220527\Psr\Container\ContainerInterface
 {
     /**
      * Gets the service container parameters.

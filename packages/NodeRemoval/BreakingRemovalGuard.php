@@ -12,28 +12,28 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class BreakingRemovalGuard
 {
-    public function ensureNodeCanBeRemove(Node $node) : void
+    public function ensureNodeCanBeRemove(\PhpParser\Node $node) : void
     {
         if ($this->isLegalNodeRemoval($node)) {
             return;
         }
         // validate the node can be removed
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
-            throw new ShouldNotHappenException();
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        throw new ShouldNotHappenException(\sprintf('Node "%s" on line %d is child of "%s", so it cannot be removed as it would break PHP code. Change or remove the parent node instead.', \get_class($node), $node->getLine(), \get_class($parentNode)));
+        throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('Node "%s" on line %d is child of "%s", so it cannot be removed as it would break PHP code. Change or remove the parent node instead.', \get_class($node), $node->getLine(), \get_class($parentNode)));
     }
-    public function isLegalNodeRemoval(Node $node) : bool
+    public function isLegalNodeRemoval(\PhpParser\Node $node) : bool
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof If_ && $parent->cond === $node) {
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parent instanceof \PhpParser\Node\Stmt\If_ && $parent->cond === $node) {
             return \false;
         }
-        if ($parent instanceof BooleanNot) {
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof \PhpParser\Node\Expr\BooleanNot) {
+            $parent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         }
-        if ($parent instanceof Assign) {
+        if ($parent instanceof \PhpParser\Node\Expr\Assign) {
             return \false;
         }
         if ($this->isIfCondition($node)) {
@@ -41,18 +41,18 @@ final class BreakingRemovalGuard
         }
         return !$this->isWhileCondition($node);
     }
-    private function isIfCondition(Node $node) : bool
+    private function isIfCondition(\PhpParser\Node $node) : bool
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof If_) {
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\If_) {
             return \false;
         }
         return $parentNode->cond === $node;
     }
-    private function isWhileCondition(Node $node) : bool
+    private function isWhileCondition(\PhpParser\Node $node) : bool
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof While_) {
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\While_) {
             return \false;
         }
         return $parentNode->cond === $node;

@@ -11,7 +11,7 @@ use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 /**
  * @implements ReadNodeAnalyzerInterface<Variable>
  */
-final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
+final class VariableReadNodeAnalyzer implements \Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface
 {
     /**
      * @readonly
@@ -28,20 +28,20 @@ final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
      * @var \Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer
      */
     private $justReadExprAnalyzer;
-    public function __construct(ParentScopeFinder $parentScopeFinder, NodeUsageFinder $nodeUsageFinder, \Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer $justReadExprAnalyzer)
+    public function __construct(\Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\ReadWrite\NodeFinder\NodeUsageFinder $nodeUsageFinder, \Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer $justReadExprAnalyzer)
     {
         $this->parentScopeFinder = $parentScopeFinder;
         $this->nodeUsageFinder = $nodeUsageFinder;
         $this->justReadExprAnalyzer = $justReadExprAnalyzer;
     }
-    public function supports(Expr $expr) : bool
+    public function supports(\PhpParser\Node\Expr $expr) : bool
     {
-        return $expr instanceof Variable;
+        return $expr instanceof \PhpParser\Node\Expr\Variable;
     }
     /**
      * @param Variable $expr
      */
-    public function isRead(Expr $expr) : bool
+    public function isRead(\PhpParser\Node\Expr $expr) : bool
     {
         $parentScope = $this->parentScopeFinder->find($expr);
         if ($parentScope === null) {

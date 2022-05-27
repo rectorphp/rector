@@ -31,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85004-DeprecateMethodsInReflectionService.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\UseClassSchemaInsteadReflectionServiceMethodsRector\UseClassSchemaInsteadReflectionServiceMethodsRectorTest
  */
-final class UseClassSchemaInsteadReflectionServiceMethodsRector extends AbstractRector implements MinPhpVersionInterface
+final class UseClassSchemaInsteadReflectionServiceMethodsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
@@ -44,9 +44,9 @@ final class UseClassSchemaInsteadReflectionServiceMethodsRector extends Abstract
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Instead of fetching reflection data via ReflectionService use ClassSchema directly', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Instead of fetching reflection data via ReflectionService use ClassSchema directly', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Reflection\ReflectionService;
 class MyService
 {
@@ -85,14 +85,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Extbase\\Reflection\\ReflectionService'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Reflection\\ReflectionService'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['getClassPropertyNames', 'getPropertyTagsValues', 'getPropertyTagValues', 'getClassTagsValues', 'getClassTagValues', 'getMethodTagsValues', self::HAS_METHOD, 'getMethodParameters', 'isClassTaggedWith', 'isPropertyTaggedWith'])) {
@@ -136,23 +136,23 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::NULL_COALESCE;
+        return \Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE;
     }
-    private function refactorGetPropertyTagsValuesMethod(MethodCall $methodCall) : ?Node
+    private function refactorGetPropertyTagsValuesMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         if (!isset($methodCall->args[1])) {
             return null;
         }
-        $propertyTagsValuesVariable = new Variable('propertyTagsValues');
-        $propertyTagsAssignExpression = new Expression(new Assign($propertyTagsValuesVariable, new Coalesce($this->createArrayDimFetchTags($methodCall), $this->nodeFactory->createArray([]))));
+        $propertyTagsValuesVariable = new \PhpParser\Node\Expr\Variable('propertyTagsValues');
+        $propertyTagsAssignExpression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($propertyTagsValuesVariable, new \PhpParser\Node\Expr\BinaryOp\Coalesce($this->createArrayDimFetchTags($methodCall), $this->nodeFactory->createArray([]))));
         $this->nodesToAddCollector->addNodeBeforeNode($propertyTagsAssignExpression, $methodCall);
         return $propertyTagsValuesVariable;
     }
-    private function refactorGetClassPropertyNamesMethod(MethodCall $methodCall) : Node
+    private function refactorGetClassPropertyNamesMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
     {
         return $this->nodeFactory->createFuncCall('array_keys', [$this->nodeFactory->createMethodCall($this->createClassSchema($methodCall), 'getProperties')]);
     }
-    private function refactorGetPropertyTagValuesMethod(MethodCall $methodCall) : ?Node
+    private function refactorGetPropertyTagValuesMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         if (!isset($methodCall->args[1])) {
             return null;
@@ -160,72 +160,72 @@ CODE_SAMPLE
         if (!isset($methodCall->args[2])) {
             return null;
         }
-        return new Coalesce(new ArrayDimFetch($this->createArrayDimFetchTags($methodCall), $methodCall->args[2]->value), $this->nodeFactory->createArray([]));
+        return new \PhpParser\Node\Expr\BinaryOp\Coalesce(new \PhpParser\Node\Expr\ArrayDimFetch($this->createArrayDimFetchTags($methodCall), $methodCall->args[2]->value), $this->nodeFactory->createArray([]));
     }
-    private function createArrayDimFetchTags(MethodCall $methodCall) : ArrayDimFetch
+    private function createArrayDimFetchTags(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\ArrayDimFetch
     {
-        return new ArrayDimFetch($this->nodeFactory->createMethodCall($this->createClassSchema($methodCall), 'getProperty', [$methodCall->args[1]->value]), new String_(self::TAGS));
+        return new \PhpParser\Node\Expr\ArrayDimFetch($this->nodeFactory->createMethodCall($this->createClassSchema($methodCall), 'getProperty', [$methodCall->args[1]->value]), new \PhpParser\Node\Scalar\String_(self::TAGS));
     }
-    private function refactorGetClassTagsValues(MethodCall $methodCall) : MethodCall
+    private function refactorGetClassTagsValues(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
     {
         return $this->nodeFactory->createMethodCall($this->createClassSchema($methodCall), 'getTags');
     }
-    private function refactorGetClassTagValues(MethodCall $methodCall) : ?Node
+    private function refactorGetClassTagValues(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         if (!isset($methodCall->args[1])) {
             return null;
         }
-        return new Coalesce(new ArrayDimFetch($this->refactorGetClassTagsValues($methodCall), $methodCall->args[1]->value), $this->nodeFactory->createArray([]));
+        return new \PhpParser\Node\Expr\BinaryOp\Coalesce(new \PhpParser\Node\Expr\ArrayDimFetch($this->refactorGetClassTagsValues($methodCall), $methodCall->args[1]->value), $this->nodeFactory->createArray([]));
     }
-    private function refactorGetMethodTagsValues(MethodCall $methodCall) : ?Node
+    private function refactorGetMethodTagsValues(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         if (!isset($methodCall->args[1])) {
             return null;
         }
-        return new Coalesce(new ArrayDimFetch($this->nodeFactory->createMethodCall($this->createClassSchema($methodCall), 'getMethod', [$methodCall->args[1]->value]), new String_(self::TAGS)), $this->nodeFactory->createArray([]));
+        return new \PhpParser\Node\Expr\BinaryOp\Coalesce(new \PhpParser\Node\Expr\ArrayDimFetch($this->nodeFactory->createMethodCall($this->createClassSchema($methodCall), 'getMethod', [$methodCall->args[1]->value]), new \PhpParser\Node\Scalar\String_(self::TAGS)), $this->nodeFactory->createArray([]));
     }
-    private function refactorHasMethod(MethodCall $methodCall) : ?Node
+    private function refactorHasMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         if (!isset($methodCall->args[1])) {
             return null;
         }
         return $this->nodeFactory->createMethodCall($this->createClassSchema($methodCall), self::HAS_METHOD, [$methodCall->args[1]->value]);
     }
-    private function refactorGetMethodParameters(MethodCall $methodCall) : ?Node
+    private function refactorGetMethodParameters(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         if (!isset($methodCall->args[1])) {
             return null;
         }
-        return new Coalesce(new ArrayDimFetch($this->nodeFactory->createMethodCall($this->createClassSchema($methodCall), 'getMethod', [$methodCall->args[1]->value]), new String_('params')), $this->nodeFactory->createArray([]));
+        return new \PhpParser\Node\Expr\BinaryOp\Coalesce(new \PhpParser\Node\Expr\ArrayDimFetch($this->nodeFactory->createMethodCall($this->createClassSchema($methodCall), 'getMethod', [$methodCall->args[1]->value]), new \PhpParser\Node\Scalar\String_('params')), $this->nodeFactory->createArray([]));
     }
-    private function refactorIsPropertyTaggedWith(MethodCall $methodCall) : ?Node
+    private function refactorIsPropertyTaggedWith(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         if (!isset($methodCall->args[1], $methodCall->args[2])) {
             return null;
         }
-        $propertyVariable = new Variable('propertyReflectionService');
-        $propertyAssignExpression = new Expression(new Assign($propertyVariable, $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($methodCall->var, 'getClassSchema', [$methodCall->args[0]->value]), 'getProperty', [$methodCall->args[1]->value])));
+        $propertyVariable = new \PhpParser\Node\Expr\Variable('propertyReflectionService');
+        $propertyAssignExpression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($propertyVariable, $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($methodCall->var, 'getClassSchema', [$methodCall->args[0]->value]), 'getProperty', [$methodCall->args[1]->value])));
         $this->nodesToAddCollector->addNodeBeforeNode($propertyAssignExpression, $methodCall);
-        return new Ternary(new Empty_($propertyVariable), $this->nodeFactory->createFalse(), new Isset_([new ArrayDimFetch(new ArrayDimFetch($propertyVariable, new String_(self::TAGS)), $methodCall->args[2]->value)]));
+        return new \PhpParser\Node\Expr\Ternary(new \PhpParser\Node\Expr\Empty_($propertyVariable), $this->nodeFactory->createFalse(), new \PhpParser\Node\Expr\Isset_([new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch($propertyVariable, new \PhpParser\Node\Scalar\String_(self::TAGS)), $methodCall->args[2]->value)]));
     }
-    private function refactorIsClassTaggedWith(MethodCall $methodCall) : ?Node
+    private function refactorIsClassTaggedWith(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         if (!isset($methodCall->args[1])) {
             return null;
         }
         $tagValue = $methodCall->args[1]->value;
-        $closureUse = $tagValue instanceof Variable ? $tagValue : new Variable('tag');
-        if (!$tagValue instanceof Variable) {
-            $tempVarAssignExpression = new Expression(new Assign($closureUse, $tagValue));
-            $this->nodesToAddCollector->addNodeBeforeNode($tempVarAssignExpression, $methodCall->getAttribute(AttributeKey::PARENT_NODE));
+        $closureUse = $tagValue instanceof \PhpParser\Node\Expr\Variable ? $tagValue : new \PhpParser\Node\Expr\Variable('tag');
+        if (!$tagValue instanceof \PhpParser\Node\Expr\Variable) {
+            $tempVarAssignExpression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($closureUse, $tagValue));
+            $this->nodesToAddCollector->addNodeBeforeNode($tempVarAssignExpression, $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE));
         }
-        $anonymousFunction = new Closure();
-        $anonymousFunction->uses[] = new ClosureUse($closureUse);
-        $anonymousFunction->params = [new Param(new Variable('tagName'))];
-        $anonymousFunction->stmts[] = new Return_(new Identical(new Variable('tagName'), $closureUse));
-        return new Bool_($this->nodeFactory->createFuncCall('count', [$this->nodeFactory->createFuncCall('array_filter', [$this->nodeFactory->createFuncCall('array_keys', [$this->refactorGetClassTagsValues($methodCall)]), $anonymousFunction])]));
+        $anonymousFunction = new \PhpParser\Node\Expr\Closure();
+        $anonymousFunction->uses[] = new \PhpParser\Node\Expr\ClosureUse($closureUse);
+        $anonymousFunction->params = [new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable('tagName'))];
+        $anonymousFunction->stmts[] = new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Expr\BinaryOp\Identical(new \PhpParser\Node\Expr\Variable('tagName'), $closureUse));
+        return new \PhpParser\Node\Expr\Cast\Bool_($this->nodeFactory->createFuncCall('count', [$this->nodeFactory->createFuncCall('array_filter', [$this->nodeFactory->createFuncCall('array_keys', [$this->refactorGetClassTagsValues($methodCall)]), $anonymousFunction])]));
     }
-    private function createClassSchema(MethodCall $methodCall) : MethodCall
+    private function createClassSchema(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
     {
         return $this->nodeFactory->createMethodCall($methodCall->var, 'getClassSchema', [$methodCall->args[0]->value]);
     }

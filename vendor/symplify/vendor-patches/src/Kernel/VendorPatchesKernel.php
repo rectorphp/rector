@@ -6,15 +6,15 @@ namespace RectorPrefix20220527\Symplify\VendorPatches\Kernel;
 use RectorPrefix20220527\Psr\Container\ContainerInterface;
 use RectorPrefix20220527\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig;
 use RectorPrefix20220527\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
-final class VendorPatchesKernel extends AbstractSymplifyKernel
+final class VendorPatchesKernel extends \RectorPrefix20220527\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
 {
     /**
      * @param string[] $configFiles
      */
-    public function createFromConfigs(array $configFiles) : ContainerInterface
+    public function createFromConfigs(array $configFiles) : \RectorPrefix20220527\Psr\Container\ContainerInterface
     {
         $configFiles[] = __DIR__ . '/../../config/config.php';
-        $configFiles[] = ComposerJsonManipulatorConfig::FILE_PATH;
+        $configFiles[] = \RectorPrefix20220527\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig::FILE_PATH;
         return $this->create($configFiles);
     }
 }

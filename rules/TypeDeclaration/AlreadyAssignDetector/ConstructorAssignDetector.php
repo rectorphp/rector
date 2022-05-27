@@ -48,7 +48,7 @@ final class ConstructorAssignDetector
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher $propertyAssignMatcher, \RectorPrefix20220527\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->propertyAssignMatcher = $propertyAssignMatcher;
@@ -56,7 +56,7 @@ final class ConstructorAssignDetector
         $this->autowiredClassMethodOrPropertyAnalyzer = $autowiredClassMethodOrPropertyAnalyzer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
-    public function isPropertyAssigned(ClassLike $classLike, string $propertyName) : bool
+    public function isPropertyAssigned(\PhpParser\Node\Stmt\ClassLike $classLike, string $propertyName) : bool
     {
         $initializeClassMethods = $this->matchInitializeClassMethod($classLike);
         if ($initializeClassMethods === []) {
@@ -65,9 +65,9 @@ final class ConstructorAssignDetector
         $isAssignedInConstructor = \false;
         $this->decorateFirstLevelStatementAttribute($initializeClassMethods);
         foreach ($initializeClassMethods as $initializeClassMethod) {
-            $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $initializeClassMethod->stmts, function (Node $node) use($propertyName, &$isAssignedInConstructor) : ?int {
+            $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $initializeClassMethod->stmts, function (\PhpParser\Node $node) use($propertyName, &$isAssignedInConstructor) : ?int {
                 $expr = $this->matchAssignExprToPropertyName($node, $propertyName);
-                if (!$expr instanceof Expr) {
+                if (!$expr instanceof \PhpParser\Node\Expr) {
                     return null;
                 }
                 /** @var Assign $assign */
@@ -78,7 +78,7 @@ final class ConstructorAssignDetector
                     return null;
                 }
                 $isAssignedInConstructor = \true;
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             });
         }
         if (!$isAssignedInConstructor) {
@@ -86,9 +86,9 @@ final class ConstructorAssignDetector
         }
         return $isAssignedInConstructor;
     }
-    private function matchAssignExprToPropertyName(Node $node, string $propertyName) : ?Expr
+    private function matchAssignExprToPropertyName(\PhpParser\Node $node, string $propertyName) : ?\PhpParser\Node\Expr
     {
-        if (!$node instanceof Assign) {
+        if (!$node instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
         return $this->propertyAssignMatcher->matchPropertyAssignExpr($node, $propertyName);
@@ -101,7 +101,7 @@ final class ConstructorAssignDetector
         foreach ($classMethods as $classMethod) {
             foreach ((array) $classMethod->stmts as $methodStmt) {
                 $methodStmt->setAttribute(self::IS_FIRST_LEVEL_STATEMENT, \true);
-                if ($methodStmt instanceof Expression) {
+                if ($methodStmt instanceof \PhpParser\Node\Stmt\Expression) {
                     $methodStmt->expr->setAttribute(self::IS_FIRST_LEVEL_STATEMENT, \true);
                 }
             }
@@ -110,21 +110,21 @@ final class ConstructorAssignDetector
     /**
      * @return ClassMethod[]
      */
-    private function matchInitializeClassMethod(ClassLike $classLike) : array
+    private function matchInitializeClassMethod(\PhpParser\Node\Stmt\ClassLike $classLike) : array
     {
         $initializingClassMethods = [];
-        $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod instanceof ClassMethod) {
+        $constructClassMethod = $classLike->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if ($constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $initializingClassMethods[] = $constructClassMethod;
         }
-        $testCaseObjectType = new ObjectType('PHPUnit\\Framework\\TestCase');
+        $testCaseObjectType = new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\TestCase');
         if ($this->nodeTypeResolver->isObjectType($classLike, $testCaseObjectType)) {
-            $setUpClassMethod = $classLike->getMethod(MethodName::SET_UP);
-            if ($setUpClassMethod instanceof ClassMethod) {
+            $setUpClassMethod = $classLike->getMethod(\Rector\Core\ValueObject\MethodName::SET_UP);
+            if ($setUpClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 $initializingClassMethods[] = $setUpClassMethod;
             }
-            $setUpBeforeClassMethod = $classLike->getMethod(MethodName::SET_UP_BEFORE_CLASS);
-            if ($setUpBeforeClassMethod instanceof ClassMethod) {
+            $setUpBeforeClassMethod = $classLike->getMethod(\Rector\Core\ValueObject\MethodName::SET_UP_BEFORE_CLASS);
+            if ($setUpBeforeClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 $initializingClassMethods[] = $setUpBeforeClassMethod;
             }
         }

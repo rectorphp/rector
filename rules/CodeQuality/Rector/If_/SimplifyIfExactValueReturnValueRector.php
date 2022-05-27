@@ -15,20 +15,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\SimplifyIfNullableReturnRectorTest
  */
-final class SimplifyIfExactValueReturnValueRector extends AbstractRector
+final class SimplifyIfExactValueReturnValueRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
-    public function __construct(IfManipulator $ifManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes compared to value and return of expr to direct return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes compared to value and return of expr to direct return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $value = 'something';
 if ($value === 52) {
     return 52;
@@ -47,19 +47,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?Return_
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\Return_
     {
-        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if (!$nextNode instanceof Return_) {
+        $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_) {
             return null;
         }
         $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
-        if (!$comparedNode instanceof Expr) {
+        if (!$comparedNode instanceof \PhpParser\Node\Expr) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($comparedNode, $nextNode->expr)) {

@@ -36,17 +36,17 @@ final class VarTagRemover
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer, PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(\Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->deadVarTagValueNodeAnalyzer = $deadVarTagValueNodeAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-    public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, Property $property) : void
+    public function removeVarTagIfUseless(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Property $property) : void
     {
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof VarTagValueNode) {
+        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
             return;
         }
         $isVarTagValueDead = $this->deadVarTagValueNodeAnalyzer->isDead($varTagValueNode, $property);
@@ -56,14 +56,14 @@ final class VarTagRemover
         if ($this->phpDocTypeChanger->isAllowed($varTagValueNode->type)) {
             return;
         }
-        $phpDocInfo->removeByType(VarTagValueNode::class);
+        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
      * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
-    public function removeVarPhpTagValueNodeIfNotComment($node, Type $type) : void
+    public function removeVarPhpTagValueNodeIfNotComment($node, \PHPStan\Type\Type $type) : void
     {
-        if ($type instanceof TemplateObjectWithoutClassType) {
+        if ($type instanceof \PHPStan\Type\Generic\TemplateObjectWithoutClassType) {
             return;
         }
         // keep doctrine collection narrow type
@@ -72,7 +72,7 @@ final class VarTagRemover
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof VarTagValueNode) {
+        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
             return;
         }
         // has description? keep it
@@ -83,6 +83,6 @@ final class VarTagRemover
         if ($this->phpDocTypeChanger->isAllowed($varTagValueNode->type)) {
             return;
         }
-        $phpDocInfo->removeByType(VarTagValueNode::class);
+        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
 }

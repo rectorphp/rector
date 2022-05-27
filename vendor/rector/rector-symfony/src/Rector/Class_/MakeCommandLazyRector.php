@@ -28,20 +28,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\MakeCommandLazyRectorTest
  */
-final class MakeCommandLazyRector extends AbstractRector
+final class MakeCommandLazyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(ParamAnalyzer $paramAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
     {
         $this->paramAnalyzer = $paramAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Make Symfony commands lazy', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make Symfony commands lazy', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Console\Command\Command
 
 final class SunshineCommand extends Command
@@ -70,25 +70,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
         $defaultNameProperty = $node->getProperty('defaultName');
-        if ($defaultNameProperty instanceof Property) {
+        if ($defaultNameProperty instanceof \PhpParser\Node\Stmt\Property) {
             return null;
         }
         $commandName = $this->resolveCommandName($node);
-        if (!$commandName instanceof Node) {
+        if (!$commandName instanceof \PhpParser\Node) {
             return null;
         }
-        if (!$commandName instanceof String_ && !$commandName instanceof ClassConstFetch) {
+        if (!$commandName instanceof \PhpParser\Node\Scalar\String_ && !$commandName instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return null;
         }
         $this->removeConstructorIfHasOnlySetNameMethodCall($node);
@@ -96,30 +96,30 @@ CODE_SAMPLE
         $node->stmts = \array_merge([$defaultNameProperty], $node->stmts);
         return $node;
     }
-    private function resolveCommandName(Class_ $class) : ?Node
+    private function resolveCommandName(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node
     {
         $commandName = $this->resolveCommandNameFromConstructor($class);
-        if (!$commandName instanceof Node) {
+        if (!$commandName instanceof \PhpParser\Node) {
             return $this->resolveCommandNameFromSetName($class);
         }
         return $commandName;
     }
-    private function resolveCommandNameFromConstructor(Class_ $class) : ?Node
+    private function resolveCommandNameFromConstructor(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node
     {
         $commandName = null;
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use(&$commandName) {
-            if (!$node instanceof StaticCall) {
+        $this->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $node) use(&$commandName) {
+            if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
                 return null;
             }
-            if (!$this->isObjectType($node->class, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+            if (!$this->isObjectType($node->class, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
                 return null;
             }
             $commandName = $this->matchCommandNameNodeInConstruct($node);
-            if (!$commandName instanceof Expr) {
+            if (!$commandName instanceof \PhpParser\Node\Expr) {
                 return null;
             }
             // only valid static property values for name
-            if (!$commandName instanceof String_ && !$commandName instanceof ConstFetch) {
+            if (!$commandName instanceof \PhpParser\Node\Scalar\String_ && !$commandName instanceof \PhpParser\Node\Expr\ConstFetch) {
                 return null;
             }
             // remove if parent name is not string
@@ -127,14 +127,14 @@ CODE_SAMPLE
         });
         return $commandName;
     }
-    private function resolveCommandNameFromSetName(Class_ $class) : ?Node
+    private function resolveCommandNameFromSetName(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node
     {
         $commandName = null;
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use(&$commandName) {
-            if (!$node instanceof MethodCall) {
+        $this->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $node) use(&$commandName) {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return null;
             }
-            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+            if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
                 return null;
             }
             if (!$this->isName($node->name, 'setName')) {
@@ -142,21 +142,21 @@ CODE_SAMPLE
             }
             $commandName = $node->getArgs()[0]->value;
             $commandNameStaticType = $this->getType($commandName);
-            if (!$commandNameStaticType instanceof StringType) {
+            if (!$commandNameStaticType instanceof \PHPStan\Type\StringType) {
                 return null;
             }
             // is chain call? → remove by variable nulling
-            if ($node->var instanceof MethodCall) {
+            if ($node->var instanceof \PhpParser\Node\Expr\MethodCall) {
                 return $node->var;
             }
             $this->removeNode($node);
         });
         return $commandName;
     }
-    private function removeConstructorIfHasOnlySetNameMethodCall(Class_ $class) : void
+    private function removeConstructorIfHasOnlySetNameMethodCall(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof ClassMethod) {
+        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
         $stmts = (array) $constructClassMethod->stmts;
@@ -168,17 +168,17 @@ CODE_SAMPLE
             return;
         }
         $onlyNode = $stmts[0];
-        if ($onlyNode instanceof Expression) {
+        if ($onlyNode instanceof \PhpParser\Node\Stmt\Expression) {
             $onlyNode = $onlyNode->expr;
         }
         /** @var Expr|null $onlyNode */
         if ($onlyNode === null) {
             return;
         }
-        if (!$onlyNode instanceof StaticCall) {
+        if (!$onlyNode instanceof \PhpParser\Node\Expr\StaticCall) {
             return;
         }
-        if (!$this->isName($onlyNode->name, MethodName::CONSTRUCT)) {
+        if (!$this->isName($onlyNode->name, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return;
         }
         if ($onlyNode->args !== []) {
@@ -186,9 +186,9 @@ CODE_SAMPLE
         }
         $this->removeNode($constructClassMethod);
     }
-    private function matchCommandNameNodeInConstruct(StaticCall $staticCall) : ?Expr
+    private function matchCommandNameNodeInConstruct(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr
     {
-        if (!$this->isName($staticCall->name, MethodName::CONSTRUCT)) {
+        if (!$this->isName($staticCall->name, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return null;
         }
         if (\count($staticCall->args) < 1) {
@@ -196,14 +196,14 @@ CODE_SAMPLE
         }
         $firstArg = $staticCall->getArgs()[0];
         $staticType = $this->getType($firstArg->value);
-        if (!$staticType instanceof StringType) {
+        if (!$staticType instanceof \PHPStan\Type\StringType) {
             return null;
         }
         return $firstArg->value;
     }
-    private function createStaticProtectedPropertyWithDefault(string $name, Node $node) : Property
+    private function createStaticProtectedPropertyWithDefault(string $name, \PhpParser\Node $node) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20220527\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makeProtected();
         $propertyBuilder->makeStatic();
         $propertyBuilder->setDefault($node);

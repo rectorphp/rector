@@ -12,13 +12,13 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Composer\Rector\RenamePackageComposerRector\RenamePackageComposerRectorTest
  */
-final class RenamePackageComposerRector implements ComposerRectorInterface
+final class RenamePackageComposerRector implements \Rector\Composer\Contract\Rector\ComposerRectorInterface
 {
     /**
      * @var RenamePackage[]
      */
     private $renamePackages = [];
-    public function refactor(ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20220527\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         foreach ($this->renamePackages as $renamePackage) {
             if ($composerJson->hasRequiredPackage($renamePackage->getOldPackageName())) {
@@ -31,9 +31,9 @@ final class RenamePackageComposerRector implements ComposerRectorInterface
             }
         }
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change package name in `composer.json`', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change package name in `composer.json`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 {
     "require": {
         "rector/rector": "dev-main"
@@ -47,14 +47,14 @@ CODE_SAMPLE
     }
 }
 CODE_SAMPLE
-, [new RenamePackage('rector/rector', 'rector/rector-src')])]);
+, [new \Rector\Composer\ValueObject\RenamePackage('rector/rector', 'rector/rector-src')])]);
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        Assert::allIsAOf($configuration, RenamePackage::class);
+        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Composer\ValueObject\RenamePackage::class);
         $this->renamePackages = $configuration;
     }
 }

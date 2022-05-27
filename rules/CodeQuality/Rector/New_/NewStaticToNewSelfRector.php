@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\New_\NewStaticToNewSelfRector\NewStaticToNewSelfRectorTest
  */
-final class NewStaticToNewSelfRector extends AbstractRector
+final class NewStaticToNewSelfRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change unsafe new static() to new self()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change unsafe new static() to new self()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function build()
@@ -45,24 +45,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [New_::class];
+        return [\PhpParser\Node\Expr\New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         if (!$class->isFinal()) {
             return null;
         }
-        if (!$this->isName($node->class, ObjectReference::STATIC()->getValue())) {
+        if (!$this->isName($node->class, \Rector\Core\Enum\ObjectReference::STATIC()->getValue())) {
             return null;
         }
-        $node->class = new Name(ObjectReference::SELF()->getValue());
+        $node->class = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF()->getValue());
         return $node;
     }
 }

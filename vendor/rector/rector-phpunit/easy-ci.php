@@ -8,7 +8,7 @@ use Rector\PHPUnit\Naming\TestClassNameResolverInterface;
 use Rector\Set\Contract\SetListInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix20220527\Symplify\EasyCI\ValueObject\Option;
-return static function (ContainerConfigurator $containerConfigurator) : void {
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::TYPES_TO_SKIP, [TestClassNameResolverInterface::class, RectorInterface::class, SetListInterface::class]);
+    $parameters->set(\RectorPrefix20220527\Symplify\EasyCI\ValueObject\Option::TYPES_TO_SKIP, [\Rector\PHPUnit\Naming\TestClassNameResolverInterface::class, \Rector\Core\Contract\Rector\RectorInterface::class, \Rector\Set\Contract\SetListInterface::class]);
 };

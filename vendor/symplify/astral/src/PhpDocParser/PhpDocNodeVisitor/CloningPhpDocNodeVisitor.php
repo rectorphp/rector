@@ -11,12 +11,12 @@ use RectorPrefix20220527\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttribut
  * Mirrors
  * https://github.com/nikic/PHP-Parser/blob/d520bc9e1d6203c35a1ba20675b79a051c821a9e/lib/PhpParser/NodeVisitor/CloningVisitor.php
  */
-final class CloningPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class CloningPhpDocNodeVisitor extends \RectorPrefix20220527\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
-    public function enterNode(Node $node) : Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : \PHPStan\PhpDocParser\Ast\Node
     {
         $clonedNode = clone $node;
-        $clonedNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, $node);
+        $clonedNode->setAttribute(\RectorPrefix20220527\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE, $node);
         return $clonedNode;
     }
 }
