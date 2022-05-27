@@ -5,9 +5,6 @@ declare(strict_types=1);
 use Composer\Semver\VersionParser;
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
-use Ergebnis\Json\Printer\Printer;
-use Ergebnis\Json\Printer\PrinterInterface;
-use Idiosyncratic\EditorConfig\EditorConfig;
 use OndraM\CiDetector\CiDetector;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
@@ -217,9 +214,4 @@ return static function (RectorConfig $rectorConfig): void {
 
     $services->set(DynamicSourceLocatorProvider::class)
         ->factory([service(PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
-
-    $services->set(EditorConfig::class);
-
-    $services->set(Printer::class);
-    $services->alias(PrinterInterface::class, Printer::class);
 };

@@ -1,9 +1,0 @@
-services:
-  Vendor\Namespace\MyService:
-    arguments: [ !tagged_iterator { tag: 'namespace_mytag' } ]
------
-services:
-    Vendor\Namespace\MyService:
-        arguments:
-            - !tagged_iterator
-              tag: namespace_mytag

@@ -15,7 +15,6 @@ use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
-use Rector\FileFormatter\FileFormatter;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Parallel\ValueObject\Bridge;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,7 +46,6 @@ final class ApplicationFileProcessor
     public function __construct(
         private readonly SmartFileSystem $smartFileSystem,
         private readonly FileDiffFileDecorator $fileDiffFileDecorator,
-        private readonly FileFormatter $fileFormatter,
         private readonly RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         private readonly OutputStyleInterface $rectorOutputStyle,
         private readonly FileFactory $fileFactory,
@@ -89,7 +87,6 @@ final class ApplicationFileProcessor
             $this->configurePHPStanNodeScopeResolver($files);
 
             $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
-            $this->fileFormatter->format($files);
 
             $this->fileDiffFileDecorator->decorate($files);
             $this->printFiles($files, $configuration);
