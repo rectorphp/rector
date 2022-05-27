@@ -6,6 +6,7 @@ namespace Rector\Core\DependencyInjection;
 use RectorPrefix20220527\Nette\Utils\FileSystem;
 use RectorPrefix20220527\Psr\Container\ContainerInterface;
 use Rector\Caching\Detector\ChangedFilesDetector;
+use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Kernel\RectorKernel;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use RectorPrefix20220527\Symfony\Component\Console\Style\SymfonyStyle;
@@ -31,6 +32,9 @@ final class RectorContainerFactory
             $changedFilesDetector = $container->get(\Rector\Caching\Detector\ChangedFilesDetector::class);
             $changedFilesDetector->setFirstResolvedConfigFileInfo($mainConfigFile);
         }
+        /** @var BootstrapFilesIncluder $bootstrapFilesIncluder */
+        $bootstrapFilesIncluder = $container->get(\Rector\Core\Autoloading\BootstrapFilesIncluder::class);
+        $bootstrapFilesIncluder->includeBootstrapFiles();
         return $container;
     }
     /**

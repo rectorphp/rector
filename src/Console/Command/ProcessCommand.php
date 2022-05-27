@@ -7,7 +7,6 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Autoloading\AdditionalAutoloader;
-use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
@@ -48,11 +47,6 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     private $applicationFileProcessor;
     /**
      * @readonly
-     * @var \Rector\Core\Autoloading\BootstrapFilesIncluder
-     */
-    private $bootstrapFilesIncluder;
-    /**
-     * @readonly
      * @var \Rector\Core\ValueObjectFactory\ProcessResultFactory
      */
     private $processResultFactory;
@@ -81,13 +75,12 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
      * @var \Rector\Core\Util\MemoryLimiter
      */
     private $memoryLimiter;
-    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\Util\MemoryLimiter $memoryLimiter)
+    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\Util\MemoryLimiter $memoryLimiter)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->missingRectorRulesReporter = $missingRectorRulesReporter;
         $this->applicationFileProcessor = $applicationFileProcessor;
-        $this->bootstrapFilesIncluder = $bootstrapFilesIncluder;
         $this->processResultFactory = $processResultFactory;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
         $this->emptyConfigurableRectorChecker = $emptyConfigurableRectorChecker;
@@ -114,8 +107,6 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         if ($configuration->getOutputFormat() === \Rector\ChangesReporting\Output\JsonOutputFormatter::NAME) {
             $this->rectorOutputStyle->setVerbosity(\RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
         }
-        // register autoloaded and included files
-        $this->bootstrapFilesIncluder->includeBootstrapFiles();
         $this->additionalAutoloader->autoloadInput($input);
         $this->additionalAutoloader->autoloadPaths();
         $paths = $configuration->getPaths();
