@@ -18,15 +18,10 @@ final class EditorConfigConfigurationBuilder
      */
     public function __construct(
         private string $indentStyle = IndentType::SPACE,
-        private int $indentSize = 2,
+        private int $indentSize = 4,
         private bool $insertFinalNewline = true
     ) {
         $this->newLine = NewLine::fromEditorConfig('lf');
-    }
-
-    public static function create(): self
-    {
-        return new self();
     }
 
     public function withNewLine(NewLine $newLine): self

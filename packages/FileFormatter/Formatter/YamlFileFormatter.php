@@ -7,8 +7,6 @@ namespace Rector\FileFormatter\Formatter;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
-use Rector\FileFormatter\ValueObject\Indent;
-use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -30,14 +28,5 @@ final class YamlFileFormatter implements FileFormatterInterface
         $newFileContent = Yaml::dump($yaml, 99, $editorConfigConfiguration->getIndentSize());
 
         $file->changeFileContent($newFileContent);
-    }
-
-    public function createDefaultEditorConfigConfigurationBuilder(): EditorConfigConfigurationBuilder
-    {
-        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
-
-        $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(2));
-
-        return $editorConfigConfigurationBuilder;
     }
 }

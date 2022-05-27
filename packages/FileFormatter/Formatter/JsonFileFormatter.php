@@ -8,8 +8,6 @@ use Ergebnis\Json\Printer\PrinterInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
-use Rector\FileFormatter\ValueObject\Indent;
-use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 
 /**
  * @see \Rector\Tests\FileFormatter\Formatter\JsonFileFormatter\JsonFileFormatterTest
@@ -39,14 +37,5 @@ final class JsonFileFormatter implements FileFormatterInterface
         $newFileContent .= $editorConfigConfiguration->getFinalNewline();
 
         $file->changeFileContent($newFileContent);
-    }
-
-    public function createDefaultEditorConfigConfigurationBuilder(): EditorConfigConfigurationBuilder
-    {
-        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
-
-        $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(4));
-
-        return $editorConfigConfigurationBuilder;
     }
 }
