@@ -2246,12 +2246,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-laravel.git",
-                "reference": "aa05a613f0be97718b7abfc103873de97e50ad5a"
+                "reference": "b276a102c054be910d0ae0753001f7651b8d2a88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/aa05a613f0be97718b7abfc103873de97e50ad5a",
-                "reference": "aa05a613f0be97718b7abfc103873de97e50ad5a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/b276a102c054be910d0ae0753001f7651b8d2a88",
+                "reference": "b276a102c054be910d0ae0753001f7651b8d2a88",
                 "shasum": ""
             },
             "require": {
@@ -2262,7 +2262,7 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.7.2",
+                "phpstan\/phpstan": "^1.7.1",
                 "phpstan\/phpstan-strict-rules": "^1.2",
                 "phpstan\/phpstan-webmozart-assert": "^1.1",
                 "phpunit\/phpunit": "^9.5",
@@ -2275,7 +2275,7 @@
                 "symplify\/rule-doc-generator": "^10.2",
                 "symplify\/vendor-patches": "^10.2"
             },
-            "time": "2022-05-27T17:06:42+00:00",
+            "time": "2022-05-27T17:35:24+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2302,7 +2302,7 @@
             "description": "Rector upgrades rules for Laravel Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-laravel\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-laravel\/tree\/0.13.0"
+                "source": "https:\/\/github.com\/rectorphp\/rector-laravel\/tree\/main"
             },
             "install-path": "..\/rector\/rector-laravel"
         },
