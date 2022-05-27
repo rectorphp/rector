@@ -981,17 +981,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.7.2",
-            "version_normalized": "1.7.2.0",
+            "version": "1.7.1",
+            "version_normalized": "1.7.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "c602f80d66ba425943b0f4aaa27010c822dd8f87"
+                "reference": "e3baed2ee2ef322e0f9b8fe8f87fdbe024c7c719"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/c602f80d66ba425943b0f4aaa27010c822dd8f87",
-                "reference": "c602f80d66ba425943b0f4aaa27010c822dd8f87",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/e3baed2ee2ef322e0f9b8fe8f87fdbe024c7c719",
+                "reference": "e3baed2ee2ef322e0f9b8fe8f87fdbe024c7c719",
                 "shasum": ""
             },
             "require": {
@@ -1000,7 +1000,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-05-26T12:59:20+00:00",
+            "time": "2022-05-24T09:05:09+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -1019,7 +1019,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.7.2"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.7.1"
             },
             "funding": [
                 {
@@ -2032,12 +2032,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-cakephp.git",
-                "reference": "43ca394ae14176b995eab8efd804bcf28206898a"
+                "reference": "3ccfacfbd1627ee7d9f6550e2176e628322d7cb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/43ca394ae14176b995eab8efd804bcf28206898a",
-                "reference": "43ca394ae14176b995eab8efd804bcf28206898a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/3ccfacfbd1627ee7d9f6550e2176e628322d7cb4",
+                "reference": "3ccfacfbd1627ee7d9f6550e2176e628322d7cb4",
                 "shasum": ""
             },
             "require": {
@@ -2050,12 +2050,12 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.6",
+                "phpstan\/phpstan": "^1.7",
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.4.8",
-                "rector\/rector-src": "dev-main#28fb30f",
+                "rector\/rector-src": "dev-main",
                 "symplify\/easy-coding-standard": "^10.2",
                 "symplify\/monorepo-builder": "^10.2",
                 "symplify\/phpstan-extensions": "^10.2",
@@ -2063,7 +2063,7 @@
                 "symplify\/rule-doc-generator": "^10.2",
                 "symplify\/vendor-patches": "^10.2"
             },
-            "time": "2022-05-10T21:44:37+00:00",
+            "time": "2022-05-27T17:08:06+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2090,7 +2090,7 @@
             "description": "Rector upgrades rules for CakePHP",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-cakephp\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-cakephp\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-cakephp\/tree\/0.13.0"
             },
             "install-path": "..\/rector\/rector-cakephp"
         },
@@ -2246,12 +2246,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-laravel.git",
-                "reference": "5853b39ba52d8de7adcab1178bb721175e080b4a"
+                "reference": "aa05a613f0be97718b7abfc103873de97e50ad5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/5853b39ba52d8de7adcab1178bb721175e080b4a",
-                "reference": "5853b39ba52d8de7adcab1178bb721175e080b4a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/aa05a613f0be97718b7abfc103873de97e50ad5a",
+                "reference": "aa05a613f0be97718b7abfc103873de97e50ad5a",
                 "shasum": ""
             },
             "require": {
@@ -2262,12 +2262,12 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.6",
-                "phpstan\/phpstan-strict-rules": "^1.1",
-                "phpstan\/phpstan-webmozart-assert": "^1.0",
+                "phpstan\/phpstan": "^1.7.2",
+                "phpstan\/phpstan-strict-rules": "^1.2",
+                "phpstan\/phpstan-webmozart-assert": "^1.1",
                 "phpunit\/phpunit": "^9.5",
-                "rector\/phpstan-rules": "^0.4.8",
-                "rector\/rector-src": "dev-main#28fb30f",
+                "rector\/phpstan-rules": "^0.5.1",
+                "rector\/rector-src": "dev-main",
                 "symplify\/easy-coding-standard": "^10.2",
                 "symplify\/monorepo-builder": "^10.2",
                 "symplify\/phpstan-extensions": "^10.2",
@@ -2275,7 +2275,7 @@
                 "symplify\/rule-doc-generator": "^10.2",
                 "symplify\/vendor-patches": "^10.2"
             },
-            "time": "2022-05-25T17:50:59+00:00",
+            "time": "2022-05-27T17:06:42+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2302,7 +2302,7 @@
             "description": "Rector upgrades rules for Laravel Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-laravel\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-laravel\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-laravel\/tree\/0.13.0"
             },
             "install-path": "..\/rector\/rector-laravel"
         },

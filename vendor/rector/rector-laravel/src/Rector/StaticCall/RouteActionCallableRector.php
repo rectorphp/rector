@@ -126,7 +126,7 @@ CODE_SAMPLE
         $this->namespace = $namespace;
     }
     /**
-     * @return array<string>|null
+     * @return array{string, string}|null
      * @param mixed $action
      */
     private function resolveControllerFromAction($action) : ?array
