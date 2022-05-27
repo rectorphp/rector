@@ -40,7 +40,7 @@
         "sebastian/diff": "^4.0.4",
         "ssch/typo3-rector": "dev-main",
         "symfony/console": "6.0.*",
-        "symfony/contracts": "^3.0",
+        "symfony/contracts": "3.0.*",
         "symfony/dependency-injection": "6.0.*",
         "symfony/finder": "6.0.*",
         "symfony/process": "6.0.*",
