@@ -206,11 +206,15 @@ final class PhpDocInfoPrinter
             }
 
             if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode && $shouldReprintChildNode) {
-                $printedNode = (string) $phpDocChildNode;
+                $silentValue = $phpDocChildNode->value->getSilentValue();
 
-                // remove extra space between tags
-                $printedNode = Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
-                return self::NEWLINE_WITH_ASTERISK . ($printedNode === '' ? '' : ' ' . $printedNode);
+                if ($silentValue === null) {
+                    $printedNode = (string) $phpDocChildNode;
+
+                    // remove extra space between tags
+                    $printedNode = Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
+                    return self::NEWLINE_WITH_ASTERISK . ($printedNode === '' ? '' : ' ' . $printedNode);
+                }
             }
         }
 
