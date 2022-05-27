@@ -41,6 +41,12 @@ final class UpgradeRectorConfigRector extends AbstractRector
         Option::PARALLEL => 'parallel',
         Option::PHPSTAN_FOR_RECTOR_PATH => 'phpstanConfig',
         Option::PHP_VERSION_FEATURES => 'phpVersion',
+        Option::CACHE_CLASS => 'cacheClass',
+        Option::CACHE_DIR => 'cacheDirectory',
+        Option::NESTED_CHAIN_METHOD_CALL_LIMIT => 'nestedChainMethodCallLimit',
+        Option::FILE_EXTENSIONS => 'fileExtensions',
+        Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER => 'symfonyContainerPhp',
+        Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER => 'symfonyContainerXml',
     ];
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Config;
 
+use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\ValueObjectInliner;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -192,5 +193,39 @@ final class RectorConfig extends ContainerConfigurator
     {
         $parameters = $this->parameters();
         $parameters->set(Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER, $filePath);
+    }
+
+    /**
+     * @param string[] $extensions
+     */
+    public function fileExtensions(array $extensions): void
+    {
+        Assert::allString($extensions);
+
+        $parameters = $this->parameters();
+        $parameters->set(Option::FILE_EXTENSIONS, $extensions);
+    }
+
+    public function nestedChainMethodCallLimit(int $limit): void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::NESTED_CHAIN_METHOD_CALL_LIMIT, $limit);
+    }
+
+    public function cacheDirectory(string $directoryPath): void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::CACHE_DIR, $directoryPath);
+    }
+
+    /**
+     * @param class-string<CacheStorageInterface> $cacheClass
+     */
+    public function cacheClass(string $cacheClass): void
+    {
+        Assert::isAOf($cacheClass, CacheStorageInterface::class);
+
+        $parameters = $this->parameters();
+        $parameters->set(Option::CACHE_CLASS, $cacheClass);
     }
 }

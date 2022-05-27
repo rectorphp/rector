@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Composer\Semver\VersionParser;
-
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
 use Ergebnis\Json\Printer\Printer;
