@@ -17,7 +17,6 @@ jobs:
             matrix:
                 php_version: ['7.2', '7.3', '7.4', '8.0', '8.1']
                 directory:
-                    - 'e2e/define-constant'
                     - 'e2e/dont-execute-code'
                     - 'e2e/finalize'
                     - 'e2e/parse-php7-code'
