@@ -34,7 +34,7 @@ rm -f "$BUILD_DIRECTORY/phpstan-for-rector.neon"
 
 # 2. scope it
 note "Running scoper to $RESULT_DIRECTORY"
-wget https://github.com/humbug/php-scoper/releases/download/0.17.0/php-scoper.phar -N --no-verbose
+wget https://github.com/humbug/php-scoper/releases/download/0.17.2/php-scoper.phar -N --no-verbose
 
 # Work around possible PHP memory limits
 
