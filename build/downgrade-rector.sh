@@ -33,13 +33,13 @@ export IFS=";"
 for directory in $directories; do
     echo "[NOTE] Downgrading '$directory' directory\n"
 
-    if printf '%s' "$directory" | grep -Eq '^(vendor/(symfony|symplify)|rules/Naming|utils).*'; then
-        echo "downgrading with no parallel...\n"
-        CONFIG_PATH_DOWNGRADE="build/config/config-downgrade.php"
-    else
-        echo "downgrading with parallel...\n"
+#    if printf '%s' "$directory" | grep -Eq '^(vendor/(symfony|symplify)|rules/Naming|utils).*'; then
+#        echo "downgrading with no parallel...\n"
+#        CONFIG_PATH_DOWNGRADE="build/config/config-downgrade.php"
+#    else
+#        echo "downgrading with parallel...\n"
         CONFIG_PATH_DOWNGRADE="build/config/config-downgrade-parallel.php"
-    fi
+#    fi
 
     # --working-dir is needed, so "SKIP" parameter is applied in absolute path of nested directory
     php -d memory_limit=-1 bin/rector process $directory --config $CONFIG_PATH_DOWNGRADE --working-dir $BUILD_DIRECTORY --ansi
