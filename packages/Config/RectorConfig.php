@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Config;
 
 use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\ValueObjectInliner;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\PhpVersion;
@@ -96,7 +97,14 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
         \RectorPrefix20220527\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\RectorInterface::class);
         \RectorPrefix20220527\Webmozart\Assert\Assert::isAOf($rectorClass, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class);
         $services = $this->services();
-        $services->set($rectorClass)->configure($configuration);
+        // decorate with value object inliner so Symfony understands, see https://getrector.org/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config
+        \array_walk_recursive($configuration, function (&$value) {
+            if (\is_object($value)) {
+                $value = \Rector\Core\Configuration\ValueObjectInliner::inline($value);
+            }
+            return $value;
+        });
+        $services->set($rectorClass)->call('configure', [$configuration]);
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
