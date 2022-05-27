@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
-use RectorPrefix20220526\JetBrains\PhpStorm\Immutable;
+use RectorPrefix20220527\JetBrains\PhpStorm\Immutable;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use RectorPrefix20220526\Symplify\Skipper\ValueObject\Option as SkipperOption;
+use RectorPrefix20220527\Symplify\Skipper\ValueObject\Option as SkipperOption;
 #[Immutable]
 final class Option
 {
@@ -91,7 +91,7 @@ final class Option
      * @deprecated Use @see \Rector\Config\RectorConfig::skip() instead
      * @var string
      */
-    public const SKIP = \RectorPrefix20220526\Symplify\Skipper\ValueObject\Option::SKIP;
+    public const SKIP = \RectorPrefix20220527\Symplify\Skipper\ValueObject\Option::SKIP;
     /**
      * @var string
      */

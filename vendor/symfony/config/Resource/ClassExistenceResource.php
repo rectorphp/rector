@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220526\Symfony\Component\Config\Resource;
+namespace RectorPrefix20220527\Symfony\Component\Config\Resource;
 
 /**
  * ClassExistenceResource represents a class existence.
@@ -20,7 +20,7 @@ namespace RectorPrefix20220526\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class ClassExistenceResource implements \RectorPrefix20220526\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class ClassExistenceResource implements \RectorPrefix20220527\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     /**
      * @var string
@@ -200,7 +200,6 @@ class ClassExistenceResource implements \RectorPrefix20220526\Symfony\Component\
             foreach ($props as $p => $v) {
                 if (null !== $v) {
                     $r = new \ReflectionProperty(\Exception::class, $p);
-                    $r->setAccessible(\true);
                     $r->setValue($e, $v);
                 }
             }

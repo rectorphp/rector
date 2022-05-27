@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220526\Symfony\Component\Config\Resource;
+namespace RectorPrefix20220527\Symfony\Component\Config\Resource;
 
-use RectorPrefix20220526\Symfony\Component\Finder\Finder;
-use RectorPrefix20220526\Symfony\Component\Finder\Glob;
+use RectorPrefix20220527\Symfony\Component\Finder\Finder;
+use RectorPrefix20220527\Symfony\Component\Finder\Glob;
 /**
  * GlobResource represents a set of resources stored on the filesystem.
  *
@@ -23,7 +23,7 @@ use RectorPrefix20220526\Symfony\Component\Finder\Glob;
  *
  * @implements \IteratorAggregate<string, \SplFileInfo>
  */
-class GlobResource implements \IteratorAggregate, \RectorPrefix20220526\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class GlobResource implements \IteratorAggregate, \RectorPrefix20220527\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     /**
      * @var string
@@ -113,7 +113,9 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20220526\Symfony\
         }
         $prefix = \str_replace('\\', '/', $this->prefix);
         $paths = null;
-        if (\strncmp($this->prefix, 'phar://', \strlen('phar://')) !== 0 && \strpos($this->pattern, '/**/') === \false) {
+        if ('' === $this->pattern && \is_file($prefix)) {
+            $paths = [$this->prefix];
+        } elseif (\strncmp($this->prefix, 'phar://', \strlen('phar://')) !== 0 && \strpos($this->pattern, '/**/') === \false) {
             if ($this->globBrace || \strpos($this->pattern, '{') === \false) {
                 $paths = \glob($this->prefix . $this->pattern, \GLOB_NOSORT | $this->globBrace);
             } elseif (\strpos($this->pattern, '\\') === \false || !\preg_match('/\\\\[,{}]/', $this->pattern)) {
@@ -159,29 +161,33 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20220526\Symfony\
             }
             return;
         }
-        if (!\class_exists(\RectorPrefix20220526\Symfony\Component\Finder\Finder::class)) {
+        if (!\class_exists(\RectorPrefix20220527\Symfony\Component\Finder\Finder::class)) {
             throw new \LogicException(\sprintf('Extended glob pattern "%s" cannot be used as the Finder component is not installed.', $this->pattern));
         }
-        $finder = new \RectorPrefix20220526\Symfony\Component\Finder\Finder();
-        $regex = \RectorPrefix20220526\Symfony\Component\Finder\Glob::toRegex($this->pattern);
+        if (\is_file($prefix = $this->prefix)) {
+            $prefix = \dirname($prefix);
+            $pattern = \basename($prefix) . $this->pattern;
+        } else {
+            $pattern = $this->pattern;
+        }
+        $regex = \RectorPrefix20220527\Symfony\Component\Finder\Glob::toRegex($pattern);
         if ($this->recursive) {
             $regex = \substr_replace($regex, '(/|$)', -2, 1);
         }
-        $prefixLen = \strlen($this->prefix);
-        foreach ($finder->followLinks()->sortByName()->in($this->prefix) as $path => $info) {
-            $normalizedPath = \str_replace('\\', '/', $path);
+        $prefixLen = \strlen($prefix);
+        yield from (new \RectorPrefix20220527\Symfony\Component\Finder\Finder())->followLinks()->filter(function (\SplFileInfo $info) use($regex, $prefixLen, $prefix) {
+            $normalizedPath = \str_replace('\\', '/', $info->getPathname());
             if (!\preg_match($regex, \substr($normalizedPath, $prefixLen)) || !$info->isFile()) {
-                continue;
+                return \false;
             }
             if ($this->excludedPrefixes) {
                 do {
                     if (isset($this->excludedPrefixes[$dirPath = $normalizedPath])) {
-                        continue 2;
+                        return \false;
                     }
                 } while ($prefix !== $dirPath && $dirPath !== ($normalizedPath = \dirname($dirPath)));
             }
-            (yield $path => $info);
-        }
+        })->sortByName()->in($prefix);
     }
     private function computeHash() : string
     {

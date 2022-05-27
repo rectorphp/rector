@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220526\Symfony\Component\Config\Resource;
+namespace RectorPrefix20220527\Symfony\Component\Config\Resource;
 
 /**
  * DirectoryResource represents a resources stored in a subdirectory tree.
@@ -17,7 +17,7 @@ namespace RectorPrefix20220526\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class DirectoryResource implements \RectorPrefix20220526\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class DirectoryResource implements \RectorPrefix20220527\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     /**
      * @var string
@@ -78,7 +78,7 @@ class DirectoryResource implements \RectorPrefix20220526\Symfony\Component\Confi
             // for broken links
             try {
                 $fileMTime = $file->getMTime();
-            } catch (\RuntimeException $e) {
+            } catch (\RuntimeException $exception) {
                 continue;
             }
             // early return if a file's mtime exceeds the passed timestamp

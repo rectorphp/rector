@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220526\Symfony\Component\Config\Exception;
+namespace RectorPrefix20220527\Symfony\Component\Config\Exception;
 
 /**
  * Exception class for when a resource cannot be loaded or imported.
@@ -30,7 +30,7 @@ class LoaderLoadException extends \Exception
         if ($previous) {
             // Include the previous exception, to help the user see what might be the underlying cause
             // Trim the trailing period of the previous message. We only want 1 period remove so no rtrim...
-            if ('.' === \substr($previous->getMessage(), -1)) {
+            if (\substr_compare($previous->getMessage(), '.', -\strlen('.')) === 0) {
                 $trimmedMessage = \substr($previous->getMessage(), 0, -1);
                 $message .= \sprintf('%s', $trimmedMessage) . ' in ';
             } else {
