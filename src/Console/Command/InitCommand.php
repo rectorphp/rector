@@ -36,6 +36,8 @@ final class InitCommand extends Command
 
     protected function configure(): void
     {
+        $this->setName('init');
+
         $this->setDescription('Generate rector.php configuration file');
 
         $this->addOption(

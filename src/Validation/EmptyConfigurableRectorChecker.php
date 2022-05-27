@@ -53,6 +53,6 @@ final class EmptyConfigurableRectorChecker
         }
 
         // to take time to absorb it
-        sleep(3);
+        sleep(5);
     }
 }

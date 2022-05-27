@@ -10,7 +10,6 @@ use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
-use Rector\Core\DependencyInjection\CompilerPass\VerifyRectorServiceExistsCompilerPass;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -87,8 +86,6 @@ final class RectorKernel implements LightKernelInterface
 
         // add all merged arguments of Rector services
         $compilerPasses[] = new MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector);
-        $compilerPasses[] = new VerifyRectorServiceExistsCompilerPass();
-
         $compilerPasses[] = new AutowireArrayParameterCompilerPass();
 
         return $compilerPasses;
@@ -99,14 +96,12 @@ final class RectorKernel implements LightKernelInterface
      */
     private function createDefaultConfigFiles(): array
     {
-        $configFiles = [];
-
-        $configFiles[] = __DIR__ . '/../../config/config.php';
-        $configFiles[] = AstralConfig::FILE_PATH;
-        $configFiles[] = ComposerJsonManipulatorConfig::FILE_PATH;
-        $configFiles[] = SkipperConfig::FILE_PATH;
-        $configFiles[] = ConsoleColorDiffConfig::FILE_PATH;
-
-        return $configFiles;
+        return [
+            __DIR__ . '/../../config/config.php',
+            AstralConfig::FILE_PATH,
+            ComposerJsonManipulatorConfig::FILE_PATH,
+            SkipperConfig::FILE_PATH,
+            ConsoleColorDiffConfig::FILE_PATH,
+        ];
     }
 }

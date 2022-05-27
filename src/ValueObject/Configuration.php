@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject;
 
-use JetBrains\PhpStorm\Immutable;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 
-#[Immutable]
 final class Configuration
 {
     /**

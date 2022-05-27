@@ -34,7 +34,7 @@ final class RectorContainerFactory
                 );
                 $symfonyStyle->warning($warningMessage);
                 // to make message noticable
-                sleep(3);
+                sleep(5);
             }
 
             /** @var ChangedFilesDetector $changedFilesDetector */

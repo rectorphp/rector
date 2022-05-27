@@ -28,14 +28,9 @@ final class ConsoleApplication extends Application
     /**
      * @param Command[] $commands
      */
-    public function __construct(CommandNaming $commandNaming, array $commands = [])
+    public function __construct(array $commands = [])
     {
         parent::__construct(self::NAME, VersionResolver::PACKAGE_VERSION);
-
-        foreach ($commands as $command) {
-            $commandName = $commandNaming->resolveFromCommand($command);
-            $command->setName($commandName);
-        }
 
         $this->addCommands($commands);
         $this->setDefaultCommand(CommandNaming::classToName(ProcessCommand::class));

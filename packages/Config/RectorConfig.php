@@ -111,6 +111,7 @@ final class RectorConfig extends ContainerConfigurator
      */
     public function ruleWithConfiguration(string $rectorClass, array $configuration): void
     {
+        Assert::classExists($rectorClass);
         Assert::isAOf($rectorClass, RectorInterface::class);
         Assert::isAOf($rectorClass, ConfigurableRectorInterface::class);
 
@@ -134,6 +135,7 @@ final class RectorConfig extends ContainerConfigurator
      */
     public function rule(string $rectorClass): void
     {
+        Assert::classExists($rectorClass);
         Assert::isAOf($rectorClass, RectorInterface::class);
 
         $services = $this->services();
