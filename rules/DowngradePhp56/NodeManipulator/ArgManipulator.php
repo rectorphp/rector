@@ -37,7 +37,7 @@ final class ArgManipulator
             if (!$arg->unpack) {
                 continue;
             }
-            if ($arg->value instanceof \PhpParser\Node\Expr\Array_) {
+            if ($arg->value instanceof Array_) {
                 continue;
             }
             return \false;

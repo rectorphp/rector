@@ -18,23 +18,23 @@ final class HelperArgumentAssignFactory
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @return Expression[]
      */
-    public function createRegisterArgumentsCalls(\PhpParser\Node\Stmt\ClassMethod $renderMethod) : array
+    public function createRegisterArgumentsCalls(ClassMethod $renderMethod) : array
     {
         $stmts = [];
         foreach ($renderMethod->params as $param) {
             /** @var string $paramName */
             $paramName = $this->nodeNameResolver->getName($param->var);
-            $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), 'arguments');
-            $argumentsDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($propertyFetch, new \PhpParser\Node\Scalar\String_($paramName));
-            $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable($paramName), $argumentsDimFetch);
-            $stmts[] = new \PhpParser\Node\Stmt\Expression($assign);
+            $propertyFetch = new PropertyFetch(new Variable('this'), 'arguments');
+            $argumentsDimFetch = new ArrayDimFetch($propertyFetch, new String_($paramName));
+            $assign = new Assign(new Variable($paramName), $argumentsDimFetch);
+            $stmts[] = new Expression($assign);
         }
         // remove all params
         $renderMethod->params = [];

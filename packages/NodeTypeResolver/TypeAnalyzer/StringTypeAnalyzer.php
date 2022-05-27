@@ -14,19 +14,19 @@ final class StringTypeAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function isStringOrUnionStringOnlyType(\PhpParser\Node $node) : bool
+    public function isStringOrUnionStringOnlyType(Node $node) : bool
     {
         $nodeType = $this->nodeTypeResolver->getType($node);
-        if ($nodeType instanceof \PHPStan\Type\StringType) {
+        if ($nodeType instanceof StringType) {
             return \true;
         }
-        if ($nodeType instanceof \PHPStan\Type\UnionType) {
+        if ($nodeType instanceof UnionType) {
             foreach ($nodeType->getTypes() as $singleType) {
-                if ($singleType->isSuperTypeOf(new \PHPStan\Type\StringType())->no()) {
+                if ($singleType->isSuperTypeOf(new StringType())->no()) {
                     return \false;
                 }
             }

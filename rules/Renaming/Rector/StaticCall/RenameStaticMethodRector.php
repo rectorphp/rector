@@ -16,27 +16,27 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\StaticCall\RenameStaticMethodRector\RenameStaticMethodRectorTest
  */
-final class RenameStaticMethodRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class RenameStaticMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var RenameStaticMethod[]
      */
     private $staticMethodRenames = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns method names to new ones.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample('SomeClass::oldStaticMethod();', 'AnotherExampleClass::newStaticMethod();', [new \Rector\Renaming\ValueObject\RenameStaticMethod('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod')])]);
+        return new RuleDefinition('Turns method names to new ones.', [new ConfiguredCodeSample('SomeClass::oldStaticMethod();', 'AnotherExampleClass::newStaticMethod();', [new RenameStaticMethod('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->staticMethodRenames as $staticMethodRename) {
             if (!$this->isObjectType($node->class, $staticMethodRename->getOldObjectType())) {
@@ -54,14 +54,14 @@ final class RenameStaticMethodRector extends \Rector\Core\Rector\AbstractRector 
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Renaming\ValueObject\RenameStaticMethod::class);
+        Assert::allIsAOf($configuration, RenameStaticMethod::class);
         $this->staticMethodRenames = $configuration;
     }
-    private function rename(\PhpParser\Node\Expr\StaticCall $staticCall, \Rector\Renaming\ValueObject\RenameStaticMethod $renameStaticMethod) : \PhpParser\Node\Expr\StaticCall
+    private function rename(StaticCall $staticCall, RenameStaticMethod $renameStaticMethod) : StaticCall
     {
-        $staticCall->name = new \PhpParser\Node\Identifier($renameStaticMethod->getNewMethod());
+        $staticCall->name = new Identifier($renameStaticMethod->getNewMethod());
         if ($renameStaticMethod->hasClassChanged()) {
-            $staticCall->class = new \PhpParser\Node\Name\FullyQualified($renameStaticMethod->getNewClass());
+            $staticCall->class = new FullyQualified($renameStaticMethod->getNewClass());
         }
         return $staticCall;
     }

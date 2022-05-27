@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Deprecation-81213-RenderMethodArgumentOnViewHelpersDeprecated.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\MoveRenderArgumentsToInitializeArgumentsMethodRector\MoveRenderArgumentsToInitializeArgumentsMethodRectorTest
  */
-final class MoveRenderArgumentsToInitializeArgumentsMethodRector extends \Rector\Core\Rector\AbstractRector
+final class MoveRenderArgumentsToInitializeArgumentsMethodRector extends AbstractRector
 {
     /**
      * @readonly
@@ -34,7 +34,7 @@ final class MoveRenderArgumentsToInitializeArgumentsMethodRector extends \Rector
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
-    public function __construct(\Ssch\TYPO3Rector\NodeFactory\HelperArgumentAssignFactory $helperArgumentAssignFactory, \Ssch\TYPO3Rector\NodeFactory\InitializeArgumentsClassMethodFactory $initializeArgumentsClassMethodFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
+    public function __construct(HelperArgumentAssignFactory $helperArgumentAssignFactory, InitializeArgumentsClassMethodFactory $initializeArgumentsClassMethodFactory, PhpDocTagRemover $phpDocTagRemover)
     {
         $this->helperArgumentAssignFactory = $helperArgumentAssignFactory;
         $this->initializeArgumentsClassMethodFactory = $initializeArgumentsClassMethodFactory;
@@ -45,23 +45,23 @@ final class MoveRenderArgumentsToInitializeArgumentsMethodRector extends \Rector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->isAbstract()) {
             return null;
         }
-        $desiredObjectTypes = [new \PHPStan\Type\ObjectType('TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractViewHelper'), new \PHPStan\Type\ObjectType('TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractTagBasedViewHelper'), new \PHPStan\Type\ObjectType('TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractConditionViewHelper'), new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper'), new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractTagBasedViewHelper'), new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractConditionViewHelper')];
+        $desiredObjectTypes = [new ObjectType('TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractViewHelper'), new ObjectType('TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractTagBasedViewHelper'), new ObjectType('TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractConditionViewHelper'), new ObjectType('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper'), new ObjectType('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractTagBasedViewHelper'), new ObjectType('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractConditionViewHelper')];
         if (!$this->nodeTypeResolver->isObjectTypes($node, $desiredObjectTypes)) {
             return null;
         }
         // Check if the ViewHelper has a render method with params, if not return immediately
         $renderMethod = $node->getMethod('render');
-        if (!$renderMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$renderMethod instanceof ClassMethod) {
             return null;
         }
         if ([] === $renderMethod->getParams()) {
@@ -76,9 +76,9 @@ final class MoveRenderArgumentsToInitializeArgumentsMethodRector extends \Rector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move render method arguments to initializeArguments method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move render method arguments to initializeArguments method', [new CodeSample(<<<'CODE_SAMPLE'
 class MyViewHelper implements ViewHelperInterface
 {
     public function render(array $firstParameter, string $secondParameter = null)
@@ -104,7 +104,7 @@ class MyViewHelper implements ViewHelperInterface
 CODE_SAMPLE
 )]);
     }
-    private function removeParamTags(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function removeParamTags(ClassMethod $classMethod) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTagRemover->removeByName($phpDocInfo, 'param');

@@ -25,33 +25,33 @@ final class ArrayFilterFactory
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function createSimpleFuncCallAssign(\PhpParser\Node\Stmt\Foreach_ $foreach, string $funcName, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : \PhpParser\Node\Expr\Assign
+    public function createSimpleFuncCallAssign(Foreach_ $foreach, string $funcName, ArrayDimFetch $arrayDimFetch) : Assign
     {
-        $string = new \PhpParser\Node\Scalar\String_($funcName);
-        $args = [new \PhpParser\Node\Arg($foreach->expr), new \PhpParser\Node\Arg($string)];
-        $arrayFilterFuncCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_filter'), $args);
-        return new \PhpParser\Node\Expr\Assign($arrayDimFetch->var, $arrayFilterFuncCall);
+        $string = new String_($funcName);
+        $args = [new Arg($foreach->expr), new Arg($string)];
+        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), $args);
+        return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
     }
-    public function createWithClosure(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, \PhpParser\Node\Expr\Variable $valueVariable, \PhpParser\Node\Expr $condExpr, \PhpParser\Node\Stmt\Foreach_ $foreach) : \PhpParser\Node\Expr\Assign
+    public function createWithClosure(ArrayDimFetch $arrayDimFetch, Variable $valueVariable, Expr $condExpr, Foreach_ $foreach) : Assign
     {
         $filterFunction = $this->createClosure($valueVariable, $condExpr);
-        $args = [new \PhpParser\Node\Arg($foreach->expr), new \PhpParser\Node\Arg($filterFunction)];
-        $arrayFilterFuncCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_filter'), $args);
-        return new \PhpParser\Node\Expr\Assign($arrayDimFetch->var, $arrayFilterFuncCall);
+        $args = [new Arg($foreach->expr), new Arg($filterFunction)];
+        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), $args);
+        return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
     }
     /**
      * @return \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure
      */
-    private function createClosure(\PhpParser\Node\Expr\Variable $valueVariable, \PhpParser\Node\Expr $condExpr)
+    private function createClosure(Variable $valueVariable, Expr $condExpr)
     {
-        $params = [new \PhpParser\Node\Param($valueVariable)];
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::ARROW_FUNCTION)) {
-            return new \PhpParser\Node\Expr\ArrowFunction(['params' => $params, 'expr' => $condExpr]);
+        $params = [new Param($valueVariable)];
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ARROW_FUNCTION)) {
+            return new ArrowFunction(['params' => $params, 'expr' => $condExpr]);
         }
-        return new \PhpParser\Node\Expr\Closure(['params' => $params, 'stmts' => [new \PhpParser\Node\Stmt\Return_($condExpr)]]);
+        return new Closure(['params' => $params, 'stmts' => [new Return_($condExpr)]]);
     }
 }

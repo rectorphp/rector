@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-class Property extends \PhpParser\Node\Stmt
+class Property extends Node\Stmt
 {
     /** @var int Modifiers */
     public $flags;
@@ -31,7 +31,7 @@ class Property extends \PhpParser\Node\Stmt
         $this->attributes = $attributes;
         $this->flags = $flags;
         $this->props = $props;
-        $this->type = \is_string($type) ? new \PhpParser\Node\Identifier($type) : $type;
+        $this->type = \is_string($type) ? new Identifier($type) : $type;
         $this->attrGroups = $attrGroups;
     }
     public function getSubNodeNames() : array

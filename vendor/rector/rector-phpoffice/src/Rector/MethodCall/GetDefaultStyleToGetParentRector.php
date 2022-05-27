@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPOffice\Tests\Rector\MethodCall\GetDefaultStyleToGetParentRector\GetDefaultStyleToGetParentRectorTest
  */
-final class GetDefaultStyleToGetParentRector extends \Rector\Core\Rector\AbstractRector
+final class GetDefaultStyleToGetParentRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Methods to (new Worksheet())->getDefaultStyle() to getParent()->getDefaultStyle()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Methods to (new Worksheet())->getDefaultStyle() to getParent()->getDefaultStyle()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -45,21 +45,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('PHPExcel_Worksheet'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('PHPExcel_Worksheet'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getDefaultStyle')) {
             return null;
         }
         $variable = clone $node->var;
-        $getParentMethodCall = new \PhpParser\Node\Expr\MethodCall($variable, 'getParent');
+        $getParentMethodCall = new MethodCall($variable, 'getParent');
         $node->var = $getParentMethodCall;
         return $node;
     }

@@ -34,7 +34,7 @@ final class Factory
     public static function create()
     {
         $loop = self::construct();
-        \RectorPrefix20220527\React\EventLoop\Loop::set($loop);
+        Loop::set($loop);
         return $loop;
     }
     /**
@@ -46,22 +46,22 @@ final class Factory
         // @codeCoverageIgnoreStart
         if (\function_exists('uv_loop_new')) {
             // only use ext-uv on PHP 7
-            return new \RectorPrefix20220527\React\EventLoop\ExtUvLoop();
+            return new ExtUvLoop();
         }
         if (\class_exists('RectorPrefix20220527\\libev\\EventLoop', \false)) {
-            return new \RectorPrefix20220527\React\EventLoop\ExtLibevLoop();
+            return new ExtLibevLoop();
         }
         if (\class_exists('EvLoop', \false)) {
-            return new \RectorPrefix20220527\React\EventLoop\ExtEvLoop();
+            return new ExtEvLoop();
         }
         if (\class_exists('EventBase', \false)) {
-            return new \RectorPrefix20220527\React\EventLoop\ExtEventLoop();
+            return new ExtEventLoop();
         }
         if (\function_exists('event_base_new') && \PHP_MAJOR_VERSION === 5) {
             // only use ext-libevent on PHP 5 for now
-            return new \RectorPrefix20220527\React\EventLoop\ExtLibeventLoop();
+            return new ExtLibeventLoop();
         }
-        return new \RectorPrefix20220527\React\EventLoop\StreamSelectLoop();
+        return new StreamSelectLoop();
         // @codeCoverageIgnoreEnd
     }
 }

@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.0/Breaking-93041-RemoveTypoScriptOptionAddQueryStringmethod.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v0\RemoveAddQueryStringMethodRector\RemoveAddQueryStringMethodRectorTest
  */
-final class RemoveAddQueryStringMethodRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveAddQueryStringMethodRector extends AbstractRector
 {
     /**
      * @readonly
@@ -29,7 +29,7 @@ final class RemoveAddQueryStringMethodRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer
      */
     private $sameClassMethodCallAnalyzer;
-    public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer, \Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer)
+    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer, SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer)
     {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
         $this->sameClassMethodCallAnalyzer = $sameClassMethodCallAnalyzer;
@@ -39,12 +39,12 @@ final class RemoveAddQueryStringMethodRector extends \Rector\Core\Rector\Abstrac
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -58,9 +58,9 @@ final class RemoveAddQueryStringMethodRector extends \Rector\Core\Rector\Abstrac
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove TypoScript option addQueryString.method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove TypoScript option addQueryString.method', [new CodeSample(<<<'CODE_SAMPLE'
 $this->uriBuilder->setUseCacheHash(true)
                          ->setCreateAbsoluteUri(true)
                          ->setAddQueryString(true)
@@ -75,34 +75,34 @@ $this->uriBuilder->setUseCacheHash(true)
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkip(MethodCall $methodCall) : bool
     {
         if ($this->isMethodCallOnUriBuilder($methodCall)) {
             return \false;
         }
         return !$this->isMethodCallOnContentObjectRenderer($methodCall);
     }
-    private function isMethodCallOnUriBuilder(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function isMethodCallOnUriBuilder(MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder'))) {
             return \false;
         }
         return $this->isName($methodCall->name, 'setAddQueryStringMethod');
     }
-    private function isMethodCallOnContentObjectRenderer(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function isMethodCallOnContentObjectRenderer(MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
             return \false;
         }
         return $this->isName($methodCall->name, 'getQueryArguments');
     }
-    private function refactorSetAddQueryStringMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
+    private function refactorSetAddQueryStringMethodCall(MethodCall $methodCall) : ?Node
     {
         try {
             // If it is the only method call, we can safely delete the node here.
             $this->removeNode($methodCall);
             return $methodCall;
-        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
+        } catch (ShouldNotHappenException $exception) {
             $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
             if (!$this->sameClassMethodCallAnalyzer->haveSingleClass($chainMethodCalls)) {
                 return null;
@@ -111,12 +111,12 @@ CODE_SAMPLE
                 if ($this->isName($methodCall->name, 'setAddQueryStringMethod')) {
                     continue;
                 }
-                $methodCall->var = new \PhpParser\Node\Expr\MethodCall($chainMethodCall->var, $chainMethodCall->name, $chainMethodCall->args);
+                $methodCall->var = new MethodCall($chainMethodCall->var, $chainMethodCall->name, $chainMethodCall->args);
             }
             return $methodCall->var;
         }
     }
-    private function refactorGetQueryArgumentsMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : void
+    private function refactorGetQueryArgumentsMethodCall(MethodCall $methodCall) : void
     {
         unset($methodCall->args[1], $methodCall->args[2]);
     }

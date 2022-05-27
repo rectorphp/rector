@@ -10,7 +10,7 @@ use RectorPrefix20220527\MyCLabs\Enum\Enum;
  * @method static TypeKind PARAM()
  * @method static TypeKind ANY()
  */
-final class TypeKind extends \RectorPrefix20220527\MyCLabs\Enum\Enum
+final class TypeKind extends Enum
 {
     /**
      * @var string

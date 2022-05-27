@@ -27,7 +27,7 @@ final class RouteRequiredParamNameToTypesResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Doctrine\NodeAnalyzer\AttrinationFinder $attrinationFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(AttrinationFinder $attrinationFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->attrinationFinder = $attrinationFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -35,12 +35,12 @@ final class RouteRequiredParamNameToTypesResolver
     /**
      * @return array<string, Type>
      */
-    public function resolve(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function resolve(ClassMethod $classMethod) : array
     {
         if ($classMethod->getParams() === []) {
             return [];
         }
-        $routeAttrination = $this->attrinationFinder->getByOne($classMethod, \Rector\Symfony\Enum\SymfonyAnnotation::ROUTE);
+        $routeAttrination = $this->attrinationFinder->getByOne($classMethod, SymfonyAnnotation::ROUTE);
         $paramsToRegexes = $this->resolveParamsToRegexes($routeAttrination);
         if ($paramsToRegexes === []) {
             return [];
@@ -48,7 +48,7 @@ final class RouteRequiredParamNameToTypesResolver
         $paramsToTypes = [];
         foreach ($paramsToRegexes as $paramName => $paramRegex) {
             if ($paramRegex === '\\d+') {
-                $paramsToTypes[$paramName] = new \PHPStan\Type\IntegerType();
+                $paramsToTypes[$paramName] = new IntegerType();
             }
             // @todo add for string/bool as well
         }
@@ -60,10 +60,10 @@ final class RouteRequiredParamNameToTypesResolver
      */
     private function resolveParamsToRegexes($routeAttrination) : array
     {
-        if ($routeAttrination instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+        if ($routeAttrination instanceof DoctrineAnnotationTagValueNode) {
             return $this->resolveFromAnnotation($routeAttrination);
         }
-        if ($routeAttrination instanceof \PhpParser\Node\Attribute) {
+        if ($routeAttrination instanceof Attribute) {
             return $this->resolveFromAttribute($routeAttrination);
         }
         return [];
@@ -71,11 +71,11 @@ final class RouteRequiredParamNameToTypesResolver
     /**
      * @return array<string, string>
      */
-    private function resolveFromAnnotation(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : array
+    private function resolveFromAnnotation(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : array
     {
         $paramsToRegexes = [];
         $requirementsValue = $doctrineAnnotationTagValueNode->getValue('requirements');
-        if (!$requirementsValue instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
+        if (!$requirementsValue instanceof CurlyListNode) {
             return [];
         }
         foreach ($requirementsValue->getValuesWithExplicitSilentAndWithoutQuotes() as $paramName => $paramRegex) {
@@ -89,7 +89,7 @@ final class RouteRequiredParamNameToTypesResolver
     /**
      * @return array<string, string>
      */
-    private function resolveFromAttribute(\PhpParser\Node\Attribute $attribute) : array
+    private function resolveFromAttribute(Attribute $attribute) : array
     {
         $paramsToRegexes = [];
         foreach ($attribute->args as $arg) {
@@ -97,20 +97,20 @@ final class RouteRequiredParamNameToTypesResolver
                 continue;
             }
             $requirementsArray = $arg->value;
-            if (!$requirementsArray instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$requirementsArray instanceof Array_) {
                 continue;
             }
             foreach ($requirementsArray->items as $arrayItem) {
-                if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+                if (!$arrayItem instanceof ArrayItem) {
                     continue;
                 }
                 $arrayKey = $arrayItem->key;
-                if (!$arrayKey instanceof \PhpParser\Node\Scalar\String_) {
+                if (!$arrayKey instanceof String_) {
                     continue;
                 }
                 $paramName = $arrayKey->value;
                 $arrayValue = $arrayItem->value;
-                if (!$arrayValue instanceof \PhpParser\Node\Scalar\String_) {
+                if (!$arrayValue instanceof String_) {
                     continue;
                 }
                 $paramType = $arrayValue->value;

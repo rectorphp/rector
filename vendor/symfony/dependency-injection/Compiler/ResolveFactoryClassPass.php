@@ -15,7 +15,7 @@ use RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\Runtime
 /**
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
-class ResolveFactoryClassPass extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class ResolveFactoryClassPass extends AbstractRecursivePass
 {
     /**
      * {@inheritdoc}
@@ -24,9 +24,9 @@ class ResolveFactoryClassPass extends \RectorPrefix20220527\Symfony\Component\De
      */
     protected function processValue($value, bool $isRoot = \false)
     {
-        if ($value instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\Definition && \is_array($factory = $value->getFactory()) && null === $factory[0]) {
+        if ($value instanceof Definition && \is_array($factory = $value->getFactory()) && null === $factory[0]) {
             if (null === ($class = $value->getClass())) {
-                throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('The "%s" service is defined to be created by a factory, but is missing the factory class. Did you forget to define the factory or service class?', $this->currentId));
+                throw new RuntimeException(\sprintf('The "%s" service is defined to be created by a factory, but is missing the factory class. Did you forget to define the factory or service class?', $this->currentId));
             }
             $factory[0] = $class;
             $value->setFactory($factory);

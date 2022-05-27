@@ -13,21 +13,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.0/Breaking-61786-ExtbaseDeprecatedTypeHandlingServiceRemoved.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v0\TypeHandlingServiceToTypeHandlingUtilityRector\TypeHandlingServiceToTypeHandlingUtilityRectorTest
  */
-final class TypeHandlingServiceToTypeHandlingUtilityRector extends \Rector\Core\Rector\AbstractRector
+final class TypeHandlingServiceToTypeHandlingUtilityRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Service\\TypeHandlingService'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Extbase\\Service\\TypeHandlingService'))) {
             return null;
         }
         $methodCall = $this->getName($node->name);
@@ -39,9 +39,9 @@ final class TypeHandlingServiceToTypeHandlingUtilityRector extends \Rector\Core\
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use TypeHandlingUtility instead of TypeHandlingService', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use TypeHandlingUtility instead of TypeHandlingService', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\TypeHandlingService;
 GeneralUtility::makeInstance(TypeHandlingService::class)->isSimpleType('string');

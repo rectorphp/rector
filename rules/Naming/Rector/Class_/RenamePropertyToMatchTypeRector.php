@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\RenamePropertyToMatchTypeRectorTest
  */
-final class RenamePropertyToMatchTypeRector extends \Rector\Core\Rector\AbstractRector
+final class RenamePropertyToMatchTypeRector extends AbstractRector
 {
     /**
      * @var bool
@@ -45,16 +45,16 @@ final class RenamePropertyToMatchTypeRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\Naming\PropertyRenamer\PropertyPromotionRenamer
      */
     private $propertyPromotionRenamer;
-    public function __construct(\Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer $matchTypePropertyRenamer, \Rector\Naming\ValueObjectFactory\PropertyRenameFactory $propertyRenameFactory, \Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver, \Rector\Naming\PropertyRenamer\PropertyPromotionRenamer $propertyPromotionRenamer)
+    public function __construct(MatchTypePropertyRenamer $matchTypePropertyRenamer, PropertyRenameFactory $propertyRenameFactory, MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver, PropertyPromotionRenamer $propertyPromotionRenamer)
     {
         $this->matchTypePropertyRenamer = $matchTypePropertyRenamer;
         $this->propertyRenameFactory = $propertyRenameFactory;
         $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;
         $this->propertyPromotionRenamer = $propertyPromotionRenamer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename property and method param to match its type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename property and method param to match its type', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -89,12 +89,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Interface_::class];
+        return [Class_::class, Interface_::class];
     }
     /**
      * @param Class_|Interface_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $this->refactorClassProperties($node);
         $this->propertyPromotionRenamer->renamePropertyPromotion($node);
@@ -103,7 +103,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function refactorClassProperties(\PhpParser\Node\Stmt\ClassLike $classLike) : void
+    private function refactorClassProperties(ClassLike $classLike) : void
     {
         foreach ($classLike->getProperties() as $property) {
             $expectedPropertyName = $this->matchPropertyTypeExpectedNameResolver->resolve($property);
@@ -111,11 +111,11 @@ CODE_SAMPLE
                 continue;
             }
             $propertyRename = $this->propertyRenameFactory->createFromExpectedName($property, $expectedPropertyName);
-            if (!$propertyRename instanceof \Rector\Naming\ValueObject\PropertyRename) {
+            if (!$propertyRename instanceof PropertyRename) {
                 continue;
             }
             $renameProperty = $this->matchTypePropertyRenamer->rename($propertyRename);
-            if (!$renameProperty instanceof \PhpParser\Node\Stmt\Property) {
+            if (!$renameProperty instanceof Property) {
                 continue;
             }
             $this->hasChanged = \true;

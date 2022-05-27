@@ -10,24 +10,24 @@ namespace RectorPrefix20220527\Nette\Neon\Node;
 use RectorPrefix20220527\Nette\Neon\Entity;
 use RectorPrefix20220527\Nette\Neon\Node;
 /** @internal */
-final class EntityNode extends \RectorPrefix20220527\Nette\Neon\Node
+final class EntityNode extends Node
 {
     /** @var Node */
     public $value;
     /** @var ArrayItemNode[] */
     public $attributes;
-    public function __construct(\RectorPrefix20220527\Nette\Neon\Node $value, array $attributes = [])
+    public function __construct(Node $value, array $attributes = [])
     {
         $this->value = $value;
         $this->attributes = $attributes;
     }
-    public function toValue() : \RectorPrefix20220527\Nette\Neon\Entity
+    public function toValue() : Entity
     {
-        return new \RectorPrefix20220527\Nette\Neon\Entity($this->value->toValue(), \RectorPrefix20220527\Nette\Neon\Node\ArrayItemNode::itemsToArray($this->attributes));
+        return new Entity($this->value->toValue(), ArrayItemNode::itemsToArray($this->attributes));
     }
     public function toString() : string
     {
-        return $this->value->toString() . '(' . ($this->attributes ? \RectorPrefix20220527\Nette\Neon\Node\ArrayItemNode::itemsToInlineString($this->attributes) : '') . ')';
+        return $this->value->toString() . '(' . ($this->attributes ? ArrayItemNode::itemsToInlineString($this->attributes) : '') . ')';
     }
     public function &getIterator() : \Generator
     {

@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
  */
-final class SensitiveConstantNameRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class SensitiveConstantNameRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @see http://php.net/manual/en/reserved.constants.php
@@ -31,17 +31,17 @@ final class SensitiveConstantNameRector extends \Rector\Core\Rector\AbstractRect
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::DEPRECATE_INSENSITIVE_CONSTANT_NAME;
+        return PhpVersionFeature::DEPRECATE_INSENSITIVE_CONSTANT_NAME;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes case insensitive constants to sensitive ones.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes case insensitive constants to sensitive ones.', [new CodeSample(<<<'CODE_SAMPLE'
 define('FOO', 42, true);
 var_dump(FOO);
 var_dump(foo);
@@ -58,12 +58,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\ConstFetch::class];
+        return [ConstFetch::class];
     }
     /**
      * @param ConstFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $constantName = $this->getName($node);
         if ($constantName === null) {
@@ -75,8 +75,8 @@ CODE_SAMPLE
             return null;
         }
         // constant is defined in current lower/upper case
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if ($this->reflectionProvider->hasConstant(new \PhpParser\Node\Name($constantName), $scope)) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($this->reflectionProvider->hasConstant(new Name($constantName), $scope)) {
             return null;
         }
         // is uppercase, all good
@@ -86,7 +86,7 @@ CODE_SAMPLE
         if (\strpos($uppercasedConstantName, '\\') !== \false) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Name\FullyQualified($uppercasedConstantName);
+        $node->name = new FullyQualified($uppercasedConstantName);
         return $node;
     }
 }

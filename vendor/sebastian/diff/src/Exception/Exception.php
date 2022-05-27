@@ -12,6 +12,6 @@ declare (strict_types=1);
 namespace RectorPrefix20220527\SebastianBergmann\Diff;
 
 use Throwable;
-interface Exception extends \Throwable
+interface Exception extends Throwable
 {
 }

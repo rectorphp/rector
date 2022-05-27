@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite2c3ce5861b00974463253eeb930ad7a
+class ComposerStaticInit23bbc0303085eb4fd74019d3f9bd88ca
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -1555,8 +1555,6 @@ class ComposerStaticInite2c3ce5861b00974463253eeb930ad7a
         'RectorPrefix20220527\\Symplify\\Astral\\PhpDocParser\\StaticFactory\\SimplePhpDocParserStaticFactory' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/StaticFactory/SimplePhpDocParserStaticFactory.php',
         'RectorPrefix20220527\\Symplify\\Astral\\PhpDocParser\\ValueObject\\Ast\\PhpDoc\\SimplePhpDocNode' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/ValueObject/Ast/PhpDoc/SimplePhpDocNode.php',
         'RectorPrefix20220527\\Symplify\\Astral\\PhpDocParser\\ValueObject\\PhpDocAttributeKey' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/ValueObject/PhpDocAttributeKey.php',
-        'RectorPrefix20220527\\Symplify\\Astral\\PhpParser\\SmartPhpParser' => __DIR__ . '/..' . '/symplify/astral/src/PhpParser/SmartPhpParser.php',
-        'RectorPrefix20220527\\Symplify\\Astral\\PhpParser\\SmartPhpParserFactory' => __DIR__ . '/..' . '/symplify/astral/src/PhpParser/SmartPhpParserFactory.php',
         'RectorPrefix20220527\\Symplify\\Astral\\Reflection\\MethodCallParser' => __DIR__ . '/..' . '/symplify/astral/src/Reflection/MethodCallParser.php',
         'RectorPrefix20220527\\Symplify\\Astral\\Reflection\\ReflectionParser' => __DIR__ . '/..' . '/symplify/astral/src/Reflection/ReflectionParser.php',
         'RectorPrefix20220527\\Symplify\\Astral\\StaticFactory\\NodeValueResolverStaticFactory' => __DIR__ . '/..' . '/symplify/astral/src/StaticFactory/NodeValueResolverStaticFactory.php',
@@ -1645,7 +1643,6 @@ class ComposerStaticInite2c3ce5861b00974463253eeb930ad7a
         'RectorPrefix20220527\\Symplify\\PackageBuilder\\Reflection\\PrivatesAccessor' => __DIR__ . '/..' . '/symplify/package-builder/src/Reflection/PrivatesAccessor.php',
         'RectorPrefix20220527\\Symplify\\PackageBuilder\\Reflection\\PrivatesCaller' => __DIR__ . '/..' . '/symplify/package-builder/src/Reflection/PrivatesCaller.php',
         'RectorPrefix20220527\\Symplify\\PackageBuilder\\Strings\\StringFormatConverter' => __DIR__ . '/..' . '/symplify/package-builder/src/Strings/StringFormatConverter.php',
-        'RectorPrefix20220527\\Symplify\\PackageBuilder\\Testing\\AbstractKernelTestCase' => __DIR__ . '/..' . '/symplify/package-builder/src/Testing/AbstractKernelTestCase.php',
         'RectorPrefix20220527\\Symplify\\PackageBuilder\\ValueObject\\ConsoleColorDiffConfig' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/ConsoleColorDiffConfig.php',
         'RectorPrefix20220527\\Symplify\\PackageBuilder\\ValueObject\\MethodName' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/MethodName.php',
         'RectorPrefix20220527\\Symplify\\PackageBuilder\\ValueObject\\Option' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/Option.php',
@@ -3919,9 +3916,9 @@ class ComposerStaticInite2c3ce5861b00974463253eeb930ad7a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite2c3ce5861b00974463253eeb930ad7a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite2c3ce5861b00974463253eeb930ad7a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite2c3ce5861b00974463253eeb930ad7a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit23bbc0303085eb4fd74019d3f9bd88ca::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit23bbc0303085eb4fd74019d3f9bd88ca::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit23bbc0303085eb4fd74019d3f9bd88ca::$classMap;
 
         }, null, ClassLoader::class);
     }

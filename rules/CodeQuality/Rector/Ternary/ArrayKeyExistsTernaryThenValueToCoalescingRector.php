@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector\ArrayKeyExistsTernaryThenValueToCoalescingRectorTest
  */
-final class ArrayKeyExistsTernaryThenValueToCoalescingRector extends \Rector\Core\Rector\AbstractRector
+final class ArrayKeyExistsTernaryThenValueToCoalescingRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change array_key_exists() ternary to coalescing', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change array_key_exists() ternary to coalescing', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($values, $keyToMatch)
@@ -46,20 +46,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Ternary::class];
+        return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->cond instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$node->cond instanceof FuncCall) {
             return null;
         }
         if (!$this->isName($node->cond, 'array_key_exists')) {
             return null;
         }
-        if (!$node->if instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if (!$node->if instanceof ArrayDimFetch) {
             return null;
         }
         if (!$this->areArrayKeysExistsArgsMatchingDimFetch($node->cond, $node->if)) {
@@ -68,7 +68,7 @@ CODE_SAMPLE
         if (!$this->valueResolver->isNull($node->else)) {
             return null;
         }
-        return new \PhpParser\Node\Expr\BinaryOp\Coalesce($node->if, $node->else);
+        return new Coalesce($node->if, $node->else);
     }
     /**
      * Equals if:
@@ -77,15 +77,15 @@ CODE_SAMPLE
      * =
      * $values[$key]
      */
-    private function areArrayKeysExistsArgsMatchingDimFetch(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
+    private function areArrayKeysExistsArgsMatchingDimFetch(FuncCall $funcCall, ArrayDimFetch $arrayDimFetch) : bool
     {
         $firstArg = $funcCall->args[0];
-        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+        if (!$firstArg instanceof Arg) {
             return \false;
         }
         $keyExpr = $firstArg->value;
         $secondArg = $funcCall->args[1];
-        if (!$secondArg instanceof \PhpParser\Node\Arg) {
+        if (!$secondArg instanceof Arg) {
             return \false;
         }
         $valuesExpr = $secondArg->value;

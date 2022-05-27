@@ -15,20 +15,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector\RemoveSoleValueSprintfRectorTest
  */
-final class RemoveSoleValueSprintfRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveSoleValueSprintfRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove sprintf() wrapper if not needed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove sprintf() wrapper if not needed', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -59,12 +59,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'sprintf')) {
             return null;
@@ -78,7 +78,7 @@ CODE_SAMPLE
         /** @var Arg $firstArg */
         $firstArg = $node->args[0];
         $maskArgument = $firstArg->value;
-        if (!$maskArgument instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$maskArgument instanceof String_) {
             return null;
         }
         if ($maskArgument->value !== '%s') {
@@ -88,7 +88,7 @@ CODE_SAMPLE
         $secondArg = $node->args[1];
         $valueArgument = $secondArg->value;
         $valueType = $this->getType($valueArgument);
-        if (!$valueType instanceof \PHPStan\Type\StringType) {
+        if (!$valueType instanceof StringType) {
             return null;
         }
         return $valueArgument;

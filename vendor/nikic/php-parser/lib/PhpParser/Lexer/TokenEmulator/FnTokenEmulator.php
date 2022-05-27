@@ -8,7 +8,7 @@ final class FnTokenEmulator extends \PhpParser\Lexer\TokenEmulator\KeywordEmulat
 {
     public function getPhpVersion() : string
     {
-        return \PhpParser\Lexer\Emulative::PHP_7_4;
+        return Emulative::PHP_7_4;
     }
     public function getKeywordString() : string
     {

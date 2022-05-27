@@ -20,7 +20,7 @@ namespace RectorPrefix20220527\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class ClassExistenceResource implements \RectorPrefix20220527\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class ClassExistenceResource implements SelfCheckingResourceInterface
 {
     /**
      * @var string

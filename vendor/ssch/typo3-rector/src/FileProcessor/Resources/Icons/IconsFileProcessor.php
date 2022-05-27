@@ -17,7 +17,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.3/Feature-77349-AdditionalLocationsForExtensionIcons.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Resources\Icons\IconsProcessor\IconsProcessorTest
  */
-final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
+final class IconsFileProcessor implements FileProcessorInterface
 {
     /**
      * @var string
@@ -36,7 +36,7 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     /**
      * @param IconRectorInterface[] $iconsRector
      */
-    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, array $iconsRector)
+    public function __construct(FilesFinder $filesFinder, array $iconsRector)
     {
         $this->filesFinder = $filesFinder;
         $this->iconsRector = $iconsRector;
@@ -44,22 +44,22 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
+    public function process(File $file, Configuration $configuration) : array
     {
         foreach ($this->iconsRector as $iconRector) {
             $iconRector->refactorFile($file);
         }
         // to keep parent contract with return values
-        return [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
+        return [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    public function supports(File $file, Configuration $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->shouldSkip($smartFileInfo->getFilenameWithoutExtension())) {
             return \false;
         }
         $extEmConfSmartFileInfo = $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($smartFileInfo);
-        if (!$extEmConfSmartFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
+        if (!$extEmConfSmartFileInfo instanceof SmartFileInfo) {
             return \false;
         }
         return !\file_exists($this->createIconPath($file));
@@ -68,7 +68,7 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     {
         return ['png', 'gif', 'svg'];
     }
-    private function createIconPath(\Rector\Core\ValueObject\Application\File $file) : string
+    private function createIconPath(File $file) : string
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $realPath = $smartFileInfo->getRealPathDirectory();
@@ -80,6 +80,6 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
         if (self::EXT_ICON_NAME === $filenameWithoutExtension) {
             return \false;
         }
-        return !(\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun() && \strpos($filenameWithoutExtension, self::EXT_ICON_NAME) !== \false);
+        return !(StaticPHPUnitEnvironment::isPHPUnitRun() && \strpos($filenameWithoutExtension, self::EXT_ICON_NAME) !== \false);
     }
 }

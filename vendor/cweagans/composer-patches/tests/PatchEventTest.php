@@ -16,9 +16,9 @@ class PatchEventTest extends \RectorPrefix20220527\PHPUnit_Framework_TestCase
      *
      * @dataProvider patchEventDataProvider
      */
-    public function testGetters($event_name, \RectorPrefix20220527\Composer\Package\PackageInterface $package, $url, $description)
+    public function testGetters($event_name, PackageInterface $package, $url, $description)
     {
-        $patch_event = new \RectorPrefix20220527\cweagans\Composer\PatchEvent($event_name, $package, $url, $description);
+        $patch_event = new PatchEvent($event_name, $package, $url, $description);
         $this->assertEquals($event_name, $patch_event->getName());
         $this->assertEquals($package, $patch_event->getPackage());
         $this->assertEquals($url, $patch_event->getUrl());
@@ -28,6 +28,6 @@ class PatchEventTest extends \RectorPrefix20220527\PHPUnit_Framework_TestCase
     {
         $prophecy = $this->prophesize('RectorPrefix20220527\\Composer\\Package\\PackageInterface');
         $package = $prophecy->reveal();
-        return array(array(\RectorPrefix20220527\cweagans\Composer\PatchEvents::PRE_PATCH_APPLY, $package, 'https://www.drupal.org', 'A test patch'), array(\RectorPrefix20220527\cweagans\Composer\PatchEvents::POST_PATCH_APPLY, $package, 'https://www.drupal.org', 'A test patch'));
+        return array(array(PatchEvents::PRE_PATCH_APPLY, $package, 'https://www.drupal.org', 'A test patch'), array(PatchEvents::POST_PATCH_APPLY, $package, 'https://www.drupal.org', 'A test patch'));
     }
 }

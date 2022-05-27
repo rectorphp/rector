@@ -22,7 +22,7 @@ final class BinaryOpConditionsCollector
      * @param class-string<BinaryOp> $binaryOpClass
      * @return array<int, Expr>
      */
-    public function findConditions(\PhpParser\Node\Expr $expr, string $binaryOpClass) : array
+    public function findConditions(Expr $expr, string $binaryOpClass) : array
     {
         if (\get_class($expr) !== $binaryOpClass) {
             // Different binary operators, as well as non-BinaryOp expressions
@@ -31,7 +31,7 @@ final class BinaryOpConditionsCollector
         }
         $conditions = [];
         /** @var BinaryOp|Expr $expr */
-        while ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
+        while ($expr instanceof BinaryOp) {
             $conditions[] = $expr->right;
             $expr = $expr->left;
             if (\get_class($expr) !== $binaryOpClass) {

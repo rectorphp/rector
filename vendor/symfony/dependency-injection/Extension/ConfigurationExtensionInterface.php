@@ -24,5 +24,5 @@ interface ConfigurationExtensionInterface
      *
      * @return ConfigurationInterface|null
      */
-    public function getConfiguration(array $config, \RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerBuilder $container);
+    public function getConfiguration(array $config, ContainerBuilder $container);
 }

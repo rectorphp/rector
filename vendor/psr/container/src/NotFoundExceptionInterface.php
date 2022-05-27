@@ -5,6 +5,6 @@ namespace RectorPrefix20220527\Psr\Container;
 /**
  * No entry was found in the container.
  */
-interface NotFoundExceptionInterface extends \RectorPrefix20220527\Psr\Container\ContainerExceptionInterface
+interface NotFoundExceptionInterface extends ContainerExceptionInterface
 {
 }

@@ -34,6 +34,6 @@ namespace RectorPrefix20220527\React\Stream;
  * @see ReadableStreamInterface
  * @see WritableStreamInterface
  */
-interface DuplexStreamInterface extends \RectorPrefix20220527\React\Stream\ReadableStreamInterface, \RectorPrefix20220527\React\Stream\WritableStreamInterface
+interface DuplexStreamInterface extends ReadableStreamInterface, WritableStreamInterface
 {
 }

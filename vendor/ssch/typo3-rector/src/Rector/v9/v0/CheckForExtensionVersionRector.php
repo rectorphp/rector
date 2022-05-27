@@ -15,19 +15,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Breaking-82896-SystemExtensionVersionMigratedIntoWorkspaces.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\CheckForExtensionVersionRector\CheckForExtensionVersionRectorTest
  */
-final class CheckForExtensionVersionRector extends \Rector\Core\Rector\AbstractRector
+final class CheckForExtensionVersionRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isExtensionManagementUtilityIsLoaded($node) && !$this->isPackageManagerIsActivePackage($node)) {
             return null;
@@ -36,15 +36,15 @@ final class CheckForExtensionVersionRector extends \Rector\Core\Rector\AbstractR
         if (!$this->valueResolver->isValue($firstArgument->value, 'version')) {
             return null;
         }
-        $firstArgument->value = new \PhpParser\Node\Scalar\String_('workspaces');
+        $firstArgument->value = new String_('workspaces');
         return $node;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change the extensions to check for workspaces instead of version.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change the extensions to check for workspaces instead of version.', [new CodeSample(<<<'CODE_SAMPLE'
 if (ExtensionManagementUtility::isLoaded('version')) {
 }
 
@@ -67,13 +67,13 @@ CODE_SAMPLE
      */
     private function isExtensionManagementUtilityIsLoaded($node) : bool
     {
-        return $node instanceof \PhpParser\Node\Expr\StaticCall && $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) && $this->isName($node->name, 'isLoaded');
+        return $node instanceof StaticCall && $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) && $this->isName($node->name, 'isLoaded');
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function isPackageManagerIsActivePackage($node) : bool
     {
-        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Package\\PackageManager')) && $this->isName($node->name, 'isPackageActive');
+        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Package\\PackageManager')) && $this->isName($node->name, 'isPackageActive');
     }
 }

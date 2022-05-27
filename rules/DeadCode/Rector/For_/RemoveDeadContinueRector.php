@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\For_\RemoveDeadContinueRector\RemoveDeadContinueRectorTest
  */
-final class RemoveDeadContinueRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDeadContinueRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove useless continue at the end of loops', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove useless continue at the end of loops', [new CodeSample(<<<'CODE_SAMPLE'
 while ($i < 10) {
     ++$i;
     continue;
@@ -39,12 +39,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\While_::class];
+        return [Do_::class, For_::class, Foreach_::class, While_::class];
     }
     /**
      * @param Do_|For_|Foreach_|While_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $modified = \false;
         while ($this->canRemoveLastStatement($node->stmts)) {
@@ -66,12 +66,12 @@ CODE_SAMPLE
         $lastStmt = $stmts[$lastKey];
         return $this->isRemovable($lastStmt);
     }
-    private function isRemovable(\PhpParser\Node\Stmt $stmt) : bool
+    private function isRemovable(Stmt $stmt) : bool
     {
-        if (!$stmt instanceof \PhpParser\Node\Stmt\Continue_) {
+        if (!$stmt instanceof Continue_) {
             return \false;
         }
-        if ($stmt->num instanceof \PhpParser\Node\Scalar\LNumber) {
+        if ($stmt->num instanceof LNumber) {
             return $stmt->num->value < 2;
         }
         return \true;

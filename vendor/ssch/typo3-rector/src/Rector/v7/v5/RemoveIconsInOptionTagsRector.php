@@ -12,14 +12,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.5/Deprecation-69736-SelectOptionIconsInOptionTagsRemoved.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v5\RemoveIconsInOptionTagsRector\RemoveIconsInOptionTagsRectorTest
  */
-final class RemoveIconsInOptionTagsRector extends \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector
+final class RemoveIconsInOptionTagsRector extends AbstractTcaRector
 {
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Select option iconsInOptionTags removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Select option iconsInOptionTags removed', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'columns' => [
         'foo' => [
@@ -50,10 +50,10 @@ return [
 CODE_SAMPLE
 )]);
     }
-    protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
+    protected function refactorColumn(Expr $columnName, Expr $columnTca) : void
     {
         $configArray = $this->extractSubArrayByKey($columnTca, self::CONFIG);
-        if (!$configArray instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$configArray instanceof Array_) {
             return;
         }
         $item = $this->extractArrayItemByKey($configArray, 'iconsInOptionTags');

@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-78899-TCACtrlFieldRequestUpdateDropped.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\MoveRequestUpdateOptionFromControlToColumnsRector\MoveRequestUpdateOptionFromControlToColumnsRectorTest
  */
-final class MoveRequestUpdateOptionFromControlToColumnsRector extends \Rector\Core\Rector\AbstractRector
+final class MoveRequestUpdateOptionFromControlToColumnsRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -25,27 +25,27 @@ final class MoveRequestUpdateOptionFromControlToColumnsRector extends \Rector\Co
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $ctrlArrayItem = $this->extractCtrl($node);
-        if (!$ctrlArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$ctrlArrayItem instanceof ArrayItem) {
             return null;
         }
         $ctrlItems = $ctrlArrayItem->value;
-        if (!$ctrlItems instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$ctrlItems instanceof Array_) {
             return null;
         }
         $requestUpdateFields = [];
         foreach ($ctrlItems->items as $fieldValue) {
-            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$fieldValue instanceof ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
@@ -56,7 +56,7 @@ final class MoveRequestUpdateOptionFromControlToColumnsRector extends \Rector\Co
                 if (null === $fields) {
                     return null;
                 }
-                $requestUpdateFields = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $fields);
+                $requestUpdateFields = ArrayUtility::trimExplode(',', $fields);
                 $this->removeNode($fieldValue);
             }
         }
@@ -64,15 +64,15 @@ final class MoveRequestUpdateOptionFromControlToColumnsRector extends \Rector\Co
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$columnsArrayItem instanceof ArrayItem) {
             return null;
         }
         $columnItems = $columnsArrayItem->value;
-        if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$columnItems instanceof Array_) {
             return null;
         }
         foreach ($columnItems->items as $columnItem) {
-            if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$columnItem instanceof ArrayItem) {
                 continue;
             }
             if (null === $columnItem->key) {
@@ -82,19 +82,19 @@ final class MoveRequestUpdateOptionFromControlToColumnsRector extends \Rector\Co
             if (!\in_array($fieldName, $requestUpdateFields, \true)) {
                 continue;
             }
-            if (!$columnItem->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$columnItem->value instanceof Array_) {
                 continue;
             }
-            $columnItem->value->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('reload'), new \PhpParser\Node\Scalar\String_('onChange'));
+            $columnItem->value->items[] = new ArrayItem(new String_('reload'), new String_('onChange'));
         }
         return $node;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA ctrl field requestUpdate dropped', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('TCA ctrl field requestUpdate dropped', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
         'requestUpdate' => 'foo',

@@ -25,17 +25,17 @@ final class PropertyWithPhpDocInfo
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
      */
     private $phpDocInfo;
-    public function __construct(string $propertyName, \PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo)
+    public function __construct(string $propertyName, Property $property, PhpDocInfo $phpDocInfo)
     {
         $this->propertyName = $propertyName;
         $this->property = $property;
         $this->phpDocInfo = $phpDocInfo;
     }
-    public function getProperty() : \PhpParser\Node\Stmt\Property
+    public function getProperty() : Property
     {
         return $this->property;
     }
-    public function getPhpDocInfo() : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    public function getPhpDocInfo() : PhpDocInfo
     {
         return $this->phpDocInfo;
     }
@@ -43,12 +43,12 @@ final class PropertyWithPhpDocInfo
     {
         return $this->propertyName;
     }
-    public function getParamTagValueNode() : \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode
+    public function getParamTagValueNode() : ParamTagValueNode
     {
         $varTagValueNode = $this->phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$varTagValueNode instanceof VarTagValueNode) {
+            throw new ShouldNotHappenException();
         }
-        return new \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode($varTagValueNode->type, \false, '$' . $this->propertyName, '');
+        return new ParamTagValueNode($varTagValueNode->type, \false, '$' . $this->propertyName, '');
     }
 }

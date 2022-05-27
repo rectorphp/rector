@@ -13,7 +13,7 @@ final class SameClassMethodCallAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
     }
@@ -26,7 +26,7 @@ final class SameClassMethodCallAnalyzer
         $classOfClassMethod = [];
         foreach ($chainMethodCalls as $chainMethodCall) {
             $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($chainMethodCall);
-            if ($methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+            if ($methodReflection instanceof MethodReflection) {
                 $declaringClass = $methodReflection->getDeclaringClass();
                 $classOfClassMethod[] = $declaringClass->getName();
             } else {

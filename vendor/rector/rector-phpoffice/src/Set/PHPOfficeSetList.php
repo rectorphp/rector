@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPOffice\Set;
 
 use Rector\Set\Contract\SetListInterface;
-final class PHPOfficeSetList implements \Rector\Set\Contract\SetListInterface
+final class PHPOfficeSetList implements SetListInterface
 {
     /**
      * @var string

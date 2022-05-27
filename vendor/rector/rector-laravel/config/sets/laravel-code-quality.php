@@ -5,6 +5,6 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Rector\Laravel\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\Laravel\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(CallOnAppArrayAccessToStandaloneAssignRector::class);
 };

@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector\ReturnTypeFromStrictTypedPropertyRectorTest
  */
-final class ReturnTypeFromStrictTypedPropertyRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ReturnTypeFromStrictTypedPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -33,14 +33,14 @@ final class ReturnTypeFromStrictTypedPropertyRector extends \Rector\Core\Rector\
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(TypeFactory $typeFactory, ReflectionResolver $reflectionResolver)
     {
         $this->typeFactory = $typeFactory;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add return method return type based on strict typed property', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add return method return type based on strict typed property', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     private int $age = 100;
@@ -69,12 +69,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->returnType !== null) {
             return null;
@@ -85,11 +85,11 @@ CODE_SAMPLE
         }
         // add type to return type
         $propertyType = $this->typeFactory->createMixedPassedOrUnionType($propertyTypes);
-        if ($propertyType instanceof \PHPStan\Type\MixedType) {
+        if ($propertyType instanceof MixedType) {
             return null;
         }
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
-        if (!$propertyTypeNode instanceof \PhpParser\Node) {
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::RETURN());
+        if (!$propertyTypeNode instanceof Node) {
             return null;
         }
         $node->returnType = $propertyTypeNode;
@@ -97,29 +97,29 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
+        return PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
      * @return Type[]
      */
-    private function resolveReturnPropertyType(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    private function resolveReturnPropertyType(ClassMethod $classMethod) : array
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, \PhpParser\Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
         $propertyTypes = [];
         foreach ($returns as $return) {
             if ($return->expr === null) {
                 return [];
             }
-            if (!$return->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            if (!$return->expr instanceof PropertyFetch) {
                 return [];
             }
             $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($return->expr);
-            if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+            if (!$phpPropertyReflection instanceof PhpPropertyReflection) {
                 return [];
             }
             // all property must have type declaration
-            if ($phpPropertyReflection->getNativeType() instanceof \PHPStan\Type\MixedType) {
+            if ($phpPropertyReflection->getNativeType() instanceof MixedType) {
                 return [];
             }
             $propertyTypes[] = $phpPropertyReflection->getNativeType();

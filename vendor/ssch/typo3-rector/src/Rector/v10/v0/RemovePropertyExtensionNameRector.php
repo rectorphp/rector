@@ -13,19 +13,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Breaking-87627-RemovePropertyExtensionNameOfAbstractController.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v0\RemovePropertyExtensionNameRector\RemovePropertyExtensionNameRectorTest
  */
-final class RemovePropertyExtensionNameRector extends \Rector\Core\Rector\AbstractRector
+final class RemovePropertyExtensionNameRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\PropertyFetch::class];
+        return [PropertyFetch::class];
     }
     /**
      * @param PropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -38,9 +38,9 @@ final class RemovePropertyExtensionNameRector extends \Rector\Core\Rector\Abstra
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use method getControllerExtensionName from $request property instead of removed property $extensionName', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use method getControllerExtensionName from $request property instead of removed property $extensionName', [new CodeSample(<<<'CODE_SAMPLE'
 class MyCommandController extends CommandController
 {
     public function myMethod()
@@ -68,11 +68,11 @@ class MyCommandController extends CommandController
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
+    private function shouldSkip(PropertyFetch $propertyFetch) : bool
     {
-        if ($this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\AbstractController'))) {
+        if ($this->isObjectType($propertyFetch->var, new ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\AbstractController'))) {
             return \false;
         }
-        return !$this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'));
+        return !$this->isObjectType($propertyFetch->var, new ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'));
     }
 }

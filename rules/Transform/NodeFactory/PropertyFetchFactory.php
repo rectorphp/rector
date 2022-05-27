@@ -14,14 +14,14 @@ final class PropertyFetchFactory
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    public function __construct(PropertyNaming $propertyNaming)
     {
         $this->propertyNaming = $propertyNaming;
     }
-    public function createFromType(\PHPStan\Type\ObjectType $objectType) : \PhpParser\Node\Expr\PropertyFetch
+    public function createFromType(ObjectType $objectType) : PropertyFetch
     {
-        $thisVariable = new \PhpParser\Node\Expr\Variable('this');
+        $thisVariable = new Variable('this');
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType->getClassName());
-        return new \PhpParser\Node\Expr\PropertyFetch($thisVariable, $propertyName);
+        return new PropertyFetch($thisVariable, $propertyName);
     }
 }

@@ -18,20 +18,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector\BinarySwitchToIfElseRectorTest
  */
-final class BinarySwitchToIfElseRector extends \Rector\Core\Rector\AbstractRector
+final class BinarySwitchToIfElseRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Renaming\NodeManipulator\SwitchManipulator
      */
     private $switchManipulator;
-    public function __construct(\Rector\Renaming\NodeManipulator\SwitchManipulator $switchManipulator)
+    public function __construct(SwitchManipulator $switchManipulator)
     {
         $this->switchManipulator = $switchManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes switch with 2 options to if-else', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes switch with 2 options to if-else', [new CodeSample(<<<'CODE_SAMPLE'
 switch ($foo) {
     case 'my string':
         $result = 'ok';
@@ -55,12 +55,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Switch_::class];
+        return [Switch_::class];
     }
     /**
      * @param Switch_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (\count($node->cases) > 2) {
             return null;
@@ -74,24 +74,24 @@ CODE_SAMPLE
         // special case with empty first case → ||
         $isFirstCaseEmpty = $firstCase->stmts === [];
         if ($isFirstCaseEmpty && $secondCase !== null && $secondCase->cond !== null) {
-            $else = new \PhpParser\Node\Expr\BinaryOp\BooleanOr(new \PhpParser\Node\Expr\BinaryOp\Equal($node->cond, $firstCase->cond), new \PhpParser\Node\Expr\BinaryOp\Equal($node->cond, $secondCase->cond));
-            $ifNode = new \PhpParser\Node\Stmt\If_($else);
+            $else = new BooleanOr(new Equal($node->cond, $firstCase->cond), new Equal($node->cond, $secondCase->cond));
+            $ifNode = new If_($else);
             $ifNode->stmts = $this->switchManipulator->removeBreakNodes($secondCase->stmts);
             return $ifNode;
         }
-        $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\Equal($node->cond, $firstCase->cond));
+        $ifNode = new If_(new Equal($node->cond, $firstCase->cond));
         $ifNode->stmts = $this->switchManipulator->removeBreakNodes($firstCase->stmts);
         // just one condition
-        if (!$secondCase instanceof \PhpParser\Node\Stmt\Case_) {
+        if (!$secondCase instanceof Case_) {
             return $ifNode;
         }
         if ($secondCase->cond !== null) {
             // has condition
-            $equal = new \PhpParser\Node\Expr\BinaryOp\Equal($node->cond, $secondCase->cond);
-            $ifNode->elseifs[] = new \PhpParser\Node\Stmt\ElseIf_($equal, $this->switchManipulator->removeBreakNodes($secondCase->stmts));
+            $equal = new Equal($node->cond, $secondCase->cond);
+            $ifNode->elseifs[] = new ElseIf_($equal, $this->switchManipulator->removeBreakNodes($secondCase->stmts));
         } else {
             // defaults
-            $ifNode->else = new \PhpParser\Node\Stmt\Else_($this->switchManipulator->removeBreakNodes($secondCase->stmts));
+            $ifNode->else = new Else_($this->switchManipulator->removeBreakNodes($secondCase->stmts));
         }
         return $ifNode;
     }

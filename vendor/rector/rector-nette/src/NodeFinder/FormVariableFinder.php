@@ -19,11 +19,11 @@ final class FormVariableFinder
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function find(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node\Expr\Variable
+    public function find(Class_ $class) : ?Variable
     {
         foreach ($class->getMethods() as $classMethod) {
             $classMethodStmts = $classMethod->getStmts();
@@ -31,18 +31,18 @@ final class FormVariableFinder
                 continue;
             }
             foreach ($classMethodStmts as $classMethodStmt) {
-                if (!$classMethodStmt instanceof \PhpParser\Node\Stmt\Expression) {
+                if (!$classMethodStmt instanceof Expression) {
                     continue;
                 }
-                if (!$classMethodStmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+                if (!$classMethodStmt->expr instanceof Assign) {
                     continue;
                 }
                 $var = $classMethodStmt->expr->var;
                 $expr = $classMethodStmt->expr->expr;
-                if (!$var instanceof \PhpParser\Node\Expr\Variable) {
+                if (!$var instanceof Variable) {
                     continue;
                 }
-                if (!$this->nodeTypeResolver->isObjectType($expr, new \PHPStan\Type\ObjectType('Nette\\Forms\\Form'))) {
+                if (!$this->nodeTypeResolver->isObjectType($expr, new ObjectType('Nette\\Forms\\Form'))) {
                     continue;
                 }
                 return $var;

@@ -12,13 +12,13 @@ final class RenamingPhpDocNodeVisitorFactory
      * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor
      */
     private $classRenamePhpDocNodeVisitor;
-    public function __construct(\Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor)
+    public function __construct(ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor)
     {
         $this->classRenamePhpDocNodeVisitor = $classRenamePhpDocNodeVisitor;
     }
-    public function create() : \RectorPrefix20220527\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser
+    public function create() : PhpDocNodeTraverser
     {
-        $phpDocNodeTraverser = new \RectorPrefix20220527\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $phpDocNodeTraverser->addPhpDocNodeVisitor($this->classRenamePhpDocNodeVisitor);
         return $phpDocNodeTraverser;
     }

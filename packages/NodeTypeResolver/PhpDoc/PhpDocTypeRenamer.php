@@ -20,12 +20,12 @@ final class PhpDocTypeRenamer
      * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor
      */
     private $underscoreRenamePhpDocNodeVisitor;
-    public function __construct(\Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser\UnderscorePhpDocNodeTraverserFactory $underscorePhpDocNodeTraverserFactory, \Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor)
+    public function __construct(UnderscorePhpDocNodeTraverserFactory $underscorePhpDocNodeTraverserFactory, UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor)
     {
         $this->underscorePhpDocNodeTraverserFactory = $underscorePhpDocNodeTraverserFactory;
         $this->underscoreRenamePhpDocNodeVisitor = $underscoreRenamePhpDocNodeVisitor;
     }
-    public function changeUnderscoreType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node $node, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : void
+    public function changeUnderscoreType(PhpDocInfo $phpDocInfo, Node $node, PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : void
     {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         $this->underscoreRenamePhpDocNodeVisitor->setPseudoNamespaceToNamespace($pseudoNamespaceToNamespace);

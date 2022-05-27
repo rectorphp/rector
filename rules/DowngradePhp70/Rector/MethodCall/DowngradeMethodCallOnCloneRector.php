@@ -19,20 +19,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp70\Rector\MethodCall\DowngradeMethodCallOnCloneRector\DowngradeMethodCallOnCloneRectorTest
  */
-final class DowngradeMethodCallOnCloneRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeMethodCallOnCloneRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
+    public function __construct(VariableNaming $variableNaming)
     {
         $this->variableNaming = $variableNaming;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace (clone $obj)->call() to object assign and call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace (clone $obj)->call() to object assign and call', [new CodeSample(<<<'CODE_SAMPLE'
 (clone $this)->execute();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -46,19 +46,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\MethodCall
+    public function refactor(Node $node) : ?MethodCall
     {
         $isFoundCloneInAssign = \false;
-        if (!$node->var instanceof \PhpParser\Node\Expr\Clone_) {
-            if (!$node->var instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$node->var instanceof Clone_) {
+            if (!$node->var instanceof Assign) {
                 return null;
             }
-            $isFoundCloneInAssign = (bool) $this->betterNodeFinder->findFirstInstanceOf($node->var->expr, \PhpParser\Node\Expr\Clone_::class);
+            $isFoundCloneInAssign = (bool) $this->betterNodeFinder->findFirstInstanceOf($node->var->expr, Clone_::class);
             if (!$isFoundCloneInAssign) {
                 return null;
             }
@@ -68,14 +68,14 @@ CODE_SAMPLE
             $assign = $node->var;
             $variable = $assign->var;
         } else {
-            $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+            $scope = $node->getAttribute(AttributeKey::SCOPE);
             $newVariableName = $this->variableNaming->createCountedValueName('object', $scope);
-            $variable = new \PhpParser\Node\Expr\Variable($newVariableName);
-            $assign = new \PhpParser\Node\Expr\Assign($variable, $node->var);
+            $variable = new Variable($newVariableName);
+            $assign = new Assign($variable, $node->var);
         }
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assign), $node, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $node, $this->file->getSmartFileInfo());
         $node->var = $variable;
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
 }

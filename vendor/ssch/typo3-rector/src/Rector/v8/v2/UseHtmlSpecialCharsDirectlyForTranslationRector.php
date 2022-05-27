@@ -14,23 +14,23 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.2/Deprecation-71917-DeprecateTheArgumentHscForGetLLGetLLLAndSL.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v2\UseHtmlSpecialCharsDirectlyForTranslationRector\UseHtmlSpecialCharsDirectlyForTranslationRectorTest
  */
-final class UseHtmlSpecialCharsDirectlyForTranslationRector extends \Rector\Core\Rector\AbstractRector
+final class UseHtmlSpecialCharsDirectlyForTranslationRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('htmlspecialchars directly to properly escape the content.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('htmlspecialchars directly to properly escape the content.', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Frontend\Plugin\AbstractPlugin;
 class MyPlugin extends AbstractPlugin
 {
@@ -65,12 +65,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -80,28 +80,28 @@ CODE_SAMPLE
         }
         return $this->refactorAbstractPluginCall($node);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkip(MethodCall $methodCall) : bool
     {
         if ($this->isLanguageServiceCall($methodCall)) {
             return \false;
         }
-        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Plugin\\AbstractPlugin'));
+        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Frontend\\Plugin\\AbstractPlugin'));
     }
-    private function isLanguageServiceCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function isLanguageServiceCall(MethodCall $methodCall) : bool
     {
-        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Lang\\LanguageService'))) {
+        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Lang\\LanguageService'))) {
             return \true;
         }
-        return $this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::LANG);
+        return $this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, Typo3NodeResolver::LANG);
     }
-    private function refactorAbstractPluginCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
+    private function refactorAbstractPluginCall(MethodCall $methodCall) : ?Node
     {
         if (!$this->isName($methodCall->name, 'pi_getLL')) {
             return null;
         }
         return $this->refactorToHtmlSpecialChars($methodCall, 2);
     }
-    private function refactorLanguageServiceCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
+    private function refactorLanguageServiceCall(MethodCall $methodCall) : ?Node
     {
         if (!$this->isNames($methodCall->name, ['sL', 'getLL', 'getLLL'])) {
             return null;
@@ -111,7 +111,7 @@ CODE_SAMPLE
         }
         return $this->refactorToHtmlSpecialChars($methodCall, 1);
     }
-    private function refactorToHtmlSpecialChars(\PhpParser\Node\Expr\MethodCall $methodCall, int $argumentPosition) : ?\PhpParser\Node
+    private function refactorToHtmlSpecialChars(MethodCall $methodCall, int $argumentPosition) : ?Node
     {
         if (!isset($methodCall->args[$argumentPosition])) {
             return null;

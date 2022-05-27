@@ -12,23 +12,23 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @implements NodeNameResolverInterface<Variable>
  */
-final class VariableNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class VariableNameResolver implements NodeNameResolverInterface
 {
     public function getNode() : string
     {
-        return \PhpParser\Node\Expr\Variable::class;
+        return Variable::class;
     }
     /**
      * @param Variable $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         // skip $some->$dynamicMethodName()
-        if ($parentNode instanceof \PhpParser\Node\Expr\MethodCall && $node === $parentNode->name) {
+        if ($parentNode instanceof MethodCall && $node === $parentNode->name) {
             return null;
         }
-        if ($node->name instanceof \PhpParser\Node\Expr) {
+        if ($node->name instanceof Expr) {
             return null;
         }
         return $node->name;

@@ -24,7 +24,7 @@ class Processor
      *
      * @param array $configs An array of configuration items to process
      */
-    public function process(\RectorPrefix20220527\Symfony\Component\Config\Definition\NodeInterface $configTree, array $configs) : array
+    public function process(NodeInterface $configTree, array $configs) : array
     {
         $currentConfig = [];
         foreach ($configs as $config) {
@@ -38,7 +38,7 @@ class Processor
      *
      * @param array $configs An array of configuration items to process
      */
-    public function processConfiguration(\RectorPrefix20220527\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, array $configs) : array
+    public function processConfiguration(ConfigurationInterface $configuration, array $configs) : array
     {
         return $this->process($configuration->getConfigTreeBuilder()->buildTree(), $configs);
     }

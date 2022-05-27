@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79440-TcaChanges.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\MigrateOptionsOfTypeGroupRector\MigrateOptionsOfTypeGroupRectorTest
  */
-final class MigrateOptionsOfTypeGroupRector extends \Rector\Core\Rector\AbstractRector
+final class MigrateOptionsOfTypeGroupRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -37,23 +37,23 @@ final class MigrateOptionsOfTypeGroupRector extends \Rector\Core\Rector\Abstract
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArray = $this->extractSubArrayByKey($node->expr, 'columns');
-        if (!$columnsArray instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$columnsArray instanceof Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($this->extractColumnConfig($columnsArray) as $config) {
-            if (!$config instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$config instanceof Array_) {
                 continue;
             }
             if (!$this->hasKeyValuePair($config, 'type', 'group')) {
@@ -65,10 +65,10 @@ final class MigrateOptionsOfTypeGroupRector extends \Rector\Core\Rector\Abstract
             $hasAstBeenChanged = $this->refactorShowThumbs($config) ? \true : $hasAstBeenChanged;
             $hasAstBeenChanged = $this->refactorDisableControls($config) ? \true : $hasAstBeenChanged;
             if ([] !== $this->addFieldControls) {
-                $config->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray($this->addFieldControls), new \PhpParser\Node\Scalar\String_('fieldControl'));
+                $config->items[] = new ArrayItem($this->nodeFactory->createArray($this->addFieldControls), new String_('fieldControl'));
             }
             if ([] !== $this->addFieldWizards) {
-                $config->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray($this->addFieldWizards), new \PhpParser\Node\Scalar\String_('fieldWizard'));
+                $config->items[] = new ArrayItem($this->nodeFactory->createArray($this->addFieldWizards), new String_('fieldWizard'));
             }
         }
         return $hasAstBeenChanged ? $node : null;
@@ -76,9 +76,9 @@ final class MigrateOptionsOfTypeGroupRector extends \Rector\Core\Rector\Abstract
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate options if type group in TCA', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Migrate options if type group in TCA', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [],
     'columns' => [
@@ -115,7 +115,7 @@ return [
 CODE_SAMPLE
 )]);
     }
-    private function dropSelectedListType(\PhpParser\Node\Expr\Array_ $configArray) : bool
+    private function dropSelectedListType(Array_ $configArray) : bool
     {
         $listStyle = $this->extractArrayItemByKey($configArray, 'selectedListStyle');
         if (null !== $listStyle) {
@@ -124,7 +124,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function refactorShowThumbs(\PhpParser\Node\Expr\Array_ $configArray) : bool
+    private function refactorShowThumbs(Array_ $configArray) : bool
     {
         $hasAstBeenChanged = \false;
         $showThumbs = $this->extractArrayItemByKey($configArray, 'show_thumbs');
@@ -141,7 +141,7 @@ CODE_SAMPLE
         }
         return $hasAstBeenChanged;
     }
-    private function refactorDisableControls(\PhpParser\Node\Expr\Array_ $configArray) : bool
+    private function refactorDisableControls(Array_ $configArray) : bool
     {
         $hasAstBeenChanged = \false;
         $disableControls = $this->extractArrayItemByKey($configArray, 'disable_controls');
@@ -149,12 +149,12 @@ CODE_SAMPLE
             $this->removeNode($disableControls);
             $hasAstBeenChanged = \true;
             if (\is_string($this->getValue($disableControls->value))) {
-                $controls = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $this->getValue($disableControls->value), \true);
+                $controls = ArrayUtility::trimExplode(',', $this->getValue($disableControls->value), \true);
                 foreach ($controls as $control) {
                     if ('browser' === $control) {
                         $this->addFieldControls['elementBrowser'][self::DISABLED] = \true;
                     } elseif ('delete' === $control) {
-                        $configArray->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createTrue(), new \PhpParser\Node\Scalar\String_('hideDeleteIcon'));
+                        $configArray->items[] = new ArrayItem($this->nodeFactory->createTrue(), new String_('hideDeleteIcon'));
                     } elseif ('allowedTables' === $control) {
                         $this->addFieldWizards['tableList'][self::DISABLED] = \true;
                     } elseif ('upload' === $control) {

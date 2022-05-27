@@ -15,24 +15,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php80\Rector\ClassMethod\SetStateToStaticRector\SetStateToStaticRectorTest
  */
-final class SetStateToStaticRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class SetStateToStaticRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    public function __construct(VisibilityManipulator $visibilityManipulator)
     {
         $this->visibilityManipulator = $visibilityManipulator;
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::STATIC_VISIBILITY_SET_STATE;
+        return PhpVersionFeature::STATIC_VISIBILITY_SET_STATE;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Adds static visibility to __set_state() methods', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Adds static visibility to __set_state() methods', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __set_state($properties) {
@@ -55,12 +55,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -68,9 +68,9 @@ CODE_SAMPLE
         $this->visibilityManipulator->makeStatic($node);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassMethod $classMethod) : bool
     {
-        if (!$this->isName($classMethod, \Rector\Core\ValueObject\MethodName::SET_STATE)) {
+        if (!$this->isName($classMethod, MethodName::SET_STATE)) {
             return \true;
         }
         return $classMethod->isStatic();

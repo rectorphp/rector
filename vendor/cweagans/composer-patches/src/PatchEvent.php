@@ -8,7 +8,7 @@ namespace RectorPrefix20220527\cweagans\Composer;
 
 use RectorPrefix20220527\Composer\EventDispatcher\Event;
 use RectorPrefix20220527\Composer\Package\PackageInterface;
-class PatchEvent extends \RectorPrefix20220527\Composer\EventDispatcher\Event
+class PatchEvent extends Event
 {
     /**
      * @var PackageInterface $package
@@ -30,7 +30,7 @@ class PatchEvent extends \RectorPrefix20220527\Composer\EventDispatcher\Event
      * @param string $url
      * @param string $description
      */
-    public function __construct($eventName, \RectorPrefix20220527\Composer\Package\PackageInterface $package, $url, $description)
+    public function __construct($eventName, PackageInterface $package, $url, $description)
     {
         parent::__construct($eventName);
         $this->package = $package;

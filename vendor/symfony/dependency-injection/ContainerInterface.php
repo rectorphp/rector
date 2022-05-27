@@ -20,7 +20,7 @@ use RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\Service
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-interface ContainerInterface extends \RectorPrefix20220527\Psr\Container\ContainerInterface
+interface ContainerInterface extends PsrContainerInterface
 {
     public const RUNTIME_EXCEPTION_ON_INVALID_REFERENCE = 0;
     public const EXCEPTION_ON_INVALID_REFERENCE = 1;

@@ -14,20 +14,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Switch_\SingularSwitchToIfRector\SingularSwitchToIfRectorTest
  */
-final class SingularSwitchToIfRector extends \Rector\Core\Rector\AbstractRector
+final class SingularSwitchToIfRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Renaming\NodeManipulator\SwitchManipulator
      */
     private $switchManipulator;
-    public function __construct(\Rector\Renaming\NodeManipulator\SwitchManipulator $switchManipulator)
+    public function __construct(SwitchManipulator $switchManipulator)
     {
         $this->switchManipulator = $switchManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change switch with only 1 check to if', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change switch with only 1 check to if', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeObject
 {
     public function run($value)
@@ -63,13 +63,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Switch_::class];
+        return [Switch_::class];
     }
     /**
      * @param Switch_ $node
      * @return Node\Stmt[]|If_|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
         if (\count($node->cases) !== 1) {
             return null;
@@ -79,7 +79,7 @@ CODE_SAMPLE
         if ($onlyCase->cond === null) {
             return $onlyCase->stmts;
         }
-        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\Identical($node->cond, $onlyCase->cond));
+        $if = new If_(new Identical($node->cond, $onlyCase->cond));
         $if->stmts = $this->switchManipulator->removeBreakNodes($onlyCase->stmts);
         return $if;
     }

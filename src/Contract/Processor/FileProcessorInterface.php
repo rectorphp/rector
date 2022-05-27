@@ -9,11 +9,11 @@ use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 interface FileProcessorInterface
 {
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool;
+    public function supports(File $file, Configuration $configuration) : bool;
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array;
+    public function process(File $file, Configuration $configuration) : array;
     /**
      * @return string[]
      */

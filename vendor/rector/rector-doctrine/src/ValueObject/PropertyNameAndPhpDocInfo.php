@@ -16,7 +16,7 @@ final class PropertyNameAndPhpDocInfo
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
      */
     private $phpDocInfo;
-    public function __construct(string $propertyName, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo)
+    public function __construct(string $propertyName, PhpDocInfo $phpDocInfo)
     {
         $this->propertyName = $propertyName;
         $this->phpDocInfo = $phpDocInfo;
@@ -25,7 +25,7 @@ final class PropertyNameAndPhpDocInfo
     {
         return $this->propertyName;
     }
-    public function getPhpDocInfo() : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    public function getPhpDocInfo() : PhpDocInfo
     {
         return $this->phpDocInfo;
     }

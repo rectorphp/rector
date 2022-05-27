@@ -34,7 +34,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\UnionTypesRectorTest
  */
-final class UnionTypesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class UnionTypesRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var bool
@@ -70,7 +70,7 @@ final class UnionTypesRector extends \Rector\Core\Rector\AbstractRector implemen
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(\Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover, \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
+    public function __construct(ReturnTagRemover $returnTagRemover, ParamTagRemover $paramTagRemover, ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, UnionTypeAnalyzer $unionTypeAnalyzer, TypeFactory $typeFactory)
     {
         $this->returnTagRemover = $returnTagRemover;
         $this->paramTagRemover = $paramTagRemover;
@@ -79,9 +79,9 @@ final class UnionTypesRector extends \Rector\Core\Rector\AbstractRector implemen
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
         $this->typeFactory = $typeFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change docs types to union types, where possible (properties are covered by TypedPropertiesRector)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change docs types to union types, where possible (properties are covered by TypedPropertiesRector)', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -108,15 +108,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Expr\ArrowFunction::class];
+        return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
     }
     /**
      * @param ClassMethod | Function_ | Closure | ArrowFunction $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $this->hasChanged = \false;
-        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node)) {
+        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node)) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
@@ -134,22 +134,22 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES;
+        return PhpVersionFeature::UNION_TYPES;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    private function refactorParamTypes($functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
+    private function refactorParamTypes($functionLike, PhpDocInfo $phpDocInfo) : void
     {
         // skip parent class lock too, just to be safe in case of different parent docs
-        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodParamVendorLockResolver->isSoftLocked($functionLike)) {
+        if ($functionLike instanceof ClassMethod && $this->classMethodParamVendorLockResolver->isSoftLocked($functionLike)) {
             return;
         }
         foreach ($functionLike->getParams() as $param) {
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
             $paramType = $phpDocInfo->getParamType($paramName);
-            if (!$paramType instanceof \PHPStan\Type\UnionType) {
+            if (!$paramType instanceof UnionType) {
                 continue;
             }
             if ($this->unionTypeAnalyzer->hasObjectWithoutClassType($paramType)) {
@@ -157,14 +157,14 @@ CODE_SAMPLE
                 continue;
             }
             $uniqueatedParamType = $this->filterOutDuplicatedArrayTypes($paramType);
-            if (!$uniqueatedParamType instanceof \PHPStan\Type\UnionType) {
+            if (!$uniqueatedParamType instanceof UnionType) {
                 continue;
             }
             // mixed has to be standalone type, cannot be part of union type declaration
-            if ($paramType->isSuperTypeOf(new \PHPStan\Type\MixedType())->yes()) {
+            if ($paramType->isSuperTypeOf(new MixedType())->yes()) {
                 continue;
             }
-            $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedParamType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+            $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedParamType, TypeKind::PARAM());
             if ($this->shouldSkipParamTypeRefactor($param->type, $phpParserUnionType)) {
                 continue;
             }
@@ -172,37 +172,37 @@ CODE_SAMPLE
             $this->hasChanged = \true;
         }
     }
-    private function changeObjectWithoutClassType(\PhpParser\Node\Param $param, \PHPStan\Type\UnionType $unionType) : void
+    private function changeObjectWithoutClassType(Param $param, UnionType $unionType) : void
     {
         if (!$this->unionTypeAnalyzer->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
             return;
         }
-        $param->type = new \PhpParser\Node\Name('object');
+        $param->type = new Name('object');
         $this->hasChanged = \true;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    private function refactorReturnType($functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
+    private function refactorReturnType($functionLike, PhpDocInfo $phpDocInfo) : void
     {
         // do not override existing return type
         if ($functionLike->getReturnType() !== null) {
             return;
         }
         $returnType = $phpDocInfo->getReturnType();
-        if (!$returnType instanceof \PHPStan\Type\UnionType) {
+        if (!$returnType instanceof UnionType) {
             return;
         }
         $uniqueatedReturnType = $this->filterOutDuplicatedArrayTypes($returnType);
-        if (!$uniqueatedReturnType instanceof \PHPStan\Type\UnionType) {
+        if (!$uniqueatedReturnType instanceof UnionType) {
             return;
         }
         // mixed has to be standalone type, cannot be part of union type declaration
-        if ($uniqueatedReturnType->isSuperTypeOf(new \PHPStan\Type\MixedType())->yes()) {
+        if ($uniqueatedReturnType->isSuperTypeOf(new MixedType())->yes()) {
             return;
         }
-        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
-        if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
+        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedReturnType, TypeKind::RETURN());
+        if (!$phpParserUnionType instanceof PhpParserUnionType) {
             return;
         }
         $functionLike->returnType = $phpParserUnionType;
@@ -211,13 +211,13 @@ CODE_SAMPLE
     /**
      * @return \PHPStan\Type\UnionType|\PHPStan\Type\Type
      */
-    private function filterOutDuplicatedArrayTypes(\PHPStan\Type\UnionType $unionType)
+    private function filterOutDuplicatedArrayTypes(UnionType $unionType)
     {
         $hasArrayType = \false;
         $singleArrayTypes = [];
         $originalTypeCount = \count($unionType->getTypes());
         foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof \PHPStan\Type\ArrayType) {
+            if ($unionedType instanceof ArrayType) {
                 if ($hasArrayType) {
                     continue;
                 }
@@ -238,20 +238,20 @@ CODE_SAMPLE
      */
     private function shouldSkipParamTypeRefactor($type, $phpParserUnionType) : bool
     {
-        if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
+        if (!$phpParserUnionType instanceof PhpParserUnionType) {
             return \true;
         }
-        if ($type instanceof \PhpParser\Node\UnionType) {
+        if ($type instanceof PhpParserUnionType) {
             return \true;
         }
         if (\count($phpParserUnionType->types) > 1) {
             return \false;
         }
         $firstType = $phpParserUnionType->types[0];
-        if (!$firstType instanceof \PhpParser\Node\Name\FullyQualified) {
+        if (!$firstType instanceof FullyQualified) {
             return \false;
         }
-        if (!$type instanceof \PhpParser\Node\Name\FullyQualified) {
+        if (!$type instanceof FullyQualified) {
             return \false;
         }
         return $type->toString() === $firstType->toString();

@@ -13,7 +13,7 @@ namespace RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception;
 /**
  * Thrown when a definition cannot be autowired.
  */
-class AutowiringFailedException extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\RuntimeException
+class AutowiringFailedException extends RuntimeException
 {
     /**
      * @var string

@@ -16,7 +16,7 @@ final class CommandArrayItemFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
@@ -28,11 +28,11 @@ final class CommandArrayItemFactory
     {
         $arrayItems = [];
         foreach ($commands as $commandName => $command) {
-            $commandArray = new \PhpParser\Node\Expr\Array_();
+            $commandArray = new Array_();
             $value = $this->nodeFactory->createClassConstReference($command);
-            $key = new \PhpParser\Node\Scalar\String_('class');
-            $commandArray->items[] = new \PhpParser\Node\Expr\ArrayItem($value, $key, \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
-            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($commandArray, new \PhpParser\Node\Scalar\String_($commandName), \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
+            $key = new String_('class');
+            $commandArray->items[] = new ArrayItem($value, $key, \false, [AttributeKey::COMMENTS => [new Comment(\PHP_EOL)]]);
+            $arrayItems[] = new ArrayItem($commandArray, new String_($commandName), \false, [AttributeKey::COMMENTS => [new Comment(\PHP_EOL)]]);
         }
         return $arrayItems;
     }

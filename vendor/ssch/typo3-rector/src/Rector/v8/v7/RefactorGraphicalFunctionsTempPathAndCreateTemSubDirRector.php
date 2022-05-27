@@ -30,7 +30,7 @@ use RectorPrefix20220527\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80514-GraphicalFunctions-tempPathAndCreateTempSubDir.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRector\RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRectorTest
  */
-final class RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRector extends \Rector\Core\Rector\AbstractRector
+final class RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRector extends AbstractRector
 {
     /**
      * @var string
@@ -49,14 +49,14 @@ final class RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRector extends \
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\PropertyFetch::class];
+        return [MethodCall::class, PropertyFetch::class];
     }
     /**
      * @param MethodCall|PropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             return $this->refactorMethodCall($node);
         }
         return $this->refactorPropertyFetch($node);
@@ -64,9 +64,9 @@ final class RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRector extends \
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor tempPath() and createTempSubDir on GraphicalFunctions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor tempPath() and createTempSubDir on GraphicalFunctions', [new CodeSample(<<<'CODE_SAMPLE'
 $graphicalFunctions = GeneralUtility::makeInstance(GraphicalFunctions::class);
 $graphicalFunctions->createTempSubDir('var/transient/');
 return $graphicalFunctions->tempPath . 'var/transient/';
@@ -78,9 +78,9 @@ return 'typo3temp/' . 'var/transient/';
 CODE_SAMPLE
 )]);
     }
-    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
+    private function refactorMethodCall(MethodCall $methodCall) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions'))) {
             return null;
         }
         if (!$this->isName($methodCall->name, self::CREATE_TEMP_SUB_DIR)) {
@@ -93,42 +93,42 @@ CODE_SAMPLE
         if (null === $argumentValue) {
             return null;
         }
-        $anonymousFunction = new \PhpParser\Node\Expr\Closure();
-        $anonymousFunction->params = [new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable(self::TEMP_PATH)), new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable('dirName'))];
-        $ifIsPartOfStrMethodCall = $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'isFirstPartOfStr', [new \PhpParser\Node\Expr\Variable(self::TEMP_PATH), new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('PATH_site'))]);
-        $ifIsPartOfStr = new \PhpParser\Node\Stmt\If_($ifIsPartOfStrMethodCall);
-        $ifIsPartOfStr->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::TMP_PATH), new \PhpParser\Node\Expr\Variable(self::TEMP_PATH)));
-        $ifIsPartOfStr->else = new \PhpParser\Node\Stmt\Else_();
-        $ifIsPartOfStr->else->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::TMP_PATH), new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('PATH_site')), new \PhpParser\Node\Expr\Variable(self::TEMP_PATH))));
+        $anonymousFunction = new Closure();
+        $anonymousFunction->params = [new Param(new Variable(self::TEMP_PATH)), new Param(new Variable('dirName'))];
+        $ifIsPartOfStrMethodCall = $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'isFirstPartOfStr', [new Variable(self::TEMP_PATH), new ConstFetch(new Name('PATH_site'))]);
+        $ifIsPartOfStr = new If_($ifIsPartOfStrMethodCall);
+        $ifIsPartOfStr->stmts[] = new Expression(new Assign(new Variable(self::TMP_PATH), new Variable(self::TEMP_PATH)));
+        $ifIsPartOfStr->else = new Else_();
+        $ifIsPartOfStr->else->stmts[] = new Expression(new Assign(new Variable(self::TMP_PATH), new Concat(new ConstFetch(new Name('PATH_site')), new Variable(self::TEMP_PATH))));
         $anonymousFunction->stmts[] = $ifIsPartOfStr;
-        $concatTempPathAndDirName = $this->nodeFactory->createConcat([new \PhpParser\Node\Expr\Variable(self::TMP_PATH), new \PhpParser\Node\Expr\Variable('dirName')]);
-        if (!$concatTempPathAndDirName instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+        $concatTempPathAndDirName = $this->nodeFactory->createConcat([new Variable(self::TMP_PATH), new Variable('dirName')]);
+        if (!$concatTempPathAndDirName instanceof Concat) {
             return null;
         }
-        $isDirFunc = new \PhpParser\Node\Expr\ErrorSuppress($this->nodeFactory->createFuncCall('is_dir', [$concatTempPathAndDirName]));
-        $ifIsNotDir = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot($isDirFunc));
-        $ifIsNotDir->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'mkdir_deep', [$concatTempPathAndDirName]));
-        $ifIsNotDir->stmts[] = new \PhpParser\Node\Stmt\Return_($isDirFunc);
+        $isDirFunc = new ErrorSuppress($this->nodeFactory->createFuncCall('is_dir', [$concatTempPathAndDirName]));
+        $ifIsNotDir = new If_(new BooleanNot($isDirFunc));
+        $ifIsNotDir->stmts[] = new Expression($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'mkdir_deep', [$concatTempPathAndDirName]));
+        $ifIsNotDir->stmts[] = new Return_($isDirFunc);
         $anonymousFunction->stmts[] = $ifIsNotDir;
-        $anonymousFunction->stmts[] = new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createFalse());
-        $parentNode = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CREATE_TEMP_SUB_DIR), $anonymousFunction)), $parentNode);
+        $anonymousFunction->stmts[] = new Return_($this->nodeFactory->createFalse());
+        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression(new Assign(new Variable(self::CREATE_TEMP_SUB_DIR), $anonymousFunction)), $parentNode);
         // Could not figure how to call the closure like that $function();
-        return $this->nodeFactory->createFuncCall('call_user_func', [new \PhpParser\Node\Expr\Variable(self::CREATE_TEMP_SUB_DIR), new \PhpParser\Node\Scalar\String_('typo3temp'), $methodCall->args[0]->value]);
+        return $this->nodeFactory->createFuncCall('call_user_func', [new Variable(self::CREATE_TEMP_SUB_DIR), new String_('typo3temp'), $methodCall->args[0]->value]);
     }
-    private function refactorPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
+    private function refactorPropertyFetch(PropertyFetch $propertyFetch) : ?Node
     {
-        if (!$this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions'))) {
+        if (!$this->isObjectType($propertyFetch->var, new ObjectType('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions'))) {
             return null;
         }
         if (!$this->isName($propertyFetch->name, self::TEMP_PATH)) {
             return null;
         }
-        $parentNode = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
         // Check if we have an assigment to the property, if so do not change it
-        if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if ($parentNode instanceof Assign && $parentNode->var instanceof PropertyFetch) {
             return null;
         }
-        return new \PhpParser\Node\Scalar\String_('typo3temp/');
+        return new String_('typo3temp/');
     }
 }

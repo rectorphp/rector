@@ -7,9 +7,9 @@ use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v11\v4\AddSetConfigurationMethodToExceptionHandlerRector;
 use Ssch\TYPO3Rector\Rector\v11\v4\ProvideCObjViaMethodRector;
 use Ssch\TYPO3Rector\Rector\v11\v4\UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/../config.php');
-    $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v11\v4\UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector::class);
-    $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v11\v4\ProvideCObjViaMethodRector::class);
-    $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v11\v4\AddSetConfigurationMethodToExceptionHandlerRector::class);
+    $rectorConfig->rule(UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector::class);
+    $rectorConfig->rule(ProvideCObjViaMethodRector::class);
+    $rectorConfig->rule(AddSetConfigurationMethodToExceptionHandlerRector::class);
 };

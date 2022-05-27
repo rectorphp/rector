@@ -6,6 +6,6 @@ namespace RectorPrefix20220527;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->sets([\Rector\Symfony\Set\SymfonySetList::SYMFONY_40, \Rector\Symfony\Set\SymfonyLevelSetList::UP_TO_SYMFONY_34]);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->sets([SymfonySetList::SYMFONY_40, SymfonyLevelSetList::UP_TO_SYMFONY_34]);
 };

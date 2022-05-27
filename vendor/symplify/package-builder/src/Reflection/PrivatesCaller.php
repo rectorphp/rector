@@ -18,7 +18,7 @@ final class PrivatesCaller
     public function callPrivateMethod($object, string $methodName, array $arguments)
     {
         if (\is_string($object)) {
-            $reflectionClass = new \ReflectionClass($object);
+            $reflectionClass = new ReflectionClass($object);
             $object = $reflectionClass->newInstanceWithoutConstructor();
         }
         $methodReflection = $this->createAccessibleMethodReflection($object, $methodName);
@@ -32,16 +32,16 @@ final class PrivatesCaller
     public function callPrivateMethodWithReference($object, string $methodName, $argument)
     {
         if (\is_string($object)) {
-            $reflectionClass = new \ReflectionClass($object);
+            $reflectionClass = new ReflectionClass($object);
             $object = $reflectionClass->newInstanceWithoutConstructor();
         }
         $methodReflection = $this->createAccessibleMethodReflection($object, $methodName);
         $methodReflection->invokeArgs($object, [&$argument]);
         return $argument;
     }
-    private function createAccessibleMethodReflection(object $object, string $methodName) : \ReflectionMethod
+    private function createAccessibleMethodReflection(object $object, string $methodName) : ReflectionMethod
     {
-        $reflectionMethod = new \ReflectionMethod(\get_class($object), $methodName);
+        $reflectionMethod = new ReflectionMethod(\get_class($object), $methodName);
         $reflectionMethod->setAccessible(\true);
         return $reflectionMethod;
     }

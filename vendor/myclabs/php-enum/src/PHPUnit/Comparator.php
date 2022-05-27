@@ -15,7 +15,7 @@ final class Comparator extends \RectorPrefix20220527\SebastianBergmann\Comparato
 {
     public function accepts($expected, $actual)
     {
-        return $expected instanceof \RectorPrefix20220527\MyCLabs\Enum\Enum && ($actual instanceof \RectorPrefix20220527\MyCLabs\Enum\Enum || $actual === null);
+        return $expected instanceof Enum && ($actual instanceof Enum || $actual === null);
     }
     /**
      * @param Enum $expected
@@ -28,9 +28,9 @@ final class Comparator extends \RectorPrefix20220527\SebastianBergmann\Comparato
         if ($expected->equals($actual)) {
             return;
         }
-        throw new \RectorPrefix20220527\SebastianBergmann\Comparator\ComparisonFailure($expected, $actual, $this->formatEnum($expected), $this->formatEnum($actual), \false, 'Failed asserting that two Enums are equal.');
+        throw new ComparisonFailure($expected, $actual, $this->formatEnum($expected), $this->formatEnum($actual), \false, 'Failed asserting that two Enums are equal.');
     }
-    private function formatEnum(\RectorPrefix20220527\MyCLabs\Enum\Enum $enum = null)
+    private function formatEnum(Enum $enum = null)
     {
         if ($enum === null) {
             return "null";

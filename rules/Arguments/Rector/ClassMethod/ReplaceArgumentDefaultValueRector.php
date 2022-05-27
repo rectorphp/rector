@@ -17,7 +17,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\ReplaceArgumentDefaultValueRectorTest
  */
-final class ReplaceArgumentDefaultValueRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ReplaceArgumentDefaultValueRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var ReplaceArgumentDefaultValue[]
@@ -28,13 +28,13 @@ final class ReplaceArgumentDefaultValueRector extends \Rector\Core\Rector\Abstra
      * @var \Rector\Arguments\ArgumentDefaultValueReplacer
      */
     private $argumentDefaultValueReplacer;
-    public function __construct(\Rector\Arguments\ArgumentDefaultValueReplacer $argumentDefaultValueReplacer)
+    public function __construct(ArgumentDefaultValueReplacer $argumentDefaultValueReplacer)
     {
         $this->argumentDefaultValueReplacer = $argumentDefaultValueReplacer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces defined map of arguments in defined methods and their calls.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces defined map of arguments in defined methods and their calls.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->someMethod(SomeClass::OLD_CONSTANT);
 CODE_SAMPLE
@@ -42,20 +42,20 @@ CODE_SAMPLE
 $someObject = new SomeClass;
 $someObject->someMethod(false);
 CODE_SAMPLE
-, [new \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue('SomeClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', \false)])]);
+, [new ReplaceArgumentDefaultValue('SomeClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', \false)])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Stmt\ClassMethod::class];
+        return [MethodCall::class, StaticCall::class, ClassMethod::class];
     }
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
         $hasChanged = \false;
         foreach ($this->replacedArguments as $replacedArgument) {
@@ -66,7 +66,7 @@ CODE_SAMPLE
                 continue;
             }
             $replacedNode = $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
-            if ($replacedNode instanceof \PhpParser\Node) {
+            if ($replacedNode instanceof Node) {
                 $hasChanged = \true;
             }
         }
@@ -80,7 +80,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue::class);
+        Assert::allIsAOf($configuration, ReplaceArgumentDefaultValue::class);
         $this->replacedArguments = $configuration;
     }
 }

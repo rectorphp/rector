@@ -8,26 +8,26 @@ use RectorPrefix20220527\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitor
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/master/lib/PhpParser/NodeVisitorAbstract.php
  */
-abstract class AbstractPhpDocNodeVisitor implements \RectorPrefix20220527\Symplify\Astral\PhpDocParser\Contract\PhpDocNodeVisitorInterface
+abstract class AbstractPhpDocNodeVisitor implements PhpDocNodeVisitorInterface
 {
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    public function beforeTraverse(Node $node) : void
     {
     }
     /**
      * @return int|\PHPStan\PhpDocParser\Ast\Node|null
      */
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node)
+    public function enterNode(Node $node)
     {
         return null;
     }
     /**
      * @return int|\PhpParser\Node|mixed[]|null Replacement node (or special return)
      */
-    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node)
+    public function leaveNode(Node $node)
     {
         return null;
     }
-    public function afterTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    public function afterTraverse(Node $node) : void
     {
     }
 }

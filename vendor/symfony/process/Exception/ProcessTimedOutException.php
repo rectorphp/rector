@@ -16,13 +16,13 @@ use RectorPrefix20220527\Symfony\Component\Process\Process;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ProcessTimedOutException extends \RectorPrefix20220527\Symfony\Component\Process\Exception\RuntimeException
+class ProcessTimedOutException extends RuntimeException
 {
     public const TYPE_GENERAL = 1;
     public const TYPE_IDLE = 2;
     private $process;
     private $timeoutType;
-    public function __construct(\RectorPrefix20220527\Symfony\Component\Process\Process $process, int $timeoutType)
+    public function __construct(Process $process, int $timeoutType)
     {
         $this->process = $process;
         $this->timeoutType = $timeoutType;

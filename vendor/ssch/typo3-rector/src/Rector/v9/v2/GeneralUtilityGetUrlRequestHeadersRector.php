@@ -13,14 +13,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.2/Deprecation-84171-AddingGeneralUtilitygetUrlRequestHeadersAsNon-associativeArrayAreDeprecated.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v2\GeneralUtilityGetUrlRequestHeadersRector\GeneralUtilityGetUrlRequestHeadersRectorTest
  */
-final class GeneralUtilityGetUrlRequestHeadersRector extends \Rector\Core\Rector\AbstractRector
+final class GeneralUtilityGetUrlRequestHeadersRector extends AbstractRector
 {
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor GeneralUtility::getUrl() request headers in a associative way', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor GeneralUtility::getUrl() request headers in a associative way', [new CodeSample(<<<'CODE_SAMPLE'
 GeneralUtility::getUrl('https://typo3.org', 1, ['Content-Language: de-DE']);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -33,14 +33,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getUrl')) {

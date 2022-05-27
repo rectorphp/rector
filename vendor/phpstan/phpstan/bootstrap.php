@@ -10,7 +10,7 @@ final class PharAutoloader
     private static $composerAutoloader;
     public static final function loadClass(string $class) : void
     {
-        if (!\extension_loaded('phar') || \defined('__PHPSTAN_RUNNING__')) {
+        if (!\extension_loaded('phar') || \defined('RectorPrefix20220527\\__PHPSTAN_RUNNING__')) {
             return;
         }
         if (\strpos($class, '_PHPStan_') === 0) {

@@ -20,10 +20,10 @@ final class BinaryOpTreeRootLocator
      *
      * @param class-string<BinaryOp> $binaryOpClass
      */
-    public function findOperationRoot(\PhpParser\Node\Expr $expr, string $binaryOpClass) : \PhpParser\Node\Expr
+    public function findOperationRoot(Expr $expr, string $binaryOpClass) : Expr
     {
-        $parentNode = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node) {
+        $parentNode = $expr->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Node) {
             // No more parents so the Expr node must be root.
             return $expr;
         }

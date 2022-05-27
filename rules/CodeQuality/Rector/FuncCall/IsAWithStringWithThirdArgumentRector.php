@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector\IsAWithStringWithThirdArgumentRectorTest
  */
-final class IsAWithStringWithThirdArgumentRector extends \Rector\Core\Rector\AbstractRector
+final class IsAWithStringWithThirdArgumentRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete missing 3rd argument in case is_a() function in case of strings', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Complete missing 3rd argument in case is_a() function in case of strings', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(string $value)
@@ -42,12 +42,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'is_a')) {
             return null;
@@ -55,14 +55,14 @@ CODE_SAMPLE
         if (isset($node->args[2])) {
             return null;
         }
-        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[0] instanceof Arg) {
             return null;
         }
         $firstArgumentStaticType = $this->getType($node->args[0]->value);
-        if (!$firstArgumentStaticType instanceof \PHPStan\Type\StringType) {
+        if (!$firstArgumentStaticType instanceof StringType) {
             return null;
         }
-        $node->args[2] = new \PhpParser\Node\Arg($this->nodeFactory->createTrue());
+        $node->args[2] = new Arg($this->nodeFactory->createTrue());
         return $node;
     }
 }

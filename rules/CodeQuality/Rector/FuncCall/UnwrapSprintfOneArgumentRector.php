@@ -14,20 +14,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/FriendsOfPHP/PHP-CS-Fixer/pull/5280
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector\UnwrapSprintfOneArgumentRectorTest
  */
-final class UnwrapSprintfOneArgumentRector extends \Rector\Core\Rector\AbstractRector
+final class UnwrapSprintfOneArgumentRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('unwrap sprintf() with one argument', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('unwrap sprintf() with one argument', [new CodeSample(<<<'CODE_SAMPLE'
 echo sprintf('value');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -40,12 +40,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'sprintf')) {
             return null;

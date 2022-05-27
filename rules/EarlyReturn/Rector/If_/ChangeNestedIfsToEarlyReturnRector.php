@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector\ChangeNestedIfsToEarlyReturnRectorTest
  */
-final class ChangeNestedIfsToEarlyReturnRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeNestedIfsToEarlyReturnRector extends AbstractRector
 {
     /**
      * @readonly
@@ -30,14 +30,14 @@ final class ChangeNestedIfsToEarlyReturnRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
-    public function __construct(\Rector\EarlyReturn\NodeTransformer\ConditionInverter $conditionInverter, \Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
+    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
     {
         $this->conditionInverter = $conditionInverter;
         $this->ifManipulator = $ifManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change nested ifs to early return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change nested ifs to early return', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -76,12 +76,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface::class];
+        return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $stmts = $node->stmts;
         if ($stmts === null) {
@@ -89,10 +89,10 @@ CODE_SAMPLE
         }
         foreach ($stmts as $key => $stmt) {
             $nextStmt = $stmts[$key + 1] ?? null;
-            if (!$nextStmt instanceof \PhpParser\Node\Stmt\Return_) {
+            if (!$nextStmt instanceof Return_) {
                 continue;
             }
-            if (!$stmt instanceof \PhpParser\Node\Stmt\If_) {
+            if (!$stmt instanceof If_) {
                 continue;
             }
             $nestedIfsWithOnlyReturn = $this->ifManipulator->collectNestedIfsWithOnlyReturn($stmt);
@@ -108,7 +108,7 @@ CODE_SAMPLE
      * @param If_[] $nestedIfsWithOnlyReturn
      * @return Stmt[]
      */
-    private function processNestedIfsWithOnlyReturn(array $nestedIfsWithOnlyReturn, \PhpParser\Node\Stmt\Return_ $nextReturn) : array
+    private function processNestedIfsWithOnlyReturn(array $nestedIfsWithOnlyReturn, Return_ $nextReturn) : array
     {
         // add nested if openly after this
         $nestedIfsWithOnlyReturnCount = \count($nestedIfsWithOnlyReturn);
@@ -129,14 +129,14 @@ CODE_SAMPLE
     /**
      * @return Stmt[]
      */
-    private function createStandaloneIfsWithReturn(\PhpParser\Node\Stmt\If_ $nestedIfWithOnlyReturn, \PhpParser\Node\Stmt\Return_ $return) : array
+    private function createStandaloneIfsWithReturn(If_ $nestedIfWithOnlyReturn, Return_ $return) : array
     {
         $invertedCondition = $this->conditionInverter->createInvertedCondition($nestedIfWithOnlyReturn->cond);
         // special case
-        if ($invertedCondition instanceof \PhpParser\Node\Expr\BooleanNot && $invertedCondition->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
-            $booleanNotPartIf = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot($invertedCondition->expr->left));
+        if ($invertedCondition instanceof BooleanNot && $invertedCondition->expr instanceof BooleanAnd) {
+            $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->left));
             $booleanNotPartIf->stmts = [clone $return];
-            $secondBooleanNotPartIf = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot($invertedCondition->expr->right));
+            $secondBooleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
             $secondBooleanNotPartIf->stmts = [clone $return];
             return [$booleanNotPartIf, $secondBooleanNotPartIf];
         }

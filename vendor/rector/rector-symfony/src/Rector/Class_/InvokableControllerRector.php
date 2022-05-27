@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * Inspiration @see https://github.com/rectorphp/rector-src/blob/main/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php
  */
-final class InvokableControllerRector extends \Rector\Core\Rector\AbstractRector
+final class InvokableControllerRector extends AbstractRector
 {
     /**
      * @readonly
@@ -54,7 +54,7 @@ final class InvokableControllerRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer, \Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter $symfonyControllerFilter, \Rector\Symfony\Printer\NeighbourClassLikePrinter $neighbourClassLikePrinter, \Rector\Symfony\NodeFactory\InvokableControllerClassFactory $invokableControllerClassFactory, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, SymfonyControllerFilter $symfonyControllerFilter, NeighbourClassLikePrinter $neighbourClassLikePrinter, InvokableControllerClassFactory $invokableControllerClassFactory, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->symfonyControllerFilter = $symfonyControllerFilter;
@@ -62,9 +62,9 @@ final class InvokableControllerRector extends \Rector\Core\Rector\AbstractRector
         $this->invokableControllerClassFactory = $invokableControllerClassFactory;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change god controller to single-action invokable controllers', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change god controller to single-action invokable controllers', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class SomeController extends Controller
@@ -104,15 +104,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         // skip anonymous controllers
-        if (!$node->name instanceof \PhpParser\Node\Identifier) {
+        if (!$node->name instanceof Identifier) {
             return null;
         }
         if (!$this->controllerAnalyzer->isInsideController($node)) {
@@ -130,9 +130,9 @@ CODE_SAMPLE
         foreach ($actionClassMethods as $actionClassMethod) {
             $invokableControllerClass = $this->invokableControllerClassFactory->createWithActionClassMethod($node, $actionClassMethod);
             /** @var Namespace_|FileWithoutNamespace|null $parentNamespace */
-            $parentNamespace = $this->betterNodeFinder->findParentByTypes($node, [\PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class]);
-            if (!$parentNamespace instanceof \PhpParser\Node) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException('Missing parent namespace or without namespace node');
+            $parentNamespace = $this->betterNodeFinder->findParentByTypes($node, [Namespace_::class, FileWithoutNamespace::class]);
+            if (!$parentNamespace instanceof Node) {
+                throw new ShouldNotHappenException('Missing parent namespace or without namespace node');
             }
             $this->neighbourClassLikePrinter->printClassLike($invokableControllerClass, $parentNamespace, $this->file->getSmartFileInfo(), $this->file);
         }
@@ -141,9 +141,9 @@ CODE_SAMPLE
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
         return null;
     }
-    private function refactorSingleAction(\PhpParser\Node\Stmt\ClassMethod $actionClassMethod, \PhpParser\Node\Stmt\Class_ $class) : \PhpParser\Node\Stmt\Class_
+    private function refactorSingleAction(ClassMethod $actionClassMethod, Class_ $class) : Class_
     {
-        $actionClassMethod->name = new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::INVOKE);
+        $actionClassMethod->name = new Identifier(MethodName::INVOKE);
         return $class;
     }
 }

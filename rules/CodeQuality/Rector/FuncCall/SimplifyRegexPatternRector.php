@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector\SimplifyRegexPatternRectorTest
  */
-final class SimplifyRegexPatternRector extends \Rector\Core\Rector\AbstractRector
+final class SimplifyRegexPatternRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -27,13 +27,13 @@ final class SimplifyRegexPatternRector extends \Rector\Core\Rector\AbstractRecto
      * @var \Rector\Core\Php\Regex\RegexPatternArgumentManipulator
      */
     private $regexPatternArgumentManipulator;
-    public function __construct(\Rector\Core\Php\Regex\RegexPatternArgumentManipulator $regexPatternArgumentManipulator)
+    public function __construct(RegexPatternArgumentManipulator $regexPatternArgumentManipulator)
     {
         $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify regex pattern to known ranges', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Simplify regex pattern to known ranges', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -58,12 +58,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [FuncCall::class, StaticCall::class];
     }
     /**
      * @param FuncCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $patterns = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
         if ($patterns === []) {
@@ -73,7 +73,7 @@ CODE_SAMPLE
         foreach ($patterns as $pattern) {
             foreach (self::COMPLEX_PATTERN_TO_SIMPLE as $complexPattern => $simple) {
                 $originalValue = $pattern->value;
-                $simplifiedValue = \RectorPrefix20220527\Nette\Utils\Strings::replace($pattern->value, '#' . \preg_quote($complexPattern, '#') . '#', $simple);
+                $simplifiedValue = Strings::replace($pattern->value, '#' . \preg_quote($complexPattern, '#') . '#', $simple);
                 if ($originalValue === $simplifiedValue) {
                     continue;
                 }

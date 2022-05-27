@@ -20,9 +20,9 @@ use RectorPrefix20220527\Symplify\Astral\NodeNameResolver\PropertyNodeNameResolv
  */
 final class SimpleNameResolverStaticFactory
 {
-    public static function create() : \RectorPrefix20220527\Symplify\Astral\Naming\SimpleNameResolver
+    public static function create() : SimpleNameResolver
     {
-        $nameResolvers = [new \RectorPrefix20220527\Symplify\Astral\NodeNameResolver\ArgNodeNameResolver(), new \RectorPrefix20220527\Symplify\Astral\NodeNameResolver\AttributeNodeNameResolver(), new \RectorPrefix20220527\Symplify\Astral\NodeNameResolver\ClassLikeNodeNameResolver(), new \RectorPrefix20220527\Symplify\Astral\NodeNameResolver\ClassMethodNodeNameResolver(), new \RectorPrefix20220527\Symplify\Astral\NodeNameResolver\ConstFetchNodeNameResolver(), new \RectorPrefix20220527\Symplify\Astral\NodeNameResolver\FuncCallNodeNameResolver(), new \RectorPrefix20220527\Symplify\Astral\NodeNameResolver\IdentifierNodeNameResolver(), new \RectorPrefix20220527\Symplify\Astral\NodeNameResolver\NamespaceNodeNameResolver(), new \RectorPrefix20220527\Symplify\Astral\NodeNameResolver\ParamNodeNameResolver(), new \RectorPrefix20220527\Symplify\Astral\NodeNameResolver\PropertyNodeNameResolver()];
-        return new \RectorPrefix20220527\Symplify\Astral\Naming\SimpleNameResolver($nameResolvers);
+        $nameResolvers = [new ArgNodeNameResolver(), new AttributeNodeNameResolver(), new ClassLikeNodeNameResolver(), new ClassMethodNodeNameResolver(), new ConstFetchNodeNameResolver(), new FuncCallNodeNameResolver(), new IdentifierNodeNameResolver(), new NamespaceNodeNameResolver(), new ParamNodeNameResolver(), new PropertyNodeNameResolver()];
+        return new SimpleNameResolver($nameResolvers);
     }
 }

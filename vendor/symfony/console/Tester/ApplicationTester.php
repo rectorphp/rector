@@ -26,7 +26,7 @@ class ApplicationTester
 {
     use TesterTrait;
     private $application;
-    public function __construct(\RectorPrefix20220527\Symfony\Component\Console\Application $application)
+    public function __construct(Application $application)
     {
         $this->application = $application;
     }
@@ -44,7 +44,7 @@ class ApplicationTester
      */
     public function run(array $input, array $options = []) : int
     {
-        $this->input = new \RectorPrefix20220527\Symfony\Component\Console\Input\ArrayInput($input);
+        $this->input = new ArrayInput($input);
         if (isset($options['interactive'])) {
             $this->input->setInteractive($options['interactive']);
         }

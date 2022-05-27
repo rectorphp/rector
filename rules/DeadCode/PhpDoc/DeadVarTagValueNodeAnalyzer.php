@@ -20,12 +20,12 @@ final class DeadVarTagValueNodeAnalyzer
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper)
     {
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function isDead(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $varTagValueNode, \PhpParser\Node\Stmt\Property $property) : bool
+    public function isDead(VarTagValueNode $varTagValueNode, Property $property) : bool
     {
         if ($property->type === null) {
             return \false;
@@ -33,7 +33,7 @@ final class DeadVarTagValueNodeAnalyzer
         // is strict type superior to doc type? keep strict type only
         $propertyType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($property->type);
         $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($varTagValueNode->type, $property);
-        if ($propertyType instanceof \PHPStan\Type\UnionType && !$docType instanceof \PHPStan\Type\UnionType) {
+        if ($propertyType instanceof UnionType && !$docType instanceof UnionType) {
             return \true;
         }
         if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($property->type, $varTagValueNode->type, $property)) {

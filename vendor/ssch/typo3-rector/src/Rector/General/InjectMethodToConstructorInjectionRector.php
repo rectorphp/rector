@@ -17,23 +17,23 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/DependencyInjection/Index.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\General\InjectMethodToConstructorInjectionRector\InjectMethodToConstructorInjectionRectorTest
  */
-final class InjectMethodToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector
+final class InjectMethodToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator)
+    public function __construct(ClassDependencyManipulator $classDependencyManipulator)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('', [new CodeSample(<<<'CODE_SAMPLE'
 namespace App\Service;
 use \TYPO3\CMS\Core\Cache\CacheManager;
 class Service
@@ -67,12 +67,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -91,19 +91,19 @@ CODE_SAMPLE
             \reset($params);
             /** @var Param $param */
             $param = \current($params);
-            if (!$param->type instanceof \PhpParser\Node\Name\FullyQualified) {
+            if (!$param->type instanceof FullyQualified) {
                 continue;
             }
             $paramName = $this->getName($param->var);
             if (null === $paramName) {
                 continue;
             }
-            $this->classDependencyManipulator->addConstructorDependency($node, new \Rector\PostRector\ValueObject\PropertyMetadata($paramName, new \PHPStan\Type\ObjectType((string) $param->type), \PhpParser\Node\Stmt\Class_::MODIFIER_PROTECTED));
+            $this->classDependencyManipulator->addConstructorDependency($node, new PropertyMetadata($paramName, new ObjectType((string) $param->type), Class_::MODIFIER_PROTECTED));
             $this->nodeRemover->removeNodeFromStatements($node, $injectMethod);
         }
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function shouldSkip(Class_ $class) : bool
     {
         return [] === $class->getMethods();
     }

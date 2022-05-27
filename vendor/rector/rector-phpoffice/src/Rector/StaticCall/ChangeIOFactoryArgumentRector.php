@@ -15,15 +15,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPOffice\Tests\Rector\StaticCall\ChangeIOFactoryArgumentRector\ChangeIOFactoryArgumentRectorTest
  */
-final class ChangeIOFactoryArgumentRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeIOFactoryArgumentRector extends AbstractRector
 {
     /**
      * @var array<string, string>
      */
     private const OLD_TO_NEW_TYPE = ['CSV' => 'Csv', 'Excel2003XML' => 'Xml', 'Excel2007' => 'Xlsx', 'Excel5' => 'Xls', 'Gnumeric' => 'Gnumeric', 'HTML' => 'Html', 'OOCalc' => 'Ods', 'OpenDocument' => 'Ods', 'PDF' => 'Pdf', 'SYLK' => 'Slk'];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change argument of PHPExcel_IOFactory::createReader(), PHPExcel_IOFactory::createWriter() and PHPExcel_IOFactory::identify()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change argument of PHPExcel_IOFactory::createReader(), PHPExcel_IOFactory::createWriter() and PHPExcel_IOFactory::identify()', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -48,14 +48,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->class, new \PHPStan\Type\ObjectType('PHPExcel_IOFactory'))) {
+        if (!$this->isObjectType($node->class, new ObjectType('PHPExcel_IOFactory'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['createReader', 'createWriter', 'identify'])) {
@@ -66,7 +66,7 @@ CODE_SAMPLE
         if ($newValue === null) {
             return null;
         }
-        $node->args[0]->value = new \PhpParser\Node\Scalar\String_($newValue);
+        $node->args[0]->value = new String_($newValue);
         return $node;
     }
 }

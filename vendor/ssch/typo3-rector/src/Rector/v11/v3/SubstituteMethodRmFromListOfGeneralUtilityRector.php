@@ -18,14 +18,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.3/Deprecation-94311-DeprecatedGeneralUtilityrmFromList.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v3\SubstituteMethodRmFromListOfGeneralUtilityRector\SubstituteMethodRmFromListOfGeneralUtilityRectorTest
  */
-final class SubstituteMethodRmFromListOfGeneralUtilityRector extends \Rector\Core\Rector\AbstractRector
+final class SubstituteMethodRmFromListOfGeneralUtilityRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
     private $anonymousFunctionFactory;
-    public function __construct(\Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory)
+    public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory)
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
     }
@@ -34,32 +34,32 @@ final class SubstituteMethodRmFromListOfGeneralUtilityRector extends \Rector\Cor
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'rmFromList')) {
             return null;
         }
         $explodeFuncCall = $this->nodeFactory->createFuncCall('explode', [',', $node->args[1]]);
-        $itemVariable = new \PhpParser\Node\Expr\Variable('item');
-        $stmts = [new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Expr\BinaryOp\Equal(new \PhpParser\Node\Expr\Variable('element'), $itemVariable))];
-        $closureFunction = $this->anonymousFunctionFactory->create([new \PhpParser\Node\Param($itemVariable)], $stmts, null);
+        $itemVariable = new Variable('item');
+        $stmts = [new Return_(new Equal(new Variable('element'), $itemVariable))];
+        $closureFunction = $this->anonymousFunctionFactory->create([new Param($itemVariable)], $stmts, null);
         $arrayFilterFuncCall = $this->nodeFactory->createFuncCall('array_filter', [$explodeFuncCall, $closureFunction]);
         return $this->nodeFactory->createFuncCall('implode', [',', $arrayFilterFuncCall]);
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use native php functions instead of GeneralUtility::rmFromList', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use native php functions instead of GeneralUtility::rmFromList', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 $element = '1';

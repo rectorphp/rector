@@ -6,7 +6,7 @@ namespace PhpParser\Builder;
 use RectorPrefix20220527\PhpParser;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
-class Param implements \PhpParser\Builder
+class Param implements PhpParser\Builder
 {
     protected $name;
     protected $default = null;
@@ -34,7 +34,7 @@ class Param implements \PhpParser\Builder
      */
     public function setDefault($value)
     {
-        $this->default = \PhpParser\BuilderHelpers::normalizeValue($value);
+        $this->default = BuilderHelpers::normalizeValue($value);
         return $this;
     }
     /**
@@ -46,7 +46,7 @@ class Param implements \PhpParser\Builder
      */
     public function setType($type)
     {
-        $this->type = \PhpParser\BuilderHelpers::normalizeType($type);
+        $this->type = BuilderHelpers::normalizeType($type);
         if ($this->type == 'void') {
             throw new \LogicException('Parameter type cannot be void');
         }
@@ -94,7 +94,7 @@ class Param implements \PhpParser\Builder
      */
     public function addAttribute($attribute)
     {
-        $this->attributeGroups[] = \PhpParser\BuilderHelpers::normalizeAttribute($attribute);
+        $this->attributeGroups[] = BuilderHelpers::normalizeAttribute($attribute);
         return $this;
     }
     /**
@@ -102,8 +102,8 @@ class Param implements \PhpParser\Builder
      *
      * @return Node\Param The built parameter node
      */
-    public function getNode() : \PhpParser\Node
+    public function getNode() : Node
     {
-        return new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($this->name), $this->default, $this->type, $this->byRef, $this->variadic, [], 0, $this->attributeGroups);
+        return new Node\Param(new Node\Expr\Variable($this->name), $this->default, $this->type, $this->byRef, $this->variadic, [], 0, $this->attributeGroups);
     }
 }

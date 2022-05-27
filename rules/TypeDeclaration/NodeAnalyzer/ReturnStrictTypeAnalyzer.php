@@ -32,7 +32,7 @@ final class ReturnStrictTypeAnalyzer
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(ReflectionResolver $reflectionResolver, \Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, StaticTypeMapper $staticTypeMapper)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->typeNodeUnwrapper = $typeNodeUnwrapper;
@@ -50,12 +50,12 @@ final class ReturnStrictTypeAnalyzer
                 return [];
             }
             $returnedExpr = $return->expr;
-            if ($returnedExpr instanceof \PhpParser\Node\Expr\MethodCall || $returnedExpr instanceof \PhpParser\Node\Expr\StaticCall || $returnedExpr instanceof \PhpParser\Node\Expr\FuncCall) {
+            if ($returnedExpr instanceof MethodCall || $returnedExpr instanceof StaticCall || $returnedExpr instanceof FuncCall) {
                 $returnNode = $this->resolveMethodCallReturnNode($returnedExpr);
             } else {
                 return [];
             }
-            if (!$returnNode instanceof \PhpParser\Node) {
+            if (!$returnNode instanceof Node) {
                 return [];
             }
             $returnedStrictTypeNodes[] = $returnNode;
@@ -65,7 +65,7 @@ final class ReturnStrictTypeAnalyzer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
      */
-    private function resolveMethodCallReturnNode($call) : ?\PhpParser\Node
+    private function resolveMethodCallReturnNode($call) : ?Node
     {
         $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
         if ($methodReflection === null) {
@@ -73,9 +73,9 @@ final class ReturnStrictTypeAnalyzer
         }
         $parametersAcceptor = $methodReflection->getVariants()[0];
         $returnType = $parametersAcceptor->getReturnType();
-        if ($returnType instanceof \PHPStan\Type\MixedType) {
+        if ($returnType instanceof MixedType) {
             return null;
         }
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN());
     }
 }

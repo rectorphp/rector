@@ -11,7 +11,7 @@ final class FilesystemTweaker
      * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
-    public function __construct(\RectorPrefix20220527\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard)
+    public function __construct(FileSystemGuard $fileSystemGuard)
     {
         $this->fileSystemGuard = $fileSystemGuard;
     }

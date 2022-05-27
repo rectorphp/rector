@@ -51,7 +51,7 @@ class InputArgument
         if (null === $mode) {
             $mode = self::OPTIONAL;
         } elseif ($mode > 7 || $mode < 1) {
-            throw new \RectorPrefix20220527\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Argument mode "%s" is not valid.', $mode));
+            throw new InvalidArgumentException(\sprintf('Argument mode "%s" is not valid.', $mode));
         }
         $this->name = $name;
         $this->mode = $mode;
@@ -92,13 +92,13 @@ class InputArgument
     public function setDefault($default = null)
     {
         if ($this->isRequired() && null !== $default) {
-            throw new \RectorPrefix20220527\Symfony\Component\Console\Exception\LogicException('Cannot set a default value except for InputArgument::OPTIONAL mode.');
+            throw new LogicException('Cannot set a default value except for InputArgument::OPTIONAL mode.');
         }
         if ($this->isArray()) {
             if (null === $default) {
                 $default = [];
             } elseif (!\is_array($default)) {
-                throw new \RectorPrefix20220527\Symfony\Component\Console\Exception\LogicException('A default value for an array argument must be an array.');
+                throw new LogicException('A default value for an array argument must be an array.');
             }
         }
         $this->default = $default;

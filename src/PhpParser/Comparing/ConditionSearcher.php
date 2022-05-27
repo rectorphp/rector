@@ -23,15 +23,15 @@ final class ConditionSearcher
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
     }
-    public function hasIfAndElseForVariableRedeclaration(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\If_ $if) : bool
+    public function hasIfAndElseForVariableRedeclaration(Assign $assign, If_ $if) : bool
     {
         $elseNode = $if->else;
-        if (!$elseNode instanceof \PhpParser\Node\Stmt\Else_) {
+        if (!$elseNode instanceof Else_) {
             return \false;
         }
         /** @var Variable $varNode */
@@ -44,7 +44,7 @@ final class ConditionSearcher
                 return \false;
             }
         }
-        $isInCond = (bool) $this->betterNodeFinder->findFirst($if->cond, function (\PhpParser\Node $subNode) use($varNode) : bool {
+        $isInCond = (bool) $this->betterNodeFinder->findFirst($if->cond, function (Node $subNode) use($varNode) : bool {
             return $this->nodeComparator->areNodesEqual($varNode, $subNode);
         });
         if ($isInCond) {
@@ -55,7 +55,7 @@ final class ConditionSearcher
     /**
      * @param Stmt[] $stmts
      */
-    private function hasVariableRedeclaration(\PhpParser\Node\Expr\Variable $variable, array $stmts) : bool
+    private function hasVariableRedeclaration(Variable $variable, array $stmts) : bool
     {
         foreach ($stmts as $stmt) {
             if ($this->hasVariableUsedInExpression($variable, $stmt)) {
@@ -67,27 +67,27 @@ final class ConditionSearcher
         }
         return \false;
     }
-    private function hasVariableUsedInExpression(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Stmt $stmt) : bool
+    private function hasVariableUsedInExpression(Variable $variable, Stmt $stmt) : bool
     {
-        if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
-            $node = $stmt->expr instanceof \PhpParser\Node\Expr\Assign ? $stmt->expr->expr : $stmt->expr;
+        if ($stmt instanceof Expression) {
+            $node = $stmt->expr instanceof Assign ? $stmt->expr->expr : $stmt->expr;
         } else {
             $node = $stmt;
         }
-        return (bool) $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $subNode) use($variable) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $subNode) use($variable) : bool {
             return $this->nodeComparator->areNodesEqual($variable, $subNode);
         });
     }
-    private function hasVariableDeclaration(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Stmt $stmt) : bool
+    private function hasVariableDeclaration(Variable $variable, Stmt $stmt) : bool
     {
-        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$stmt instanceof Expression) {
             return \false;
         }
-        if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$stmt->expr instanceof Assign) {
             return \false;
         }
         $assignVar = $stmt->expr->var;
-        if (!$assignVar instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$assignVar instanceof Variable) {
             return \false;
         }
         return $variable->name === $assignVar->name;

@@ -24,20 +24,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\New_\DowngradeArbitraryExpressionsSupportRector\DowngradeArbitraryExpressionsSupportRectorTest
  */
-final class DowngradeArbitraryExpressionsSupportRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeArbitraryExpressionsSupportRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
     private $namedVariableFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
+    public function __construct(NamedVariableFactory $namedVariableFactory)
     {
         $this->namedVariableFactory = $namedVariableFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace arbitrary expressions used with new or instanceof.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace arbitrary expressions used with new or instanceof.', [new CodeSample(<<<'CODE_SAMPLE'
 function getObjectClassName() {
     return stdClass::class;
 }
@@ -59,14 +59,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Instanceof_::class, \PhpParser\Node\Expr\New_::class];
+        return [Instanceof_::class, New_::class];
     }
     /**
      * @param Instanceof_|New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->class instanceof \PhpParser\Node\Expr) {
+        if (!$node->class instanceof Expr) {
             return null;
         }
         $isAllowed = $this->isAllowed($node->class);
@@ -75,7 +75,7 @@ CODE_SAMPLE
             return null;
         }
         // mandatory to remove parentheses
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         if ($isAllowed) {
             return $node;
         }
@@ -85,21 +85,21 @@ CODE_SAMPLE
             $variable = $assign->var;
         } else {
             $variable = $this->namedVariableFactory->createVariable($node, 'className');
-            $assign = new \PhpParser\Node\Expr\Assign($variable, $node->class);
+            $assign = new Assign($variable, $node->class);
         }
         $this->nodesToAddCollector->addNodeBeforeNode($assign, $node, $this->file->getSmartFileInfo());
         $node->class = $variable;
         return $node;
     }
-    private function isAllowed(\PhpParser\Node\Expr $expr) : bool
+    private function isAllowed(Expr $expr) : bool
     {
-        return $expr instanceof \PhpParser\Node\Expr\Variable || $expr instanceof \PhpParser\Node\Expr\ArrayDimFetch || $expr instanceof \PhpParser\Node\Expr\PropertyFetch || $expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
+        return $expr instanceof Variable || $expr instanceof ArrayDimFetch || $expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch;
     }
-    private function isAssign(\PhpParser\Node\Expr $expr) : bool
+    private function isAssign(Expr $expr) : bool
     {
-        return $expr instanceof \PhpParser\Node\Expr\Assign || $expr instanceof \PhpParser\Node\Expr\AssignRef || $expr instanceof \PhpParser\Node\Expr\AssignOp;
+        return $expr instanceof Assign || $expr instanceof AssignRef || $expr instanceof AssignOp;
     }
-    private function isBetweenParentheses(\PhpParser\Node $node) : bool
+    private function isBetweenParentheses(Node $node) : bool
     {
         $oldTokens = $this->file->getOldTokens();
         $previousTokenPos = $node->getStartTokenPos() - 1;

@@ -9,17 +9,17 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use RectorPrefix20220527\PHPUnit\Framework\MockObject\Builder\InvocationMocker;
-class InvocationMockerDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class InvocationMockerDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     public function getClass() : string
     {
-        return \RectorPrefix20220527\PHPUnit\Framework\MockObject\Builder\InvocationMocker::class;
+        return InvocationMocker::class;
     }
-    public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
+    public function isMethodSupported(MethodReflection $methodReflection) : bool
     {
         return $methodReflection->getName() !== 'getMatcher';
     }
-    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
+    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : Type
     {
         return $scope->getType($methodCall->var);
     }

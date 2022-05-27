@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\ContextGetByTypeToConstructorInjectionRectorTest
  */
-final class ContextGetByTypeToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector
+final class ContextGetByTypeToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @readonly
@@ -26,14 +26,14 @@ final class ContextGetByTypeToConstructorInjectionRector extends \Rector\Core\Re
      * @var \Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer
      */
     private $dependencyInjectionMethodCallAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->dependencyInjectionMethodCallAnalyzer = $dependencyInjectionMethodCallAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move dependency get via $context->getByType() to constructor injection', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move dependency get via $context->getByType() to constructor injection', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -72,18 +72,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
         $callerType = $this->nodeTypeResolver->getType($node->var);
-        $containerObjectType = new \PHPStan\Type\ObjectType('Nette\\DI\\Container');
+        $containerObjectType = new ObjectType('Nette\\DI\\Container');
         if (!$containerObjectType->isSuperTypeOf($callerType)->yes()) {
             return null;
         }

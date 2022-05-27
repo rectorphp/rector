@@ -13,21 +13,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.4/Deprecation-68122-GeneralUtilityReadLLfile.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v4\MethodReadLLFileToLocalizationFactoryRector\MethodReadLLFileToLocalizationFactoryRectorTest
  */
-final class MethodReadLLFileToLocalizationFactoryRector extends \Rector\Core\Rector\AbstractRector
+final class MethodReadLLFileToLocalizationFactoryRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'readLLfile')) {
@@ -38,9 +38,9 @@ final class MethodReadLLFileToLocalizationFactoryRector extends \Rector\Core\Rec
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use LocalizationFactory->getParsedData instead of GeneralUtility::readLLfile', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use LocalizationFactory->getParsedData instead of GeneralUtility::readLLfile', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 $locallangs = GeneralUtility::readLLfile('EXT:foo/locallang.xml', 'de');
 CODE_SAMPLE

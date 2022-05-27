@@ -12,5 +12,5 @@ foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
     }
     require_once $possibleAutoloadPath;
 }
-$kernelBootAndApplicationRun = new \RectorPrefix20220527\Symplify\SymplifyKernel\ValueObject\KernelBootAndApplicationRun(\RectorPrefix20220527\Symplify\VendorPatches\Kernel\VendorPatchesKernel::class);
+$kernelBootAndApplicationRun = new KernelBootAndApplicationRun(VendorPatchesKernel::class);
 $kernelBootAndApplicationRun->run();

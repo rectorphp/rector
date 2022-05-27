@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\StringFormTypeToClassRector\StringFormTypeToClassRectorTest
  */
-final class StringFormTypeToClassRector extends \Rector\Core\Rector\AbstractRector
+final class StringFormTypeToClassRector extends AbstractRector
 {
     /**
      * @var string
@@ -33,14 +33,14 @@ final class StringFormTypeToClassRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\Symfony\FormHelper\FormTypeStringToTypeProvider
      */
     private $formTypeStringToTypeProvider;
-    public function __construct(\Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, \Rector\Symfony\FormHelper\FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
+    public function __construct(FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
     {
         $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(self::DESCRIPTION, [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition(self::DESCRIPTION, [new CodeSample(<<<'CODE_SAMPLE'
 $formBuilder = new Symfony\Component\Form\FormBuilder;
 $formBuilder->add('name', 'form.type.text');
 CODE_SAMPLE
@@ -55,22 +55,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->formAddMethodCallAnalyzer->isMatching($node)) {
             return null;
         }
         // not a string
         $firstArg = $node->args[1];
-        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+        if (!$firstArg instanceof Arg) {
             return null;
         }
-        if (!$firstArg->value instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$firstArg->value instanceof String_) {
             return null;
         }
         /** @var String_ $stringNode */

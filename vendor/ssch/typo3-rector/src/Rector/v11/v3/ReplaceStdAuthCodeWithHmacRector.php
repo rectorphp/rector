@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.3/Deprecation-94309-DeprecatedGeneralUtilitystdAuthCode.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v3\ReplaceStdAuthCodeWithHmacRector\ReplaceStdAuthCodeWithHmacRectorTest
  */
-final class ReplaceStdAuthCodeWithHmacRector extends \Rector\Core\Rector\AbstractRector
+final class ReplaceStdAuthCodeWithHmacRector extends AbstractRector
 {
     /**
      * @var string
@@ -25,7 +25,7 @@ final class ReplaceStdAuthCodeWithHmacRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\Core\Console\Output\RectorOutputStyle
      */
     private $rectorOutputStyle;
-    public function __construct(\Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle)
+    public function __construct(RectorOutputStyle $rectorOutputStyle)
     {
         $this->rectorOutputStyle = $rectorOutputStyle;
     }
@@ -34,14 +34,14 @@ final class ReplaceStdAuthCodeWithHmacRector extends \Rector\Core\Rector\Abstrac
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'stdAuthCode')) {
@@ -53,9 +53,9 @@ final class ReplaceStdAuthCodeWithHmacRector extends \Rector\Core\Rector\Abstrac
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace GeneralUtility::stdAuthCode with GeneralUtility::hmac', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace GeneralUtility::stdAuthCode with GeneralUtility::hmac', [new CodeSample(<<<'CODE_SAMPLE'
 // Just a warning
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

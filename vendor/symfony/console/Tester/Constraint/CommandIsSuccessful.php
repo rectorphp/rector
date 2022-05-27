@@ -12,7 +12,7 @@ namespace RectorPrefix20220527\Symfony\Component\Console\Tester\Constraint;
 
 use RectorPrefix20220527\PHPUnit\Framework\Constraint\Constraint;
 use RectorPrefix20220527\Symfony\Component\Console\Command\Command;
-final class CommandIsSuccessful extends \RectorPrefix20220527\PHPUnit\Framework\Constraint\Constraint
+final class CommandIsSuccessful extends Constraint
 {
     /**
      * {@inheritdoc}
@@ -26,7 +26,7 @@ final class CommandIsSuccessful extends \RectorPrefix20220527\PHPUnit\Framework\
      */
     protected function matches($other) : bool
     {
-        return \RectorPrefix20220527\Symfony\Component\Console\Command\Command::SUCCESS === $other;
+        return Command::SUCCESS === $other;
     }
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ final class CommandIsSuccessful extends \RectorPrefix20220527\PHPUnit\Framework\
      */
     protected function additionalFailureDescription($other) : string
     {
-        $mapping = [\RectorPrefix20220527\Symfony\Component\Console\Command\Command::FAILURE => 'Command failed.', \RectorPrefix20220527\Symfony\Component\Console\Command\Command::INVALID => 'Command was invalid.'];
+        $mapping = [Command::FAILURE => 'Command failed.', Command::INVALID => 'Command was invalid.'];
         return $mapping[$other] ?? \sprintf('Command returned exit status %d.', $other);
     }
 }

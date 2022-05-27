@@ -18,7 +18,7 @@ namespace RectorPrefix20220527\Symfony\Component\Finder\Iterator;
  *
  * @extends MultiplePcreFilterIterator<string, \SplFileInfo>
  */
-class PathFilterIterator extends \RectorPrefix20220527\Symfony\Component\Finder\Iterator\MultiplePcreFilterIterator
+class PathFilterIterator extends MultiplePcreFilterIterator
 {
     /**
      * Filters the iterator values.

@@ -10,7 +10,7 @@ use Iterator;
  * @package    Helmich\TypoScriptParser
  * @subpackage Tokenizer
  */
-class Scanner implements \Iterator
+class Scanner implements Iterator
 {
     /** @var string[] */
     private $lines = [];
@@ -20,9 +20,9 @@ class Scanner implements \Iterator
     {
         $this->lines = $lines;
     }
-    public function current() : \RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\ScannerLine
+    public function current() : ScannerLine
     {
-        return new \RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\ScannerLine($this->index + 1, $this->lines[$this->index]);
+        return new ScannerLine($this->index + 1, $this->lines[$this->index]);
     }
     public function next() : void
     {

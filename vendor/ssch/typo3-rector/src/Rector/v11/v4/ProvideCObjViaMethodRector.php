@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.4/Deprecation-94956-PublicCObj.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v4\ProvideCObjViaMethodRector\ProvideCObjViaMethodRectorTest
  */
-final class ProvideCObjViaMethodRector extends \Rector\Core\Rector\AbstractRector
+final class ProvideCObjViaMethodRector extends AbstractRector
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ final class ProvideCObjViaMethodRector extends \Rector\Core\Rector\AbstractRecto
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    public function __construct(VisibilityManipulator $visibilityManipulator)
     {
         $this->visibilityManipulator = $visibilityManipulator;
     }
@@ -41,18 +41,18 @@ final class ProvideCObjViaMethodRector extends \Rector\Core\Rector\AbstractRecto
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         $cObjProperty = $node->getProperty(self::COBJ);
-        if (!$cObjProperty instanceof \PhpParser\Node\Stmt\Property) {
+        if (!$cObjProperty instanceof Property) {
             return null;
         }
         if (!$cObjProperty->isPublic()) {
@@ -65,9 +65,9 @@ final class ProvideCObjViaMethodRector extends \Rector\Core\Rector\AbstractRecto
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces public $cObj with protected and set via method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces public $cObj with protected and set via method', [new CodeSample(<<<'CODE_SAMPLE'
 class Foo
 {
     public $cObj;
@@ -86,29 +86,29 @@ class Foo
 CODE_SAMPLE
 )]);
     }
-    private function addSetContentObjectRendererMethod(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function addSetContentObjectRendererMethod(Class_ $class) : void
     {
-        $paramBuilder = new \RectorPrefix20220527\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder(self::COBJ);
-        $paramBuilder->setType(new \PhpParser\Node\Name\FullyQualified('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'));
+        $paramBuilder = new ParamBuilder(self::COBJ);
+        $paramBuilder->setType(new FullyQualified('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'));
         $param = $paramBuilder->getNode();
-        $propertyAssignNode = $this->nodeFactory->createPropertyAssignmentWithExpr(self::COBJ, new \PhpParser\Node\Expr\Variable(self::COBJ));
-        $classMethodBuilder = new \RectorPrefix20220527\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('setContentObjectRenderer');
+        $propertyAssignNode = $this->nodeFactory->createPropertyAssignmentWithExpr(self::COBJ, new Variable(self::COBJ));
+        $classMethodBuilder = new MethodBuilder('setContentObjectRenderer');
         $classMethodBuilder->addParam($param);
         $classMethodBuilder->addStmt($propertyAssignNode);
         $classMethodBuilder->makePublic();
         $classMethodBuilder->setReturnType('void');
-        $class->stmts[] = new \PhpParser\Node\Stmt\Nop();
+        $class->stmts[] = new Nop();
         $class->stmts[] = $classMethodBuilder->getNode();
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function shouldSkip(Class_ $class) : bool
     {
-        if ($this->isObjectType($class, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Plugin\\AbstractPlugin'))) {
+        if ($this->isObjectType($class, new ObjectType('TYPO3\\CMS\\Frontend\\Plugin\\AbstractPlugin'))) {
             return \true;
         }
-        if ($this->isObjectType($class, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
+        if ($this->isObjectType($class, new ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
             return \true;
         }
         $classMethod = $class->getMethod('setContentObjectRenderer');
-        return $classMethod instanceof \PhpParser\Node\Stmt\ClassMethod;
+        return $classMethod instanceof ClassMethod;
     }
 }

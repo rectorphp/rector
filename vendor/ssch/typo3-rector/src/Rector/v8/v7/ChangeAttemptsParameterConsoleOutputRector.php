@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80053-ExtbaseCLIConsoleOutputDifferentMethodSignatureForInfiniteAttempts.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\ChangeAttemptsParameterConsoleOutputRector\ChangeAttemptsParameterConsoleOutputRectorTest
  */
-final class ChangeAttemptsParameterConsoleOutputRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeAttemptsParameterConsoleOutputRector extends AbstractRector
 {
     /**
      * @var string
@@ -28,14 +28,14 @@ final class ChangeAttemptsParameterConsoleOutputRector extends \Rector\Core\Rect
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Cli\\ConsoleOutput'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Cli\\ConsoleOutput'))) {
             return null;
         }
         if (!$this->isName($node->name, self::SELECT) && !$this->isName($node->name, self::ASK_AND_VALIDATE)) {
@@ -62,8 +62,8 @@ final class ChangeAttemptsParameterConsoleOutputRector extends \Rector\Core\Rect
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns old default value to parameter in ConsoleOutput->askAndValidate() and/or ConsoleOutput->select() method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->output->select(\'The question\', [1, 2, 3], null, false, false);', '$this->output->select(\'The question\', [1, 2, 3], null, false, null);')]);
+        return new RuleDefinition('Turns old default value to parameter in ConsoleOutput->askAndValidate() and/or ConsoleOutput->select() method', [new CodeSample('$this->output->select(\'The question\', [1, 2, 3], null, false, false);', '$this->output->select(\'The question\', [1, 2, 3], null, false, null);')]);
     }
 }

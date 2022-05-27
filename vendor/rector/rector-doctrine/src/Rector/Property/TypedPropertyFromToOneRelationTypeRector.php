@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\Rector\Property\TypedPropertyFromToOneRelationTypeRector\TypedPropertyFromToOneRelationTypeRectorTest
  */
-final class TypedPropertyFromToOneRelationTypeRector extends \Rector\Core\Rector\AbstractRector
+final class TypedPropertyFromToOneRelationTypeRector extends AbstractRector
 {
     /**
      * @readonly
@@ -44,16 +44,16 @@ final class TypedPropertyFromToOneRelationTypeRector extends \Rector\Core\Rector
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\NodeManipulator\ToOneRelationPropertyTypeResolver $toOneRelationPropertyTypeResolver, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(PropertyTypeDecorator $propertyTypeDecorator, PhpDocTypeChanger $phpDocTypeChanger, ToOneRelationPropertyTypeResolver $toOneRelationPropertyTypeResolver, PhpVersionProvider $phpVersionProvider)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->toOneRelationPropertyTypeResolver = $toOneRelationPropertyTypeResolver;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete @var annotations or types based on @ORM\\*toOne annotations or attributes', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Complete @var annotations or types based on @ORM\\*toOne annotations or attributes', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 class SimpleColumn
@@ -82,25 +82,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
     /**
      * @param Property $node
      * @return \PhpParser\Node\Stmt\Property|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
         if ($node->type !== null) {
             return null;
         }
         $propertyType = $this->toOneRelationPropertyTypeResolver->resolve($node);
-        if (!$propertyType instanceof \PHPStan\Type\Type) {
+        if (!$propertyType instanceof Type) {
             return null;
         }
-        if ($propertyType instanceof \PHPStan\Type\MixedType) {
+        if ($propertyType instanceof MixedType) {
             return null;
         }
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY());
         if ($typeNode === null) {
             return null;
         }
@@ -110,11 +110,11 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType $typeNode
      */
-    private function completePropertyTypeOrVarDoc(\PHPStan\Type\Type $propertyType, $typeNode, \PhpParser\Node\Stmt\Property $property) : void
+    private function completePropertyTypeOrVarDoc(Type $propertyType, $typeNode, Property $property) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_74)) {
-            if ($propertyType instanceof \PHPStan\Type\UnionType) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_74)) {
+            if ($propertyType instanceof UnionType) {
                 $this->propertyTypeDecorator->decoratePropertyUnionType($propertyType, $typeNode, $property, $phpDocInfo);
                 return;
             }

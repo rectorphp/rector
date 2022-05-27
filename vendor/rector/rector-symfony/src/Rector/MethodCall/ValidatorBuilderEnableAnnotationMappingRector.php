@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#validator
  * @see \Rector\Symfony\Tests\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector\ValidatorBuilderEnableAnnotationMappingRectorTest
  */
-final class ValidatorBuilderEnableAnnotationMappingRector extends \Rector\Core\Rector\AbstractRector
+final class ValidatorBuilderEnableAnnotationMappingRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrates from deprecated ValidatorBuilder->enableAnnotationMapping($reader) to ValidatorBuilder->enableAnnotationMapping(true)->setDoctrineAnnotationReader($reader)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Migrates from deprecated ValidatorBuilder->enableAnnotationMapping($reader) to ValidatorBuilder->enableAnnotationMapping(true)->setDoctrineAnnotationReader($reader)', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\Validator\ValidatorBuilder;
 
@@ -49,27 +49,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\Validator\\ValidatorBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Validator\\ValidatorBuilder'))) {
             return null;
         }
         if (!$this->isName($node->name, 'enableAnnotationMapping')) {
             return null;
         }
         $firstArg = $node->args[0];
-        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+        if (!$firstArg instanceof Arg) {
             return null;
         }
         if ($this->valueResolver->isTrueOrFalse($firstArg->value)) {
             return null;
         }
-        if (!$this->isObjectType($firstArg->value, new \PHPStan\Type\ObjectType('Doctrine\\Common\\Annotations\\Reader'))) {
+        if (!$this->isObjectType($firstArg->value, new ObjectType('Doctrine\\Common\\Annotations\\Reader'))) {
             return null;
         }
         $readerType = $firstArg->value;

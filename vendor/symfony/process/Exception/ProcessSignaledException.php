@@ -16,15 +16,15 @@ use RectorPrefix20220527\Symfony\Component\Process\Process;
  *
  * @author Sullivan Senechal <soullivaneuh@gmail.com>
  */
-final class ProcessSignaledException extends \RectorPrefix20220527\Symfony\Component\Process\Exception\RuntimeException
+final class ProcessSignaledException extends RuntimeException
 {
     private $process;
-    public function __construct(\RectorPrefix20220527\Symfony\Component\Process\Process $process)
+    public function __construct(Process $process)
     {
         $this->process = $process;
         parent::__construct(\sprintf('The process has been signaled with signal "%s".', $process->getTermSignal()));
     }
-    public function getProcess() : \RectorPrefix20220527\Symfony\Component\Process\Process
+    public function getProcess() : Process
     {
         return $this->process;
     }

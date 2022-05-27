@@ -27,7 +27,7 @@ final class MethodCallManipulator
      * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -36,7 +36,7 @@ final class MethodCallManipulator
     /**
      * @return string[]
      */
-    public function findMethodCallNamesOnVariable(\PhpParser\Node\Expr\Variable $variable) : array
+    public function findMethodCallNamesOnVariable(Variable $variable) : array
     {
         $methodCallsOnVariable = $this->findMethodCallsOnVariable($variable);
         $methodCallNamesOnVariable = [];
@@ -52,24 +52,24 @@ final class MethodCallManipulator
     /**
      * @return MethodCall[]
      */
-    public function findMethodCallsOnVariable(\PhpParser\Node\Expr\Variable $variable) : array
+    public function findMethodCallsOnVariable(Variable $variable) : array
     {
         // get scope node, e.g. parent function call, method call or anonymous function
-        $classMethod = $this->betterNodeFinder->findParentType($variable, \PhpParser\Node\Stmt\ClassMethod::class);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $this->betterNodeFinder->findParentType($variable, ClassMethod::class);
+        if (!$classMethod instanceof ClassMethod) {
             return [];
         }
         $variableName = $this->nodeNameResolver->getName($variable);
         if ($variableName === null) {
             return [];
         }
-        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (\PhpParser\Node $node) use($variableName) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use($variableName) : bool {
+            if (!$node instanceof MethodCall) {
                 return \false;
             }
             // cover fluent interfaces too
             $callerNode = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($node);
-            if (!$callerNode instanceof \PhpParser\Node\Expr\Variable) {
+            if (!$callerNode instanceof Variable) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($callerNode, $variableName);

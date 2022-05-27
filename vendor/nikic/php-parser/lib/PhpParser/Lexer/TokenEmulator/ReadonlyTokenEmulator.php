@@ -8,7 +8,7 @@ final class ReadonlyTokenEmulator extends \PhpParser\Lexer\TokenEmulator\Keyword
 {
     public function getPhpVersion() : string
     {
-        return \PhpParser\Lexer\Emulative::PHP_8_1;
+        return Emulative::PHP_8_1;
     }
     public function getKeywordString() : string
     {

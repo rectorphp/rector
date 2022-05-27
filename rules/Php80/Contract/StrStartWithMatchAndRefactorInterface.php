@@ -14,9 +14,9 @@ interface StrStartWithMatchAndRefactorInterface
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $binaryOp
      */
-    public function match($binaryOp) : ?\Rector\Php80\ValueObject\StrStartsWith;
+    public function match($binaryOp) : ?StrStartsWith;
     /**
      * @return FuncCall|BooleanNot|null
      */
-    public function refactorStrStartsWith(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith) : ?\PhpParser\Node;
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith) : ?Node;
 }

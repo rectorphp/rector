@@ -25,7 +25,7 @@ final class UnwrapableAnnotationAnalyzer
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
@@ -42,14 +42,14 @@ final class UnwrapableAnnotationAnalyzer
     public function areUnwrappable(array $doctrineAnnotationTagValueNodes) : bool
     {
         // the new in initilazers is handled directly
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NEW_INITIALIZERS)) {
             return \false;
         }
         foreach ($doctrineAnnotationTagValueNodes as $doctrineAnnotationTagValueNode) {
-            $annotationClassName = $doctrineAnnotationTagValueNode->identifierTypeNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::RESOLVED_CLASS);
+            $annotationClassName = $doctrineAnnotationTagValueNode->identifierTypeNode->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
             $nestedAnnotationToAttribute = $this->matchAnnotationToAttribute($doctrineAnnotationTagValueNode);
             // the nested annotation should be convertable
-            if (!$nestedAnnotationToAttribute instanceof \Rector\Php80\ValueObject\AnnotationToAttribute) {
+            if (!$nestedAnnotationToAttribute instanceof AnnotationToAttribute) {
                 return \false;
             }
             if (!\in_array($annotationClassName, self::UNWRAPEABLE_ANNOTATION_CLASSES, \true)) {
@@ -61,7 +61,7 @@ final class UnwrapableAnnotationAnalyzer
     /**
      * @return \Rector\Php80\ValueObject\AnnotationToAttribute|null
      */
-    private function matchAnnotationToAttribute(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    private function matchAnnotationToAttribute(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {
         foreach ($this->annotationsToAttributes as $annotationToAttribute) {
             if (!$doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {

@@ -26,7 +26,7 @@ final class ChangeMethodVisibility
         $this->class = $class;
         $this->method = $method;
         $this->visibility = $visibility;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
     public function getClass() : string
     {

@@ -13,20 +13,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector\RemoveUselessParamTagRectorTest
  */
-final class RemoveUselessParamTagRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveUselessParamTagRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;
-    public function __construct(\Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover)
+    public function __construct(ParamTagRemover $paramTagRemover)
     {
         $this->paramTagRemover = $paramTagRemover;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove @param docblock with same type as parameter type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove @param docblock with same type as parameter type', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -56,15 +56,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+        if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
         $hasChanged = $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);

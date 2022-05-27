@@ -10,11 +10,11 @@ final class CurrentRectorProvider
      * @var \Rector\Core\Contract\Rector\RectorInterface|null
      */
     private $currentRector;
-    public function changeCurrentRector(\Rector\Core\Contract\Rector\RectorInterface $rector) : void
+    public function changeCurrentRector(RectorInterface $rector) : void
     {
         $this->currentRector = $rector;
     }
-    public function getCurrentRector() : ?\Rector\Core\Contract\Rector\RectorInterface
+    public function getCurrentRector() : ?RectorInterface
     {
         return $this->currentRector;
     }

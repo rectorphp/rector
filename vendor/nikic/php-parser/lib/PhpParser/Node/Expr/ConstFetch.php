@@ -5,7 +5,7 @@ namespace PhpParser\Node\Expr;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
-class ConstFetch extends \PhpParser\Node\Expr
+class ConstFetch extends Expr
 {
     /** @var Name Constant name */
     public $name;
@@ -15,7 +15,7 @@ class ConstFetch extends \PhpParser\Node\Expr
      * @param Name  $name       Constant name
      * @param array $attributes Additional attributes
      */
-    public function __construct(\PhpParser\Node\Name $name, array $attributes = [])
+    public function __construct(Name $name, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->name = $name;

@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRectorTest
  */
-final class JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector extends \Rector\Core\Rector\AbstractRector
+final class JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes json_encode()/json_decode() to safer and more verbose Nette\\Utils\\Json::encode()/decode() calls', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes json_encode()/json_decode() to safer and more verbose Nette\\Utils\\Json::encode()/decode() calls', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function decodeJson(string $jsonString)
@@ -62,12 +62,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->isName($node, 'json_encode')) {
             return $this->refactorJsonEncode($node);
@@ -77,19 +77,19 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorJsonEncode(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\StaticCall
+    private function refactorJsonEncode(FuncCall $funcCall) : StaticCall
     {
         $args = $funcCall->args;
         if (isset($args[1])) {
             $secondArgumentValue = $args[1]->value;
             if ($this->isName($secondArgumentValue, 'JSON_PRETTY_PRINT')) {
                 $classConstFetch = $this->nodeFactory->createClassConstFetch('Nette\\Utils\\Json', 'PRETTY');
-                $args[1] = new \PhpParser\Node\Arg($classConstFetch);
+                $args[1] = new Arg($classConstFetch);
             }
         }
         return $this->nodeFactory->createStaticCall('Nette\\Utils\\Json', 'encode', $args);
     }
-    private function refactorJsonDecode(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\StaticCall
+    private function refactorJsonDecode(FuncCall $funcCall) : StaticCall
     {
         $args = $funcCall->args;
         if (isset($args[1])) {
@@ -98,7 +98,7 @@ CODE_SAMPLE
                 unset($args[1]);
             } elseif ($this->valueResolver->isTrue($secondArgumentValue)) {
                 $classConstFetch = $this->nodeFactory->createClassConstFetch('Nette\\Utils\\Json', 'FORCE_ARRAY');
-                $args[1] = new \PhpParser\Node\Arg($classConstFetch);
+                $args[1] = new Arg($classConstFetch);
             }
         }
         return $this->nodeFactory->createStaticCall('Nette\\Utils\\Json', 'decode', $args);

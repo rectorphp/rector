@@ -18,31 +18,31 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80513-DataHandlerVariousMethodsAndMethodArguments.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\DataHandlerVariousMethodsAndMethodArgumentsRector\DataHandlerVariousMethodsAndMethodArgumentsRectorTest
  */
-final class DataHandlerVariousMethodsAndMethodArgumentsRector extends \Rector\Core\Rector\AbstractRector
+final class DataHandlerVariousMethodsAndMethodArgumentsRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\DataHandling\\DataHandler'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\DataHandling\\DataHandler'))) {
             return null;
         }
         if ($this->isName($node->name, 'destPathFromUploadFolder')) {
             /** @var Arg[] $args */
             $args = $node->args;
             $firstArgument = \array_shift($args);
-            if (!$firstArgument instanceof \PhpParser\Node\Arg) {
+            if (!$firstArgument instanceof Arg) {
                 return null;
             }
-            return new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('PATH_site')), $firstArgument->value);
+            return new Concat(new ConstFetch(new Name('PATH_site')), $firstArgument->value);
         }
         if ($this->isName($node->name, 'extFileFunctions') && 4 === \count($node->args)) {
             $this->removeNode($node->args[3]);
@@ -53,9 +53,9 @@ final class DataHandlerVariousMethodsAndMethodArgumentsRector extends \Rector\Co
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove CharsetConvertParameters', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove CharsetConvertParameters', [new CodeSample(<<<'CODE_SAMPLE'
 $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
 $dest = $dataHandler->destPathFromUploadFolder('uploadFolder');
 $dataHandler->extFileFunctions('table', 'field', 'theField', 'deleteAll');

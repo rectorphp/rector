@@ -9,5 +9,5 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 interface DocumentedRuleInterface
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+    public function getRuleDefinition() : RuleDefinition;
 }

@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\AddDoesNotPerformAssertionToNonAssertingTestRectorTest
  */
-final class AddDoesNotPerformAssertionToNonAssertingTestRector extends \Rector\Core\Rector\AbstractRector
+final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractRector
 {
     /**
      * @readonly
@@ -36,15 +36,15 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends \Rector\C
      * @var \Rector\PHPUnit\NodeAnalyzer\MockedVariableAnalyzer
      */
     private $mockedVariableAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\PHPUnit\NodeAnalyzer\AssertCallAnalyzer $assertCallAnalyzer, \Rector\PHPUnit\NodeAnalyzer\MockedVariableAnalyzer $mockedVariableAnalyzer)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AssertCallAnalyzer $assertCallAnalyzer, MockedVariableAnalyzer $mockedVariableAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->assertCallAnalyzer = $assertCallAnalyzer;
         $this->mockedVariableAnalyzer = $mockedVariableAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Tests without assertion will have @doesNotPerformAssertion', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Tests without assertion will have @doesNotPerformAssertion', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -76,12 +76,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkipClassMethod($node)) {
             return null;
@@ -89,7 +89,7 @@ CODE_SAMPLE
         $this->addDoesNotPerformAssertions($node);
         return $node;
     }
-    private function shouldSkipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($classMethod)) {
             return \true;
@@ -107,9 +107,9 @@ CODE_SAMPLE
         }
         return $this->mockedVariableAnalyzer->containsMockAsUsedVariable($classMethod);
     }
-    private function addDoesNotPerformAssertions(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function addDoesNotPerformAssertions(ClassMethod $classMethod) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@doesNotPerformAssertions', new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
+        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@doesNotPerformAssertions', new GenericTagValueNode('')));
     }
 }

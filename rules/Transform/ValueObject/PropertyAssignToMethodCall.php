@@ -27,11 +27,11 @@ final class PropertyAssignToMethodCall
         $this->class = $class;
         $this->oldPropertyName = $oldPropertyName;
         $this->newMethodName = $newMethodName;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getOldPropertyName() : string
     {

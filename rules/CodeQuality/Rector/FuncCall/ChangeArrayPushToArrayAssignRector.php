@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector\ChangeArrayPushToArrayAssignRectorTest
  */
-final class ChangeArrayPushToArrayAssignRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeArrayPushToArrayAssignRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change array_push() to direct variable assign', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change array_push() to direct variable assign', [new CodeSample(<<<'CODE_SAMPLE'
 $items = [];
 array_push($items, $item);
 CODE_SAMPLE
@@ -36,15 +36,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Expression::class];
+        return [Expression::class];
     }
     /**
      * @param Expression[] $node
      * @param Expression[]|null $node
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor(Node $node) : ?array
     {
-        if (!$node->expr instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$node->expr instanceof FuncCall) {
             return null;
         }
         $funcCall = $node->expr;
@@ -63,11 +63,11 @@ CODE_SAMPLE
         if ($args === []) {
             return null;
         }
-        $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($firstArg->value);
+        $arrayDimFetch = new ArrayDimFetch($firstArg->value);
         $newStmts = [];
         foreach ($args as $key => $arg) {
-            $assign = new \PhpParser\Node\Expr\Assign($arrayDimFetch, $arg->value);
-            $assignExpression = new \PhpParser\Node\Stmt\Expression($assign);
+            $assign = new Assign($arrayDimFetch, $arg->value);
+            $assignExpression = new Expression($assign);
             $newStmts[] = $assignExpression;
             // keep comments of first line
             if ($key === 0) {
@@ -76,7 +76,7 @@ CODE_SAMPLE
         }
         return $newStmts;
     }
-    private function hasArraySpread(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    private function hasArraySpread(FuncCall $funcCall) : bool
     {
         foreach ($funcCall->getArgs() as $arg) {
             if ($arg->unpack) {

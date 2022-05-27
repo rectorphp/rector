@@ -13,6 +13,6 @@ namespace RectorPrefix20220527\Symfony\Component\Console\Exception;
 /**
  * @author Jérôme Tamarelle <jerome@tamarelle.net>
  */
-class InvalidArgumentException extends \InvalidArgumentException implements \RectorPrefix20220527\Symfony\Component\Console\Exception\ExceptionInterface
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
 }

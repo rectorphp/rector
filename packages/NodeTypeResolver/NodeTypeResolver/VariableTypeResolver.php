@@ -18,7 +18,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  * @implements NodeTypeResolverInterface<Variable>
  */
-final class VariableTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
+final class VariableTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @readonly
@@ -30,7 +30,7 @@ final class VariableTypeResolver implements \Rector\NodeTypeResolver\Contract\No
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -40,51 +40,51 @@ final class VariableTypeResolver implements \Rector\NodeTypeResolver\Contract\No
      */
     public function getNodeClasses() : array
     {
-        return [\PhpParser\Node\Expr\Variable::class];
+        return [Variable::class];
     }
     /**
      * @param Variable $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve(Node $node) : Type
     {
         $variableName = $this->nodeNameResolver->getName($node);
         if ($variableName === null) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         $scopeType = $this->resolveTypesFromScope($node, $variableName);
-        if (!$scopeType instanceof \PHPStan\Type\MixedType) {
+        if (!$scopeType instanceof MixedType) {
             return $scopeType;
         }
         // get from annotation
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         return $phpDocInfo->getVarType();
     }
-    private function resolveTypesFromScope(\PhpParser\Node\Expr\Variable $variable, string $variableName) : \PHPStan\Type\Type
+    private function resolveTypesFromScope(Variable $variable, string $variableName) : Type
     {
         $scope = $this->resolveNodeScope($variable);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return new \PHPStan\Type\MixedType();
+        if (!$scope instanceof Scope) {
+            return new MixedType();
         }
         if (!$scope->hasVariableType($variableName)->yes()) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         // this → object type is easier to work with and consistent with the rest of the code
         return $scope->getVariableType($variableName);
     }
-    private function resolveNodeScope(\PhpParser\Node\Expr\Variable $variable) : ?\PHPStan\Analyser\Scope
+    private function resolveNodeScope(Variable $variable) : ?Scope
     {
-        $scope = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if ($scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $variable->getAttribute(AttributeKey::SCOPE);
+        if ($scope instanceof Scope) {
             return $scope;
         }
         return $this->resolveFromParentNodes($variable);
     }
-    private function resolveFromParentNodes(\PhpParser\Node\Expr\Variable $variable) : ?\PHPStan\Analyser\Scope
+    private function resolveFromParentNodes(Variable $variable) : ?Scope
     {
-        $parent = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node) {
+        $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof Node) {
             return null;
         }
-        return $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        return $parent->getAttribute(AttributeKey::SCOPE);
     }
 }

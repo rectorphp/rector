@@ -13,14 +13,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector\DowngradeUnionTypeTypedPropertyRectorTest
  */
-final class DowngradeUnionTypeTypedPropertyRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeUnionTypeTypedPropertyRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\CodeQuality\NodeFactory\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
-    public function __construct(\Rector\CodeQuality\NodeFactory\PropertyTypeDecorator $propertyTypeDecorator)
+    public function __construct(PropertyTypeDecorator $propertyTypeDecorator)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
     }
@@ -29,11 +29,11 @@ final class DowngradeUnionTypeTypedPropertyRector extends \Rector\Core\Rector\Ab
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes union type property type definition, adding `@var` annotations instead.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removes union type property type definition, adding `@var` annotations instead.', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private string|int $property;
@@ -53,7 +53,7 @@ CODE_SAMPLE
     /**
      * @param Property $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->type === null) {
             return null;
@@ -65,12 +65,12 @@ CODE_SAMPLE
         $node->type = null;
         return $node;
     }
-    private function shouldRemoveProperty(\PhpParser\Node\Stmt\Property $property) : bool
+    private function shouldRemoveProperty(Property $property) : bool
     {
         if ($property->type === null) {
             return \false;
         }
         // Check it is the union type
-        return $property->type instanceof \PhpParser\Node\UnionType;
+        return $property->type instanceof UnionType;
     }
 }

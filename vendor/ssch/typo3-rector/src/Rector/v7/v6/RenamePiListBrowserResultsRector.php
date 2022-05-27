@@ -16,21 +16,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.6.x/Breaking-72931-SearchFormControllerpi_list_browseresultsHasBeenRenamed.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v6\RenamePiListBrowserResultsRector\RenamePiListBrowserResultsRectorTest
  */
-final class RenamePiListBrowserResultsRector extends \Rector\Core\Rector\AbstractRector
+final class RenamePiListBrowserResultsRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\IndexedSearch\\Controller\\SearchFormController'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('TYPO3\\CMS\\IndexedSearch\\Controller\\SearchFormController'))) {
             return null;
         }
         if (!$this->isName($node->name, 'pi_list_browseresults')) {
@@ -41,22 +41,22 @@ final class RenamePiListBrowserResultsRector extends \Rector\Core\Rector\Abstrac
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename pi_list_browseresults calls to renderPagination', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->pi_list_browseresults', '$this->renderPagination')]);
+        return new RuleDefinition('Rename pi_list_browseresults calls to renderPagination', [new CodeSample('$this->pi_list_browseresults', '$this->renderPagination')]);
     }
     /**
      * @param string|string[] $newMethodNames
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\ArrayDimFetch
      */
-    private function process(\PhpParser\Node\Expr\MethodCall $methodCall, $newMethodNames)
+    private function process(MethodCall $methodCall, $newMethodNames)
     {
         if (\is_string($newMethodNames)) {
-            $methodCall->name = new \PhpParser\Node\Identifier($newMethodNames);
+            $methodCall->name = new Identifier($newMethodNames);
             return $methodCall;
         }
         // special case for array dim fetch
-        $methodCall->name = new \PhpParser\Node\Identifier($newMethodNames['name']);
-        return new \PhpParser\Node\Expr\ArrayDimFetch($methodCall, \PhpParser\BuilderHelpers::normalizeValue($newMethodNames['array_key']));
+        $methodCall->name = new Identifier($newMethodNames['name']);
+        return new ArrayDimFetch($methodCall, BuilderHelpers::normalizeValue($newMethodNames['array_key']));
     }
 }

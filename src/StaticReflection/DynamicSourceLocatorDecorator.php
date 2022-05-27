@@ -27,7 +27,7 @@ final class DynamicSourceLocatorDecorator
      * @var \Rector\Core\FileSystem\PhpFilesFinder
      */
     private $phpFilesFinder;
-    public function __construct(\RectorPrefix20220527\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter, \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider $dynamicSourceLocatorProvider, \Rector\Core\FileSystem\PhpFilesFinder $phpFilesFinder)
+    public function __construct(FileSystemFilter $fileSystemFilter, DynamicSourceLocatorProvider $dynamicSourceLocatorProvider, PhpFilesFinder $phpFilesFinder)
     {
         $this->fileSystemFilter = $fileSystemFilter;
         $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;

@@ -26,7 +26,7 @@ final class ComposerPatchesConfigurationUpdater
      * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
      */
     private $parametersMerger;
-    public function __construct(\RectorPrefix20220527\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20220527\Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager $jsonFileManager, \RectorPrefix20220527\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger)
+    public function __construct(ComposerJsonFactory $composerJsonFactory, JsonFileManager $jsonFileManager, ParametersMerger $parametersMerger)
     {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->jsonFileManager = $jsonFileManager;
@@ -35,7 +35,7 @@ final class ComposerPatchesConfigurationUpdater
     /**
      * @param mixed[] $composerExtraPatches
      */
-    public function updateComposerJson(string $composerJsonFilePath, array $composerExtraPatches) : \RectorPrefix20220527\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson
+    public function updateComposerJson(string $composerJsonFilePath, array $composerExtraPatches) : ComposerJson
     {
         $extra = ['patches' => $composerExtraPatches];
         $composerJson = $this->composerJsonFactory->createFromFilePath($composerJsonFilePath);
@@ -51,8 +51,8 @@ final class ComposerPatchesConfigurationUpdater
     {
         $composerJson = $this->updateComposerJson($composerJsonFilePath, $composerExtraPatches);
         $fileInfo = $composerJson->getFileInfo();
-        if (!$fileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
-            throw new \RectorPrefix20220527\Symplify\Astral\Exception\ShouldNotHappenException();
+        if (!$fileInfo instanceof SmartFileInfo) {
+            throw new ShouldNotHappenException();
         }
         $this->jsonFileManager->printComposerJsonToFilePath($composerJson, $fileInfo->getRealPath());
     }

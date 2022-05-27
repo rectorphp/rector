@@ -17,5 +17,5 @@ interface PhpParserNodeMapperInterface
     /**
      * @param TNode $node
      */
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type;
+    public function mapToPHPStan(Node $node) : Type;
 }

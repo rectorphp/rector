@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\MakeInheritedMethodVisibilitySameAsParentRectorTest
  */
-final class MakeInheritedMethodVisibilitySameAsParentRector extends \Rector\Core\Rector\AbstractRector
+final class MakeInheritedMethodVisibilitySameAsParentRector extends AbstractRector
 {
     /**
      * @readonly
@@ -30,14 +30,14 @@ final class MakeInheritedMethodVisibilitySameAsParentRector extends \Rector\Core
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(VisibilityManipulator $visibilityManipulator, ReflectionResolver $reflectionResolver)
     {
         $this->visibilityManipulator = $visibilityManipulator;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make method visibility same as parent one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Make method visibility same as parent one', [new CodeSample(<<<'CODE_SAMPLE'
 class ChildClass extends ParentClass
 {
     public function run()
@@ -74,15 +74,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         $parentClassReflections = $classReflection->getParents();
@@ -116,7 +116,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isClassMethodCompatibleWithParentReflectionMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \ReflectionMethod $reflectionMethod) : bool
+    private function isClassMethodCompatibleWithParentReflectionMethod(ClassMethod $classMethod, ReflectionMethod $reflectionMethod) : bool
     {
         if ($reflectionMethod->isPublic() && $classMethod->isPublic()) {
             return \true;
@@ -129,7 +129,7 @@ CODE_SAMPLE
         }
         return $classMethod->isPrivate();
     }
-    private function changeClassMethodVisibilityBasedOnReflectionMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \ReflectionMethod $reflectionMethod) : void
+    private function changeClassMethodVisibilityBasedOnReflectionMethod(ClassMethod $classMethod, ReflectionMethod $reflectionMethod) : void
     {
         if ($reflectionMethod->isPublic()) {
             $this->visibilityManipulator->makePublic($classMethod);

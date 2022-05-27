@@ -22,17 +22,17 @@ final class AlwaysTemplateParameterAssign
      * @var \PhpParser\Node\Expr
      */
     private $assignedExpr;
-    public function __construct(\PhpParser\Node\Expr\Assign $assign, string $parameterName, \PhpParser\Node\Expr $assignedExpr)
+    public function __construct(Assign $assign, string $parameterName, Expr $assignedExpr)
     {
         $this->assign = $assign;
         $this->parameterName = $parameterName;
         $this->assignedExpr = $assignedExpr;
     }
-    public function getAssign() : \PhpParser\Node\Expr\Assign
+    public function getAssign() : Assign
     {
         return $this->assign;
     }
-    public function getAssignVar() : \PhpParser\Node\Expr
+    public function getAssignVar() : Expr
     {
         return $this->assign->var;
     }
@@ -40,7 +40,7 @@ final class AlwaysTemplateParameterAssign
     {
         return $this->parameterName;
     }
-    public function getAssignedExpr() : \PhpParser\Node\Expr
+    public function getAssignedExpr() : Expr
     {
         return $this->assignedExpr;
     }

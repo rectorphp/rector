@@ -20,15 +20,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php54\Rector\Break_\RemoveZeroBreakContinueRector\RemoveZeroBreakContinueRectorTest
  */
-final class RemoveZeroBreakContinueRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class RemoveZeroBreakContinueRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::NO_ZERO_BREAK;
+        return PhpVersionFeature::NO_ZERO_BREAK;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove 0 from break and continue', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove 0 from break and continue', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($random)
@@ -65,17 +65,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Break_::class, \PhpParser\Node\Stmt\Continue_::class];
+        return [Break_::class, Continue_::class];
     }
     /**
      * @param Break_|Continue_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->num === null) {
             return null;
         }
-        if ($node->num instanceof \PhpParser\Node\Scalar\LNumber) {
+        if ($node->num instanceof LNumber) {
             $number = $this->valueResolver->getValue($node->num);
             if ($number > 1) {
                 return null;
@@ -86,7 +86,7 @@ CODE_SAMPLE
             }
             return null;
         }
-        if ($node->num instanceof \PhpParser\Node\Expr\Variable) {
+        if ($node->num instanceof Variable) {
             return $this->processVariableNum($node, $node->num);
         }
         return null;
@@ -94,17 +94,17 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Break_|\PhpParser\Node\Stmt\Continue_ $stmt
      */
-    private function processVariableNum($stmt, \PhpParser\Node\Expr\Variable $numVariable) : ?\PhpParser\Node
+    private function processVariableNum($stmt, Variable $numVariable) : ?Node
     {
         $staticType = $this->getType($numVariable);
-        if ($staticType instanceof \PHPStan\Type\ConstantType) {
-            if ($staticType instanceof \PHPStan\Type\Constant\ConstantIntegerType) {
+        if ($staticType instanceof ConstantType) {
+            if ($staticType instanceof ConstantIntegerType) {
                 if ($staticType->getValue() === 0) {
                     $stmt->num = null;
                     return $stmt;
                 }
                 if ($staticType->getValue() > 0) {
-                    $stmt->num = new \PhpParser\Node\Scalar\LNumber($staticType->getValue());
+                    $stmt->num = new LNumber($staticType->getValue());
                     return $stmt;
                 }
             }

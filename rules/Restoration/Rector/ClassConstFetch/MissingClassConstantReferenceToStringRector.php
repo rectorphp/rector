@@ -13,20 +13,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Restoration\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector\MissingClassConstantReferenceToStringRectorTest
  */
-final class MissingClassConstantReferenceToStringRector extends \Rector\Core\Rector\AbstractRector
+final class MissingClassConstantReferenceToStringRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert missing class reference to string', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert missing class reference to string', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -51,12 +51,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\ClassConstFetch::class];
+        return [ClassConstFetch::class];
     }
     /**
      * @param ClassConstFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node->name, 'class')) {
             return null;
@@ -68,6 +68,6 @@ CODE_SAMPLE
         if ($this->reflectionProvider->hasClass($referencedClass)) {
             return null;
         }
-        return new \PhpParser\Node\Scalar\String_($referencedClass);
+        return new String_($referencedClass);
     }
 }

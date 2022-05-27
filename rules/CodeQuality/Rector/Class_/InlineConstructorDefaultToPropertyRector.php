@@ -15,20 +15,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector\InlineConstructorDefaultToPropertyRectorTest
  */
-final class InlineConstructorDefaultToPropertyRector extends \Rector\Core\Rector\AbstractRector
+final class InlineConstructorDefaultToPropertyRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\ConstructorPropertyDefaultExprResolver
      */
     private $constructorPropertyDefaultExprResolver;
-    public function __construct(\Rector\CodeQuality\NodeAnalyzer\ConstructorPropertyDefaultExprResolver $constructorPropertyDefaultExprResolver)
+    public function __construct(ConstructorPropertyDefaultExprResolver $constructorPropertyDefaultExprResolver)
     {
         $this->constructorPropertyDefaultExprResolver = $constructorPropertyDefaultExprResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move property default from constructor to property default', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move property default from constructor to property default', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $name;
@@ -52,15 +52,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $constructClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return null;
         }
         // resolve property defaults
@@ -71,7 +71,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         foreach ($defaultPropertyExprAssigns as $defaultPropertyExprAssign) {
             $property = $node->getProperty($defaultPropertyExprAssign->getPropertyName());
-            if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+            if (!$property instanceof Property) {
                 continue;
             }
             $propertyProperty = $property->props[0];

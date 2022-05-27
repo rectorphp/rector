@@ -17,15 +17,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Laravel\Tests\Rector\FuncCall\FactoryFuncCallToStaticCallRector\FactoryFuncCallToStaticCallRectorTest
  */
-final class FactoryFuncCallToStaticCallRector extends \Rector\Core\Rector\AbstractRector
+final class FactoryFuncCallToStaticCallRector extends AbstractRector
 {
     /**
      * @var string
      */
     private const FACTORY = 'factory';
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use the static factory method instead of global factory function.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use the static factory method instead of global factory function.', [new CodeSample(<<<'CODE_SAMPLE'
 factory(User::class);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -38,12 +38,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param Node\Expr\FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node->name, self::FACTORY)) {
             return null;
@@ -51,19 +51,19 @@ CODE_SAMPLE
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[0] instanceof Arg) {
             return null;
         }
         $firstArgValue = $node->args[0]->value;
-        if (!$firstArgValue instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+        if (!$firstArgValue instanceof ClassConstFetch) {
             return null;
         }
         $model = $firstArgValue->class;
         // create model
         if (!isset($node->args[1])) {
-            return new \PhpParser\Node\Expr\StaticCall($model, self::FACTORY);
+            return new StaticCall($model, self::FACTORY);
         }
         // create models of a given type
-        return new \PhpParser\Node\Expr\StaticCall($model, self::FACTORY, [$node->args[1]]);
+        return new StaticCall($model, self::FACTORY, [$node->args[1]]);
     }
 }

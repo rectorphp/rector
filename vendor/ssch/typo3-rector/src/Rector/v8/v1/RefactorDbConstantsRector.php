@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.1/Breaking-75454-TYPO3_dbConstantsRemoved.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v1\RefactorDbConstantsRector\RefactorDbConstantsRectorTest
  */
-final class RefactorDbConstantsRector extends \Rector\Core\Rector\AbstractRector
+final class RefactorDbConstantsRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -26,12 +26,12 @@ final class RefactorDbConstantsRector extends \Rector\Core\Rector\AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\ConstFetch::class];
+        return [ConstFetch::class];
     }
     /**
      * @param ConstFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $constantsName = $this->getName($node);
         if (null === $constantsName) {
@@ -41,14 +41,14 @@ final class RefactorDbConstantsRector extends \Rector\Core\Rector\AbstractRector
             return null;
         }
         $globalKey = self::MAP_CONSTANTS_TO_GLOBALS[$constantsName];
-        return new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_('TYPO3_CONF_VARS')), new \PhpParser\Node\Scalar\String_('DB')), new \PhpParser\Node\Scalar\String_('Connections')), new \PhpParser\Node\Scalar\String_('Default')), new \PhpParser\Node\Scalar\String_($globalKey));
+        return new ArrayDimFetch(new ArrayDimFetch(new ArrayDimFetch(new ArrayDimFetch(new ArrayDimFetch(new Variable('GLOBALS'), new String_('TYPO3_CONF_VARS')), new String_('DB')), new String_('Connections')), new String_('Default')), new String_($globalKey));
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes TYPO3_db constants to $GLOBALS[\'TYPO3_CONF_VARS\'][\'DB\'][\'Connections\'][\'Default\'].', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes TYPO3_db constants to $GLOBALS[\'TYPO3_CONF_VARS\'][\'DB\'][\'Connections\'][\'Default\'].', [new CodeSample(<<<'CODE_SAMPLE'
 $database = TYPO3_db;
 $username = TYPO3_db_username;
 $password = TYPO3_db_password;

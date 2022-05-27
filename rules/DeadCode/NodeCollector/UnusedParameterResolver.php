@@ -13,14 +13,14 @@ final class UnusedParameterResolver
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
+    public function __construct(ParamAnalyzer $paramAnalyzer)
     {
         $this->paramAnalyzer = $paramAnalyzer;
     }
     /**
      * @return Param[]
      */
-    public function resolve(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function resolve(ClassMethod $classMethod) : array
     {
         /** @var array<int, Param> $unusedParameters */
         $unusedParameters = [];

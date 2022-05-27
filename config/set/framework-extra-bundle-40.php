@@ -6,7 +6,7 @@ namespace RectorPrefix20220527;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\ClassMethod\RemoveServiceFromSensioRouteRector;
 use Rector\Symfony\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\Symfony\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector::class);
-    $rectorConfig->rule(\Rector\Symfony\Rector\ClassMethod\RemoveServiceFromSensioRouteRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(ReplaceSensioRouteAnnotationWithSymfonyRector::class);
+    $rectorConfig->rule(RemoveServiceFromSensioRouteRector::class);
 };

@@ -6,19 +6,19 @@ namespace RectorPrefix20220527\OndraM\CiDetector\Ci;
 use RectorPrefix20220527\OndraM\CiDetector\CiDetector;
 use RectorPrefix20220527\OndraM\CiDetector\Env;
 use RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic;
-class Travis extends \RectorPrefix20220527\OndraM\CiDetector\Ci\AbstractCi
+class Travis extends AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220527\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(Env $env) : bool
     {
         return $env->get('TRAVIS') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220527\OndraM\CiDetector\CiDetector::CI_TRAVIS;
+        return CiDetector::CI_TRAVIS;
     }
-    public function isPullRequest() : \RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : TrinaryLogic
     {
-        return \RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('TRAVIS_PULL_REQUEST') !== 'false');
+        return TrinaryLogic::createFromBoolean($this->env->getString('TRAVIS_PULL_REQUEST') !== 'false');
     }
     public function getBuildNumber() : string
     {

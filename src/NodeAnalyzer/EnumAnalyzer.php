@@ -19,7 +19,7 @@ final class EnumAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -27,10 +27,10 @@ final class EnumAnalyzer
     /**
      * @see https://github.com/myclabs/php-enum#declaration
      */
-    public function isEnumClassConst(\PhpParser\Node\Stmt\ClassConst $classConst) : bool
+    public function isEnumClassConst(ClassConst $classConst) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($classConst, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($classConst, Class_::class);
+        if (!$class instanceof Class_) {
             return \false;
         }
         if ($class->extends === null) {

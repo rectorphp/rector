@@ -8,7 +8,7 @@ namespace RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
  *
  * @package Helmich\TypoScriptParser\Tokenizer\Preprocessing
  */
-class RemoveTrailingWhitespacePreprocessor implements \RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
+class RemoveTrailingWhitespacePreprocessor implements Preprocessor
 {
     /** @var string */
     private $eolCharacter;

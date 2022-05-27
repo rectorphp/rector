@@ -37,7 +37,7 @@ final class FileGenerator
      * @var \Rector\RectorGenerator\FileSystem\TemplateFileSystem
      */
     private $templateFileSystem;
-    public function __construct(\RectorPrefix20220527\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\RectorGenerator\TemplateFactory $templateFactory, \Rector\RectorGenerator\FileSystem\TemplateFileSystem $templateFileSystem)
+    public function __construct(SmartFileSystem $smartFileSystem, TemplateFactory $templateFactory, TemplateFileSystem $templateFileSystem)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->templateFactory = $templateFactory;
@@ -48,7 +48,7 @@ final class FileGenerator
      * @param array<string, string> $templateVariables
      * @return string[]
      */
-    public function generateFiles(array $templateFileInfos, array $templateVariables, \Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, string $destinationDirectory) : array
+    public function generateFiles(array $templateFileInfos, array $templateVariables, RectorRecipe $rectorRecipe, string $destinationDirectory) : array
     {
         $generatedFilePaths = [];
         foreach ($templateFileInfos as $templateFileInfo) {
@@ -59,18 +59,18 @@ final class FileGenerator
     /**
      * @param array<string, string> $templateVariables
      */
-    private function generateFileInfoWithTemplateVariables(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $templateVariables, \Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, string $targetDirectory) : string
+    private function generateFileInfoWithTemplateVariables(SmartFileInfo $smartFileInfo, array $templateVariables, RectorRecipe $rectorRecipe, string $targetDirectory) : string
     {
         $targetFilePath = $this->templateFileSystem->resolveDestination($smartFileInfo, $templateVariables, $rectorRecipe, $targetDirectory);
         $content = $this->templateFactory->create($smartFileInfo->getContents(), $templateVariables);
         // replace "Rector\Utils\" with "Utils\Rector\" for 3rd party packages
         if (!$rectorRecipe->isRectorRepository()) {
-            $content = \RectorPrefix20220527\Nette\Utils\Strings::replace($content, self::RECTOR_UTILS_REGEX, 'Utils\\Rector');
-            $content = \RectorPrefix20220527\Nette\Utils\Strings::replace($content, self::RECTOR_UTILS_TESTS_REGEX, 'Utils\\Rector\\Tests');
+            $content = Strings::replace($content, self::RECTOR_UTILS_REGEX, 'Utils\\Rector');
+            $content = Strings::replace($content, self::RECTOR_UTILS_TESTS_REGEX, 'Utils\\Rector\\Tests');
         }
         // correct tests PSR-4 namespace for core rector packages
-        if (\in_array($rectorRecipe->getPackage(), \Rector\RectorGenerator\Enum\Packages::RECTOR_CORE, \true)) {
-            $content = \RectorPrefix20220527\Nette\Utils\Strings::replace($content, '#namespace Rector\\\\Tests\\\\' . $rectorRecipe->getPackage() . '#', 'namespace Rector\\' . $rectorRecipe->getPackage() . '\\Tests');
+        if (\in_array($rectorRecipe->getPackage(), Packages::RECTOR_CORE, \true)) {
+            $content = Strings::replace($content, '#namespace Rector\\\\Tests\\\\' . $rectorRecipe->getPackage() . '#', 'namespace Rector\\' . $rectorRecipe->getPackage() . '\\Tests');
             // add core package main config
             if (\substr_compare($targetFilePath, 'configured_rule.php', -\strlen('configured_rule.php')) === 0) {
                 $rectorConfigLine = 'return static function (RectorConfig $rectorConfig): void {';

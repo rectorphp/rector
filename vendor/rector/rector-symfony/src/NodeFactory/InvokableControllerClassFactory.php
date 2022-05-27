@@ -37,30 +37,30 @@ final class InvokableControllerClassFactory
      * @var \Rector\Symfony\NodeFactory\InvokableController\ActiveClassElementsFilter
      */
     private $activeClassElementsFilter;
-    public function __construct(\Rector\Symfony\NodeFactory\InvokableControllerNameFactory $invokableControllerNameFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Symfony\NodeAnalyzer\InvokableAnalyzer\ActiveClassElementsClassMethodResolver $activeClassElementsClassMethodResolver, \Rector\Symfony\NodeFactory\InvokableController\ActiveClassElementsFilter $activeClassElementsFilter)
+    public function __construct(\Rector\Symfony\NodeFactory\InvokableControllerNameFactory $invokableControllerNameFactory, NodeNameResolver $nodeNameResolver, ActiveClassElementsClassMethodResolver $activeClassElementsClassMethodResolver, ActiveClassElementsFilter $activeClassElementsFilter)
     {
         $this->invokableControllerNameFactory = $invokableControllerNameFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->activeClassElementsClassMethodResolver = $activeClassElementsClassMethodResolver;
         $this->activeClassElementsFilter = $activeClassElementsFilter;
     }
-    public function createWithActionClassMethod(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $actionClassMethod) : \PhpParser\Node\Stmt\Class_
+    public function createWithActionClassMethod(Class_ $class, ClassMethod $actionClassMethod) : Class_
     {
         $controllerName = $this->createControllerName($class, $actionClassMethod);
-        $actionClassMethod->name = new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::INVOKE);
+        $actionClassMethod->name = new Identifier(MethodName::INVOKE);
         $newClass = clone $class;
         $newClassStmts = $this->resolveNewClassStmts($actionClassMethod, $class);
-        $newClass->name = new \PhpParser\Node\Identifier($controllerName);
+        $newClass->name = new Identifier($controllerName);
         $newClass->stmts = $newClassStmts;
         return $newClass;
     }
-    private function createControllerName(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $actionClassMethod) : string
+    private function createControllerName(Class_ $class, ClassMethod $actionClassMethod) : string
     {
         /** @var Identifier $className */
         $className = $class->name;
         return $this->invokableControllerNameFactory->createControllerName($className, $actionClassMethod->name->toString());
     }
-    private function filterOutUnusedDependencies(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\Symfony\ValueObject\InvokableController\ActiveClassElements $activeClassElements) : \PhpParser\Node\Stmt\ClassMethod
+    private function filterOutUnusedDependencies(ClassMethod $classMethod, ActiveClassElements $activeClassElements) : ClassMethod
     {
         // to keep original method in other run untouched
         $classMethod = clone $classMethod;
@@ -73,20 +73,20 @@ final class InvokableControllerClassFactory
         $this->filterOutUnusedPropertyAssigns($classMethod, $activeClassElements);
         return $classMethod;
     }
-    private function filterOutUnusedPropertyAssigns(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\Symfony\ValueObject\InvokableController\ActiveClassElements $activeClassElements) : void
+    private function filterOutUnusedPropertyAssigns(ClassMethod $classMethod, ActiveClassElements $activeClassElements) : void
     {
         if (!\is_array($classMethod->stmts)) {
             return;
         }
         foreach ($classMethod->stmts as $key => $stmt) {
-            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if (!$stmt instanceof Expression) {
                 continue;
             }
             $stmtExpr = $stmt->expr;
-            if (!$stmtExpr instanceof \PhpParser\Node\Expr\Assign) {
+            if (!$stmtExpr instanceof Assign) {
                 continue;
             }
-            if (!$stmtExpr->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            if (!$stmtExpr->var instanceof PropertyFetch) {
                 continue;
             }
             $assignPropertyFetch = $stmtExpr->var;
@@ -103,7 +103,7 @@ final class InvokableControllerClassFactory
     /**
      * @return Stmt[]
      */
-    private function resolveNewClassStmts(\PhpParser\Node\Stmt\ClassMethod $actionClassMethod, \PhpParser\Node\Stmt\Class_ $class) : array
+    private function resolveNewClassStmts(ClassMethod $actionClassMethod, Class_ $class) : array
     {
         $activeClassElements = $this->activeClassElementsClassMethodResolver->resolve($actionClassMethod);
         $activeClassConsts = $this->activeClassElementsFilter->filterClassConsts($class, $activeClassElements);
@@ -112,7 +112,7 @@ final class InvokableControllerClassFactory
         $newClassStmts = \array_merge($activeClassConsts, $activeProperties);
         foreach ($class->getMethods() as $classMethod) {
             // avoid duplicated names
-            if ($this->nodeNameResolver->isName($classMethod->name, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+            if ($this->nodeNameResolver->isName($classMethod->name, MethodName::CONSTRUCT)) {
                 $classMethod = $this->filterOutUnusedDependencies($classMethod, $activeClassElements);
                 $newClassStmts[] = $classMethod;
             }

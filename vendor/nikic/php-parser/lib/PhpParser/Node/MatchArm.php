@@ -5,7 +5,7 @@ namespace PhpParser\Node;
 
 use PhpParser\Node;
 use PhpParser\NodeAbstract;
-class MatchArm extends \PhpParser\NodeAbstract
+class MatchArm extends NodeAbstract
 {
     /** @var null|Node\Expr[] */
     public $conds;
@@ -14,7 +14,7 @@ class MatchArm extends \PhpParser\NodeAbstract
     /**
      * @param null|Node\Expr[] $conds
      */
-    public function __construct($conds, \PhpParser\Node\Expr $body, array $attributes = [])
+    public function __construct($conds, Node\Expr $body, array $attributes = [])
     {
         $this->conds = $conds;
         $this->body = $body;

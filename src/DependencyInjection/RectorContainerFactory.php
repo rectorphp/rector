@@ -11,16 +11,16 @@ use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use RectorPrefix20220527\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorContainerFactory
 {
-    public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20220527\Psr\Container\ContainerInterface
+    public function createFromBootstrapConfigs(BootstrapConfigs $bootstrapConfigs) : ContainerInterface
     {
         $container = $this->createFromConfigs($bootstrapConfigs->getConfigFiles());
         $mainConfigFile = $bootstrapConfigs->getMainConfigFile();
         if ($mainConfigFile !== null) {
             // warning about old syntax before RectorConfig
-            $fileContents = \RectorPrefix20220527\Nette\Utils\FileSystem::read($mainConfigFile);
+            $fileContents = FileSystem::read($mainConfigFile);
             if (\strpos($fileContents, 'ContainerConfigurator $containerConfigurator') !== \false) {
                 /** @var SymfonyStyle $symfonyStyle */
-                $symfonyStyle = $container->get(\RectorPrefix20220527\Symfony\Component\Console\Style\SymfonyStyle::class);
+                $symfonyStyle = $container->get(SymfonyStyle::class);
                 // @todo add link to blog post after release
                 $warningMessage = \sprintf('Your "%s" config is using old syntax with "ContainerConfigurator".%sUpgrade to "RectorConfig" that allows better autocomplete and future standard.', $mainConfigFile, \PHP_EOL);
                 $symfonyStyle->warning($warningMessage);
@@ -28,7 +28,7 @@ final class RectorContainerFactory
                 \sleep(3);
             }
             /** @var ChangedFilesDetector $changedFilesDetector */
-            $changedFilesDetector = $container->get(\Rector\Caching\Detector\ChangedFilesDetector::class);
+            $changedFilesDetector = $container->get(ChangedFilesDetector::class);
             $changedFilesDetector->setFirstResolvedConfigFileInfo($mainConfigFile);
         }
         return $container;
@@ -37,9 +37,9 @@ final class RectorContainerFactory
      * @param string[] $configFiles
      * @api
      */
-    private function createFromConfigs(array $configFiles) : \RectorPrefix20220527\Psr\Container\ContainerInterface
+    private function createFromConfigs(array $configFiles) : ContainerInterface
     {
-        $rectorKernel = new \Rector\Core\Kernel\RectorKernel();
+        $rectorKernel = new RectorKernel();
         return $rectorKernel->createFromConfigs($configFiles);
     }
 }

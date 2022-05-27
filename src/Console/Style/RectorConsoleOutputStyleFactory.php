@@ -15,19 +15,19 @@ final class RectorConsoleOutputStyleFactory
      * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
      */
     private $privatesCaller;
-    public function __construct(\RectorPrefix20220527\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller)
+    public function __construct(PrivatesCaller $privatesCaller)
     {
         $this->privatesCaller = $privatesCaller;
     }
     public function create() : \Rector\Core\Console\Style\RectorConsoleOutputStyle
     {
-        $argvInput = new \RectorPrefix20220527\Symfony\Component\Console\Input\ArgvInput();
-        $consoleOutput = new \RectorPrefix20220527\Symfony\Component\Console\Output\ConsoleOutput();
+        $argvInput = new ArgvInput();
+        $consoleOutput = new ConsoleOutput();
         // to configure all -v, -vv, -vvv options without memory-lock to Application run() arguments
-        $this->privatesCaller->callPrivateMethod(new \RectorPrefix20220527\Symfony\Component\Console\Application(), 'configureIO', [$argvInput, $consoleOutput]);
+        $this->privatesCaller->callPrivateMethod(new Application(), 'configureIO', [$argvInput, $consoleOutput]);
         // --debug is called
         if ($argvInput->hasParameterOption('--debug')) {
-            $consoleOutput->setVerbosity(\RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG);
+            $consoleOutput->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
         }
         return new \Rector\Core\Console\Style\RectorConsoleOutputStyle($argvInput, $consoleOutput);
     }

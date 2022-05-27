@@ -26,7 +26,7 @@ final class NetteTypeAnalyzer
      * @var \Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser
      */
     private $containsTypeAnalyser;
-    public function __construct(\RectorPrefix20220527\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20220527\Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser $containsTypeAnalyser)
+    public function __construct(SimpleNameResolver $simpleNameResolver, ContainsTypeAnalyser $containsTypeAnalyser)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->containsTypeAnalyser = $containsTypeAnalyser;
@@ -34,12 +34,12 @@ final class NetteTypeAnalyzer
     /**
      * E.g. $this->template->key
      */
-    public function isTemplateMagicPropertyType(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\Scope $scope) : bool
+    public function isTemplateMagicPropertyType(Expr $expr, Scope $scope) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$expr instanceof PropertyFetch) {
             return \false;
         }
-        if (!$expr->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$expr->var instanceof PropertyFetch) {
             return \false;
         }
         return $this->isTemplateType($expr->var, $scope);
@@ -47,14 +47,14 @@ final class NetteTypeAnalyzer
     /**
      * E.g. $this->template
      */
-    public function isTemplateType(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\Scope $scope) : bool
+    public function isTemplateType(Expr $expr, Scope $scope) : bool
     {
         return $this->containsTypeAnalyser->containsExprTypes($expr, $scope, self::TEMPLATE_TYPES);
     }
     /**
      * This type has getComponent() method
      */
-    public function isInsideComponentContainer(\PHPStan\Analyser\Scope $scope) : bool
+    public function isInsideComponentContainer(Scope $scope) : bool
     {
         $className = $this->simpleNameResolver->getClassNameFromScope($scope);
         if ($className === null) {
@@ -63,7 +63,7 @@ final class NetteTypeAnalyzer
         // this type has getComponent() method
         return \is_a($className, 'RectorPrefix20220527\\Nette\\ComponentModel\\Container', \true);
     }
-    public function isInsideControl(\PHPStan\Analyser\Scope $scope) : bool
+    public function isInsideControl(Scope $scope) : bool
     {
         $className = $this->simpleNameResolver->getClassNameFromScope($scope);
         if ($className === null) {

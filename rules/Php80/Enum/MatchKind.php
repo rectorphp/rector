@@ -10,7 +10,7 @@ use RectorPrefix20220527\MyCLabs\Enum\Enum;
  * @method static MatchKind RETURN()
  * @method static MatchKind THROW()
  */
-final class MatchKind extends \RectorPrefix20220527\MyCLabs\Enum\Enum
+final class MatchKind extends Enum
 {
     /**
      * @var string

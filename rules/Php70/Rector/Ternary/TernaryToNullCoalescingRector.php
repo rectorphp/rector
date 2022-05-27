@@ -18,31 +18,31 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php70\Rector\Ternary\TernaryToNullCoalescingRector\TernaryToNullCoalescingRectorTest
  */
-final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class TernaryToNullCoalescingRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes unneeded null check to ?? operator', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$value === null ? 10 : $value;', '$value ?? 10;'), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('isset($value) ? $value : 10;', '$value ?? 10;')]);
+        return new RuleDefinition('Changes unneeded null check to ?? operator', [new CodeSample('$value === null ? 10 : $value;', '$value ?? 10;'), new CodeSample('isset($value) ? $value : 10;', '$value ?? 10;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Ternary::class];
+        return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node->cond instanceof \PhpParser\Node\Expr\Isset_) {
+        if ($node->cond instanceof Isset_) {
             return $this->processTernaryWithIsset($node, $node->cond);
         }
-        if ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
+        if ($node->cond instanceof Identical) {
             $checkedNode = $node->else;
             $fallbackNode = $node->if;
-        } elseif ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
+        } elseif ($node->cond instanceof NotIdentical) {
             $checkedNode = $node->if;
             $fallbackNode = $node->else;
         } else {
@@ -52,24 +52,24 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
         if ($checkedNode === null) {
             return null;
         }
-        if (!$fallbackNode instanceof \PhpParser\Node\Expr) {
+        if (!$fallbackNode instanceof Expr) {
             return null;
         }
         /** @var Identical|NotIdentical $ternaryCompareNode */
         $ternaryCompareNode = $node->cond;
         if ($this->isNullMatch($ternaryCompareNode->left, $ternaryCompareNode->right, $checkedNode)) {
-            return new \PhpParser\Node\Expr\BinaryOp\Coalesce($checkedNode, $fallbackNode);
+            return new Coalesce($checkedNode, $fallbackNode);
         }
         if ($this->isNullMatch($ternaryCompareNode->right, $ternaryCompareNode->left, $checkedNode)) {
-            return new \PhpParser\Node\Expr\BinaryOp\Coalesce($checkedNode, $fallbackNode);
+            return new Coalesce($checkedNode, $fallbackNode);
         }
         return null;
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE;
+        return PhpVersionFeature::NULL_COALESCE;
     }
-    private function processTernaryWithIsset(\PhpParser\Node\Expr\Ternary $ternary, \PhpParser\Node\Expr\Isset_ $isset) : ?\PhpParser\Node\Expr\BinaryOp\Coalesce
+    private function processTernaryWithIsset(Ternary $ternary, Isset_ $isset) : ?Coalesce
     {
         if ($ternary->if === null) {
             return null;
@@ -84,9 +84,9 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
         if (!$this->nodeComparator->areNodesEqual($ternary->if, $isset->vars[0])) {
             return null;
         }
-        return new \PhpParser\Node\Expr\BinaryOp\Coalesce($ternary->if, $ternary->else);
+        return new Coalesce($ternary->if, $ternary->else);
     }
-    private function isNullMatch(\PhpParser\Node\Expr $possibleNullExpr, \PhpParser\Node\Expr $firstNode, \PhpParser\Node\Expr $secondNode) : bool
+    private function isNullMatch(Expr $possibleNullExpr, Expr $firstNode, Expr $secondNode) : bool
     {
         if (!$this->valueResolver->isNull($possibleNullExpr)) {
             return \false;

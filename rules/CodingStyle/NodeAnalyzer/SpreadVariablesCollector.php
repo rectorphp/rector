@@ -19,7 +19,7 @@ final class SpreadVariablesCollector
     public function resolveFromMethodReflection($functionLikeReflection) : array
     {
         $spreadParameterReflections = [];
-        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
         foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             if (!$parameterReflection->isVariadic()) {
                 continue;
@@ -31,14 +31,14 @@ final class SpreadVariablesCollector
     /**
      * @return array<int, Param>
      */
-    public function resolveFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function resolveFromClassMethod(ClassMethod $classMethod) : array
     {
         /** @var array<int, Param> $spreadParams */
         $spreadParams = [];
         foreach ($classMethod->params as $key => $param) {
             // prevent race-condition removal on class method
-            $originalParam = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
-            if (!$originalParam instanceof \PhpParser\Node\Param) {
+            $originalParam = $param->getAttribute(AttributeKey::ORIGINAL_NODE);
+            if (!$originalParam instanceof Param) {
                 continue;
             }
             if (!$originalParam->variadic) {

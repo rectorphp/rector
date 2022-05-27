@@ -19,12 +19,12 @@ use RectorPrefix20220527\Symfony\Contracts\EventDispatcher\Event;
  *
  * @author Francesco Levorato <git@flevour.net>
  */
-class ConsoleEvent extends \RectorPrefix20220527\Symfony\Contracts\EventDispatcher\Event
+class ConsoleEvent extends Event
 {
     protected $command;
     private $input;
     private $output;
-    public function __construct(?\RectorPrefix20220527\Symfony\Component\Console\Command\Command $command, \RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output)
+    public function __construct(?Command $command, InputInterface $input, OutputInterface $output)
     {
         $this->command = $command;
         $this->input = $input;
@@ -33,21 +33,21 @@ class ConsoleEvent extends \RectorPrefix20220527\Symfony\Contracts\EventDispatch
     /**
      * Gets the command that is executed.
      */
-    public function getCommand() : ?\RectorPrefix20220527\Symfony\Component\Console\Command\Command
+    public function getCommand() : ?Command
     {
         return $this->command;
     }
     /**
      * Gets the input instance.
      */
-    public function getInput() : \RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface
+    public function getInput() : InputInterface
     {
         return $this->input;
     }
     /**
      * Gets the output instance.
      */
-    public function getOutput() : \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface
+    public function getOutput() : OutputInterface
     {
         return $this->output;
     }

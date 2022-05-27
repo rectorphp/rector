@@ -13,9 +13,9 @@ use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgument
 use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
 use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 # source: https://book.cakephp.org/4.next/en/appendices/4-3-migration-guide.html
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Controller\\Component', 'shutdown', 'afterFilter')]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::class, [new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Cake\\Network\\Socket', 'connected', 'isConnected'), new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Cake\\Network\\Socket', 'encrypted', 'isEncrypted'), new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Cake\\Network\\Socket', 'lastError', 'lastError')]);
-    $rectorConfig->ruleWithConfiguration(\Rector\CakePHP\Rector\MethodCall\RemoveIntermediaryMethodRector::class, [new \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod('getTableLocator', 'get', 'fetchTable')]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector::class, [new \Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments('Cake\\Database\\DriverInterface', 'supportsQuoting', 'supports', ['quote']), new \Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments('Cake\\Database\\DriverInterface', 'supportsSavepoints', 'supports', ['savepoint'])]);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('Cake\\Controller\\Component', 'shutdown', 'afterFilter')]);
+    $rectorConfig->ruleWithConfiguration(PropertyFetchToMethodCallRector::class, [new PropertyFetchToMethodCall('Cake\\Network\\Socket', 'connected', 'isConnected'), new PropertyFetchToMethodCall('Cake\\Network\\Socket', 'encrypted', 'isEncrypted'), new PropertyFetchToMethodCall('Cake\\Network\\Socket', 'lastError', 'lastError')]);
+    $rectorConfig->ruleWithConfiguration(RemoveIntermediaryMethodRector::class, [new RemoveIntermediaryMethod('getTableLocator', 'get', 'fetchTable')]);
+    $rectorConfig->ruleWithConfiguration(MethodCallToAnotherMethodCallWithArgumentsRector::class, [new MethodCallToAnotherMethodCallWithArguments('Cake\\Database\\DriverInterface', 'supportsQuoting', 'supports', ['quote']), new MethodCallToAnotherMethodCallWithArguments('Cake\\Database\\DriverInterface', 'supportsSavepoints', 'supports', ['savepoint'])]);
 };

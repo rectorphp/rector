@@ -298,7 +298,7 @@ interface LoopInterface
      *
      * @return void
      */
-    public function cancelTimer(\RectorPrefix20220527\React\EventLoop\TimerInterface $timer);
+    public function cancelTimer(TimerInterface $timer);
     /**
      * Schedule a callback to be invoked on a future tick of the event loop.
      *

@@ -14,21 +14,21 @@ use RectorPrefix20220527\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85978-GraphicalFunctions-init.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\RemoveInitMethodGraphicalFunctionsRector\RemoveInitMethodGraphicalFunctionsRectorTest
  */
-final class RemoveInitMethodGraphicalFunctionsRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveInitMethodGraphicalFunctionsRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions'))) {
             return null;
         }
         if (!$this->isName($node->name, 'init')) {
@@ -40,9 +40,9 @@ final class RemoveInitMethodGraphicalFunctionsRector extends \Rector\Core\Rector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove method call init of class GraphicalFunctions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove method call init of class GraphicalFunctions', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 $graphicalFunctions = GeneralUtility::makeInstance(GraphicalFunctions::class);

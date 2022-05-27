@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPOffice\Tests\Rector\StaticCall\ChangeChartRendererRector\ChangeChartRendererRectorTest
  */
-final class ChangeChartRendererRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeChartRendererRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change chart renderer', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change chart renderer', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -44,15 +44,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $callerType = $this->nodeTypeResolver->getType($node->class);
-        if (!$callerType->isSuperTypeOf(new \PHPStan\Type\ObjectType('PHPExcel_Settings'))->yes()) {
+        if (!$callerType->isSuperTypeOf(new ObjectType('PHPExcel_Settings'))->yes()) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($node->name, 'setChartRenderer')) {
@@ -61,7 +61,7 @@ CODE_SAMPLE
         if (\count($node->args) === 1) {
             return null;
         }
-        $arg = new \PhpParser\Node\Arg($this->nodeFactory->createClassConstReference('PhpOffice\\PhpSpreadsheet\\Chart\\Renderer\\JpGraph'));
+        $arg = new Arg($this->nodeFactory->createClassConstReference('PhpOffice\\PhpSpreadsheet\\Chart\\Renderer\\JpGraph'));
         $node->args = [$arg];
         return $node;
     }

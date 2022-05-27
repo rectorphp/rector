@@ -19,7 +19,7 @@ final class PhpFilesFinder
      * @var \Rector\Caching\UnchangedFilesFilter
      */
     private $unchangedFilesFilter;
-    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, \Rector\Caching\UnchangedFilesFilter $unchangedFilesFilter)
+    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, UnchangedFilesFilter $unchangedFilesFilter)
     {
         $this->filesFinder = $filesFinder;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
@@ -31,7 +31,7 @@ final class PhpFilesFinder
     public function findInPaths(array $paths) : array
     {
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths);
-        $suffixRegexPattern = \Rector\Core\ValueObject\StaticNonPhpFileSuffixes::getSuffixRegexPattern();
+        $suffixRegexPattern = StaticNonPhpFileSuffixes::getSuffixRegexPattern();
         // filter out non-PHP files
         foreach ($phpFileInfos as $key => $phpFileInfo) {
             $pathName = $phpFileInfo->getPathname();
@@ -51,7 +51,7 @@ final class PhpFilesFinder
             /**
              * only check with regex when needed
              */
-            if (\Rector\Core\Util\StringUtils::isMatch($pathName, $suffixRegexPattern)) {
+            if (StringUtils::isMatch($pathName, $suffixRegexPattern)) {
                 unset($phpFileInfos[$key]);
             }
         }

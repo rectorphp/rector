@@ -15,14 +15,14 @@ use RectorPrefix20220527\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendControl
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Deprecation-88473-TypoScriptFrontendController-settingLocale.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v0\SetSystemLocaleFromSiteLanguageRector\SetSystemLocaleFromSiteLanguageRectorTest
  */
-final class SetSystemLocaleFromSiteLanguageRector extends \Rector\Core\Rector\AbstractRector
+final class SetSystemLocaleFromSiteLanguageRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -31,14 +31,14 @@ final class SetSystemLocaleFromSiteLanguageRector extends \Rector\Core\Rector\Ab
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController')) && !$this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController')) && !$this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return null;
         }
         if (!$this->isName($node->name, 'settingLocale')) {
@@ -49,9 +49,9 @@ final class SetSystemLocaleFromSiteLanguageRector extends \Rector\Core\Rector\Ab
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor TypoScriptFrontendController->settingLocale() to Locales::setSystemLocaleFromSiteLanguage()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor TypoScriptFrontendController->settingLocale() to Locales::setSystemLocaleFromSiteLanguage()', [new CodeSample(<<<'CODE_SAMPLE'
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;

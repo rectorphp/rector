@@ -11,7 +11,7 @@ use Ssch\TYPO3Rector\FileProcessor\TypoScript\Collector\RemoveTypoScriptStatemen
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-final class RemoveDisableCharsetHeaderConfigTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
+final class RemoveDisableCharsetHeaderConfigTypoScriptRector extends AbstractTypoScriptRector
 {
     /**
      * @readonly
@@ -23,29 +23,29 @@ final class RemoveDisableCharsetHeaderConfigTypoScriptRector extends \Ssch\TYPO3
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Collector\RemoveTypoScriptStatementCollector $removeTypoScriptStatementCollector, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
+    public function __construct(RemoveTypoScriptStatementCollector $removeTypoScriptStatementCollector, CurrentFileProvider $currentFileProvider)
     {
         $this->removeTypoScriptStatementCollector = $removeTypoScriptStatementCollector;
         $this->currentFileProvider = $currentFileProvider;
     }
-    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
+        if (!$statement instanceof Assignment) {
             return;
         }
         if ('config.disableCharsetHeader' !== $statement->object->absoluteName) {
             return;
         }
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
+        if (!$file instanceof File) {
             return;
         }
         $this->hasChanged = \true;
         $this->removeTypoScriptStatementCollector->removeStatement($statement, $file);
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use array syntax for additionalHeaders', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use array syntax for additionalHeaders', [new CodeSample(<<<'CODE_SAMPLE'
 config.disableCharsetHeader = true
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

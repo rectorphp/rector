@@ -25,7 +25,7 @@ final class ChangedArgumentsDetector
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
+    public function __construct(ValueResolver $valueResolver, StaticTypeMapper $staticTypeMapper, TypeComparator $typeComparator)
     {
         $this->valueResolver = $valueResolver;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -34,14 +34,14 @@ final class ChangedArgumentsDetector
     /**
      * @param mixed $value
      */
-    public function isDefaultValueChanged(\PhpParser\Node\Param $param, $value) : bool
+    public function isDefaultValueChanged(Param $param, $value) : bool
     {
         if ($param->default === null) {
             return \false;
         }
         return !$this->valueResolver->isValue($param->default, $value);
     }
-    public function isTypeChanged(\PhpParser\Node\Param $param, ?\PHPStan\Type\Type $newType) : bool
+    public function isTypeChanged(Param $param, ?Type $newType) : bool
     {
         if ($param->type === null) {
             return \false;

@@ -22,24 +22,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\While_\WhileEachToForeachRector\WhileEachToForeachRectorTest
  */
-final class WhileEachToForeachRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class WhileEachToForeachRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\AssignManipulator
      */
     private $assignManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator)
+    public function __construct(AssignManipulator $assignManipulator)
     {
         $this->assignManipulator = $assignManipulator;
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::DEPRECATE_EACH;
+        return PhpVersionFeature::DEPRECATE_EACH;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('each() function is deprecated, use foreach() instead.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('each() function is deprecated, use foreach() instead.', [new CodeSample(<<<'CODE_SAMPLE'
 while (list($key, $callback) = each($callbacks)) {
     // ...
 }
@@ -49,7 +49,7 @@ foreach ($callbacks as $key => $callback) {
     // ...
 }
 CODE_SAMPLE
-), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+), new CodeSample(<<<'CODE_SAMPLE'
 while (list($key) = each($callbacks)) {
     // ...
 }
@@ -66,14 +66,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\While_::class];
+        return [While_::class];
     }
     /**
      * @param While_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->cond instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$node->cond instanceof Assign) {
             return null;
         }
         /** @var Assign $assignNode */
@@ -88,13 +88,13 @@ CODE_SAMPLE
         if (!isset($eachFuncCall->args[0])) {
             return null;
         }
-        if (!$eachFuncCall->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$eachFuncCall->args[0] instanceof Arg) {
             return null;
         }
         $foreachedExpr = \count($listNode->items) === 1 ? $this->nodeFactory->createFuncCall('array_keys', [$eachFuncCall->args[0]]) : $eachFuncCall->args[0]->value;
         /** @var ArrayItem $arrayItem */
         $arrayItem = \array_pop($listNode->items);
-        $foreach = new \PhpParser\Node\Stmt\Foreach_($foreachedExpr, $arrayItem, ['stmts' => $node->stmts]);
+        $foreach = new Foreach_($foreachedExpr, $arrayItem, ['stmts' => $node->stmts]);
         $this->mirrorComments($foreach, $node);
         // is key included? add it to foreach
         if ($listNode->items !== []) {

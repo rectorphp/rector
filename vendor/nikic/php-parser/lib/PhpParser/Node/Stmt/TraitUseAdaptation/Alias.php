@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt\TraitUseAdaptation;
 
 use PhpParser\Node;
-class Alias extends \PhpParser\Node\Stmt\TraitUseAdaptation
+class Alias extends Node\Stmt\TraitUseAdaptation
 {
     /** @var null|int New modifier */
     public $newModifier;
@@ -23,9 +23,9 @@ class Alias extends \PhpParser\Node\Stmt\TraitUseAdaptation
     {
         $this->attributes = $attributes;
         $this->trait = $trait;
-        $this->method = \is_string($method) ? new \PhpParser\Node\Identifier($method) : $method;
+        $this->method = \is_string($method) ? new Node\Identifier($method) : $method;
         $this->newModifier = $newModifier;
-        $this->newName = \is_string($newName) ? new \PhpParser\Node\Identifier($newName) : $newName;
+        $this->newName = \is_string($newName) ? new Node\Identifier($newName) : $newName;
     }
     public function getSubNodeNames() : array
     {

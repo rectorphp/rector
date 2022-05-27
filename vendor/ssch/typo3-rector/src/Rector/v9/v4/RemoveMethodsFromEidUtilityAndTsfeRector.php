@@ -16,14 +16,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85878-EidUtilityAndVariousTSFEMethods.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\RemoveMethodsFromEidUtilityAndTsfeRector\RemoveMethodsFromEidUtilityAndTsfeRectorTest
  */
-final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveMethodsFromEidUtilityAndTsfeRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -32,12 +32,12 @@ final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\MethodCall::class];
+        return [StaticCall::class, MethodCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -49,7 +49,7 @@ final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector
         if (!$this->isNames($node->name, ['initFEuser', 'storeSessionData', 'previewInfo', 'hook_eofe', 'addTempContentHttpHeaders', 'sendCacheHeaders'])) {
             return null;
         }
-        if ($this->isName($node->name, 'storeSessionData') && $node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($this->isName($node->name, 'storeSessionData') && $node instanceof MethodCall) {
             return $this->delegateToFrontendUserProperty($node);
         }
         $this->removeMethodCall($node);
@@ -58,9 +58,9 @@ final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove EidUtility and various TSFE methods', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove EidUtility and various TSFE methods', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Frontend\Utility\EidUtility;
 EidUtility::initExtensionTCA('foo');
 EidUtility::initFeUser();
@@ -87,14 +87,14 @@ CODE_SAMPLE
      */
     private function isEidUtilityMethodCall($call) : bool
     {
-        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Utility\\EidUtility'));
+        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new ObjectType('TYPO3\\CMS\\Frontend\\Utility\\EidUtility'));
     }
-    private function isMethodCallOnTsfe(\PhpParser\Node $node) : bool
+    private function isMethodCallOnTsfe(Node $node) : bool
     {
-        if ($this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if ($this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \true;
         }
-        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
+        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node $node
@@ -103,10 +103,10 @@ CODE_SAMPLE
     {
         try {
             parent::removeNode($node);
-        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
+        } catch (ShouldNotHappenException $exception) {
         }
     }
-    private function delegateToFrontendUserProperty(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
+    private function delegateToFrontendUserProperty(MethodCall $methodCall) : MethodCall
     {
         return $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch($methodCall->var, 'fe_user'), (string) $this->getName($methodCall->name));
     }

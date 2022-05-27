@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector\DowngradeStaticTypeDeclarationRectorTest
  */
-final class DowngradeStaticTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeStaticTypeDeclarationRector extends AbstractRector
 {
     /**
      * @readonly
@@ -27,7 +27,7 @@ final class DowngradeStaticTypeDeclarationRector extends \Rector\Core\Rector\Abs
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator, ReflectionResolver $reflectionResolver)
     {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
         $this->reflectionResolver = $reflectionResolver;
@@ -37,11 +37,11 @@ final class DowngradeStaticTypeDeclarationRector extends \Rector\Core\Rector\Abs
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove "static" return and param type, add a "@param $this" and "@return $this" tag instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove "static" return and param type, add a "@param $this" and "@return $this" tag instead', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getStatic(): static
@@ -67,13 +67,13 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        $staticType = new \PHPStan\Type\StaticType($classReflection);
+        $staticType = new StaticType($classReflection);
         foreach ($node->getParams() as $param) {
             $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $staticType);
         }

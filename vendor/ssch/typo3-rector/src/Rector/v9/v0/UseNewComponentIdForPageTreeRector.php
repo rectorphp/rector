@@ -16,21 +16,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Deprecation-82426-Typo3-pagetreeNavigationComponentName.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\UseNewComponentIdForPageTreeRector\UseNewComponentIdForPageTreeRectorTest
  */
-final class UseNewComponentIdForPageTreeRector extends \Rector\Core\Rector\AbstractRector
+final class UseNewComponentIdForPageTreeRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'registerModule')) {
@@ -43,12 +43,12 @@ final class UseNewComponentIdForPageTreeRector extends \Rector\Core\Rector\Abstr
             return null;
         }
         $moduleConfiguration = $node->args[5]->value;
-        if (!$moduleConfiguration instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$moduleConfiguration instanceof Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($moduleConfiguration->items as $item) {
-            if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$item instanceof ArrayItem) {
                 continue;
             }
             if (null === $item->key) {
@@ -60,7 +60,7 @@ final class UseNewComponentIdForPageTreeRector extends \Rector\Core\Rector\Abstr
             if ('typo3-pagetree' !== $this->valueResolver->getValue($item->value)) {
                 continue;
             }
-            $item->value = new \PhpParser\Node\Scalar\String_('TYPO3/CMS/Backend/PageTree/PageTreeElement');
+            $item->value = new String_('TYPO3/CMS/Backend/PageTree/PageTreeElement');
             $hasAstBeenChanged = \true;
         }
         return $hasAstBeenChanged ? $node : null;
@@ -68,9 +68,9 @@ final class UseNewComponentIdForPageTreeRector extends \Rector\Core\Rector\Abstr
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use TYPO3/CMS/Backend/PageTree/PageTreeElement instead of typo3-pagetree', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility' . '::registerModule(
+        return new RuleDefinition('Use TYPO3/CMS/Backend/PageTree/PageTreeElement instead of typo3-pagetree', [new CodeSample('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility' . '::registerModule(
       \'TYPO3.CMS.Workspaces\',
       \'web\',
       \'workspaces\',

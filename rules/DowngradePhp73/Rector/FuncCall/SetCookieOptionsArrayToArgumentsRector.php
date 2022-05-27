@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector\SetCookieOptionsArrayToArgumentsRectorTest
  */
-final class SetCookieOptionsArrayToArgumentsRector extends \Rector\Core\Rector\AbstractRector
+final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
 {
     /**
      * Conversion table from argument index to options name
@@ -39,13 +39,13 @@ final class SetCookieOptionsArrayToArgumentsRector extends \Rector\Core\Rector\A
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert setcookie option array to arguments', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert setcookie option array to arguments', [new CodeSample(<<<'CODE_SAMPLE'
 setcookie('name', $value, ['expires' => 360]);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -58,12 +58,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -71,7 +71,7 @@ CODE_SAMPLE
         $node->args = $this->composeNewArgs($node);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    private function shouldSkip(FuncCall $funcCall) : bool
     {
         if (!$this->isNames($funcCall, ['setcookie', 'setrawcookie'])) {
             return \true;
@@ -83,12 +83,12 @@ CODE_SAMPLE
         if (!isset($funcCall->args[2])) {
             return \true;
         }
-        return !($funcCall->args[2] instanceof \PhpParser\Node\Arg && $funcCall->args[2]->value instanceof \PhpParser\Node\Expr\Array_);
+        return !($funcCall->args[2] instanceof Arg && $funcCall->args[2]->value instanceof Array_);
     }
     /**
      * @return Arg[]
      */
-    private function composeNewArgs(\PhpParser\Node\Expr\FuncCall $funcCall) : array
+    private function composeNewArgs(FuncCall $funcCall) : array
     {
         $this->highestIndex = 1;
         if (!$this->argsAnalyzer->isArgsInstanceInArgsPositions($funcCall->args, [0, 1, 2])) {
@@ -119,7 +119,7 @@ CODE_SAMPLE
             if ($order > $this->highestIndex) {
                 $this->highestIndex = $order;
             }
-            $newArgs[$order] = new \PhpParser\Node\Arg($value);
+            $newArgs[$order] = new Arg($value);
         }
         $newArgs = $this->fillMissingArgumentsWithDefaultValues($newArgs);
         \ksort($newArgs);
@@ -143,13 +143,13 @@ CODE_SAMPLE
         }
         return $args;
     }
-    private function createDefaultValueArg(int $argumentIndex) : \PhpParser\Node\Arg
+    private function createDefaultValueArg(int $argumentIndex) : Arg
     {
         if (!\array_key_exists($argumentIndex, self::ARGUMENT_DEFAULT_VALUES)) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         $argumentDefaultValue = self::ARGUMENT_DEFAULT_VALUES[$argumentIndex];
-        $expr = \PhpParser\BuilderHelpers::normalizeValue($argumentDefaultValue);
-        return new \PhpParser\Node\Arg($expr);
+        $expr = BuilderHelpers::normalizeValue($argumentDefaultValue);
+        return new Arg($expr);
     }
 }

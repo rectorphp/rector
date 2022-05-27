@@ -30,36 +30,36 @@ final class VarAnnotationManipulator
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, BetterNodeFinder $betterNodeFinder)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function decorateNodeWithInlineVarType(\PhpParser\Node $node, \PHPStan\Type\TypeWithClassName $typeWithClassName, string $variableName) : void
+    public function decorateNodeWithInlineVarType(Node $node, TypeWithClassName $typeWithClassName, string $variableName) : void
     {
         $phpDocInfo = $this->resolvePhpDocInfo($node);
         // already done
         if ($phpDocInfo->getVarTagValueNode() !== null) {
             return;
         }
-        $fullyQualifiedIdentifierTypeNode = new \Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode($typeWithClassName->getClassName());
-        $varTagValueNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode($fullyQualifiedIdentifierTypeNode, '$' . $variableName, '');
+        $fullyQualifiedIdentifierTypeNode = new FullyQualifiedIdentifierTypeNode($typeWithClassName->getClassName());
+        $varTagValueNode = new VarTagValueNode($fullyQualifiedIdentifierTypeNode, '$' . $variableName, '');
         $phpDocInfo->addTagValueNode($varTagValueNode);
         $phpDocInfo->makeSingleLined();
     }
-    public function decorateNodeWithType(\PhpParser\Node $node, \PHPStan\Type\Type $staticType) : void
+    public function decorateNodeWithType(Node $node, Type $staticType) : void
     {
-        if ($staticType instanceof \PHPStan\Type\MixedType) {
+        if ($staticType instanceof MixedType) {
             return;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);
     }
-    private function resolvePhpDocInfo(\PhpParser\Node $node) : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    private function resolvePhpDocInfo(Node $node) : PhpDocInfo
     {
         $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
-        if ($currentStmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if ($currentStmt instanceof Expression) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($currentStmt);
         } else {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);

@@ -9,14 +9,14 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver;
-final class ObjectManagerDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+final class ObjectManagerDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver
      */
     private $argumentTypeResolver;
-    public function __construct(\Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver $argumentTypeResolver)
+    public function __construct(ArgumentTypeResolver $argumentTypeResolver)
     {
         $this->argumentTypeResolver = $argumentTypeResolver;
     }
@@ -24,11 +24,11 @@ final class ObjectManagerDynamicReturnTypeExtension implements \PHPStan\Type\Dyn
     {
         return 'TYPO3\\CMS\\Extbase\\Object\\ObjectManagerInterface';
     }
-    public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
+    public function isMethodSupported(MethodReflection $methodReflection) : bool
     {
         return 'get' === $methodReflection->getName();
     }
-    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : ?\PHPStan\Type\Type
+    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : ?\PHPStan\Type\Type
     {
         return $this->argumentTypeResolver->resolveFromMethodCall($methodCall, $methodReflection);
     }

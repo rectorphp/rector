@@ -23,19 +23,19 @@ final class PropertyRenameFactory
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function createFromExpectedName(\PhpParser\Node\Stmt\Property $property, string $expectedName) : ?\Rector\Naming\ValueObject\PropertyRename
+    public function createFromExpectedName(Property $property, string $expectedName) : ?PropertyRename
     {
         $currentName = $this->nodeNameResolver->getName($property);
-        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         $className = (string) $this->nodeNameResolver->getName($classLike);
-        return new \Rector\Naming\ValueObject\PropertyRename($property, $expectedName, $currentName, $classLike, $className, $property->props[0]);
+        return new PropertyRename($property, $expectedName, $currentName, $classLike, $className, $property->props[0]);
     }
 }

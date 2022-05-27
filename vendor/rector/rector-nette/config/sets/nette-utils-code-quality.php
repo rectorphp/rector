@@ -16,15 +16,15 @@ use Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector;
 use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 # @see https://tomasvotruba.com/blog/2018/07/30/hidden-gems-of-php-packages-nette-utils
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector::class, [new \Rector\Transform\ValueObject\FuncCallToStaticCall('file_get_contents', 'Nette\\Utils\\FileSystem', 'read'), new \Rector\Transform\ValueObject\FuncCallToStaticCall('unlink', 'Nette\\Utils\\FileSystem', 'delete'), new \Rector\Transform\ValueObject\FuncCallToStaticCall('rmdir', 'Nette\\Utils\\FileSystem', 'delete')]);
-    $rectorConfig->rule(\Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector::class);
-    $rectorConfig->rule(\Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector::class);
-    $rectorConfig->rule(\Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector::class);
-    $rectorConfig->rule(\Rector\Nette\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector::class);
-    $rectorConfig->rule(\Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector::class);
-    $rectorConfig->rule(\Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector::class);
-    $rectorConfig->rule(\Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector::class);
-    $rectorConfig->rule(\Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector::class);
-    $rectorConfig->rule(\Rector\Nette\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->ruleWithConfiguration(FuncCallToStaticCallRector::class, [new FuncCallToStaticCall('file_get_contents', 'Nette\\Utils\\FileSystem', 'read'), new FuncCallToStaticCall('unlink', 'Nette\\Utils\\FileSystem', 'delete'), new FuncCallToStaticCall('rmdir', 'Nette\\Utils\\FileSystem', 'delete')]);
+    $rectorConfig->rule(StrposToStringsContainsRector::class);
+    $rectorConfig->rule(SubstrStrlenFunctionToNetteUtilsStringsRector::class);
+    $rectorConfig->rule(StartsWithFunctionToNetteUtilsStringsRector::class);
+    $rectorConfig->rule(PregMatchFunctionToNetteUtilsStringsRector::class);
+    $rectorConfig->rule(PregFunctionToNetteUtilsStringsRector::class);
+    $rectorConfig->rule(EndsWithFunctionToNetteUtilsStringsRector::class);
+    $rectorConfig->rule(JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector::class);
+    $rectorConfig->rule(FilePutContentsToFileSystemWriteRector::class);
+    $rectorConfig->rule(ReplaceTimeNumberWithDateTimeConstantRector::class);
 };

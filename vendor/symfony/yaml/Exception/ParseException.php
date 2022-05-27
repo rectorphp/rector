@@ -15,7 +15,7 @@ namespace RectorPrefix20220527\Symfony\Component\Yaml\Exception;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParseException extends \RectorPrefix20220527\Symfony\Component\Yaml\Exception\RuntimeException
+class ParseException extends RuntimeException
 {
     /**
      * @var string|null

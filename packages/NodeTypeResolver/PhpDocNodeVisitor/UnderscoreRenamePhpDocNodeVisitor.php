@@ -11,7 +11,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20220527\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220527\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
      * @var \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace|null
@@ -26,22 +26,22 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220527\Symp
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    public function beforeTraverse(Node $node) : void
     {
         if ($this->pseudoNamespaceToNamespace === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException('Set PseudoNamespaceToNamespace first');
+            throw new ShouldNotHappenException('Set PseudoNamespaceToNamespace first');
         }
         if (!$this->currentPhpParserNode instanceof \PhpParser\Node) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException('Set "$currentPhpParserNode" first');
+            throw new ShouldNotHappenException('Set "$currentPhpParserNode" first');
         }
     }
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
+    public function enterNode(Node $node) : ?Node
     {
-        if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+        if (!$node instanceof IdentifierTypeNode) {
             return null;
         }
         if ($this->shouldSkip($node, $this->currentPhpParserNode, $this->pseudoNamespaceToNamespace)) {
@@ -49,14 +49,14 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220527\Symp
         }
         /** @var IdentifierTypeNode $node */
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $this->currentPhpParserNode);
-        if (!$staticType instanceof \PHPStan\Type\ObjectType) {
+        if (!$staticType instanceof ObjectType) {
             return null;
         }
         // change underscore to \\
-        $slashedName = '\\' . \RectorPrefix20220527\Nette\Utils\Strings::replace($staticType->getClassName(), '#_#', '\\');
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($slashedName);
+        $slashedName = '\\' . Strings::replace($staticType->getClassName(), '#_#', '\\');
+        return new IdentifierTypeNode($slashedName);
     }
-    public function setPseudoNamespaceToNamespace(\Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : void
+    public function setPseudoNamespaceToNamespace(PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : void
     {
         $this->pseudoNamespaceToNamespace = $pseudoNamespaceToNamespace;
     }
@@ -64,10 +64,10 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220527\Symp
     {
         $this->currentPhpParserNode = $node;
     }
-    private function shouldSkip(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode, \PhpParser\Node $phpParserNode, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : bool
+    private function shouldSkip(IdentifierTypeNode $identifierTypeNode, \PhpParser\Node $phpParserNode, PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : bool
     {
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifierTypeNode, $phpParserNode);
-        if (!$staticType instanceof \PHPStan\Type\ObjectType) {
+        if (!$staticType instanceof ObjectType) {
             return \true;
         }
         if (\strncmp($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix(), \strlen($pseudoNamespaceToNamespace->getNamespacePrefix())) !== 0) {

@@ -13,11 +13,11 @@ final class ClassMethodVisibilityGuard
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isClassMethodVisibilityGuardedByParent(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Reflection\ClassReflection $classReflection) : bool
+    public function isClassMethodVisibilityGuardedByParent(ClassMethod $classMethod, ClassReflection $classReflection) : bool
     {
         $methodName = $this->nodeNameResolver->getName($classMethod);
         /** @var ClassReflection[] $parentClassReflections */
@@ -29,7 +29,7 @@ final class ClassMethodVisibilityGuard
         }
         return \false;
     }
-    public function isClassMethodVisibilityGuardedByTrait(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Reflection\ClassReflection $classReflection) : bool
+    public function isClassMethodVisibilityGuardedByTrait(ClassMethod $classMethod, ClassReflection $classReflection) : bool
     {
         $parentTraitReflections = $this->getLocalAndParentTraitReflections($classReflection);
         $methodName = $this->nodeNameResolver->getName($classMethod);
@@ -43,7 +43,7 @@ final class ClassMethodVisibilityGuard
     /**
      * @return ClassReflection[]
      */
-    private function getLocalAndParentTraitReflections(\PHPStan\Reflection\ClassReflection $classReflection) : array
+    private function getLocalAndParentTraitReflections(ClassReflection $classReflection) : array
     {
         $traitReflections = $classReflection->getTraits();
         foreach ($classReflection->getParents() as $parentClassReflection) {

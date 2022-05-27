@@ -11,9 +11,9 @@ interface ASTPrinterInterface
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      */
-    public function printStatements(array $statements, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output) : void;
+    public function printStatements(array $statements, OutputInterface $output) : void;
     /**
      * @param PrettyPrinterConfiguration $prettyPrinterConfiguration
      */
-    public function setPrettyPrinterConfiguration(\RectorPrefix20220527\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration $prettyPrinterConfiguration) : void;
+    public function setPrettyPrinterConfiguration(PrettyPrinterConfiguration $prettyPrinterConfiguration) : void;
 }

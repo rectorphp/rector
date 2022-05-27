@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.5/Deprecation-77524-DeprecatedMethodFileResourceOfContentObjectRenderer.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v5\ContentObjectRendererFileResourceRector\ContentObjectRendererFileResourceRectorTest
  */
-final class ContentObjectRendererFileResourceRector extends \Rector\Core\Rector\AbstractRector
+final class ContentObjectRendererFileResourceRector extends AbstractRector
 {
     /**
      * @var string
@@ -35,7 +35,7 @@ final class ContentObjectRendererFileResourceRector extends \Rector\Core\Rector\
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -44,12 +44,12 @@ final class ContentObjectRendererFileResourceRector extends \Rector\Core\Rector\
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -57,8 +57,8 @@ final class ContentObjectRendererFileResourceRector extends \Rector\Core\Rector\
         if (!$this->isName($node->name, 'fileResource')) {
             return null;
         }
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node\Expr\Assign) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Assign) {
             return null;
         }
         $this->addInitializeVariableNode($node);
@@ -71,9 +71,9 @@ final class ContentObjectRendererFileResourceRector extends \Rector\Core\Rector\
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate fileResource method of class ContentObjectRenderer', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Migrate fileResource method of class ContentObjectRenderer', [new CodeSample(<<<'CODE_SAMPLE'
 $template = $this->cObj->fileResource('EXT:vendor/Resources/Private/Templates/Template.html');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -84,38 +84,38 @@ if ($path !== null && file_exists($path)) {
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkip(MethodCall $methodCall) : bool
     {
-        if ($this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
+        if ($this->isObjectType($methodCall->var, new ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'cObj');
+        return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($methodCall, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'cObj');
     }
-    private function addInitializeVariableNode(\PhpParser\Node\Expr\MethodCall $methodCall) : void
+    private function addInitializeVariableNode(MethodCall $methodCall) : void
     {
-        $parentNode = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            $initializeVariable = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($parentNode->var, new \PhpParser\Node\Scalar\String_('')));
+        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode->var instanceof PropertyFetch) {
+            $initializeVariable = new Expression(new Assign($parentNode->var, new String_('')));
             $this->nodesToAddCollector->addNodeBeforeNode($initializeVariable, $methodCall);
         }
     }
-    private function addTypoScriptFrontendControllerAssignmentNode(\PhpParser\Node\Expr\MethodCall $methodCall) : void
+    private function addTypoScriptFrontendControllerAssignmentNode(MethodCall $methodCall) : void
     {
-        $typoscriptFrontendControllerVariable = new \PhpParser\Node\Expr\Variable('typoscriptFrontendController');
-        $typoscriptFrontendControllerAssign = new \PhpParser\Node\Expr\Assign($typoscriptFrontendControllerVariable, new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)));
+        $typoscriptFrontendControllerVariable = new Variable('typoscriptFrontendController');
+        $typoscriptFrontendControllerAssign = new Assign($typoscriptFrontendControllerVariable, new ArrayDimFetch(new Variable('GLOBALS'), new String_(Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)));
         $this->nodesToAddCollector->addNodeBeforeNode($typoscriptFrontendControllerAssign, $methodCall);
     }
-    private function addFileNameNode(\PhpParser\Node\Expr\MethodCall $methodCall) : void
+    private function addFileNameNode(MethodCall $methodCall) : void
     {
-        $fileNameAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PATH), $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch(new \PhpParser\Node\Expr\Variable('typoscriptFrontendController'), 'tmpl'), 'getFileName', $methodCall->args));
+        $fileNameAssign = new Assign(new Variable(self::PATH), $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch(new Variable('typoscriptFrontendController'), 'tmpl'), 'getFileName', $methodCall->args));
         $this->nodesToAddCollector->addNodeBeforeNode($fileNameAssign, $methodCall);
     }
-    private function addIfNode(\PhpParser\Node\Expr\MethodCall $methodCall) : void
+    private function addIfNode(MethodCall $methodCall) : void
     {
-        $parentNode = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\BooleanAnd(new \PhpParser\Node\Expr\BinaryOp\NotIdentical(new \PhpParser\Node\Expr\Variable(self::PATH), $this->nodeFactory->createNull()), $this->nodeFactory->createFuncCall('file_exists', [new \PhpParser\Node\Expr\Variable(self::PATH)])));
-        $templateAssignment = new \PhpParser\Node\Expr\Assign($parentNode->var, $this->nodeFactory->createFuncCall('file_get_contents', [new \PhpParser\Node\Expr\Variable(self::PATH)]));
-        $if->stmts[] = new \PhpParser\Node\Stmt\Expression($templateAssignment);
+        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        $if = new If_(new BooleanAnd(new NotIdentical(new Variable(self::PATH), $this->nodeFactory->createNull()), $this->nodeFactory->createFuncCall('file_exists', [new Variable(self::PATH)])));
+        $templateAssignment = new Assign($parentNode->var, $this->nodeFactory->createFuncCall('file_get_contents', [new Variable(self::PATH)]));
+        $if->stmts[] = new Expression($templateAssignment);
         $this->nodesToAddCollector->addNodeBeforeNode($if, $methodCall);
     }
 }

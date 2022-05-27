@@ -24,5 +24,5 @@ interface CallbackInterface
      *
      * @return mixed The computed value for the passed item
      */
-    public function __invoke(\RectorPrefix20220527\Psr\Cache\CacheItemInterface $item, bool &$save) : mixed;
+    public function __invoke(CacheItemInterface $item, bool &$save) : mixed;
 }

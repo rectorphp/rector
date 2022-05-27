@@ -31,17 +31,17 @@ final class AddParamTypeDeclaration
     /**
      * @param int<0, max> $position
      */
-    public function __construct(string $className, string $methodName, int $position, \PHPStan\Type\Type $paramType)
+    public function __construct(string $className, string $methodName, int $position, Type $paramType)
     {
         $this->className = $className;
         $this->methodName = $methodName;
         $this->position = $position;
         $this->paramType = $paramType;
-        \Rector\Core\Validation\RectorAssert::className($className);
+        RectorAssert::className($className);
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->className);
+        return new ObjectType($this->className);
     }
     public function getMethodName() : string
     {
@@ -51,7 +51,7 @@ final class AddParamTypeDeclaration
     {
         return $this->position;
     }
-    public function getParamType() : \PHPStan\Type\Type
+    public function getParamType() : Type
     {
         return $this->paramType;
     }

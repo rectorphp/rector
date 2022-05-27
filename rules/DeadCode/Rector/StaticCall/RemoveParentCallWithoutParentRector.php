@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector\RemoveParentCallWithoutParentRectorTest
  */
-final class RemoveParentCallWithoutParentRector extends \Rector\Core\Rector\AbstractScopeAwareRector
+final class RemoveParentCallWithoutParentRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -47,16 +47,16 @@ final class RemoveParentCallWithoutParentRector extends \Rector\Core\Rector\Abst
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\Core\NodeManipulator\ClassMethodManipulator $classMethodManipulator, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ClassMethodManipulator $classMethodManipulator, ParentClassScopeResolver $parentClassScopeResolver, ClassAnalyzer $classAnalyzer, ReflectionProvider $reflectionProvider)
     {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->parentClassScopeResolver = $parentClassScopeResolver;
         $this->classAnalyzer = $classAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unused parent call with no parent class', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unused parent call with no parent class', [new CodeSample(<<<'CODE_SAMPLE'
 class OrphanClass
 {
     public function __construct()
@@ -80,26 +80,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$classLike instanceof Class_) {
             return null;
         }
         if ($this->shouldSkip($node, $classLike)) {
             return null;
         }
         $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
-        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$parentClassReflection instanceof ClassReflection) {
             return $this->processNoParentReflection($node);
         }
-        $classMethod = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
+        if (!$classMethod instanceof ClassMethod) {
             return null;
         }
         if ($this->classAnalyzer->isAnonymousClass($classLike)) {
@@ -110,27 +110,27 @@ CODE_SAMPLE
         if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($classMethod, $calledMethodName)) {
             return null;
         }
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Stmt\Expression) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof Expression) {
             return null;
         }
         $this->removeNode($node);
         return null;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\StaticCall $staticCall, \PhpParser\Node\Stmt\Class_ $class) : bool
+    private function shouldSkip(StaticCall $staticCall, Class_ $class) : bool
     {
-        if (!$staticCall->class instanceof \PhpParser\Node\Name) {
+        if (!$staticCall->class instanceof Name) {
             return \true;
         }
-        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+        if (!$this->isName($staticCall->class, ObjectReference::PARENT()->getValue())) {
             return \true;
         }
-        return $class->extends instanceof \PhpParser\Node\Name\FullyQualified && !$this->reflectionProvider->hasClass($class->extends->toString());
+        return $class->extends instanceof FullyQualified && !$this->reflectionProvider->hasClass($class->extends->toString());
     }
-    private function processNoParentReflection(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr\ConstFetch
+    private function processNoParentReflection(StaticCall $staticCall) : ?ConstFetch
     {
-        $parent = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Stmt\Expression) {
+        $parent = $staticCall->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof Expression) {
             return $this->nodeFactory->createNull();
         }
         $this->removeNode($staticCall);

@@ -15,6 +15,6 @@ namespace RectorPrefix20220527\Symfony\Component\Console\Exception;
  *
  * @author Pierre du Plessis <pdples@gmail.com>
  */
-class NamespaceNotFoundException extends \RectorPrefix20220527\Symfony\Component\Console\Exception\CommandNotFoundException
+class NamespaceNotFoundException extends CommandNotFoundException
 {
 }

@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Breaking-87989-TCAOptionSetToDefaultOnCopyRemoved.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v0\RemoveTcaOptionSetToDefaultOnCopyRector\RemoveTcaOptionSetToDefaultOnCopyRectorTest
  */
-final class RemoveTcaOptionSetToDefaultOnCopyRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveTcaOptionSetToDefaultOnCopyRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -23,27 +23,27 @@ final class RemoveTcaOptionSetToDefaultOnCopyRector extends \Rector\Core\Rector\
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $ctrlArrayItem = $this->extractCtrl($node);
-        if (!$ctrlArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$ctrlArrayItem instanceof ArrayItem) {
             return null;
         }
         $items = $ctrlArrayItem->value;
-        if (!$items instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$items instanceof Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($items->items as $fieldValue) {
-            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$fieldValue instanceof ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
@@ -59,9 +59,9 @@ final class RemoveTcaOptionSetToDefaultOnCopyRector extends \Rector\Core\Rector\
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA option setToDefaultOnCopy removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('TCA option setToDefaultOnCopy removed', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
         'selicon_field' => 'icon',

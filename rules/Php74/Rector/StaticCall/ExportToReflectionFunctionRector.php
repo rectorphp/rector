@@ -21,24 +21,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://3v4l.org/RTCUq
  * @see \Rector\Tests\Php74\Rector\StaticCall\ExportToReflectionFunctionRector\ExportToReflectionFunctionRectorTest
  */
-final class ExportToReflectionFunctionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ExportToReflectionFunctionRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::EXPORT_TO_REFLECTION_FUNCTION;
+        return PhpVersionFeature::EXPORT_TO_REFLECTION_FUNCTION;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change export() to ReflectionFunction alternatives', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change export() to ReflectionFunction alternatives', [new CodeSample(<<<'CODE_SAMPLE'
 $reflectionFunction = ReflectionFunction::export('foo');
 $reflectionFunctionAsString = ReflectionFunction::export('foo', true);
 CODE_SAMPLE
@@ -53,18 +53,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->class instanceof \PhpParser\Node\Name) {
+        if (!$node->class instanceof Name) {
             return null;
         }
         $callerType = $this->nodeTypeResolver->getType($node->class);
-        if (!$callerType->isSuperTypeOf(new \PHPStan\Type\ObjectType('ReflectionFunction'))->yes()) {
+        if (!$callerType->isSuperTypeOf(new ObjectType('ReflectionFunction'))->yes()) {
             return null;
         }
         if (!$this->isName($node->name, 'export')) {
@@ -75,14 +75,14 @@ CODE_SAMPLE
         }
         /** @var Arg $firstArg */
         $firstArg = $node->args[0];
-        $new = new \PhpParser\Node\Expr\New_($node->class, [new \PhpParser\Node\Arg($firstArg->value)]);
+        $new = new New_($node->class, [new Arg($firstArg->value)]);
         if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 1)) {
             return $new;
         }
         /** @var Arg $secondArg */
         $secondArg = $node->args[1];
         if ($this->valueResolver->isTrue($secondArg->value)) {
-            return new \PhpParser\Node\Expr\Cast\String_($new);
+            return new String_($new);
         }
         return $new;
     }

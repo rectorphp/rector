@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPOffice\Tests\Rector\MethodCall\ChangeConditionalSetConditionRector\ChangeConditionalSetConditionRectorTest
  */
-final class ChangeConditionalSetConditionRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeConditionalSetConditionRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change argument PHPExcel_Style_Conditional->setCondition() to setConditions()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change argument PHPExcel_Style_Conditional->setCondition() to setConditions()', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -48,31 +48,31 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('PHPExcel_Style_Conditional'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('PHPExcel_Style_Conditional'))) {
             return null;
         }
         if (!$this->isName($node->name, 'setCondition')) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Identifier('setConditions');
+        $node->name = new Identifier('setConditions');
         $this->castArgumentToArrayIfNotArrayType($node);
         return $node;
     }
-    private function castArgumentToArrayIfNotArrayType(\PhpParser\Node\Expr\MethodCall $methodCall) : void
+    private function castArgumentToArrayIfNotArrayType(MethodCall $methodCall) : void
     {
         $firstArgumentValue = $methodCall->args[0]->value;
         $firstArgumentStaticType = $this->getType($firstArgumentValue);
-        if ($firstArgumentStaticType instanceof \PHPStan\Type\ArrayType) {
+        if ($firstArgumentStaticType instanceof ArrayType) {
             return;
         }
         // cast to array if not an array
-        $methodCall->args[0]->value = new \PhpParser\Node\Expr\Cast\Array_($firstArgumentValue);
+        $methodCall->args[0]->value = new Array_($firstArgumentValue);
     }
 }

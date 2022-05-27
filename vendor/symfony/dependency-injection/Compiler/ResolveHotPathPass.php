@@ -19,7 +19,7 @@ use RectorPrefix20220527\Symfony\Component\DependencyInjection\Reference;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ResolveHotPathPass extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class ResolveHotPathPass extends AbstractRecursivePass
 {
     /**
      * @var mixed[]
@@ -28,7 +28,7 @@ class ResolveHotPathPass extends \RectorPrefix20220527\Symfony\Component\Depende
     /**
      * {@inheritdoc}
      */
-    public function process(\RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(ContainerBuilder $container)
     {
         try {
             parent::process($container);
@@ -44,10 +44,10 @@ class ResolveHotPathPass extends \RectorPrefix20220527\Symfony\Component\Depende
      */
     protected function processValue($value, bool $isRoot = \false)
     {
-        if ($value instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\Argument\ArgumentInterface) {
+        if ($value instanceof ArgumentInterface) {
             return $value;
         }
-        if ($value instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\Definition && $isRoot) {
+        if ($value instanceof Definition && $isRoot) {
             if ($value->isDeprecated()) {
                 return $value->clearTag('container.hot_path');
             }
@@ -56,7 +56,7 @@ class ResolveHotPathPass extends \RectorPrefix20220527\Symfony\Component\Depende
                 return $value;
             }
         }
-        if ($value instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\Reference && \RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerBuilder::IGNORE_ON_UNINITIALIZED_REFERENCE !== $value->getInvalidBehavior() && $this->container->hasDefinition($id = (string) $value)) {
+        if ($value instanceof Reference && ContainerBuilder::IGNORE_ON_UNINITIALIZED_REFERENCE !== $value->getInvalidBehavior() && $this->container->hasDefinition($id = (string) $value)) {
             $definition = $this->container->getDefinition($id);
             if ($definition->isDeprecated() || $definition->hasTag('container.hot_path')) {
                 return $value;

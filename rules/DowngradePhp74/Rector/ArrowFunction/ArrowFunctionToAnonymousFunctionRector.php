@@ -16,20 +16,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector\ArrowFunctionToAnonymousFunctionRectorTest
  */
-final class ArrowFunctionToAnonymousFunctionRector extends \Rector\Core\Rector\AbstractRector
+final class ArrowFunctionToAnonymousFunctionRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
     private $anonymousFunctionFactory;
-    public function __construct(\Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory)
+    public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory)
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace arrow functions with anonymous functions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace arrow functions with anonymous functions', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -58,14 +58,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\ArrowFunction::class];
+        return [ArrowFunction::class];
     }
     /**
      * @param ArrowFunction $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\Closure
+    public function refactor(Node $node) : Closure
     {
-        $stmts = [new \PhpParser\Node\Stmt\Return_($node->expr)];
+        $stmts = [new Return_($node->expr)];
         return $this->anonymousFunctionFactory->create($node->params, $stmts, $node->returnType, $node->static);
     }
 }

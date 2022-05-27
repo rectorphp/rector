@@ -42,11 +42,11 @@ final class ReplaceStringWithClassConstant
         $this->argPosition = $argPosition;
         $this->classWithConstants = $classWithConstants;
         $this->caseInsensitive = $caseInsensitive;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getMethod() : string
     {

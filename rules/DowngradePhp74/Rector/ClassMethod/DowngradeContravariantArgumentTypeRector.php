@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\DowngradeContravariantArgumentTypeRectorTest
  */
-final class DowngradeContravariantArgumentTypeRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeContravariantArgumentTypeRector extends AbstractRector
 {
     /**
      * @readonly
@@ -42,7 +42,7 @@ final class DowngradeContravariantArgumentTypeRector extends \Rector\Core\Rector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ParamAnalyzer $paramAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->paramAnalyzer = $paramAnalyzer;
@@ -53,11 +53,11 @@ final class DowngradeContravariantArgumentTypeRector extends \Rector\Core\Rector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class];
+        return [ClassMethod::class, Function_::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove contravariant argument type declarations', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove contravariant argument type declarations', [new CodeSample(<<<'CODE_SAMPLE'
 class ParentType {}
 class ChildType extends ParentType {}
 
@@ -101,7 +101,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->params === []) {
             return null;
@@ -114,7 +114,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function isNullableParam(\PhpParser\Node\Param $param, $functionLike) : bool
+    private function isNullableParam(Param $param, $functionLike) : bool
     {
         if ($param->variadic) {
             return \false;
@@ -123,11 +123,11 @@ CODE_SAMPLE
             return \false;
         }
         // Don't consider for Union types
-        if ($param->type instanceof \PhpParser\Node\UnionType) {
+        if ($param->type instanceof UnionType) {
             return \false;
         }
         // Contravariant arguments are supported for __construct
-        if ($this->isName($functionLike, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if ($this->isName($functionLike, MethodName::CONSTRUCT)) {
             return \false;
         }
         // Check if the type is different from the one declared in some ancestor
@@ -136,10 +136,10 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function getDifferentParamTypeFromAncestorClass(\PhpParser\Node\Param $param, $functionLike) : ?string
+    private function getDifferentParamTypeFromAncestorClass(Param $param, $functionLike) : ?string
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($functionLike);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         $paramName = $this->getName($param);
@@ -163,7 +163,7 @@ CODE_SAMPLE
         $parentClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         foreach ($parentClassReflections as $parentClassReflection) {
             $parentReflectionMethod = $this->resolveParentReflectionMethod($parentClassReflection, $methodName);
-            if (!$parentReflectionMethod instanceof \ReflectionMethod) {
+            if (!$parentReflectionMethod instanceof ReflectionMethod) {
                 continue;
             }
             $differentAncestorParamTypeName = $this->getDifferentParamTypeFromReflectionMethod($parentReflectionMethod, $paramName, $paramTypeName);
@@ -173,7 +173,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function resolveParentReflectionMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : ?\ReflectionMethod
+    private function resolveParentReflectionMethod(ClassReflection $classReflection, string $methodName) : ?ReflectionMethod
     {
         if (!$classReflection->hasMethod($methodName)) {
             return null;
@@ -185,7 +185,7 @@ CODE_SAMPLE
         // Find the param we're looking for
         return $nativeReflection->getMethod($methodName);
     }
-    private function getDifferentParamTypeFromReflectionMethod(\ReflectionMethod $reflectionMethod, string $paramName, string $paramTypeName) : ?string
+    private function getDifferentParamTypeFromReflectionMethod(ReflectionMethod $reflectionMethod, string $paramName, string $paramTypeName) : ?string
     {
         /** @var ReflectionParameter[] $parentReflectionMethodParams */
         $parentReflectionMethodParams = $reflectionMethod->getParameters();
@@ -200,7 +200,7 @@ CODE_SAMPLE
                  * If the type is null, we don't have enough information
                  * to check if they are different. Then do nothing
                  */
-                if (!$reflectionParamType instanceof \ReflectionNamedType) {
+                if (!$reflectionParamType instanceof ReflectionNamedType) {
                     continue;
                 }
                 if ($reflectionParamType->getName() !== $paramTypeName) {
@@ -214,7 +214,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function refactorParam(\PhpParser\Node\Param $param, $functionLike) : void
+    private function refactorParam(Param $param, $functionLike) : void
     {
         if (!$this->isNullableParam($param, $functionLike)) {
             return;
@@ -225,7 +225,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function decorateWithDocBlock($functionLike, \PhpParser\Node\Param $param) : void
+    private function decorateWithDocBlock($functionLike, Param $param) : void
     {
         if ($param->type === null) {
             return;

@@ -16,7 +16,7 @@ use RectorPrefix20220527\Psr\Cache\InvalidArgumentException;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface TagAwareCacheInterface extends \RectorPrefix20220527\Symfony\Contracts\Cache\CacheInterface
+interface TagAwareCacheInterface extends CacheInterface
 {
     /**
      * Invalidates cached items using tags.

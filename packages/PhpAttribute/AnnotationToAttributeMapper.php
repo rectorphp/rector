@@ -36,14 +36,14 @@ final class AnnotationToAttributeMapper
                 return $annotationToAttributeMapper->map($value);
             }
         }
-        if ($value instanceof \PhpParser\Node\Expr) {
+        if ($value instanceof Expr) {
             return $value;
         }
         // remove node, as handled elsewhere
-        if ($value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-            return \Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY;
+        if ($value instanceof DoctrineAnnotationTagValueNode) {
+            return DocTagNodeState::REMOVE_ARRAY;
         }
         // fallback
-        return \PhpParser\BuilderHelpers::normalizeValue($value);
+        return BuilderHelpers::normalizeValue($value);
     }
 }

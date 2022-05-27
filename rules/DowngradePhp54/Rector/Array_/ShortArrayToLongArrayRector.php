@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector\ShortArrayToLongArrayRectorTest
  */
-final class ShortArrayToLongArrayRector extends \Rector\Core\Rector\AbstractRector
+final class ShortArrayToLongArrayRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace short arrays by long arrays', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace short arrays by long arrays', [new CodeSample(<<<'CODE_SAMPLE'
 $a = [1, 2, 3];
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -31,20 +31,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Array_::class];
+        return [Array_::class];
     }
     /**
      * @param Array_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\Array_
+    public function refactor(Node $node) : ?Array_
     {
-        $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
-        if ($kind === \PhpParser\Node\Expr\Array_::KIND_LONG) {
+        $kind = $node->getAttribute(AttributeKey::KIND);
+        if ($kind === Array_::KIND_LONG) {
             return null;
         }
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Expr\Array_::KIND_LONG);
+        $node->setAttribute(AttributeKey::KIND, Array_::KIND_LONG);
         // force php-parser to re-print: https://github.com/rectorphp/rector/issues/6618#issuecomment-893226087
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
 }

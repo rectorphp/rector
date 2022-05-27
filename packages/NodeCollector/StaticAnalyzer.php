@@ -14,7 +14,7 @@ final class StaticAnalyzer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
@@ -34,13 +34,13 @@ final class StaticAnalyzer
         // @see https://regex101.com/r/tlvfTB/1
         return $this->hasStaticAnnotation($methodName, $classReflection);
     }
-    private function hasStaticAnnotation(string $methodName, \PHPStan\Reflection\ClassReflection $classReflection) : bool
+    private function hasStaticAnnotation(string $methodName, ClassReflection $classReflection) : bool
     {
         $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
-        if (!$resolvedPhpDocBlock instanceof \PHPStan\PhpDoc\ResolvedPhpDocBlock) {
+        if (!$resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
             return \false;
         }
         // @see https://regex101.com/r/7Zkej2/1
-        return \Rector\Core\Util\StringUtils::isMatch($resolvedPhpDocBlock->getPhpDocString(), '#@method\\s*static\\s*((([\\w\\|\\\\]+)|\\$this)*+(\\[\\])*)*\\s+\\b' . $methodName . '\\b#');
+        return StringUtils::isMatch($resolvedPhpDocBlock->getPhpDocString(), '#@method\\s*static\\s*((([\\w\\|\\\\]+)|\\$this)*+(\\[\\])*)*\\s+\\b' . $methodName . '\\b#');
     }
 }

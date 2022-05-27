@@ -11,7 +11,7 @@ use RectorPrefix20220527\MyCLabs\Enum\Enum;
  * @method static ObjectReference STATIC()
  * @method static ObjectReference PARENT()
  */
-final class ObjectReference extends \RectorPrefix20220527\MyCLabs\Enum\Enum
+final class ObjectReference extends Enum
 {
     /**
      * @var string

@@ -14,15 +14,15 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToStaticCallRector\NewToStaticCallRectorTest
  */
-final class NewToStaticCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class NewToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var NewToStaticCall[]
      */
     private $typeToStaticCalls = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change new Object to static call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change new Object to static call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -40,19 +40,19 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new \Rector\Transform\ValueObject\NewToStaticCall('Cookie', 'Cookie', 'create')])]);
+, [new NewToStaticCall('Cookie', 'Cookie', 'create')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\New_::class];
+        return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->typeToStaticCalls as $typeToStaticCall) {
             if (!$this->isObjectType($node->class, $typeToStaticCall->getObjectType())) {
@@ -67,7 +67,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\NewToStaticCall::class);
+        Assert::allIsAOf($configuration, NewToStaticCall::class);
         $this->typeToStaticCalls = $configuration;
     }
 }

@@ -55,11 +55,11 @@ final class ArgumentAdder
         $this->argumentDefaultValue = $argumentDefaultValue;
         $this->argumentType = $argumentType;
         $this->scope = $scope;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getMethod() : string
     {
@@ -80,7 +80,7 @@ final class ArgumentAdder
     {
         return $this->argumentDefaultValue;
     }
-    public function getArgumentType() : ?\PHPStan\Type\Type
+    public function getArgumentType() : ?Type
     {
         return $this->argumentType;
     }

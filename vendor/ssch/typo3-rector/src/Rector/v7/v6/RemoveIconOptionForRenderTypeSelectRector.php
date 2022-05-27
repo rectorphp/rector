@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.6/Breaking-70033-TcaIconOptionsForSelectFields.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v6\RemoveIconOptionForRenderTypeSelectRector\RemoveIconOptionForRenderTypeSelectRectorTest
  */
-final class RemoveIconOptionForRenderTypeSelectRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveIconOptionForRenderTypeSelectRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -26,9 +26,9 @@ final class RemoveIconOptionForRenderTypeSelectRector extends \Rector\Core\Recto
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA icon options have been removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('TCA icon options have been removed', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'columns' => [
         'foo' => [
@@ -61,27 +61,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$columnsArrayItem instanceof ArrayItem) {
             return null;
         }
         $items = $columnsArrayItem->value;
-        if (!$items instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$items instanceof Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($items->items as $fieldValue) {
-            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$fieldValue instanceof ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
@@ -91,14 +91,14 @@ CODE_SAMPLE
             if (null === $fieldName) {
                 continue;
             }
-            if (!$fieldValue->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$fieldValue->value instanceof Array_) {
                 continue;
             }
             foreach ($fieldValue->value->items as $configValue) {
                 if (null === $configValue) {
                     continue;
                 }
-                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
+                if (!$configValue->value instanceof Array_) {
                     continue;
                 }
                 $renderType = null;
@@ -107,7 +107,7 @@ CODE_SAMPLE
                 $noIconsBelowSelect = null;
                 $doSomething = \false;
                 foreach ($configValue->value->items as $configItemValue) {
-                    if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+                    if (!$configItemValue instanceof ArrayItem) {
                         continue;
                     }
                     if (null === $configItemValue->key) {
@@ -140,10 +140,10 @@ CODE_SAMPLE
                     continue;
                 }
                 if (null !== $selicon_cols && null === $showIconTable) {
-                    $configValue->value->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createTrue(), new \PhpParser\Node\Scalar\String_(self::SHOW_ICON_TABLE));
+                    $configValue->value->items[] = new ArrayItem($this->nodeFactory->createTrue(), new String_(self::SHOW_ICON_TABLE));
                     $hasAstBeenChanged = \true;
                 } elseif (!$noIconsBelowSelect && null === $showIconTable) {
-                    $configValue->value->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createTrue(), new \PhpParser\Node\Scalar\String_(self::SHOW_ICON_TABLE));
+                    $configValue->value->items[] = new ArrayItem($this->nodeFactory->createTrue(), new String_(self::SHOW_ICON_TABLE));
                     $hasAstBeenChanged = \true;
                 }
             }

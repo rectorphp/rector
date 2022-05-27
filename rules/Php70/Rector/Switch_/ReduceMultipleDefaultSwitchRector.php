@@ -19,15 +19,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector\ReduceMultipleDefaultSwitchRectorTest
  */
-final class ReduceMultipleDefaultSwitchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ReduceMultipleDefaultSwitchRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::NO_MULTIPLE_DEFAULT_SWITCH;
+        return PhpVersionFeature::NO_MULTIPLE_DEFAULT_SWITCH;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove first default switch, that is ignored', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove first default switch, that is ignored', [new CodeSample(<<<'CODE_SAMPLE'
 switch ($expr) {
     default:
          echo "Hello World";
@@ -51,12 +51,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Switch_::class];
+        return [Switch_::class];
     }
     /**
      * @param Switch_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $defaultCases = [];
         foreach ($node->cases as $case) {
@@ -83,10 +83,10 @@ CODE_SAMPLE
             $this->removeNode($defaultCase);
         }
     }
-    private function keepStatementsToParentCase(\PhpParser\Node\Stmt\Case_ $case) : void
+    private function keepStatementsToParentCase(Case_ $case) : void
     {
-        $previousNode = $case->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-        if (!$previousNode instanceof \PhpParser\Node\Stmt\Case_) {
+        $previousNode = $case->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if (!$previousNode instanceof Case_) {
             return;
         }
         if ($previousNode->stmts === []) {

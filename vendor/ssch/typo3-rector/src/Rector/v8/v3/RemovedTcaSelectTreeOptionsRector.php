@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.3/Breaking-77081-RemovedTCASelectTreeOptions.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v3\RemovedTcaSelectTreeOptionsRector\RemovedTcaSelectTreeOptionsRectorTest
  */
-final class RemovedTcaSelectTreeOptionsRector extends \Rector\Core\Rector\AbstractRector
+final class RemovedTcaSelectTreeOptionsRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -24,33 +24,33 @@ final class RemovedTcaSelectTreeOptionsRector extends \Rector\Core\Rector\Abstra
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$columnsArrayItem instanceof ArrayItem) {
             return null;
         }
         $columnItems = $columnsArrayItem->value;
-        if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$columnItems instanceof Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($columnItems->items as $columnItem) {
-            if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$columnItem instanceof ArrayItem) {
                 continue;
             }
             if (null === $columnItem->key) {
                 continue;
             }
-            if (!$columnItem->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$columnItem->value instanceof Array_) {
                 continue;
             }
             foreach ($columnItem->value->items as $configValue) {
@@ -60,24 +60,24 @@ final class RemovedTcaSelectTreeOptionsRector extends \Rector\Core\Rector\Abstra
                 if (null === $configValue->key) {
                     continue;
                 }
-                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
+                if (!$configValue->value instanceof Array_) {
                     continue;
                 }
                 if (!$this->configIsOfRenderType($configValue->value, 'selectTree')) {
                     continue;
                 }
                 foreach ($configValue->value->items as $configItemValue) {
-                    if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+                    if (!$configItemValue instanceof ArrayItem) {
                         continue;
                     }
                     if (null === $configItemValue->key) {
                         continue;
                     }
                     if ($this->valueResolver->isValue($configItemValue->key, 'autoSizeMax')) {
-                        $configItemValue->key = new \PhpParser\Node\Scalar\String_('size');
-                    } elseif ($configItemValue->value instanceof \PhpParser\Node\Expr\Array_ && $this->valueResolver->isValue($configItemValue->key, 'treeConfig')) {
+                        $configItemValue->key = new String_('size');
+                    } elseif ($configItemValue->value instanceof Array_ && $this->valueResolver->isValue($configItemValue->key, 'treeConfig')) {
                         foreach ($configItemValue->value->items as $treeConfigValue) {
-                            if (!$treeConfigValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+                            if (!$treeConfigValue instanceof ArrayItem) {
                                 continue;
                             }
                             if (null === $treeConfigValue->key) {
@@ -86,11 +86,11 @@ final class RemovedTcaSelectTreeOptionsRector extends \Rector\Core\Rector\Abstra
                             if (!$this->valueResolver->isValue($treeConfigValue->key, 'appearance')) {
                                 continue;
                             }
-                            if (!$treeConfigValue->value instanceof \PhpParser\Node\Expr\Array_) {
+                            if (!$treeConfigValue->value instanceof Array_) {
                                 continue;
                             }
                             foreach ($treeConfigValue->value->items as $appearanceConfigValue) {
-                                if (!$appearanceConfigValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+                                if (!$appearanceConfigValue instanceof ArrayItem) {
                                     continue;
                                 }
                                 if (null === $appearanceConfigValue->key) {
@@ -112,9 +112,9 @@ final class RemovedTcaSelectTreeOptionsRector extends \Rector\Core\Rector\Abstra
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removed TCA tree options: width, allowRecursiveMode, autoSizeMax', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removed TCA tree options: width, allowRecursiveMode, autoSizeMax', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
     ],

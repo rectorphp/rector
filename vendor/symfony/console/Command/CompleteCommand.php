@@ -24,7 +24,7 @@ use RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-final class CompleteCommand extends \RectorPrefix20220527\Symfony\Component\Console\Command\Command
+final class CompleteCommand extends Command
 {
     protected static $defaultName = '|_complete';
     protected static $defaultDescription = 'Internal command to provide shell completion suggestions';
@@ -36,18 +36,18 @@ final class CompleteCommand extends \RectorPrefix20220527\Symfony\Component\Cons
     public function __construct(array $completionOutputs = [])
     {
         // must be set before the parent constructor, as the property value is used in configure()
-        $this->completionOutputs = $completionOutputs + ['bash' => \RectorPrefix20220527\Symfony\Component\Console\Completion\Output\BashCompletionOutput::class];
+        $this->completionOutputs = $completionOutputs + ['bash' => BashCompletionOutput::class];
         parent::__construct();
     }
     protected function configure() : void
     {
-        $this->addOption('shell', 's', \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The shell type ("' . \implode('", "', \array_keys($this->completionOutputs)) . '")')->addOption('input', 'i', \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED | \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_IS_ARRAY, 'An array of input tokens (e.g. COMP_WORDS or argv)')->addOption('current', 'c', \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The index of the "input" array that the cursor is in (e.g. COMP_CWORD)')->addOption('symfony', 'S', \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The version of the completion script');
+        $this->addOption('shell', 's', InputOption::VALUE_REQUIRED, 'The shell type ("' . \implode('", "', \array_keys($this->completionOutputs)) . '")')->addOption('input', 'i', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'An array of input tokens (e.g. COMP_WORDS or argv)')->addOption('current', 'c', InputOption::VALUE_REQUIRED, 'The index of the "input" array that the cursor is in (e.g. COMP_CWORD)')->addOption('symfony', 'S', InputOption::VALUE_REQUIRED, 'The version of the completion script');
     }
-    protected function initialize(\RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output)
     {
         $this->isDebug = \filter_var(\getenv('SYMFONY_COMPLETION_DEBUG'), \FILTER_VALIDATE_BOOLEAN);
     }
-    protected function execute(\RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         try {
             // uncomment when a bugfix or BC break has been introduced in the shell completion scripts
@@ -66,7 +66,7 @@ final class CompleteCommand extends \RectorPrefix20220527\Symfony\Component\Cons
                 throw new \RuntimeException(\sprintf('Shell completion is not supported for your shell: "%s" (supported: "%s").', $shell, \implode('", "', \array_keys($this->completionOutputs))));
             }
             $completionInput = $this->createCompletionInput($input);
-            $suggestions = new \RectorPrefix20220527\Symfony\Component\Console\Completion\CompletionSuggestions();
+            $suggestions = new CompletionSuggestions();
             $this->log(['', '<comment>' . \date('Y-m-d H:i:s') . '</>', '<info>Input:</> <comment>("|" indicates the cursor position)</>', '  ' . (string) $completionInput, '<info>Command:</>', '  ' . (string) \implode(' ', $_SERVER['argv']), '<info>Messages:</>']);
             $command = $this->findCommand($completionInput, $output);
             if (null === $command) {
@@ -79,11 +79,11 @@ final class CompleteCommand extends \RectorPrefix20220527\Symfony\Component\Cons
             } else {
                 $command->mergeApplicationDefinition();
                 $completionInput->bind($command->getDefinition());
-                if (\RectorPrefix20220527\Symfony\Component\Console\Completion\CompletionInput::TYPE_OPTION_NAME === $completionInput->getCompletionType()) {
-                    $this->log('  Completing option names for the <comment>' . \get_class($command instanceof \RectorPrefix20220527\Symfony\Component\Console\Command\LazyCommand ? $command->getCommand() : $command) . '</> command.');
+                if (CompletionInput::TYPE_OPTION_NAME === $completionInput->getCompletionType()) {
+                    $this->log('  Completing option names for the <comment>' . \get_class($command instanceof LazyCommand ? $command->getCommand() : $command) . '</> command.');
                     $suggestions->suggestOptions($command->getDefinition()->getOptions());
                 } else {
-                    $this->log(['  Completing using the <comment>' . \get_class($command instanceof \RectorPrefix20220527\Symfony\Component\Console\Command\LazyCommand ? $command->getCommand() : $command) . '</> class.', '  Completing <comment>' . $completionInput->getCompletionType() . '</> for <comment>' . $completionInput->getCompletionName() . '</>']);
+                    $this->log(['  Completing using the <comment>' . \get_class($command instanceof LazyCommand ? $command->getCommand() : $command) . '</> class.', '  Completing <comment>' . $completionInput->getCompletionType() . '</> for <comment>' . $completionInput->getCompletionName() . '</>']);
                     if (null !== ($compval = $completionInput->getCompletionValue())) {
                         $this->log('  Current value: <comment>' . $compval . '</>');
                     }
@@ -112,20 +112,20 @@ final class CompleteCommand extends \RectorPrefix20220527\Symfony\Component\Cons
         }
         return self::SUCCESS;
     }
-    private function createCompletionInput(\RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input) : \RectorPrefix20220527\Symfony\Component\Console\Completion\CompletionInput
+    private function createCompletionInput(InputInterface $input) : CompletionInput
     {
         $currentIndex = $input->getOption('current');
         if (!$currentIndex || !\ctype_digit($currentIndex)) {
             throw new \RuntimeException('The "--current" option must be set and it must be an integer.');
         }
-        $completionInput = \RectorPrefix20220527\Symfony\Component\Console\Completion\CompletionInput::fromTokens($input->getOption('input'), (int) $currentIndex);
+        $completionInput = CompletionInput::fromTokens($input->getOption('input'), (int) $currentIndex);
         try {
             $completionInput->bind($this->getApplication()->getDefinition());
-        } catch (\RectorPrefix20220527\Symfony\Component\Console\Exception\ExceptionInterface $e) {
+        } catch (ExceptionInterface $e) {
         }
         return $completionInput;
     }
-    private function findCommand(\RectorPrefix20220527\Symfony\Component\Console\Completion\CompletionInput $completionInput, \RectorPrefix20220527\Symfony\Component\Console\Output\OutputInterface $output) : ?\RectorPrefix20220527\Symfony\Component\Console\Command\Command
+    private function findCommand(CompletionInput $completionInput, OutputInterface $output) : ?Command
     {
         try {
             $inputName = $completionInput->getFirstArgument();
@@ -133,7 +133,7 @@ final class CompleteCommand extends \RectorPrefix20220527\Symfony\Component\Cons
                 return null;
             }
             return $this->getApplication()->find($inputName);
-        } catch (\RectorPrefix20220527\Symfony\Component\Console\Exception\CommandNotFoundException $e) {
+        } catch (CommandNotFoundException $e) {
         }
         return null;
     }

@@ -17,7 +17,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
 use Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory;
 use Rector\Php80\ValueObject\StrStartsWith;
-final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface
+final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     /**
      * @readonly
@@ -44,7 +44,7 @@ final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver, NodeComparator $nodeComparator, StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory, ArgsAnalyzer $argsAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
@@ -55,10 +55,10 @@ final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $binaryOp
      */
-    public function match($binaryOp) : ?\Rector\Php80\ValueObject\StrStartsWith
+    public function match($binaryOp) : ?StrStartsWith
     {
-        $isPositive = $binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Identical;
-        if ($binaryOp->left instanceof \PhpParser\Node\Expr\FuncCall && $this->nodeNameResolver->isName($binaryOp->left, 'substr')) {
+        $isPositive = $binaryOp instanceof Identical;
+        if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->left, 'substr')) {
             /** @var FuncCall $funcCall */
             $funcCall = $binaryOp->left;
             if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0)) {
@@ -67,9 +67,9 @@ final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
             /** @var Arg $arg */
             $arg = $funcCall->args[0];
             $haystack = $arg->value;
-            return new \Rector\Php80\ValueObject\StrStartsWith($funcCall, $haystack, $binaryOp->right, $isPositive);
+            return new StrStartsWith($funcCall, $haystack, $binaryOp->right, $isPositive);
         }
-        if ($binaryOp->right instanceof \PhpParser\Node\Expr\FuncCall && $this->nodeNameResolver->isName($binaryOp->right, 'substr')) {
+        if ($binaryOp->right instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->right, 'substr')) {
             /** @var FuncCall $funcCall */
             $funcCall = $binaryOp->right;
             if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0)) {
@@ -78,11 +78,11 @@ final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
             /** @var Arg $arg */
             $arg = $funcCall->args[0];
             $haystack = $arg->value;
-            return new \Rector\Php80\ValueObject\StrStartsWith($funcCall, $haystack, $binaryOp->left, $isPositive);
+            return new StrStartsWith($funcCall, $haystack, $binaryOp->left, $isPositive);
         }
         return null;
     }
-    public function refactorStrStartsWith(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith) : ?\PhpParser\Node
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith) : ?Node
     {
         if ($this->isStrlenWithNeedleExpr($strStartsWith)) {
             return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
@@ -92,7 +92,7 @@ final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
         }
         return null;
     }
-    private function isStrlenWithNeedleExpr(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith) : bool
+    private function isStrlenWithNeedleExpr(StrStartsWith $strStartsWith) : bool
     {
         $substrFuncCall = $strStartsWith->getFuncCall();
         if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($substrFuncCall->args, 1)) {
@@ -109,7 +109,7 @@ final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
         /** @var Arg $arg2 */
         $arg2 = $substrFuncCall->args[2];
         $secondFuncCallArgValue = $arg2->value;
-        if (!$secondFuncCallArgValue instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$secondFuncCallArgValue instanceof FuncCall) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($secondFuncCallArgValue, 'strlen')) {
@@ -126,7 +126,7 @@ final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
         $comparedNeedleExpr = $strStartsWith->getNeedleExpr();
         return $this->nodeComparator->areNodesEqual($needleExpr, $comparedNeedleExpr);
     }
-    private function isHardcodedStringWithLNumberLength(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith) : bool
+    private function isHardcodedStringWithLNumberLength(StrStartsWith $strStartsWith) : bool
     {
         $substrFuncCall = $strStartsWith->getFuncCall();
         if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($substrFuncCall->args, 1)) {
@@ -138,7 +138,7 @@ final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
             return \false;
         }
         $hardcodedStringNeedle = $strStartsWith->getNeedleExpr();
-        if (!$hardcodedStringNeedle instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$hardcodedStringNeedle instanceof String_) {
             return \false;
         }
         if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($substrFuncCall->args, 2)) {
@@ -147,7 +147,7 @@ final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
         /** @var Arg $arg2 */
         $arg2 = $substrFuncCall->args[2];
         $lNumberLength = $arg2->value;
-        if (!$lNumberLength instanceof \PhpParser\Node\Scalar\LNumber) {
+        if (!$lNumberLength instanceof LNumber) {
             return \false;
         }
         return $lNumberLength->value === \strlen($hardcodedStringNeedle->value);

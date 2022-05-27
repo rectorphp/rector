@@ -14,21 +14,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Breaking-82506-RemoveBackendUserRepositoryInjectionInNoteController.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\FindByPidsAndAuthorIdRector\FindByPidsAndAuthorIdRectorTest
  */
-final class FindByPidsAndAuthorIdRector extends \Rector\Core\Rector\AbstractRector
+final class FindByPidsAndAuthorIdRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\SysNote\\Domain\\Repository\\SysNoteRepository'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\SysNote\\Domain\\Repository\\SysNoteRepository'))) {
             return null;
         }
         if (!$this->isName($node->name, 'findByPidsAndAuthor')) {
@@ -37,7 +37,7 @@ final class FindByPidsAndAuthorIdRector extends \Rector\Core\Rector\AbstractRect
         if (\count($node->args) < 2) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Identifier('findByPidsAndAuthorId');
+        $node->name = new Identifier('findByPidsAndAuthorId');
         $secondArgument = $node->args[1];
         $secondArgument->value = $this->nodeFactory->createMethodCall($secondArgument->value, 'getUid');
         return $node;
@@ -45,9 +45,9 @@ final class FindByPidsAndAuthorIdRector extends \Rector\Core\Rector\AbstractRect
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use findByPidsAndAuthorId instead of findByPidsAndAuthor', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use findByPidsAndAuthorId instead of findByPidsAndAuthor', [new CodeSample(<<<'CODE_SAMPLE'
 $sysNoteRepository = GeneralUtility::makeInstance(SysNoteRepository::class);
 $backendUser = new BackendUser();
 $sysNoteRepository->findByPidsAndAuthor('1,2,3', $backendUser);

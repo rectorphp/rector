@@ -8,7 +8,7 @@ final class StringUtils
 {
     public static function isMatch(string $value, string $regex) : bool
     {
-        $match = \RectorPrefix20220527\Nette\Utils\Strings::match($value, $regex);
+        $match = Strings::match($value, $regex);
         return $match !== null;
     }
 }

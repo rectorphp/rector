@@ -36,13 +36,13 @@ final class ClassAnnotationMatcher
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher $useImportNameMatcher, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(UseImportNameMatcher $useImportNameMatcher, UseImportsResolver $useImportsResolver, ReflectionProvider $reflectionProvider)
     {
         $this->useImportNameMatcher = $useImportNameMatcher;
         $this->useImportsResolver = $useImportsResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function resolveTagFullyQualifiedName(string $tag, \PhpParser\Node $node) : string
+    public function resolveTagFullyQualifiedName(string $tag, Node $node) : string
     {
         $uniqueHash = $tag . \spl_object_hash($node);
         if (isset($this->fullyQualifiedNameByHash[$uniqueHash])) {
@@ -57,10 +57,10 @@ final class ClassAnnotationMatcher
     /**
      * @param Use_[]|GroupUse[] $uses
      */
-    private function resolveFullyQualifiedClass(array $uses, \PhpParser\Node $node, string $tag) : string
+    private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag) : string
     {
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if ($scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($scope instanceof Scope) {
             $namespace = $scope->getNamespace();
             if ($namespace !== null) {
                 $namespacedTag = $namespace . '\\' . $tag;
@@ -80,10 +80,10 @@ final class ClassAnnotationMatcher
     private function resolveAsAliased(array $uses, string $tag) : string
     {
         foreach ($uses as $use) {
-            $prefix = $use instanceof \PhpParser\Node\Stmt\GroupUse ? $use->prefix . '\\' : '';
+            $prefix = $use instanceof GroupUse ? $use->prefix . '\\' : '';
             $useUses = $use->uses;
             foreach ($useUses as $useUse) {
-                if (!$useUse->alias instanceof \PhpParser\Node\Identifier) {
+                if (!$useUse->alias instanceof Identifier) {
                     continue;
                 }
                 $alias = $useUse->alias;

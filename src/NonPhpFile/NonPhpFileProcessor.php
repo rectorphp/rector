@@ -12,7 +12,7 @@ use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Parallel\ValueObject\Bridge;
-final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
+final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**
      * @var NonPhpRectorInterface[]
@@ -27,7 +27,7 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
     /**
      * @param NonPhpRectorInterface[] $nonPhpRectors
      */
-    public function __construct(array $nonPhpRectors, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory)
+    public function __construct(array $nonPhpRectors, FileDiffFactory $fileDiffFactory)
     {
         $this->nonPhpRectors = $nonPhpRectors;
         $this->fileDiffFactory = $fileDiffFactory;
@@ -35,9 +35,9 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
+    public function process(File $file, Configuration $configuration) : array
     {
-        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
+        $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
         if ($this->nonPhpRectors === []) {
             return $systemErrorsAndFileDiffs;
         }
@@ -52,11 +52,11 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
         }
         if ($oldFileContent !== $newFileContent) {
             $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldFileContent, $newFileContent);
-            $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS][] = $fileDiff;
+            $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS][] = $fileDiff;
         }
         return $systemErrorsAndFileDiffs;
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    public function supports(File $file, Configuration $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         // early assign to variable for increase performance
@@ -75,6 +75,6 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
      */
     public function getSupportedFileExtensions() : array
     {
-        return \Rector\Core\ValueObject\StaticNonPhpFileSuffixes::SUFFIXES;
+        return StaticNonPhpFileSuffixes::SUFFIXES;
     }
 }

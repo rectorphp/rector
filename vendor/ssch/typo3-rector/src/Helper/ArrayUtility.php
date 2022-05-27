@@ -12,7 +12,7 @@ final class ArrayUtility
     public static function trimExplode(string $delimiter, string $string, bool $removeEmptyValues = \false, int $limit = 0) : array
     {
         if ('' === $delimiter) {
-            throw new \InvalidArgumentException('Please define a correct delimiter');
+            throw new InvalidArgumentException('Please define a correct delimiter');
         }
         $result = \explode($delimiter, $string);
         if ($removeEmptyValues) {

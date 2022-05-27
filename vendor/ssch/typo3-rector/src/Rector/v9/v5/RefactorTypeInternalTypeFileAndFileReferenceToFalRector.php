@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.5/Deprecation-86406-TCATypeGroupInternal_typeFileAndFile_reference.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v5\RefactorTypeInternalTypeFileAndFileReferenceToFalRector\RefactorTypeInternalTypeFileAndFileReferenceToFalRectorTest
  */
-final class RefactorTypeInternalTypeFileAndFileReferenceToFalRector extends \Rector\Core\Rector\AbstractRector
+final class RefactorTypeInternalTypeFileAndFileReferenceToFalRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -28,7 +28,7 @@ final class RefactorTypeInternalTypeFileAndFileReferenceToFalRector extends \Rec
      * @var \Rector\Core\Console\Output\RectorOutputStyle
      */
     private $rectorOutputStyle;
-    public function __construct(\Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle)
+    public function __construct(RectorOutputStyle $rectorOutputStyle)
     {
         $this->rectorOutputStyle = $rectorOutputStyle;
     }
@@ -37,33 +37,33 @@ final class RefactorTypeInternalTypeFileAndFileReferenceToFalRector extends \Rec
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$columnsArrayItem instanceof ArrayItem) {
             return null;
         }
         $columnItems = $columnsArrayItem->value;
-        if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$columnItems instanceof Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($columnItems->items as $columnItem) {
-            if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$columnItem instanceof ArrayItem) {
                 continue;
             }
             if (null === $columnItem->key) {
                 continue;
             }
-            if (!$columnItem->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$columnItem->value instanceof Array_) {
                 continue;
             }
             foreach ($columnItem->value->items as $configValue) {
@@ -73,7 +73,7 @@ final class RefactorTypeInternalTypeFileAndFileReferenceToFalRector extends \Rec
                 if (null === $configValue->key) {
                     continue;
                 }
-                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
+                if (!$configValue->value instanceof Array_) {
                     continue;
                 }
                 if (!$this->valueResolver->isValue($configValue->key, 'config')) {
@@ -85,17 +85,17 @@ final class RefactorTypeInternalTypeFileAndFileReferenceToFalRector extends \Rec
                 if (!$this->configIsOfInternalType($configValue->value, 'file') && !$this->configIsOfInternalType($configValue->value, 'file_reference')) {
                     continue;
                 }
-                $newConfig = new \PhpParser\Node\Expr\Array_();
+                $newConfig = new Array_();
                 $allowed = null;
                 foreach ($configValue->value->items as $configItemValue) {
-                    if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+                    if (!$configItemValue instanceof ArrayItem) {
                         continue;
                     }
                     if (null === $configItemValue->key) {
                         continue;
                     }
                     if ($this->valueResolver->isValues($configItemValue->key, ['max_size', 'uploadfolder', 'maxitems'])) {
-                        $newConfig->items[] = new \PhpParser\Node\Expr\ArrayItem($configItemValue->value, $configItemValue->key);
+                        $newConfig->items[] = new ArrayItem($configItemValue->value, $configItemValue->key);
                         continue;
                     }
                     if ($this->valueResolver->isValue($configItemValue->key, 'allowed')) {
@@ -118,9 +118,9 @@ final class RefactorTypeInternalTypeFileAndFileReferenceToFalRector extends \Rec
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move TCA type group internal_type file and file_reference to FAL configuration', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move TCA type group internal_type file and file_reference to FAL configuration', [new CodeSample(<<<'CODE_SAMPLE'
 return [
             'ctrl' => [],
             'columns' => [

@@ -19,19 +19,19 @@ final class ConditionEvaluator
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
     /**
      * @return bool|int|null
      */
-    public function evaluate(\Rector\DeadCode\Contract\ConditionInterface $condition)
+    public function evaluate(ConditionInterface $condition)
     {
-        if ($condition instanceof \Rector\DeadCode\ValueObject\VersionCompareCondition) {
+        if ($condition instanceof VersionCompareCondition) {
             return $this->evaluateVersionCompareCondition($condition);
         }
-        if ($condition instanceof \Rector\DeadCode\ValueObject\BinaryToVersionCompareCondition) {
+        if ($condition instanceof BinaryToVersionCompareCondition) {
             return $this->isEvaluedAsTrue($condition);
         }
         return null;
@@ -39,7 +39,7 @@ final class ConditionEvaluator
     /**
      * @return bool|int|null
      */
-    private function evaluateVersionCompareCondition(\Rector\DeadCode\ValueObject\VersionCompareCondition $versionCompareCondition)
+    private function evaluateVersionCompareCondition(VersionCompareCondition $versionCompareCondition)
     {
         $compareSign = $versionCompareCondition->getCompareSign();
         if ($compareSign !== null) {
@@ -50,23 +50,23 @@ final class ConditionEvaluator
         }
         return \version_compare((string) $versionCompareCondition->getFirstVersion(), (string) $versionCompareCondition->getSecondVersion());
     }
-    private function isEvaluedAsTrue(\Rector\DeadCode\ValueObject\BinaryToVersionCompareCondition $binaryToVersionCompareCondition) : bool
+    private function isEvaluedAsTrue(BinaryToVersionCompareCondition $binaryToVersionCompareCondition) : bool
     {
         $versionCompareResult = $this->evaluateVersionCompareCondition($binaryToVersionCompareCondition->getVersionCompareCondition());
-        if ($binaryToVersionCompareCondition->getBinaryClass() === \PhpParser\Node\Expr\BinaryOp\Identical::class) {
+        if ($binaryToVersionCompareCondition->getBinaryClass() === Identical::class) {
             return $binaryToVersionCompareCondition->getExpectedValue() === $versionCompareResult;
         }
-        if ($binaryToVersionCompareCondition->getBinaryClass() === \PhpParser\Node\Expr\BinaryOp\NotIdentical::class) {
+        if ($binaryToVersionCompareCondition->getBinaryClass() === NotIdentical::class) {
             return $binaryToVersionCompareCondition->getExpectedValue() !== $versionCompareResult;
         }
-        if ($binaryToVersionCompareCondition->getBinaryClass() === \PhpParser\Node\Expr\BinaryOp\Equal::class) {
+        if ($binaryToVersionCompareCondition->getBinaryClass() === Equal::class) {
             // weak comparison on purpose
             return $binaryToVersionCompareCondition->getExpectedValue() === $versionCompareResult;
         }
-        if ($binaryToVersionCompareCondition->getBinaryClass() === \PhpParser\Node\Expr\BinaryOp\NotEqual::class) {
+        if ($binaryToVersionCompareCondition->getBinaryClass() === NotEqual::class) {
             // weak comparison on purpose
             return $binaryToVersionCompareCondition->getExpectedValue() !== $versionCompareResult;
         }
-        throw new \Rector\Core\Exception\ShouldNotHappenException();
+        throw new ShouldNotHappenException();
     }
 }

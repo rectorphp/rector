@@ -20,14 +20,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.5/Deprecation-95219-TypoScriptFrontendController-ATagParams.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v5\ReplaceTSFEATagParamsCallOnGlobalsRector\ReplaceTSFEATagParamsCallOnGlobalsRectorTest
  */
-final class ReplaceTSFEATagParamsCallOnGlobalsRector extends \Rector\Core\Rector\AbstractRector
+final class ReplaceTSFEATagParamsCallOnGlobalsRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -36,25 +36,25 @@ final class ReplaceTSFEATagParamsCallOnGlobalsRector extends \Rector\Core\Rector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\PropertyFetch::class];
+        return [PropertyFetch::class];
     }
     /**
      * @param PropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $propertyFetch = $this->nodeFactory->createPropertyFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)), 'config');
-        return new \PhpParser\Node\Expr\BinaryOp\Coalesce(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch($propertyFetch, new \PhpParser\Node\Scalar\String_('config')), new \PhpParser\Node\Scalar\String_('ATagParams')), new \PhpParser\Node\Scalar\String_(''));
+        $propertyFetch = $this->nodeFactory->createPropertyFetch(new ArrayDimFetch(new Variable('GLOBALS'), new String_(Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)), 'config');
+        return new Coalesce(new ArrayDimFetch(new ArrayDimFetch($propertyFetch, new String_('config')), new String_('ATagParams')), new String_(''));
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces all direct calls to $GLOBALS[\'TSFE\']->ATagParams.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces all direct calls to $GLOBALS[\'TSFE\']->ATagParams.', [new CodeSample(<<<'CODE_SAMPLE'
 $foo = $GLOBALS['TSFE']->ATagParams;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -62,19 +62,19 @@ $foo = $GLOBALS['TSFE']->config['config']['ATagParams'] ?? '';
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
+    private function shouldSkip(PropertyFetch $propertyFetch) : bool
     {
-        $parentNode = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
         // Check if we have an assigment to the property, if so do not change it
-        if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if ($parentNode instanceof Assign && $parentNode->var instanceof PropertyFetch) {
             return \true;
         }
         if (!$this->isName($propertyFetch->name, 'ATagParams')) {
             return \true;
         }
-        if ($this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
+        if ($this->isObjectType($propertyFetch->var, new ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
+        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
     }
 }

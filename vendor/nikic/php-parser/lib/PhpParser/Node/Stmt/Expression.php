@@ -7,7 +7,7 @@ use PhpParser\Node;
 /**
  * Represents statements of type "expr;"
  */
-class Expression extends \PhpParser\Node\Stmt
+class Expression extends Node\Stmt
 {
     /** @var Node\Expr Expression */
     public $expr;
@@ -17,7 +17,7 @@ class Expression extends \PhpParser\Node\Stmt
      * @param Node\Expr $expr       Expression
      * @param array     $attributes Additional attributes
      */
-    public function __construct(\PhpParser\Node\Expr $expr, array $attributes = [])
+    public function __construct(Node\Expr $expr, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->expr = $expr;

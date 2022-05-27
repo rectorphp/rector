@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector\WrapEncapsedVariableInCurlyBracesRectorTest
  */
-final class WrapEncapsedVariableInCurlyBracesRector extends \Rector\Core\Rector\AbstractRector
+final class WrapEncapsedVariableInCurlyBracesRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Wrap encapsed variables in curly braces', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Wrap encapsed variables in curly braces', [new CodeSample(<<<'CODE_SAMPLE'
 function run($world)
 {
     echo "Hello $world!";
@@ -36,22 +36,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Scalar\Encapsed::class];
+        return [Encapsed::class];
     }
     /**
      * @param Encapsed $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $startTokenPos = $node->getStartTokenPos();
         $hasVariableBeenWrapped = \false;
         foreach ($node->parts as $index => $nodePart) {
-            if ($nodePart instanceof \PhpParser\Node\Expr\Variable) {
-                $previousNode = $nodePart->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-                $previousNodeEndTokenPosition = $previousNode instanceof \PhpParser\Node ? $previousNode->getEndTokenPos() : $startTokenPos;
+            if ($nodePart instanceof Variable) {
+                $previousNode = $nodePart->getAttribute(AttributeKey::PREVIOUS_NODE);
+                $previousNodeEndTokenPosition = $previousNode instanceof Node ? $previousNode->getEndTokenPos() : $startTokenPos;
                 if ($previousNodeEndTokenPosition + 1 === $nodePart->getStartTokenPos()) {
                     $hasVariableBeenWrapped = \true;
-                    $node->parts[$index] = new \PhpParser\Node\Expr\Variable($nodePart->name);
+                    $node->parts[$index] = new Variable($nodePart->name);
                 }
             }
         }

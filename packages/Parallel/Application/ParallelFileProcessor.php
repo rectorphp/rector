@@ -55,7 +55,7 @@ final class ParallelFileProcessor
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\Rector\Parallel\Command\WorkerCommandLineFactory $workerCommandLineFactory, \RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(WorkerCommandLineFactory $workerCommandLineFactory, ParameterProvider $parameterProvider)
     {
         $this->workerCommandLineFactory = $workerCommandLineFactory;
         $this->parameterProvider = $parameterProvider;
@@ -64,27 +64,27 @@ final class ParallelFileProcessor
      * @param callable(int $stepCount): void $postFileCallback Used for progress bar jump
      * @return array{file_diffs: SerializableInterface[], system_errors: SerializableInterface[], system_errors_count: int}
      */
-    public function process(\RectorPrefix20220527\Symplify\EasyParallel\ValueObject\Schedule $schedule, string $mainScript, callable $postFileCallback, \RectorPrefix20220527\Symfony\Component\Console\Input\InputInterface $input) : array
+    public function process(Schedule $schedule, string $mainScript, callable $postFileCallback, InputInterface $input) : array
     {
         $jobs = \array_reverse($schedule->getJobs());
-        $streamSelectLoop = new \RectorPrefix20220527\React\EventLoop\StreamSelectLoop();
+        $streamSelectLoop = new StreamSelectLoop();
         // basic properties setup
         $numberOfProcesses = $schedule->getNumberOfProcesses();
         // initial counters
         $fileDiffs = [];
         /** @var SystemError[] $systemErrors */
         $systemErrors = [];
-        $tcpServer = new \RectorPrefix20220527\React\Socket\TcpServer('127.0.0.1:0', $streamSelectLoop);
-        $this->processPool = new \RectorPrefix20220527\Symplify\EasyParallel\ValueObject\ProcessPool($tcpServer);
-        $tcpServer->on(\RectorPrefix20220527\Symplify\EasyParallel\Enum\ReactEvent::CONNECTION, function (\RectorPrefix20220527\React\Socket\ConnectionInterface $connection) use(&$jobs) : void {
-            $inDecoder = new \RectorPrefix20220527\Clue\React\NDJson\Decoder($connection, \true, 512, 0, 4 * 1024 * 1024);
-            $outEncoder = new \RectorPrefix20220527\Clue\React\NDJson\Encoder($connection);
-            $inDecoder->on(\RectorPrefix20220527\Symplify\EasyParallel\Enum\ReactEvent::DATA, function (array $data) use(&$jobs, $inDecoder, $outEncoder) : void {
-                $action = $data[\RectorPrefix20220527\Symplify\EasyParallel\Enum\ReactCommand::ACTION];
-                if ($action !== \RectorPrefix20220527\Symplify\EasyParallel\Enum\Action::HELLO) {
+        $tcpServer = new TcpServer('127.0.0.1:0', $streamSelectLoop);
+        $this->processPool = new ProcessPool($tcpServer);
+        $tcpServer->on(ReactEvent::CONNECTION, function (ConnectionInterface $connection) use(&$jobs) : void {
+            $inDecoder = new Decoder($connection, \true, 512, 0, 4 * 1024 * 1024);
+            $outEncoder = new Encoder($connection);
+            $inDecoder->on(ReactEvent::DATA, function (array $data) use(&$jobs, $inDecoder, $outEncoder) : void {
+                $action = $data[ReactCommand::ACTION];
+                if ($action !== Action::HELLO) {
                     return;
                 }
-                $processIdentifier = $data[\Rector\Core\Configuration\Option::PARALLEL_IDENTIFIER];
+                $processIdentifier = $data[Option::PARALLEL_IDENTIFIER];
                 $parallelProcess = $this->processPool->getProcess($processIdentifier);
                 $parallelProcess->bindConnection($inDecoder, $outEncoder);
                 if ($jobs === []) {
@@ -92,7 +92,7 @@ final class ParallelFileProcessor
                     return;
                 }
                 $job = \array_pop($jobs);
-                $parallelProcess->request([\RectorPrefix20220527\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20220527\Symplify\EasyParallel\Enum\Action::MAIN, \RectorPrefix20220527\Symplify\EasyParallel\Enum\Content::FILES => $job]);
+                $parallelProcess->request([ReactCommand::ACTION => Action::MAIN, Content::FILES => $job]);
             });
         });
         /** @var string $serverAddress */
@@ -101,37 +101,37 @@ final class ParallelFileProcessor
         $serverPort = \parse_url($serverAddress, \PHP_URL_PORT);
         $systemErrorsCount = 0;
         $reachedSystemErrorsCountLimit = \false;
-        $handleErrorCallable = function (\Throwable $throwable) use(&$systemErrors, &$systemErrorsCount, &$reachedSystemErrorsCountLimit) : void {
-            $systemErrors[] = new \Rector\Core\ValueObject\Error\SystemError($throwable->getMessage(), $throwable->getFile(), $throwable->getLine());
+        $handleErrorCallable = function (Throwable $throwable) use(&$systemErrors, &$systemErrorsCount, &$reachedSystemErrorsCountLimit) : void {
+            $systemErrors[] = new SystemError($throwable->getMessage(), $throwable->getFile(), $throwable->getLine());
             ++$systemErrorsCount;
             $reachedSystemErrorsCountLimit = \true;
             $this->processPool->quitAll();
         };
-        $timeoutInSeconds = $this->parameterProvider->provideIntParameter(\Rector\Core\Configuration\Option::PARALLEL_TIMEOUT_IN_SECONDS);
+        $timeoutInSeconds = $this->parameterProvider->provideIntParameter(Option::PARALLEL_TIMEOUT_IN_SECONDS);
         for ($i = 0; $i < $numberOfProcesses; ++$i) {
             // nothing else to process, stop now
             if ($jobs === []) {
                 break;
             }
-            $processIdentifier = \RectorPrefix20220527\Nette\Utils\Random::generate();
-            $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, \Rector\Core\Console\Command\ProcessCommand::class, \RectorPrefix20220527\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(\Rector\Core\Console\Command\WorkerCommand::class), $input, $processIdentifier, $serverPort);
-            $parallelProcess = new \RectorPrefix20220527\Symplify\EasyParallel\ValueObject\ParallelProcess($workerCommandLine, $streamSelectLoop, $timeoutInSeconds);
+            $processIdentifier = Random::generate();
+            $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, ProcessCommand::class, CommandNaming::classToName(WorkerCommand::class), $input, $processIdentifier, $serverPort);
+            $parallelProcess = new ParallelProcess($workerCommandLine, $streamSelectLoop, $timeoutInSeconds);
             $parallelProcess->start(
                 // 1. callable on data
                 function (array $json) use($parallelProcess, &$systemErrors, &$fileDiffs, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $processIdentifier) : void {
                     // decode arrays to objects
-                    foreach ($json[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS] as $jsonError) {
+                    foreach ($json[Bridge::SYSTEM_ERRORS] as $jsonError) {
                         if (\is_string($jsonError)) {
-                            $systemErrors[] = new \Rector\Core\ValueObject\Error\SystemError('System error: ' . $jsonError);
+                            $systemErrors[] = new SystemError('System error: ' . $jsonError);
                             continue;
                         }
-                        $systemErrors[] = \Rector\Core\ValueObject\Error\SystemError::decode($jsonError);
+                        $systemErrors[] = SystemError::decode($jsonError);
                     }
-                    foreach ($json[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] as $jsonError) {
-                        $fileDiffs[] = \Rector\Core\ValueObject\Reporting\FileDiff::decode($jsonError);
+                    foreach ($json[Bridge::FILE_DIFFS] as $jsonError) {
+                        $fileDiffs[] = FileDiff::decode($jsonError);
                     }
-                    $postFileCallback($json[\Rector\Parallel\ValueObject\Bridge::FILES_COUNT]);
-                    $systemErrorsCount += $json[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS_COUNT];
+                    $postFileCallback($json[Bridge::FILES_COUNT]);
+                    $systemErrorsCount += $json[Bridge::SYSTEM_ERRORS_COUNT];
                     if ($systemErrorsCount >= self::SYSTEM_ERROR_LIMIT) {
                         $reachedInternalErrorsCountLimit = \true;
                         $this->processPool->quitAll();
@@ -141,28 +141,28 @@ final class ParallelFileProcessor
                         return;
                     }
                     $job = \array_pop($jobs);
-                    $parallelProcess->request([\RectorPrefix20220527\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20220527\Symplify\EasyParallel\Enum\Action::MAIN, \RectorPrefix20220527\Symplify\EasyParallel\Enum\Content::FILES => $job]);
+                    $parallelProcess->request([ReactCommand::ACTION => Action::MAIN, Content::FILES => $job]);
                 },
                 // 2. callable on error
                 $handleErrorCallable,
                 // 3. callable on exit
                 function ($exitCode, string $stdErr) use(&$systemErrors, $processIdentifier) : void {
                     $this->processPool->tryQuitProcess($processIdentifier);
-                    if ($exitCode === \RectorPrefix20220527\Symfony\Component\Console\Command\Command::SUCCESS) {
+                    if ($exitCode === Command::SUCCESS) {
                         return;
                     }
                     if ($exitCode === null) {
                         return;
                     }
-                    $systemErrors[] = new \Rector\Core\ValueObject\Error\SystemError('Child process error: ' . $stdErr);
+                    $systemErrors[] = new SystemError('Child process error: ' . $stdErr);
                 }
             );
             $this->processPool->attachProcess($processIdentifier, $parallelProcess);
         }
         $streamSelectLoop->run();
         if ($reachedSystemErrorsCountLimit) {
-            $systemErrors[] = new \Rector\Core\ValueObject\Error\SystemError(\sprintf('Reached system errors count limit of %d, exiting...', self::SYSTEM_ERROR_LIMIT));
+            $systemErrors[] = new SystemError(\sprintf('Reached system errors count limit of %d, exiting...', self::SYSTEM_ERROR_LIMIT));
         }
-        return [\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => $fileDiffs, \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => $systemErrors, \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS_COUNT => \count($systemErrors)];
+        return [Bridge::FILE_DIFFS => $fileDiffs, Bridge::SYSTEM_ERRORS => $systemErrors, Bridge::SYSTEM_ERRORS_COUNT => \count($systemErrors)];
     }
 }

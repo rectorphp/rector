@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\Rector\Property\TypedPropertyFromToManyRelationTypeRector\TypedPropertyFromToManyRelationTypeRectorTest
  */
-final class TypedPropertyFromToManyRelationTypeRector extends \Rector\Core\Rector\AbstractRector
+final class TypedPropertyFromToManyRelationTypeRector extends AbstractRector
 {
     /**
      * @readonly
@@ -42,16 +42,16 @@ final class TypedPropertyFromToManyRelationTypeRector extends \Rector\Core\Recto
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\NodeManipulator\ToManyRelationPropertyTypeResolver $toManyRelationPropertyTypeResolver, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(PropertyTypeDecorator $propertyTypeDecorator, PhpDocTypeChanger $phpDocTypeChanger, ToManyRelationPropertyTypeResolver $toManyRelationPropertyTypeResolver, PhpVersionProvider $phpVersionProvider)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->toManyRelationPropertyTypeResolver = $toManyRelationPropertyTypeResolver;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete @var annotations or types based on @ORM\\*toMany annotations or attributes', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Complete @var annotations or types based on @ORM\\*toMany annotations or attributes', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 class SimpleColumn
@@ -81,30 +81,30 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
     /**
      * @param Property $node
      * @return \PhpParser\Node\Stmt\Property|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
         if ($node->type !== null) {
             return null;
         }
         $propertyType = $this->toManyRelationPropertyTypeResolver->resolve($node);
-        if (!$propertyType instanceof \PHPStan\Type\Type || $propertyType instanceof \PHPStan\Type\MixedType) {
+        if (!$propertyType instanceof Type || $propertyType instanceof MixedType) {
             return null;
         }
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY());
         if ($typeNode === null) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         // always decorate with collection generic type
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_74)) {
-            if ($propertyType instanceof \PHPStan\Type\UnionType) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_74)) {
+            if ($propertyType instanceof UnionType) {
                 $this->propertyTypeDecorator->decoratePropertyUnionType($propertyType, $typeNode, $node, $phpDocInfo);
                 return $node;
             }

@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node;
 
 use PhpParser\NodeAbstract;
-class Const_ extends \PhpParser\NodeAbstract
+class Const_ extends NodeAbstract
 {
     /** @var Identifier Name */
     public $name;

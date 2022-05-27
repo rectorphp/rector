@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Composer\ValueObject;
 
 use Rector\Composer\Contract\VersionAwareInterface;
-final class PackageAndVersion implements \Rector\Composer\Contract\VersionAwareInterface
+final class PackageAndVersion implements VersionAwareInterface
 {
     /**
      * @readonly

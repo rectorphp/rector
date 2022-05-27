@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79440-TcaChanges.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\MigrateSelectShowIconTableRector\MigrateSelectShowIconTableRectorTest
  */
-final class MigrateSelectShowIconTableRector extends \Rector\Core\Rector\AbstractRector
+final class MigrateSelectShowIconTableRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -28,40 +28,40 @@ final class MigrateSelectShowIconTableRector extends \Rector\Core\Rector\Abstrac
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$columnsArrayItem instanceof ArrayItem) {
             return null;
         }
         $columnItems = $columnsArrayItem->value;
-        if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$columnItems instanceof Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($columnItems->items as $fieldValue) {
-            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$fieldValue instanceof ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
                 continue;
             }
-            if (!$fieldValue->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$fieldValue->value instanceof Array_) {
                 continue;
             }
             foreach ($fieldValue->value->items as $configValue) {
                 if (null === $configValue) {
                     continue;
                 }
-                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
+                if (!$configValue->value instanceof Array_) {
                     continue;
                 }
                 if (!$this->isConfigType($configValue->value, 'select')) {
@@ -71,7 +71,7 @@ final class MigrateSelectShowIconTableRector extends \Rector\Core\Rector\Abstrac
                     continue;
                 }
                 foreach ($configValue->value->items as $configItemValue) {
-                    if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+                    if (!$configItemValue instanceof ArrayItem) {
                         continue;
                     }
                     if (null === $configItemValue->key) {
@@ -82,11 +82,11 @@ final class MigrateSelectShowIconTableRector extends \Rector\Core\Rector\Abstrac
                     }
                     if ($this->shouldAddFieldWizard($configItemValue)) {
                         $fieldWizard = $this->extractArrayItemByKey($configValue->value, 'fieldWizard');
-                        if (!$fieldWizard instanceof \PhpParser\Node\Expr\ArrayItem) {
-                            $configValue->value->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray(['selectIcons' => [self::DISABLED => \false]]), new \PhpParser\Node\Scalar\String_('fieldWizard'));
+                        if (!$fieldWizard instanceof ArrayItem) {
+                            $configValue->value->items[] = new ArrayItem($this->nodeFactory->createArray(['selectIcons' => [self::DISABLED => \false]]), new String_('fieldWizard'));
                         } elseif (($selectIconsArray = $this->extractSubArrayByKey($fieldWizard->value, 'selectIcons')) !== null) {
                             if (null === $this->extractArrayItemByKey($selectIconsArray, self::DISABLED)) {
-                                $selectIconsArray->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createFalse(), new \PhpParser\Node\Scalar\String_(self::DISABLED));
+                                $selectIconsArray->items[] = new ArrayItem($this->nodeFactory->createFalse(), new String_(self::DISABLED));
                             }
                         }
                     }
@@ -100,9 +100,9 @@ final class MigrateSelectShowIconTableRector extends \Rector\Core\Rector\Abstrac
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate select showIconTable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Migrate select showIconTable', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
     ],
@@ -147,7 +147,7 @@ return [
 CODE_SAMPLE
 )]);
     }
-    private function shouldAddFieldWizard(\PhpParser\Node\Expr\ArrayItem $configValueArrayItem) : bool
+    private function shouldAddFieldWizard(ArrayItem $configValueArrayItem) : bool
     {
         if (null === $configValueArrayItem->key) {
             return \false;

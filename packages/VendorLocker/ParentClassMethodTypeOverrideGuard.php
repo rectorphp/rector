@@ -43,7 +43,7 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220527\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, PathNormalizer $pathNormalizer, AstResolver $astResolver, ParamTypeInferer $paramTypeInferer, ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;
@@ -51,21 +51,21 @@ final class ParentClassMethodTypeOverrideGuard
         $this->paramTypeInferer = $paramTypeInferer;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isReturnTypeChangeAllowed(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function isReturnTypeChangeAllowed(ClassMethod $classMethod) : bool
     {
         // __construct cannot declare a return type
         // so the return type change is not allowed
-        if ($this->nodeNameResolver->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
             return \false;
         }
         // make sure return type is not protected by parent contract
         $parentClassMethodReflection = $this->getParentClassMethod($classMethod);
         // nothing to check
-        if (!$parentClassMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+        if (!$parentClassMethodReflection instanceof MethodReflection) {
             return \true;
         }
-        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($parentClassMethodReflection->getVariants());
-        if ($parametersAcceptor instanceof \PHPStan\Reflection\FunctionVariantWithPhpDocs && !$parametersAcceptor->getNativeReturnType() instanceof \PHPStan\Type\MixedType) {
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($parentClassMethodReflection->getVariants());
+        if ($parametersAcceptor instanceof FunctionVariantWithPhpDocs && !$parametersAcceptor->getNativeReturnType() instanceof MixedType) {
             return \false;
         }
         $classReflection = $parentClassMethodReflection->getDeclaringClass();
@@ -96,21 +96,21 @@ final class ParentClassMethodTypeOverrideGuard
         $isParentInVendor = \strpos($normalizedFileName, '/vendor/') !== \false;
         return $isCurrentInVendor && $isParentInVendor || !$isCurrentInVendor && !$isParentInVendor;
     }
-    public function hasParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function hasParentClassMethod(ClassMethod $classMethod) : bool
     {
-        return $this->getParentClassMethod($classMethod) instanceof \PHPStan\Reflection\MethodReflection;
+        return $this->getParentClassMethod($classMethod) instanceof MethodReflection;
     }
-    public function hasParentClassMethodDifferentType(\PhpParser\Node\Stmt\ClassMethod $classMethod, int $position, \PHPStan\Type\Type $currentType) : bool
+    public function hasParentClassMethodDifferentType(ClassMethod $classMethod, int $position, Type $currentType) : bool
     {
         if ($classMethod->isPrivate()) {
             return \false;
         }
         $methodReflection = $this->getParentClassMethod($classMethod);
-        if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+        if (!$methodReflection instanceof MethodReflection) {
             return \false;
         }
         $classMethod = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$classMethod instanceof ClassMethod) {
             return \false;
         }
         if ($classMethod->isPrivate()) {
@@ -122,10 +122,10 @@ final class ParentClassMethodTypeOverrideGuard
         $inferedType = $this->paramTypeInferer->inferParam($classMethod->params[$position]);
         return \get_class($inferedType) !== \get_class($currentType);
     }
-    public function getParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\MethodReflection
+    public function getParentClassMethod(ClassMethod $classMethod) : ?MethodReflection
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         /** @var string $methodName */

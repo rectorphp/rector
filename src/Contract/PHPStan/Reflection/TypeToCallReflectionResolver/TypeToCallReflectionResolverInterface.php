@@ -12,10 +12,10 @@ use PHPStan\Type\Type;
  */
 interface TypeToCallReflectionResolverInterface
 {
-    public function supports(\PHPStan\Type\Type $type) : bool;
+    public function supports(Type $type) : bool;
     /**
      * @param TType $type
      * @return FunctionReflection|MethodReflection|null
      */
-    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope);
+    public function resolve(Type $type, Scope $scope);
 }

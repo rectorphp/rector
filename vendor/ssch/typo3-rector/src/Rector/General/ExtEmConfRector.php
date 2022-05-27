@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ExtensionArchitecture/DeclarationFile/Index.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\General\ExtEmConfRector\ExtEmConfRectorTest
  */
-final class ExtEmConfRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ExtEmConfRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -44,14 +44,14 @@ final class ExtEmConfRector extends \Rector\Core\Rector\AbstractRector implement
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if (!$node->var instanceof ArrayDimFetch) {
             return null;
         }
         if (!$this->isName($node->var->var, 'EM_CONF')) {
@@ -60,7 +60,7 @@ final class ExtEmConfRector extends \Rector\Core\Rector\AbstractRector implement
         if (null === $node->var->dim) {
             return null;
         }
-        if (!$node->expr instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$node->expr instanceof Array_) {
             return null;
         }
         if ([] === $node->expr->items || null === $node->expr->items) {
@@ -73,7 +73,7 @@ final class ExtEmConfRector extends \Rector\Core\Rector\AbstractRector implement
                 continue;
             }
             if ($this->propertyFixString($item)) {
-                $item->key = new \PhpParser\Node\Scalar\String_('clearCacheOnLoad');
+                $item->key = new String_('clearCacheOnLoad');
                 $nodeHasChanged = \true;
             }
             if ($this->propertyCanBeRemoved($item)) {
@@ -95,7 +95,7 @@ final class ExtEmConfRector extends \Rector\Core\Rector\AbstractRector implement
             if (!$this->valueResolver->isValue($item->key, 'constraints')) {
                 continue;
             }
-            if (!$item->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$item->value instanceof Array_) {
                 continue;
             }
             if (null === $item->value->items) {
@@ -109,7 +109,7 @@ final class ExtEmConfRector extends \Rector\Core\Rector\AbstractRector implement
                 if (!$this->valueResolver->isValue($constraintItem->key, 'depends')) {
                     continue;
                 }
-                if (!$constraintItem->value instanceof \PhpParser\Node\Expr\Array_) {
+                if (!$constraintItem->value instanceof Array_) {
                     continue;
                 }
                 if (null === $constraintItem->value->items) {
@@ -121,7 +121,7 @@ final class ExtEmConfRector extends \Rector\Core\Rector\AbstractRector implement
                         continue;
                     }
                     if ($this->valueResolver->isValue($dependsItem->key, 'typo3')) {
-                        $dependsItem->value = new \PhpParser\Node\Scalar\String_($this->targetTypo3VersionConstraint);
+                        $dependsItem->value = new String_($this->targetTypo3VersionConstraint);
                         $nodeHasChanged = \true;
                     }
                 }
@@ -132,9 +132,9 @@ final class ExtEmConfRector extends \Rector\Core\Rector\AbstractRector implement
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor file ext_emconf.php', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor file ext_emconf.php', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Package Extension',
     'description' => 'Package Extension',
@@ -214,14 +214,14 @@ CODE_SAMPLE
         $this->valuesToBeRemoved = \array_merge($this->valuesToBeRemoved, $additionalValuesToBeRemoved);
         $this->targetTypo3VersionConstraint = isset($configuration[self::TYPO3_VERSION_CONSTRAINT]) ? (string) $configuration[self::TYPO3_VERSION_CONSTRAINT] : '';
     }
-    private function propertyCanBeRemoved(\PhpParser\Node\Expr\ArrayItem $item) : bool
+    private function propertyCanBeRemoved(ArrayItem $item) : bool
     {
         if (null === $item->key) {
             return \false;
         }
         return $this->valueResolver->isValues($item->key, $this->valuesToBeRemoved);
     }
-    private function propertyFixString(\PhpParser\Node\Expr\ArrayItem $item) : bool
+    private function propertyFixString(ArrayItem $item) : bool
     {
         if (null === $item->key) {
             return \false;

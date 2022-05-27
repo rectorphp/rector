@@ -15,20 +15,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\CombineIfRector\CombineIfRectorTest
  */
-final class CombineIfRector extends \Rector\Core\Rector\AbstractRector
+final class CombineIfRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
      */
     private $commentsMerger;
-    public function __construct(\Rector\BetterPhpDocParser\Comment\CommentsMerger $commentsMerger)
+    public function __construct(CommentsMerger $commentsMerger)
     {
         $this->commentsMerger = $commentsMerger;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Merges nested if statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Merges nested if statements', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -59,12 +59,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\If_::class];
+        return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -74,12 +74,12 @@ CODE_SAMPLE
         if ($this->hasVarTag($subIf)) {
             return null;
         }
-        $node->cond = new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($node->cond, $subIf->cond);
+        $node->cond = new BooleanAnd($node->cond, $subIf->cond);
         $node->stmts = $subIf->stmts;
         $this->commentsMerger->keepComments($node, [$subIf]);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
+    private function shouldSkip(If_ $if) : bool
     {
         if ($if->else !== null) {
             return \true;
@@ -90,7 +90,7 @@ CODE_SAMPLE
         if ($if->elseifs !== []) {
             return \true;
         }
-        if (!$if->stmts[0] instanceof \PhpParser\Node\Stmt\If_) {
+        if (!$if->stmts[0] instanceof If_) {
             return \true;
         }
         if ($if->stmts[0]->else !== null) {
@@ -98,12 +98,12 @@ CODE_SAMPLE
         }
         return (bool) $if->stmts[0]->elseifs;
     }
-    private function hasVarTag(\PhpParser\Node\Stmt\If_ $if) : bool
+    private function hasVarTag(If_ $if) : bool
     {
         $subIfPhpDocInfo = $this->phpDocInfoFactory->createFromNode($if);
-        if (!$subIfPhpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+        if (!$subIfPhpDocInfo instanceof PhpDocInfo) {
             return \false;
         }
-        return $subIfPhpDocInfo->getVarTagValueNode() instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+        return $subIfPhpDocInfo->getVarTagValueNode() instanceof VarTagValueNode;
     }
 }

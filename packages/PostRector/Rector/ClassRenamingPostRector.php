@@ -20,7 +20,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
-    public function __construct(\Rector\Renaming\NodeManipulator\ClassRenamer $classRenamer, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector)
+    public function __construct(ClassRenamer $classRenamer, RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->classRenamer = $classRenamer;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
@@ -30,7 +30,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         // must be run before name importing, so new names are imported
         return 650;
     }
-    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function enterNode(Node $node) : ?Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         if ($oldToNewClasses === []) {
@@ -38,9 +38,9 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         }
         return $this->classRenamer->renameNode($node, $oldToNewClasses);
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename references for classes that were renamed during Rector run', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename references for classes that were renamed during Rector run', [new CodeSample(<<<'CODE_SAMPLE'
 function (OriginalClass $someClass)
 {
 }

@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/11.0/Breaking-90799-DependencyInjectionWithNonPublicPropertiesHasBeenRemoved.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v0\ReplaceInjectAnnotationWithMethodRector\ReplaceInjectAnnotationWithMethodRectorTest
  */
-final class ReplaceInjectAnnotationWithMethodRector extends \Rector\Core\Rector\AbstractRector
+final class ReplaceInjectAnnotationWithMethodRector extends AbstractRector
 {
     /**
      * @var class-string
@@ -25,7 +25,7 @@ final class ReplaceInjectAnnotationWithMethodRector extends \Rector\Core\Rector\
      * @var \Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory
      */
     private $injectMethodFactory;
-    public function __construct(\Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory $injectMethodFactory)
+    public function __construct(InjectMethodFactory $injectMethodFactory)
     {
         $this->injectMethodFactory = $injectMethodFactory;
     }
@@ -34,12 +34,12 @@ final class ReplaceInjectAnnotationWithMethodRector extends \Rector\Core\Rector\
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $injectMethods = [];
         $properties = $node->getProperties();
@@ -56,9 +56,9 @@ final class ReplaceInjectAnnotationWithMethodRector extends \Rector\Core\Rector\
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns properties with `@TYPO3\\CMS\\Extbase\\Annotation\\Inject` to setter injection', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns properties with `@TYPO3\\CMS\\Extbase\\Annotation\\Inject` to setter injection', [new CodeSample(<<<'CODE_SAMPLE'
 /**
  * @var SomeService
  * @TYPO3\CMS\Extbase\Annotation\Inject

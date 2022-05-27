@@ -16,7 +16,7 @@ use RectorPrefix20220527\Symfony\Component\Process\Exception\InvalidArgumentExce
  *
  * @internal
  */
-abstract class AbstractPipes implements \RectorPrefix20220527\Symfony\Component\Process\Pipes\PipesInterface
+abstract class AbstractPipes implements PipesInterface
 {
     /**
      * @var mixed[]
@@ -96,7 +96,7 @@ abstract class AbstractPipes implements \RectorPrefix20220527\Symfony\Component\
             } elseif (!isset($this->inputBuffer[0])) {
                 if (!\is_string($input)) {
                     if (!\is_scalar($input)) {
-                        throw new \RectorPrefix20220527\Symfony\Component\Process\Exception\InvalidArgumentException(\sprintf('"%s" yielded a value of type "%s", but only scalars and stream resources are supported.', \get_debug_type($this->input), \get_debug_type($input)));
+                        throw new InvalidArgumentException(\sprintf('"%s" yielded a value of type "%s", but only scalars and stream resources are supported.', \get_debug_type($this->input), \get_debug_type($input)));
                     }
                     $input = (string) $input;
                 }

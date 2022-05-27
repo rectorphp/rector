@@ -6,19 +6,19 @@ namespace RectorPrefix20220527\OndraM\CiDetector\Ci;
 use RectorPrefix20220527\OndraM\CiDetector\CiDetector;
 use RectorPrefix20220527\OndraM\CiDetector\Env;
 use RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic;
-class AwsCodeBuild extends \RectorPrefix20220527\OndraM\CiDetector\Ci\AbstractCi
+class AwsCodeBuild extends AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220527\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(Env $env) : bool
     {
         return $env->get('CODEBUILD_CI') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220527\OndraM\CiDetector\CiDetector::CI_AWS_CODEBUILD;
+        return CiDetector::CI_AWS_CODEBUILD;
     }
-    public function isPullRequest() : \RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : TrinaryLogic
     {
-        return \RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic::createFromBoolean(\mb_strpos($this->env->getString('CODEBUILD_WEBHOOK_EVENT'), 'PULL_REQUEST') === 0);
+        return TrinaryLogic::createFromBoolean(\mb_strpos($this->env->getString('CODEBUILD_WEBHOOK_EVENT'), 'PULL_REQUEST') === 0);
     }
     public function getBuildNumber() : string
     {

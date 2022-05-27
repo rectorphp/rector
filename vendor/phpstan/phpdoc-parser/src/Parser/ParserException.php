@@ -10,7 +10,7 @@ use function json_encode;
 use function sprintf;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
-class ParserException extends \Exception
+class ParserException extends Exception
 {
     /** @var string */
     private $currentTokenValue;
@@ -29,7 +29,7 @@ class ParserException extends \Exception
         $this->currentOffset = $currentOffset;
         $this->expectedTokenType = $expectedTokenType;
         $this->expectedTokenValue = $expectedTokenValue;
-        parent::__construct(\sprintf('Unexpected token %s, expected %s%s at offset %d', $this->formatValue($currentTokenValue), \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_LABELS[$expectedTokenType], $expectedTokenValue !== null ? \sprintf(' (%s)', $this->formatValue($expectedTokenValue)) : '', $currentOffset));
+        parent::__construct(sprintf('Unexpected token %s, expected %s%s at offset %d', $this->formatValue($currentTokenValue), Lexer::TOKEN_LABELS[$expectedTokenType], $expectedTokenValue !== null ? sprintf(' (%s)', $this->formatValue($expectedTokenValue)) : '', $currentOffset));
     }
     public function getCurrentTokenValue() : string
     {
@@ -53,8 +53,8 @@ class ParserException extends \Exception
     }
     private function formatValue(string $value) : string
     {
-        $json = \json_encode($value, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
-        \assert($json !== \false);
+        $json = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        assert($json !== \false);
         return $json;
     }
 }

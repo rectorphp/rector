@@ -13,5 +13,5 @@ interface RenameParamValueObjectInterface extends \Rector\Naming\Contract\Rename
      * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
      */
     public function getFunctionLike();
-    public function getParam() : \PhpParser\Node\Param;
+    public function getParam() : Param;
 }

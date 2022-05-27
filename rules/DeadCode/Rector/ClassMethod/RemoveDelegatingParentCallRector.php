@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector\RemoveDelegatingParentCallRectorTest
  */
-final class RemoveDelegatingParentCallRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDelegatingParentCallRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -40,14 +40,14 @@ final class RemoveDelegatingParentCallRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
-    public function __construct(\Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    public function __construct(CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->currentAndParentClassMethodComparator = $currentAndParentClassMethodComparator;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removed dead parent call, that does not change anything', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removed dead parent call, that does not change anything', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function prettyPrint(array $stmts): string
@@ -68,14 +68,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         if ($this->shouldSkipClass($classLike)) {
             return null;
         }
@@ -84,11 +84,11 @@ CODE_SAMPLE
             return null;
         }
         // are both return?
-        if ($this->isMethodReturnType($node, 'void') && !$onlyStmt instanceof \PhpParser\Node\Stmt\Return_) {
+        if ($this->isMethodReturnType($node, 'void') && !$onlyStmt instanceof Return_) {
             return null;
         }
         $staticCall = $this->matchStaticCall($onlyStmt);
-        if (!$staticCall instanceof \PhpParser\Node\Expr\StaticCall) {
+        if (!$staticCall instanceof StaticCall) {
             return null;
         }
         if (!$this->currentAndParentClassMethodComparator->isParentCallMatching($node, $staticCall)) {
@@ -101,14 +101,14 @@ CODE_SAMPLE
         $this->removeNode($node);
         return null;
     }
-    private function shouldSkipClass(?\PhpParser\Node\Stmt\ClassLike $classLike) : bool
+    private function shouldSkipClass(?ClassLike $classLike) : bool
     {
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$classLike instanceof Class_) {
             return \true;
         }
         return $classLike->extends === null;
     }
-    private function isMethodReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $type) : bool
+    private function isMethodReturnType(ClassMethod $classMethod, string $type) : bool
     {
         if ($classMethod->returnType === null) {
             return \false;
@@ -118,21 +118,21 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Stmt $node
      */
-    private function matchStaticCall($node) : ?\PhpParser\Node\Expr\StaticCall
+    private function matchStaticCall($node) : ?StaticCall
     {
         // must be static call
-        if ($node instanceof \PhpParser\Node\Stmt\Return_) {
-            if ($node->expr instanceof \PhpParser\Node\Expr\StaticCall) {
+        if ($node instanceof Return_) {
+            if ($node->expr instanceof StaticCall) {
                 return $node->expr;
             }
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
+        if ($node instanceof StaticCall) {
             return $node;
         }
         return null;
     }
-    private function shouldSkipWithAnnotationsOrAttributes(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkipWithAnnotationsOrAttributes(ClassMethod $classMethod) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         if ($phpDocInfo->hasByNames(self::ALLOWED_ANNOTATIONS)) {
@@ -143,7 +143,7 @@ CODE_SAMPLE
     /**
      * @return null|\PhpParser\Node\Stmt|\PhpParser\Node\Expr
      */
-    private function matchClassMethodOnlyStmt(\PhpParser\Node\Stmt\ClassMethod $classMethod)
+    private function matchClassMethodOnlyStmt(ClassMethod $classMethod)
     {
         $classMethodStmts = $classMethod->stmts;
         if ($classMethodStmts === null) {
@@ -155,7 +155,7 @@ CODE_SAMPLE
         // recount empty notes
         $stmtsValues = \array_values($classMethodStmts);
         $stmtValue = $stmtsValues[0];
-        if ($stmtValue instanceof \PhpParser\Node\Stmt\Expression) {
+        if ($stmtValue instanceof Expression) {
             return $stmtValue->expr;
         }
         return $stmtValue;

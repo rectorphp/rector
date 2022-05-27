@@ -14,14 +14,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.3/Deprecation-84984-ProtectedUserTSconfigPropertiesInBackendUserAuthentication.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v3\PropertyUserTsToMethodGetTsConfigOfBackendUserAuthenticationRector\PropertyUserTsToMethodGetTsConfigOfBackendUserAuthenticationRectorTest
  */
-final class PropertyUserTsToMethodGetTsConfigOfBackendUserAuthenticationRector extends \Rector\Core\Rector\AbstractRector
+final class PropertyUserTsToMethodGetTsConfigOfBackendUserAuthenticationRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -30,12 +30,12 @@ final class PropertyUserTsToMethodGetTsConfigOfBackendUserAuthenticationRector e
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\PropertyFetch::class];
+        return [PropertyFetch::class];
     }
     /**
      * @param PropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -48,9 +48,9 @@ final class PropertyUserTsToMethodGetTsConfigOfBackendUserAuthenticationRector e
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use method getTSConfig instead of property userTS', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use method getTSConfig instead of property userTS', [new CodeSample(<<<'CODE_SAMPLE'
 if(is_array($GLOBALS['BE_USER']->userTS['tx_news.']) && $GLOBALS['BE_USER']->userTS['tx_news.']['singleCategoryAcl'] === '1') {
     return true;
 }
@@ -62,11 +62,11 @@ if(is_array($GLOBALS['BE_USER']->getTSConfig()['tx_news.']) && $GLOBALS['BE_USER
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
+    private function shouldSkip(PropertyFetch $propertyFetch) : bool
     {
-        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::BACKEND_USER)) {
+        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, Typo3NodeResolver::BACKEND_USER)) {
             return \false;
         }
-        return !$this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication'));
+        return !$this->isObjectType($propertyFetch->var, new ObjectType('TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication'));
     }
 }

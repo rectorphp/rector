@@ -28,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\MethodCall\DowngradeReflectionClassGetConstantsFilterRector\DowngradeReflectionClassGetConstantsFilterRectorTest
  */
-final class DowngradeReflectionClassGetConstantsFilterRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeReflectionClassGetConstantsFilterRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -49,7 +49,7 @@ final class DowngradeReflectionClassGetConstantsFilterRector extends \Rector\Cor
      * @var \Rector\NodeCollector\BinaryOpConditionsCollector
      */
     private $binaryOpConditionsCollector;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\NodeCollector\BinaryOpConditionsCollector $binaryOpConditionsCollector)
+    public function __construct(VariableNaming $variableNaming, IfManipulator $ifManipulator, BinaryOpConditionsCollector $binaryOpConditionsCollector)
     {
         $this->variableNaming = $variableNaming;
         $this->ifManipulator = $ifManipulator;
@@ -60,11 +60,11 @@ final class DowngradeReflectionClassGetConstantsFilterRector extends \Rector\Cor
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade ReflectionClass->getConstants(ReflectionClassConstant::IS_*)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade ReflectionClass->getConstants(ReflectionClassConstant::IS_*)', [new CodeSample(<<<'CODE_SAMPLE'
 $reflectionClass = new ReflectionClass('SomeClass');
 $constants = $reflectionClass->getConstants(ReflectionClassConstant::IS_PUBLIC));
 CODE_SAMPLE
@@ -84,24 +84,24 @@ CODE_SAMPLE
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         $args = $node->getArgs();
         $value = $args[0]->value;
-        if (!\in_array(\get_class($value), [\PhpParser\Node\Expr\ClassConstFetch::class, \PhpParser\Node\Expr\BinaryOp\BitwiseOr::class], \true)) {
+        if (!\in_array(\get_class($value), [ClassConstFetch::class, BitwiseOr::class], \true)) {
             return null;
         }
         $classConstFetchNames = [];
-        if ($value instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+        if ($value instanceof ClassConstFetch) {
             $classConstFetchName = $this->resolveClassConstFetchName($value);
             if (\is_string($classConstFetchName)) {
                 $classConstFetchNames = [$classConstFetchName];
             }
         }
-        if ($value instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
+        if ($value instanceof BitwiseOr) {
             $classConstFetchNames = $this->resolveClassConstFetchNames($value);
         }
         if ($classConstFetchNames !== []) {
@@ -112,36 +112,36 @@ CODE_SAMPLE
     /**
      * @param string[] $classConstFetchNames
      */
-    private function processClassConstFetches(\PhpParser\Node\Expr\MethodCall $methodCall, array $classConstFetchNames) : \PhpParser\Node\Expr\Variable
+    private function processClassConstFetches(MethodCall $methodCall, array $classConstFetchNames) : Variable
     {
-        $scope = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
         $reflectionClassConstants = $this->variableNaming->createCountedValueName('reflectionClassConstants', $scope);
-        $variableReflectionClassConstants = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName($reflectionClassConstants, $scope));
-        $assign = new \PhpParser\Node\Expr\Assign($variableReflectionClassConstants, new \PhpParser\Node\Expr\MethodCall($methodCall->var, 'getReflectionConstants'));
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assign), $methodCall, $this->file->getSmartFileInfo());
+        $variableReflectionClassConstants = new Variable($this->variableNaming->createCountedValueName($reflectionClassConstants, $scope));
+        $assign = new Assign($variableReflectionClassConstants, new MethodCall($methodCall->var, 'getReflectionConstants'));
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $methodCall, $this->file->getSmartFileInfo());
         $result = $this->variableNaming->createCountedValueName('result', $scope);
-        $variableResult = new \PhpParser\Node\Expr\Variable($result);
-        $assignVariableResult = new \PhpParser\Node\Expr\Assign($variableResult, new \PhpParser\Node\Expr\Array_());
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($assignVariableResult), $methodCall, $this->file->getSmartFileInfo());
+        $variableResult = new Variable($result);
+        $assignVariableResult = new Assign($variableResult, new Array_());
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assignVariableResult), $methodCall, $this->file->getSmartFileInfo());
         $ifs = [];
-        $valueVariable = new \PhpParser\Node\Expr\Variable('value');
-        $key = new \PhpParser\Node\Expr\MethodCall($valueVariable, 'getName');
-        $value = new \PhpParser\Node\Expr\MethodCall($valueVariable, 'getValue');
-        $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($variableResult, $key);
+        $valueVariable = new Variable('value');
+        $key = new MethodCall($valueVariable, 'getName');
+        $value = new MethodCall($valueVariable, 'getValue');
+        $arrayDimFetch = new ArrayDimFetch($variableResult, $key);
         $assignValue = $value;
         foreach ($classConstFetchNames as $classConstFetchName) {
             $methodCallName = self::MAP_CONSTANT_TO_METHOD[$classConstFetchName];
-            $ifs[] = $this->ifManipulator->createIfStmt(new \PhpParser\Node\Expr\MethodCall($valueVariable, $methodCallName), new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($arrayDimFetch, $assignValue)));
+            $ifs[] = $this->ifManipulator->createIfStmt(new MethodCall($valueVariable, $methodCallName), new Expression(new Assign($arrayDimFetch, $assignValue)));
         }
-        $closure = new \PhpParser\Node\Expr\Closure();
-        $closure->params = [new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable('value'))];
-        $closure->uses = [new \PhpParser\Node\Expr\ClosureUse($variableResult, \true)];
+        $closure = new Closure();
+        $closure->params = [new Param(new Variable('value'))];
+        $closure->uses = [new ClosureUse($variableResult, \true)];
         $closure->stmts = $ifs;
         $funcCall = $this->nodeFactory->createFuncCall('array_walk', [$variableReflectionClassConstants, $closure]);
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($funcCall), $methodCall, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($funcCall), $methodCall, $this->file->getSmartFileInfo());
         return $variableResult;
     }
-    private function resolveClassConstFetchName(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : ?string
+    private function resolveClassConstFetchName(ClassConstFetch $classConstFetch) : ?string
     {
         if ($this->shouldSkipClassConstFetch($classConstFetch)) {
             return null;
@@ -153,9 +153,9 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function resolveClassConstFetchNames(\PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr) : array
+    private function resolveClassConstFetchNames(BitwiseOr $bitwiseOr) : array
     {
-        $values = $this->binaryOpConditionsCollector->findConditions($bitwiseOr, \PhpParser\Node\Expr\BinaryOp\BitwiseOr::class);
+        $values = $this->binaryOpConditionsCollector->findConditions($bitwiseOr, BitwiseOr::class);
         if ($this->shouldSkipBitwiseOrValues($values)) {
             return [];
         }
@@ -174,7 +174,7 @@ CODE_SAMPLE
     private function shouldSkipBitwiseOrValues(array $values) : bool
     {
         foreach ($values as $value) {
-            if (!$value instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+            if (!$value instanceof ClassConstFetch) {
                 return \true;
             }
             if ($this->shouldSkipClassConstFetch($value)) {
@@ -183,27 +183,27 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function shouldSkipClassConstFetch(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : bool
+    private function shouldSkipClassConstFetch(ClassConstFetch $classConstFetch) : bool
     {
-        if (!$classConstFetch->class instanceof \PhpParser\Node\Name\FullyQualified) {
+        if (!$classConstFetch->class instanceof FullyQualified) {
             return \true;
         }
         if ($classConstFetch->class->toString() !== 'ReflectionClassConstant') {
             return \true;
         }
-        if (!$classConstFetch->name instanceof \PhpParser\Node\Identifier) {
+        if (!$classConstFetch->name instanceof Identifier) {
             return \true;
         }
         $constants = \array_keys(self::MAP_CONSTANT_TO_METHOD);
         return !$this->nodeNameResolver->isNames($classConstFetch->name, $constants);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkip(MethodCall $methodCall) : bool
     {
         if (!$this->nodeNameResolver->isName($methodCall->name, 'getConstants')) {
             return \true;
         }
         $varType = $this->nodeTypeResolver->getType($methodCall->var);
-        if (!$varType instanceof \PHPStan\Type\ObjectType) {
+        if (!$varType instanceof ObjectType) {
             return \true;
         }
         if ($varType->getClassName() !== 'ReflectionClass') {

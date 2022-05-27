@@ -15,7 +15,7 @@ use RectorPrefix20220527\Symfony\Component\Process\Process;
 class TestHttpServer
 {
     private static $process = [];
-    public static function start(int $port = 8057) : \RectorPrefix20220527\Symfony\Component\Process\Process
+    public static function start(int $port = 8057) : Process
     {
         if (isset(self::$process[$port])) {
             self::$process[$port]->stop();
@@ -24,8 +24,8 @@ class TestHttpServer
                 self::$process[$port]->stop();
             });
         }
-        $finder = new \RectorPrefix20220527\Symfony\Component\Process\PhpExecutableFinder();
-        $process = new \RectorPrefix20220527\Symfony\Component\Process\Process(\array_merge([$finder->find(\false)], $finder->findArguments(), ['-dopcache.enable=0', '-dvariables_order=EGPCS', '-S', '127.0.0.1:' . $port]));
+        $finder = new PhpExecutableFinder();
+        $process = new Process(\array_merge([$finder->find(\false)], $finder->findArguments(), ['-dopcache.enable=0', '-dvariables_order=EGPCS', '-S', '127.0.0.1:' . $port]));
         $process->setWorkingDirectory(__DIR__ . '/Fixtures/web');
         $process->start();
         self::$process[$port] = $process;

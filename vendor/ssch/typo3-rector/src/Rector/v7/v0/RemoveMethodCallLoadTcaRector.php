@@ -13,21 +13,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.0/Breaking-61785-LoadTcaFunctionRemoved.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v0\RemoveMethodCallLoadTcaRector\RemoveMethodCallLoadTcaRectorTest
  */
-final class RemoveMethodCallLoadTcaRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveMethodCallLoadTcaRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'loadTCA')) {
@@ -39,9 +39,9 @@ final class RemoveMethodCallLoadTcaRector extends \Rector\Core\Rector\AbstractRe
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove GeneralUtility::loadTCA() call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove GeneralUtility::loadTCA() call', [new CodeSample(<<<'CODE_SAMPLE'
 'GeneralUtility::loadTCA()'
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

@@ -14,14 +14,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79440-TcaChanges.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\AddTypeToColumnConfigRector\AddTypeToColumnConfigRectorTest
  */
-final class AddTypeToColumnConfigRector extends \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector
+final class AddTypeToColumnConfigRector extends AbstractTcaRector
 {
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add type to column config if not exists', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add type to column config if not exists', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'columns' => [
         'bar' => []
@@ -49,28 +49,28 @@ CODE_SAMPLE
      * @param Expr $columnName the key in above example (typically String_('column_name'))
      * @param Expr $columnTca the value in above example (typically an associative Array with stuff like 'label', 'config', 'exclude', ...)
      */
-    protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
+    protected function refactorColumn(Expr $columnName, Expr $columnTca) : void
     {
-        if (!$columnTca instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$columnTca instanceof Array_) {
             return;
         }
         $config = null;
         $configItem = $this->extractArrayItemByKey($columnTca, 'config');
         if (null !== $configItem) {
             $config = $configItem->value;
-            if (!$config instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$config instanceof Array_) {
                 return;
             }
         }
         if (null === $config) {
             // found a column without a 'config' part. Create an empty 'config' array
-            $config = new \PhpParser\Node\Expr\Array_();
-            $columnTca->items[] = new \PhpParser\Node\Expr\ArrayItem($config, new \PhpParser\Node\Scalar\String_('config'));
+            $config = new Array_();
+            $columnTca->items[] = new ArrayItem($config, new String_('config'));
             $this->hasAstBeenChanged = \true;
         }
         if (null === $this->extractArrayItemByKey($config, self::TYPE)) {
             // found a column without a 'type' field in the config. add type => none
-            $config->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('none'), new \PhpParser\Node\Scalar\String_(self::TYPE));
+            $config->items[] = new ArrayItem(new String_('none'), new String_(self::TYPE));
             $this->hasAstBeenChanged = \true;
         }
     }
@@ -80,7 +80,7 @@ CODE_SAMPLE
      *
      * @inheritdoc
      */
-    protected function isSingleTcaColumn(\PhpParser\Node\Expr\ArrayItem $arrayItem) : bool
+    protected function isSingleTcaColumn(ArrayItem $arrayItem) : bool
     {
         $labelNode = $this->extractArrayItemByKey($arrayItem->value, 'label');
         return null !== $labelNode;

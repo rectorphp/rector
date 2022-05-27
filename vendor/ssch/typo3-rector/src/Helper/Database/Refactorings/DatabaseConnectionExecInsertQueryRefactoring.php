@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Ssch\TYPO3Rector\Contract\Helper\Database\Refactorings\DatabaseConnectionToDbalRefactoring;
-final class DatabaseConnectionExecInsertQueryRefactoring implements \Ssch\TYPO3Rector\Contract\Helper\Database\Refactorings\DatabaseConnectionToDbalRefactoring
+final class DatabaseConnectionExecInsertQueryRefactoring implements DatabaseConnectionToDbalRefactoring
 {
     /**
      * @readonly
@@ -21,7 +21,7 @@ final class DatabaseConnectionExecInsertQueryRefactoring implements \Ssch\TYPO3R
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Database\Refactorings\ConnectionCallFactory $connectionCallFactory, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(\Ssch\TYPO3Rector\Helper\Database\Refactorings\ConnectionCallFactory $connectionCallFactory, NodeFactory $nodeFactory)
     {
         $this->connectionCallFactory = $connectionCallFactory;
         $this->nodeFactory = $nodeFactory;
@@ -29,15 +29,15 @@ final class DatabaseConnectionExecInsertQueryRefactoring implements \Ssch\TYPO3R
     /**
      * @return Expr[]
      */
-    public function refactor(\PhpParser\Node\Expr\MethodCall $oldMethodCall) : array
+    public function refactor(MethodCall $oldMethodCall) : array
     {
         $tableArgument = \array_shift($oldMethodCall->args);
         $dataArgument = \array_shift($oldMethodCall->args);
-        if (!$tableArgument instanceof \PhpParser\Node\Arg || !$dataArgument instanceof \PhpParser\Node\Arg) {
+        if (!$tableArgument instanceof Arg || !$dataArgument instanceof Arg) {
             return [];
         }
         $connectionAssignment = $this->connectionCallFactory->createConnectionCall($tableArgument);
-        $connectionInsertCall = $this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable('connection'), 'insert', [$tableArgument->value, $dataArgument->value]);
+        $connectionInsertCall = $this->nodeFactory->createMethodCall(new Variable('connection'), 'insert', [$tableArgument->value, $dataArgument->value]);
         return [$connectionAssignment, $connectionInsertCall];
     }
     public function canHandle(string $methodName) : bool

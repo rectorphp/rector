@@ -46,7 +46,7 @@ class Status
     public function __construct(string $envAllowXdebug, bool $debug)
     {
         $start = \getenv(self::ENV_RESTART);
-        \RectorPrefix20220527\Composer\XdebugHandler\Process::setEnv(self::ENV_RESTART);
+        Process::setEnv(self::ENV_RESTART);
         $this->time = \is_numeric($start) ? \round((\microtime(\true) - $start) * 1000) : 0;
         $this->envAllowXdebug = $envAllowXdebug;
         $this->debug = $debug && \defined('STDERR');
@@ -57,7 +57,7 @@ class Status
      *
      * @return void
      */
-    public function setLogger(\RectorPrefix20220527\Psr\Log\LoggerInterface $logger) : void
+    public function setLogger(LoggerInterface $logger) : void
     {
         $this->logger = $logger;
     }
@@ -83,7 +83,7 @@ class Status
     private function output(string $text, ?string $level = null) : void
     {
         if ($this->logger !== null) {
-            $this->logger->log($level !== null ? $level : \RectorPrefix20220527\Psr\Log\LogLevel::DEBUG, $text);
+            $this->logger->log($level !== null ? $level : LogLevel::DEBUG, $text);
         }
         if ($this->debug) {
             \fwrite(\STDERR, \sprintf('xdebug-handler[%d] %s', \getmypid(), $text . \PHP_EOL));
@@ -106,7 +106,7 @@ class Status
      */
     private function reportError(string $error) : void
     {
-        $this->output(\sprintf('No restart (%s)', $error), \RectorPrefix20220527\Psr\Log\LogLevel::WARNING);
+        $this->output(\sprintf('No restart (%s)', $error), LogLevel::WARNING);
     }
     /**
      * Info status message
@@ -135,7 +135,7 @@ class Status
     private function reportRestart() : void
     {
         $this->output($this->getLoadedMessage());
-        \RectorPrefix20220527\Composer\XdebugHandler\Process::setEnv(self::ENV_RESTART, (string) \microtime(\true));
+        Process::setEnv(self::ENV_RESTART, (string) \microtime(\true));
     }
     /**
      * Restarted status message
@@ -144,7 +144,7 @@ class Status
     {
         $loaded = $this->getLoadedMessage();
         $text = \sprintf('Restarted (%d ms). %s', $this->time, $loaded);
-        $level = $this->loaded !== null ? \RectorPrefix20220527\Psr\Log\LogLevel::WARNING : null;
+        $level = $this->loaded !== null ? LogLevel::WARNING : null;
         $this->output($text, $level);
     }
     /**

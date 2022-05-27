@@ -13,19 +13,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.2/Deprecation-89554-DeprecateTYPO3CMSExtbaseMvcControllerAbstractController.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v2\UseActionControllerRector\UseActionControllerRectorTest
  */
-final class UseActionControllerRector extends \Rector\Core\Rector\AbstractRector
+final class UseActionControllerRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (null === $node->extends) {
             return null;
@@ -33,15 +33,15 @@ final class UseActionControllerRector extends \Rector\Core\Rector\AbstractRector
         if (!$this->isName($node->extends, 'TYPO3\\CMS\\Extbase\\Mvc\\Controller\\AbstractController')) {
             return null;
         }
-        $node->extends = new \PhpParser\Node\Name\FullyQualified('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController');
+        $node->extends = new FullyQualified('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController');
         return $node;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use ActionController class instead of AbstractController if used', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use ActionController class instead of AbstractController if used', [new CodeSample(<<<'CODE_SAMPLE'
 class MyController extends AbstractController
 {
 }

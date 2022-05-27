@@ -12,14 +12,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.2/Feature-84153-IntroduceAGenericEnvironmentClass.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v2\RenameMethodCallToEnvironmentMethodCallRector\RenameMethodCallToEnvironmentMethodCallRectorTest
  */
-final class RenameMethodCallToEnvironmentMethodCallRector extends \Rector\Core\Rector\AbstractRector
+final class RenameMethodCallToEnvironmentMethodCallRector extends AbstractRector
 {
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns method call names to new ones from new Environment API.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns method call names to new ones from new Environment API.', [new CodeSample(<<<'CODE_SAMPLE'
 Bootstrap::usesComposerClassLoading();
 GeneralUtility::getApplicationContext();
 EnvironmentService::isEnvironmentInCliMode();
@@ -36,12 +36,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $className = $this->getName($node->class);
         $methodName = $this->getName($node->name);

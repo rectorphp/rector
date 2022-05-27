@@ -11,7 +11,7 @@ final class Cache
      * @var \Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface
      */
     private $cacheStorage;
-    public function __construct(\Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface $cacheStorage)
+    public function __construct(CacheStorageInterface $cacheStorage)
     {
         $this->cacheStorage = $cacheStorage;
     }

@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php81\Rector\ClassMethod\NewInInitializerRector\NewInInitializerRectorTest
  */
-final class NewInInitializerRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class NewInInitializerRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -46,15 +46,15 @@ final class NewInInitializerRector extends \Rector\Core\Rector\AbstractRector im
      * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
     private $classChildAnalyzer;
-    public function __construct(\Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer $complexNewAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer)
+    public function __construct(ComplexNewAnalyzer $complexNewAnalyzer, ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer)
     {
         $this->complexNewAnalyzer = $complexNewAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
         $this->classChildAnalyzer = $classChildAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace property declaration of new state with direct new', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace property declaration of new state with direct new', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private Logger $logger;
@@ -82,12 +82,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isLegalClass($node)) {
             return null;
@@ -103,13 +103,13 @@ CODE_SAMPLE
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
             $toPropertyAssigns = $this->betterNodeFinder->findClassMethodAssignsToLocalProperty($node, $paramName);
-            $toPropertyAssigns = \array_filter($toPropertyAssigns, function (\PhpParser\Node\Expr\Assign $assign) : bool {
-                return $assign->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce;
+            $toPropertyAssigns = \array_filter($toPropertyAssigns, function (Assign $assign) : bool {
+                return $assign->expr instanceof Coalesce;
             });
             foreach ($toPropertyAssigns as $toPropertyAssign) {
                 /** @var Coalesce $coalesce */
                 $coalesce = $toPropertyAssign->expr;
-                if (!$coalesce->right instanceof \PhpParser\Node\Expr\New_) {
+                if (!$coalesce->right instanceof New_) {
                     continue;
                 }
                 if ($this->complexNewAnalyzer->isDynamic($coalesce->right)) {
@@ -127,34 +127,34 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS;
+        return PhpVersionFeature::NEW_INITIALIZERS;
     }
-    private function isOverrideAbstractMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isOverrideAbstractMethod(ClassMethod $classMethod) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        return $classReflection instanceof \PHPStan\Reflection\ClassReflection && $this->classChildAnalyzer->hasAbstractParentClassMethod($classReflection, $methodName);
+        return $classReflection instanceof ClassReflection && $this->classChildAnalyzer->hasAbstractParentClassMethod($classReflection, $methodName);
     }
-    private function processPropertyPromotion(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param, string $paramName) : void
+    private function processPropertyPromotion(ClassMethod $classMethod, Param $param, string $paramName) : void
     {
-        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return;
         }
         $property = $classLike->getProperty($paramName);
-        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+        if (!$property instanceof Property) {
             return;
         }
         $param->flags = $property->flags;
         $this->removeNode($property);
     }
-    private function isLegalClass(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isLegalClass(ClassMethod $classMethod) : bool
     {
-        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\ClassLike::class);
-        if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
+        if ($classLike instanceof Interface_) {
             return \false;
         }
-        if ($classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        if ($classLike instanceof Class_) {
             return !$classLike->isAbstract();
         }
         return \true;
@@ -162,9 +162,9 @@ CODE_SAMPLE
     /**
      * @return Param[]
      */
-    private function matchConstructorParams(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    private function matchConstructorParams(ClassMethod $classMethod) : array
     {
-        if (!$this->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if (!$this->isName($classMethod, MethodName::CONSTRUCT)) {
             return [];
         }
         if ($classMethod->params === []) {
@@ -173,8 +173,8 @@ CODE_SAMPLE
         if ((array) $classMethod->stmts === []) {
             return [];
         }
-        return \array_filter($classMethod->params, function (\PhpParser\Node\Param $param) : bool {
-            return $param->type instanceof \PhpParser\Node\NullableType;
+        return \array_filter($classMethod->params, function (Param $param) : bool {
+            return $param->type instanceof NullableType;
         });
     }
 }

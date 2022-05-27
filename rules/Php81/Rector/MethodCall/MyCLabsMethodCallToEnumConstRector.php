@@ -18,11 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector\MyCLabsMethodCallToEnumConstRectorTest
  */
-final class MyCLabsMethodCallToEnumConstRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class MyCLabsMethodCallToEnumConstRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor MyCLabs enum fetch to Enum const', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor MyCLabs enum fetch to Enum const', [new CodeSample(<<<'CODE_SAMPLE'
 $name = SomeEnum::VALUE()->getKey();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -35,20 +35,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('MyCLabs\\Enum\\Enum'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('MyCLabs\\Enum\\Enum'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getKey')) {
             return null;
         }
-        if (!$node->var instanceof \PhpParser\Node\Expr\StaticCall) {
+        if (!$node->var instanceof StaticCall) {
             return null;
         }
         $staticCall = $node->var;
@@ -64,6 +64,6 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::ENUM;
+        return PhpVersionFeature::ENUM;
     }
 }

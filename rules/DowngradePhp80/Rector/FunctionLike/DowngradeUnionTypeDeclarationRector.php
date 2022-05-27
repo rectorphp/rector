@@ -18,14 +18,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @requires PHP 8.0
  */
-final class DowngradeUnionTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeUnionTypeDeclarationRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocFromTypeDeclarationDecorator;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
+    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
     {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
     }
@@ -34,11 +34,11 @@ final class DowngradeUnionTypeDeclarationRector extends \Rector\Core\Rector\Abst
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Expr\ArrowFunction::class];
+        return [Function_::class, ClassMethod::class, Closure::class, ArrowFunction::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove the union type params and returns, add @param/@return tags instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove the union type params and returns, add @param/@return tags instead', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function echoInput(string|int $input): int|bool
@@ -65,17 +65,17 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Closure|Function_|ArrowFunction $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $paramDecorated = \false;
         foreach ($node->getParams() as $param) {
-            if (!$param->type instanceof \PhpParser\Node\UnionType) {
+            if (!$param->type instanceof UnionType) {
                 continue;
             }
             $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node, [\PHPStan\Type\UnionType::class]);
             $paramDecorated = \true;
         }
-        if (!$node->returnType instanceof \PhpParser\Node\UnionType) {
+        if (!$node->returnType instanceof UnionType) {
             if ($paramDecorated) {
                 return $node;
             }

@@ -5,6 +5,6 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Rector\Laravel\Set\LaravelSetList;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->sets([\Rector\Laravel\Set\LaravelSetList::LARAVEL_50, \Rector\Laravel\Set\LaravelSetList::LARAVEL_51]);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->sets([LaravelSetList::LARAVEL_50, LaravelSetList::LARAVEL_51]);
 };

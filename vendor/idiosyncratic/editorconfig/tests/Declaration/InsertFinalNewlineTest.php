@@ -6,20 +6,20 @@ namespace RectorPrefix20220527\Idiosyncratic\EditorConfig\Declaration;
 use RectorPrefix20220527\Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use RectorPrefix20220527\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class InsertFinalNewlineTest extends \RectorPrefix20220527\PHPUnit\Framework\TestCase
+class InsertFinalNewlineTest extends TestCase
 {
     public function testValidValues()
     {
-        $declaration = new \RectorPrefix20220527\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('false');
+        $declaration = new InsertFinalNewline('false');
         $this->assertEquals('insert_final_newline=false', (string) $declaration);
-        $declaration = new \RectorPrefix20220527\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('true');
+        $declaration = new InsertFinalNewline('true');
         $this->assertEquals('insert_final_newline=true', (string) $declaration);
     }
     public function testInvalidValues()
     {
-        $this->expectException(\RectorPrefix20220527\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20220527\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('4');
-        $this->expectException(\RectorPrefix20220527\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20220527\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('four');
+        $this->expectException(InvalidValue::class);
+        $declaration = new InsertFinalNewline('4');
+        $this->expectException(InvalidValue::class);
+        $declaration = new InsertFinalNewline('four');
     }
 }

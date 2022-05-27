@@ -12,14 +12,14 @@ final class AttributeNameFactory
     /**
      * @return \PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Name
      */
-    public function create(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    public function create(AnnotationToAttribute $annotationToAttribute, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {
         // attribute and class name are the same, so we re-use the short form to keep code compatible with previous one
         if ($annotationToAttribute->getAttributeClass() === $annotationToAttribute->getTag()) {
             $attributeName = $doctrineAnnotationTagValueNode->identifierTypeNode->name;
             $attributeName = \ltrim($attributeName, '@');
-            return new \PhpParser\Node\Name($attributeName);
+            return new Name($attributeName);
         }
-        return new \PhpParser\Node\Name\FullyQualified($annotationToAttribute->getAttributeClass());
+        return new FullyQualified($annotationToAttribute->getAttributeClass());
     }
 }

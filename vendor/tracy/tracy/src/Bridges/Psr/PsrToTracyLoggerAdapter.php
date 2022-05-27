@@ -12,28 +12,28 @@ use RectorPrefix20220527\Tracy;
 /**
  * Psr\Log\LoggerInterface to Tracy\ILogger adapter.
  */
-class PsrToTracyLoggerAdapter implements \RectorPrefix20220527\Tracy\ILogger
+class PsrToTracyLoggerAdapter implements Tracy\ILogger
 {
     /** Tracy logger level to PSR-3 log level mapping */
-    private const LevelMap = [\RectorPrefix20220527\Tracy\ILogger::DEBUG => \RectorPrefix20220527\Psr\Log\LogLevel::DEBUG, \RectorPrefix20220527\Tracy\ILogger::INFO => \RectorPrefix20220527\Psr\Log\LogLevel::INFO, \RectorPrefix20220527\Tracy\ILogger::WARNING => \RectorPrefix20220527\Psr\Log\LogLevel::WARNING, \RectorPrefix20220527\Tracy\ILogger::ERROR => \RectorPrefix20220527\Psr\Log\LogLevel::ERROR, \RectorPrefix20220527\Tracy\ILogger::EXCEPTION => \RectorPrefix20220527\Psr\Log\LogLevel::ERROR, \RectorPrefix20220527\Tracy\ILogger::CRITICAL => \RectorPrefix20220527\Psr\Log\LogLevel::CRITICAL];
+    private const LevelMap = [Tracy\ILogger::DEBUG => Psr\Log\LogLevel::DEBUG, Tracy\ILogger::INFO => Psr\Log\LogLevel::INFO, Tracy\ILogger::WARNING => Psr\Log\LogLevel::WARNING, Tracy\ILogger::ERROR => Psr\Log\LogLevel::ERROR, Tracy\ILogger::EXCEPTION => Psr\Log\LogLevel::ERROR, Tracy\ILogger::CRITICAL => Psr\Log\LogLevel::CRITICAL];
     /** @var Psr\Log\LoggerInterface */
     private $psrLogger;
-    public function __construct(\RectorPrefix20220527\Psr\Log\LoggerInterface $psrLogger)
+    public function __construct(Psr\Log\LoggerInterface $psrLogger)
     {
         $this->psrLogger = $psrLogger;
     }
     public function log($value, $level = self::INFO)
     {
         if ($value instanceof \Throwable) {
-            $message = \RectorPrefix20220527\Tracy\Helpers::getClass($value) . ': ' . $value->getMessage() . ($value->getCode() ? ' #' . $value->getCode() : '') . ' in ' . $value->getFile() . ':' . $value->getLine();
+            $message = Tracy\Helpers::getClass($value) . ': ' . $value->getMessage() . ($value->getCode() ? ' #' . $value->getCode() : '') . ' in ' . $value->getFile() . ':' . $value->getLine();
             $context = ['exception' => $value];
         } elseif (!\is_string($value)) {
-            $message = \trim(\RectorPrefix20220527\Tracy\Dumper::toText($value));
+            $message = \trim(Tracy\Dumper::toText($value));
             $context = [];
         } else {
             $message = $value;
             $context = [];
         }
-        $this->psrLogger->log(self::LevelMap[$level] ?? \RectorPrefix20220527\Psr\Log\LogLevel::ERROR, $message, $context);
+        $this->psrLogger->log(self::LevelMap[$level] ?? Psr\Log\LogLevel::ERROR, $message, $context);
     }
 }

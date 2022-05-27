@@ -17,15 +17,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://3v4l.org/9rLjE
  * @see \Rector\Tests\Php74\Rector\FuncCall\FilterVarToAddSlashesRector\FilterVarToAddSlashesRectorTest
  */
-final class FilterVarToAddSlashesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class FilterVarToAddSlashesRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::FILTER_VAR_TO_ADD_SLASHES;
+        return PhpVersionFeature::FILTER_VAR_TO_ADD_SLASHES;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change filter_var() with slash escaping to addslashes()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change filter_var() with slash escaping to addslashes()', [new CodeSample(<<<'CODE_SAMPLE'
 $var= "Satya's here!";
 filter_var($var, FILTER_SANITIZE_MAGIC_QUOTES);
 CODE_SAMPLE
@@ -40,12 +40,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'filter_var')) {
             return null;
@@ -53,13 +53,13 @@ CODE_SAMPLE
         if (!isset($node->args[1])) {
             return null;
         }
-        if (!$node->args[1] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[1] instanceof Arg) {
             return null;
         }
         if (!$this->isName($node->args[1]->value, 'FILTER_SANITIZE_MAGIC_QUOTES')) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Name('addslashes');
+        $node->name = new Name('addslashes');
         unset($node->args[1]);
         return $node;
     }

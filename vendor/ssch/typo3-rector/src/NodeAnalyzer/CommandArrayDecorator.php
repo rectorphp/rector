@@ -18,7 +18,7 @@ final class CommandArrayDecorator
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Ssch\TYPO3Rector\NodeFactory\CommandArrayItemFactory $commandArrayItemFactory, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(CommandArrayItemFactory $commandArrayItemFactory, ValueResolver $valueResolver)
     {
         $this->commandArrayItemFactory = $commandArrayItemFactory;
         $this->valueResolver = $valueResolver;
@@ -26,7 +26,7 @@ final class CommandArrayDecorator
     /**
      * @param array<string, mixed> $commands
      */
-    public function decorateArray(\PhpParser\Node\Expr\Array_ $array, array $commands) : void
+    public function decorateArray(Array_ $array, array $commands) : void
     {
         $existingCommands = $this->valueResolver->getValue($array) ?? [];
         $commands = \array_filter($commands, function (string $command) use($existingCommands) {

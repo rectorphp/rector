@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php81\Rector\Property\ReadOnlyPropertyRector\ReadOnlyPropertyRectorTest
  */
-final class ReadOnlyPropertyRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ReadOnlyPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -39,15 +39,15 @@ final class ReadOnlyPropertyRector extends \Rector\Core\Rector\AbstractRector im
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Core\NodeManipulator\PropertyFetchAssignManipulator $propertyFetchAssignManipulator, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAssignManipulator $propertyFetchAssignManipulator, VisibilityManipulator $visibilityManipulator)
     {
         $this->propertyManipulator = $propertyManipulator;
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
         $this->visibilityManipulator = $visibilityManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Decorate read-only property with `readonly` attribute', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Decorate read-only property with `readonly` attribute', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(
@@ -82,23 +82,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Param::class];
+        return [Property::class, Param::class];
     }
     /**
      * @param Property|Param $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Param) {
+        if ($node instanceof Param) {
             return $this->refactorParam($node);
         }
         return $this->refactorProperty($node);
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::READONLY_PROPERTY;
+        return PhpVersionFeature::READONLY_PROPERTY;
     }
-    private function refactorProperty(\PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
+    private function refactorProperty(Property $property) : ?Property
     {
         // 1. is property read-only?
         if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($property)) {
@@ -107,13 +107,13 @@ CODE_SAMPLE
         if ($property->isReadonly()) {
             return null;
         }
-        if ($property->props[0]->default instanceof \PhpParser\Node\Expr) {
+        if ($property->props[0]->default instanceof Expr) {
             return null;
         }
         if ($property->type === null) {
             return null;
         }
-        if (!$this->visibilityManipulator->hasVisibility($property, \Rector\Core\ValueObject\Visibility::PRIVATE)) {
+        if (!$this->visibilityManipulator->hasVisibility($property, Visibility::PRIVATE)) {
             return null;
         }
         if ($property->isStatic()) {
@@ -125,16 +125,16 @@ CODE_SAMPLE
         $this->visibilityManipulator->makeReadonly($property);
         $attributeGroups = $property->attrGroups;
         if ($attributeGroups !== []) {
-            $property->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            $property->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
         return $property;
     }
     /**
      * @return \PhpParser\Node\Param|null
      */
-    private function refactorParam(\PhpParser\Node\Param $param)
+    private function refactorParam(Param $param)
     {
-        if (!$this->visibilityManipulator->hasVisibility($param, \Rector\Core\ValueObject\Visibility::PRIVATE)) {
+        if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
             return null;
         }
         if ($param->type === null) {

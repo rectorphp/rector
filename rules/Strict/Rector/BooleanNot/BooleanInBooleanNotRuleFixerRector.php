@@ -18,21 +18,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\BooleanInBooleanNotRuleFixerRectorTest
  */
-final class BooleanInBooleanNotRuleFixerRector extends \Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector
+final class BooleanInBooleanNotRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
 {
     /**
      * @readonly
      * @var \Rector\Strict\NodeFactory\ExactCompareFactory
      */
     private $exactCompareFactory;
-    public function __construct(\Rector\Strict\NodeFactory\ExactCompareFactory $exactCompareFactory)
+    public function __construct(ExactCompareFactory $exactCompareFactory)
     {
         $this->exactCompareFactory = $exactCompareFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
         $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\\Rules\\BooleansInConditions\\BooleanInBooleanNotRule');
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition($errorMessage, [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition($errorMessage, [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(string|null $name)
@@ -65,15 +65,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BooleanNot::class];
+        return [BooleanNot::class];
     }
     /**
      * @param BooleanNot $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr
+    public function refactor(Node $node) : ?Expr
     {
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return null;
         }
         $exprType = $scope->getType($node->expr);

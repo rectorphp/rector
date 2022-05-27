@@ -13,29 +13,29 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 /**
  * @implements TypeMapperInterface<NeverType>
  */
-final class NeverTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
+final class NeverTypeMapper implements TypeMapperInterface
 {
     /**
      * @return class-string<Type>
      */
     public function getNodeClass() : string
     {
-        return \PHPStan\Type\NeverType::class;
+        return NeverType::class;
     }
     /**
      * @param NeverType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind) : TypeNode
     {
-        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN())) {
-            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('never');
+        if ($typeKind->equals(TypeKind::RETURN())) {
+            return new IdentifierTypeNode('never');
         }
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('mixed');
+        return new IdentifierTypeNode('mixed');
     }
     /**
      * @param NeverType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(Type $type, TypeKind $typeKind) : ?Node
     {
         return null;
     }

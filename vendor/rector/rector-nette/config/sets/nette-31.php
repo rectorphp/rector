@@ -25,16 +25,16 @@ use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
 use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig) : void {
     // forms 3.1
-    $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::class, [new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Nette\\Application\\UI\\Form', 'values', 'getValues')]);
+    $rectorConfig->ruleWithConfiguration(PropertyFetchToMethodCallRector::class, [new PropertyFetchToMethodCall('Nette\\Application\\UI\\Form', 'values', 'getValues')]);
     // some attributes were added in nette 3.0, but only in one of latest patch versions; it's is safer to add them in 3.1
-    $rectorConfig->sets([\Rector\Nette\Set\NetteSetList::ANNOTATIONS_TO_ATTRIBUTES]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector::class, [
+    $rectorConfig->sets([NetteSetList::ANNOTATIONS_TO_ATTRIBUTES]);
+    $rectorConfig->ruleWithConfiguration(CallableInMethodCallToVariableRector::class, [
         // see https://github.com/nette/caching/commit/5ffe263752af5ccf3866a28305e7b2669ab4da82
-        new \Rector\Transform\ValueObject\CallableInMethodCallToVariable('Nette\\Caching\\Cache', 'save', 1),
+        new CallableInMethodCallToVariable('Nette\\Caching\\Cache', 'save', 1),
     ]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         'Nette\\Bridges\\ApplicationLatte\\Template' => 'Nette\\Bridges\\ApplicationLatte\\DefaultTemplate',
         // https://github.com/nette/application/compare/v3.0.7...v3.1.0
         'Nette\\Application\\IRouter' => 'Nette\\Routing\\Router',
@@ -79,51 +79,51 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         'Latte\\Runtime\\IHtmlString' => 'Latte\\Runtime\\HtmlStringable',
         'Latte\\Runtime\\ISnippetBridge' => 'Latte\\Runtime\\SnippetBridge',
     ]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // https://github.com/nette/caching/commit/60281abf366c4ab76e9436dc1bfe2e402db18b67
-        new \Rector\Renaming\ValueObject\MethodCallRename('Nette\\Caching\\Cache', 'start', 'capture'),
+        new MethodCallRename('Nette\\Caching\\Cache', 'start', 'capture'),
         // https://github.com/nette/forms/commit/faaaf8b8fd3408a274a9de7ca3f342091010ad5d
-        new \Rector\Renaming\ValueObject\MethodCallRename('Nette\\Forms\\Container', 'addImage', 'addImageButton'),
+        new MethodCallRename('Nette\\Forms\\Container', 'addImage', 'addImageButton'),
         // https://github.com/nette/utils/commit/d0427c1811462dbb6c503143eabe5478b26685f7
-        new \Rector\Renaming\ValueObject\MethodCallRename('Nette\\Utils\\Arrays', 'searchKey', 'getKeyOffset'),
-        new \Rector\Renaming\ValueObject\MethodCallRename('Nette\\Configurator', 'addParameters', 'addStaticParameters'),
+        new MethodCallRename('Nette\\Utils\\Arrays', 'searchKey', 'getKeyOffset'),
+        new MethodCallRename('Nette\\Configurator', 'addParameters', 'addStaticParameters'),
     ]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector::class, [
+    $rectorConfig->ruleWithConfiguration(RenameStaticMethodRector::class, [
         // https://github.com/nette/utils/commit/8a4b795acd00f3f6754c28a73a7e776b60350c34
-        new \Rector\Renaming\ValueObject\RenameStaticMethod('Nette\\Utils\\Callback', 'closure', 'Closure', 'fromCallable'),
+        new RenameStaticMethod('Nette\\Utils\\Callback', 'closure', 'Closure', 'fromCallable'),
     ]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector::class, [new \Rector\Transform\ValueObject\DimFetchAssignToMethodCall('Nette\\Application\\Routers\\RouteList', 'Nette\\Application\\Routers\\Route', 'addRoute')]);
-    $nullableTemplateType = new \PHPStan\Type\UnionType([new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Template'), new \PHPStan\Type\NullType()]);
-    $rectorConfig->ruleWithConfiguration(\Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector::class, [new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('Nette\\Application\\UI\\Presenter', 'sendTemplate', 0, $nullableTemplateType)]);
-    $rectorConfig->rule(\Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector::class);
-    $rectorConfig->ruleWithConfiguration(\Rector\Composer\Rector\ChangePackageVersionComposerRector::class, [
+    $rectorConfig->ruleWithConfiguration(DimFetchAssignToMethodCallRector::class, [new DimFetchAssignToMethodCall('Nette\\Application\\Routers\\RouteList', 'Nette\\Application\\Routers\\Route', 'addRoute')]);
+    $nullableTemplateType = new UnionType([new ObjectType('Nette\\Application\\UI\\Template'), new NullType()]);
+    $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [new AddParamTypeDeclaration('Nette\\Application\\UI\\Presenter', 'sendTemplate', 0, $nullableTemplateType)]);
+    $rectorConfig->rule(ContextGetByTypeToConstructorInjectionRector::class);
+    $rectorConfig->ruleWithConfiguration(ChangePackageVersionComposerRector::class, [
         // meta package
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/nette', '^3.1'),
+        new PackageAndVersion('nette/nette', '^3.1'),
         // https://github.com/nette/nette/blob/v3.0.0/composer.json vs https://github.com/nette/nette/blob/v3.1.0/composer.json
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/application', '^3.1'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/bootstrap', '^3.1'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/caching', '^3.1'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/database', '^3.1'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/di', '^3.0'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/finder', '^2.5'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/forms', '^3.1'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/http', '^3.1'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/mail', '^3.1'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/php-generator', '^3.5'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/robot-loader', '^3.3'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/safe-stream', '^2.4'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/security', '^3.1'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/tokenizer', '^3.0'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nette/utils', '^3.2'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('latte/latte', '^2.9'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('tracy/tracy', '^2.8'),
+        new PackageAndVersion('nette/application', '^3.1'),
+        new PackageAndVersion('nette/bootstrap', '^3.1'),
+        new PackageAndVersion('nette/caching', '^3.1'),
+        new PackageAndVersion('nette/database', '^3.1'),
+        new PackageAndVersion('nette/di', '^3.0'),
+        new PackageAndVersion('nette/finder', '^2.5'),
+        new PackageAndVersion('nette/forms', '^3.1'),
+        new PackageAndVersion('nette/http', '^3.1'),
+        new PackageAndVersion('nette/mail', '^3.1'),
+        new PackageAndVersion('nette/php-generator', '^3.5'),
+        new PackageAndVersion('nette/robot-loader', '^3.3'),
+        new PackageAndVersion('nette/safe-stream', '^2.4'),
+        new PackageAndVersion('nette/security', '^3.1'),
+        new PackageAndVersion('nette/tokenizer', '^3.0'),
+        new PackageAndVersion('nette/utils', '^3.2'),
+        new PackageAndVersion('latte/latte', '^2.9'),
+        new PackageAndVersion('tracy/tracy', '^2.8'),
         // contributte
-        new \Rector\Composer\ValueObject\PackageAndVersion('contributte/console', '^0.9'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('contributte/event-dispatcher', '^0.8'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('contributte/event-dispatcher-extra', '^0.8'),
+        new PackageAndVersion('contributte/console', '^0.9'),
+        new PackageAndVersion('contributte/event-dispatcher', '^0.8'),
+        new PackageAndVersion('contributte/event-dispatcher-extra', '^0.8'),
         // nettrine
-        new \Rector\Composer\ValueObject\PackageAndVersion('nettrine/annotations', '^0.7'),
-        new \Rector\Composer\ValueObject\PackageAndVersion('nettrine/cache', '^0.3'),
+        new PackageAndVersion('nettrine/annotations', '^0.7'),
+        new PackageAndVersion('nettrine/cache', '^0.3'),
     ]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Composer\Rector\RemovePackageComposerRector::class, ['nette/component-model', 'nette/neon']);
+    $rectorConfig->ruleWithConfiguration(RemovePackageComposerRector::class, ['nette/component-model', 'nette/neon']);
 };

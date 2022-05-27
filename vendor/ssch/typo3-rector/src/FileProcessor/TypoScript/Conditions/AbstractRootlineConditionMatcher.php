@@ -5,7 +5,7 @@ namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
-abstract class AbstractRootlineConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
+abstract class AbstractRootlineConditionMatcher implements TyposcriptConditionMatcher
 {
     public function change(string $condition) : ?string
     {
@@ -13,7 +13,7 @@ abstract class AbstractRootlineConditionMatcher implements \Ssch\TYPO3Rector\Con
         if (!\is_array($matches)) {
             return $condition;
         }
-        $values = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $matches[1], \true);
+        $values = ArrayUtility::trimExplode(',', $matches[1], \true);
         $newConditions = [];
         foreach ($values as $value) {
             $newConditions[] = \sprintf('%s in %s', $value, $this->getExpression());

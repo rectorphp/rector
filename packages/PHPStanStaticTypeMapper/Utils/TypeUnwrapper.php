@@ -12,32 +12,32 @@ final class TypeUnwrapper
     /**
      * E.g. null|ClassType → ClassType
      */
-    public function unwrapNullableType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
+    public function unwrapNullableType(Type $type) : Type
     {
-        return \PHPStan\Type\TypeCombinator::removeNull($type);
+        return TypeCombinator::removeNull($type);
     }
-    public function unwrapFirstObjectTypeFromUnionType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
+    public function unwrapFirstObjectTypeFromUnionType(Type $type) : Type
     {
-        if (!$type instanceof \PHPStan\Type\UnionType) {
+        if (!$type instanceof UnionType) {
             return $type;
         }
         foreach ($type->getTypes() as $unionedType) {
-            if (!$unionedType instanceof \PHPStan\Type\TypeWithClassName) {
+            if (!$unionedType instanceof TypeWithClassName) {
                 continue;
             }
             return $unionedType;
         }
         return $type;
     }
-    public function removeNullTypeFromUnionType(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\UnionType
+    public function removeNullTypeFromUnionType(UnionType $unionType) : UnionType
     {
         $unionedTypesWithoutNullType = [];
         foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof \PHPStan\Type\UnionType) {
+            if ($type instanceof UnionType) {
                 continue;
             }
             $unionedTypesWithoutNullType[] = $type;
         }
-        return new \PHPStan\Type\UnionType($unionedTypesWithoutNullType);
+        return new UnionType($unionedTypesWithoutNullType);
     }
 }

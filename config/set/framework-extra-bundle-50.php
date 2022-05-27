@@ -5,6 +5,6 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\Symfony\Rector\ClassMethod\TemplateAnnotationToThisRenderRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(TemplateAnnotationToThisRenderRector::class);
 };

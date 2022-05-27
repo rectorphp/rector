@@ -31,7 +31,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
  *
  * @see \Rector\Laravel\Tests\Rector\PropertyFetch\OptionalToNullsafeOperatorRector\OptionalToNullsafeOperatorRectorTest
  */
-final class OptionalToNullsafeOperatorRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface, \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface
+final class OptionalToNullsafeOperatorRector extends AbstractRector implements MinPhpVersionInterface, AllowEmptyConfigurableRectorInterface
 {
     /**
      * @var string
@@ -40,7 +40,7 @@ final class OptionalToNullsafeOperatorRector extends \Rector\Core\Rector\Abstrac
     /**
      * @var array<class-string<Expr>>
      */
-    private const SKIP_VALUE_TYPES = [\PhpParser\Node\Expr\ConstFetch::class, \PhpParser\Node\Scalar::class, \PhpParser\Node\Expr\Array_::class, \PhpParser\Node\Expr\ClassConstFetch::class];
+    private const SKIP_VALUE_TYPES = [ConstFetch::class, Scalar::class, Array_::class, ClassConstFetch::class];
     /**
      * @var string[]
      */
@@ -55,14 +55,14 @@ final class OptionalToNullsafeOperatorRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\RectorPrefix20220527\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(TypeChecker $typeChecker, ArgsAnalyzer $argsAnalyzer)
     {
         $this->typeChecker = $typeChecker;
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert simple calls to optional helper to use the nullsafe operator', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert simple calls to optional helper to use the nullsafe operator', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 optional($user)->getKey();
 optional($user)->id;
 // macro methods
@@ -81,21 +81,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\MethodCall::class];
+        return [PropertyFetch::class, MethodCall::class];
     }
     /**
      * @param MethodCall|PropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->var instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$node->var instanceof FuncCall) {
             return null;
         }
         if (!$this->isName($node->var->name, 'optional')) {
             return null;
         }
         // exclude macro methods
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall && $this->isNames($node->name, $this->excludeMethods)) {
+        if ($node instanceof MethodCall && $this->isNames($node->name, $this->excludeMethods)) {
             return null;
         }
         if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->var->args, 0)) {
@@ -111,14 +111,14 @@ CODE_SAMPLE
         if ($this->typeChecker->isInstanceOf($firstArg->value, self::SKIP_VALUE_TYPES)) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return new \PhpParser\Node\Expr\NullsafePropertyFetch($firstArg->value, $node->name);
+        if ($node instanceof PropertyFetch) {
+            return new NullsafePropertyFetch($firstArg->value, $node->name);
         }
-        return new \PhpParser\Node\Expr\NullsafeMethodCall($firstArg->value, $node->name, $node->args);
+        return new NullsafeMethodCall($firstArg->value, $node->name, $node->args);
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersion::PHP_80;
+        return PhpVersion::PHP_80;
     }
     /**
      * @param mixed[] $configuration
@@ -126,12 +126,12 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $excludeMethods = $configuration[self::EXCLUDE_METHODS] ?? $configuration;
-        \RectorPrefix20220527\Webmozart\Assert\Assert::isArray($excludeMethods);
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($excludeMethods);
+        Assert::isArray($excludeMethods);
+        Assert::allString($excludeMethods);
         $this->excludeMethods = $excludeMethods;
     }
-    private function hasCallback(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    private function hasCallback(FuncCall $funcCall) : bool
     {
-        return isset($funcCall->args[1]) && $funcCall->args[1] instanceof \PhpParser\Node\Arg && !$this->valueResolver->isNull($funcCall->args[1]->value);
+        return isset($funcCall->args[1]) && $funcCall->args[1] instanceof Arg && !$this->valueResolver->isNull($funcCall->args[1]->value);
     }
 }

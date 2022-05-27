@@ -37,7 +37,7 @@ class ConstExprEvaluator
      */
     public function __construct(callable $fallbackEvaluator = null)
     {
-        $this->fallbackEvaluator = $fallbackEvaluator ?? function (\PhpParser\Node\Expr $expr) {
+        $this->fallbackEvaluator = $fallbackEvaluator ?? function (Expr $expr) {
             throw new \PhpParser\ConstExprEvaluationException("Expression of type {$expr->getType()} cannot be evaluated");
         };
     }
@@ -58,7 +58,7 @@ class ConstExprEvaluator
      *
      * @throws ConstExprEvaluationException if the expression cannot be evaluated or an error occurred
      */
-    public function evaluateSilently(\PhpParser\Node\Expr $expr)
+    public function evaluateSilently(Expr $expr)
     {
         \set_error_handler(function ($num, $str, $file, $line) {
             throw new \ErrorException($str, 0, $num, $file, $line);
@@ -91,69 +91,69 @@ class ConstExprEvaluator
      *
      * @throws ConstExprEvaluationException if the expression cannot be evaluated
      */
-    public function evaluateDirectly(\PhpParser\Node\Expr $expr)
+    public function evaluateDirectly(Expr $expr)
     {
         return $this->evaluate($expr);
     }
-    private function evaluate(\PhpParser\Node\Expr $expr)
+    private function evaluate(Expr $expr)
     {
-        if ($expr instanceof \PhpParser\Node\Scalar\LNumber || $expr instanceof \PhpParser\Node\Scalar\DNumber || $expr instanceof \PhpParser\Node\Scalar\String_) {
+        if ($expr instanceof Scalar\LNumber || $expr instanceof Scalar\DNumber || $expr instanceof Scalar\String_) {
             return $expr->value;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\Array_) {
+        if ($expr instanceof Expr\Array_) {
             return $this->evaluateArray($expr);
         }
         // Unary operators
-        if ($expr instanceof \PhpParser\Node\Expr\UnaryPlus) {
+        if ($expr instanceof Expr\UnaryPlus) {
             return +$this->evaluate($expr->expr);
         }
-        if ($expr instanceof \PhpParser\Node\Expr\UnaryMinus) {
+        if ($expr instanceof Expr\UnaryMinus) {
             return -$this->evaluate($expr->expr);
         }
-        if ($expr instanceof \PhpParser\Node\Expr\BooleanNot) {
+        if ($expr instanceof Expr\BooleanNot) {
             return !$this->evaluate($expr->expr);
         }
-        if ($expr instanceof \PhpParser\Node\Expr\BitwiseNot) {
+        if ($expr instanceof Expr\BitwiseNot) {
             return ~$this->evaluate($expr->expr);
         }
-        if ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
+        if ($expr instanceof Expr\BinaryOp) {
             return $this->evaluateBinaryOp($expr);
         }
-        if ($expr instanceof \PhpParser\Node\Expr\Ternary) {
+        if ($expr instanceof Expr\Ternary) {
             return $this->evaluateTernary($expr);
         }
-        if ($expr instanceof \PhpParser\Node\Expr\ArrayDimFetch && null !== $expr->dim) {
+        if ($expr instanceof Expr\ArrayDimFetch && null !== $expr->dim) {
             return $this->evaluate($expr->var)[$this->evaluate($expr->dim)];
         }
-        if ($expr instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if ($expr instanceof Expr\ConstFetch) {
             return $this->evaluateConstFetch($expr);
         }
         return ($this->fallbackEvaluator)($expr);
     }
-    private function evaluateArray(\PhpParser\Node\Expr\Array_ $expr)
+    private function evaluateArray(Expr\Array_ $expr)
     {
         $array = [];
         foreach ($expr->items as $item) {
             if (null !== $item->key) {
                 $array[$this->evaluate($item->key)] = $this->evaluate($item->value);
             } elseif ($item->unpack) {
-                $array = \array_merge($array, $this->evaluate($item->value));
+                $array = array_merge($array, $this->evaluate($item->value));
             } else {
                 $array[] = $this->evaluate($item->value);
             }
         }
         return $array;
     }
-    private function evaluateTernary(\PhpParser\Node\Expr\Ternary $expr)
+    private function evaluateTernary(Expr\Ternary $expr)
     {
         if (null === $expr->if) {
             return $this->evaluate($expr->cond) ?: $this->evaluate($expr->else);
         }
         return $this->evaluate($expr->cond) ? $this->evaluate($expr->if) : $this->evaluate($expr->else);
     }
-    private function evaluateBinaryOp(\PhpParser\Node\Expr\BinaryOp $expr)
+    private function evaluateBinaryOp(Expr\BinaryOp $expr)
     {
-        if ($expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce && $expr->left instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if ($expr instanceof Expr\BinaryOp\Coalesce && $expr->left instanceof Expr\ArrayDimFetch) {
             // This needs to be special cased to respect BP_VAR_IS fetch semantics
             return $this->evaluate($expr->left->var)[$this->evaluate($expr->left->dim)] ?? $this->evaluate($expr->right);
         }
@@ -219,7 +219,7 @@ class ConstExprEvaluator
         }
         throw new \Exception('Should not happen');
     }
-    private function evaluateConstFetch(\PhpParser\Node\Expr\ConstFetch $expr)
+    private function evaluateConstFetch(Expr\ConstFetch $expr)
     {
         $name = $expr->name->toLowerString();
         switch ($name) {

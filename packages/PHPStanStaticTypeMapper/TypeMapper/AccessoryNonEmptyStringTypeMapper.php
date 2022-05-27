@@ -14,27 +14,27 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 /**
  * @implements TypeMapperInterface<AccessoryNonEmptyStringType>
  */
-final class AccessoryNonEmptyStringTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
+final class AccessoryNonEmptyStringTypeMapper implements TypeMapperInterface
 {
     /**
      * @return class-string<Type>
      */
     public function getNodeClass() : string
     {
-        return \PHPStan\Type\Accessory\AccessoryNonEmptyStringType::class;
+        return AccessoryNonEmptyStringType::class;
     }
     /**
      * @param AccessoryNonEmptyStringType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind) : TypeNode
     {
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('string');
+        return new IdentifierTypeNode('string');
     }
     /**
      * @param AccessoryNonEmptyStringType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(Type $type, TypeKind $typeKind) : ?Node
     {
-        return new \PhpParser\Node\Name('string');
+        return new Name('string');
     }
 }

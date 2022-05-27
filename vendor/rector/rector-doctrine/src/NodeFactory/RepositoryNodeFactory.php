@@ -12,14 +12,14 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 final class RepositoryNodeFactory
 {
-    public function createRepositoryAssign(\PhpParser\Node\Expr $entityReferenceExpr) : \PhpParser\Node\Expr\Assign
+    public function createRepositoryAssign(Expr $entityReferenceExpr) : Assign
     {
-        $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), new \PhpParser\Node\Identifier('repository'));
-        return new \PhpParser\Node\Expr\Assign($propertyFetch, $this->createGetRepositoryMethodCall($entityReferenceExpr));
+        $propertyFetch = new PropertyFetch(new Variable('this'), new Identifier('repository'));
+        return new Assign($propertyFetch, $this->createGetRepositoryMethodCall($entityReferenceExpr));
     }
-    private function createGetRepositoryMethodCall(\PhpParser\Node\Expr $entityReferenceExpr) : \PhpParser\Node\Expr\MethodCall
+    private function createGetRepositoryMethodCall(Expr $entityReferenceExpr) : MethodCall
     {
-        $args = [new \PhpParser\Node\Arg($entityReferenceExpr)];
-        return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable('entityManager'), 'getRepository', $args);
+        $args = [new Arg($entityReferenceExpr)];
+        return new MethodCall(new Variable('entityManager'), 'getRepository', $args);
     }
 }

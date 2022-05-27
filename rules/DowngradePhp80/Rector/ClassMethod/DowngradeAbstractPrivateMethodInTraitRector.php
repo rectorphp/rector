@@ -14,20 +14,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\ClassMethod\DowngradeAbstractPrivateMethodInTraitRector\DowngradeAbstractPrivateMethodInTraitRectorTest
  */
-final class DowngradeAbstractPrivateMethodInTraitRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeAbstractPrivateMethodInTraitRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    public function __construct(VisibilityManipulator $visibilityManipulator)
     {
         $this->visibilityManipulator = $visibilityManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove "abstract" from private methods in traits and adds an empty function body', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove "abstract" from private methods in traits and adds an empty function body', [new CodeSample(<<<'CODE_SAMPLE'
 trait SomeTrait
 {
     abstract private function someAbstractPrivateFunction();
@@ -46,12 +46,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -61,7 +61,7 @@ CODE_SAMPLE
         $node->stmts = [];
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassMethod $classMethod) : bool
     {
         if (!$classMethod->isAbstract()) {
             return \true;
@@ -69,7 +69,7 @@ CODE_SAMPLE
         if (!$classMethod->isPrivate()) {
             return \true;
         }
-        $parent = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        return !$parent instanceof \PhpParser\Node\Stmt\Trait_;
+        $parent = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
+        return !$parent instanceof Trait_;
     }
 }

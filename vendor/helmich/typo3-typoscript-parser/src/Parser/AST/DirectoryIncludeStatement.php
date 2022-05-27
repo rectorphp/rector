@@ -9,7 +9,7 @@ namespace RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST
  */
-class DirectoryIncludeStatement extends \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\IncludeStatement
+class DirectoryIncludeStatement extends IncludeStatement
 {
     /**
      * The directory to include from.

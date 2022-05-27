@@ -14,18 +14,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\FlexForms\FlexFormsProcessorTest
  */
-final class RenderTypeFlexFormRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\FlexForms\Rector\FlexFormRectorInterface
+final class RenderTypeFlexFormRector implements FlexFormRectorInterface
 {
-    public function transform(\DOMDocument $domDocument) : bool
+    public function transform(DOMDocument $domDocument) : bool
     {
-        $xpath = new \DOMXPath($domDocument);
+        $xpath = new DOMXPath($domDocument);
         /** @var DOMNodeList<DOMElement> $elements */
         $elements = $xpath->query('//TCEforms/config');
         $hasChanged = \false;
         foreach ($elements as $element) {
             $types = $element->getElementsByTagName('type');
             $type = $types->item(0);
-            if (!$type instanceof \DOMElement) {
+            if (!$type instanceof DOMElement) {
                 continue;
             }
             if ('select' !== $type->textContent) {
@@ -42,10 +42,10 @@ final class RenderTypeFlexFormRector implements \Ssch\TYPO3Rector\Contract\FileP
             $size = $sizes->item(0);
             $renderTypeName = 'selectSingle';
             $insertBefore = $type;
-            if ($renderMode instanceof \DOMNode) {
+            if ($renderMode instanceof DOMNode) {
                 $renderTypeName = 'selectTree';
                 $insertBefore = $renderMode;
-            } elseif ($size instanceof \DOMNode && (int) $size->textContent > 1) {
+            } elseif ($size instanceof DOMNode && (int) $size->textContent > 1) {
                 // Could be also selectCheckBox. This is a sensitive default
                 $renderTypeName = 'selectMultipleSideBySide';
             }
@@ -62,9 +62,9 @@ final class RenderTypeFlexFormRector implements \Ssch\TYPO3Rector\Contract\FileP
         }
         return $hasChanged;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add renderType node in Flexforms xml', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add renderType node in Flexforms xml', [new CodeSample(<<<'CODE_SAMPLE'
 <type>select</type>
 <items>
     <numIndex index="0" type="array">

@@ -19,21 +19,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector\DisallowedShortTernaryRuleFixerRectorTest
  */
-final class DisallowedShortTernaryRuleFixerRector extends \Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector
+final class DisallowedShortTernaryRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
 {
     /**
      * @readonly
      * @var \Rector\Strict\NodeFactory\ExactCompareFactory
      */
     private $exactCompareFactory;
-    public function __construct(\Rector\Strict\NodeFactory\ExactCompareFactory $exactCompareFactory)
+    public function __construct(ExactCompareFactory $exactCompareFactory)
     {
         $this->exactCompareFactory = $exactCompareFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
         $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\\Rules\\DisallowedConstructs\\DisallowedShortTernaryRule');
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition($errorMessage, [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition($errorMessage, [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class ShortTernaryArray
 {
     public function run(array $array)
@@ -58,15 +58,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Ternary::class];
+        return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\Ternary
+    public function refactor(Node $node) : ?Ternary
     {
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return null;
         }
         // skip non-short ternary
@@ -74,26 +74,26 @@ CODE_SAMPLE
             return null;
         }
         // special case for reset() function
-        if ($node->cond instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($node->cond, 'reset')) {
+        if ($node->cond instanceof FuncCall && $this->isName($node->cond, 'reset')) {
             $this->refactorResetFuncCall($node, $node->cond, $scope);
             return $node;
         }
         $exprType = $scope->getType($node->cond);
         $compareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $node->cond, $this->treatAsNonEmpty);
-        if (!$compareExpr instanceof \PhpParser\Node\Expr) {
+        if (!$compareExpr instanceof Expr) {
             return null;
         }
         $node->if = $node->cond;
         $node->cond = $compareExpr;
         return $node;
     }
-    private function refactorResetFuncCall(\PhpParser\Node\Expr\Ternary $ternary, \PhpParser\Node\Expr\FuncCall $resetFuncCall, \PHPStan\Analyser\Scope $scope) : void
+    private function refactorResetFuncCall(Ternary $ternary, FuncCall $resetFuncCall, Scope $scope) : void
     {
         $ternary->if = $ternary->cond;
         $firstArgValue = $resetFuncCall->args[0]->value;
         $firstArgType = $scope->getType($firstArgValue);
         $falsyCompareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($firstArgType, $firstArgValue, $this->treatAsNonEmpty);
-        if (!$falsyCompareExpr instanceof \PhpParser\Node\Expr) {
+        if (!$falsyCompareExpr instanceof Expr) {
             return;
         }
         $ternary->cond = $falsyCompareExpr;

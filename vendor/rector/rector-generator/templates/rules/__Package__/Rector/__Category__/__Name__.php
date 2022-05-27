@@ -11,11 +11,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 __Resources__
 * @see \Rector\Tests\__Package__\Rector\__Category__\__Name__\__Name__Test
 */
-final class __Name__ extends \Rector\Core\Rector\AbstractRector
+final class __Name__ extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('__Description__', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(__CodeBeforeExample__, __CodeAfterExample__)]);
+        return new RuleDefinition('__Description__', [new CodeSample(__CodeBeforeExample__, __CodeAfterExample__)]);
     }
     /**
      * @return array<class-string<Node>>
@@ -27,7 +27,7 @@ final class __Name__ extends \Rector\Core\Rector\AbstractRector
     /**
      * @param __NodeTypesDoc__ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         // change the node
         return $node;

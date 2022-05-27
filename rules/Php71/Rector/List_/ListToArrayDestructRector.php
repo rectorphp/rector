@@ -19,11 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\List_\ListToArrayDestructRector\ListToArrayDestructRectorTest
  */
-final class ListToArrayDestructRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ListToArrayDestructRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change list() to array destruct', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change list() to array destruct', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -54,27 +54,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\List_::class];
+        return [List_::class];
     }
     /**
      * @param List_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var === $node) {
-            return new \PhpParser\Node\Expr\Array_($node->items);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Assign && $parentNode->var === $node) {
+            return new Array_($node->items);
         }
-        if (!$parentNode instanceof \PhpParser\Node\Stmt\Foreach_) {
+        if (!$parentNode instanceof Foreach_) {
             return null;
         }
         if ($parentNode->valueVar !== $node) {
             return null;
         }
-        return new \PhpParser\Node\Expr\Array_($node->items);
+        return new Array_($node->items);
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::ARRAY_DESTRUCT;
+        return PhpVersionFeature::ARRAY_DESTRUCT;
     }
 }

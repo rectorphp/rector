@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.3/Deprecation-90007-GlobalConstantsTYPO3_versionAndTYPO3_branch.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v3\UseClassTypo3VersionRector\UseClassTypo3VersionRectorTest
  */
-final class UseClassTypo3VersionRector extends \Rector\Core\Rector\AbstractRector
+final class UseClassTypo3VersionRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -23,12 +23,12 @@ final class UseClassTypo3VersionRector extends \Rector\Core\Rector\AbstractRecto
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\ConstFetch::class];
+        return [ConstFetch::class];
     }
     /**
      * @param ConstFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isNames($node->name, self::CONSTANTS_TO_REFACTOR)) {
             return null;
@@ -39,9 +39,9 @@ final class UseClassTypo3VersionRector extends \Rector\Core\Rector\AbstractRecto
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use class Typo3Version instead of the constants', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use class Typo3Version instead of the constants', [new CodeSample(<<<'CODE_SAMPLE'
 $typo3Version = TYPO3_version;
 $typo3Branch = TYPO3_branch;
 CODE_SAMPLE

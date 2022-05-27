@@ -15,15 +15,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see \Rector\Tests\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector\WrapVariableVariableNameInCurlyBracesRectorTest
  * @changelog https://www.php.net/manual/en/language.variables.variable.php
  */
-final class WrapVariableVariableNameInCurlyBracesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class WrapVariableVariableNameInCurlyBracesRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::WRAP_VARIABLE_VARIABLE;
+        return PhpVersionFeature::WRAP_VARIABLE_VARIABLE;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Ensure variable variables are wrapped in curly braces', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Ensure variable variables are wrapped in curly braces', [new CodeSample(<<<'CODE_SAMPLE'
 function run($foo)
 {
     global $$foo->bar;
@@ -42,23 +42,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Variable::class];
+        return [Variable::class];
     }
     /**
      * @param Variable $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $nodeName = $node->name;
-        if (!$nodeName instanceof \PhpParser\Node\Expr\PropertyFetch && !$nodeName instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$nodeName instanceof PropertyFetch && !$nodeName instanceof Variable) {
             return null;
         }
         if ($node->getEndTokenPos() !== $nodeName->getEndTokenPos()) {
             return null;
         }
-        if ($nodeName instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return new \PhpParser\Node\Expr\Variable(new \PhpParser\Node\Expr\PropertyFetch($nodeName->var, $nodeName->name));
+        if ($nodeName instanceof PropertyFetch) {
+            return new Variable(new PropertyFetch($nodeName->var, $nodeName->name));
         }
-        return new \PhpParser\Node\Expr\Variable(new \PhpParser\Node\Expr\Variable($nodeName->name));
+        return new Variable(new Variable($nodeName->name));
     }
 }

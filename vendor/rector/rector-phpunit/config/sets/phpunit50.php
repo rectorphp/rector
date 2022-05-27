@@ -5,6 +5,6 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\StaticCall\GetMockRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\PHPUnit\Rector\StaticCall\GetMockRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(GetMockRector::class);
 };

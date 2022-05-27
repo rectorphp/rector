@@ -15,7 +15,7 @@ use RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-class Copy extends \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryObjectOperator
+class Copy extends BinaryObjectOperator
 {
     /**
      * Constructs a copy statement.
@@ -24,7 +24,7 @@ class Copy extends \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Ope
      * @param ObjectPath $target     The object to copy the value from.
      * @param int        $sourceLine The original source line.
      */
-    public function __construct(\RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ObjectPath $target, int $sourceLine)
+    public function __construct(ObjectPath $object, ObjectPath $target, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;

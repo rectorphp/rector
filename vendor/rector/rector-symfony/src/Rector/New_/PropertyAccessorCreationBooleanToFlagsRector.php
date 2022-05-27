@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
  * @see \Rector\Symfony\Tests\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector\PropertyAccessorCreationBooleanToFlagsRectorTest
  */
-final class PropertyAccessorCreationBooleanToFlagsRector extends \Rector\Core\Rector\AbstractRector
+final class PropertyAccessorCreationBooleanToFlagsRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes first argument of PropertyAccessor::__construct() to flags from boolean', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes first argument of PropertyAccessor::__construct() to flags from boolean', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,18 +44,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\New_::class];
+        return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         $firstArg = $node->args[0];
-        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+        if (!$firstArg instanceof Arg) {
             return null;
         }
         $isTrue = $this->valueResolver->isTrue($firstArg->value);
@@ -63,9 +63,9 @@ CODE_SAMPLE
         $node->args[0] = $this->nodeFactory->createArg($bitwiseOr);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\New_ $new) : bool
+    private function shouldSkip(New_ $new) : bool
     {
-        if (!$new->class instanceof \PhpParser\Node\Name) {
+        if (!$new->class instanceof Name) {
             return \true;
         }
         if (!$this->isName($new->class, 'Symfony\\Component\\PropertyAccess\\PropertyAccessor')) {
@@ -75,19 +75,19 @@ CODE_SAMPLE
             return \true;
         }
         $firstArg = $new->args[0];
-        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+        if (!$firstArg instanceof Arg) {
             return \true;
         }
         return !$this->valueResolver->isTrueOrFalse($firstArg->value);
     }
-    private function prepareFlags(bool $currentValue) : \PhpParser\Node\Expr\BinaryOp\BitwiseOr
+    private function prepareFlags(bool $currentValue) : BitwiseOr
     {
         $magicGetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyAccess\\PropertyAccessor', 'MAGIC_GET');
         $magicSetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyAccess\\PropertyAccessor', 'MAGIC_SET');
         if (!$currentValue) {
-            return new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($magicGetClassConstFetch, $magicSetClassConstFetch);
+            return new BitwiseOr($magicGetClassConstFetch, $magicSetClassConstFetch);
         }
         $magicCallClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyAccess\\PropertyAccessor', 'MAGIC_CALL');
-        return new \PhpParser\Node\Expr\BinaryOp\BitwiseOr(new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch);
+        return new BitwiseOr(new BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch);
     }
 }

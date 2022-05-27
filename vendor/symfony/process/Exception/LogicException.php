@@ -15,6 +15,6 @@ namespace RectorPrefix20220527\Symfony\Component\Process\Exception;
  *
  * @author Romain Neutron <imprec@gmail.com>
  */
-class LogicException extends \LogicException implements \RectorPrefix20220527\Symfony\Component\Process\Exception\ExceptionInterface
+class LogicException extends \LogicException implements ExceptionInterface
 {
 }

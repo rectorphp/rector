@@ -9,14 +9,14 @@ namespace RectorPrefix20220527\Nette\Neon\Node;
 
 use RectorPrefix20220527\Nette\Neon\Node;
 /** @internal */
-abstract class ArrayNode extends \RectorPrefix20220527\Nette\Neon\Node
+abstract class ArrayNode extends Node
 {
     /** @var ArrayItemNode[] */
     public $items = [];
     /** @return mixed[] */
     public function toValue() : array
     {
-        return \RectorPrefix20220527\Nette\Neon\Node\ArrayItemNode::itemsToArray($this->items);
+        return ArrayItemNode::itemsToArray($this->items);
     }
     public function &getIterator() : \Generator
     {

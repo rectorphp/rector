@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Class_\StringableForToStringRector\StringableForToStringRectorTest
  */
-final class StringableForToStringRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class StringableForToStringRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -48,7 +48,7 @@ final class StringableForToStringRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReturnTypeInferer $returnTypeInferer, ClassAnalyzer $classAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->returnTypeInferer = $returnTypeInferer;
@@ -56,11 +56,11 @@ final class StringableForToStringRector extends \Rector\Core\Rector\AbstractRect
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::STRINGABLE;
+        return PhpVersionFeature::STRINGABLE;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add `Stringable` interface to classes with `__toString()` method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add `Stringable` interface to classes with `__toString()` method', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __toString()
@@ -85,15 +85,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $toStringClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::TO_STRING);
-        if (!$toStringClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $toStringClassMethod = $node->getMethod(MethodName::TO_STRING);
+        if (!$toStringClassMethod instanceof ClassMethod) {
             return null;
         }
         // warning, classes that implements __toString() will return Stringable interface even if they don't implemen it
@@ -106,44 +106,44 @@ CODE_SAMPLE
             return null;
         }
         $returnType = $this->returnTypeInferer->inferFunctionLike($toStringClassMethod);
-        if (!$returnType instanceof \PHPStan\Type\StringType) {
+        if (!$returnType instanceof StringType) {
             $this->processNotStringType($toStringClassMethod);
         }
         // add interface
-        $node->implements[] = new \PhpParser\Node\Name\FullyQualified(self::STRINGABLE);
+        $node->implements[] = new FullyQualified(self::STRINGABLE);
         // add return type
         if ($toStringClassMethod->returnType === null) {
-            $toStringClassMethod->returnType = new \PhpParser\Node\Name('string');
+            $toStringClassMethod->returnType = new Name('string');
         }
         return $node;
     }
-    private function processNotStringType(\PhpParser\Node\Stmt\ClassMethod $toStringClassMethod) : void
+    private function processNotStringType(ClassMethod $toStringClassMethod) : void
     {
         if ($toStringClassMethod->isAbstract()) {
             return;
         }
-        $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($toStringClassMethod, \PhpParser\Node\Stmt\Return_::class);
+        $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($toStringClassMethod, Return_::class);
         if (!$hasReturn) {
             $stmts = (array) $toStringClassMethod->stmts;
             \end($stmts);
             $lastKey = \key($stmts);
             $lastKey = $lastKey === null ? 0 : (int) $lastKey + 1;
-            $toStringClassMethod->stmts[$lastKey] = new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Scalar\String_(''));
+            $toStringClassMethod->stmts[$lastKey] = new Return_(new String_(''));
             return;
         }
-        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (\PhpParser\Node $subNode) {
-            if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
+        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (Node $subNode) {
+            if (!$subNode instanceof Return_) {
                 return null;
             }
-            if (!$subNode->expr instanceof \PhpParser\Node\Expr) {
-                $subNode->expr = new \PhpParser\Node\Scalar\String_('');
+            if (!$subNode->expr instanceof Expr) {
+                $subNode->expr = new String_('');
                 return null;
             }
             $type = $this->nodeTypeResolver->getType($subNode->expr);
-            if ($type instanceof \PHPStan\Type\StringType) {
+            if ($type instanceof StringType) {
                 return null;
             }
-            $subNode->expr = new \PhpParser\Node\Expr\Cast\String_($subNode->expr);
+            $subNode->expr = new CastString_($subNode->expr);
             return null;
         });
     }

@@ -39,37 +39,37 @@ final class RegexFuncAnalyzer
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, ValueResolver $valueResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
         $this->valueResolver = $valueResolver;
     }
-    public function isRegexFunctionNames(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    public function isRegexFunctionNames(FuncCall $funcCall) : bool
     {
         if ($this->nodeNameResolver->isNames($funcCall, self::REGEX_FUNCTION_NAMES)) {
             return \true;
         }
         $variable = $funcCall->name;
-        if (!$variable instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$variable instanceof Variable) {
             return \false;
         }
         /** @var Assign|null $assignExprVariable */
-        $assignExprVariable = $this->betterNodeFinder->findFirstPrevious($funcCall, function (\PhpParser\Node $node) use($variable) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        $assignExprVariable = $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $node) use($variable) : bool {
+            if (!$node instanceof Assign) {
                 return \false;
             }
             return $this->nodeComparator->areNodesEqual($node->var, $variable);
         });
-        if (!$assignExprVariable instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$assignExprVariable instanceof Assign) {
             return \false;
         }
         $expr = $assignExprVariable->expr;
-        if (!$expr instanceof \PhpParser\Node\Expr\Ternary) {
+        if (!$expr instanceof Ternary) {
             return \false;
         }
-        if (!$expr->if instanceof \PhpParser\Node\Expr) {
+        if (!$expr->if instanceof Expr) {
             return \false;
         }
         if (!$this->valueResolver->isValues($expr->if, self::REGEX_FUNCTION_NAMES)) {

@@ -7,18 +7,18 @@ use PhpParser\Node\FunctionLike;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-final class ReturnTagReturnTypeInfererTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
+final class ReturnTagReturnTypeInfererTypeInferer implements ReturnTypeInfererInterface
 {
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
+    public function inferFunctionLike(FunctionLike $functionLike) : Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         return $phpDocInfo->getReturnType();

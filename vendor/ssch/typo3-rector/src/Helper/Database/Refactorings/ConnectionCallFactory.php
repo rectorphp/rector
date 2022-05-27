@@ -14,13 +14,13 @@ final class ConnectionCallFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function createConnectionCall(\PhpParser\Node\Arg $firstArgument) : \PhpParser\Node\Expr\Assign
+    public function createConnectionCall(Arg $firstArgument) : Assign
     {
         $connection = $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Database\\ConnectionPool')]), 'getConnectionForTable', [$this->nodeFactory->createArg($firstArgument->value)]);
-        return new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('connection'), $connection);
+        return new Assign(new Variable('connection'), $connection);
     }
 }

@@ -14,10 +14,10 @@ use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 # https://laravel-news.com/laravel-5-8-deprecates-string-and-array-helpers
 # https://github.com/laravel/framework/pull/26898
 # see: https://laravel.com/docs/5.8/upgrade
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/laravel-array-str-functions-to-static-call.php');
-    $rectorConfig->rule(\Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector::class);
-    $rectorConfig->ruleWithConfiguration(\Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector::class, [new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Repository', 'put', new \PHPStan\Type\BooleanType()), new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Repository', 'forever', new \PHPStan\Type\BooleanType()), new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Store', 'put', new \PHPStan\Type\BooleanType()), new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Store', 'putMany', new \PHPStan\Type\BooleanType()), new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Store', 'forever', new \PHPStan\Type\BooleanType())]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector::class, [new \Rector\Renaming\ValueObject\RenameProperty('Illuminate\\Routing\\UrlGenerator', 'cachedSchema', 'cachedScheme')]);
-    $rectorConfig->rule(\Rector\Laravel\Rector\Class_\PropertyDeferToDeferrableProviderToRector::class);
+    $rectorConfig->rule(MinutesToSecondsInCacheRector::class);
+    $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [new AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Repository', 'put', new BooleanType()), new AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Repository', 'forever', new BooleanType()), new AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Store', 'put', new BooleanType()), new AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Store', 'putMany', new BooleanType()), new AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Store', 'forever', new BooleanType())]);
+    $rectorConfig->ruleWithConfiguration(RenamePropertyRector::class, [new RenameProperty('Illuminate\\Routing\\UrlGenerator', 'cachedSchema', 'cachedScheme')]);
+    $rectorConfig->rule(PropertyDeferToDeferrableProviderToRector::class);
 };

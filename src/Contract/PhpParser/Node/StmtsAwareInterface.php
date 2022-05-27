@@ -8,6 +8,6 @@ use PhpParser\Node\Stmt;
 /**
  * @property Stmt[]|null $stmts
  */
-interface StmtsAwareInterface extends \PhpParser\Node
+interface StmtsAwareInterface extends Node
 {
 }

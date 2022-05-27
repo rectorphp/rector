@@ -6,19 +6,19 @@ namespace RectorPrefix20220527\OndraM\CiDetector\Ci;
 use RectorPrefix20220527\OndraM\CiDetector\CiDetector;
 use RectorPrefix20220527\OndraM\CiDetector\Env;
 use RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic;
-class TeamCity extends \RectorPrefix20220527\OndraM\CiDetector\Ci\AbstractCi
+class TeamCity extends AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220527\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(Env $env) : bool
     {
         return $env->get('TEAMCITY_VERSION') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220527\OndraM\CiDetector\CiDetector::CI_TEAMCITY;
+        return CiDetector::CI_TEAMCITY;
     }
-    public function isPullRequest() : \RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : TrinaryLogic
     {
-        return \RectorPrefix20220527\OndraM\CiDetector\TrinaryLogic::createMaybe();
+        return TrinaryLogic::createMaybe();
     }
     public function getBuildNumber() : string
     {

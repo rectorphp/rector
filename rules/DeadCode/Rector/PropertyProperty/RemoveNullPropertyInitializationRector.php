@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector\RemoveNullPropertyInitializationRectorTest
  */
-final class RemoveNullPropertyInitializationRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveNullPropertyInitializationRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove initialization with null value from property declarations', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove initialization with null value from property declarations', [new CodeSample(<<<'CODE_SAMPLE'
 class SunshineCommand extends ParentClassWithNewConstructor
 {
     private $myVar = null;
@@ -40,30 +40,30 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\PropertyProperty::class];
+        return [PropertyProperty::class];
     }
     /**
      * @param PropertyProperty $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         // skip typed properties
-        if ($parent instanceof \PhpParser\Node\Stmt\Property && $parent->type !== null) {
+        if ($parent instanceof Property && $parent->type !== null) {
             return null;
         }
         $defaultValueNode = $node->default;
-        if (!$defaultValueNode instanceof \PhpParser\Node\Expr) {
+        if (!$defaultValueNode instanceof Expr) {
             return null;
         }
-        if (!$defaultValueNode instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if (!$defaultValueNode instanceof ConstFetch) {
             return null;
         }
-        if (\strtolower((string) $defaultValueNode->name) !== 'null') {
+        if (strtolower((string) $defaultValueNode->name) !== 'null') {
             return null;
         }
-        $nodeNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-        if ($nodeNode instanceof \PhpParser\Node\NullableType) {
+        $nodeNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($nodeNode instanceof NullableType) {
             return null;
         }
         $node->default = null;

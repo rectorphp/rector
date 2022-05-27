@@ -19,42 +19,42 @@ final class ControllerAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isController(\PhpParser\Node\Expr $expr) : bool
+    public function isController(Expr $expr) : bool
     {
-        $scope = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
         // might be missing in a trait
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        if (!$scope instanceof Scope) {
             return \false;
         }
         $nodeType = $scope->getType($expr);
-        if (!$nodeType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$nodeType instanceof TypeWithClassName) {
             return \false;
         }
-        if ($nodeType instanceof \PHPStan\Type\ThisType) {
+        if ($nodeType instanceof ThisType) {
             $nodeType = $nodeType->getStaticObjectType();
         }
-        if (!$nodeType instanceof \PHPStan\Type\ObjectType) {
+        if (!$nodeType instanceof ObjectType) {
             return \false;
         }
         $classReflection = $nodeType->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         return $this->isControllerClassReflection($classReflection);
     }
-    public function isInsideController(\PhpParser\Node $node) : bool
+    public function isInsideController(Node $node) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         return $this->isControllerClassReflection($classReflection);
     }
-    private function isControllerClassReflection(\PHPStan\Reflection\ClassReflection $classReflection) : bool
+    private function isControllerClassReflection(ClassReflection $classReflection) : bool
     {
         if ($classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller')) {
             return \true;

@@ -12,7 +12,7 @@ use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
-final class ConstructorFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
+final class ConstructorFormControlTypeResolver implements FormControlTypeResolverInterface
 {
     /**
      * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
@@ -28,7 +28,7 @@ final class ConstructorFormControlTypeResolver implements \Rector\Nette\Contract
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -36,23 +36,23 @@ final class ConstructorFormControlTypeResolver implements \Rector\Nette\Contract
     /**
      * @required
      */
-    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
     /**
      * @return array<string, string>
      */
-    public function resolve(\PhpParser\Node $node) : array
+    public function resolve(Node $node) : array
     {
-        if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$node instanceof ClassMethod) {
             return [];
         }
-        if (!$this->nodeNameResolver->isName($node, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if (!$this->nodeNameResolver->isName($node, MethodName::CONSTRUCT)) {
             return [];
         }
         $thisVariable = $this->betterNodeFinder->findVariableOfName($node, 'this');
-        if (!$thisVariable instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$thisVariable instanceof Variable) {
             return [];
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($thisVariable);

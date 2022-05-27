@@ -12,7 +12,7 @@ use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements PhpParserNodeMapperInterface<Node\IntersectionType>
  */
-final class IntersectionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
+final class IntersectionTypeNodeMapper implements PhpParserNodeMapperInterface
 {
     /**
      * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
@@ -21,23 +21,23 @@ final class IntersectionTypeNodeMapper implements \Rector\StaticTypeMapper\Contr
     /**
      * @required
      */
-    public function autowire(\Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper $phpParserNodeMapper) : void
+    public function autowire(PhpParserNodeMapper $phpParserNodeMapper) : void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
     public function getNodeType() : string
     {
-        return \PhpParser\Node\IntersectionType::class;
+        return Node\IntersectionType::class;
     }
     /**
      * @param Node\IntersectionType $node
      */
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function mapToPHPStan(Node $node) : Type
     {
         $types = [];
         foreach ($node->types as $intersectionedType) {
             $types[] = $this->phpParserNodeMapper->mapToPHPStanType($intersectionedType);
         }
-        return new \PHPStan\Type\IntersectionType($types);
+        return new IntersectionType($types);
     }
 }

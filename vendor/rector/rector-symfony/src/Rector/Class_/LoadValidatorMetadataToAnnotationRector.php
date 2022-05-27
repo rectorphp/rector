@@ -17,20 +17,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\Class_\LoadValidatorMetadataToAnnotationRector\LoadValidatorMetadataToAnnotationRectorTest
  */
-final class LoadValidatorMetadataToAnnotationRector extends \Rector\Core\Rector\AbstractRector
+final class LoadValidatorMetadataToAnnotationRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\Annotations\ConstraintAnnotationResolver
      */
     private $constraintAnnotationResolver;
-    public function __construct(\Rector\Symfony\NodeAnalyzer\Annotations\ConstraintAnnotationResolver $constraintAnnotationResolver)
+    public function __construct(ConstraintAnnotationResolver $constraintAnnotationResolver)
     {
         $this->constraintAnnotationResolver = $constraintAnnotationResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move metadata from loadValidatorMetadata() to property/getter/method annotations', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move metadata from loadValidatorMetadata() to property/getter/method annotations', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
@@ -65,22 +65,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $loadValidatorMetadataClassMethod = $node->getMethod('loadValidatorMetadata');
-        if (!$loadValidatorMetadataClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$loadValidatorMetadataClassMethod instanceof ClassMethod) {
             return null;
         }
         // @todo extract annotations from loadValidatorMetadata()
         $annotationsToMethodNames = $this->constraintAnnotationResolver->resolveGetterTagValueNodes($loadValidatorMetadataClassMethod);
         foreach ($annotationsToMethodNames as $methodName => $doctrineTagValueNode) {
             $classMethod = $node->getMethod($methodName);
-            if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            if (!$classMethod instanceof ClassMethod) {
                 continue;
             }
             $getterPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
@@ -89,7 +89,7 @@ CODE_SAMPLE
         $annotationsToPropertyNames = $this->constraintAnnotationResolver->resolvePropertyTagValueNodes($loadValidatorMetadataClassMethod);
         foreach ($annotationsToPropertyNames as $propertyName => $doctrineTagValueNode) {
             $property = $node->getProperty($propertyName);
-            if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+            if (!$property instanceof Property) {
                 continue;
             }
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);

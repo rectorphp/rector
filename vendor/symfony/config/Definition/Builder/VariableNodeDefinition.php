@@ -17,19 +17,19 @@ use RectorPrefix20220527\Symfony\Component\Config\Definition\VariableNode;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class VariableNodeDefinition extends \RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\NodeDefinition
+class VariableNodeDefinition extends NodeDefinition
 {
     /**
      * Instantiate a Node.
      */
-    protected function instantiateNode() : \RectorPrefix20220527\Symfony\Component\Config\Definition\VariableNode
+    protected function instantiateNode() : VariableNode
     {
-        return new \RectorPrefix20220527\Symfony\Component\Config\Definition\VariableNode($this->name, $this->parent, $this->pathSeparator);
+        return new VariableNode($this->name, $this->parent, $this->pathSeparator);
     }
     /**
      * {@inheritdoc}
      */
-    protected function createNode() : \RectorPrefix20220527\Symfony\Component\Config\Definition\NodeInterface
+    protected function createNode() : NodeInterface
     {
         $node = $this->instantiateNode();
         if (null !== $this->normalization) {

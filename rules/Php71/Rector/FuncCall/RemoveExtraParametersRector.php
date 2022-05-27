@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\RemoveExtraParametersRectorTest
  */
-final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class RemoveExtraParametersRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -38,43 +38,43 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Core\NodeAnalyzer\VariadicAnalyzer $variadicAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(VariadicAnalyzer $variadicAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->variadicAnalyzer = $variadicAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::NO_EXTRA_PARAMETERS;
+        return PhpVersionFeature::NO_EXTRA_PARAMETERS;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove extra parameters', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('strlen("asdf", 1);', 'strlen("asdf");')]);
+        return new RuleDefinition('Remove extra parameters', [new CodeSample('strlen("asdf", 1);', 'strlen("asdf");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [FuncCall::class, MethodCall::class, StaticCall::class];
     }
     /**
      * @param FuncCall|MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         // unreliable count of arguments
         $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
-        if ($functionLikeReflection instanceof \PHPStan\Reflection\Type\UnionTypeMethodReflection) {
+        if ($functionLikeReflection instanceof UnionTypeMethodReflection) {
             return null;
         }
         if ($functionLikeReflection === null) {
             return null;
         }
-        if ($functionLikeReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
+        if ($functionLikeReflection instanceof PhpMethodReflection) {
             $classReflection = $functionLikeReflection->getDeclaringClass();
             if ($classReflection->isInterface()) {
                 return null;
@@ -99,11 +99,11 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
         if ($call->args === []) {
             return \true;
         }
-        if ($call instanceof \PhpParser\Node\Expr\StaticCall) {
-            if (!$call->class instanceof \PhpParser\Node\Name) {
+        if ($call instanceof StaticCall) {
+            if (!$call->class instanceof Name) {
                 return \true;
             }
-            if ($this->isName($call->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+            if ($this->isName($call->class, ObjectReference::PARENT()->getValue())) {
                 return \true;
             }
         }

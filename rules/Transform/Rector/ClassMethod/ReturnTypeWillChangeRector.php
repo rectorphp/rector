@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Transform\Rector\ClassMethod\ReturnTypeWillChangeRector\ReturnTypeWillChangeRectorTest
  */
-final class ReturnTypeWillChangeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ReturnTypeWillChangeRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @var array<string, string[]>
@@ -37,14 +37,14 @@ final class ReturnTypeWillChangeRector extends \Rector\Core\Rector\AbstractRecto
      * @var \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
-    public function __construct(\Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory)
+    public function __construct(PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory)
     {
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add #[\\ReturnTypeWillChange] attribute to configured instanceof class with methods', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add #[\\ReturnTypeWillChange] attribute to configured instanceof class with methods', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass implements ArrayAccess
 {
     public function offsetGet($offset)
@@ -68,12 +68,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->phpAttributeAnalyzer->hasPhpAttribute($node, 'ReturnTypeWillChange')) {
             return null;
@@ -81,25 +81,25 @@ CODE_SAMPLE
         if ($node->returnType !== null) {
             return null;
         }
-        $classLike = $this->betterNodeFinder->findParentByTypes($node, [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Interface_::class]);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentByTypes($node, [Class_::class, Interface_::class]);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         /** @var array<string, string[]> $classMethodsOfClass */
         $classMethodsOfClass = \array_merge_recursive($this->resolveDefaultConfig(), $this->classMethodsOfClass);
         $className = (string) $this->nodeNameResolver->getName($classLike);
-        $objectType = new \PHPStan\Type\ObjectType($className);
+        $objectType = new ObjectType($className);
         $methodName = $this->nodeNameResolver->getName($node);
         $hasChanged = \false;
         foreach ($classMethodsOfClass as $class => $methods) {
-            $configuredClassObjectType = new \PHPStan\Type\ObjectType($class);
+            $configuredClassObjectType = new ObjectType($class);
             if (!$configuredClassObjectType->isSuperTypeOf($objectType)->yes()) {
                 continue;
             }
             if (!\in_array($methodName, $methods, \true)) {
                 continue;
             }
-            $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(\Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator::RETURN_TYPE_WILL_CHANGE_ATTRIBUTE);
+            $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(PhpDocFromTypeDeclarationDecorator::RETURN_TYPE_WILL_CHANGE_ATTRIBUTE);
             $node->attrGroups[] = $attributeGroup;
             $hasChanged = \true;
             break;
@@ -118,7 +118,7 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::RETURN_TYPE_WILL_CHANGE_ATTRIBUTE;
+        return PhpVersionFeature::RETURN_TYPE_WILL_CHANGE_ATTRIBUTE;
     }
     /**
      * @return array<string, string[]>
@@ -126,7 +126,7 @@ CODE_SAMPLE
     private function resolveDefaultConfig() : array
     {
         $configuration = [];
-        foreach (\Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator::ADD_RETURN_TYPE_WILL_CHANGE as $classWithMethods) {
+        foreach (PhpDocFromTypeDeclarationDecorator::ADD_RETURN_TYPE_WILL_CHANGE as $classWithMethods) {
             foreach ($classWithMethods as $class => $methods) {
                 $configuration[$class] = \array_merge($configuration[$class] ?? [], $methods);
             }

@@ -16,7 +16,7 @@ use RectorPrefix20220527\React\Stream\WritableStreamInterface;
  * @see ConnectionInterface
  * @internal
  */
-class Connection extends \RectorPrefix20220527\Evenement\EventEmitter implements \RectorPrefix20220527\React\Socket\ConnectionInterface
+class Connection extends EventEmitter implements ConnectionInterface
 {
     /**
      * Internal flag whether this is a Unix domain socket (UDS) connection
@@ -36,7 +36,7 @@ class Connection extends \RectorPrefix20220527\Evenement\EventEmitter implements
     /** @internal */
     public $stream;
     private $input;
-    public function __construct($resource, \RectorPrefix20220527\React\EventLoop\LoopInterface $loop)
+    public function __construct($resource, LoopInterface $loop)
     {
         // PHP < 7.3.3 (and PHP < 7.2.15) suffers from a bug where feof() might
         // block with 100% CPU usage on fragmented TLS records.
@@ -57,9 +57,9 @@ class Connection extends \RectorPrefix20220527\Evenement\EventEmitter implements
         // This applies to all streams because TLS may be enabled later on.
         // See https://github.com/reactphp/socket/issues/105
         $limitWriteChunks = \PHP_VERSION_ID < 70018 || \PHP_VERSION_ID >= 70100 && \PHP_VERSION_ID < 70104;
-        $this->input = new \RectorPrefix20220527\React\Stream\DuplexResourceStream($resource, $loop, $clearCompleteBuffer ? -1 : null, new \RectorPrefix20220527\React\Stream\WritableResourceStream($resource, $loop, null, $limitWriteChunks ? 8192 : null));
+        $this->input = new DuplexResourceStream($resource, $loop, $clearCompleteBuffer ? -1 : null, new WritableResourceStream($resource, $loop, null, $limitWriteChunks ? 8192 : null));
         $this->stream = $resource;
-        \RectorPrefix20220527\React\Stream\Util::forwardEvents($this->input, $this, array('data', 'end', 'error', 'close', 'pipe', 'drain'));
+        Util::forwardEvents($this->input, $this, array('data', 'end', 'error', 'close', 'pipe', 'drain'));
         $this->input->on('close', array($this, 'close'));
     }
     public function isReadable()
@@ -78,7 +78,7 @@ class Connection extends \RectorPrefix20220527\Evenement\EventEmitter implements
     {
         $this->input->resume();
     }
-    public function pipe(\RectorPrefix20220527\React\Stream\WritableStreamInterface $dest, array $options = array())
+    public function pipe(WritableStreamInterface $dest, array $options = array())
     {
         return $this->input->pipe($dest, $options);
     }
@@ -132,13 +132,13 @@ class Connection extends \RectorPrefix20220527\Evenement\EventEmitter implements
         if ($this->unix) {
             // remove trailing colon from address for HHVM < 3.19: https://3v4l.org/5C1lo
             // note that technically ":" is a valid address, so keep this in place otherwise
-            if (\substr($address, -1) === ':' && \defined('HHVM_VERSION_ID') && \HHVM_VERSION_ID < 31900) {
+            if (\substr($address, -1) === ':' && \defined('RectorPrefix20220527\\HHVM_VERSION_ID') && \RectorPrefix20220527\HHVM_VERSION_ID < 31900) {
                 $address = (string) \substr($address, 0, -1);
                 // @codeCoverageIgnore
             }
             // work around unknown addresses should return null value: https://3v4l.org/5C1lo and https://bugs.php.net/bug.php?id=74556
             // PHP uses "\0" string and HHVM uses empty string (colon removed above)
-            if ($address === '' || $address[0] === "\0") {
+            if ($address === '' || $address[0] === "\x00") {
                 return null;
                 // @codeCoverageIgnore
             }

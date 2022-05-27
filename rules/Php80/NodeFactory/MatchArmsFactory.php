@@ -17,12 +17,12 @@ final class MatchArmsFactory
         $matchArms = [];
         foreach ($condAndExprs as $condAndExpr) {
             $expr = $condAndExpr->getExpr();
-            if ($expr instanceof \PhpParser\Node\Expr\Assign) {
+            if ($expr instanceof Assign) {
                 // $this->assignExpr = $expr->var;
                 $expr = $expr->expr;
             }
             $condExprs = $condAndExpr->getCondExprs();
-            $matchArms[] = new \PhpParser\Node\MatchArm($condExprs, $expr);
+            $matchArms[] = new MatchArm($condExprs, $expr);
         }
         return $matchArms;
     }

@@ -19,5 +19,5 @@ interface ConfigurableInterface
     /**
      * Generates the configuration tree builder.
      */
-    public function configure(\RectorPrefix20220527\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator $definition) : void;
+    public function configure(DefinitionConfigurator $definition) : void;
 }

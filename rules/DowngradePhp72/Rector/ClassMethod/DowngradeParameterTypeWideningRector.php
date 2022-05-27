@@ -25,7 +25,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
  */
-final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface
+final class DowngradeParameterTypeWideningRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface
 {
     /**
      * @var array<string, string[]>
@@ -61,7 +61,7 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      * @var \Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer
      */
     private $sealedClassAnalyzer;
-    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer $builtInMethodAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer $sealedClassAnalyzer)
+    public function __construct(NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, ReflectionResolver $reflectionResolver, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, BuiltInMethodAnalyzer $builtInMethodAnalyzer, OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer, SealedClassAnalyzer $sealedClassAnalyzer)
     {
         $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
         $this->reflectionResolver = $reflectionResolver;
@@ -70,9 +70,9 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
         $this->overrideFromAnonymousClassMethodAnalyzer = $overrideFromAnonymousClassMethodAnalyzer;
         $this->sealedClassAnalyzer = $sealedClassAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change param type to match the lowest type in whole family tree', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change param type to match the lowest type in whole family tree', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 interface SomeInterface
 {
     public function test(array $input);
@@ -108,19 +108,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         $ancestorOverridableAnonymousClass = $this->overrideFromAnonymousClassMethodAnalyzer->matchAncestorClassReflectionOverrideable($classLike, $node);
-        if ($ancestorOverridableAnonymousClass instanceof \PHPStan\Reflection\ClassReflection) {
+        if ($ancestorOverridableAnonymousClass instanceof ClassReflection) {
             return $this->processRemoveParamTypeFromMethod($ancestorOverridableAnonymousClass, $node);
         }
         $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($classLike);
@@ -133,12 +133,12 @@ CODE_SAMPLE
     {
         $unsafeTypesToMethods = $configuration;
         foreach ($unsafeTypesToMethods as $key => $value) {
-            \RectorPrefix20220527\Webmozart\Assert\Assert::string($key);
-            \RectorPrefix20220527\Webmozart\Assert\Assert::allString($value);
+            Assert::string($key);
+            Assert::allString($value);
         }
         $this->unsafeTypesToMethods = $unsafeTypesToMethods;
     }
-    private function shouldSkip(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassReflection $classReflection, ClassMethod $classMethod) : bool
     {
         if ($classMethod->params === []) {
             return \true;
@@ -160,7 +160,7 @@ CODE_SAMPLE
         }
         return $this->isSafeType($classReflection, $classMethod);
     }
-    private function processRemoveParamTypeFromMethod(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function processRemoveParamTypeFromMethod(ClassReflection $classReflection, ClassMethod $classMethod) : ?ClassMethod
     {
         if ($this->shouldSkip($classReflection, $classMethod)) {
             return null;
@@ -174,17 +174,17 @@ CODE_SAMPLE
         }
         return $classMethod;
     }
-    private function removeParamTypeFromMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, int $paramPosition) : void
+    private function removeParamTypeFromMethod(ClassMethod $classMethod, int $paramPosition) : void
     {
         $param = $classMethod->params[$paramPosition] ?? null;
-        if (!$param instanceof \PhpParser\Node\Param) {
+        if (!$param instanceof Param) {
             return;
         }
         // Add the current type in the PHPDoc
         $this->nativeParamToPhpDocDecorator->decorate($classMethod, $param);
         $param->type = null;
     }
-    private function hasParamAlreadyNonTyped(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function hasParamAlreadyNonTyped(ClassMethod $classMethod) : bool
     {
         foreach ($classMethod->params as $param) {
             if ($param->type !== null) {
@@ -193,7 +193,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function isSafeType(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isSafeType(ClassReflection $classReflection, ClassMethod $classMethod) : bool
     {
         if ($this->unsafeTypesToMethods === []) {
             return \false;

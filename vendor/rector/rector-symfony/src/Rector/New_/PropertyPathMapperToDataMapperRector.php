@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
  * @see \Rector\Symfony\Tests\Rector\New_\PropertyPathMapperToDataMapperRector\PropertyPathMapperToDataMapperRectorTest
  */
-final class PropertyPathMapperToDataMapperRector extends \Rector\Core\Rector\AbstractRector
+final class PropertyPathMapperToDataMapperRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate from PropertyPathMapper to DataMapper and PropertyPathAccessor', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Migrate from PropertyPathMapper to DataMapper and PropertyPathAccessor', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
 
 class SomeClass
@@ -47,32 +47,32 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\New_::class];
+        return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         return $this->generateNewInstances($node);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\New_ $new) : bool
+    private function shouldSkip(New_ $new) : bool
     {
-        if (!$new->class instanceof \PhpParser\Node\Name) {
+        if (!$new->class instanceof Name) {
             return \true;
         }
         return !$this->isName($new->class, 'Symfony\\Component\\Form\\Extension\\Core\\DataMapper\\PropertyPathMapper');
     }
-    private function generateNewInstances(\PhpParser\Node\Expr\New_ $new) : \PhpParser\Node\Expr\New_
+    private function generateNewInstances(New_ $new) : New_
     {
         $arguments = [];
         if (isset($new->args[0])) {
             $arguments = [$new->args[0]];
         }
-        $new = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Form\\Extension\\Core\\DataAccessor\\PropertyPathAccessor'), $arguments);
-        return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Form\\Extension\\Core\\DataMapper\\DataMapper'), [$this->nodeFactory->createArg($new)]);
+        $new = new New_(new FullyQualified('Symfony\\Component\\Form\\Extension\\Core\\DataAccessor\\PropertyPathAccessor'), $arguments);
+        return new New_(new FullyQualified('Symfony\\Component\\Form\\Extension\\Core\\DataMapper\\DataMapper'), [$this->nodeFactory->createArg($new)]);
     }
 }

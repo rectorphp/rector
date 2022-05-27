@@ -10,7 +10,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-final class AliasedObjectType extends \PHPStan\Type\ObjectType
+final class AliasedObjectType extends ObjectType
 {
     /**
      * @readonly
@@ -26,11 +26,11 @@ final class AliasedObjectType extends \PHPStan\Type\ObjectType
     {
         return $this->fullyQualifiedClass;
     }
-    public function getUseNode() : \PhpParser\Node\Stmt\Use_
+    public function getUseNode() : Use_
     {
-        $name = new \PhpParser\Node\Name($this->fullyQualifiedClass);
-        $useUse = new \PhpParser\Node\Stmt\UseUse($name, $this->getClassName());
-        return new \PhpParser\Node\Stmt\Use_([$useUse]);
+        $name = new Name($this->fullyQualifiedClass);
+        $useUse = new UseUse($name, $this->getClassName());
+        return new Use_([$useUse]);
     }
     public function getShortName() : string
     {
@@ -43,19 +43,19 @@ final class AliasedObjectType extends \PHPStan\Type\ObjectType
     {
         return $this->getShortName() === $comparedObjectType->getShortName();
     }
-    public function getFunctionUseNode() : \PhpParser\Node\Stmt\Use_
+    public function getFunctionUseNode() : Use_
     {
-        $name = new \PhpParser\Node\Name($this->fullyQualifiedClass);
-        $useUse = new \PhpParser\Node\Stmt\UseUse($name, $this->getClassName());
-        $name->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, $useUse);
-        $use = new \PhpParser\Node\Stmt\Use_([$useUse]);
-        $use->type = \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION;
+        $name = new Name($this->fullyQualifiedClass);
+        $useUse = new UseUse($name, $this->getClassName());
+        $name->setAttribute(AttributeKey::PARENT_NODE, $useUse);
+        $use = new Use_([$useUse]);
+        $use->type = Use_::TYPE_FUNCTION;
         return $use;
     }
-    public function equals(\PHPStan\Type\Type $type) : bool
+    public function equals(Type $type) : bool
     {
         // compare with FQN classes
-        if ($type instanceof \PHPStan\Type\TypeWithClassName) {
+        if ($type instanceof TypeWithClassName) {
             if ($type instanceof self && $this->fullyQualifiedClass === $type->getFullyQualifiedName()) {
                 return \true;
             }

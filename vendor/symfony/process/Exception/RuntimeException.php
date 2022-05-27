@@ -15,6 +15,6 @@ namespace RectorPrefix20220527\Symfony\Component\Process\Exception;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class RuntimeException extends \RuntimeException implements \RectorPrefix20220527\Symfony\Component\Process\Exception\ExceptionInterface
+class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
 }

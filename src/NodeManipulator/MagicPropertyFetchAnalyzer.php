@@ -37,7 +37,7 @@ final class MagicPropertyFetchAnalyzer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -46,13 +46,13 @@ final class MagicPropertyFetchAnalyzer
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
-    public function isMagicOnType($expr, \PHPStan\Type\Type $type) : bool
+    public function isMagicOnType($expr, Type $type) : bool
     {
         $varNodeType = $this->nodeTypeResolver->getType($expr);
-        if ($varNodeType instanceof \PHPStan\Type\ErrorType) {
+        if ($varNodeType instanceof ErrorType) {
             return \true;
         }
-        if ($varNodeType instanceof \PHPStan\Type\MixedType) {
+        if ($varNodeType instanceof MixedType) {
             return \false;
         }
         if ($varNodeType->isSuperTypeOf($type)->yes()) {
@@ -69,16 +69,16 @@ final class MagicPropertyFetchAnalyzer
      */
     private function hasPublicProperty($expr, string $propertyName) : bool
     {
-        $scope = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            throw new ShouldNotHappenException();
         }
-        if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if ($expr instanceof PropertyFetch) {
             $propertyFetchType = $scope->getType($expr->var);
         } else {
             $propertyFetchType = $this->nodeTypeResolver->getType($expr->class);
         }
-        if (!$propertyFetchType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$propertyFetchType instanceof TypeWithClassName) {
             return \false;
         }
         $propertyFetchType = $propertyFetchType->getClassName();

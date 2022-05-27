@@ -19,12 +19,12 @@ final class BuiltInMethodAnalyzer
      * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
     private $classChildAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, ClassChildAnalyzer $classChildAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classChildAnalyzer = $classChildAnalyzer;
     }
-    public function isImplementsBuiltInInterface(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function isImplementsBuiltInInterface(ClassReflection $classReflection, ClassMethod $classMethod) : bool
     {
         if (!$classReflection->isClass()) {
             return \false;

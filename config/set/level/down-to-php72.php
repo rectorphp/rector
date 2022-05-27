@@ -6,6 +6,6 @@ namespace RectorPrefix20220527;
 use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\Set\ValueObject\DowngradeSetList;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->sets([\Rector\Set\ValueObject\DowngradeLevelSetList::DOWN_TO_PHP_73, \Rector\Set\ValueObject\DowngradeSetList::PHP_73]);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->sets([DowngradeLevelSetList::DOWN_TO_PHP_73, DowngradeSetList::PHP_73]);
 };

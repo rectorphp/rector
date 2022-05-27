@@ -43,9 +43,9 @@ class InputStream implements \IteratorAggregate
             return;
         }
         if ($this->isClosed()) {
-            throw new \RectorPrefix20220527\Symfony\Component\Process\Exception\RuntimeException(\sprintf('"%s" is closed.', static::class));
+            throw new RuntimeException(\sprintf('"%s" is closed.', static::class));
         }
-        $this->input[] = \RectorPrefix20220527\Symfony\Component\Process\ProcessUtils::validateInput(__METHOD__, $input);
+        $this->input[] = ProcessUtils::validateInput(__METHOD__, $input);
     }
     /**
      * Closes the write buffer.

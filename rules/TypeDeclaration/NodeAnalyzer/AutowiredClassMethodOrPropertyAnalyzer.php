@@ -21,7 +21,7 @@ final class AutowiredClassMethodOrPropertyAnalyzer
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
@@ -35,6 +35,6 @@ final class AutowiredClassMethodOrPropertyAnalyzer
         if ($nodePhpDocInfo->hasByNames(['required', 'inject'])) {
             return \true;
         }
-        return $this->phpAttributeAnalyzer->hasPhpAttributes($node, [\RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject']);
+        return $this->phpAttributeAnalyzer->hasPhpAttributes($node, [Required::class, 'Nette\\DI\\Attributes\\Inject']);
     }
 }

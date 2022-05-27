@@ -13,7 +13,7 @@ use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements PhpParserNodeMapperInterface<UnionType>
  */
-final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
+final class UnionTypeNodeMapper implements PhpParserNodeMapperInterface
 {
     /**
      * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
@@ -24,25 +24,25 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
+    public function __construct(TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;
     }
     /**
      * @required
      */
-    public function autowire(\Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper $phpParserNodeMapper) : void
+    public function autowire(PhpParserNodeMapper $phpParserNodeMapper) : void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
     public function getNodeType() : string
     {
-        return \PhpParser\Node\UnionType::class;
+        return UnionType::class;
     }
     /**
      * @param UnionType $node
      */
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function mapToPHPStan(Node $node) : Type
     {
         $types = [];
         foreach ($node->types as $unionedType) {

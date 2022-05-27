@@ -13,20 +13,20 @@ final class ContainerServiceProvider
      * @var \Rector\Core\Configuration\RectorConfigProvider
      */
     private $rectorConfigProvider;
-    public function __construct(\Rector\Core\Configuration\RectorConfigProvider $rectorConfigProvider)
+    public function __construct(RectorConfigProvider $rectorConfigProvider)
     {
         $this->rectorConfigProvider = $rectorConfigProvider;
     }
     public function provideByName(string $serviceName) : object
     {
         $symfonyContainerPhp = $this->rectorConfigProvider->getSymfonyContainerPhp();
-        \RectorPrefix20220527\Webmozart\Assert\Assert::fileExists($symfonyContainerPhp);
+        Assert::fileExists($symfonyContainerPhp);
         $container = (require_once $symfonyContainerPhp);
         // this allows older Symfony versions, e.g. 2.8 did not have the PSR yet
-        \RectorPrefix20220527\Webmozart\Assert\Assert::isInstanceOf($container, 'Symfony\\Component\\DependencyInjection\\Container');
+        Assert::isInstanceOf($container, 'Symfony\\Component\\DependencyInjection\\Container');
         if (!$container->has($serviceName)) {
             $errorMessage = \sprintf('Symfony container has no service "%s", maybe it is private', 'router');
-            throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
+            throw new ShouldNotHappenException($errorMessage);
         }
         return $container->get($serviceName);
     }

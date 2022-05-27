@@ -5,8 +5,8 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\PIDupinRootlineConditionMatcher;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/../config.php');
     $services = $rectorConfig->services();
-    $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\PIDupinRootlineConditionMatcher::class);
+    $services->set(PIDupinRootlineConditionMatcher::class);
 };

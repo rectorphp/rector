@@ -23,28 +23,28 @@ final class GetSubscribedEventsArrayManipulator
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\RectorPrefix20220527\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ValueResolver $valueResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->valueResolver = $valueResolver;
     }
-    public function change(\PhpParser\Node\Expr\Array_ $array) : void
+    public function change(Array_ $array) : void
     {
         $arrayItems = \array_filter($array->items, function ($arrayItem) : bool {
             return $arrayItem !== null;
         });
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($arrayItems, function (\PhpParser\Node $node) : ?Node {
-            if (!$node instanceof \PhpParser\Node\Expr\ArrayItem) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($arrayItems, function (Node $node) : ?Node {
+            if (!$node instanceof ArrayItem) {
                 return null;
             }
-            foreach (\Rector\Nette\Kdyby\ValueObject\NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS as $netteEventProperty => $contributeEventClass) {
+            foreach (NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS as $netteEventProperty => $contributeEventClass) {
                 if ($node->key === null) {
                     continue;
                 }
                 if (!$this->valueResolver->isValue($node->key, $netteEventProperty)) {
                     continue;
                 }
-                $node->key = new \PhpParser\Node\Expr\ClassConstFetch(new \PhpParser\Node\Name\FullyQualified($contributeEventClass), 'class');
+                $node->key = new ClassConstFetch(new FullyQualified($contributeEventClass), 'class');
             }
             return $node;
         });

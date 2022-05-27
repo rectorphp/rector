@@ -16,21 +16,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Breaking-82414-RemoveCMSBaseViewHelperClasses.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\UseRenderingContextGetControllerContextRector\UseRenderingContextGetControllerContextRectorTest
  */
-final class UseRenderingContextGetControllerContextRector extends \Rector\Core\Rector\AbstractRector
+final class UseRenderingContextGetControllerContextRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $desiredObjectTypes = [new \PHPStan\Type\ObjectType('TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractViewHelper'), new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper')];
+        $desiredObjectTypes = [new ObjectType('TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractViewHelper'), new ObjectType('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper')];
         if (!$this->nodeTypeResolver->isObjectTypes($node, $desiredObjectTypes)) {
             return null;
         }
@@ -40,9 +40,9 @@ final class UseRenderingContextGetControllerContextRector extends \Rector\Core\R
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Get controllerContext from renderingContext', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Get controllerContext from renderingContext', [new CodeSample(<<<'CODE_SAMPLE'
 class MyViewHelperAccessingControllerContext extends AbstractViewHelper
 {
     public function render()
@@ -62,18 +62,18 @@ class MyViewHelperAccessingControllerContext extends AbstractViewHelper
 CODE_SAMPLE
 )]);
     }
-    private function replaceWithRenderingContextGetControllerContext(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function replaceWithRenderingContextGetControllerContext(Class_ $class) : void
     {
         foreach ($class->getMethods() as $classMethod) {
-            $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (\PhpParser\Node $node) {
-                if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) {
+                if (!$node instanceof PropertyFetch) {
                     return null;
                 }
                 if (!$this->isName($node, 'controllerContext')) {
                     return null;
                 }
-                $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-                if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var === $node) {
+                $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+                if ($parentNode instanceof Assign && $parentNode->var === $node) {
                     return null;
                 }
                 return $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch('this', 'renderingContext'), 'getControllerContext');

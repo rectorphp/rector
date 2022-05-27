@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp74\Rector\MethodCall\DowngradeReflectionGetTypeRector\DowngradeReflectionGetTypeRectorTest
  */
-final class DowngradeReflectionGetTypeRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeReflectionGetTypeRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade reflection $refleciton->getType() method call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade reflection $refleciton->getType() method call', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(ReflectionProperty $reflectionProperty)
@@ -54,27 +54,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node->name, 'getType')) {
             return null;
         }
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('ReflectionProperty'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('ReflectionProperty'))) {
             return null;
         }
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Expr\Instanceof_) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Instanceof_) {
             return null;
         }
-        $args = [new \PhpParser\Node\Arg($node->var), new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_('getType'))];
-        $ternary = new \PhpParser\Node\Expr\Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, $this->nodeFactory->createNull());
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Expr\Ternary) {
+        $args = [new Arg($node->var), new Arg(new String_('getType'))];
+        $ternary = new Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, $this->nodeFactory->createNull());
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof Ternary) {
             return $ternary;
         }
         if (!$this->nodeComparator->areNodesEqual($parent, $ternary)) {

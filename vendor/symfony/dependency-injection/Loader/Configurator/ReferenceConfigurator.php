@@ -14,14 +14,14 @@ use RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerInterfac
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ReferenceConfigurator extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
+class ReferenceConfigurator extends AbstractConfigurator
 {
     /** @internal
      * @var string */
     protected $id;
     /** @internal
      * @var int */
-    protected $invalidBehavior = \RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
+    protected $invalidBehavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
     public function __construct(string $id)
     {
         $this->id = $id;
@@ -31,7 +31,7 @@ class ReferenceConfigurator extends \RectorPrefix20220527\Symfony\Component\Depe
      */
     public final function ignoreOnInvalid()
     {
-        $this->invalidBehavior = \RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
+        $this->invalidBehavior = ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
         return $this;
     }
     /**
@@ -39,7 +39,7 @@ class ReferenceConfigurator extends \RectorPrefix20220527\Symfony\Component\Depe
      */
     public final function nullOnInvalid()
     {
-        $this->invalidBehavior = \RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE;
+        $this->invalidBehavior = ContainerInterface::NULL_ON_INVALID_REFERENCE;
         return $this;
     }
     /**
@@ -47,7 +47,7 @@ class ReferenceConfigurator extends \RectorPrefix20220527\Symfony\Component\Depe
      */
     public final function ignoreOnUninitialized()
     {
-        $this->invalidBehavior = \RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE;
+        $this->invalidBehavior = ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE;
         return $this;
     }
     public function __toString() : string

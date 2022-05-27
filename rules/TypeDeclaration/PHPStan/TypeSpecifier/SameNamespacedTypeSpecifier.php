@@ -9,18 +9,18 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\PHPStan\TypeWithClassTypeSpecifierInterface;
-final class SameNamespacedTypeSpecifier implements \Rector\TypeDeclaration\Contract\PHPStan\TypeWithClassTypeSpecifierInterface
+final class SameNamespacedTypeSpecifier implements TypeWithClassTypeSpecifierInterface
 {
     /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function match(\PHPStan\Type\ObjectType $objectType, \PHPStan\Analyser\Scope $scope) : bool
+    public function match(ObjectType $objectType, Scope $scope) : bool
     {
         $namespaceName = $scope->getNamespace();
         if ($namespaceName === null) {
@@ -29,9 +29,9 @@ final class SameNamespacedTypeSpecifier implements \Rector\TypeDeclaration\Contr
         $namespacedClassName = $namespaceName . '\\' . \ltrim($objectType->getClassName(), '\\');
         return $this->reflectionProvider->hasClass($namespacedClassName);
     }
-    public function resolveObjectReferenceType(\PHPStan\Type\ObjectType $objectType, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\TypeWithClassName
+    public function resolveObjectReferenceType(ObjectType $objectType, Scope $scope) : TypeWithClassName
     {
         $namespacedClassName = $scope->getNamespace() . '\\' . \ltrim($objectType->getClassName(), '\\');
-        return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($namespacedClassName);
+        return new FullyQualifiedObjectType($namespacedClassName);
     }
 }

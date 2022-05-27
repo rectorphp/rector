@@ -18,14 +18,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Breaking-82893-RemoveGlobalVariablePARSETIME_START.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\SubstituteConstantParsetimeStartRector\SubstituteConstantParsetimeStartRectorTest
  */
-final class SubstituteConstantParsetimeStartRector extends \Rector\Core\Rector\AbstractRector
+final class SubstituteConstantParsetimeStartRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -34,24 +34,24 @@ final class SubstituteConstantParsetimeStartRector extends \Rector\Core\Rector\A
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr::class];
+        return [Expr::class];
     }
     /**
      * @param Expr $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->typo3NodeResolver->isTypo3Global($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::PARSETIME_START)) {
+        if (!$this->typo3NodeResolver->isTypo3Global($node, Typo3NodeResolver::PARSETIME_START)) {
             return null;
         }
-        return $this->nodeFactory->createFuncCall('round', [new \PhpParser\Node\Expr\BinaryOp\Mul(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_('TYPO3_MISC')), new \PhpParser\Node\Scalar\String_('microtime_start')), new \PhpParser\Node\Scalar\LNumber(1000))]);
+        return $this->nodeFactory->createFuncCall('round', [new Mul(new ArrayDimFetch(new ArrayDimFetch(new Variable('GLOBALS'), new String_('TYPO3_MISC')), new String_('microtime_start')), new LNumber(1000))]);
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Substitute $GLOBALS[\'PARSETIME_START\'] with round($GLOBALS[\'TYPO3_MISC\'][\'microtime_start\'] * 1000)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Substitute $GLOBALS[\'PARSETIME_START\'] with round($GLOBALS[\'TYPO3_MISC\'][\'microtime_start\'] * 1000)', [new CodeSample(<<<'CODE_SAMPLE'
 $parseTime = $GLOBALS['PARSETIME_START'];
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

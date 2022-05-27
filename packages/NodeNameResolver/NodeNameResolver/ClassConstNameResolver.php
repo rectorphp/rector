@@ -11,7 +11,7 @@ use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeNameResolverInterface<ClassConst>
  */
-final class ClassConstNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class ClassConstNameResolver implements NodeNameResolverInterface
 {
     /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -20,18 +20,18 @@ final class ClassConstNameResolver implements \Rector\NodeNameResolver\Contract\
     /**
      * @required
      */
-    public function autowire(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
+    public function autowire(NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     public function getNode() : string
     {
-        return \PhpParser\Node\Stmt\ClassConst::class;
+        return ClassConst::class;
     }
     /**
      * @param ClassConst $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         if ($node->consts === []) {
             return null;

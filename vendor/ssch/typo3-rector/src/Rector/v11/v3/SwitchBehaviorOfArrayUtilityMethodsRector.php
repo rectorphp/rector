@@ -13,19 +13,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.3/Deprecation-94137-SwitchBehaviorOfArrayUtilityarrayDiffAssocRecursive.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v3\SwitchBehaviorOfArrayUtilityMethodsRector\SwitchBehaviorOfArrayUtilityMethodsRectorTest
  */
-final class SwitchBehaviorOfArrayUtilityMethodsRector extends \Rector\Core\Rector\AbstractRector
+final class SwitchBehaviorOfArrayUtilityMethodsRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -39,9 +39,9 @@ final class SwitchBehaviorOfArrayUtilityMethodsRector extends \Rector\Core\Recto
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Handles the methods arrayDiffAssocRecursive() and arrayDiffKeyRecursive() of ArrayUtility', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Handles the methods arrayDiffAssocRecursive() and arrayDiffKeyRecursive() of ArrayUtility', [new CodeSample(<<<'CODE_SAMPLE'
 $foo = ArrayUtility::arrayDiffAssocRecursive([], [], true);
 $bar = ArrayUtility::arrayDiffAssocRecursive([], [], false);
 $test = ArrayUtility::arrayDiffAssocRecursive([], []);
@@ -53,9 +53,9 @@ $test = ArrayUtility::arrayDiffKeyRecursive([], []);
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    private function shouldSkip(StaticCall $staticCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ArrayUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new ObjectType('TYPO3\\CMS\\Core\\Utility\\ArrayUtility'))) {
             return \true;
         }
         return !$this->isName($staticCall->name, 'arrayDiffAssocRecursive');

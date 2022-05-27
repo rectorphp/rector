@@ -31,70 +31,70 @@ abstract class PrettyPrinterAbstract
     protected $precedenceMap = [
         // [precedence, associativity]
         // where for precedence -1 is %left, 0 is %nonassoc and 1 is %right
-        \PhpParser\Node\Expr\BinaryOp\Pow::class => [0, 1],
-        \PhpParser\Node\Expr\BitwiseNot::class => [10, 1],
-        \PhpParser\Node\Expr\PreInc::class => [10, 1],
-        \PhpParser\Node\Expr\PreDec::class => [10, 1],
-        \PhpParser\Node\Expr\PostInc::class => [10, -1],
-        \PhpParser\Node\Expr\PostDec::class => [10, -1],
-        \PhpParser\Node\Expr\UnaryPlus::class => [10, 1],
-        \PhpParser\Node\Expr\UnaryMinus::class => [10, 1],
-        \PhpParser\Node\Expr\Cast\Int_::class => [10, 1],
-        \PhpParser\Node\Expr\Cast\Double::class => [10, 1],
-        \PhpParser\Node\Expr\Cast\String_::class => [10, 1],
-        \PhpParser\Node\Expr\Cast\Array_::class => [10, 1],
-        \PhpParser\Node\Expr\Cast\Object_::class => [10, 1],
-        \PhpParser\Node\Expr\Cast\Bool_::class => [10, 1],
-        \PhpParser\Node\Expr\Cast\Unset_::class => [10, 1],
-        \PhpParser\Node\Expr\ErrorSuppress::class => [10, 1],
-        \PhpParser\Node\Expr\Instanceof_::class => [20, 0],
-        \PhpParser\Node\Expr\BooleanNot::class => [30, 1],
-        \PhpParser\Node\Expr\BinaryOp\Mul::class => [40, -1],
-        \PhpParser\Node\Expr\BinaryOp\Div::class => [40, -1],
-        \PhpParser\Node\Expr\BinaryOp\Mod::class => [40, -1],
-        \PhpParser\Node\Expr\BinaryOp\Plus::class => [50, -1],
-        \PhpParser\Node\Expr\BinaryOp\Minus::class => [50, -1],
-        \PhpParser\Node\Expr\BinaryOp\Concat::class => [50, -1],
-        \PhpParser\Node\Expr\BinaryOp\ShiftLeft::class => [60, -1],
-        \PhpParser\Node\Expr\BinaryOp\ShiftRight::class => [60, -1],
-        \PhpParser\Node\Expr\BinaryOp\Smaller::class => [70, 0],
-        \PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class => [70, 0],
-        \PhpParser\Node\Expr\BinaryOp\Greater::class => [70, 0],
-        \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class => [70, 0],
-        \PhpParser\Node\Expr\BinaryOp\Equal::class => [80, 0],
-        \PhpParser\Node\Expr\BinaryOp\NotEqual::class => [80, 0],
-        \PhpParser\Node\Expr\BinaryOp\Identical::class => [80, 0],
-        \PhpParser\Node\Expr\BinaryOp\NotIdentical::class => [80, 0],
-        \PhpParser\Node\Expr\BinaryOp\Spaceship::class => [80, 0],
-        \PhpParser\Node\Expr\BinaryOp\BitwiseAnd::class => [90, -1],
-        \PhpParser\Node\Expr\BinaryOp\BitwiseXor::class => [100, -1],
-        \PhpParser\Node\Expr\BinaryOp\BitwiseOr::class => [110, -1],
-        \PhpParser\Node\Expr\BinaryOp\BooleanAnd::class => [120, -1],
-        \PhpParser\Node\Expr\BinaryOp\BooleanOr::class => [130, -1],
-        \PhpParser\Node\Expr\BinaryOp\Coalesce::class => [140, 1],
-        \PhpParser\Node\Expr\Ternary::class => [150, 0],
+        BinaryOp\Pow::class => [0, 1],
+        Expr\BitwiseNot::class => [10, 1],
+        Expr\PreInc::class => [10, 1],
+        Expr\PreDec::class => [10, 1],
+        Expr\PostInc::class => [10, -1],
+        Expr\PostDec::class => [10, -1],
+        Expr\UnaryPlus::class => [10, 1],
+        Expr\UnaryMinus::class => [10, 1],
+        Cast\Int_::class => [10, 1],
+        Cast\Double::class => [10, 1],
+        Cast\String_::class => [10, 1],
+        Cast\Array_::class => [10, 1],
+        Cast\Object_::class => [10, 1],
+        Cast\Bool_::class => [10, 1],
+        Cast\Unset_::class => [10, 1],
+        Expr\ErrorSuppress::class => [10, 1],
+        Expr\Instanceof_::class => [20, 0],
+        Expr\BooleanNot::class => [30, 1],
+        BinaryOp\Mul::class => [40, -1],
+        BinaryOp\Div::class => [40, -1],
+        BinaryOp\Mod::class => [40, -1],
+        BinaryOp\Plus::class => [50, -1],
+        BinaryOp\Minus::class => [50, -1],
+        BinaryOp\Concat::class => [50, -1],
+        BinaryOp\ShiftLeft::class => [60, -1],
+        BinaryOp\ShiftRight::class => [60, -1],
+        BinaryOp\Smaller::class => [70, 0],
+        BinaryOp\SmallerOrEqual::class => [70, 0],
+        BinaryOp\Greater::class => [70, 0],
+        BinaryOp\GreaterOrEqual::class => [70, 0],
+        BinaryOp\Equal::class => [80, 0],
+        BinaryOp\NotEqual::class => [80, 0],
+        BinaryOp\Identical::class => [80, 0],
+        BinaryOp\NotIdentical::class => [80, 0],
+        BinaryOp\Spaceship::class => [80, 0],
+        BinaryOp\BitwiseAnd::class => [90, -1],
+        BinaryOp\BitwiseXor::class => [100, -1],
+        BinaryOp\BitwiseOr::class => [110, -1],
+        BinaryOp\BooleanAnd::class => [120, -1],
+        BinaryOp\BooleanOr::class => [130, -1],
+        BinaryOp\Coalesce::class => [140, 1],
+        Expr\Ternary::class => [150, 0],
         // parser uses %left for assignments, but they really behave as %right
-        \PhpParser\Node\Expr\Assign::class => [160, 1],
-        \PhpParser\Node\Expr\AssignRef::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\Plus::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\Minus::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\Mul::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\Div::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\Concat::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\Mod::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\BitwiseAnd::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\BitwiseOr::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\BitwiseXor::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\ShiftLeft::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\ShiftRight::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\Pow::class => [160, 1],
-        \PhpParser\Node\Expr\AssignOp\Coalesce::class => [160, 1],
-        \PhpParser\Node\Expr\YieldFrom::class => [165, 1],
-        \PhpParser\Node\Expr\Print_::class => [168, 1],
-        \PhpParser\Node\Expr\BinaryOp\LogicalAnd::class => [170, -1],
-        \PhpParser\Node\Expr\BinaryOp\LogicalXor::class => [180, -1],
-        \PhpParser\Node\Expr\BinaryOp\LogicalOr::class => [190, -1],
-        \PhpParser\Node\Expr\Include_::class => [200, -1],
+        Expr\Assign::class => [160, 1],
+        Expr\AssignRef::class => [160, 1],
+        AssignOp\Plus::class => [160, 1],
+        AssignOp\Minus::class => [160, 1],
+        AssignOp\Mul::class => [160, 1],
+        AssignOp\Div::class => [160, 1],
+        AssignOp\Concat::class => [160, 1],
+        AssignOp\Mod::class => [160, 1],
+        AssignOp\BitwiseAnd::class => [160, 1],
+        AssignOp\BitwiseOr::class => [160, 1],
+        AssignOp\BitwiseXor::class => [160, 1],
+        AssignOp\ShiftLeft::class => [160, 1],
+        AssignOp\ShiftRight::class => [160, 1],
+        AssignOp\Pow::class => [160, 1],
+        AssignOp\Coalesce::class => [160, 1],
+        Expr\YieldFrom::class => [165, 1],
+        Expr\Print_::class => [168, 1],
+        BinaryOp\LogicalAnd::class => [170, -1],
+        BinaryOp\LogicalXor::class => [180, -1],
+        BinaryOp\LogicalOr::class => [190, -1],
+        Expr\Include_::class => [200, -1],
     ];
     /** @var int Current indentation level. */
     protected $indentLevel;
@@ -209,7 +209,7 @@ abstract class PrettyPrinterAbstract
      *
      * @return string Pretty printed node
      */
-    public function prettyPrintExpr(\PhpParser\Node\Expr $node) : string
+    public function prettyPrintExpr(Expr $node) : string
     {
         $this->resetState();
         return $this->handleMagicTokens($this->p($node));
@@ -227,10 +227,10 @@ abstract class PrettyPrinterAbstract
             return "<?php\n\n";
         }
         $p = "<?php\n\n" . $this->prettyPrint($stmts);
-        if ($stmts[0] instanceof \PhpParser\Node\Stmt\InlineHTML) {
+        if ($stmts[0] instanceof Stmt\InlineHTML) {
             $p = \preg_replace('/^<\\?php\\s+\\?>\\n?/', '', $p);
         }
-        if ($stmts[\count($stmts) - 1] instanceof \PhpParser\Node\Stmt\InlineHTML) {
+        if ($stmts[\count($stmts) - 1] instanceof Stmt\InlineHTML) {
             $p = \preg_replace('/<\\?php$/', '', \rtrim($p));
         }
         return $p;
@@ -245,7 +245,7 @@ abstract class PrettyPrinterAbstract
         /* We can use semicolon-namespaces unless there is a global namespace declaration */
         $this->canUseSemicolonNamespaces = \true;
         foreach ($nodes as $node) {
-            if ($node instanceof \PhpParser\Node\Stmt\Namespace_ && null === $node->name) {
+            if ($node instanceof Stmt\Namespace_ && null === $node->name) {
                 $this->canUseSemicolonNamespaces = \false;
                 break;
             }
@@ -282,7 +282,7 @@ abstract class PrettyPrinterAbstract
             $comments = $node->getComments();
             if ($comments) {
                 $result .= $this->nl . $this->pComments($comments);
-                if ($node instanceof \PhpParser\Node\Stmt\Nop) {
+                if ($node instanceof Stmt\Nop) {
                     continue;
                 }
             }
@@ -465,7 +465,7 @@ abstract class PrettyPrinterAbstract
         $this->initializeEmptyListInsertionMap();
         $this->initializeModifierChangeMap();
         $this->resetState();
-        $this->origTokens = new \PhpParser\Internal\TokenStream($origTokens);
+        $this->origTokens = new TokenStream($origTokens);
         $this->preprocessNodes($stmts);
         $pos = 0;
         $result = $this->pArray($stmts, $origStmts, $pos, 0, 'File', 'stmts', null);
@@ -509,15 +509,15 @@ abstract class PrettyPrinterAbstract
         $endPos = $origNode->getEndTokenPos();
         \assert($startPos >= 0 && $endPos >= 0);
         $fallbackNode = $node;
-        if ($node instanceof \PhpParser\Node\Expr\New_ && $node->class instanceof \PhpParser\Node\Stmt\Class_) {
+        if ($node instanceof Expr\New_ && $node->class instanceof Stmt\Class_) {
             // Normalize node structure of anonymous classes
-            $node = \PhpParser\Internal\PrintableNewAnonClassNode::fromNewNode($node);
-            $origNode = \PhpParser\Internal\PrintableNewAnonClassNode::fromNewNode($origNode);
+            $node = PrintableNewAnonClassNode::fromNewNode($node);
+            $origNode = PrintableNewAnonClassNode::fromNewNode($origNode);
         }
         // InlineHTML node does not contain closing and opening PHP tags. If the parent formatting
         // is not preserved, then we need to use the fallback code to make sure the tags are
         // printed.
-        if ($node instanceof \PhpParser\Node\Stmt\InlineHTML && !$parentFormatPreserved) {
+        if ($node instanceof Stmt\InlineHTML && !$parentFormatPreserved) {
             return $this->pFallback($fallbackNode);
         }
         $indentAdjustment = $this->indentLevel - $this->origTokens->getIndentationBefore($startPos);
@@ -671,7 +671,7 @@ abstract class PrettyPrinterAbstract
             $arrItem = $diffElem->new;
             /** @var Node|null $origArrItem */
             $origArrItem = $diffElem->old;
-            if ($diffType === \PhpParser\Internal\DiffElem::TYPE_KEEP || $diffType === \PhpParser\Internal\DiffElem::TYPE_REPLACE) {
+            if ($diffType === DiffElem::TYPE_KEEP || $diffType === DiffElem::TYPE_REPLACE) {
                 $beforeFirstKeepOrReplace = \false;
                 if ($origArrItem === null || $arrItem === null) {
                     // We can only handle the case where both are null
@@ -736,7 +736,7 @@ abstract class PrettyPrinterAbstract
                 }
                 // If we had to remove anything, we have done so now.
                 $skipRemovedNode = \false;
-            } elseif ($diffType === \PhpParser\Internal\DiffElem::TYPE_ADD) {
+            } elseif ($diffType === DiffElem::TYPE_ADD) {
                 if (null === $insertStr) {
                     // We don't have insertion information for this list type
                     return null;
@@ -765,7 +765,7 @@ abstract class PrettyPrinterAbstract
                 } else {
                     $result .= $insertStr;
                 }
-            } elseif ($diffType === \PhpParser\Internal\DiffElem::TYPE_REMOVE) {
+            } elseif ($diffType === DiffElem::TYPE_REMOVE) {
                 if (!$origArrItem instanceof \PhpParser\Node) {
                     // We only support removal for nodes
                     return null;
@@ -868,12 +868,12 @@ abstract class PrettyPrinterAbstract
                 break;
             case self::FIXUP_BRACED_NAME:
             case self::FIXUP_VAR_BRACED_NAME:
-                if ($subNode instanceof \PhpParser\Node\Expr && !$this->origTokens->haveBraces($subStartPos, $subEndPos)) {
+                if ($subNode instanceof Expr && !$this->origTokens->haveBraces($subStartPos, $subEndPos)) {
                     return ($fixup === self::FIXUP_VAR_BRACED_NAME ? '$' : '') . '{' . $this->p($subNode) . '}';
                 }
                 break;
             case self::FIXUP_ENCAPSED:
-                if (!$subNode instanceof \PhpParser\Node\Scalar\EncapsedStringPart && !$this->origTokens->haveBraces($subStartPos, $subEndPos)) {
+                if (!$subNode instanceof Scalar\EncapsedStringPart && !$this->origTokens->haveBraces($subStartPos, $subEndPos)) {
                     return '{' . $this->p($subNode) . '}';
                 }
                 break;
@@ -916,7 +916,7 @@ abstract class PrettyPrinterAbstract
      */
     protected function callLhsRequiresParens(\PhpParser\Node $node) : bool
     {
-        return !($node instanceof \PhpParser\Node\Name || $node instanceof \PhpParser\Node\Expr\Variable || $node instanceof \PhpParser\Node\Expr\ArrayDimFetch || $node instanceof \PhpParser\Node\Expr\FuncCall || $node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\NullsafeMethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall || $node instanceof \PhpParser\Node\Expr\Array_);
+        return !($node instanceof \PhpParser\Node\Name || $node instanceof Expr\Variable || $node instanceof Expr\ArrayDimFetch || $node instanceof Expr\FuncCall || $node instanceof Expr\MethodCall || $node instanceof Expr\NullsafeMethodCall || $node instanceof Expr\StaticCall || $node instanceof Expr\Array_);
     }
     /**
      * Determines whether the LHS of a dereferencing operation must be wrapped in parenthesis.
@@ -927,7 +927,7 @@ abstract class PrettyPrinterAbstract
      */
     protected function dereferenceLhsRequiresParens(\PhpParser\Node $node) : bool
     {
-        return !($node instanceof \PhpParser\Node\Expr\Variable || $node instanceof \PhpParser\Node\Name || $node instanceof \PhpParser\Node\Expr\ArrayDimFetch || $node instanceof \PhpParser\Node\Expr\PropertyFetch || $node instanceof \PhpParser\Node\Expr\NullsafePropertyFetch || $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch || $node instanceof \PhpParser\Node\Expr\FuncCall || $node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\NullsafeMethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall || $node instanceof \PhpParser\Node\Expr\Array_ || $node instanceof \PhpParser\Node\Scalar\String_ || $node instanceof \PhpParser\Node\Expr\ConstFetch || $node instanceof \PhpParser\Node\Expr\ClassConstFetch);
+        return !($node instanceof Expr\Variable || $node instanceof \PhpParser\Node\Name || $node instanceof Expr\ArrayDimFetch || $node instanceof Expr\PropertyFetch || $node instanceof Expr\NullsafePropertyFetch || $node instanceof Expr\StaticPropertyFetch || $node instanceof Expr\FuncCall || $node instanceof Expr\MethodCall || $node instanceof Expr\NullsafeMethodCall || $node instanceof Expr\StaticCall || $node instanceof Expr\Array_ || $node instanceof Scalar\String_ || $node instanceof Expr\ConstFetch || $node instanceof Expr\ClassConstFetch);
     }
     /**
      * Print modifiers, including trailing whitespace.
@@ -938,7 +938,7 @@ abstract class PrettyPrinterAbstract
      */
     protected function pModifiers(int $modifiers)
     {
-        return ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC ? 'public ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_PROTECTED ? 'protected ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE ? 'private ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC ? 'static ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT ? 'abstract ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL ? 'final ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY ? 'readonly ' : '');
+        return ($modifiers & Stmt\Class_::MODIFIER_PUBLIC ? 'public ' : '') . ($modifiers & Stmt\Class_::MODIFIER_PROTECTED ? 'protected ' : '') . ($modifiers & Stmt\Class_::MODIFIER_PRIVATE ? 'private ' : '') . ($modifiers & Stmt\Class_::MODIFIER_STATIC ? 'static ' : '') . ($modifiers & Stmt\Class_::MODIFIER_ABSTRACT ? 'abstract ' : '') . ($modifiers & Stmt\Class_::MODIFIER_FINAL ? 'final ' : '') . ($modifiers & Stmt\Class_::MODIFIER_READONLY ? 'readonly ' : '');
     }
     /**
      * Determine whether a list of nodes uses multiline formatting.
@@ -1019,34 +1019,34 @@ abstract class PrettyPrinterAbstract
             return;
         }
         $this->fixupMap = [
-            \PhpParser\Node\Expr\PreInc::class => ['var' => self::FIXUP_PREC_RIGHT],
-            \PhpParser\Node\Expr\PreDec::class => ['var' => self::FIXUP_PREC_RIGHT],
-            \PhpParser\Node\Expr\PostInc::class => ['var' => self::FIXUP_PREC_LEFT],
-            \PhpParser\Node\Expr\PostDec::class => ['var' => self::FIXUP_PREC_LEFT],
-            \PhpParser\Node\Expr\Instanceof_::class => ['expr' => self::FIXUP_PREC_LEFT, 'class' => self::FIXUP_PREC_RIGHT],
-            \PhpParser\Node\Expr\Ternary::class => ['cond' => self::FIXUP_PREC_LEFT, 'else' => self::FIXUP_PREC_RIGHT],
-            \PhpParser\Node\Expr\FuncCall::class => ['name' => self::FIXUP_CALL_LHS],
-            \PhpParser\Node\Expr\StaticCall::class => ['class' => self::FIXUP_DEREF_LHS],
-            \PhpParser\Node\Expr\ArrayDimFetch::class => ['var' => self::FIXUP_DEREF_LHS],
-            \PhpParser\Node\Expr\ClassConstFetch::class => ['var' => self::FIXUP_DEREF_LHS],
-            \PhpParser\Node\Expr\New_::class => ['class' => self::FIXUP_DEREF_LHS],
+            Expr\PreInc::class => ['var' => self::FIXUP_PREC_RIGHT],
+            Expr\PreDec::class => ['var' => self::FIXUP_PREC_RIGHT],
+            Expr\PostInc::class => ['var' => self::FIXUP_PREC_LEFT],
+            Expr\PostDec::class => ['var' => self::FIXUP_PREC_LEFT],
+            Expr\Instanceof_::class => ['expr' => self::FIXUP_PREC_LEFT, 'class' => self::FIXUP_PREC_RIGHT],
+            Expr\Ternary::class => ['cond' => self::FIXUP_PREC_LEFT, 'else' => self::FIXUP_PREC_RIGHT],
+            Expr\FuncCall::class => ['name' => self::FIXUP_CALL_LHS],
+            Expr\StaticCall::class => ['class' => self::FIXUP_DEREF_LHS],
+            Expr\ArrayDimFetch::class => ['var' => self::FIXUP_DEREF_LHS],
+            Expr\ClassConstFetch::class => ['var' => self::FIXUP_DEREF_LHS],
+            Expr\New_::class => ['class' => self::FIXUP_DEREF_LHS],
             // TODO: FIXUP_NEW_VARIABLE
-            \PhpParser\Node\Expr\MethodCall::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
-            \PhpParser\Node\Expr\NullsafeMethodCall::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
-            \PhpParser\Node\Expr\StaticPropertyFetch::class => ['class' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_VAR_BRACED_NAME],
-            \PhpParser\Node\Expr\PropertyFetch::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
-            \PhpParser\Node\Expr\NullsafePropertyFetch::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
-            \PhpParser\Node\Scalar\Encapsed::class => ['parts' => self::FIXUP_ENCAPSED],
+            Expr\MethodCall::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
+            Expr\NullsafeMethodCall::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
+            Expr\StaticPropertyFetch::class => ['class' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_VAR_BRACED_NAME],
+            Expr\PropertyFetch::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
+            Expr\NullsafePropertyFetch::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
+            Scalar\Encapsed::class => ['parts' => self::FIXUP_ENCAPSED],
         ];
-        $binaryOps = [\PhpParser\Node\Expr\BinaryOp\Pow::class, \PhpParser\Node\Expr\BinaryOp\Mul::class, \PhpParser\Node\Expr\BinaryOp\Div::class, \PhpParser\Node\Expr\BinaryOp\Mod::class, \PhpParser\Node\Expr\BinaryOp\Plus::class, \PhpParser\Node\Expr\BinaryOp\Minus::class, \PhpParser\Node\Expr\BinaryOp\Concat::class, \PhpParser\Node\Expr\BinaryOp\ShiftLeft::class, \PhpParser\Node\Expr\BinaryOp\ShiftRight::class, \PhpParser\Node\Expr\BinaryOp\Smaller::class, \PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class, \PhpParser\Node\Expr\BinaryOp\Greater::class, \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, \PhpParser\Node\Expr\BinaryOp\Equal::class, \PhpParser\Node\Expr\BinaryOp\NotEqual::class, \PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class, \PhpParser\Node\Expr\BinaryOp\Spaceship::class, \PhpParser\Node\Expr\BinaryOp\BitwiseAnd::class, \PhpParser\Node\Expr\BinaryOp\BitwiseXor::class, \PhpParser\Node\Expr\BinaryOp\BitwiseOr::class, \PhpParser\Node\Expr\BinaryOp\BooleanAnd::class, \PhpParser\Node\Expr\BinaryOp\BooleanOr::class, \PhpParser\Node\Expr\BinaryOp\Coalesce::class, \PhpParser\Node\Expr\BinaryOp\LogicalAnd::class, \PhpParser\Node\Expr\BinaryOp\LogicalXor::class, \PhpParser\Node\Expr\BinaryOp\LogicalOr::class];
+        $binaryOps = [BinaryOp\Pow::class, BinaryOp\Mul::class, BinaryOp\Div::class, BinaryOp\Mod::class, BinaryOp\Plus::class, BinaryOp\Minus::class, BinaryOp\Concat::class, BinaryOp\ShiftLeft::class, BinaryOp\ShiftRight::class, BinaryOp\Smaller::class, BinaryOp\SmallerOrEqual::class, BinaryOp\Greater::class, BinaryOp\GreaterOrEqual::class, BinaryOp\Equal::class, BinaryOp\NotEqual::class, BinaryOp\Identical::class, BinaryOp\NotIdentical::class, BinaryOp\Spaceship::class, BinaryOp\BitwiseAnd::class, BinaryOp\BitwiseXor::class, BinaryOp\BitwiseOr::class, BinaryOp\BooleanAnd::class, BinaryOp\BooleanOr::class, BinaryOp\Coalesce::class, BinaryOp\LogicalAnd::class, BinaryOp\LogicalXor::class, BinaryOp\LogicalOr::class];
         foreach ($binaryOps as $binaryOp) {
             $this->fixupMap[$binaryOp] = ['left' => self::FIXUP_PREC_LEFT, 'right' => self::FIXUP_PREC_RIGHT];
         }
-        $assignOps = [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Expr\AssignRef::class, \PhpParser\Node\Expr\AssignOp\Plus::class, \PhpParser\Node\Expr\AssignOp\Minus::class, \PhpParser\Node\Expr\AssignOp\Mul::class, \PhpParser\Node\Expr\AssignOp\Div::class, \PhpParser\Node\Expr\AssignOp\Concat::class, \PhpParser\Node\Expr\AssignOp\Mod::class, \PhpParser\Node\Expr\AssignOp\BitwiseAnd::class, \PhpParser\Node\Expr\AssignOp\BitwiseOr::class, \PhpParser\Node\Expr\AssignOp\BitwiseXor::class, \PhpParser\Node\Expr\AssignOp\ShiftLeft::class, \PhpParser\Node\Expr\AssignOp\ShiftRight::class, \PhpParser\Node\Expr\AssignOp\Pow::class, \PhpParser\Node\Expr\AssignOp\Coalesce::class];
+        $assignOps = [Expr\Assign::class, Expr\AssignRef::class, AssignOp\Plus::class, AssignOp\Minus::class, AssignOp\Mul::class, AssignOp\Div::class, AssignOp\Concat::class, AssignOp\Mod::class, AssignOp\BitwiseAnd::class, AssignOp\BitwiseOr::class, AssignOp\BitwiseXor::class, AssignOp\ShiftLeft::class, AssignOp\ShiftRight::class, AssignOp\Pow::class, AssignOp\Coalesce::class];
         foreach ($assignOps as $assignOp) {
             $this->fixupMap[$assignOp] = ['var' => self::FIXUP_PREC_LEFT, 'expr' => self::FIXUP_PREC_RIGHT];
         }
-        $prefixOps = [\PhpParser\Node\Expr\BitwiseNot::class, \PhpParser\Node\Expr\BooleanNot::class, \PhpParser\Node\Expr\UnaryPlus::class, \PhpParser\Node\Expr\UnaryMinus::class, \PhpParser\Node\Expr\Cast\Int_::class, \PhpParser\Node\Expr\Cast\Double::class, \PhpParser\Node\Expr\Cast\String_::class, \PhpParser\Node\Expr\Cast\Array_::class, \PhpParser\Node\Expr\Cast\Object_::class, \PhpParser\Node\Expr\Cast\Bool_::class, \PhpParser\Node\Expr\Cast\Unset_::class, \PhpParser\Node\Expr\ErrorSuppress::class, \PhpParser\Node\Expr\YieldFrom::class, \PhpParser\Node\Expr\Print_::class, \PhpParser\Node\Expr\Include_::class];
+        $prefixOps = [Expr\BitwiseNot::class, Expr\BooleanNot::class, Expr\UnaryPlus::class, Expr\UnaryMinus::class, Cast\Int_::class, Cast\Double::class, Cast\String_::class, Cast\Array_::class, Cast\Object_::class, Cast\Bool_::class, Cast\Unset_::class, Expr\ErrorSuppress::class, Expr\YieldFrom::class, Expr\Print_::class, Expr\Include_::class];
         foreach ($prefixOps as $prefixOp) {
             $this->fixupMap[$prefixOp] = ['expr' => self::FIXUP_PREC_RIGHT];
         }

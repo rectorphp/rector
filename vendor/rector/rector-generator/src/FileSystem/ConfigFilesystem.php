@@ -27,7 +27,7 @@ final class ConfigFilesystem
      * @var \Rector\RectorGenerator\TemplateFactory
      */
     private $templateFactory;
-    public function __construct(\RectorPrefix20220527\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\RectorGenerator\TemplateFactory $templateFactory)
+    public function __construct(SmartFileSystem $smartFileSystem, TemplateFactory $templateFactory)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->templateFactory = $templateFactory;
@@ -45,7 +45,7 @@ final class ConfigFilesystem
             return;
         }
         $registerServiceLine = \sprintf(';' . \PHP_EOL . '    $rectorConfig->rule(\\%s::class);' . \PHP_EOL . '};', $servicesFullyQualifiedName);
-        $setFileContents = \RectorPrefix20220527\Nette\Utils\Strings::replace($setFileContents, self::LAST_ITEM_REGEX, $registerServiceLine);
+        $setFileContents = Strings::replace($setFileContents, self::LAST_ITEM_REGEX, $registerServiceLine);
         // 3. print the content back to file
         $this->smartFileSystem->dumpFile($setFilePath, $setFileContents);
     }
@@ -59,6 +59,6 @@ final class ConfigFilesystem
             return;
         }
         $message = \sprintf('Template variables for "%s" keys are missing', \implode('", "', $missingKeys));
-        throw new \Rector\RectorGenerator\Exception\ShouldNotHappenException($message);
+        throw new ShouldNotHappenException($message);
     }
 }

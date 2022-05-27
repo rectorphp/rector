@@ -20,18 +20,18 @@ use RectorPrefix20220527\Symfony\Component\DependencyInjection\Reference;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ResolveDecoratorStackPass implements \RectorPrefix20220527\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class ResolveDecoratorStackPass implements CompilerPassInterface
 {
-    public function process(\RectorPrefix20220527\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(ContainerBuilder $container)
     {
         $stacks = [];
         foreach ($container->findTaggedServiceIds('container.stack') as $id => $tags) {
             $definition = $container->getDefinition($id);
-            if (!$definition instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\ChildDefinition) {
-                throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid service "%s": only definitions with a "parent" can have the "container.stack" tag.', $id));
+            if (!$definition instanceof ChildDefinition) {
+                throw new InvalidArgumentException(\sprintf('Invalid service "%s": only definitions with a "parent" can have the "container.stack" tag.', $id));
             }
             if (!($stack = $definition->getArguments())) {
-                throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid service "%s": the stack of decorators is empty.', $id));
+                throw new InvalidArgumentException(\sprintf('Invalid service "%s": the stack of decorators is empty.', $id));
             }
             $stacks[$id] = $stack;
         }
@@ -63,27 +63,27 @@ class ResolveDecoratorStackPass implements \RectorPrefix20220527\Symfony\Compone
         $id = \end($path);
         $prefix = '.' . $id . '.';
         if (!isset($stacks[$id])) {
-            return [$id => new \RectorPrefix20220527\Symfony\Component\DependencyInjection\ChildDefinition($id)];
+            return [$id => new ChildDefinition($id)];
         }
         if (\key($path) !== ($searchKey = \array_search($id, $path))) {
-            throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException($id, \array_slice($path, $searchKey));
+            throw new ServiceCircularReferenceException($id, \array_slice($path, $searchKey));
         }
         foreach ($stacks[$id] as $k => $definition) {
-            if ($definition instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\ChildDefinition && isset($stacks[$definition->getParent()])) {
+            if ($definition instanceof ChildDefinition && isset($stacks[$definition->getParent()])) {
                 $path[] = $definition->getParent();
                 $definition = \unserialize(\serialize($definition));
                 // deep clone
-            } elseif ($definition instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\Definition) {
+            } elseif ($definition instanceof Definition) {
                 $definitions[$decoratedId = $prefix . $k] = $definition;
                 continue;
-            } elseif ($definition instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\Reference || $definition instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\Alias) {
+            } elseif ($definition instanceof Reference || $definition instanceof Alias) {
                 $path[] = (string) $definition;
             } else {
-                throw new \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid service "%s": unexpected value of type "%s" found in the stack of decorators.', $id, \get_debug_type($definition)));
+                throw new InvalidArgumentException(\sprintf('Invalid service "%s": unexpected value of type "%s" found in the stack of decorators.', $id, \get_debug_type($definition)));
             }
             $p = $prefix . $k;
             foreach ($this->resolveStack($stacks, $path) as $k => $v) {
-                $definitions[$decoratedId = $p . $k] = $definition instanceof \RectorPrefix20220527\Symfony\Component\DependencyInjection\ChildDefinition ? $definition->setParent($k) : new \RectorPrefix20220527\Symfony\Component\DependencyInjection\ChildDefinition($k);
+                $definitions[$decoratedId = $p . $k] = $definition instanceof ChildDefinition ? $definition->setParent($k) : new ChildDefinition($k);
                 $definition = null;
             }
             \array_pop($path);

@@ -26,12 +26,12 @@ class Arrays
      */
     public static function get(array $array, $key, $default = null)
     {
-        foreach (\is_array($key) ? $key : [$key] as $k) {
-            if (\is_array($array) && \array_key_exists($k, $array)) {
+        foreach (is_array($key) ? $key : [$key] as $k) {
+            if (is_array($array) && \array_key_exists($k, $array)) {
                 $array = $array[$k];
             } else {
                 if (\func_num_args() < 3) {
-                    throw new \RectorPrefix20220527\Nette\InvalidArgumentException("Missing item '{$k}'.");
+                    throw new Nette\InvalidArgumentException("Missing item '{$k}'.");
                 }
                 return $default;
             }
@@ -48,11 +48,11 @@ class Arrays
      */
     public static function &getRef(array &$array, $key)
     {
-        foreach (\is_array($key) ? $key : [$key] as $k) {
-            if (\is_array($array) || $array === null) {
+        foreach (is_array($key) ? $key : [$key] as $k) {
+            if (is_array($array) || $array === null) {
                 $array =& $array[$k];
             } else {
-                throw new \RectorPrefix20220527\Nette\InvalidArgumentException('Traversed item is not an array.');
+                throw new Nette\InvalidArgumentException('Traversed item is not an array.');
             }
         }
         return $array;
@@ -71,7 +71,7 @@ class Arrays
     {
         $res = $array1 + $array2;
         foreach (\array_intersect_key($array1, $array2) as $k => $v) {
-            if (\is_array($v) && \is_array($array2[$k])) {
+            if (is_array($v) && is_array($array2[$k])) {
                 $res[$k] = self::mergeTree($v, $array2[$k]);
             }
         }
@@ -84,7 +84,7 @@ class Arrays
      */
     public static function getKeyOffset(array $array, $key) : ?int
     {
-        return \RectorPrefix20220527\Nette\Utils\Helpers::falseToNull(\array_search(self::toKey($key), \array_keys($array), \true));
+        return Helpers::falseToNull(\array_search(self::toKey($key), \array_keys($array), \true));
     }
     /**
      * @deprecated  use  getKeyOffset()
@@ -109,7 +109,7 @@ class Arrays
      */
     public static function first(array $array)
     {
-        return \count($array) ? \reset($array) : null;
+        return count($array) ? \reset($array) : null;
     }
     /**
      * Returns the last item from the array or null if array is empty.
@@ -119,7 +119,7 @@ class Arrays
      */
     public static function last(array $array)
     {
-        return \count($array) ? \end($array) : null;
+        return count($array) ? \end($array) : null;
     }
     /**
      * Inserts the contents of the $inserted array into the $array immediately after the $key.
@@ -129,7 +129,7 @@ class Arrays
     public static function insertBefore(array &$array, $key, array $inserted) : void
     {
         $offset = $key === null ? 0 : (int) self::getKeyOffset($array, $key);
-        $array = \array_slice($array, 0, $offset, \true) + $inserted + \array_slice($array, $offset, \count($array), \true);
+        $array = \array_slice($array, 0, $offset, \true) + $inserted + \array_slice($array, $offset, count($array), \true);
     }
     /**
      * Inserts the contents of the $inserted array into the $array before the $key.
@@ -139,9 +139,9 @@ class Arrays
     public static function insertAfter(array &$array, $key, array $inserted) : void
     {
         if ($key === null || ($offset = self::getKeyOffset($array, $key)) === null) {
-            $offset = \count($array) - 1;
+            $offset = count($array) - 1;
         }
-        $array = \array_slice($array, 0, $offset + 1, \true) + $inserted + \array_slice($array, $offset + 1, \count($array), \true);
+        $array = \array_slice($array, 0, $offset + 1, \true) + $inserted + \array_slice($array, $offset + 1, count($array), \true);
     }
     /**
      * Renames key in array.
@@ -168,7 +168,7 @@ class Arrays
      */
     public static function grep(array $array, string $pattern, int $flags = 0) : array
     {
-        return \RectorPrefix20220527\Nette\Utils\Strings::pcre('preg_grep', [$pattern, $array, $flags]);
+        return Strings::pcre('preg_grep', [$pattern, $array, $flags]);
     }
     /**
      * Transforms multidimensional array to flat array.
@@ -191,8 +191,8 @@ class Arrays
     public static function isList($value) : bool
     {
         $arrayIsList = function (array $array) : bool {
-            if (\function_exists('RectorPrefix20220527\\array_is_list')) {
-                return array_is_list($array);
+            if (\function_exists('array_is_list')) {
+                return \array_is_list($array);
             }
             if ($array === []) {
                 return \true;
@@ -206,7 +206,7 @@ class Arrays
             }
             return \true;
         };
-        return \is_array($value) && (\PHP_VERSION_ID < 80100 ? !$value || \array_keys($value) === \range(0, \count($value) - 1) : $arrayIsList($value));
+        return is_array($value) && (\PHP_VERSION_ID < 80100 ? !$value || \array_keys($value) === \range(0, count($value) - 1) : $arrayIsList($value));
     }
     /**
      * Reformats table to associative tree. Path looks like 'field|field[]field->field=field'.
@@ -215,15 +215,15 @@ class Arrays
      */
     public static function associate(array $array, $path)
     {
-        $parts = \is_array($path) ? $path : \preg_split('#(\\[\\]|->|=|\\|)#', $path, -1, \PREG_SPLIT_DELIM_CAPTURE | \PREG_SPLIT_NO_EMPTY);
+        $parts = is_array($path) ? $path : \preg_split('#(\\[\\]|->|=|\\|)#', $path, -1, \PREG_SPLIT_DELIM_CAPTURE | \PREG_SPLIT_NO_EMPTY);
         if (!$parts || $parts === ['->'] || $parts[0] === '=' || $parts[0] === '|') {
-            throw new \RectorPrefix20220527\Nette\InvalidArgumentException("Invalid path '{$path}'.");
+            throw new Nette\InvalidArgumentException("Invalid path '{$path}'.");
         }
         $res = $parts[0] === '->' ? new \stdClass() : [];
         foreach ($array as $rowOrig) {
             $row = (array) $rowOrig;
             $x =& $res;
-            for ($i = 0; $i < \count($parts); $i++) {
+            for ($i = 0; $i < count($parts); $i++) {
                 $part = $parts[$i];
                 if ($part === '[]') {
                     $x =& $x[];
@@ -239,7 +239,7 @@ class Arrays
                         }
                         $x =& $x->{$row[$parts[$i]]};
                     } else {
-                        $row = \is_object($rowOrig) ? $rowOrig : (object) $row;
+                        $row = is_object($rowOrig) ? $rowOrig : (object) $row;
                     }
                 } elseif ($part !== '|') {
                     $x =& $x[(string) $row[$part]];
@@ -259,7 +259,7 @@ class Arrays
     {
         $res = [];
         foreach ($array as $k => $v) {
-            $res[\is_int($k) ? $v : $k] = \is_int($k) ? $filling : $v;
+            $res[is_int($k) ? $v : $k] = is_int($k) ? $filling : $v;
         }
         return $res;
     }
@@ -280,7 +280,7 @@ class Arrays
             unset($array[$key]);
             return $value;
         } elseif (\func_num_args() < 3) {
-            throw new \RectorPrefix20220527\Nette\InvalidArgumentException("Missing item '{$key}'.");
+            throw new Nette\InvalidArgumentException("Missing item '{$key}'.");
         } else {
             return $default;
         }

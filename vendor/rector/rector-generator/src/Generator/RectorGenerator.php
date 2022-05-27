@@ -38,7 +38,7 @@ final class RectorGenerator
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\Rector\RectorGenerator\Finder\TemplateFinder $templateFinder, \Rector\RectorGenerator\TemplateVariablesFactory $templateVariablesFactory, \Rector\RectorGenerator\Generator\FileGenerator $fileGenerator, \Rector\RectorGenerator\Guard\OverrideGuard $overrideGuard, \RectorPrefix20220527\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(TemplateFinder $templateFinder, TemplateVariablesFactory $templateVariablesFactory, \Rector\RectorGenerator\Generator\FileGenerator $fileGenerator, OverrideGuard $overrideGuard, SymfonyStyle $symfonyStyle)
     {
         $this->templateFinder = $templateFinder;
         $this->templateVariablesFactory = $templateVariablesFactory;
@@ -49,7 +49,7 @@ final class RectorGenerator
     /**
      * @return string[]
      */
-    public function generate(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, string $destinationDirectory) : array
+    public function generate(RectorRecipe $rectorRecipe, string $destinationDirectory) : array
     {
         // generate and compare
         $templateFileInfos = $this->templateFinder->find($rectorRecipe);

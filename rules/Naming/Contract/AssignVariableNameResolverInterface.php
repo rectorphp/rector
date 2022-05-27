@@ -9,9 +9,9 @@ use PhpParser\Node;
  */
 interface AssignVariableNameResolverInterface
 {
-    public function match(\PhpParser\Node $node) : bool;
+    public function match(Node $node) : bool;
     /**
      * @param TNode $node
      */
-    public function resolve(\PhpParser\Node $node) : string;
+    public function resolve(Node $node) : string;
 }

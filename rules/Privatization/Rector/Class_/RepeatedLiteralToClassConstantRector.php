@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector\RepeatedLiteralToClassConstantRectorTest
  */
-final class RepeatedLiteralToClassConstantRector extends \Rector\Core\Rector\AbstractRector
+final class RepeatedLiteralToClassConstantRector extends AbstractRector
 {
     /**
      * @var string
@@ -52,14 +52,14 @@ final class RepeatedLiteralToClassConstantRector extends \Rector\Core\Rector\Abs
      * @var \Rector\Core\Php\ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
+    public function __construct(ClassInsertManipulator $classInsertManipulator, ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace repeated strings with constant', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace repeated strings with constant', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($key, $items)
@@ -92,19 +92,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         // skip tests, where string values are often used as fixtures
         if ($this->isName($node, '*Test')) {
             return null;
         }
         /** @var String_[] $strings */
-        $strings = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Scalar\String_::class);
+        $strings = $this->betterNodeFinder->findInstanceOf($node, String_::class);
         $stringsToReplace = $this->resolveStringsToReplace($strings);
         if ($stringsToReplace === []) {
             return null;
@@ -143,17 +143,17 @@ CODE_SAMPLE
     /**
      * @param string[] $stringsToReplace
      */
-    private function replaceStringsWithClassConstReferences(\PhpParser\Node\Stmt\Class_ $class, array $stringsToReplace) : void
+    private function replaceStringsWithClassConstReferences(Class_ $class, array $stringsToReplace) : void
     {
         $classConsts = $class->getConstants();
-        $this->traverseNodesWithCallable($class, function (\PhpParser\Node $node) use($stringsToReplace, $classConsts) : ?ClassConstFetch {
-            if (!$node instanceof \PhpParser\Node\Scalar\String_) {
+        $this->traverseNodesWithCallable($class, function (Node $node) use($stringsToReplace, $classConsts) : ?ClassConstFetch {
+            if (!$node instanceof String_) {
                 return null;
             }
             if (!$this->valueResolver->isValues($node, $stringsToReplace)) {
                 return null;
             }
-            $isInMethod = (bool) $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
+            $isInMethod = (bool) $this->betterNodeFinder->findParentType($node, ClassMethod::class);
             if (!$isInMethod) {
                 return null;
             }
@@ -185,15 +185,15 @@ CODE_SAMPLE
     /**
      * @param string[] $stringsToReplace
      */
-    private function addClassConsts(array $stringsToReplace, \PhpParser\Node\Stmt\Class_ $class) : void
+    private function addClassConsts(array $stringsToReplace, Class_ $class) : void
     {
         foreach ($stringsToReplace as $stringToReplace) {
             $constantName = $this->createConstName($stringToReplace);
-            $classConst = $this->nodeFactory->createClassConstant($constantName, new \PhpParser\Node\Scalar\String_($stringToReplace), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $classConst = $this->nodeFactory->createClassConstant($constantName, new String_($stringToReplace), Class_::MODIFIER_PRIVATE);
             $this->classInsertManipulator->addConstantToClass($class, $stringToReplace, $classConst);
         }
     }
-    private function shouldSkipString(\PhpParser\Node\Scalar\String_ $string) : bool
+    private function shouldSkipString(String_ $string) : bool
     {
         $value = $string->value;
         // value is too short
@@ -207,12 +207,12 @@ CODE_SAMPLE
             return \true;
         }
         // is replaceable value?
-        $matches = \RectorPrefix20220527\Nette\Utils\Strings::match($value, '#(?<' . self::VALUE . '>[\\w\\-\\/\\_]+)#');
+        $matches = Strings::match($value, '#(?<' . self::VALUE . '>[\\w\\-\\/\\_]+)#');
         if (!isset($matches[self::VALUE])) {
             return \true;
         }
         // skip values in another constants
-        $parentConst = $this->betterNodeFinder->findParentType($string, \PhpParser\Node\Stmt\ClassConst::class);
+        $parentConst = $this->betterNodeFinder->findParentType($string, ClassConst::class);
         if ($parentConst !== null) {
             return \true;
         }
@@ -221,10 +221,10 @@ CODE_SAMPLE
     private function createConstName(string $value) : string
     {
         // replace slashes and dashes
-        $value = \RectorPrefix20220527\Nette\Utils\Strings::replace($value, self::SLASH_AND_DASH_REGEX, self::UNDERSCORE);
+        $value = Strings::replace($value, self::SLASH_AND_DASH_REGEX, self::UNDERSCORE);
         // find beginning numbers
         $beginningNumbers = '';
-        $matches = \RectorPrefix20220527\Nette\Utils\Strings::match($value, '#(?<' . self::NUMBERS . '>[0-9]*)(?<' . self::VALUE . '>.*)#');
+        $matches = Strings::match($value, '#(?<' . self::NUMBERS . '>[0-9]*)(?<' . self::VALUE . '>.*)#');
         if (isset($matches[self::NUMBERS])) {
             $beginningNumbers = $matches[self::NUMBERS];
         }
@@ -234,7 +234,7 @@ CODE_SAMPLE
         // convert camelcase parts to underscore
         $parts = \explode(self::UNDERSCORE, (string) $value);
         $parts = \array_map(function (string $value) : string {
-            return \Rector\Core\Util\StaticRectorStrings::camelCaseToUnderscore($value);
+            return StaticRectorStrings::camelCaseToUnderscore($value);
         }, $parts);
         // apply "CONST" prefix if constant beginning with number
         if ($beginningNumbers !== '') {
@@ -242,7 +242,7 @@ CODE_SAMPLE
             $parts = \array_filter($parts);
         }
         $value = \implode(self::UNDERSCORE, $parts);
-        return \strtoupper(\RectorPrefix20220527\Nette\Utils\Strings::replace($value, '#_+#', self::UNDERSCORE));
+        return \strtoupper(Strings::replace($value, '#_+#', self::UNDERSCORE));
     }
     private function isNativeConstantResemblingValue(string $value) : bool
     {

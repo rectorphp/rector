@@ -21,7 +21,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector\AddReturnTypeDeclarationRectorTest
  */
-final class AddReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class AddReturnTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var AddReturnTypeDeclaration[]
@@ -37,15 +37,15 @@ final class AddReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractR
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(TypeComparator $typeComparator, PhpVersionProvider $phpVersionProvider)
     {
         $this->typeComparator = $typeComparator;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        $arrayType = new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes defined return typehint of method and class.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        $arrayType = new ArrayType(new MixedType(), new MixedType());
+        return new RuleDefinition('Changes defined return typehint of method and class.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getData()
@@ -61,19 +61,19 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('SomeClass', 'getData', $arrayType)])]);
+, [new AddReturnTypeDeclaration('SomeClass', 'getData', $arrayType)])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->methodReturnTypes as $methodReturnType) {
             if (!$this->isObjectType($node, $methodReturnType->getObjectType())) {
@@ -92,13 +92,13 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration::class);
+        Assert::allIsAOf($configuration, AddReturnTypeDeclaration::class);
         $this->methodReturnTypes = $configuration;
     }
-    private function processClassMethodNodeWithTypehints(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $newType) : void
+    private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, Type $newType) : void
     {
         // remove it
-        if ($newType instanceof \PHPStan\Type\MixedType && !$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::MIXED_TYPE)) {
+        if ($newType instanceof MixedType && !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::MIXED_TYPE)) {
             $classMethod->returnType = null;
             return;
         }
@@ -109,7 +109,7 @@ CODE_SAMPLE
                 return;
             }
         }
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($newType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($newType, TypeKind::RETURN());
         $classMethod->returnType = $returnTypeNode;
     }
 }

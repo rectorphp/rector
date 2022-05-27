@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://3v4l.org/INd7o
  * @see \Rector\Tests\Php55\Rector\Class_\ClassConstantToSelfClassRector\ClassConstantToSelfClassRectorTest
  */
-final class ClassConstantToSelfClassRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ClassConstantToSelfClassRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change `__CLASS__` to self::class', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `__CLASS__` to self::class', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
    public function callOnMe()
@@ -45,17 +45,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Scalar\MagicConst\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\ClassConstFetch
+    public function refactor(Node $node) : ClassConstFetch
     {
         return $this->nodeFactory->createSelfFetchConstant('class');
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::CLASSNAME_CONSTANT;
+        return PhpVersionFeature::CLASSNAME_CONSTANT;
     }
 }

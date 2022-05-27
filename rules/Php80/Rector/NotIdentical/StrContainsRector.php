@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\StrContainsRectorTest
  */
-final class StrContainsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class StrContainsRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string[]
@@ -27,11 +27,11 @@ final class StrContainsRector extends \Rector\Core\Rector\AbstractRector impleme
     private const OLD_STR_NAMES = ['strpos', 'strstr'];
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::STR_CONTAINS;
+        return PhpVersionFeature::STR_CONTAINS;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace strpos() !== false and strstr()  with str_contains()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace strpos() !== false and strstr()  with str_contains()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -56,30 +56,30 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class];
+        return [Identical::class, NotIdentical::class];
     }
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $funcCall = $this->matchIdenticalOrNotIdenticalToFalse($node);
-        if (!$funcCall instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$funcCall instanceof FuncCall) {
             return null;
         }
-        $funcCall->name = new \PhpParser\Node\Name('str_contains');
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
-            return new \PhpParser\Node\Expr\BooleanNot($funcCall);
+        $funcCall->name = new Name('str_contains');
+        if ($node instanceof Identical) {
+            return new BooleanNot($funcCall);
         }
         return $funcCall;
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $expr
      */
-    private function matchIdenticalOrNotIdenticalToFalse($expr) : ?\PhpParser\Node\Expr\FuncCall
+    private function matchIdenticalOrNotIdenticalToFalse($expr) : ?FuncCall
     {
         if ($this->valueResolver->isFalse($expr->left)) {
-            if (!$expr->right instanceof \PhpParser\Node\Expr\FuncCall) {
+            if (!$expr->right instanceof FuncCall) {
                 return null;
             }
             if (!$this->isNames($expr->right, self::OLD_STR_NAMES)) {
@@ -90,7 +90,7 @@ CODE_SAMPLE
             return $funcCall;
         }
         if ($this->valueResolver->isFalse($expr->right)) {
-            if (!$expr->left instanceof \PhpParser\Node\Expr\FuncCall) {
+            if (!$expr->left instanceof FuncCall) {
                 return null;
             }
             if (!$this->isNames($expr->left, self::OLD_STR_NAMES)) {

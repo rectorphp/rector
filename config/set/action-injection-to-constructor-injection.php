@@ -5,6 +5,6 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Rector\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(ActionInjectionToConstructorInjectionRector::class);
 };

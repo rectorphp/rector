@@ -14,7 +14,7 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 /**
  * @implements ConflictingNameGuardInterface<PropertyRename>
  */
-final class DateTimeAtNamingConventionGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
+final class DateTimeAtNamingConventionGuard implements ConflictingNameGuardInterface
 {
     /**
      * @var string
@@ -31,7 +31,7 @@ final class DateTimeAtNamingConventionGuard implements \Rector\Naming\Contract\G
      * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeUnwrapper $typeUnwrapper)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeUnwrapper = $typeUnwrapper;
@@ -39,20 +39,20 @@ final class DateTimeAtNamingConventionGuard implements \Rector\Naming\Contract\G
     /**
      * @param PropertyRename $renameValueObject
      */
-    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
+    public function isConflicting(RenameValueObjectInterface $renameValueObject) : bool
     {
         return $this->isDateTimeAtNamingConvention($renameValueObject);
     }
-    private function isDateTimeAtNamingConvention(\Rector\Naming\ValueObject\PropertyRename $propertyRename) : bool
+    private function isDateTimeAtNamingConvention(PropertyRename $propertyRename) : bool
     {
         $type = $this->nodeTypeResolver->getType($propertyRename->getProperty());
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
-        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$type instanceof TypeWithClassName) {
             return \false;
         }
-        if (!\is_a($type->getClassName(), \DateTimeInterface::class, \true)) {
+        if (!\is_a($type->getClassName(), DateTimeInterface::class, \true)) {
             return \false;
         }
-        return \Rector\Core\Util\StringUtils::isMatch($propertyRename->getCurrentName(), self::AT_NAMING_REGEX . '');
+        return StringUtils::isMatch($propertyRename->getCurrentName(), self::AT_NAMING_REGEX . '');
     }
 }

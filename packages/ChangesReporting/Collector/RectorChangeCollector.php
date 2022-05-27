@@ -21,7 +21,7 @@ final class RectorChangeCollector
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(\Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
+    public function __construct(CurrentRectorProvider $currentRectorProvider, CurrentFileProvider $currentFileProvider)
     {
         $this->currentRectorProvider = $currentRectorProvider;
         $this->currentFileProvider = $currentFileProvider;
@@ -29,19 +29,19 @@ final class RectorChangeCollector
     /**
      * @deprecated Use file-> method instead
      */
-    public function notifyNodeFileInfo(\PhpParser\Node $node) : void
+    public function notifyNodeFileInfo(Node $node) : void
     {
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
+        if (!$file instanceof File) {
             // this file was changed before and this is a sub-new node
             // array Traverse to all new nodes would have to be used, but it's not worth the performance
             return;
         }
         $currentRector = $this->currentRectorProvider->getCurrentRector();
-        if (!$currentRector instanceof \Rector\Core\Contract\Rector\RectorInterface) {
+        if (!$currentRector instanceof RectorInterface) {
             return;
         }
-        $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($currentRector), $node->getLine());
+        $rectorWithLineChange = new RectorWithLineChange(\get_class($currentRector), $node->getLine());
         $file->addRectorClassWithLine($rectorWithLineChange);
     }
 }

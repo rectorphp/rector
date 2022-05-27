@@ -29,11 +29,11 @@ final class NewArgToMethodCall
         $this->type = $type;
         $this->value = $value;
         $this->methodCall = $methodCall;
-        \Rector\Core\Validation\RectorAssert::className($type);
+        RectorAssert::className($type);
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->type);
+        return new ObjectType($this->type);
     }
     /**
      * @return mixed

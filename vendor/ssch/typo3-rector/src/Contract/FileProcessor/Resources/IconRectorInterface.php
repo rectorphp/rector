@@ -5,7 +5,7 @@ namespace Ssch\TYPO3Rector\Contract\FileProcessor\Resources;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\Application\File;
-interface IconRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface
+interface IconRectorInterface extends RectorInterface
 {
-    public function refactorFile(\Rector\Core\ValueObject\Application\File $file) : void;
+    public function refactorFile(File $file) : void;
 }

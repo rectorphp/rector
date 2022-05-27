@@ -27,12 +27,12 @@ final class ServiceGetterToConstructorInjection
         $this->oldType = $oldType;
         $this->oldMethod = $oldMethod;
         $this->serviceType = $serviceType;
-        \Rector\Core\Validation\RectorAssert::className($oldType);
-        \Rector\Core\Validation\RectorAssert::className($serviceType);
+        RectorAssert::className($oldType);
+        RectorAssert::className($serviceType);
     }
-    public function getOldObjectType() : \PHPStan\Type\ObjectType
+    public function getOldObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->oldType);
+        return new ObjectType($this->oldType);
     }
     public function getOldMethod() : string
     {

@@ -13,14 +13,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.5/Deprecation-85981-AnnotationFlushesCaches.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v5\RemoveFlushCachesRector\RemoveFlushCachesRectorTest
  */
-final class RemoveFlushCachesRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveFlushCachesRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
+    public function __construct(PhpDocTagRemover $phpDocTagRemover)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
     }
@@ -29,12 +29,12 @@ final class RemoveFlushCachesRector extends \Rector\Core\Rector\AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         /** @var string $name */
         $name = $this->getName($node);
@@ -48,9 +48,9 @@ final class RemoveFlushCachesRector extends \Rector\Core\Rector\AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove @flushesCaches annotation', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove @flushesCaches annotation', [new CodeSample(<<<'CODE_SAMPLE'
 /**
  * My command
  *

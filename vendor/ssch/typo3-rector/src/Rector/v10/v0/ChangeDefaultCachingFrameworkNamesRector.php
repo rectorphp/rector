@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Deprecation-88366-DefaultCachingFrameworkCacheNamesChanged.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v0\ChangeDefaultCachingFrameworkNamesRector\ChangeDefaultCachingFrameworkNamesRectorTest
  */
-final class ChangeDefaultCachingFrameworkNamesRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeDefaultCachingFrameworkNamesRector extends AbstractRector
 {
     /*
      * @return string[]
@@ -23,14 +23,14 @@ final class ChangeDefaultCachingFrameworkNamesRector extends \Rector\Core\Rector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Cache\\CacheManager'))) {
+        if (!$this->nodeTypeResolver->isObjectType($node->var, new ObjectType('TYPO3\\CMS\\Core\\Cache\\CacheManager'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getCache')) {
@@ -50,9 +50,9 @@ final class ChangeDefaultCachingFrameworkNamesRector extends \Rector\Core\Rector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use new default cache names like core instead of cache_core)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use new default cache names like core instead of cache_core)', [new CodeSample(<<<'CODE_SAMPLE'
 $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
 $cacheManager->getCache('cache_core');
 $cacheManager->getCache('cache_hash');

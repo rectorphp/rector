@@ -12,23 +12,23 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector\SimplifyInArrayValuesRectorTest
  */
-final class SimplifyInArrayValuesRector extends \Rector\Core\Rector\AbstractRector
+final class SimplifyInArrayValuesRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes unneeded array_values() in in_array() call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('in_array("key", array_values($array), true);', 'in_array("key", $array, true);')]);
+        return new RuleDefinition('Removes unneeded array_values() in in_array() call', [new CodeSample('in_array("key", array_values($array), true);', 'in_array("key", $array, true);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'in_array')) {
             return null;
@@ -36,10 +36,10 @@ final class SimplifyInArrayValuesRector extends \Rector\Core\Rector\AbstractRect
         if (!isset($node->args[1])) {
             return null;
         }
-        if (!$node->args[1] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[1] instanceof Arg) {
             return null;
         }
-        if (!$node->args[1]->value instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$node->args[1]->value instanceof FuncCall) {
             return null;
         }
         /** @var FuncCall $innerFunCall */
@@ -50,7 +50,7 @@ final class SimplifyInArrayValuesRector extends \Rector\Core\Rector\AbstractRect
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[0] instanceof Arg) {
             return null;
         }
         $node->args[1] = $innerFunCall->args[0];

@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector\CompleteDynamicPropertiesRectorTest
  */
-final class CompleteDynamicPropertiesRector extends \Rector\Core\Rector\AbstractRector
+final class CompleteDynamicPropertiesRector extends AbstractRector
 {
     /**
      * @readonly
@@ -57,7 +57,7 @@ final class CompleteDynamicPropertiesRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\Core\NodeAnalyzer\PropertyPresenceChecker
      */
     private $propertyPresenceChecker;
-    public function __construct(\Rector\CodeQuality\NodeFactory\MissingPropertiesFactory $missingPropertiesFactory, \Rector\CodeQuality\NodeAnalyzer\LocalPropertyAnalyzer $localPropertyAnalyzer, \Rector\CodeQuality\NodeAnalyzer\ClassLikeAnalyzer $classLikeAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\Core\NodeAnalyzer\PropertyPresenceChecker $propertyPresenceChecker)
+    public function __construct(MissingPropertiesFactory $missingPropertiesFactory, LocalPropertyAnalyzer $localPropertyAnalyzer, ClassLikeAnalyzer $classLikeAnalyzer, ReflectionProvider $reflectionProvider, ClassAnalyzer $classAnalyzer, PropertyPresenceChecker $propertyPresenceChecker)
     {
         $this->missingPropertiesFactory = $missingPropertiesFactory;
         $this->localPropertyAnalyzer = $localPropertyAnalyzer;
@@ -66,9 +66,9 @@ final class CompleteDynamicPropertiesRector extends \Rector\Core\Rector\Abstract
         $this->classAnalyzer = $classAnalyzer;
         $this->propertyPresenceChecker = $propertyPresenceChecker;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add missing dynamic properties', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add missing dynamic properties', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function set()
@@ -98,12 +98,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkipClass($node)) {
             return null;
@@ -130,7 +130,7 @@ CODE_SAMPLE
         $node->stmts = \array_merge($newProperties, $node->stmts);
         return $node;
     }
-    private function shouldSkipClass(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class) : bool
     {
         if ($this->classAnalyzer->isAnonymousClass($class)) {
             return \true;
@@ -150,7 +150,7 @@ CODE_SAMPLE
      * @param array<string, Type> $fetchedLocalPropertyNameToTypes
      * @return string[]
      */
-    private function resolvePropertiesToComplete(\PhpParser\Node\Stmt\Class_ $class, array $fetchedLocalPropertyNameToTypes) : array
+    private function resolvePropertiesToComplete(Class_ $class, array $fetchedLocalPropertyNameToTypes) : array
     {
         $propertyNames = $this->classLikeAnalyzer->resolvePropertyNames($class);
         /** @var string[] $fetchedLocalPropertyNames */
@@ -161,7 +161,7 @@ CODE_SAMPLE
      * @param string[] $propertiesToComplete
      * @return string[]
      */
-    private function filterOutExistingProperties(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Reflection\ClassReflection $classReflection, array $propertiesToComplete) : array
+    private function filterOutExistingProperties(Class_ $class, ClassReflection $classReflection, array $propertiesToComplete) : array
     {
         $missingPropertyNames = [];
         $className = $classReflection->getName();
@@ -170,7 +170,7 @@ CODE_SAMPLE
             if ($classReflection->hasProperty($propertyToComplete)) {
                 continue;
             }
-            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyToComplete, new \PHPStan\Type\ObjectType($className), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $propertyMetadata = new PropertyMetadata($propertyToComplete, new ObjectType($className), Class_::MODIFIER_PRIVATE);
             $hasClassContextProperty = $this->propertyPresenceChecker->hasClassContextProperty($class, $propertyMetadata);
             if ($hasClassContextProperty) {
                 continue;

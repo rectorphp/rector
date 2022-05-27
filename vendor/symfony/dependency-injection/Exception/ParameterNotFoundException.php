@@ -16,7 +16,7 @@ use RectorPrefix20220527\Psr\Container\NotFoundExceptionInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParameterNotFoundException extends \RectorPrefix20220527\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException implements \RectorPrefix20220527\Psr\Container\NotFoundExceptionInterface
+class ParameterNotFoundException extends InvalidArgumentException implements NotFoundExceptionInterface
 {
     /**
      * @var string

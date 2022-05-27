@@ -21,7 +21,7 @@ use RectorPrefix20220527\Symfony\Component\Config\Resource\GlobResource;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class FileLoader extends \RectorPrefix20220527\Symfony\Component\Config\Loader\Loader
+abstract class FileLoader extends Loader
 {
     protected static $loading = [];
     protected $locator;
@@ -29,7 +29,7 @@ abstract class FileLoader extends \RectorPrefix20220527\Symfony\Component\Config
      * @var string|null
      */
     private $currentDir;
-    public function __construct(\RectorPrefix20220527\Symfony\Component\Config\FileLocatorInterface $locator, string $env = null)
+    public function __construct(FileLocatorInterface $locator, string $env = null)
     {
         $this->locator = $locator;
         parent::__construct($env);
@@ -44,7 +44,7 @@ abstract class FileLoader extends \RectorPrefix20220527\Symfony\Component\Config
     /**
      * Returns the file locator used by this loader.
      */
-    public function getLocator() : \RectorPrefix20220527\Symfony\Component\Config\FileLocatorInterface
+    public function getLocator() : FileLocatorInterface
     {
         return $this->locator;
     }
@@ -105,17 +105,17 @@ abstract class FileLoader extends \RectorPrefix20220527\Symfony\Component\Config
         }
         try {
             $prefix = $this->locator->locate($prefix, $this->currentDir, \true);
-        } catch (\RectorPrefix20220527\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException $e) {
+        } catch (FileLocatorFileNotFoundException $e) {
             if (!$ignoreErrors) {
                 throw $e;
             }
             $resource = [];
             foreach ($e->getPaths() as $path) {
-                $resource[] = new \RectorPrefix20220527\Symfony\Component\Config\Resource\FileExistenceResource($path);
+                $resource[] = new FileExistenceResource($path);
             }
             return;
         }
-        $resource = new \RectorPrefix20220527\Symfony\Component\Config\Resource\GlobResource($prefix, $pattern, $recursive, $forExclusion, $excluded);
+        $resource = new GlobResource($prefix, $pattern, $recursive, $forExclusion, $excluded);
         yield from $resource;
     }
     /**
@@ -132,7 +132,7 @@ abstract class FileLoader extends \RectorPrefix20220527\Symfony\Component\Config
             for ($i = 0; $i < ($resourcesCount = \count($resources)); ++$i) {
                 if (isset(self::$loading[$resources[$i]])) {
                     if ($i == $resourcesCount - 1) {
-                        throw new \RectorPrefix20220527\Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException(\array_keys(self::$loading));
+                        throw new FileLoaderImportCircularReferenceException(\array_keys(self::$loading));
                     }
                 } else {
                     $resource = $resources[$i];
@@ -146,15 +146,15 @@ abstract class FileLoader extends \RectorPrefix20220527\Symfony\Component\Config
                 unset(self::$loading[$resource]);
             }
             return $ret;
-        } catch (\RectorPrefix20220527\Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException $e) {
+        } catch (FileLoaderImportCircularReferenceException $e) {
             throw $e;
         } catch (\Exception $e) {
             if (!$ignoreErrors) {
                 // prevent embedded imports from nesting multiple exceptions
-                if ($e instanceof \RectorPrefix20220527\Symfony\Component\Config\Exception\LoaderLoadException) {
+                if ($e instanceof LoaderLoadException) {
                     throw $e;
                 }
-                throw new \RectorPrefix20220527\Symfony\Component\Config\Exception\LoaderLoadException($resource, $sourceResource, 0, $e, $type);
+                throw new LoaderLoadException($resource, $sourceResource, 0, $e, $type);
             }
         }
         return null;

@@ -9,7 +9,7 @@ use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
-final class ReturnTypeDeclarationReturnTypeInfererTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
+final class ReturnTypeDeclarationReturnTypeInfererTypeInferer implements ReturnTypeInfererInterface
 {
     /**
      * @readonly
@@ -21,19 +21,19 @@ final class ReturnTypeDeclarationReturnTypeInfererTypeInferer implements \Rector
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\TypeDeclaration\FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
+    public function inferFunctionLike(FunctionLike $functionLike) : Type
     {
         if ($functionLike->getReturnType() === null) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         // resolve later with more precise type, e.g. Type[]
         if ($this->nodeNameResolver->isNames($functionLike->getReturnType(), ['array', 'iterable'])) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         return $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType($functionLike);
     }

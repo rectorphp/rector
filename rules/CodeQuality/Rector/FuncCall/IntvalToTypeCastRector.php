@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector\IntvalToTypeCastRectorTest
  */
-final class IntvalToTypeCastRector extends \Rector\Core\Rector\AbstractRector
+final class IntvalToTypeCastRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change intval() to faster and readable (int) $value', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change intval() to faster and readable (int) $value', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -44,17 +44,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'intval')) {
             return null;
         }
-        if (isset($node->args[1]) && $node->args[1] instanceof \PhpParser\Node\Arg) {
+        if (isset($node->args[1]) && $node->args[1] instanceof Arg) {
             $secondArgumentValue = $this->valueResolver->getValue($node->args[1]->value);
             // default value
             if ($secondArgumentValue !== 10) {
@@ -64,9 +64,9 @@ CODE_SAMPLE
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[0] instanceof Arg) {
             return null;
         }
-        return new \PhpParser\Node\Expr\Cast\Int_($node->args[0]->value);
+        return new Int_($node->args[0]->value);
     }
 }

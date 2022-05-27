@@ -21,7 +21,7 @@ namespace RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST
  */
-class NestedAssignment extends \Helmich\TypoScriptParser\Parser\AST\Statement
+class NestedAssignment extends Statement
 {
     /**
      * The object to operate on.
@@ -40,7 +40,7 @@ class NestedAssignment extends \Helmich\TypoScriptParser\Parser\AST\Statement
      * @param Statement[] $statements The nested statements.
      * @param int         $sourceLine The original source line.
      */
-    public function __construct(\RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, array $statements, int $sourceLine)
+    public function __construct(ObjectPath $object, array $statements, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;

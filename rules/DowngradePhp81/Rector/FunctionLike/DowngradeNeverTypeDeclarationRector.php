@@ -17,14 +17,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp81\Rector\FunctionLike\DowngradeNeverTypeDeclarationRector\DowngradeNeverTypeDeclarationRectorTest
  */
-final class DowngradeNeverTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeNeverTypeDeclarationRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocFromTypeDeclarationDecorator;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
+    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
     {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
     }
@@ -33,11 +33,11 @@ final class DowngradeNeverTypeDeclarationRector extends \Rector\Core\Rector\Abst
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\Closure::class];
+        return [Function_::class, ClassMethod::class, Closure::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove "never" return type, add a "@return never" tag instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove "never" return type, add a "@return never" tag instead', [new CodeSample(<<<'CODE_SAMPLE'
 function someFunction(): never
 {
 }
@@ -55,9 +55,9 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Closure|Function_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $neverType = new \PHPStan\Type\NeverType();
+        $neverType = new NeverType();
         if (!$this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $neverType)) {
             return null;
         }

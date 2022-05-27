@@ -21,17 +21,17 @@ final class FinderSanitizer
     {
         $smartFileInfos = [];
         foreach ($files as $file) {
-            $fileInfo = \is_string($file) ? new \SplFileInfo($file) : $file;
+            $fileInfo = \is_string($file) ? new SplFileInfo($file) : $file;
             if (!$this->isFileInfoValid($fileInfo)) {
                 continue;
             }
             /** @var string $realPath */
             $realPath = $fileInfo->getRealPath();
-            $smartFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($realPath);
+            $smartFileInfos[] = new SmartFileInfo($realPath);
         }
         return $smartFileInfos;
     }
-    private function isFileInfoValid(\SplFileInfo $fileInfo) : bool
+    private function isFileInfoValid(SplFileInfo $fileInfo) : bool
     {
         return (bool) $fileInfo->getRealPath();
     }

@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector\SingleInArrayToCompareRectorTest
  */
-final class SingleInArrayToCompareRector extends \Rector\Core\Rector\AbstractRector
+final class SingleInArrayToCompareRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes in_array() with single element to ===', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes in_array() with single element to ===', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -49,12 +49,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'in_array')) {
             return null;
@@ -62,10 +62,10 @@ CODE_SAMPLE
         if (!isset($node->args[1])) {
             return null;
         }
-        if (!$node->args[1] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[1] instanceof Arg) {
             return null;
         }
-        if (!$node->args[1]->value instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$node->args[1]->value instanceof Array_) {
             return null;
         }
         /** @var Array_ $arrayNode */
@@ -74,20 +74,20 @@ CODE_SAMPLE
             return null;
         }
         $firstArrayItem = $arrayNode->items[0];
-        if (!$firstArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$firstArrayItem instanceof ArrayItem) {
             return null;
         }
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[0] instanceof Arg) {
             return null;
         }
         $firstArrayItemValue = $firstArrayItem->value;
         // strict
         if (isset($node->args[2])) {
-            return new \PhpParser\Node\Expr\BinaryOp\Identical($node->args[0]->value, $firstArrayItemValue);
+            return new Identical($node->args[0]->value, $firstArrayItemValue);
         }
-        return new \PhpParser\Node\Expr\BinaryOp\Equal($node->args[0]->value, $firstArrayItemValue);
+        return new Equal($node->args[0]->value, $firstArrayItemValue);
     }
 }

@@ -13,21 +13,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.3/Deprecation-76804-DeprecateGeneralUtilitystrtoupperStrtolower.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v1\GeneralUtilityToUpperAndLowerRector\GeneralUtilityToUpperAndLowerRectorTest
  */
-final class GeneralUtilityToUpperAndLowerRector extends \Rector\Core\Rector\AbstractRector
+final class GeneralUtilityToUpperAndLowerRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['strtoupper', 'strtolower'])) {
@@ -42,9 +42,9 @@ final class GeneralUtilityToUpperAndLowerRector extends \Rector\Core\Rector\Abst
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use mb_strtolower and mb_strtoupper', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use mb_strtolower and mb_strtoupper', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 $toUpper = GeneralUtility::strtoupper('foo');

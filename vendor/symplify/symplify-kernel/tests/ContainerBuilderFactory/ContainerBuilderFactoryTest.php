@@ -7,13 +7,13 @@ use RectorPrefix20220527\PHPUnit\Framework\TestCase;
 use RectorPrefix20220527\Symplify\SmartFileSystem\SmartFileSystem;
 use RectorPrefix20220527\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory;
 use RectorPrefix20220527\Symplify\SymplifyKernel\ContainerBuilderFactory;
-final class ContainerBuilderFactoryTest extends \RectorPrefix20220527\PHPUnit\Framework\TestCase
+final class ContainerBuilderFactoryTest extends TestCase
 {
     public function test() : void
     {
-        $containerBuilderFactory = new \RectorPrefix20220527\Symplify\SymplifyKernel\ContainerBuilderFactory(new \RectorPrefix20220527\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory());
+        $containerBuilderFactory = new ContainerBuilderFactory(new ParameterMergingLoaderFactory());
         $containerBuilder = $containerBuilderFactory->create([__DIR__ . '/config/some_services.php'], [], []);
-        $hasSmartFileSystemService = $containerBuilder->has(\RectorPrefix20220527\Symplify\SmartFileSystem\SmartFileSystem::class);
+        $hasSmartFileSystemService = $containerBuilder->has(SmartFileSystem::class);
         $this->assertTrue($hasSmartFileSystemService);
     }
 }

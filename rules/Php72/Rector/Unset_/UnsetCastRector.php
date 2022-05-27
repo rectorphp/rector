@@ -16,15 +16,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php72\Rector\Unset_\UnsetCastRector\UnsetCastRectorTest
  */
-final class UnsetCastRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class UnsetCastRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::NO_UNSET_CAST;
+        return PhpVersionFeature::NO_UNSET_CAST;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes (unset) cast', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removes (unset) cast', [new CodeSample(<<<'CODE_SAMPLE'
 $different = (unset) $value;
 
 $value = (unset) $value;
@@ -41,15 +41,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Cast\Unset_::class, \PhpParser\Node\Expr\Assign::class];
+        return [Unset_::class, Assign::class];
     }
     /**
      * @param Unset_|Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\Assign) {
-            if ($node->expr instanceof \PhpParser\Node\Expr\Cast\Unset_) {
+        if ($node instanceof Assign) {
+            if ($node->expr instanceof Unset_) {
                 $unset = $node->expr;
                 if ($this->nodeComparator->areNodesEqual($node->var, $unset->expr)) {
                     return $this->nodeFactory->createFuncCall('unset', [$node->var]);
@@ -57,8 +57,8 @@ CODE_SAMPLE
             }
             return null;
         }
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Stmt\Expression) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Expression) {
             $this->removeNode($node);
             return null;
         }

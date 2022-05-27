@@ -7,7 +7,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220527\Tracy;
 
-class FileSession implements \RectorPrefix20220527\Tracy\SessionStorage
+class FileSession implements SessionStorage
 {
     private const FilePrefix = 'tracy-';
     private const CookieLifetime = 31557600;
@@ -36,7 +36,7 @@ class FileSession implements \RectorPrefix20220527\Tracy\SessionStorage
     {
         $id = $_COOKIE[$this->cookieName] ?? null;
         if (!\is_string($id) || !\preg_match('#^\\w{10}\\z#i', $id) || !($file = @\fopen($path = $this->dir . '/' . self::FilePrefix . $id, 'r+'))) {
-            $id = \RectorPrefix20220527\Tracy\Helpers::createId();
+            $id = Helpers::createId();
             \setcookie($this->cookieName, $id, \time() + self::CookieLifetime, '/', '', \false, \true);
             $file = @\fopen($path = $this->dir . '/' . self::FilePrefix . $id, 'c+');
             // intentionally @

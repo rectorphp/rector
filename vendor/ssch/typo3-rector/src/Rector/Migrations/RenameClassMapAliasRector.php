@@ -25,7 +25,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Ssch\TYPO3Rector\Tests\Rector\Migrations\RenameClassMapAliasRectorTest
  */
-final class RenameClassMapAliasRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class RenameClassMapAliasRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @api
@@ -59,7 +59,7 @@ final class RenameClassMapAliasRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Renaming\NodeManipulator\ClassRenamer
      */
     private $classRenamer;
-    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\Renaming\NodeManipulator\ClassRenamer $classRenamer)
+    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, ClassRenamer $classRenamer)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->classRenamer = $classRenamer;
@@ -67,9 +67,9 @@ final class RenameClassMapAliasRector extends \Rector\Core\Rector\AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces defined classes by new ones.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces defined classes by new ones.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 namespace App;
 
 use t3lib_div;
@@ -96,14 +96,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class, \PhpParser\Node\Name::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\FunctionLike::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\ClassLike::class, \PhpParser\Node\Stmt\Namespace_::class, \PhpParser\Node\Scalar\String_::class];
+        return [FileWithoutNamespace::class, Name::class, Property::class, FunctionLike::class, Expression::class, ClassLike::class, Namespace_::class, String_::class];
     }
     /**
      * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace|String_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Scalar\String_) {
+        if ($node instanceof String_) {
             return $this->stringClassNameToClassConstantRectorIfPossible($node);
         }
         return $this->classRenamer->renameNode($node, $this->oldToNewClasses);
@@ -115,7 +115,7 @@ CODE_SAMPLE
     {
         $classAliasMaps = $configuration[self::CLASS_ALIAS_MAPS] ?? $configuration;
         foreach ($classAliasMaps as $file) {
-            $filePath = new \Symplify\SmartFileSystem\SmartFileInfo($file);
+            $filePath = new SmartFileInfo($file);
             $classAliasMap = (require $filePath->getRealPath());
             foreach ($classAliasMap as $oldClass => $newClass) {
                 $this->oldToNewClasses[$oldClass] = $newClass;
@@ -130,9 +130,9 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::CLASSNAME_CONSTANT;
+        return PhpVersionFeature::CLASSNAME_CONSTANT;
     }
-    private function stringClassNameToClassConstantRectorIfPossible(\PhpParser\Node\Scalar\String_ $node) : ?\PhpParser\Node
+    private function stringClassNameToClassConstantRectorIfPossible(String_ $node) : ?Node
     {
         $classLikeName = $node->value;
         // remove leading slash
@@ -143,7 +143,7 @@ CODE_SAMPLE
         if (!\array_key_exists($classLikeName, $this->oldToNewClasses)) {
             return null;
         }
-        if (\Rector\Core\Util\StaticRectorStrings::isInArrayInsensitive($classLikeName, $this->classesToSkip)) {
+        if (StaticRectorStrings::isInArrayInsensitive($classLikeName, $this->classesToSkip)) {
             return null;
         }
         $newClassName = $this->oldToNewClasses[$classLikeName];

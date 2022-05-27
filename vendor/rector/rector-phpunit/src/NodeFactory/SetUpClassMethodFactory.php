@@ -30,7 +30,7 @@ final class SetUpClassMethodFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator $setUpMethodDecorator, \Rector\PHPUnit\NodeManipulator\StmtManipulator $stmtManipulator, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(SetUpMethodDecorator $setUpMethodDecorator, StmtManipulator $stmtManipulator, NodeFactory $nodeFactory)
     {
         $this->setUpMethodDecorator = $setUpMethodDecorator;
         $this->stmtManipulator = $stmtManipulator;
@@ -39,10 +39,10 @@ final class SetUpClassMethodFactory
     /**
      * @param Stmt[]|Expr[] $stmts
      */
-    public function createSetUpMethod(array $stmts) : \PhpParser\Node\Stmt\ClassMethod
+    public function createSetUpMethod(array $stmts) : ClassMethod
     {
         $stmts = $this->stmtManipulator->normalizeStmts($stmts);
-        $classMethodBuilder = new \RectorPrefix20220527\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::SET_UP);
+        $classMethodBuilder = new MethodBuilder(MethodName::SET_UP);
         $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmt($this->createParentStaticCall());
         $classMethodBuilder->addStmts($stmts);
@@ -50,9 +50,9 @@ final class SetUpClassMethodFactory
         $this->setUpMethodDecorator->decorate($classMethod);
         return $classMethod;
     }
-    public function createParentStaticCall() : \PhpParser\Node\Stmt\Expression
+    public function createParentStaticCall() : Expression
     {
-        $parentSetupStaticCall = $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::PARENT(), \Rector\Core\ValueObject\MethodName::SET_UP);
-        return new \PhpParser\Node\Stmt\Expression($parentSetupStaticCall);
+        $parentSetupStaticCall = $this->nodeFactory->createStaticCall(ObjectReference::PARENT(), MethodName::SET_UP);
+        return new Expression($parentSetupStaticCall);
     }
 }

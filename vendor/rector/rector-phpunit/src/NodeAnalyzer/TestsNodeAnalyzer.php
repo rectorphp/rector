@@ -39,23 +39,23 @@ final class TestsNodeAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->testCaseObjectTypes = [new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\TestCase'), new \PHPStan\Type\ObjectType('PHPUnit_Framework_TestCase')];
+        $this->testCaseObjectTypes = [new ObjectType('PHPUnit\\Framework\\TestCase'), new ObjectType('PHPUnit_Framework_TestCase')];
     }
-    public function isInTestClass(\PhpParser\Node $node) : bool
+    public function isInTestClass(Node $node) : bool
     {
-        $classLike = $node instanceof \PhpParser\Node\Stmt\ClassLike ? $node : $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $node instanceof ClassLike ? $node : $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return \false;
         }
         return $this->nodeTypeResolver->isObjectTypes($classLike, $this->testCaseObjectTypes);
     }
-    public function isTestClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function isTestClassMethod(ClassMethod $classMethod) : bool
     {
         if (!$classMethod->isPublic()) {
             return \false;
@@ -66,23 +66,23 @@ final class TestsNodeAnalyzer
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         return $phpDocInfo->hasByName('test');
     }
-    public function isAssertMethodCallName(\PhpParser\Node $node, string $name) : bool
+    public function isAssertMethodCallName(Node $node, string $name) : bool
     {
-        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
+        if ($node instanceof StaticCall) {
             $callerType = $this->nodeTypeResolver->getType($node->class);
-        } elseif ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        } elseif ($node instanceof MethodCall) {
             $callerType = $this->nodeTypeResolver->getType($node->var);
         } else {
             return \false;
         }
-        $assertObjectType = new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\Assert');
+        $assertObjectType = new ObjectType('PHPUnit\\Framework\\Assert');
         if (!$assertObjectType->isSuperTypeOf($callerType)->yes()) {
             return \false;
         }
         /** @var StaticCall|MethodCall $node */
         return $this->nodeNameResolver->isName($node->name, $name);
     }
-    public function isInPHPUnitMethodCallName(\PhpParser\Node $node, string $name) : bool
+    public function isInPHPUnitMethodCallName(Node $node, string $name) : bool
     {
         if (!$this->isPHPUnitTestCaseCall($node)) {
             return \false;
@@ -93,7 +93,7 @@ final class TestsNodeAnalyzer
     /**
      * @param string[] $names
      */
-    public function isPHPUnitMethodCallNames(\PhpParser\Node $node, array $names) : bool
+    public function isPHPUnitMethodCallNames(Node $node, array $names) : bool
     {
         if (!$this->isPHPUnitTestCaseCall($node)) {
             return \false;
@@ -101,11 +101,11 @@ final class TestsNodeAnalyzer
         /** @var MethodCall|StaticCall $node */
         return $this->nodeNameResolver->isNames($node->name, $names);
     }
-    public function isPHPUnitTestCaseCall(\PhpParser\Node $node) : bool
+    public function isPHPUnitTestCaseCall(Node $node) : bool
     {
         if (!$this->isInTestClass($node)) {
             return \false;
         }
-        return $node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall;
+        return $node instanceof MethodCall || $node instanceof StaticCall;
     }
 }

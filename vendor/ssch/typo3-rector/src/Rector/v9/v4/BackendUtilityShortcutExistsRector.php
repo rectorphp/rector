@@ -14,14 +14,14 @@ use RectorPrefix20220527\TYPO3\CMS\Backend\Utility\BackendUtility;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-84414-BackendUtilityshortcutExists.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\BackendUtilityShortcutExistsRector\BackendUtilityShortcutExistsRectorTest
  */
-final class BackendUtilityShortcutExistsRector extends \Rector\Core\Rector\AbstractRector
+final class BackendUtilityShortcutExistsRector extends AbstractRector
 {
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('shortcutExists Static call replaced by method call of ShortcutRepository', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(\RectorPrefix20220527\TYPO3\CMS\Backend\Utility\BackendUtility::class . '::shortcutExists($url);', <<<'CODE_SAMPLE'
+        return new RuleDefinition('shortcutExists Static call replaced by method call of ShortcutRepository', [new CodeSample(BackendUtility::class . '::shortcutExists($url);', <<<'CODE_SAMPLE'
 GeneralUtility::makeInstance(ShortcutRepository::class)->shortcutExists($url);
 CODE_SAMPLE
 )]);
@@ -31,14 +31,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'shortcutExists')) {

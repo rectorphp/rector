@@ -13,11 +13,11 @@ final class ParameterTypeComparator
      * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
      */
     private $methodParameterTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\MethodParameterTypeResolver $methodParameterTypeResolver)
+    public function __construct(MethodParameterTypeResolver $methodParameterTypeResolver)
     {
         $this->methodParameterTypeResolver = $methodParameterTypeResolver;
     }
-    public function isClassMethodIdenticalToParentStaticCall(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    public function isClassMethodIdenticalToParentStaticCall(ClassMethod $classMethod, StaticCall $staticCall) : bool
     {
         $currentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByClassMethod($classMethod);
         $parentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByStaticCall($staticCall);

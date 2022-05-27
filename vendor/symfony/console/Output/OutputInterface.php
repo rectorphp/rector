@@ -71,9 +71,9 @@ interface OutputInterface
      * Gets the decorated flag.
      */
     public function isDecorated() : bool;
-    public function setFormatter(\RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter);
+    public function setFormatter(OutputFormatterInterface $formatter);
     /**
      * Returns current output formatter instance.
      */
-    public function getFormatter() : \RectorPrefix20220527\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+    public function getFormatter() : OutputFormatterInterface;
 }

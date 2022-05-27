@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.1/Deprecation-89001-InternalPublicTSFEProperties.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v1\RefactorInternalPropertiesOfTSFERector\RefactorInternalPropertiesOfTSFERectorTest
  */
-final class RefactorInternalPropertiesOfTSFERector extends \Rector\Core\Rector\AbstractRector
+final class RefactorInternalPropertiesOfTSFERector extends AbstractRector
 {
     /**
      * @var string
@@ -48,16 +48,16 @@ final class RefactorInternalPropertiesOfTSFERector extends \Rector\Core\Rector\A
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor Internal public TSFE properties', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor Internal public TSFE properties', [new CodeSample(<<<'CODE_SAMPLE'
 $domainStartPage = $GLOBALS['TSFE']->domainStartPage;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -70,12 +70,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\PropertyFetch::class];
+        return [PropertyFetch::class];
     }
     /**
      * @param PropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -83,8 +83,8 @@ CODE_SAMPLE
         if (!$this->isNames($node->name, ['cHash_array', self::HASH, 'domainStartPage'])) {
             return null;
         }
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var === $node) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Assign && $parentNode->var === $node) {
             return null;
         }
         if ($this->isName($node->name, 'cHash_array')) {
@@ -95,44 +95,44 @@ CODE_SAMPLE
         }
         return $this->refactorDomainStartPage();
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
+    private function shouldSkip(PropertyFetch $propertyFetch) : bool
     {
-        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
+        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
     }
-    private function initializeEmptyArray() : \PhpParser\Node
+    private function initializeEmptyArray() : Node
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::RELEVANT_PARAMETERS_FOR_CACHING_FROM_PAGE_ARGUMENTS), $this->nodeFactory->createArray([])));
+        return new Expression(new Assign(new Variable(self::RELEVANT_PARAMETERS_FOR_CACHING_FROM_PAGE_ARGUMENTS), $this->nodeFactory->createArray([])));
     }
-    private function initializePageArguments() : \PhpParser\Node
+    private function initializePageArguments() : Node
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PAGE_ARGUMENTS), $this->createPageArguments()));
+        return new Expression(new Assign(new Variable(self::PAGE_ARGUMENTS), $this->createPageArguments()));
     }
-    private function initializeQueryParams() : \PhpParser\Node
+    private function initializeQueryParams() : Node
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::QUERY_PARAMS), $this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable(self::PAGE_ARGUMENTS), 'getDynamicArguments')));
+        return new Expression(new Assign(new Variable(self::QUERY_PARAMS), $this->nodeFactory->createMethodCall(new Variable(self::PAGE_ARGUMENTS), 'getDynamicArguments')));
     }
-    private function getRelevantParametersFromCacheHashCalculator() : \PhpParser\Node
+    private function getRelevantParametersFromCacheHashCalculator() : Node
     {
-        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\BooleanAnd(new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Empty_(new \PhpParser\Node\Expr\Variable(self::QUERY_PARAMS))), new \PhpParser\Node\Expr\BinaryOp\Coalesce(new \PhpParser\Node\Expr\ArrayDimFetch($this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable(self::PAGE_ARGUMENTS), 'getArguments'), new \PhpParser\Node\Scalar\String_(self::HASH)), $this->nodeFactory->createFalse())));
-        $if->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::QUERY_PARAMS), new \PhpParser\Node\Scalar\String_('id')), $this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable(self::PAGE_ARGUMENTS), 'getPageId')));
-        $if->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::RELEVANT_PARAMETERS_FOR_CACHING_FROM_PAGE_ARGUMENTS), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Page\\CacheHashCalculator')]), 'getRelevantParameters', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\HttpUtility', 'buildQueryString', [new \PhpParser\Node\Expr\Variable(self::QUERY_PARAMS)])])));
+        $if = new If_(new BooleanAnd(new BooleanNot(new Empty_(new Variable(self::QUERY_PARAMS))), new Coalesce(new ArrayDimFetch($this->nodeFactory->createMethodCall(new Variable(self::PAGE_ARGUMENTS), 'getArguments'), new String_(self::HASH)), $this->nodeFactory->createFalse())));
+        $if->stmts[] = new Expression(new Assign(new ArrayDimFetch(new Variable(self::QUERY_PARAMS), new String_('id')), $this->nodeFactory->createMethodCall(new Variable(self::PAGE_ARGUMENTS), 'getPageId')));
+        $if->stmts[] = new Expression(new Assign(new Variable(self::RELEVANT_PARAMETERS_FOR_CACHING_FROM_PAGE_ARGUMENTS), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Page\\CacheHashCalculator')]), 'getRelevantParameters', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\HttpUtility', 'buildQueryString', [new Variable(self::QUERY_PARAMS)])])));
         return $if;
     }
-    private function refactorCacheHashArray(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \PhpParser\Node
+    private function refactorCacheHashArray(PropertyFetch $propertyFetch) : Node
     {
         $this->nodesToAddCollector->addNodesBeforeNode([$this->initializeEmptyArray(), $this->initializePageArguments(), $this->initializeQueryParams(), $this->getRelevantParametersFromCacheHashCalculator()], $propertyFetch);
-        return new \PhpParser\Node\Expr\Variable(self::RELEVANT_PARAMETERS_FOR_CACHING_FROM_PAGE_ARGUMENTS);
+        return new Variable(self::RELEVANT_PARAMETERS_FOR_CACHING_FROM_PAGE_ARGUMENTS);
     }
-    private function refactorCacheHash() : \PhpParser\Node
+    private function refactorCacheHash() : Node
     {
-        return new \PhpParser\Node\Expr\ArrayDimFetch($this->nodeFactory->createMethodCall($this->createPageArguments(), 'getArguments'), new \PhpParser\Node\Scalar\String_(self::HASH));
+        return new ArrayDimFetch($this->nodeFactory->createMethodCall($this->createPageArguments(), 'getArguments'), new String_(self::HASH));
     }
-    private function createPageArguments() : \PhpParser\Node\Expr\MethodCall
+    private function createPageArguments() : MethodCall
     {
-        return $this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_('REQUEST')), 'getAttribute', ['routing']);
+        return $this->nodeFactory->createMethodCall(new ArrayDimFetch(new Variable('GLOBALS'), new String_('REQUEST')), 'getAttribute', ['routing']);
     }
-    private function refactorDomainStartPage() : \PhpParser\Node
+    private function refactorDomainStartPage() : Node
     {
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_('REQUEST')), 'getAttribute', ['site']), 'getRootPageId');
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(new ArrayDimFetch(new Variable('GLOBALS'), new String_('REQUEST')), 'getAttribute', ['site']), 'getRootPageId');
     }
 }

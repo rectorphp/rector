@@ -5,7 +5,7 @@ namespace Rector\FileSystemRector\ValueObject;
 
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\FileSystemRector\Contract\AddedFileInterface;
-final class AddedFileWithContent implements \Rector\FileSystemRector\Contract\AddedFileInterface
+final class AddedFileWithContent implements AddedFileInterface
 {
     /**
      * @readonly
@@ -22,14 +22,14 @@ final class AddedFileWithContent implements \Rector\FileSystemRector\Contract\Ad
         $this->filePath = $filePath;
         $this->fileContent = $fileContent;
         if ($filePath === $fileContent) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException('File path and content are the same, probably a bug');
+            throw new ShouldNotHappenException('File path and content are the same, probably a bug');
         }
     }
     public function getRealPath() : string
     {
         $realpath = \realpath($this->filePath);
         if ($realpath === \false) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         return $realpath;
     }

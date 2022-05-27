@@ -13,11 +13,11 @@ namespace RectorPrefix20220527\Symfony\Contracts\Service\Test;
 use RectorPrefix20220527\PHPUnit\Framework\TestCase;
 use RectorPrefix20220527\Psr\Container\ContainerInterface;
 use RectorPrefix20220527\Symfony\Contracts\Service\ServiceLocatorTrait;
-abstract class ServiceLocatorTest extends \RectorPrefix20220527\PHPUnit\Framework\TestCase
+abstract class ServiceLocatorTest extends TestCase
 {
-    protected function getServiceLocator(array $factories) : \RectorPrefix20220527\Psr\Container\ContainerInterface
+    protected function getServiceLocator(array $factories) : ContainerInterface
     {
-        return new class($factories) implements \RectorPrefix20220527\Psr\Container\ContainerInterface
+        return new class($factories) implements ContainerInterface
         {
             use ServiceLocatorTrait;
         };

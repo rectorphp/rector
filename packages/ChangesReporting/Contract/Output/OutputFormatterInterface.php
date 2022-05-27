@@ -8,5 +8,5 @@ use Rector\Core\ValueObject\ProcessResult;
 interface OutputFormatterInterface
 {
     public function getName() : string;
-    public function report(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : void;
+    public function report(ProcessResult $processResult, Configuration $configuration) : void;
 }

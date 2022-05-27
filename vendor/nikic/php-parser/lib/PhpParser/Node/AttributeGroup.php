@@ -5,7 +5,7 @@ namespace PhpParser\Node;
 
 use PhpParser\Node;
 use PhpParser\NodeAbstract;
-class AttributeGroup extends \PhpParser\NodeAbstract
+class AttributeGroup extends NodeAbstract
 {
     /** @var Attribute[] Attributes */
     public $attrs;

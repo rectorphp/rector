@@ -25,13 +25,13 @@ final class CondAndExpr
     /**
      * @param Expr[]|null $condExprs
      */
-    public function __construct($condExprs, \PhpParser\Node\Expr $expr, \Rector\Php80\Enum\MatchKind $matchKind)
+    public function __construct($condExprs, Expr $expr, MatchKind $matchKind)
     {
         $this->condExprs = $condExprs;
         $this->expr = $expr;
         $this->matchKind = $matchKind;
     }
-    public function getExpr() : \PhpParser\Node\Expr
+    public function getExpr() : Expr
     {
         return $this->expr;
     }
@@ -46,11 +46,11 @@ final class CondAndExpr
         }
         return $this->condExprs;
     }
-    public function getMatchKind() : \Rector\Php80\Enum\MatchKind
+    public function getMatchKind() : MatchKind
     {
         return $this->matchKind;
     }
-    public function equalsMatchKind(\Rector\Php80\Enum\MatchKind $matchKind) : bool
+    public function equalsMatchKind(MatchKind $matchKind) : bool
     {
         return $this->matchKind->equals($matchKind);
     }

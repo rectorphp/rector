@@ -5,7 +5,7 @@ namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
-final class UsergroupConditionMatcherMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
+final class UsergroupConditionMatcherMatcher implements TyposcriptConditionMatcher
 {
     /**
      * @var string
@@ -20,7 +20,7 @@ final class UsergroupConditionMatcherMatcher implements \Ssch\TYPO3Rector\Contra
         if (!isset($matches[1]) || '' === $matches[1]) {
             return "usergroup('*') == false";
         }
-        $values = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $matches[1], \true);
+        $values = ArrayUtility::trimExplode(',', $matches[1], \true);
         return \sprintf('usergroup("%s")', \implode(',', $values));
     }
     public function shouldApply(string $condition) : bool

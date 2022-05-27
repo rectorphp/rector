@@ -18,11 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Nette\Tests\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector\MagicHtmlCallToAppendAttributeRectorTest
  */
-final class MagicHtmlCallToAppendAttributeRector extends \Rector\Core\Rector\AbstractRector
+final class MagicHtmlCallToAppendAttributeRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change magic addClass() etc. calls on Html to explicit methods', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change magic addClass() etc. calls on Html to explicit methods', [new CodeSample(<<<'CODE_SAMPLE'
 use Nette\Utils\Html;
 
 final class SomeClass
@@ -53,20 +53,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Nette\\Utils\\Html'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Nette\\Utils\\Html'))) {
             return null;
         }
         // @todo posibly extends by more common names
         if ($this->isName($node->name, 'setClass')) {
-            $node->name = new \PhpParser\Node\Identifier('appendAttribute');
-            $args = \array_merge([new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_('class'))], $node->args);
+            $node->name = new Identifier('appendAttribute');
+            $args = \array_merge([new Arg(new String_('class'))], $node->args);
             $node->args = $args;
             return $node;
         }

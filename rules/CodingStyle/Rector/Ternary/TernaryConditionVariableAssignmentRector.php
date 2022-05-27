@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector\TernaryConditionVariableAssignmentRectorTest
  */
-final class TernaryConditionVariableAssignmentRector extends \Rector\Core\Rector\AbstractRector
+final class TernaryConditionVariableAssignmentRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Assign outcome of ternary condition to variable, where applicable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Assign outcome of ternary condition to variable, where applicable', [new CodeSample(<<<'CODE_SAMPLE'
 function ternary($value)
 {
     $value ? $a = 1 : $a = 0;
@@ -37,39 +37,39 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Ternary::class];
+        return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $nodeIf = $node->if;
         $nodeElse = $node->else;
-        if (!$nodeIf instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$nodeIf instanceof Assign) {
             return null;
         }
-        if (!$nodeElse instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$nodeElse instanceof Assign) {
             return null;
         }
         $nodeIfVar = $nodeIf->var;
         $nodeElseVar = $nodeElse->var;
-        if (!$nodeIfVar instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$nodeIfVar instanceof Variable) {
             return null;
         }
-        if (!$nodeElseVar instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$nodeElseVar instanceof Variable) {
             return null;
         }
         if ($nodeIfVar->name !== $nodeElseVar->name) {
             return null;
         }
-        $previousNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
+        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         if ($previousNode !== null) {
             return null;
         }
         $node->if = $nodeIf->expr;
         $node->else = $nodeElse->expr;
-        $variable = new \PhpParser\Node\Expr\Variable($nodeIfVar->name);
-        return new \PhpParser\Node\Expr\Assign($variable, $node);
+        $variable = new Variable($nodeIfVar->name);
+        return new Assign($variable, $node);
     }
 }

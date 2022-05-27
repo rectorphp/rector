@@ -17,9 +17,9 @@ final class ConstructorClassMethodAssignFactory
     {
         $expressions = [];
         foreach ($paramNames as $paramName) {
-            $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $paramName);
-            $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, new \PhpParser\Node\Expr\Variable($paramName));
-            $expressions[] = new \PhpParser\Node\Stmt\Expression($assign);
+            $propertyFetch = new PropertyFetch(new Variable('this'), $paramName);
+            $assign = new Assign($propertyFetch, new Variable($paramName));
+            $expressions[] = new Expression($assign);
         }
         return $expressions;
     }

@@ -18,7 +18,7 @@ final class OldToNewFilesFinder
      * @var \Symplify\VendorPatches\Composer\PackageNameResolver
      */
     private $packageNameResolver;
-    public function __construct(\RectorPrefix20220527\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20220527\Symplify\VendorPatches\Composer\PackageNameResolver $packageNameResolver)
+    public function __construct(FinderSanitizer $finderSanitizer, PackageNameResolver $packageNameResolver)
     {
         $this->finderSanitizer = $finderSanitizer;
         $this->packageNameResolver = $packageNameResolver;
@@ -40,9 +40,9 @@ final class OldToNewFilesFinder
             if (!\file_exists($newFilePath)) {
                 continue;
             }
-            $newFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($newFilePath);
+            $newFileInfo = new SmartFileInfo($newFilePath);
             $packageName = $this->packageNameResolver->resolveFromFileInfo($newFileInfo);
-            $oldAndNewFileInfos[] = new \RectorPrefix20220527\Symplify\VendorPatches\ValueObject\OldAndNewFileInfo($oldFileInfo, $newFileInfo, $packageName);
+            $oldAndNewFileInfos[] = new OldAndNewFileInfo($oldFileInfo, $newFileInfo, $packageName);
         }
         return $oldAndNewFileInfos;
     }
@@ -51,7 +51,7 @@ final class OldToNewFilesFinder
      */
     private function findSmartFileInfosInDirectory(string $directory) : array
     {
-        $finder = \RectorPrefix20220527\Symfony\Component\Finder\Finder::create()->in($directory)->files()->exclude('composer/')->exclude('ocramius/')->name('*.old');
+        $finder = Finder::create()->in($directory)->files()->exclude('composer/')->exclude('ocramius/')->name('*.old');
         return $this->finderSanitizer->sanitize($finder);
     }
 }

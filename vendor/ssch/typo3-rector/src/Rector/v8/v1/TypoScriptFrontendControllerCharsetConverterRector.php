@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.1/Deprecation-75327-TSFE-csConvObjAndTSFE-csConv.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v1\TypoScriptFrontendControllerCharsetConverterRector\TypoScriptFrontendControllerCharsetConverterRectorTest
  */
-final class TypoScriptFrontendControllerCharsetConverterRector extends \Rector\Core\Rector\AbstractRector
+final class TypoScriptFrontendControllerCharsetConverterRector extends AbstractRector
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ final class TypoScriptFrontendControllerCharsetConverterRector extends \Rector\C
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -41,12 +41,12 @@ final class TypoScriptFrontendControllerCharsetConverterRector extends \Rector\C
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -62,9 +62,9 @@ final class TypoScriptFrontendControllerCharsetConverterRector extends \Rector\C
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor $TSFE->csConvObj and $TSFE->csConv()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor $TSFE->csConvObj and $TSFE->csConv()', [new CodeSample(<<<'CODE_SAMPLE'
 $output = $GLOBALS['TSFE']->csConvObj->conv_case('utf-8', 'foobar', 'lower');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -75,17 +75,17 @@ $output = $charsetConverter->conv_case('utf-8', 'foobar', 'lower');
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkip(MethodCall $methodCall) : bool
     {
-        if ($this->typo3NodeResolver->isMethodCallOnGlobals($methodCall, self::CS_CONV, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if ($this->typo3NodeResolver->isMethodCallOnGlobals($methodCall, self::CS_CONV, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \false;
         }
-        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
+        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'csConvObj');
+        return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($methodCall, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'csConvObj');
     }
-    private function refactorMethodCsConv(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
+    private function refactorMethodCsConv(MethodCall $methodCall) : Node
     {
         $from = isset($methodCall->args[1]) ? $this->valueResolver->getValue($methodCall->args[1]->value) : null;
         if ('' === $from || 'null' === $from || null === $from) {
@@ -94,12 +94,12 @@ CODE_SAMPLE
         $this->addCharsetConverterNode($methodCall);
         return $this->nodeFactory->createMethodCall(self::CHARSET_CONVERTER, 'conv', [$methodCall->args[0], $this->nodeFactory->createMethodCall(self::CHARSET_CONVERTER, 'parse_charset', [$methodCall->args[1]]), 'utf-8']);
     }
-    private function addCharsetConverterNode(\PhpParser\Node\Expr\MethodCall $methodCall) : void
+    private function addCharsetConverterNode(MethodCall $methodCall) : void
     {
-        $charsetConverterAssignExpression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CHARSET_CONVERTER), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Charset\\CharsetConverter')])));
+        $charsetConverterAssignExpression = new Expression(new Assign(new Variable(self::CHARSET_CONVERTER), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Charset\\CharsetConverter')])));
         $this->nodesToAddCollector->addNodeBeforeNode($charsetConverterAssignExpression, $methodCall);
     }
-    private function refactorCsConvObj(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
+    private function refactorCsConvObj(MethodCall $methodCall) : ?Node
     {
         $this->addCharsetConverterNode($methodCall);
         $methodName = $this->getName($methodCall->name);

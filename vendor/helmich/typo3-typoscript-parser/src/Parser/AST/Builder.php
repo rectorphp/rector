@@ -19,7 +19,7 @@ class Builder
      */
     public function __construct()
     {
-        $this->operatorBuilder = new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\Builder();
+        $this->operatorBuilder = new Operator\Builder();
     }
     /**
      * @param string      $condition
@@ -28,21 +28,21 @@ class Builder
      * @param int         $line
      * @return ConditionalStatement
      */
-    public function condition(string $condition, array $if, array $else, int $line) : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement
+    public function condition(string $condition, array $if, array $else, int $line) : ConditionalStatement
     {
-        return new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement($condition, $if, $else, $line);
+        return new ConditionalStatement($condition, $if, $else, $line);
     }
-    public function comment(string $comment, int $line) : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Comment
+    public function comment(string $comment, int $line) : Comment
     {
-        return new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Comment($comment, $line);
+        return new Comment($comment, $line);
     }
-    public function multilineComment(string $comment, int $line) : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\MultilineComment
+    public function multilineComment(string $comment, int $line) : MultilineComment
     {
-        return new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\MultilineComment($comment, $line);
+        return new MultilineComment($comment, $line);
     }
-    public function nop(int $line) : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\NopStatement
+    public function nop(int $line) : NopStatement
     {
-        return new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\NopStatement($line);
+        return new NopStatement($line);
     }
     /**
      * @param string      $directory
@@ -51,9 +51,9 @@ class Builder
      * @param int         $line
      * @return DirectoryIncludeStatement
      */
-    public function includeDirectory(string $directory, ?string $extensions, ?string $condition, int $line) : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\DirectoryIncludeStatement
+    public function includeDirectory(string $directory, ?string $extensions, ?string $condition, int $line) : DirectoryIncludeStatement
     {
-        return new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\DirectoryIncludeStatement($directory, $extensions, $condition, $line);
+        return new DirectoryIncludeStatement($directory, $extensions, $condition, $line);
     }
     /**
      * @param string      $file
@@ -62,9 +62,9 @@ class Builder
      * @param int         $line
      * @return FileIncludeStatement
      */
-    public function includeFile(string $file, bool $newSyntax, ?string $condition, int $line) : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement
+    public function includeFile(string $file, bool $newSyntax, ?string $condition, int $line) : FileIncludeStatement
     {
-        return new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement($file, $newSyntax, $condition, $line);
+        return new FileIncludeStatement($file, $newSyntax, $condition, $line);
     }
     /**
      * @param ObjectPath  $path
@@ -72,31 +72,31 @@ class Builder
      * @param int         $line
      * @return NestedAssignment
      */
-    public function nested(\RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ObjectPath $path, array $statements, int $line) : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\NestedAssignment
+    public function nested(ObjectPath $path, array $statements, int $line) : NestedAssignment
     {
-        return new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\NestedAssignment($path, $statements, $line);
+        return new NestedAssignment($path, $statements, $line);
     }
     /**
      * @param string $value
      * @return Scalar
      */
-    public function scalar(string $value) : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Scalar
+    public function scalar(string $value) : Scalar
     {
-        return new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Scalar($value);
+        return new Scalar($value);
     }
     /**
      * @param string $absolute
      * @param string $relative
      * @return ObjectPath
      */
-    public function path(string $absolute, string $relative) : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ObjectPath
+    public function path(string $absolute, string $relative) : ObjectPath
     {
-        return new \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\ObjectPath($absolute, $relative);
+        return new ObjectPath($absolute, $relative);
     }
     /**
      * @return Operator\Builder
      */
-    public function op() : \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\Operator\Builder
+    public function op() : Operator\Builder
     {
         return $this->operatorBuilder;
     }

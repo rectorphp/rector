@@ -8,7 +8,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 /**
  * @template TNode as Node
  */
-interface NeonRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface
+interface NeonRectorInterface extends RectorInterface
 {
     /**
      * @return class-string<TNode>
@@ -18,5 +18,5 @@ interface NeonRectorInterface extends \Rector\Core\Contract\Rector\RectorInterfa
      * @param TNode $node
      * @return \Nette\Neon\Node|null
      */
-    public function enterNode(\RectorPrefix20220527\Nette\Neon\Node $node);
+    public function enterNode(Node $node);
 }

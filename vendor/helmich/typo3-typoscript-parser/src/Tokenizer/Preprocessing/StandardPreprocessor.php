@@ -8,10 +8,10 @@ namespace RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
  *
  * @package Helmich\TypoScriptParser\Tokenizer\Preprocessing
  */
-class StandardPreprocessor extends \RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\Preprocessing\ProcessorChain
+class StandardPreprocessor extends ProcessorChain
 {
     public function __construct(string $eolChar = "\n")
     {
-        $this->processors = [new \RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\Preprocessing\UnifyLineEndingsPreprocessor($eolChar), new \RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\Preprocessing\RemoveTrailingWhitespacePreprocessor($eolChar)];
+        $this->processors = [new UnifyLineEndingsPreprocessor($eolChar), new RemoveTrailingWhitespacePreprocessor($eolChar)];
     }
 }

@@ -42,7 +42,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\NonVariableToVariableOnFunctionCallRectorTest
  */
-final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class NonVariableToVariableOnFunctionCallRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -64,52 +64,52 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(VariableNaming $variableNaming, ParentScopeFinder $parentScopeFinder, ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer)
     {
         $this->variableNaming = $variableNaming;
         $this->parentScopeFinder = $parentScopeFinder;
         $this->reflectionResolver = $reflectionResolver;
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Transform non variable like arguments to variable where a function or method expects an argument passed by reference', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('reset(a());', '$a = a(); reset($a);')]);
+        return new RuleDefinition('Transform non variable like arguments to variable where a function or method expects an argument passed by reference', [new CodeSample('reset(a());', '$a = a(); reset($a);')]);
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::VARIABLE_ON_FUNC_CALL;
+        return PhpVersionFeature::VARIABLE_ON_FUNC_CALL;
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [FuncCall::class, MethodCall::class, StaticCall::class];
     }
     /**
      * @param FuncCall|MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $arguments = $this->getNonVariableArguments($node);
         if ($arguments === []) {
             return null;
         }
         $scopeNode = $this->parentScopeFinder->find($node);
-        if (!$scopeNode instanceof \PhpParser\Node) {
+        if (!$scopeNode instanceof Node) {
             return null;
         }
-        $currentScope = $scopeNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$currentScope instanceof \PHPStan\Analyser\MutatingScope) {
+        $currentScope = $scopeNode->getAttribute(AttributeKey::SCOPE);
+        if (!$currentScope instanceof MutatingScope) {
             return null;
         }
         foreach ($arguments as $key => $argument) {
-            if (!$node->args[$key] instanceof \PhpParser\Node\Arg) {
+            if (!$node->args[$key] instanceof Arg) {
                 continue;
             }
             $replacements = $this->getReplacementsFor($argument, $currentScope, $scopeNode);
             $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
-            if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
+            if (!$currentStmt instanceof Stmt) {
                 continue;
             }
             $this->nodesToAddCollector->addNodeBeforeNode($replacements->getAssign(), $currentStmt, $this->file->getSmartFileInfo());
@@ -117,7 +117,7 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
             // add variable name to scope, so we prevent duplication of new variable of the same name
             $currentScope = $currentScope->assignExpression($replacements->getVariable(), $currentScope->getType($replacements->getVariable()));
         }
-        $scopeNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $currentScope);
+        $scopeNode->setAttribute(AttributeKey::SCOPE, $currentScope);
         return $node;
     }
     /**
@@ -155,33 +155,33 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
     /**
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Namespace_ $scopeNode
      */
-    private function getReplacementsFor(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\MutatingScope $scope, $scopeNode) : \Rector\Php70\ValueObject\VariableAssignPair
+    private function getReplacementsFor(Expr $expr, MutatingScope $scope, $scopeNode) : VariableAssignPair
     {
         if ($this->isAssign($expr)) {
             /** @var Assign|AssignRef|AssignOp $expr */
             if ($this->isVariableLikeNode($expr->var)) {
-                return new \Rector\Php70\ValueObject\VariableAssignPair($expr->var, $expr);
+                return new VariableAssignPair($expr->var, $expr);
             }
         }
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($expr, $scope, 'tmp');
-        $variable = new \PhpParser\Node\Expr\Variable($variableName);
+        $variable = new Variable($variableName);
         // add a new scope with this variable
-        $mutatingScope = $scope->assignExpression($variable, new \PHPStan\Type\MixedType());
-        $scopeNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
-        return new \Rector\Php70\ValueObject\VariableAssignPair($variable, new \PhpParser\Node\Expr\Assign($variable, $expr));
+        $mutatingScope = $scope->assignExpression($variable, new MixedType());
+        $scopeNode->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        return new VariableAssignPair($variable, new Assign($variable, $expr));
     }
-    private function isVariableLikeNode(\PhpParser\Node\Expr $expr) : bool
+    private function isVariableLikeNode(Expr $expr) : bool
     {
-        return $expr instanceof \PhpParser\Node\Expr\Variable || $expr instanceof \PhpParser\Node\Expr\ArrayDimFetch || $expr instanceof \PhpParser\Node\Expr\PropertyFetch || $expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
+        return $expr instanceof Variable || $expr instanceof ArrayDimFetch || $expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch;
     }
-    private function isAssign(\PhpParser\Node\Expr $expr) : bool
+    private function isAssign(Expr $expr) : bool
     {
-        if ($expr instanceof \PhpParser\Node\Expr\Assign) {
+        if ($expr instanceof Assign) {
             return \true;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\AssignRef) {
+        if ($expr instanceof AssignRef) {
             return \true;
         }
-        return $expr instanceof \PhpParser\Node\Expr\AssignOp;
+        return $expr instanceof AssignOp;
     }
 }

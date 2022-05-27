@@ -35,7 +35,7 @@ class DefinitionConfigurator
      * @var string
      */
     private $file;
-    public function __construct(\RectorPrefix20220527\Symfony\Component\Config\Definition\Builder\TreeBuilder $treeBuilder, \RectorPrefix20220527\Symfony\Component\Config\Definition\Loader\DefinitionFileLoader $loader, string $path, string $file)
+    public function __construct(TreeBuilder $treeBuilder, DefinitionFileLoader $loader, string $path, string $file)
     {
         $this->treeBuilder = $treeBuilder;
         $this->loader = $loader;

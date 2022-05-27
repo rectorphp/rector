@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer;
 
-class Token implements \RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+class Token implements TokenInterface
 {
     /** @var string */
     private $type;

@@ -5,6 +5,6 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Rector\DogFood\Rector\Closure\UpgradeRectorConfigRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\DogFood\Rector\Closure\UpgradeRectorConfigRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(UpgradeRectorConfigRector::class);
 };

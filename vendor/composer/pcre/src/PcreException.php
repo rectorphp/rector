@@ -23,7 +23,7 @@ class PcreException extends \RuntimeException
         if (\is_array($pattern)) {
             $pattern = \implode(', ', $pattern);
         }
-        return new \RectorPrefix20220527\Composer\Pcre\PcreException($function . '(): failed executing "' . $pattern . '": ' . self::pcreLastErrorMessage($code), $code);
+        return new PcreException($function . '(): failed executing "' . $pattern . '": ' . self::pcreLastErrorMessage($code), $code);
     }
     /**
      * @param  int $code

@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see Based on https://github.com/slevomat/coding-standard/blob/master/SlevomatCodingStandard/Sniffs/Variables/UselessVariableSniff.php
  * @see \Rector\Tests\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector\SimplifyUselessVariableRectorTest
  */
-final class SimplifyUselessVariableRector extends \Rector\Core\Rector\AbstractRector
+final class SimplifyUselessVariableRector extends AbstractRector
 {
     /**
      * @readonly
@@ -45,16 +45,16 @@ final class SimplifyUselessVariableRector extends \Rector\Core\Rector\AbstractRe
      * @var \Rector\CodeQuality\NodeAnalyzer\ReturnAnalyzer
      */
     private $returnAnalyzer;
-    public function __construct(\Rector\Core\PhpParser\Node\AssignAndBinaryMap $assignAndBinaryMap, \Rector\Core\NodeAnalyzer\VariableAnalyzer $variableAnalyzer, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer, \Rector\CodeQuality\NodeAnalyzer\ReturnAnalyzer $returnAnalyzer)
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap, VariableAnalyzer $variableAnalyzer, CallAnalyzer $callAnalyzer, ReturnAnalyzer $returnAnalyzer)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
         $this->variableAnalyzer = $variableAnalyzer;
         $this->callAnalyzer = $callAnalyzer;
         $this->returnAnalyzer = $returnAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes useless variable assigns', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removes useless variable assigns', [new CodeSample(<<<'CODE_SAMPLE'
 function () {
     $a = true;
     return $a;
@@ -72,12 +72,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface::class];
+        return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $stmts = $node->stmts;
         if ($stmts === null) {
@@ -87,7 +87,7 @@ CODE_SAMPLE
             if (!isset($stmts[$key - 1])) {
                 continue;
             }
-            if (!$stmt instanceof \PhpParser\Node\Stmt\Return_) {
+            if (!$stmt instanceof Return_) {
                 continue;
             }
             $previousStmt = $stmts[$key - 1];
@@ -109,9 +109,9 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $assign
      */
-    private function processSimplifyUselessVariable(\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmtsAware, \PhpParser\Node\Stmt\Return_ $return, $assign, int $key) : ?\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
+    private function processSimplifyUselessVariable(StmtsAwareInterface $stmtsAware, Return_ $return, $assign, int $key) : ?StmtsAwareInterface
     {
-        if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$assign instanceof Assign) {
             $binaryClass = $this->assignAndBinaryMap->getAlternative($assign);
             if ($binaryClass === null) {
                 return null;
@@ -123,12 +123,12 @@ CODE_SAMPLE
         unset($stmtsAware->stmts[$key - 1]);
         return $stmtsAware;
     }
-    private function shouldSkipStmt(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\Stmt $previousStmt) : bool
+    private function shouldSkipStmt(Return_ $return, Stmt $previousStmt) : bool
     {
         if ($this->hasSomeComment($previousStmt)) {
             return \true;
         }
-        if (!$return->expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$return->expr instanceof Variable) {
             return \true;
         }
         if ($this->returnAnalyzer->hasByRefReturn($return)) {
@@ -136,12 +136,12 @@ CODE_SAMPLE
         }
         /** @var Variable $variable */
         $variable = $return->expr;
-        if (!$previousStmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$previousStmt instanceof Expression) {
             return \true;
         }
         // is variable part of single assign
         $previousNode = $previousStmt->expr;
-        if (!$previousNode instanceof \PhpParser\Node\Expr\AssignOp && !$previousNode instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$previousNode instanceof AssignOp && !$previousNode instanceof Assign) {
             return \true;
         }
         // is the same variable
@@ -156,16 +156,16 @@ CODE_SAMPLE
         }
         return $this->variableAnalyzer->isUsedByReference($variable);
     }
-    private function hasSomeComment(\PhpParser\Node\Stmt $stmt) : bool
+    private function hasSomeComment(Stmt $stmt) : bool
     {
         if ($stmt->getComments() !== []) {
             return \true;
         }
         return $stmt->getDocComment() !== null;
     }
-    private function isReturnWithVarAnnotation(\PhpParser\Node\Stmt\Return_ $return) : bool
+    private function isReturnWithVarAnnotation(Return_ $return) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($return);
-        return !$phpDocInfo->getVarType() instanceof \PHPStan\Type\MixedType;
+        return !$phpDocInfo->getVarType() instanceof MixedType;
     }
 }

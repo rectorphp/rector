@@ -5,7 +5,7 @@ namespace RectorPrefix20220527;
 
 use Rector\Config\RectorConfig;
 use Ssch\TYPO3Rector\Rector\v9\v0\DatabaseConnectionToDbalRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/config.php');
-    $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v9\v0\DatabaseConnectionToDbalRector::class);
+    $rectorConfig->rule(DatabaseConnectionToDbalRector::class);
 };

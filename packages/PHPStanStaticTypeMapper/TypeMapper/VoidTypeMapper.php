@@ -16,7 +16,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 /**
  * @implements TypeMapperInterface<VoidType>
  */
-final class VoidTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
+final class VoidTypeMapper implements TypeMapperInterface
 {
     /**
      * @var string
@@ -27,7 +27,7 @@ final class VoidTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\T
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
@@ -36,26 +36,26 @@ final class VoidTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\T
      */
     public function getNodeClass() : string
     {
-        return \PHPStan\Type\VoidType::class;
+        return VoidType::class;
     }
     /**
      * @param VoidType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind) : TypeNode
     {
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(self::VOID);
+        return new IdentifierTypeNode(self::VOID);
     }
     /**
      * @param VoidType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(Type $type, TypeKind $typeKind) : ?Node
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::VOID_TYPE)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
             return null;
         }
-        if (\in_array($typeKind->getValue(), [\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY()], \true)) {
+        if (\in_array($typeKind->getValue(), [TypeKind::PARAM(), TypeKind::PROPERTY()], \true)) {
             return null;
         }
-        return new \PhpParser\Node\Name(self::VOID);
+        return new Name(self::VOID);
     }
 }

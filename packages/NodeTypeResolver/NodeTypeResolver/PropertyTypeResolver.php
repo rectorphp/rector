@@ -17,7 +17,7 @@ use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
  *
  * @implements NodeTypeResolverInterface<Property>
  */
-final class PropertyTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
+final class PropertyTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
@@ -26,7 +26,7 @@ final class PropertyTypeResolver implements \Rector\NodeTypeResolver\Contract\No
     /**
      * @required
      */
-    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -35,16 +35,16 @@ final class PropertyTypeResolver implements \Rector\NodeTypeResolver\Contract\No
      */
     public function getNodeClasses() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve(Node $node) : Type
     {
         // fake property to local PropertyFetch → PHPStan understands that
-        $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), (string) $node->props[0]->name);
-        $propertyFetch->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));
+        $propertyFetch = new PropertyFetch(new Variable('this'), (string) $node->props[0]->name);
+        $propertyFetch->setAttribute(AttributeKey::SCOPE, $node->getAttribute(AttributeKey::SCOPE));
         return $this->nodeTypeResolver->getType($propertyFetch);
     }
 }

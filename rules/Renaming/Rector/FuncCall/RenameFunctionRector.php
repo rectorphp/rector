@@ -16,34 +16,34 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\FuncCall\RenameFunctionRector\RenameFunctionRectorTest
  */
-final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class RenameFunctionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var array<string, string>
      */
     private $oldFunctionToNewFunction = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns defined function call new one.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample('view("...", []);', 'Laravel\\Templating\\render("...", []);', ['view' => 'Laravel\\Templating\\render'])]);
+        return new RuleDefinition('Turns defined function call new one.', [new ConfiguredCodeSample('view("...", []);', 'Laravel\\Templating\\render("...", []);', ['view' => 'Laravel\\Templating\\render'])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->oldFunctionToNewFunction as $oldFunction => $newFunction) {
             if (!$this->isName($node, $oldFunction)) {
                 continue;
             }
             // not to refactor here
-            $isVirtual = (bool) $node->name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE);
+            $isVirtual = (bool) $node->name->getAttribute(AttributeKey::VIRTUAL_NODE);
             if ($isVirtual) {
                 continue;
             }
@@ -57,15 +57,15 @@ final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector impl
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allString(\array_values($configuration));
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($configuration);
+        Assert::allString(\array_values($configuration));
+        Assert::allString($configuration);
         $this->oldFunctionToNewFunction = $configuration;
     }
-    private function createName(string $newFunction) : \PhpParser\Node\Name
+    private function createName(string $newFunction) : Name
     {
         if (\strpos($newFunction, '\\') !== \false) {
-            return new \PhpParser\Node\Name\FullyQualified($newFunction);
+            return new FullyQualified($newFunction);
         }
-        return new \PhpParser\Node\Name($newFunction);
+        return new Name($newFunction);
     }
 }

@@ -46,21 +46,21 @@ abstract class Declaration
     }
     public final function __toString() : string
     {
-        return \sprintf('%s=%s', $this->getName(), $this->getStringValue());
+        return sprintf('%s=%s', $this->getName(), $this->getStringValue());
     }
     protected function setName(string $name) : void
     {
-        $this->name = \strtolower($name);
+        $this->name = strtolower($name);
     }
     /**
      * @return mixed
      */
     protected function getTypedValue(string $value)
     {
-        if (\in_array($value, ['true', 'false']) === \true) {
+        if (in_array($value, ['true', 'false']) === \true) {
             return $value === 'true';
         }
-        if (\is_numeric($value) === \true && (string) (int) $value === $value) {
+        if (is_numeric($value) === \true && (string) (int) $value === $value) {
             return (int) $value;
         }
         return $value;

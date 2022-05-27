@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\LocallyCalledStaticMethodToNonStaticRectorTest
  */
-final class LocallyCalledStaticMethodToNonStaticRector extends \Rector\Core\Rector\AbstractRector
+final class LocallyCalledStaticMethodToNonStaticRector extends AbstractRector
 {
     /**
      * @readonly
@@ -37,15 +37,15 @@ final class LocallyCalledStaticMethodToNonStaticRector extends \Rector\Core\Rect
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard $classMethodVisibilityGuard, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator, ReflectionResolver $reflectionResolver)
     {
         $this->classMethodVisibilityGuard = $classMethodVisibilityGuard;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change static method and local-only calls to non-static', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change static method and local-only calls to non-static', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -78,14 +78,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [ClassMethod::class, StaticCall::class];
     }
     /**
      * @param ClassMethod|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if ($node instanceof ClassMethod) {
             if (!$node->isPrivate()) {
                 return null;
             }
@@ -93,13 +93,13 @@ CODE_SAMPLE
         }
         return $this->refactorStaticCall($node);
     }
-    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function refactorClassMethod(ClassMethod $classMethod) : ?ClassMethod
     {
         if (!$classMethod->isStatic()) {
             return null;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($classMethod, $classReflection)) {
@@ -109,14 +109,14 @@ CODE_SAMPLE
         $this->visibilityManipulator->makeNonStatic($classMethod);
         return $classMethod;
     }
-    private function refactorStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function refactorStaticCall(StaticCall $staticCall) : ?MethodCall
     {
-        $classLike = $this->betterNodeFinder->findParentType($staticCall, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($staticCall, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         /** @var ClassMethod[] $classMethods */
-        $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, \PhpParser\Node\Stmt\ClassMethod::class);
+        $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, ClassMethod::class);
         foreach ($classMethods as $classMethod) {
             if (!$this->isClassMethodMatchingStaticCall($classMethod, $staticCall)) {
                 continue;
@@ -124,27 +124,27 @@ CODE_SAMPLE
             if ($this->isInStaticClassMethod($staticCall)) {
                 continue;
             }
-            $thisVariable = new \PhpParser\Node\Expr\Variable('this');
-            return new \PhpParser\Node\Expr\MethodCall($thisVariable, $staticCall->name, $staticCall->args);
+            $thisVariable = new Variable('this');
+            return new MethodCall($thisVariable, $staticCall->name, $staticCall->args);
         }
         return null;
     }
-    private function isInStaticClassMethod(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    private function isInStaticClassMethod(StaticCall $staticCall) : bool
     {
-        $locationClassMethod = $this->betterNodeFinder->findParentType($staticCall, \PhpParser\Node\Stmt\ClassMethod::class);
-        if (!$locationClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $locationClassMethod = $this->betterNodeFinder->findParentType($staticCall, ClassMethod::class);
+        if (!$locationClassMethod instanceof ClassMethod) {
             return \false;
         }
         return $locationClassMethod->isStatic();
     }
-    private function isClassMethodMatchingStaticCall(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    private function isClassMethodMatchingStaticCall(ClassMethod $classMethod, StaticCall $staticCall) : bool
     {
-        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return \false;
         }
         $className = (string) $this->nodeNameResolver->getName($classLike);
-        $objectType = new \PHPStan\Type\ObjectType($className);
+        $objectType = new ObjectType($className);
         $callerType = $this->nodeTypeResolver->getType($staticCall->class);
         return $objectType->equals($callerType);
     }

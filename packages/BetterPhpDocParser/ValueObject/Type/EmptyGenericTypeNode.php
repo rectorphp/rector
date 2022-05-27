@@ -6,9 +6,9 @@ namespace Rector\BetterPhpDocParser\ValueObject\Type;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Stringable;
-final class EmptyGenericTypeNode extends \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode
+final class EmptyGenericTypeNode extends GenericTypeNode
 {
-    public function __construct(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode)
+    public function __construct(IdentifierTypeNode $identifierTypeNode)
     {
         parent::__construct($identifierTypeNode, []);
     }

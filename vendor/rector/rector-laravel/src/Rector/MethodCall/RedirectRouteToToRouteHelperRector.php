@@ -16,20 +16,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Laravel\Tests\Rector\MethodCall\RedirectRouteToToRouteHelperRector\RedirectRouteToToRouteHelperRectorTest
  */
-final class RedirectRouteToToRouteHelperRector extends \Rector\Core\Rector\AbstractRector
+final class RedirectRouteToToRouteHelperRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
-    public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
+    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
     {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace `redirect()->route("home")` and `Redirect::route("home")` with `to_route("home")`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace `redirect()->route("home")` and `Redirect::route("home")` with `to_route("home")`', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Support\Facades\Redirect;
 
 class MyController
@@ -68,29 +68,29 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             return $this->updateRedirectHelperCall($node);
         }
         return $this->updateRedirectStaticCall($node);
     }
-    private function updateRedirectHelperCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function updateRedirectHelperCall(MethodCall $methodCall) : ?MethodCall
     {
         if (!$this->isName($methodCall->name, 'route')) {
             return null;
         }
         $rootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($methodCall);
-        $parentNode = $rootExpr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node\Expr\MethodCall) {
+        $parentNode = $rootExpr->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof MethodCall) {
             return null;
         }
-        if (!$parentNode->var instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$parentNode->var instanceof FuncCall) {
             return null;
         }
         if ($parentNode->var->getArgs() !== []) {
@@ -100,11 +100,11 @@ CODE_SAMPLE
             return null;
         }
         $this->removeNode($methodCall);
-        $parentNode->var->name = new \PhpParser\Node\Name('to_route');
+        $parentNode->var->name = new Name('to_route');
         $parentNode->var->args = $methodCall->getArgs();
         return $parentNode;
     }
-    private function updateRedirectStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr\FuncCall
+    private function updateRedirectStaticCall(StaticCall $staticCall) : ?FuncCall
     {
         if (!$this->isName($staticCall->class, 'Illuminate\\Support\\Facades\\Redirect')) {
             return null;
@@ -112,6 +112,6 @@ CODE_SAMPLE
         if (!$this->isName($staticCall->name, 'route')) {
             return null;
         }
-        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('to_route'), $staticCall->args);
+        return new FuncCall(new Name('to_route'), $staticCall->args);
     }
 }

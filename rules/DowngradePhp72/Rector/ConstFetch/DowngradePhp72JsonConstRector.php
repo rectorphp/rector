@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp72\Rector\ConstFetch\DowngradePhp72JsonConstRector\DowngradePhp72JsonConstRectorTest
  */
-final class DowngradePhp72JsonConstRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradePhp72JsonConstRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -26,13 +26,13 @@ final class DowngradePhp72JsonConstRector extends \Rector\Core\Rector\AbstractRe
      * @var \Rector\DowngradePhp72\NodeManipulator\JsonConstCleaner
      */
     private $jsonConstCleaner;
-    public function __construct(\Rector\DowngradePhp72\NodeManipulator\JsonConstCleaner $jsonConstCleaner)
+    public function __construct(JsonConstCleaner $jsonConstCleaner)
     {
         $this->jsonConstCleaner = $jsonConstCleaner;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove Json constant that available only in php 7.2', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove Json constant that available only in php 7.2', [new CodeSample(<<<'CODE_SAMPLE'
 $inDecoder = new Decoder($connection, true, 512, \JSON_INVALID_UTF8_IGNORE);
 $inDecoder = new Decoder($connection, true, 512, \JSON_INVALID_UTF8_SUBSTITUTE);
 CODE_SAMPLE
@@ -47,12 +47,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\ConstFetch::class, \PhpParser\Node\Expr\BinaryOp\BitwiseOr::class];
+        return [ConstFetch::class, BitwiseOr::class];
     }
     /**
      * @param ConstFetch|BitwiseOr $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         return $this->jsonConstCleaner->clean($node, self::CONSTANTS);
     }

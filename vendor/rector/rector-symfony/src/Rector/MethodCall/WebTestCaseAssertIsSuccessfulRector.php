@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector\WebTestCaseAssertIsSuccessfulRectorTest
  */
-final class WebTestCaseAssertIsSuccessfulRector extends \Rector\Core\Rector\AbstractRector
+final class WebTestCaseAssertIsSuccessfulRector extends AbstractRector
 {
     /**
      * @readonly
@@ -30,14 +30,14 @@ final class WebTestCaseAssertIsSuccessfulRector extends \Rector\Core\Rector\Abst
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->symfonyTestCaseAnalyzer = $symfonyTestCaseAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify use of assertions in WebTestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Simplify use of assertions in WebTestCase', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -66,12 +66,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->symfonyTestCaseAnalyzer->isInWebTestCase($node)) {
             return null;
@@ -84,13 +84,13 @@ CODE_SAMPLE
             return null;
         }
         $secondArg = $args[1]->value;
-        if (!$secondArg instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$secondArg instanceof MethodCall) {
             return null;
         }
         if (!$this->isName($secondArg->name, 'getStatusCode')) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Identifier('assertResponseIsSuccessful');
+        $node->name = new Identifier('assertResponseIsSuccessful');
         $node->args = [];
         return $node;
     }

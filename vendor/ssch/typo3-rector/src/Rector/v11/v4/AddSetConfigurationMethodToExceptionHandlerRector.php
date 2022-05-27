@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.4/Deprecation-95009-PassingTypoScriptConfigurationAsConstructorArgumentToExceptionHandler.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v4\AddSetConfigurationMethodToExceptionHandlerRector\AddSetConfigurationMethodToExceptionHandlerRectorTest
  */
-final class AddSetConfigurationMethodToExceptionHandlerRector extends \Rector\Core\Rector\AbstractRector
+final class AddSetConfigurationMethodToExceptionHandlerRector extends AbstractRector
 {
     /**
      * @var string
@@ -31,7 +31,7 @@ final class AddSetConfigurationMethodToExceptionHandlerRector extends \Rector\Co
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
@@ -40,21 +40,21 @@ final class AddSetConfigurationMethodToExceptionHandlerRector extends \Rector\Co
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $constructClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         $configurationMethod = $this->createSetConfigurationMethod();
-        $node->stmts[] = new \PhpParser\Node\Stmt\Nop();
+        $node->stmts[] = new Nop();
         $node->stmts[] = $configurationMethod;
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$constructClassMethod instanceof ClassMethod) {
             return $node;
         }
         $firstParameterName = (string) $this->getName($constructClassMethod->params[0]);
@@ -72,9 +72,9 @@ final class AddSetConfigurationMethodToExceptionHandlerRector extends \Rector\Co
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add method setConfiguration to class which implements ExceptionHandlerInterface', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add method setConfiguration to class which implements ExceptionHandlerInterface', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Frontend\ContentObject\Exception\ExceptionHandlerInterface;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
 
@@ -111,9 +111,9 @@ class CustomExceptionHandler implements ExceptionHandlerInterface
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function shouldSkip(Class_ $class) : bool
     {
-        if (!$this->nodeTypeResolver->isObjectType($class, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\Exception\\ExceptionHandlerInterface'))) {
+        if (!$this->nodeTypeResolver->isObjectType($class, new ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\Exception\\ExceptionHandlerInterface'))) {
             return \true;
         }
         $className = $this->getName($class);
@@ -129,21 +129,21 @@ CODE_SAMPLE
         }
         return null !== $class->getMethod(self::SET_CONFIGURATION);
     }
-    private function createSetConfigurationMethod() : \PhpParser\Node\Stmt\ClassMethod
+    private function createSetConfigurationMethod() : ClassMethod
     {
         $configurationMethod = $this->nodeFactory->createPublicMethod(self::SET_CONFIGURATION);
-        $configurationVariable = new \PhpParser\Node\Expr\Variable('configuration');
-        $configurationParam = new \PhpParser\Node\Param($configurationVariable);
-        $configurationParam->type = new \PhpParser\Node\Identifier('array');
+        $configurationVariable = new Variable('configuration');
+        $configurationParam = new Param($configurationVariable);
+        $configurationParam->type = new Identifier('array');
         $configurationMethod->params[] = $configurationParam;
-        $configurationMethod->returnType = new \PhpParser\Node\Identifier('void');
+        $configurationMethod->returnType = new Identifier('void');
         return $configurationMethod;
     }
-    private function renameFirstConstructorParameterVariableName(\PhpParser\Node\Stmt\ClassMethod $constructClassMethod, string $firstParameterName) : void
+    private function renameFirstConstructorParameterVariableName(ClassMethod $constructClassMethod, string $firstParameterName) : void
     {
         /** @var Variable[] $variables */
-        $variables = $this->betterNodeFinder->find((array) $constructClassMethod->stmts, function (\PhpParser\Node $node) use($firstParameterName) {
-            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+        $variables = $this->betterNodeFinder->find((array) $constructClassMethod->stmts, function (Node $node) use($firstParameterName) {
+            if (!$node instanceof Variable) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($node, $firstParameterName);

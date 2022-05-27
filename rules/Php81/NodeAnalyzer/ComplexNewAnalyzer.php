@@ -22,14 +22,14 @@ final class ComplexNewAnalyzer
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\ArrayManipulator $arrayManipulator, \Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer)
+    public function __construct(ArrayManipulator $arrayManipulator, ExprAnalyzer $exprAnalyzer)
     {
         $this->arrayManipulator = $arrayManipulator;
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function isDynamic(\PhpParser\Node\Expr\New_ $new) : bool
+    public function isDynamic(New_ $new) : bool
     {
-        if (!$new->class instanceof \PhpParser\Node\Name\FullyQualified) {
+        if (!$new->class instanceof FullyQualified) {
             return \true;
         }
         $args = $new->getArgs();
@@ -39,7 +39,7 @@ final class ComplexNewAnalyzer
                 continue;
             }
             // new inside array is allowed for New in initializer
-            if ($value instanceof \PhpParser\Node\Expr\Array_ && $this->isAllowedArray($value)) {
+            if ($value instanceof Array_ && $this->isAllowedArray($value)) {
                 continue;
             }
             if (!$this->exprAnalyzer->isDynamicExpr($value)) {
@@ -49,24 +49,24 @@ final class ComplexNewAnalyzer
         }
         return \false;
     }
-    private function isAllowedNew(\PhpParser\Node\Expr $expr) : bool
+    private function isAllowedNew(Expr $expr) : bool
     {
-        if ($expr instanceof \PhpParser\Node\Expr\New_) {
+        if ($expr instanceof New_) {
             return !$this->isDynamic($expr);
         }
         return \false;
     }
-    private function isAllowedArray(\PhpParser\Node\Expr\Array_ $array) : bool
+    private function isAllowedArray(Array_ $array) : bool
     {
         if (!$this->arrayManipulator->isDynamicArray($array)) {
             return \true;
         }
         $arrayItems = $array->items;
         foreach ($arrayItems as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
-            if (!$arrayItem->value instanceof \PhpParser\Node\Expr\New_) {
+            if (!$arrayItem->value instanceof New_) {
                 return \false;
             }
             if ($this->isDynamic($arrayItem->value)) {

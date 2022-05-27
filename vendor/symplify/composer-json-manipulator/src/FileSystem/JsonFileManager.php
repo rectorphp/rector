@@ -31,7 +31,7 @@ final class JsonFileManager
      * @var \Symplify\ComposerJsonManipulator\Json\JsonInliner
      */
     private $jsonInliner;
-    public function __construct(\RectorPrefix20220527\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20220527\Symplify\ComposerJsonManipulator\Json\JsonCleaner $jsonCleaner, \RectorPrefix20220527\Symplify\ComposerJsonManipulator\Json\JsonInliner $jsonInliner)
+    public function __construct(SmartFileSystem $smartFileSystem, JsonCleaner $jsonCleaner, JsonInliner $jsonInliner)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->jsonCleaner = $jsonCleaner;
@@ -40,11 +40,11 @@ final class JsonFileManager
     /**
      * @return mixed[]
      */
-    public function loadFromFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
+    public function loadFromFileInfo(SmartFileInfo $smartFileInfo) : array
     {
         $realPath = $smartFileInfo->getRealPath();
         if (!isset($this->cachedJSONFiles[$realPath])) {
-            $this->cachedJSONFiles[$realPath] = \RectorPrefix20220527\Nette\Utils\Json::decode($smartFileInfo->getContents(), \RectorPrefix20220527\Nette\Utils\Json::FORCE_ARRAY);
+            $this->cachedJSONFiles[$realPath] = Json::decode($smartFileInfo->getContents(), Json::FORCE_ARRAY);
         }
         return $this->cachedJSONFiles[$realPath];
     }
@@ -54,12 +54,12 @@ final class JsonFileManager
     public function loadFromFilePath(string $filePath) : array
     {
         $fileContent = $this->smartFileSystem->readFile($filePath);
-        return \RectorPrefix20220527\Nette\Utils\Json::decode($fileContent, \RectorPrefix20220527\Nette\Utils\Json::FORCE_ARRAY);
+        return Json::decode($fileContent, Json::FORCE_ARRAY);
     }
     /**
      * @param mixed[] $json
      */
-    public function printJsonToFileInfo(array $json, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : string
+    public function printJsonToFileInfo(array $json, SmartFileInfo $smartFileInfo) : string
     {
         $jsonString = $this->encodeJsonToFileContent($json);
         $this->smartFileSystem->dumpFile($smartFileInfo->getPathname(), $jsonString);
@@ -67,7 +67,7 @@ final class JsonFileManager
         unset($this->cachedJSONFiles[$realPath]);
         return $jsonString;
     }
-    public function printComposerJsonToFilePath(\RectorPrefix20220527\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson, string $filePath) : string
+    public function printComposerJsonToFilePath(ComposerJson $composerJson, string $filePath) : string
     {
         $jsonString = $this->encodeJsonToFileContent($composerJson->getJsonArray());
         $this->smartFileSystem->dumpFile($filePath, $jsonString);
@@ -80,7 +80,7 @@ final class JsonFileManager
     {
         // Empty arrays may lead to bad encoding since we can't be sure whether they need to be arrays or objects.
         $json = $this->jsonCleaner->removeEmptyKeysFromJsonArray($json);
-        $jsonContent = \RectorPrefix20220527\Nette\Utils\Json::encode($json, \RectorPrefix20220527\Nette\Utils\Json::PRETTY) . \RectorPrefix20220527\Symplify\PackageBuilder\Configuration\StaticEolConfiguration::getEolChar();
+        $jsonContent = Json::encode($json, Json::PRETTY) . StaticEolConfiguration::getEolChar();
         return $this->jsonInliner->inlineSections($jsonContent);
     }
 }

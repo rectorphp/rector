@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsToSameRector\AssertEqualsToSameRectorTest
  */
-final class AssertEqualsToSameRector extends \Rector\Core\Rector\AbstractRector
+final class AssertEqualsToSameRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -31,7 +31,7 @@ final class AssertEqualsToSameRector extends \Rector\Core\Rector\AbstractRector
      *
      * @var array<class-string<Type>>
      */
-    private const SCALAR_TYPES = [\PHPStan\Type\FloatType::class, \PHPStan\Type\IntegerType::class, \PHPStan\Type\StringType::class];
+    private const SCALAR_TYPES = [FloatType::class, IntegerType::class, StringType::class];
     /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
@@ -42,26 +42,26 @@ final class AssertEqualsToSameRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns `assertEquals()` into stricter `assertSame()` for scalar values in PHPUnit TestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertEquals(2, $result);', '$this->assertSame(2, $result);')]);
+        return new RuleDefinition('Turns `assertEquals()` into stricter `assertSame()` for scalar values in PHPUnit TestCase', [new CodeSample('$this->assertEquals(2, $result);', '$this->assertSame(2, $result);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -81,7 +81,7 @@ final class AssertEqualsToSameRector extends \Rector\Core\Rector\AbstractRector
         $hasChanged = $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
         return $hasChanged ? $node : null;
     }
-    private function isScalarType(\PHPStan\Type\Type $valueNodeType) : bool
+    private function isScalarType(Type $valueNodeType) : bool
     {
         foreach (self::SCALAR_TYPES as $scalarType) {
             if (\is_a($valueNodeType, $scalarType, \true)) {

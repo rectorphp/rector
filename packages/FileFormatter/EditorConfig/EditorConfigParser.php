@@ -19,29 +19,29 @@ final class EditorConfigParser
      * @var \Idiosyncratic\EditorConfig\EditorConfig
      */
     private $editorConfig;
-    public function __construct(\RectorPrefix20220527\Idiosyncratic\EditorConfig\EditorConfig $editorConfig)
+    public function __construct(EditorConfig $editorConfig)
     {
         $this->editorConfig = $editorConfig;
     }
-    public function extractConfigurationForFile(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : \Rector\FileFormatter\ValueObject\EditorConfigConfiguration
+    public function extractConfigurationForFile(File $file, EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : EditorConfigConfiguration
     {
         $smartFileInfo = $file->getSmartFileInfo();
         /** @var Declaration[] $configuration */
         $configuration = $this->editorConfig->getConfigForPath($smartFileInfo->getRealPath());
-        if (\array_key_exists(\Rector\FileFormatter\ValueObject\EditorConfigOption::INDENT_STYLE, $configuration)) {
-            $indentStyle = (string) $configuration[\Rector\FileFormatter\ValueObject\EditorConfigOption::INDENT_STYLE]->getValue();
+        if (\array_key_exists(EditorConfigOption::INDENT_STYLE, $configuration)) {
+            $indentStyle = (string) $configuration[EditorConfigOption::INDENT_STYLE]->getValue();
             $editorConfigConfigurationBuilder->withIndentStyle($indentStyle);
         }
-        if (\array_key_exists(\Rector\FileFormatter\ValueObject\EditorConfigOption::INDENT_SIZE, $configuration)) {
-            $indentSize = (int) $configuration[\Rector\FileFormatter\ValueObject\EditorConfigOption::INDENT_SIZE]->getValue();
+        if (\array_key_exists(EditorConfigOption::INDENT_SIZE, $configuration)) {
+            $indentSize = (int) $configuration[EditorConfigOption::INDENT_SIZE]->getValue();
             $editorConfigConfigurationBuilder->withIndentSize($indentSize);
         }
-        if (\array_key_exists(\Rector\FileFormatter\ValueObject\EditorConfigOption::END_OF_LINE, $configuration)) {
-            $endOfLine = (string) $configuration[\Rector\FileFormatter\ValueObject\EditorConfigOption::END_OF_LINE]->getValue();
+        if (\array_key_exists(EditorConfigOption::END_OF_LINE, $configuration)) {
+            $endOfLine = (string) $configuration[EditorConfigOption::END_OF_LINE]->getValue();
             $editorConfigConfigurationBuilder->withEndOfLineFromEditorConfig($endOfLine);
         }
-        if (\array_key_exists(\Rector\FileFormatter\ValueObject\EditorConfigOption::INSERT_FINAL_NEWLINE, $configuration)) {
-            $insertFinalNewline = (bool) $configuration[\Rector\FileFormatter\ValueObject\EditorConfigOption::INSERT_FINAL_NEWLINE]->getValue();
+        if (\array_key_exists(EditorConfigOption::INSERT_FINAL_NEWLINE, $configuration)) {
+            $insertFinalNewline = (bool) $configuration[EditorConfigOption::INSERT_FINAL_NEWLINE]->getValue();
             $editorConfigConfigurationBuilder->withInsertFinalNewline($insertFinalNewline);
         }
         return $editorConfigConfigurationBuilder->build();

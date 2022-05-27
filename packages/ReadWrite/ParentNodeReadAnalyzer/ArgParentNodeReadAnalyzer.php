@@ -8,20 +8,20 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use Rector\ReadWrite\Contract\ParentNodeReadAnalyzerInterface;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
-final class ArgParentNodeReadAnalyzer implements \Rector\ReadWrite\Contract\ParentNodeReadAnalyzerInterface
+final class ArgParentNodeReadAnalyzer implements ParentNodeReadAnalyzerInterface
 {
     /**
      * @readonly
      * @var \Rector\ReadWrite\Guard\VariableToConstantGuard
      */
     private $variableToConstantGuard;
-    public function __construct(\Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard)
+    public function __construct(VariableToConstantGuard $variableToConstantGuard)
     {
         $this->variableToConstantGuard = $variableToConstantGuard;
     }
-    public function isRead(\PhpParser\Node\Expr $expr, \PhpParser\Node $parentNode) : bool
+    public function isRead(Expr $expr, Node $parentNode) : bool
     {
-        if (!$parentNode instanceof \PhpParser\Node\Arg) {
+        if (!$parentNode instanceof Arg) {
             return \false;
         }
         return $this->variableToConstantGuard->isReadArg($parentNode);

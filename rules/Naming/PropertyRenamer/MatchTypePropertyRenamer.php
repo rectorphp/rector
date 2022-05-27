@@ -18,12 +18,12 @@ final class MatchTypePropertyRenamer
      * @var \Rector\Naming\Guard\PropertyConflictingNameGuard\MatchPropertyTypeConflictingNameGuard
      */
     private $matchPropertyTypeConflictingNameGuard;
-    public function __construct(\Rector\Naming\PropertyRenamer\PropertyRenamer $propertyRenamer, \Rector\Naming\Guard\PropertyConflictingNameGuard\MatchPropertyTypeConflictingNameGuard $matchPropertyTypeConflictingNameGuard)
+    public function __construct(\Rector\Naming\PropertyRenamer\PropertyRenamer $propertyRenamer, MatchPropertyTypeConflictingNameGuard $matchPropertyTypeConflictingNameGuard)
     {
         $this->propertyRenamer = $propertyRenamer;
         $this->matchPropertyTypeConflictingNameGuard = $matchPropertyTypeConflictingNameGuard;
     }
-    public function rename(\Rector\Naming\ValueObject\PropertyRename $propertyRename) : ?\PhpParser\Node\Stmt\Property
+    public function rename(PropertyRename $propertyRename) : ?Property
     {
         if ($this->matchPropertyTypeConflictingNameGuard->isConflicting($propertyRename)) {
             return null;

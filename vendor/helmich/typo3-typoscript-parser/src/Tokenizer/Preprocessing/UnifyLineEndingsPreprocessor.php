@@ -8,7 +8,7 @@ namespace RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
  *
  * @package Helmich\TypoScriptParser\Tokenizer\Preprocessing
  */
-class UnifyLineEndingsPreprocessor implements \RectorPrefix20220527\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
+class UnifyLineEndingsPreprocessor implements Preprocessor
 {
     /** @var string */
     private $eolCharacter;

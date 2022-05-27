@@ -24,15 +24,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\Assign\AssignArrayToStringRector\AssignArrayToStringRectorTest
  */
-final class AssignArrayToStringRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class AssignArrayToStringRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::NO_ASSIGN_ARRAY_TO_STRING;
+        return PhpVersionFeature::NO_ASSIGN_ARRAY_TO_STRING;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('String cannot be turned into array by assignment anymore', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('String cannot be turned into array by assignment anymore', [new CodeSample(<<<'CODE_SAMPLE'
 $string = '';
 $string[] = 1;
 CODE_SAMPLE
@@ -47,15 +47,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Stmt\Property::class];
+        return [Assign::class, Property::class];
     }
     /**
      * @param Assign|Property $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $defaultExpr = $this->resolveDefaultValueExpr($node);
-        if (!$defaultExpr instanceof \PhpParser\Node\Expr) {
+        if (!$defaultExpr instanceof Expr) {
             return null;
         }
         if (!$this->isEmptyString($defaultExpr)) {
@@ -68,12 +68,12 @@ CODE_SAMPLE
         $exprUsages = $this->betterNodeFinder->findSameNamedExprs($assignedVar);
         // detect if is part of variable assign?
         foreach ($exprUsages as $exprUsage) {
-            $parent = $exprUsage->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if (!$parent instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            $parent = $exprUsage->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$parent instanceof ArrayDimFetch) {
                 continue;
             }
-            $firstAssign = $this->betterNodeFinder->findParentType($parent, \PhpParser\Node\Expr\Assign::class);
-            if (!$firstAssign instanceof \PhpParser\Node\Expr\Assign) {
+            $firstAssign = $this->betterNodeFinder->findParentType($parent, Assign::class);
+            if (!$firstAssign instanceof Assign) {
                 continue;
             }
             // skip explicit assigns
@@ -86,26 +86,26 @@ CODE_SAMPLE
         if (!$shouldRetype) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Stmt\Property) {
-            $node->props[0]->default = new \PhpParser\Node\Expr\Array_();
+        if ($node instanceof Property) {
+            $node->props[0]->default = new Array_();
             return $node;
         }
-        $node->expr = new \PhpParser\Node\Expr\Array_();
+        $node->expr = new Array_();
         return $node;
     }
     /**
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Property $node
      */
-    private function resolveDefaultValueExpr($node) : ?\PhpParser\Node\Expr
+    private function resolveDefaultValueExpr($node) : ?Expr
     {
-        if ($node instanceof \PhpParser\Node\Stmt\Property) {
+        if ($node instanceof Property) {
             return $node->props[0]->default;
         }
         return $node->expr;
     }
-    private function isEmptyString(\PhpParser\Node\Expr $expr) : bool
+    private function isEmptyString(Expr $expr) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$expr instanceof String_) {
             return \false;
         }
         return $expr->value === '';
@@ -116,7 +116,7 @@ CODE_SAMPLE
      */
     private function resolveAssignedVar($node)
     {
-        if ($node instanceof \PhpParser\Node\Expr\Assign) {
+        if ($node instanceof Assign) {
             return $node->var;
         }
         return $node;

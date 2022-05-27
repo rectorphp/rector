@@ -8,18 +8,18 @@ use RectorPrefix20220527\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix20220527\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 final class RectorConfigsResolver
 {
-    public function provide() : \Rector\Core\ValueObject\Bootstrap\BootstrapConfigs
+    public function provide() : BootstrapConfigs
     {
-        $argvInput = new \RectorPrefix20220527\Symfony\Component\Console\Input\ArgvInput();
+        $argvInput = new ArgvInput();
         $mainConfigFile = $this->resolveFromInputWithFallback($argvInput, 'rector.php');
         $rectorRecipeConfigFile = $this->resolveRectorRecipeConfig($argvInput);
         $configFiles = [];
         if ($rectorRecipeConfigFile !== null) {
             $configFiles[] = $rectorRecipeConfigFile;
         }
-        return new \Rector\Core\ValueObject\Bootstrap\BootstrapConfigs($mainConfigFile, $configFiles);
+        return new BootstrapConfigs($mainConfigFile, $configFiles);
     }
-    private function resolveRectorRecipeConfig(\RectorPrefix20220527\Symfony\Component\Console\Input\ArgvInput $argvInput) : ?string
+    private function resolveRectorRecipeConfig(ArgvInput $argvInput) : ?string
     {
         if ($argvInput->getFirstArgument() !== 'generate') {
             return null;
@@ -31,7 +31,7 @@ final class RectorConfigsResolver
         }
         return $rectorRecipeFilePath;
     }
-    private function resolveFromInput(\RectorPrefix20220527\Symfony\Component\Console\Input\ArgvInput $argvInput) : ?string
+    private function resolveFromInput(ArgvInput $argvInput) : ?string
     {
         $configFile = $this->getOptionValue($argvInput, ['--config', '-c']);
         if ($configFile === null) {
@@ -39,11 +39,11 @@ final class RectorConfigsResolver
         }
         if (!\file_exists($configFile)) {
             $message = \sprintf('File "%s" was not found', $configFile);
-            throw new \RectorPrefix20220527\Symplify\SmartFileSystem\Exception\FileNotFoundException($message);
+            throw new FileNotFoundException($message);
         }
         return \realpath($configFile);
     }
-    private function resolveFromInputWithFallback(\RectorPrefix20220527\Symfony\Component\Console\Input\ArgvInput $argvInput, string $fallbackFile) : ?string
+    private function resolveFromInputWithFallback(ArgvInput $argvInput, string $fallbackFile) : ?string
     {
         $configFile = $this->resolveFromInput($argvInput);
         if ($configFile !== null) {
@@ -62,7 +62,7 @@ final class RectorConfigsResolver
     /**
      * @param string[] $optionNames
      */
-    private function getOptionValue(\RectorPrefix20220527\Symfony\Component\Console\Input\ArgvInput $argvInput, array $optionNames) : ?string
+    private function getOptionValue(ArgvInput $argvInput, array $optionNames) : ?string
     {
         foreach ($optionNames as $optionName) {
             if ($argvInput->hasParameterOption($optionName, \true)) {

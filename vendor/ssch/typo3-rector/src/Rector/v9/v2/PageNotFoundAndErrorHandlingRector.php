@@ -28,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.2/Deprecation-83883-PageNotFoundAndErrorHandlingInFrontend.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v2\PageNotFoundAndErrorHandlingRector\PageNotFoundAndErrorHandlingRectorTest
  */
-final class PageNotFoundAndErrorHandlingRector extends \Rector\Core\Rector\AbstractRector
+final class PageNotFoundAndErrorHandlingRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -43,16 +43,16 @@ final class PageNotFoundAndErrorHandlingRector extends \Rector\Core\Rector\Abstr
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Page Not Found And Error handling in Frontend', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Page Not Found And Error handling in Frontend', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 class SomeController extends ActionController
 {
@@ -85,12 +85,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -110,7 +110,7 @@ CODE_SAMPLE
             return null;
         }
         $responseNode = $this->createResponse($node);
-        if (!$responseNode instanceof \PhpParser\Node) {
+        if (!$responseNode instanceof Node) {
             return null;
         }
         $this->nodesToAddCollector->addNodeBeforeNode($responseNode, $node);
@@ -118,14 +118,14 @@ CODE_SAMPLE
         $this->removeNodeOrParentNode($node);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkip(MethodCall $methodCall) : bool
     {
-        if ($this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if ($this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \false;
         }
-        return !$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
+        return !$this->isObjectType($methodCall->var, new ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
     }
-    private function createResponse(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
+    private function createResponse(MethodCall $methodCall) : ?Node
     {
         $methodCallName = $this->getName($methodCall->name);
         if (null === $methodCallName) {
@@ -134,22 +134,22 @@ CODE_SAMPLE
         if (!\array_key_exists($methodCallName, self::MAP_METHODS)) {
             return null;
         }
-        $arguments = [new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::GLOBALS), new \PhpParser\Node\Scalar\String_('TYPO3_REQUEST'))];
+        $arguments = [new ArrayDimFetch(new Variable(Typo3NodeResolver::GLOBALS), new String_('TYPO3_REQUEST'))];
         // Message
-        $arguments[] = isset($methodCall->args[0]) ? $methodCall->args[0]->value : new \PhpParser\Node\Scalar\String_('');
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('response'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Controller\\ErrorController')]), self::MAP_METHODS[$methodCallName], $arguments)));
+        $arguments[] = isset($methodCall->args[0]) ? $methodCall->args[0]->value : new String_('');
+        return new Expression(new Assign(new Variable('response'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Controller\\ErrorController')]), self::MAP_METHODS[$methodCallName], $arguments)));
     }
-    private function throwException() : \PhpParser\Node
+    private function throwException() : Node
     {
-        return new \PhpParser\Node\Stmt\Throw_(new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\Http\\ImmediateResponseException'), $this->nodeFactory->createArgs([new \PhpParser\Node\Expr\Variable('response')])));
+        return new Throw_(new New_(new Name('TYPO3\\CMS\\Core\\Http\\ImmediateResponseException'), $this->nodeFactory->createArgs([new Variable('response')])));
     }
-    private function refactorCheckPageUnavailableHandlerMethod() : \PhpParser\Node
+    private function refactorCheckPageUnavailableHandlerMethod() : Node
     {
-        $devIpMask = new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::GLOBALS), new \PhpParser\Node\Scalar\String_('TYPO3_CONF_VARS')), new \PhpParser\Node\Scalar\String_('SYS')), new \PhpParser\Node\Scalar\String_('devIPmask'));
-        $pageUnavailableHandling = new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::GLOBALS), new \PhpParser\Node\Scalar\String_('TYPO3_CONF_VARS')), new \PhpParser\Node\Scalar\String_('FE')), new \PhpParser\Node\Scalar\String_('pageUnavailable_handling'));
-        return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($pageUnavailableHandling, new \PhpParser\Node\Expr\BooleanNot($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'cmpIP', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [new \PhpParser\Node\Scalar\String_('REMOTE_ADDR')]), $devIpMask])));
+        $devIpMask = new ArrayDimFetch(new ArrayDimFetch(new ArrayDimFetch(new Variable(Typo3NodeResolver::GLOBALS), new String_('TYPO3_CONF_VARS')), new String_('SYS')), new String_('devIPmask'));
+        $pageUnavailableHandling = new ArrayDimFetch(new ArrayDimFetch(new ArrayDimFetch(new Variable(Typo3NodeResolver::GLOBALS), new String_('TYPO3_CONF_VARS')), new String_('FE')), new String_('pageUnavailable_handling'));
+        return new BooleanAnd($pageUnavailableHandling, new BooleanNot($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'cmpIP', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [new String_('REMOTE_ADDR')]), $devIpMask])));
     }
-    private function refactorPageErrorHandlerIfPossible(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
+    private function refactorPageErrorHandlerIfPossible(MethodCall $methodCall) : ?Node
     {
         if (!isset($methodCall->args[0])) {
             return null;
@@ -160,30 +160,30 @@ CODE_SAMPLE
         }
         $message = null;
         if ('1' === (string) $code || \is_bool($code) || 'true' === \strtolower((string) $code)) {
-            $message = new \PhpParser\Node\Scalar\String_('The page did not exist or was inaccessible.');
+            $message = new String_('The page did not exist or was inaccessible.');
             if (isset($methodCall->args[2])) {
                 $reason = $methodCall->args[2]->value;
-                $message = $this->nodeFactory->createConcat([$message, new \PhpParser\Node\Expr\Ternary($reason, $this->nodeFactory->createConcat([new \PhpParser\Node\Scalar\String_(' Reason: '), $reason]), new \PhpParser\Node\Scalar\String_(''))]);
+                $message = $this->nodeFactory->createConcat([$message, new Ternary($reason, $this->nodeFactory->createConcat([new String_(' Reason: '), $reason]), new String_(''))]);
             }
         }
         if ('' === $code) {
-            $message = new \PhpParser\Node\Scalar\String_('Page cannot be found.');
+            $message = new String_('Page cannot be found.');
             if (isset($methodCall->args[2])) {
                 $reason = $methodCall->args[2]->value;
-                $message = new \PhpParser\Node\Expr\Ternary($reason, $this->nodeFactory->createConcat([new \PhpParser\Node\Scalar\String_('Reason: '), $reason]), $message);
+                $message = new Ternary($reason, $this->nodeFactory->createConcat([new String_('Reason: '), $reason]), $message);
             }
         }
         if (null !== $message) {
-            return new \PhpParser\Node\Stmt\Echo_([$this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Controller\\ErrorPageController')]), 'errorAction', ['Page Not Found', $message])]);
+            return new Echo_([$this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Controller\\ErrorPageController')]), 'errorAction', ['Page Not Found', $message])]);
         }
         return null;
     }
-    private function removeNodeOrParentNode(\PhpParser\Node $node) : void
+    private function removeNodeOrParentNode(Node $node) : void
     {
         try {
             $this->removeNode($node);
-        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
-            $this->removeNode($node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE));
+        } catch (ShouldNotHappenException $exception) {
+            $this->removeNode($node->getAttribute(AttributeKey::PARENT_NODE));
         }
     }
 }

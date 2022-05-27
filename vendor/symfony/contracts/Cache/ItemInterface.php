@@ -18,7 +18,7 @@ use RectorPrefix20220527\Psr\Cache\InvalidArgumentException;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface ItemInterface extends \RectorPrefix20220527\Psr\Cache\CacheItemInterface
+interface ItemInterface extends CacheItemInterface
 {
     /**
      * References the Unix timestamp stating when the item will expire.

@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\Latte\RenameMethodLatteRector\RenameMethodLatteRectorTest
  */
-final class RenameMethodLatteRector implements \Rector\Nette\Contract\Rector\LatteRectorInterface
+final class RenameMethodLatteRector implements LatteRectorInterface
 {
     /**
      * @readonly
@@ -29,15 +29,15 @@ final class RenameMethodLatteRector implements \Rector\Nette\Contract\Rector\Lat
      * @var \Rector\Nette\Latte\Parser\VarTypeParser
      */
     private $varTypeParser;
-    public function __construct(\Rector\Renaming\Collector\MethodCallRenameCollector $methodCallRenameCollector, \Rector\Nette\Latte\Parser\TemplateTypeParser $templateTypeParser, \Rector\Nette\Latte\Parser\VarTypeParser $varTypeParser)
+    public function __construct(MethodCallRenameCollector $methodCallRenameCollector, TemplateTypeParser $templateTypeParser, VarTypeParser $varTypeParser)
     {
         $this->methodCallRenameCollector = $methodCallRenameCollector;
         $this->templateTypeParser = $templateTypeParser;
         $this->varTypeParser = $varTypeParser;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Renames method calls in LATTE templates', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Renames method calls in LATTE templates', [new CodeSample(<<<'CODE_SAMPLE'
 {varType SomeClass $someClass}
 
 <div n:foreach="$someClass->oldCall() as $item"></div>

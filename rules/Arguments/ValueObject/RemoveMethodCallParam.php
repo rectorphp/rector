@@ -27,9 +27,9 @@ final class RemoveMethodCallParam
         $this->methodName = $methodName;
         $this->paramPosition = $paramPosition;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getMethodName() : string
     {

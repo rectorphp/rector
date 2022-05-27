@@ -7,7 +7,7 @@ use PhpParser\NodeAbstract;
 /**
  * Represents the "..." in "foo(...)" of the first-class callable syntax.
  */
-class VariadicPlaceholder extends \PhpParser\NodeAbstract
+class VariadicPlaceholder extends NodeAbstract
 {
     /**
      * Create a variadic argument placeholder (first-class callable syntax).

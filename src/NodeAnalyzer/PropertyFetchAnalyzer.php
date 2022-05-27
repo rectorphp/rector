@@ -43,29 +43,29 @@ final class PropertyFetchAnalyzer
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->astResolver = $astResolver;
     }
-    public function isLocalPropertyFetch(\PhpParser\Node $node) : bool
+    public function isLocalPropertyFetch(Node $node) : bool
     {
-        if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
+        if ($node instanceof PropertyFetch) {
+            if (!$node->var instanceof Variable) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($node->var, self::THIS);
         }
-        if ($node instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
-            if (!$node->class instanceof \PhpParser\Node\Name) {
+        if ($node instanceof StaticPropertyFetch) {
+            if (!$node->class instanceof Name) {
                 return \false;
             }
-            return $this->nodeNameResolver->isNames($node->class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()]);
+            return $this->nodeNameResolver->isNames($node->class, [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue()]);
         }
         return \false;
     }
-    public function isLocalPropertyFetchName(\PhpParser\Node $node, string $desiredPropertyName) : bool
+    public function isLocalPropertyFetchName(Node $node, string $desiredPropertyName) : bool
     {
         if (!$this->isLocalPropertyFetch($node)) {
             return \false;
@@ -73,9 +73,9 @@ final class PropertyFetchAnalyzer
         /** @var PropertyFetch|StaticPropertyFetch $node */
         return $this->nodeNameResolver->isName($node->name, $desiredPropertyName);
     }
-    public function containsLocalPropertyFetchName(\PhpParser\Node $node, string $propertyName) : bool
+    public function containsLocalPropertyFetchName(Node $node, string $propertyName) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $node) use($propertyName) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) use($propertyName) : bool {
             return $this->isLocalPropertyFetchName($node, $propertyName);
         });
     }
@@ -84,14 +84,14 @@ final class PropertyFetchAnalyzer
      */
     public function isPropertyToSelf($expr) : bool
     {
-        if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch && !$this->nodeNameResolver->isName($expr->var, self::THIS)) {
+        if ($expr instanceof PropertyFetch && !$this->nodeNameResolver->isName($expr->var, self::THIS)) {
             return \false;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch && !$this->nodeNameResolver->isName($expr->class, \Rector\Core\Enum\ObjectReference::SELF()->getValue())) {
+        if ($expr instanceof StaticPropertyFetch && !$this->nodeNameResolver->isName($expr->class, ObjectReference::SELF()->getValue())) {
             return \false;
         }
-        $class = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($expr, Class_::class);
+        if (!$class instanceof Class_) {
             return \false;
         }
         foreach ($class->getProperties() as $property) {
@@ -102,23 +102,23 @@ final class PropertyFetchAnalyzer
         }
         return \false;
     }
-    public function isPropertyFetch(\PhpParser\Node $node) : bool
+    public function isPropertyFetch(Node $node) : bool
     {
-        if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if ($node instanceof PropertyFetch) {
             return \true;
         }
-        return $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
+        return $node instanceof StaticPropertyFetch;
     }
     /**
      * Matches:
      * "$this->someValue = $<variableName>;"
      */
-    public function isVariableAssignToThisPropertyFetch(\PhpParser\Node $node, string $variableName) : bool
+    public function isVariableAssignToThisPropertyFetch(Node $node, string $variableName) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$node instanceof Assign) {
             return \false;
         }
-        if (!$node->expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$node->expr instanceof Variable) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($node->expr, $variableName)) {
@@ -126,27 +126,27 @@ final class PropertyFetchAnalyzer
         }
         return $this->isLocalPropertyFetch($node->var);
     }
-    public function isFilledViaMethodCallInConstructStmts(\PhpParser\Node\Stmt\ClassLike $classLike, string $propertyName) : bool
+    public function isFilledViaMethodCallInConstructStmts(ClassLike $classLike, string $propertyName) : bool
     {
-        $classMethod = $classLike->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
+        if (!$classMethod instanceof ClassMethod) {
             return \false;
         }
         $className = (string) $this->nodeNameResolver->getName($classLike);
         $stmts = (array) $classMethod->stmts;
         foreach ($stmts as $stmt) {
-            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if (!$stmt instanceof Expression) {
                 continue;
             }
-            if (!$stmt->expr instanceof \PhpParser\Node\Expr\MethodCall && !$stmt->expr instanceof \PhpParser\Node\Expr\StaticCall) {
+            if (!$stmt->expr instanceof MethodCall && !$stmt->expr instanceof StaticCall) {
                 continue;
             }
             $callerClassMethod = $this->astResolver->resolveClassMethodFromCall($stmt->expr);
-            if (!$callerClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            if (!$callerClassMethod instanceof ClassMethod) {
                 continue;
             }
-            $callerClass = $this->betterNodeFinder->findParentType($callerClassMethod, \PhpParser\Node\Stmt\Class_::class);
-            if (!$callerClass instanceof \PhpParser\Node\Stmt\Class_) {
+            $callerClass = $this->betterNodeFinder->findParentType($callerClassMethod, Class_::class);
+            if (!$callerClass instanceof Class_) {
                 continue;
             }
             $callerClassName = (string) $this->nodeNameResolver->getName($callerClass);
@@ -160,7 +160,7 @@ final class PropertyFetchAnalyzer
     /**
      * @param string[] $propertyNames
      */
-    public function isLocalPropertyOfNames(\PhpParser\Node $node, array $propertyNames) : bool
+    public function isLocalPropertyOfNames(Node $node, array $propertyNames) : bool
     {
         if (!$this->isLocalPropertyFetch($node)) {
             return \false;
@@ -168,20 +168,20 @@ final class PropertyFetchAnalyzer
         /** @var PropertyFetch $node */
         return $this->nodeNameResolver->isNames($node->name, $propertyNames);
     }
-    private function isPropertyAssignFoundInClassMethod(\PhpParser\Node\Stmt\ClassLike $classLike, string $className, string $callerClassName, \PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : bool
+    private function isPropertyAssignFoundInClassMethod(ClassLike $classLike, string $className, string $callerClassName, ClassMethod $classMethod, string $propertyName) : bool
     {
-        if ($className !== $callerClassName && !$classLike instanceof \PhpParser\Node\Stmt\Trait_) {
-            $objectType = new \PHPStan\Type\ObjectType($className);
-            $callerObjectType = new \PHPStan\Type\ObjectType($callerClassName);
+        if ($className !== $callerClassName && !$classLike instanceof Trait_) {
+            $objectType = new ObjectType($className);
+            $callerObjectType = new ObjectType($callerClassName);
             if (!$callerObjectType->isSuperTypeOf($objectType)->yes()) {
                 return \false;
             }
         }
         foreach ((array) $classMethod->stmts as $stmt) {
-            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if (!$stmt instanceof Expression) {
                 continue;
             }
-            if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+            if (!$stmt->expr instanceof Assign) {
                 continue;
             }
             if ($this->isLocalPropertyFetchName($stmt->expr->var, $propertyName)) {

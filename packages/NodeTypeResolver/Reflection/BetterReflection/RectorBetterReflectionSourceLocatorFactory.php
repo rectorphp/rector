@@ -19,17 +19,17 @@ final class RectorBetterReflectionSourceLocatorFactory
      * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator
      */
     private $intermediateSourceLocator;
-    public function __construct(\PHPStan\Reflection\BetterReflection\BetterReflectionSourceLocatorFactory $betterReflectionSourceLocatorFactory, \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator $intermediateSourceLocator)
+    public function __construct(BetterReflectionSourceLocatorFactory $betterReflectionSourceLocatorFactory, IntermediateSourceLocator $intermediateSourceLocator)
     {
         $this->betterReflectionSourceLocatorFactory = $betterReflectionSourceLocatorFactory;
         $this->intermediateSourceLocator = $intermediateSourceLocator;
     }
-    public function create() : \PHPStan\BetterReflection\SourceLocator\Type\MemoizingSourceLocator
+    public function create() : MemoizingSourceLocator
     {
         $phpStanSourceLocator = $this->betterReflectionSourceLocatorFactory->create();
         // make PHPStan first source locator, so we avoid parsing every single file - huge performance hit!
-        $aggregateSourceLocator = new \PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator([$phpStanSourceLocator, $this->intermediateSourceLocator]);
+        $aggregateSourceLocator = new AggregateSourceLocator([$phpStanSourceLocator, $this->intermediateSourceLocator]);
         // important for cache
-        return new \PHPStan\BetterReflection\SourceLocator\Type\MemoizingSourceLocator($aggregateSourceLocator);
+        return new MemoizingSourceLocator($aggregateSourceLocator);
     }
 }

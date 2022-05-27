@@ -14,15 +14,15 @@ use Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNewInInitializerRector;
 use Rector\DowngradePhp81\Rector\FunctionLike\DowngradePureIntersectionTypeRector;
 use Rector\DowngradePhp81\Rector\Instanceof_\DowngradePhp81ResourceReturnToObjectRector;
 use Rector\DowngradePhp81\Rector\Property\DowngradeReadonlyPropertyRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_80);
-    $rectorConfig->rule(\Rector\DowngradePhp81\Rector\ClassConst\DowngradeFinalizePublicClassConstantRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp81\Rector\FuncCall\DowngradeFirstClassCallableSyntaxRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNeverTypeDeclarationRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp81\Rector\FunctionLike\DowngradePureIntersectionTypeRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNewInInitializerRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp81\Rector\Instanceof_\DowngradePhp81ResourceReturnToObjectRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp81\Rector\Property\DowngradeReadonlyPropertyRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp81\Rector\FuncCall\DowngradeArrayIsListRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->phpVersion(PhpVersion::PHP_80);
+    $rectorConfig->rule(DowngradeFinalizePublicClassConstantRector::class);
+    $rectorConfig->rule(DowngradeFirstClassCallableSyntaxRector::class);
+    $rectorConfig->rule(DowngradeNeverTypeDeclarationRector::class);
+    $rectorConfig->rule(DowngradePureIntersectionTypeRector::class);
+    $rectorConfig->rule(DowngradeNewInInitializerRector::class);
+    $rectorConfig->rule(DowngradePhp81ResourceReturnToObjectRector::class);
+    $rectorConfig->rule(DowngradeReadonlyPropertyRector::class);
+    $rectorConfig->rule(DowngradeArraySpreadStringKeyRector::class);
+    $rectorConfig->rule(DowngradeArrayIsListRector::class);
 };

@@ -6,6 +6,6 @@ namespace RectorPrefix20220527;
 use Rector\CakePHP\Set\CakePHPLevelSetList;
 use Rector\CakePHP\Set\CakePHPSetList;
 use Rector\Config\RectorConfig;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->sets([\Rector\CakePHP\Set\CakePHPSetList::CAKEPHP_41, \Rector\CakePHP\Set\CakePHPLevelSetList::UP_TO_CAKEPHP_40]);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->sets([CakePHPSetList::CAKEPHP_41, CakePHPLevelSetList::UP_TO_CAKEPHP_40]);
 };

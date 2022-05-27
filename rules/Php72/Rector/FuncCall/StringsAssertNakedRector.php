@@ -19,24 +19,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\StringsAssertNakedRector\StringsAssertNakedRectorTest
  */
-final class StringsAssertNakedRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class StringsAssertNakedRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
     private $simplePhpParser;
-    public function __construct(\Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser)
+    public function __construct(SimplePhpParser $simplePhpParser)
     {
         $this->simplePhpParser = $simplePhpParser;
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::STRING_IN_ASSERT_ARG;
+        return PhpVersionFeature::STRING_IN_ASSERT_ARG;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('String asserts must be passed directly to assert()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('String asserts must be passed directly to assert()', [new CodeSample(<<<'CODE_SAMPLE'
 function nakedAssert()
 {
     assert('true === true');
@@ -57,21 +57,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'assert')) {
             return null;
         }
-        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[0] instanceof Arg) {
             return null;
         }
         $firstArgValue = $node->args[0]->value;
-        if (!$firstArgValue instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$firstArgValue instanceof String_) {
             return null;
         }
         $phpCode = '<?php ' . $firstArgValue->value . ';';
@@ -79,10 +79,10 @@ CODE_SAMPLE
         if (!isset($contentStmts[0])) {
             return null;
         }
-        if (!$contentStmts[0] instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$contentStmts[0] instanceof Expression) {
             return null;
         }
-        $node->args[0] = new \PhpParser\Node\Arg($contentStmts[0]->expr);
+        $node->args[0] = new Arg($contentStmts[0]->expr);
         return $node;
     }
 }

@@ -13,26 +13,26 @@ use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-final class GeneralUtilityDynamicReturnTypeExtension implements \PHPStan\Type\DynamicStaticMethodReturnTypeExtension
+final class GeneralUtilityDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension
 {
     public function getClass() : string
     {
         return 'TYPO3\\CMS\\Core\\Utility\\GeneralUtility';
     }
-    public function isStaticMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
+    public function isStaticMethodSupported(MethodReflection $methodReflection) : bool
     {
         return 'makeInstance' === $methodReflection->getName();
     }
-    public function getTypeFromStaticMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\StaticCall $methodCall, \PHPStan\Analyser\Scope $scope) : ?\PHPStan\Type\Type
+    public function getTypeFromStaticMethodCall(MethodReflection $methodReflection, StaticCall $methodCall, Scope $scope) : ?\PHPStan\Type\Type
     {
         $arg = $methodCall->args[0]->value;
-        if (!$arg instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-            return \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
+        if (!$arg instanceof ClassConstFetch) {
+            return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
         }
         $class = $arg->class;
-        if ($class instanceof \PhpParser\Node\Expr) {
-            return new \PHPStan\Type\MixedType();
+        if ($class instanceof Expr) {
+            return new MixedType();
         }
-        return new \PHPStan\Type\ObjectType($class->toString());
+        return new ObjectType($class->toString());
     }
 }

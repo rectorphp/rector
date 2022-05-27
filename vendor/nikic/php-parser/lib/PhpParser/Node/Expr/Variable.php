@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Expr;
 
 use PhpParser\Node\Expr;
-class Variable extends \PhpParser\Node\Expr
+class Variable extends Expr
 {
     /** @var string|Expr Name */
     public $name;

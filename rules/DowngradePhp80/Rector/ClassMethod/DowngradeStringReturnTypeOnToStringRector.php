@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\ClassMethod\DowngradeStringReturnTypeOnToStringRector\DowngradeStringReturnTypeOnToStringRectorTest
  */
-final class DowngradeStringReturnTypeOnToStringRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeStringReturnTypeOnToStringRector extends AbstractRector
 {
     /**
      * @readonly
@@ -28,7 +28,7 @@ final class DowngradeStringReturnTypeOnToStringRector extends \Rector\Core\Recto
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(ClassChildAnalyzer $classChildAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->classChildAnalyzer = $classChildAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
@@ -38,11 +38,11 @@ final class DowngradeStringReturnTypeOnToStringRector extends \Rector\Core\Recto
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add "string" return on current __toString() method when parent method has string return on __toString() method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add "string" return on current __toString() method when parent method has string return on __toString() method', [new CodeSample(<<<'CODE_SAMPLE'
 abstract class ParentClass
 {
     public function __toString(): string
@@ -81,27 +81,27 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $node->returnType = new \PhpParser\Node\Name('string');
+        $node->returnType = new Name('string');
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassMethod $classMethod) : bool
     {
         if (!$this->nodeNameResolver->isName($classMethod, '__toString')) {
             return \true;
         }
-        if ($classMethod->returnType instanceof \PhpParser\Node) {
+        if ($classMethod->returnType instanceof Node) {
             return \true;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
         $type = $this->classChildAnalyzer->resolveParentClassMethodReturnType($classReflection, '__toString');
-        return $type instanceof \PHPStan\Type\MixedType;
+        return $type instanceof MixedType;
     }
 }

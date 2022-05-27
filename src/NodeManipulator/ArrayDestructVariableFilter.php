@@ -23,7 +23,7 @@ final class ArrayDestructVariableFilter
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\RectorPrefix20220527\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -32,14 +32,14 @@ final class ArrayDestructVariableFilter
      * @param Assign[] $variableAssigns
      * @return Assign[]
      */
-    public function filterOut(array $variableAssigns, \PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function filterOut(array $variableAssigns, ClassMethod $classMethod) : array
     {
         $arrayDestructionCreatedVariables = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) use(&$arrayDestructionCreatedVariables) {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use(&$arrayDestructionCreatedVariables) {
+            if (!$node instanceof Assign) {
                 return null;
             }
-            if (!$node->var instanceof \PhpParser\Node\Expr\Array_ && !$node->var instanceof \PhpParser\Node\Expr\List_) {
+            if (!$node->var instanceof Array_ && !$node->var instanceof List_) {
                 return null;
             }
             foreach ($node->var->items as $arrayItem) {
@@ -47,7 +47,7 @@ final class ArrayDestructVariableFilter
                 if ($arrayItem === null) {
                     continue;
                 }
-                if (!$arrayItem->value instanceof \PhpParser\Node\Expr\Variable) {
+                if (!$arrayItem->value instanceof Variable) {
                     continue;
                 }
                 /** @var string $variableName */
@@ -55,7 +55,7 @@ final class ArrayDestructVariableFilter
                 $arrayDestructionCreatedVariables[] = $variableName;
             }
         });
-        return \array_filter($variableAssigns, function (\PhpParser\Node\Expr\Assign $assign) use($arrayDestructionCreatedVariables) : bool {
+        return \array_filter($variableAssigns, function (Assign $assign) use($arrayDestructionCreatedVariables) : bool {
             return !$this->nodeNameResolver->isNames($assign->var, $arrayDestructionCreatedVariables);
         });
     }

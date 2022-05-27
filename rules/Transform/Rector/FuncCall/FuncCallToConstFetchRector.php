@@ -15,15 +15,15 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToConstFetchRector\FunctionCallToConstantRectorTest
  */
-final class FuncCallToConstFetchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class FuncCallToConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string[]
      */
     private $functionsToConstants = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes use of function calls to use constants', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes use of function calls to use constants', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -48,12 +48,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $functionName = $this->getName($node);
         if (!\is_string($functionName)) {
@@ -62,15 +62,15 @@ CODE_SAMPLE
         if (!\array_key_exists($functionName, $this->functionsToConstants)) {
             return null;
         }
-        return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($this->functionsToConstants[$functionName]));
+        return new ConstFetch(new Name($this->functionsToConstants[$functionName]));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($configuration);
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        Assert::allString($configuration);
+        Assert::allString(\array_keys($configuration));
         /** @var array<string, string> $configuration */
         $this->functionsToConstants = $configuration;
     }

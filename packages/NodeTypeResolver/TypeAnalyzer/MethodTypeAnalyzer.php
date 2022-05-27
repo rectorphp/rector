@@ -16,7 +16,7 @@ final class MethodTypeAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -24,7 +24,7 @@ final class MethodTypeAnalyzer
      * @param class-string $expectedClass
      * @param non-empty-string $expectedMethod
      */
-    public function isCallTo(\PhpParser\Node\Expr\MethodCall $methodCall, string $expectedClass, string $expectedMethod) : bool
+    public function isCallTo(MethodCall $methodCall, string $expectedClass, string $expectedMethod) : bool
     {
         if (!$this->isMethodName($methodCall, $expectedMethod)) {
             return \false;
@@ -34,13 +34,13 @@ final class MethodTypeAnalyzer
     /**
      * @param non-empty-string $expectedName
      */
-    private function isMethodName(\PhpParser\Node\Expr\MethodCall $methodCall, string $expectedName) : bool
+    private function isMethodName(MethodCall $methodCall, string $expectedName) : bool
     {
-        if ($methodCall->name instanceof \PhpParser\Node\Identifier && $this->areMethodNamesEqual($methodCall->name->toString(), $expectedName)) {
+        if ($methodCall->name instanceof Identifier && $this->areMethodNamesEqual($methodCall->name->toString(), $expectedName)) {
             return \true;
         }
         $type = $this->nodeTypeResolver->getType($methodCall->name);
-        return $type instanceof \PHPStan\Type\Constant\ConstantStringType && $this->areMethodNamesEqual($type->getValue(), $expectedName);
+        return $type instanceof ConstantStringType && $this->areMethodNamesEqual($type->getValue(), $expectedName);
     }
     private function areMethodNamesEqual(string $left, string $right) : bool
     {
@@ -50,10 +50,10 @@ final class MethodTypeAnalyzer
     /**
      * @param class-string $expectedClass
      */
-    private function isInstanceOf(\PhpParser\Node\Expr $expr, string $expectedClass) : bool
+    private function isInstanceOf(Expr $expr, string $expectedClass) : bool
     {
         $type = $this->nodeTypeResolver->getType($expr);
-        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$type instanceof TypeWithClassName) {
             return \false;
         }
         if ($this->areClassNamesEqual($expectedClass, $type->getClassName())) {

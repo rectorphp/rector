@@ -20,7 +20,7 @@ class Dumper
     // show object and reference hashes (defaults to true)
     public const LOCATION_CLASS = 0b1, LOCATION_SOURCE = 0b11, LOCATION_LINK = self::LOCATION_SOURCE;
     // deprecated
-    public const HIDDEN_VALUE = \RectorPrefix20220527\Tracy\Dumper\Describer::HIDDEN_VALUE;
+    public const HIDDEN_VALUE = Describer::HIDDEN_VALUE;
     /** @var Dumper\Value[] */
     public static $liveSnapshot = [];
     /** @var array */
@@ -28,7 +28,7 @@ class Dumper
     /** @var array */
     public static $resources = ['stream' => 'stream_get_meta_data', 'stream-context' => 'stream_context_get_options', 'curl' => 'curl_getinfo'];
     /** @var array */
-    public static $objectExporters = [\Closure::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeClosure'], \RectorPrefix20220527\UnitEnum::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeEnum'], \ArrayObject::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeArrayObject'], \SplFileInfo::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeSplFileInfo'], \SplObjectStorage::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeSplObjectStorage'], \__PHP_Incomplete_Class::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposePhpIncompleteClass'], \Generator::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeGenerator'], \RectorPrefix20220527\Fiber::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeFiber'], \DOMNode::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeDOMNode'], \DOMNodeList::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeDOMNodeList'], \DOMNamedNodeMap::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeDOMNodeList'], \Ds\Collection::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeDsCollection'], \Ds\Map::class => [\RectorPrefix20220527\Tracy\Dumper\Exposer::class, 'exposeDsMap']];
+    public static $objectExporters = [\Closure::class => [Exposer::class, 'exposeClosure'], \UnitEnum::class => [Exposer::class, 'exposeEnum'], \ArrayObject::class => [Exposer::class, 'exposeArrayObject'], \SplFileInfo::class => [Exposer::class, 'exposeSplFileInfo'], \SplObjectStorage::class => [Exposer::class, 'exposeSplObjectStorage'], \__PHP_Incomplete_Class::class => [Exposer::class, 'exposePhpIncompleteClass'], \Generator::class => [Exposer::class, 'exposeGenerator'], \Fiber::class => [Exposer::class, 'exposeFiber'], \DOMNode::class => [Exposer::class, 'exposeDOMNode'], \DOMNodeList::class => [Exposer::class, 'exposeDOMNodeList'], \DOMNamedNodeMap::class => [Exposer::class, 'exposeDOMNodeList'], Ds\Collection::class => [Exposer::class, 'exposeDsCollection'], Ds\Map::class => [Exposer::class, 'exposeDsMap']];
     /** @var Describer */
     private $describer;
     /** @var Renderer */
@@ -39,11 +39,11 @@ class Dumper
      */
     public static function dump($var, array $options = [])
     {
-        if (\RectorPrefix20220527\Tracy\Helpers::isCli()) {
-            $useColors = self::$terminalColors && \RectorPrefix20220527\Tracy\Helpers::detectColors();
+        if (Helpers::isCli()) {
+            $useColors = self::$terminalColors && Helpers::detectColors();
             $dumper = new self($options);
             \fwrite(\STDOUT, $dumper->asTerminal($var, $useColors ? self::$terminalColors : []));
-        } elseif (\RectorPrefix20220527\Tracy\Helpers::isHtmlMode()) {
+        } elseif (Helpers::isHtmlMode()) {
             $options[self::LOCATION] = $options[self::LOCATION] ?? \true;
             self::renderAssets();
             echo self::toHtml($var, $options);
@@ -79,24 +79,24 @@ class Dumper
     public static function renderAssets() : void
     {
         static $sent;
-        if (\RectorPrefix20220527\Tracy\Debugger::$productionMode === \true || $sent) {
+        if (Debugger::$productionMode === \true || $sent) {
             return;
         }
         $sent = \true;
-        $nonce = \RectorPrefix20220527\Tracy\Helpers::getNonce();
-        $nonceAttr = $nonce ? ' nonce="' . \RectorPrefix20220527\Tracy\Helpers::escapeHtml($nonce) . '"' : '';
+        $nonce = Helpers::getNonce();
+        $nonceAttr = $nonce ? ' nonce="' . Helpers::escapeHtml($nonce) . '"' : '';
         $s = \file_get_contents(__DIR__ . '/../assets/toggle.css') . \file_get_contents(__DIR__ . '/assets/dumper-light.css') . \file_get_contents(__DIR__ . '/assets/dumper-dark.css');
-        echo "<style{$nonceAttr}>", \str_replace('</', '<\\/', \RectorPrefix20220527\Tracy\Helpers::minifyCss($s)), "</style>\n";
-        if (!\RectorPrefix20220527\Tracy\Debugger::isEnabled()) {
+        echo "<style{$nonceAttr}>", \str_replace('</', '<\\/', Helpers::minifyCss($s)), "</style>\n";
+        if (!Debugger::isEnabled()) {
             $s = '(function(){' . \file_get_contents(__DIR__ . '/../assets/toggle.js') . '})();' . '(function(){' . \file_get_contents(__DIR__ . '/../Dumper/assets/dumper.js') . '})();';
-            echo "<script{$nonceAttr}>", \str_replace(['<!--', '</s'], ['<\\!--', '<\\/s'], \RectorPrefix20220527\Tracy\Helpers::minifyJs($s)), "</script>\n";
+            echo "<script{$nonceAttr}>", \str_replace(['<!--', '</s'], ['<\\!--', '<\\/s'], Helpers::minifyJs($s)), "</script>\n";
         }
     }
     private function __construct(array $options = [])
     {
         $location = $options[self::LOCATION] ?? 0;
         $location = $location === \true ? ~0 : (int) $location;
-        $describer = $this->describer = new \RectorPrefix20220527\Tracy\Dumper\Describer();
+        $describer = $this->describer = new Describer();
         $describer->maxDepth = (int) ($options[self::DEPTH] ?? $describer->maxDepth);
         $describer->maxLength = (int) ($options[self::TRUNCATE] ?? $describer->maxLength);
         $describer->maxItems = (int) ($options[self::ITEMS] ?? $describer->maxItems);
@@ -117,7 +117,7 @@ class Dumper
             $describer->snapshot =& $tmp[0];
             $describer->references =& $tmp[1];
         }
-        $renderer = $this->renderer = new \RectorPrefix20220527\Tracy\Dumper\Renderer();
+        $renderer = $this->renderer = new Renderer();
         $renderer->collapseTop = $options[self::COLLAPSE] ?? $renderer->collapseTop;
         $renderer->collapseSub = $options[self::COLLAPSE_COUNT] ?? $renderer->collapseSub;
         $renderer->collectingMode = isset($options[self::SNAPSHOT]) || !empty($options[self::LIVE]);
@@ -150,7 +150,7 @@ class Dumper
     }
     public static function formatSnapshotAttribute(array &$snapshot) : string
     {
-        $res = "'" . \RectorPrefix20220527\Tracy\Dumper\Renderer::jsonEncode($snapshot[0] ?? []) . "'";
+        $res = "'" . Renderer::jsonEncode($snapshot[0] ?? []) . "'";
         $snapshot = [];
         return $res;
     }

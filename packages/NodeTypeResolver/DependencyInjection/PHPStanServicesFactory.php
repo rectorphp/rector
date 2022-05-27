@@ -29,11 +29,11 @@ final class PHPStanServicesFactory
      * @var \PHPStan\DependencyInjection\Container
      */
     private $container;
-    public function __construct(\RectorPrefix20220527\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(ParameterProvider $parameterProvider)
     {
-        $containerFactory = new \PHPStan\DependencyInjection\ContainerFactory(\getcwd());
+        $containerFactory = new ContainerFactory(\getcwd());
         $additionalConfigFiles = [];
-        $additionalConfigFiles[] = $parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH);
+        $additionalConfigFiles[] = $parameterProvider->provideStringParameter(Option::PHPSTAN_FOR_RECTOR_PATH);
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/static-reflection.neon';
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/better-infer.neon';
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/parser.neon';
@@ -45,65 +45,65 @@ final class PHPStanServicesFactory
     /**
      * @api
      */
-    public function createReflectionProvider() : \PHPStan\Reflection\ReflectionProvider
+    public function createReflectionProvider() : ReflectionProvider
     {
-        return $this->container->getByType(\PHPStan\Reflection\ReflectionProvider::class);
+        return $this->container->getByType(ReflectionProvider::class);
     }
     /**
      * @api
      */
-    public function createEmulativeLexer() : \PhpParser\Lexer
+    public function createEmulativeLexer() : Lexer
     {
         return $this->container->getService('currentPhpVersionLexer');
     }
     /**
      * @api
      */
-    public function createPHPStanParser() : \PHPStan\Parser\Parser
+    public function createPHPStanParser() : Parser
     {
         return $this->container->getService('currentPhpVersionRichParser');
     }
     /**
      * @api
      */
-    public function createNodeScopeResolver() : \PHPStan\Analyser\NodeScopeResolver
+    public function createNodeScopeResolver() : NodeScopeResolver
     {
-        return $this->container->getByType(\PHPStan\Analyser\NodeScopeResolver::class);
+        return $this->container->getByType(NodeScopeResolver::class);
     }
     /**
      * @api
      */
-    public function createScopeFactory() : \PHPStan\Analyser\ScopeFactory
+    public function createScopeFactory() : ScopeFactory
     {
-        return $this->container->getByType(\PHPStan\Analyser\ScopeFactory::class);
+        return $this->container->getByType(ScopeFactory::class);
     }
     /**
      * @api
      */
-    public function createDependencyResolver() : \PHPStan\Dependency\DependencyResolver
+    public function createDependencyResolver() : DependencyResolver
     {
-        return $this->container->getByType(\PHPStan\Dependency\DependencyResolver::class);
+        return $this->container->getByType(DependencyResolver::class);
     }
     /**
      * @api
      */
-    public function createFileHelper() : \PHPStan\File\FileHelper
+    public function createFileHelper() : FileHelper
     {
-        return $this->container->getByType(\PHPStan\File\FileHelper::class);
+        return $this->container->getByType(FileHelper::class);
     }
     /**
      * @api
      */
-    public function createTypeNodeResolver() : \PHPStan\PhpDoc\TypeNodeResolver
+    public function createTypeNodeResolver() : TypeNodeResolver
     {
-        return $this->container->getByType(\PHPStan\PhpDoc\TypeNodeResolver::class);
+        return $this->container->getByType(TypeNodeResolver::class);
     }
     /**
      * @api
      */
-    public function createDynamicSourceLocatorProvider() : \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
+    public function createDynamicSourceLocatorProvider() : DynamicSourceLocatorProvider
     {
-        return $this->container->getByType(\Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider::class);
+        return $this->container->getByType(DynamicSourceLocatorProvider::class);
     }
     /**
      * @return string[]
@@ -111,17 +111,17 @@ final class PHPStanServicesFactory
     private function resolveExtensionConfigs() : array
     {
         // same logic as in PHPStan for extension installed - https://github.com/phpstan/phpstan-src/blob/5956ec4f6cd09c8d7db9466ed4e7f25706f37a43/src/Command/CommandHelper.php#L195-L222
-        if (!\class_exists(\PHPStan\ExtensionInstaller\GeneratedConfig::class)) {
+        if (!\class_exists(GeneratedConfig::class)) {
             return [];
         }
-        $reflectionClass = new \ReflectionClass(\PHPStan\ExtensionInstaller\GeneratedConfig::class);
+        $reflectionClass = new ReflectionClass(GeneratedConfig::class);
         $generatedConfigClassFileName = $reflectionClass->getFileName();
         if ($generatedConfigClassFileName === \false) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         $generatedConfigDirectory = \dirname($generatedConfigClassFileName);
         $extensionConfigFiles = [];
-        foreach (\PHPStan\ExtensionInstaller\GeneratedConfig::EXTENSIONS as $extension) {
+        foreach (GeneratedConfig::EXTENSIONS as $extension) {
             $fileNames = $extension['extra']['includes'] ?? [];
             foreach ($fileNames as $fileName) {
                 $configFilePath = $generatedConfigDirectory . '/' . $extension['relative_install_path'] . '/' . $fileName;

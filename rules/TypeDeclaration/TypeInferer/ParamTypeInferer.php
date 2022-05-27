@@ -30,28 +30,28 @@ final class ParamTypeInferer
     /**
      * @param ParamTypeInfererInterface[] $paramTypeInferers
      */
-    public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, array $paramTypeInferers, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, array $paramTypeInferers, NodeTypeResolver $nodeTypeResolver)
     {
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->paramTypeInferers = $paramTypeInferers;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
+    public function inferParam(Param $param) : Type
     {
         foreach ($this->paramTypeInferers as $paramTypeInferer) {
             $paramType = $paramTypeInferer->inferParam($param);
-            if ($paramType instanceof \PHPStan\Type\MixedType) {
+            if ($paramType instanceof MixedType) {
                 continue;
             }
             $inferedType = $this->genericClassStringTypeNormalizer->normalize($paramType);
-            if ($param->default instanceof \PhpParser\Node) {
+            if ($param->default instanceof Node) {
                 $paramDefaultType = $this->nodeTypeResolver->getType($param->default);
                 if (!$paramDefaultType instanceof $inferedType) {
-                    return new \PHPStan\Type\MixedType();
+                    return new MixedType();
                 }
             }
             return $inferedType;
         }
-        return new \PHPStan\Type\MixedType();
+        return new MixedType();
     }
 }

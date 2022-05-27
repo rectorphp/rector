@@ -10,6 +10,6 @@
  */
 namespace RectorPrefix20220527\Symfony\Component\String\Exception;
 
-class RuntimeException extends \RuntimeException implements \RectorPrefix20220527\Symfony\Component\String\Exception\ExceptionInterface
+class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
 }

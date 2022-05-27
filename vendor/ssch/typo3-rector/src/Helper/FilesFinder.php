@@ -15,26 +15,26 @@ final class FilesFinder
      * @var string
      */
     private const EXT_EMCONF_FILENAME = 'ext_emconf.php';
-    public function findExtEmConfRelativeFromGivenFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : ?\Symplify\SmartFileSystem\SmartFileInfo
+    public function findExtEmConfRelativeFromGivenFileInfo(SmartFileInfo $fileInfo) : ?SmartFileInfo
     {
         return $this->findFileRelativeFromGivenFileInfo($fileInfo, self::EXT_EMCONF_FILENAME);
     }
-    public function isExtLocalConf(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : bool
+    public function isExtLocalConf(SmartFileInfo $fileInfo) : bool
     {
         return $this->endsWith($fileInfo, 'ext_localconf.php');
     }
-    public function isExtTables(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : bool
+    public function isExtTables(SmartFileInfo $fileInfo) : bool
     {
         return $this->endsWith($fileInfo, 'ext_tables.php');
     }
-    public function isExtEmconf(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : bool
+    public function isExtEmconf(SmartFileInfo $fileInfo) : bool
     {
         return $this->endsWith($fileInfo, self::EXT_EMCONF_FILENAME);
     }
-    private function findFileRelativeFromGivenFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, string $filename) : ?\Symplify\SmartFileSystem\SmartFileInfo
+    private function findFileRelativeFromGivenFileInfo(SmartFileInfo $fileInfo, string $filename) : ?SmartFileInfo
     {
         // special case for tests
-        if (\RectorPrefix20220527\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return $fileInfo;
         }
         $currentDirectory = \dirname($fileInfo->getRealPath());
@@ -56,15 +56,15 @@ final class FilesFinder
         }
         return null;
     }
-    private function createSmartFileInfoIfFileExistsInCurrentDirectory(string $currentDirectory, string $filename) : ?\Symplify\SmartFileSystem\SmartFileInfo
+    private function createSmartFileInfoIfFileExistsInCurrentDirectory(string $currentDirectory, string $filename) : ?SmartFileInfo
     {
         $filePath = \sprintf('%s/%s', $currentDirectory, $filename);
         if (\is_file($filePath)) {
-            return new \Symplify\SmartFileSystem\SmartFileInfo($filePath);
+            return new SmartFileInfo($filePath);
         }
         return null;
     }
-    private function endsWith(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, string $needle) : bool
+    private function endsWith(SmartFileInfo $fileInfo, string $needle) : bool
     {
         return \substr_compare($fileInfo->getFilename(), $needle, -\strlen($needle)) === 0;
     }

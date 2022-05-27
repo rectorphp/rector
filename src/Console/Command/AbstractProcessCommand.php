@@ -10,7 +10,7 @@ use RectorPrefix20220527\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220527\Symfony\Component\Console\Input\InputArgument;
 use RectorPrefix20220527\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20220527\Symfony\Contracts\Service\Attribute\Required;
-abstract class AbstractProcessCommand extends \RectorPrefix20220527\Symfony\Component\Console\Command\Command
+abstract class AbstractProcessCommand extends Command
 {
     /**
      * @var \Rector\Core\Configuration\ConfigurationFactory
@@ -19,22 +19,22 @@ abstract class AbstractProcessCommand extends \RectorPrefix20220527\Symfony\Comp
     /**
      * @required
      */
-    public function autowire(\Rector\Core\Configuration\ConfigurationFactory $configurationFactory) : void
+    public function autowire(ConfigurationFactory $configurationFactory) : void
     {
         $this->configurationFactory = $configurationFactory;
     }
     protected function configure() : void
     {
-        $this->addArgument(\Rector\Core\Configuration\Option::SOURCE, \RectorPrefix20220527\Symfony\Component\Console\Input\InputArgument::OPTIONAL | \RectorPrefix20220527\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'Files or directories to be upgraded.');
-        $this->addOption(\Rector\Core\Configuration\Option::DRY_RUN, \Rector\Core\Configuration\Option::DRY_RUN_SHORT, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Only see the diff of changes, do not save them to files.');
-        $this->addOption(\Rector\Core\Configuration\Option::AUTOLOAD_FILE, \Rector\Core\Configuration\Option::AUTOLOAD_FILE_SHORT, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'Path to file with extra autoload (will be included)');
-        $this->addOption(\Rector\Core\Configuration\Option::NO_PROGRESS_BAR, null, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Hide progress bar. Useful e.g. for nicer CI output.');
-        $this->addOption(\Rector\Core\Configuration\Option::NO_DIFFS, null, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Hide diffs of changed files. Useful e.g. for nicer CI output.');
-        $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, null, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'Select output format', \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
-        $this->addOption(\Rector\Core\Configuration\Option::DEBUG, null, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Display debug output.');
-        $this->addOption(\Rector\Core\Configuration\Option::MEMORY_LIMIT, null, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'Memory limit for process');
-        $this->addOption(\Rector\Core\Configuration\Option::CLEAR_CACHE, null, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Clear unchaged files cache');
-        $this->addOption(\Rector\Core\Configuration\Option::PARALLEL_PORT, null, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED);
-        $this->addOption(\Rector\Core\Configuration\Option::PARALLEL_IDENTIFIER, null, \RectorPrefix20220527\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED);
+        $this->addArgument(Option::SOURCE, InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Files or directories to be upgraded.');
+        $this->addOption(Option::DRY_RUN, Option::DRY_RUN_SHORT, InputOption::VALUE_NONE, 'Only see the diff of changes, do not save them to files.');
+        $this->addOption(Option::AUTOLOAD_FILE, Option::AUTOLOAD_FILE_SHORT, InputOption::VALUE_REQUIRED, 'Path to file with extra autoload (will be included)');
+        $this->addOption(Option::NO_PROGRESS_BAR, null, InputOption::VALUE_NONE, 'Hide progress bar. Useful e.g. for nicer CI output.');
+        $this->addOption(Option::NO_DIFFS, null, InputOption::VALUE_NONE, 'Hide diffs of changed files. Useful e.g. for nicer CI output.');
+        $this->addOption(Option::OUTPUT_FORMAT, null, InputOption::VALUE_REQUIRED, 'Select output format', ConsoleOutputFormatter::NAME);
+        $this->addOption(Option::DEBUG, null, InputOption::VALUE_NONE, 'Display debug output.');
+        $this->addOption(Option::MEMORY_LIMIT, null, InputOption::VALUE_REQUIRED, 'Memory limit for process');
+        $this->addOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchaged files cache');
+        $this->addOption(Option::PARALLEL_PORT, null, InputOption::VALUE_REQUIRED);
+        $this->addOption(Option::PARALLEL_IDENTIFIER, null, InputOption::VALUE_REQUIRED);
     }
 }

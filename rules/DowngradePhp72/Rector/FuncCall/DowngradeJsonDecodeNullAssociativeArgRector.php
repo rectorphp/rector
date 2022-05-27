@@ -18,20 +18,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @changelog https://3v4l.org/b1mA6
  */
-final class DowngradeJsonDecodeNullAssociativeArgRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeJsonDecodeNullAssociativeArgRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade json_decode() with null associative argument function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade json_decode() with null associative argument function', [new CodeSample(<<<'CODE_SAMPLE'
 function exactlyNull(string $json)
 {
     $value = json_decode($json, null);
@@ -60,12 +60,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'json_decode')) {
             return null;
@@ -79,20 +79,20 @@ CODE_SAMPLE
         }
         $associativeValue = $args[1]->value;
         // already converted
-        if ($associativeValue instanceof \PhpParser\Node\Expr\Ternary && $associativeValue->if === null) {
+        if ($associativeValue instanceof Ternary && $associativeValue->if === null) {
             return null;
         }
         $associativeValueType = $this->nodeTypeResolver->getType($associativeValue);
-        if ($associativeValueType instanceof \PHPStan\Type\BooleanType) {
+        if ($associativeValueType instanceof BooleanType) {
             return null;
         }
-        if ($associativeValue instanceof \PhpParser\Node\Expr\ConstFetch && $this->valueResolver->isNull($associativeValue)) {
+        if ($associativeValue instanceof ConstFetch && $this->valueResolver->isNull($associativeValue)) {
             $args[1]->value = $this->nodeFactory->createTrue();
             return $node;
         }
         // add conditional ternary
-        $nullIdentical = new \PhpParser\Node\Expr\BinaryOp\Identical($associativeValue, $this->nodeFactory->createNull());
-        $ternary = new \PhpParser\Node\Expr\Ternary($nullIdentical, null, $associativeValue);
+        $nullIdentical = new Identical($associativeValue, $this->nodeFactory->createNull());
+        $ternary = new Ternary($nullIdentical, null, $associativeValue);
         $args[1]->value = $ternary;
         return $node;
     }

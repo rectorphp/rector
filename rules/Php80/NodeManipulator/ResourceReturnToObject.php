@@ -41,7 +41,7 @@ final class ResourceReturnToObject
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -55,7 +55,7 @@ final class ResourceReturnToObject
      */
     public function refactor($node, array $collectionFunctionToReturnObject)
     {
-        if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
+        if ($node instanceof FuncCall) {
             return $this->processFuncCall($node, $collectionFunctionToReturnObject);
         }
         return $this->processBooleanOr($node, $collectionFunctionToReturnObject);
@@ -63,10 +63,10 @@ final class ResourceReturnToObject
     /**
      * @param array<string, string> $collectionFunctionToReturnObject
      */
-    private function processFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall, array $collectionFunctionToReturnObject) : ?\PhpParser\Node\Expr\Instanceof_
+    private function processFuncCall(FuncCall $funcCall, array $collectionFunctionToReturnObject) : ?Instanceof_
     {
-        $parent = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Expr\BinaryOp && !$parent instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
+        $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof BinaryOp && !$parent instanceof BooleanOr) {
             return null;
         }
         if ($this->shouldSkip($funcCall)) {
@@ -78,12 +78,12 @@ final class ResourceReturnToObject
         }
         /** @var Expr $argResourceValue */
         $argResourceValue = $funcCall->args[0]->value;
-        return new \PhpParser\Node\Expr\Instanceof_($argResourceValue, new \PhpParser\Node\Name\FullyQualified($objectInstanceCheck));
+        return new Instanceof_($argResourceValue, new FullyQualified($objectInstanceCheck));
     }
     /**
      * @param array<string, string> $collectionFunctionToReturnObject
      */
-    private function resolveArgValueType(\PhpParser\Node\Expr\FuncCall $funcCall, array $collectionFunctionToReturnObject) : ?\PHPStan\Type\Type
+    private function resolveArgValueType(FuncCall $funcCall, array $collectionFunctionToReturnObject) : ?Type
     {
         /** @var Expr $argResourceValue */
         $argResourceValue = $funcCall->args[0]->value;
@@ -91,7 +91,7 @@ final class ResourceReturnToObject
         // if detected type is not FullyQualifiedObjectType, it still can be a resource to object, when:
         //      - in the right position of BooleanOr, it be NeverType
         //      - the object changed after init
-        if (!$argValueType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+        if (!$argValueType instanceof FullyQualifiedObjectType) {
             $argValueType = $this->resolveArgValueTypeFromPreviousAssign($funcCall, $argResourceValue, $collectionFunctionToReturnObject);
         }
         return $argValueType;
@@ -99,10 +99,10 @@ final class ResourceReturnToObject
     /**
      * @param array<string, string> $collectionFunctionToReturnObject
      */
-    private function resolveObjectInstanceCheck(\PhpParser\Node\Expr\FuncCall $funcCall, array $collectionFunctionToReturnObject) : ?string
+    private function resolveObjectInstanceCheck(FuncCall $funcCall, array $collectionFunctionToReturnObject) : ?string
     {
         $argValueType = $this->resolveArgValueType($funcCall, $collectionFunctionToReturnObject);
-        if (!$argValueType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+        if (!$argValueType instanceof FullyQualifiedObjectType) {
             return null;
         }
         $className = $argValueType->getClassName();
@@ -116,10 +116,10 @@ final class ResourceReturnToObject
     /**
      * @param array<string, string> $collectionFunctionToReturnObject
      */
-    private function resolveArgValueTypeFromPreviousAssign(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr, array $collectionFunctionToReturnObject) : ?\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType
+    private function resolveArgValueTypeFromPreviousAssign(FuncCall $funcCall, Expr $expr, array $collectionFunctionToReturnObject) : ?FullyQualifiedObjectType
     {
         $objectInstanceCheck = null;
-        $assign = $this->betterNodeFinder->findFirstPrevious($funcCall, function (\PhpParser\Node $subNode) use(&$objectInstanceCheck, $expr, $collectionFunctionToReturnObject) : bool {
+        $assign = $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $subNode) use(&$objectInstanceCheck, $expr, $collectionFunctionToReturnObject) : bool {
             if (!$this->isAssignWithFuncCallExpr($subNode)) {
                 return \false;
             }
@@ -135,32 +135,32 @@ final class ResourceReturnToObject
             }
             return \false;
         });
-        if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$assign instanceof Assign) {
             return null;
         }
         /** @var string $objectInstanceCheck */
-        return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($objectInstanceCheck);
+        return new FullyQualifiedObjectType($objectInstanceCheck);
     }
-    private function isAssignWithFuncCallExpr(\PhpParser\Node $node) : bool
+    private function isAssignWithFuncCallExpr(Node $node) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$node instanceof Assign) {
             return \false;
         }
-        return $node->expr instanceof \PhpParser\Node\Expr\FuncCall;
+        return $node->expr instanceof FuncCall;
     }
     /**
      * @param array<string, string> $collectionFunctionToReturnObject
      */
-    private function processBooleanOr(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr, array $collectionFunctionToReturnObject) : ?\PhpParser\Node\Expr\Instanceof_
+    private function processBooleanOr(BooleanOr $booleanOr, array $collectionFunctionToReturnObject) : ?Instanceof_
     {
         $left = $booleanOr->left;
         $right = $booleanOr->right;
         $funCall = null;
         $instanceof = null;
-        if ($left instanceof \PhpParser\Node\Expr\FuncCall && $right instanceof \PhpParser\Node\Expr\Instanceof_) {
+        if ($left instanceof FuncCall && $right instanceof Instanceof_) {
             $funCall = $left;
             $instanceof = $right;
-        } elseif ($left instanceof \PhpParser\Node\Expr\Instanceof_ && $right instanceof \PhpParser\Node\Expr\FuncCall) {
+        } elseif ($left instanceof Instanceof_ && $right instanceof FuncCall) {
             $funCall = $right;
             $instanceof = $left;
         } else {
@@ -182,9 +182,9 @@ final class ResourceReturnToObject
         }
         return $instanceof;
     }
-    private function isInstanceOfObjectCheck(\PhpParser\Node\Expr\Instanceof_ $instanceof, \PhpParser\Node\Expr $expr, string $objectInstanceCheck) : bool
+    private function isInstanceOfObjectCheck(Instanceof_ $instanceof, Expr $expr, string $objectInstanceCheck) : bool
     {
-        if (!$instanceof->class instanceof \PhpParser\Node\Name\FullyQualified) {
+        if (!$instanceof->class instanceof FullyQualified) {
             return \false;
         }
         if (!$this->nodeComparator->areNodesEqual($expr, $instanceof->expr)) {
@@ -192,7 +192,7 @@ final class ResourceReturnToObject
         }
         return $this->nodeNameResolver->isName($instanceof->class, $objectInstanceCheck);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    private function shouldSkip(FuncCall $funcCall) : bool
     {
         if (!$this->nodeNameResolver->isName($funcCall, 'is_resource')) {
             return \true;
@@ -201,6 +201,6 @@ final class ResourceReturnToObject
             return \true;
         }
         $argResource = $funcCall->args[0];
-        return !$argResource instanceof \PhpParser\Node\Arg;
+        return !$argResource instanceof Arg;
     }
 }

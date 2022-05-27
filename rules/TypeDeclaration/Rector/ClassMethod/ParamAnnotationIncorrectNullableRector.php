@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ParamAnnotationIncorrectNullableRector\ParamAnnotationIncorrectNullableRectorTest
  */
-final class ParamAnnotationIncorrectNullableRector extends \Rector\Core\Rector\AbstractRector
+final class ParamAnnotationIncorrectNullableRector extends AbstractRector
 {
     /**
      * @readonly
@@ -50,7 +50,7 @@ final class ParamAnnotationIncorrectNullableRector extends \Rector\Core\Rector\A
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper $phpDocNullableTypeHelper, \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory $paramPhpDocNodeFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(TypeComparator $typeComparator, PhpDocNullableTypeHelper $phpDocNullableTypeHelper, PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, ParamPhpDocNodeFactory $paramPhpDocNodeFactory, PhpVersionProvider $phpVersionProvider)
     {
         $this->typeComparator = $typeComparator;
         $this->phpDocNullableTypeHelper = $phpDocNullableTypeHelper;
@@ -58,9 +58,9 @@ final class ParamAnnotationIncorrectNullableRector extends \Rector\Core\Rector\A
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add or remove null type from @param phpdoc typehint based on php parameter type declaration', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add or remove null type from @param phpdoc typehint based on php parameter type declaration', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -95,17 +95,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class];
+        return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->getParams() === []) {
             return null;
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             return null;
         }
         if (!$this->phpDocNestedAnnotationGuard->isPhpDocCommentCorrectlyParsed($node)) {
@@ -118,7 +118,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function matchParamByName(string $desiredParamName, $node) : ?\PhpParser\Node\Param
+    private function matchParamByName(string $desiredParamName, $node) : ?Param
     {
         foreach ($node->getParams() as $param) {
             $paramName = $this->nodeNameResolver->getName($param);
@@ -129,13 +129,13 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function wasUpdateOfParamTypeRequired(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\Type\Type $newType, \PhpParser\Node\Param $param, string $paramName) : bool
+    private function wasUpdateOfParamTypeRequired(PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName) : bool
     {
         // better skip, could crash hard
         if ($phpDocInfo->hasInvalidTag('@param')) {
             return \false;
         }
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, TypeKind::PARAM());
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
         // override existing type
         if ($paramTagValueNode !== null) {
@@ -155,7 +155,7 @@ CODE_SAMPLE
      * @return ClassMethod|Function_|null
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function updateParamTagsIfRequired(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, $node, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : ?\PhpParser\Node
+    private function updateParamTagsIfRequired(PhpDocNode $phpDocNode, $node, PhpDocInfo $phpDocInfo) : ?Node
     {
         $paramTagValueNodes = $phpDocNode->getParamTagValues();
         $paramTagWasUpdated = \false;
@@ -164,12 +164,12 @@ CODE_SAMPLE
                 continue;
             }
             $param = $this->matchParamByName($paramTagValueNode->parameterName, $node);
-            if (!$param instanceof \PhpParser\Node\Param) {
+            if (!$param instanceof Param) {
                 continue;
             }
             $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($paramTagValueNode->type, $node);
             $updatedPhpDocType = $this->phpDocNullableTypeHelper->resolveUpdatedPhpDocTypeFromPhpDocTypeAndParamNode($docType, $param);
-            if (!$updatedPhpDocType instanceof \PHPStan\Type\Type) {
+            if (!$updatedPhpDocType instanceof Type) {
                 continue;
             }
             if ($this->wasUpdateOfParamTypeRequired($phpDocInfo, $updatedPhpDocType, $param, $paramTagValueNode->parameterName)) {

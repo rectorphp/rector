@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79440-TcaChanges.html#suggest-wizard
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\MoveTypeGroupSuggestWizardToSuggestOptions\MoveTypeGroupSuggestWizardToSuggestOptionsTest
  */
-final class MoveTypeGroupSuggestWizardToSuggestOptionsRector extends \Rector\Core\Rector\AbstractRector
+final class MoveTypeGroupSuggestWizardToSuggestOptionsRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -34,24 +34,24 @@ final class MoveTypeGroupSuggestWizardToSuggestOptionsRector extends \Rector\Cor
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArray = $this->extractSubArrayByKey($node->expr, 'columns');
-        if (!$columnsArray instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$columnsArray instanceof Array_) {
             return null;
         }
         $columnNamesWithTypeGroupAndInternalTypeDb = [];
         $this->hasAstBeenChanged = \false;
         foreach ($this->extractColumnConfig($columnsArray) as $columnName => $config) {
-            if (!$config instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$config instanceof Array_) {
                 continue;
             }
             if (!$this->hasKeyValuePair($config, self::TYPE, 'group')) {
@@ -65,25 +65,25 @@ final class MoveTypeGroupSuggestWizardToSuggestOptionsRector extends \Rector\Cor
         }
         // now check columnsOverrides of all type=group, internal_type=db fields:
         $typesArray = $this->extractSubArrayByKey($node->expr, 'types');
-        if (!$typesArray instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$typesArray instanceof Array_) {
             return null;
         }
         foreach ($this->extractColumnConfig($typesArray, 'columnsOverrides') as $columnOverride) {
-            if (!$columnOverride instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$columnOverride instanceof Array_) {
                 continue;
             }
             foreach ($columnNamesWithTypeGroupAndInternalTypeDb as $columnName => $columnConfig) {
                 $overrideForColumnArray = $this->extractSubArrayByKey($columnOverride, $columnName);
-                if (!$overrideForColumnArray instanceof \PhpParser\Node\Expr\Array_) {
+                if (!$overrideForColumnArray instanceof Array_) {
                     continue;
                 }
                 $configOverrideArray = $this->extractSubArrayByKey($overrideForColumnArray, 'config');
-                if (!$configOverrideArray instanceof \PhpParser\Node\Expr\Array_) {
+                if (!$configOverrideArray instanceof Array_) {
                     continue;
                 }
                 if ($this->refactorWizards($configOverrideArray)) {
-                    $configOverrideArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('false')), new \PhpParser\Node\Scalar\String_('hideSuggest'));
-                    $columnConfig->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('true')), new \PhpParser\Node\Scalar\String_('hideSuggest'));
+                    $configOverrideArray->items[] = new ArrayItem(new ConstFetch(new Name('false')), new String_('hideSuggest'));
+                    $columnConfig->items[] = new ArrayItem(new ConstFetch(new Name('true')), new String_('hideSuggest'));
                     $this->hasAstBeenChanged = \true;
                 }
             }
@@ -93,9 +93,9 @@ final class MoveTypeGroupSuggestWizardToSuggestOptionsRector extends \Rector\Cor
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate the "suggest" wizard in type=group to "hideSuggest" and "suggestOptions"', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Migrate the "suggest" wizard in type=group to "hideSuggest" and "suggestOptions"', [new CodeSample(<<<'CODE_SAMPLE'
 [
     'columns' => [
         'group_db_8' => [
@@ -139,19 +139,19 @@ CODE_SAMPLE
 CODE_SAMPLE
 )]);
     }
-    private function refactorWizards(\PhpParser\Node\Expr\Array_ $configArray) : bool
+    private function refactorWizards(Array_ $configArray) : bool
     {
         $wizardsArrayItem = $this->extractArrayItemByKey($configArray, 'wizards');
-        if (!$wizardsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$wizardsArrayItem instanceof ArrayItem) {
             return \false;
         }
         $wizards = $wizardsArrayItem->value;
-        if (!$wizards instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$wizards instanceof Array_) {
             return \false;
         }
         foreach ($this->extractSubArraysWithArrayItemMatching($wizards, self::TYPE, 'suggest') as $wizard) {
             $wizardConfig = $wizard->value;
-            if (!$wizardConfig instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$wizardConfig instanceof Array_) {
                 continue;
             }
             $typeItem = $this->extractArrayItemByKey($wizardConfig, self::TYPE);
@@ -159,7 +159,7 @@ CODE_SAMPLE
                 $this->removeNode($typeItem);
             }
             if (!$this->isEmpty($wizardConfig)) {
-                $configArray->items[] = new \PhpParser\Node\Expr\ArrayItem($wizardConfig, new \PhpParser\Node\Scalar\String_('suggestOptions'));
+                $configArray->items[] = new ArrayItem($wizardConfig, new String_('suggestOptions'));
             }
             $this->removeNode($wizard);
             $this->hasAstBeenChanged = \true;
@@ -169,7 +169,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function isEmpty(\PhpParser\Node\Expr\Array_ $array) : bool
+    private function isEmpty(Array_ $array) : bool
     {
         $nodeEmpty = \true;
         foreach ($array->items as $item) {

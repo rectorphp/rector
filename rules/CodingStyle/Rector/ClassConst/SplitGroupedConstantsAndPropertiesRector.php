@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector\SplitGroupedConstantsAndPropertiesRectorTest
  */
-final class SplitGroupedConstantsAndPropertiesRector extends \Rector\Core\Rector\AbstractRector
+final class SplitGroupedConstantsAndPropertiesRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Separate constant and properties to own lines', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Separate constant and properties to own lines', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     const HI = true, AHOJ = 'true';
@@ -53,15 +53,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassConst::class, \PhpParser\Node\Stmt\Property::class];
+        return [ClassConst::class, Property::class];
     }
     /**
      * @param ClassConst|Property $node
      * @return Node[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor(Node $node) : ?array
     {
-        if ($node instanceof \PhpParser\Node\Stmt\ClassConst) {
+        if ($node instanceof ClassConst) {
             if (\count($node->consts) < 2) {
                 return null;
             }
@@ -82,7 +82,7 @@ CODE_SAMPLE
         $node->props = [$firstPropertyProperty];
         $nextProperties = [];
         foreach ($allProperties as $allProperty) {
-            $nextProperties[] = new \PhpParser\Node\Stmt\Property($node->flags, [$allProperty], $node->getAttributes());
+            $nextProperties[] = new Property($node->flags, [$allProperty], $node->getAttributes());
         }
         $item0Unpacked = [$node];
         return \array_merge($item0Unpacked, $nextProperties);
@@ -91,11 +91,11 @@ CODE_SAMPLE
      * @param Const_[] $consts
      * @return ClassConst[]
      */
-    private function createNextClassConsts(array $consts, \PhpParser\Node\Stmt\ClassConst $classConst) : array
+    private function createNextClassConsts(array $consts, ClassConst $classConst) : array
     {
         $decoratedConsts = [];
         foreach ($consts as $const) {
-            $decoratedConsts[] = new \PhpParser\Node\Stmt\ClassConst([$const], $classConst->flags, $classConst->getAttributes());
+            $decoratedConsts[] = new ClassConst([$const], $classConst->flags, $classConst->getAttributes());
         }
         return $decoratedConsts;
     }

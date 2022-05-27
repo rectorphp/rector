@@ -21,7 +21,7 @@ use RectorPrefix20220527\Symfony\Component\Console\Completion\CompletionSuggesti
 class CommandCompletionTester
 {
     private $command;
-    public function __construct(\RectorPrefix20220527\Symfony\Component\Console\Command\Command $command)
+    public function __construct(Command $command)
     {
         $this->command = $command;
     }
@@ -35,9 +35,9 @@ class CommandCompletionTester
             \array_pop($input);
         }
         \array_unshift($input, $this->command->getName());
-        $completionInput = \RectorPrefix20220527\Symfony\Component\Console\Completion\CompletionInput::fromTokens($input, $currentIndex);
+        $completionInput = CompletionInput::fromTokens($input, $currentIndex);
         $completionInput->bind($this->command->getDefinition());
-        $suggestions = new \RectorPrefix20220527\Symfony\Component\Console\Completion\CompletionSuggestions();
+        $suggestions = new CompletionSuggestions();
         $this->command->complete($completionInput, $suggestions);
         $options = [];
         foreach ($suggestions->getOptionSuggestions() as $option) {

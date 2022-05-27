@@ -22,10 +22,10 @@ final class Decoder
         $node = $this->parseToNode($input);
         return $node->toValue();
     }
-    public function parseToNode(string $input) : \RectorPrefix20220527\Nette\Neon\Node
+    public function parseToNode(string $input) : Node
     {
-        $lexer = new \RectorPrefix20220527\Nette\Neon\Lexer();
-        $parser = new \RectorPrefix20220527\Nette\Neon\Parser();
+        $lexer = new Lexer();
+        $parser = new Parser();
         $tokens = $lexer->tokenize($input);
         return $parser->parse($tokens);
     }

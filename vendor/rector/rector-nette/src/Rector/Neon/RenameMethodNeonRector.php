@@ -14,20 +14,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @implements NeonRectorInterface<SetupMethodCall>
  */
-final class RenameMethodNeonRector implements \Rector\Nette\Contract\Rector\NeonRectorInterface
+final class RenameMethodNeonRector implements NeonRectorInterface
 {
     /**
      * @readonly
      * @var \Rector\Renaming\Collector\MethodCallRenameCollector
      */
     private $methodCallRenameCollector;
-    public function __construct(\Rector\Renaming\Collector\MethodCallRenameCollector $methodCallRenameCollector)
+    public function __construct(MethodCallRenameCollector $methodCallRenameCollector)
     {
         $this->methodCallRenameCollector = $methodCallRenameCollector;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Renames method calls in NEON configs', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Renames method calls in NEON configs', [new CodeSample(<<<'CODE_SAMPLE'
 services:
     -
         class: SomeClass
@@ -45,13 +45,13 @@ CODE_SAMPLE
     }
     public function getNodeType() : string
     {
-        return \Rector\Nette\NeonParser\Node\Service_\SetupMethodCall::class;
+        return SetupMethodCall::class;
     }
     /**
      * @param SetupMethodCall $node
      * @return \Nette\Neon\Node|null
      */
-    public function enterNode(\RectorPrefix20220527\Nette\Neon\Node $node)
+    public function enterNode(Node $node)
     {
         foreach ($this->methodCallRenameCollector->getMethodCallRenames() as $methodCallRename) {
             if (!\is_a($node->className, $methodCallRename->getClass(), \true)) {

@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPOffice\Tests\Rector\MethodCall\ChangeConditionalReturnedCellRector\ChangeConditionalReturnedCellRectorTest
  */
-final class ChangeConditionalReturnedCellRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeConditionalReturnedCellRector extends AbstractRector
 {
     /**
      * @var ConditionalSetValue[]
@@ -24,14 +24,14 @@ final class ChangeConditionalReturnedCellRector extends \Rector\Core\Rector\Abst
     private $conditionalSetValues = [];
     public function __construct()
     {
-        $this->conditionalSetValues[] = new \Rector\PHPOffice\ValueObject\ConditionalSetValue('setCellValue', 'getCell', 'setValue', 2, \false);
-        $this->conditionalSetValues[] = new \Rector\PHPOffice\ValueObject\ConditionalSetValue('setCellValueByColumnAndRow', 'getCellByColumnAndRow', 'setValue', 3, \true);
-        $this->conditionalSetValues[] = new \Rector\PHPOffice\ValueObject\ConditionalSetValue('setCellValueExplicit', 'getCell', 'setValueExplicit', 3, \false);
-        $this->conditionalSetValues[] = new \Rector\PHPOffice\ValueObject\ConditionalSetValue('setCellValueExplicitByColumnAndRow', 'getCellByColumnAndRow', 'setValueExplicit', 4, \true);
+        $this->conditionalSetValues[] = new ConditionalSetValue('setCellValue', 'getCell', 'setValue', 2, \false);
+        $this->conditionalSetValues[] = new ConditionalSetValue('setCellValueByColumnAndRow', 'getCellByColumnAndRow', 'setValue', 3, \true);
+        $this->conditionalSetValues[] = new ConditionalSetValue('setCellValueExplicit', 'getCell', 'setValueExplicit', 3, \false);
+        $this->conditionalSetValues[] = new ConditionalSetValue('setCellValueExplicitByColumnAndRow', 'getCellByColumnAndRow', 'setValueExplicit', 4, \true);
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change conditional call to getCell()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change conditional call to getCell()', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -58,14 +58,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('PHPExcel_Worksheet'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('PHPExcel_Worksheet'))) {
             return null;
         }
         foreach ($this->conditionalSetValues as $conditionalSetValue) {
@@ -85,10 +85,10 @@ CODE_SAMPLE
                 unset($args[1]);
             }
             $variable = clone $node->var;
-            $getCellMethodCall = new \PhpParser\Node\Expr\MethodCall($variable, $conditionalSetValue->getNewGetMethod(), $locationArgs);
+            $getCellMethodCall = new MethodCall($variable, $conditionalSetValue->getNewGetMethod(), $locationArgs);
             $node->var = $getCellMethodCall;
             $node->args = \array_values($args);
-            $node->name = new \PhpParser\Node\Identifier($conditionalSetValue->getNewSetMethod());
+            $node->name = new Identifier($conditionalSetValue->getNewSetMethod());
             return $node;
         }
         return null;

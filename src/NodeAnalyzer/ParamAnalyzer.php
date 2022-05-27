@@ -43,7 +43,7 @@ final class ParamAnalyzer
      * @var \Rector\Core\NodeManipulator\FuncCallManipulator
      */
     private $funcCallManipulator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\FuncCallManipulator $funcCallManipulator)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, ValueResolver $valueResolver, NodeNameResolver $nodeNameResolver, FuncCallManipulator $funcCallManipulator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
@@ -51,16 +51,16 @@ final class ParamAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->funcCallManipulator = $funcCallManipulator;
     }
-    public function isParamUsedInClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param) : bool
+    public function isParamUsedInClassMethod(ClassMethod $classMethod, Param $param) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (\PhpParser\Node $node) use($param) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\Variable && !$node instanceof \PhpParser\Node\Expr\Closure && !$node instanceof \PhpParser\Node\Expr\FuncCall) {
+        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (Node $node) use($param) : bool {
+            if (!$node instanceof Variable && !$node instanceof Closure && !$node instanceof FuncCall) {
                 return \false;
             }
-            if ($node instanceof \PhpParser\Node\Expr\Variable) {
+            if ($node instanceof Variable) {
                 return $this->nodeComparator->areNodesEqual($node, $param->var);
             }
-            if ($node instanceof \PhpParser\Node\Expr\Closure) {
+            if ($node instanceof Closure) {
                 return $this->isVariableInClosureUses($node, $param->var);
             }
             if (!$this->nodeNameResolver->isName($node, 'compact')) {
@@ -82,7 +82,7 @@ final class ParamAnalyzer
         }
         return \false;
     }
-    public function isNullable(\PhpParser\Node\Param $param) : bool
+    public function isNullable(Param $param) : bool
     {
         if ($param->variadic) {
             return \false;
@@ -90,13 +90,13 @@ final class ParamAnalyzer
         if ($param->type === null) {
             return \false;
         }
-        return $param->type instanceof \PhpParser\Node\NullableType;
+        return $param->type instanceof NullableType;
     }
-    public function hasDefaultNull(\PhpParser\Node\Param $param) : bool
+    public function hasDefaultNull(Param $param) : bool
     {
-        return $param->default instanceof \PhpParser\Node\Expr\ConstFetch && $this->valueResolver->isNull($param->default);
+        return $param->default instanceof ConstFetch && $this->valueResolver->isNull($param->default);
     }
-    private function isVariableInClosureUses(\PhpParser\Node\Expr\Closure $closure, \PhpParser\Node\Expr\Variable $variable) : bool
+    private function isVariableInClosureUses(Closure $closure, Variable $variable) : bool
     {
         foreach ($closure->uses as $use) {
             if ($this->nodeComparator->areNodesEqual($use->var, $variable)) {

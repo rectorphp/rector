@@ -16,7 +16,7 @@ use RectorPrefix20220527\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Removing\Rector\FuncCall\RemoveFuncCallRector\RemoveFuncCallRectorTest
  */
-final class RemoveFuncCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class RemoveFuncCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var RemoveFuncCall[]
@@ -27,32 +27,32 @@ final class RemoveFuncCallRector extends \Rector\Core\Rector\AbstractRector impl
      * @var \Rector\NodeRemoval\BreakingRemovalGuard
      */
     private $breakingRemovalGuard;
-    public function __construct(\Rector\NodeRemoval\BreakingRemovalGuard $breakingRemovalGuard)
+    public function __construct(BreakingRemovalGuard $breakingRemovalGuard)
     {
         $this->breakingRemovalGuard = $breakingRemovalGuard;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove ini_get by configuration', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove ini_get by configuration', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 ini_get('y2k_compliance');
 ini_get('keep_me');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 ini_get('keep_me');
 CODE_SAMPLE
-, [new \Rector\Removing\ValueObject\RemoveFuncCall('ini_get', [1 => ['y2k_compliance']])])]);
+, [new RemoveFuncCall('ini_get', [1 => ['y2k_compliance']])])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->removeFuncCalls as $removeFuncCall) {
             if (!$this->isName($node, $removeFuncCall->getFuncCall())) {
@@ -63,7 +63,7 @@ CODE_SAMPLE
                 return $node;
             }
             $removedFuncCall = $this->refactorFuncCallsWithPositions($node, $removeFuncCall);
-            if ($removedFuncCall instanceof \PhpParser\Node\Expr\FuncCall) {
+            if ($removedFuncCall instanceof FuncCall) {
                 return $node;
             }
         }
@@ -74,10 +74,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Removing\ValueObject\RemoveFuncCall::class);
+        Assert::allIsAOf($configuration, RemoveFuncCall::class);
         $this->removeFuncCalls = $configuration;
     }
-    private function refactorFuncCallsWithPositions(\PhpParser\Node\Expr\FuncCall $funcCall, \Rector\Removing\ValueObject\RemoveFuncCall $removeFuncCall) : ?\PhpParser\Node\Expr\FuncCall
+    private function refactorFuncCallsWithPositions(FuncCall $funcCall, RemoveFuncCall $removeFuncCall) : ?FuncCall
     {
         foreach ($removeFuncCall->getArgumentPositionAndValues() as $argumentPosition => $values) {
             if (!$this->isArgumentPositionValueMatch($funcCall, $argumentPosition, $values)) {
@@ -93,12 +93,12 @@ CODE_SAMPLE
     /**
      * @param mixed[] $values
      */
-    private function isArgumentPositionValueMatch(\PhpParser\Node\Expr\FuncCall $funcCall, int $argumentPosition, array $values) : bool
+    private function isArgumentPositionValueMatch(FuncCall $funcCall, int $argumentPosition, array $values) : bool
     {
         if (!isset($funcCall->args[$argumentPosition])) {
             return \false;
         }
-        if (!$funcCall->args[$argumentPosition] instanceof \PhpParser\Node\Arg) {
+        if (!$funcCall->args[$argumentPosition] instanceof Arg) {
             return \false;
         }
         return $this->valueResolver->isValues($funcCall->args[$argumentPosition]->value, $values);

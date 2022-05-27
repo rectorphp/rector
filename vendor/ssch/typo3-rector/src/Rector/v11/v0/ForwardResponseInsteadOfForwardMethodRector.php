@@ -17,14 +17,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.0/Deprecation-92815-ActionControllerForward.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v0\ForwardResponseInsteadOfForwardMethodRector\ForwardResponseInsteadOfForwardMethodRectorTest
  */
-final class ForwardResponseInsteadOfForwardMethodRector extends \Rector\Core\Rector\AbstractRector
+final class ForwardResponseInsteadOfForwardMethodRector extends AbstractRector
 {
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Return TYPO3\\CMS\\Extbase\\Http\\ForwardResponse instead of TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController::forward()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Return TYPO3\\CMS\\Extbase\\Http\\ForwardResponse instead of TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController::forward()', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 class FooController extends ActionController
 {
@@ -54,12 +54,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $forwardMethodCalls = $this->extractForwardMethodCalls($node);
         if ([] === $forwardMethodCalls) {
@@ -71,7 +71,7 @@ CODE_SAMPLE
                 return null;
             }
             $args = $this->nodeFactory->createArgs([$action]);
-            $forwardResponse = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('TYPO3\\CMS\\Extbase\\Http\\ForwardResponse'), $args);
+            $forwardResponse = new New_(new FullyQualified('TYPO3\\CMS\\Extbase\\Http\\ForwardResponse'), $args);
             if (isset($forwardMethodCall->args[1]) && !$this->valueResolver->isNull($forwardMethodCall->args[1]->value)) {
                 $forwardResponse = $this->nodeFactory->createMethodCall($forwardResponse, 'withControllerName', [$forwardMethodCall->args[1]->value]);
             }
@@ -81,26 +81,26 @@ CODE_SAMPLE
             if (isset($forwardMethodCall->args[3])) {
                 $forwardResponse = $this->nodeFactory->createMethodCall($forwardResponse, 'withArguments', [$forwardMethodCall->args[3]->value]);
             }
-            $forwardResponseReturn = new \PhpParser\Node\Stmt\Return_($forwardResponse);
+            $forwardResponseReturn = new Return_($forwardResponse);
             $this->nodesToAddCollector->addNodeBeforeNode($forwardResponseReturn, $forwardMethodCall);
             $this->removeNode($forwardMethodCall);
         }
         // Add returnType only if it is the only statement, otherwise it is not reliable
         if ((\is_array($node->stmts) || $node->stmts instanceof \Countable) && 1 === \count((array) $node->stmts)) {
-            $node->returnType = new \PhpParser\Node\Name\FullyQualified('Psr\\Http\\Message\\ResponseInterface');
+            $node->returnType = new FullyQualified('Psr\\Http\\Message\\ResponseInterface');
         }
         return $node;
     }
     /**
      * @return MethodCall[]
      */
-    private function extractForwardMethodCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    private function extractForwardMethodCalls(ClassMethod $classMethod) : array
     {
-        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) : bool {
+            if (!$node instanceof MethodCall) {
                 return \false;
             }
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
                 return \false;
             }
             return $this->isName($node->name, 'forward');

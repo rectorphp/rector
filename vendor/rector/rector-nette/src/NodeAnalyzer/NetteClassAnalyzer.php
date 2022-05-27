@@ -20,20 +20,20 @@ final class NetteClassAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function isInComponent(\PhpParser\Node $node) : bool
+    public function isInComponent(Node $node) : bool
     {
-        $class = $node instanceof \PhpParser\Node\Stmt\Class_ ? $node : $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $node instanceof Class_ ? $node : $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$class instanceof Class_) {
             return \false;
         }
-        if (!$this->nodeTypeResolver->isObjectType($class, new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Control'))) {
+        if (!$this->nodeTypeResolver->isObjectType($class, new ObjectType('Nette\\Application\\UI\\Control'))) {
             return \false;
         }
-        return !$this->nodeTypeResolver->isObjectType($class, new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Presenter'));
+        return !$this->nodeTypeResolver->isObjectType($class, new ObjectType('Nette\\Application\\UI\\Presenter'));
     }
 }

@@ -13,11 +13,11 @@ final class PathResolver
      * @var string
      */
     private const VENDOR_PACKAGE_DIRECTORY_REGEX = '#^(?<vendor_package_directory>.*?vendor\\/(\\w|\\.|\\-)+\\/(\\w|\\.|\\-)+)\\/#si';
-    public function resolveVendorDirectory(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : string
+    public function resolveVendorDirectory(SmartFileInfo $fileInfo) : string
     {
-        $match = \RectorPrefix20220527\Nette\Utils\Strings::match($fileInfo->getRealPath(), self::VENDOR_PACKAGE_DIRECTORY_REGEX);
+        $match = Strings::match($fileInfo->getRealPath(), self::VENDOR_PACKAGE_DIRECTORY_REGEX);
         if (!isset($match['vendor_package_directory'])) {
-            throw new \RectorPrefix20220527\Symplify\SymplifyKernel\Exception\ShouldNotHappenException('Could not resolve vendor package directory');
+            throw new ShouldNotHappenException('Could not resolve vendor package directory');
         }
         return $match['vendor_package_directory'];
     }

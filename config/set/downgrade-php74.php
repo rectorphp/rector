@@ -17,18 +17,18 @@ use Rector\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterf
 use Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector;
 use Rector\DowngradePhp74\Rector\MethodCall\DowngradeReflectionGetTypeRector;
 use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_73);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterfaceRector::class);
-    $rectorConfig->rule(\Rector\DowngradePhp74\Rector\MethodCall\DowngradeReflectionGetTypeRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->phpVersion(PhpVersion::PHP_73);
+    $rectorConfig->rule(DowngradeTypedPropertyRector::class);
+    $rectorConfig->rule(ArrowFunctionToAnonymousFunctionRector::class);
+    $rectorConfig->rule(DowngradeCovariantReturnTypeRector::class);
+    $rectorConfig->rule(DowngradeContravariantArgumentTypeRector::class);
+    $rectorConfig->rule(DowngradeNullCoalescingOperatorRector::class);
+    $rectorConfig->rule(DowngradeNumericLiteralSeparatorRector::class);
+    $rectorConfig->rule(DowngradeStripTagsCallWithArrayRector::class);
+    $rectorConfig->rule(DowngradeArraySpreadRector::class);
+    $rectorConfig->rule(DowngradeArrayMergeCallWithoutArgumentsRector::class);
+    $rectorConfig->rule(DowngradeFreadFwriteFalsyToNegationRector::class);
+    $rectorConfig->rule(DowngradePreviouslyImplementedInterfaceRector::class);
+    $rectorConfig->rule(DowngradeReflectionGetTypeRector::class);
 };

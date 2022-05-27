@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://3v4l.org/F5GE8
  * @see \Rector\Tests\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector\RenameMktimeWithoutArgsToTimeRectorTest
  */
-final class RenameMktimeWithoutArgsToTimeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class RenameMktimeWithoutArgsToTimeRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Renames mktime() without arguments to time()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Renames mktime() without arguments to time()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -43,19 +43,19 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::NO_MKTIME_WITHOUT_ARG;
+        return PhpVersionFeature::NO_MKTIME_WITHOUT_ARG;
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'mktime')) {
             return null;
@@ -63,7 +63,7 @@ CODE_SAMPLE
         if ($node->args !== []) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Name('time');
+        $node->name = new Name('time');
         return $node;
     }
 }

@@ -7,6 +7,6 @@ use Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample;
 /**
  * @api
  */
-final class CodeSample extends \Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample
+final class CodeSample extends AbstractCodeSample
 {
 }

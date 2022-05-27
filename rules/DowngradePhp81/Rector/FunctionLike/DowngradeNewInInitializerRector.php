@@ -36,20 +36,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp81\Rector\FunctionLike\DowngradeNewInInitializerRector\DowngradeNewInInitializerRectorTest
  */
-final class DowngradeNewInInitializerRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeNewInInitializerRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
     private $anonymousFunctionFactory;
-    public function __construct(\Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory)
+    public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory)
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace New in initializers', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace New in initializers', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(
@@ -75,12 +75,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\FunctionLike::class];
+        return [FunctionLike::class];
     }
     /**
      * @param FunctionLike $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\FunctionLike
+    public function refactor(Node $node) : ?FunctionLike
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -89,7 +89,7 @@ CODE_SAMPLE
         $node = $this->convertArrowFunctionToClosure($node);
         return $this->replaceNewInParams($node);
     }
-    private function shouldSkip(\PhpParser\Node\FunctionLike $functionLike) : bool
+    private function shouldSkip(FunctionLike $functionLike) : bool
     {
         foreach ($functionLike->getParams() as $param) {
             if ($this->isParamSkipped($param)) {
@@ -99,24 +99,24 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function convertArrowFunctionToClosure(\PhpParser\Node\FunctionLike $functionLike) : \PhpParser\Node\FunctionLike
+    private function convertArrowFunctionToClosure(FunctionLike $functionLike) : FunctionLike
     {
-        if (!$functionLike instanceof \PhpParser\Node\Expr\ArrowFunction) {
+        if (!$functionLike instanceof ArrowFunction) {
             return $functionLike;
         }
-        $stmts = [new \PhpParser\Node\Stmt\Return_($functionLike->expr)];
+        $stmts = [new Return_($functionLike->expr)];
         return $this->anonymousFunctionFactory->create($functionLike->params, $stmts, $functionLike->returnType, $functionLike->static);
     }
-    private function isParamSkipped(\PhpParser\Node\Param $param) : bool
+    private function isParamSkipped(Param $param) : bool
     {
         if ($param->default === null) {
             return \true;
         }
-        $hasNew = (bool) $this->betterNodeFinder->findFirstInstanceOf($param->default, \PhpParser\Node\Expr\New_::class);
+        $hasNew = (bool) $this->betterNodeFinder->findFirstInstanceOf($param->default, New_::class);
         if (!$hasNew) {
             return \true;
         }
-        return $param->type instanceof \PhpParser\Node\IntersectionType;
+        return $param->type instanceof IntersectionType;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
@@ -124,7 +124,7 @@ CODE_SAMPLE
      */
     private function replaceNewInParams($functionLike)
     {
-        $isConstructor = $functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->isName($functionLike, \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $isConstructor = $functionLike instanceof ClassMethod && $this->isName($functionLike, MethodName::CONSTRUCT);
         $stmts = [];
         foreach ($functionLike->getParams() as $param) {
             if ($this->isParamSkipped($param)) {
@@ -134,16 +134,16 @@ CODE_SAMPLE
             $default = $param->default;
             // check for property promotion
             if ($isConstructor && $param->flags > 0) {
-                $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $param->var->name);
-                $coalesce = new \PhpParser\Node\Expr\BinaryOp\Coalesce($param->var, $default);
-                $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, $coalesce);
+                $propertyFetch = new PropertyFetch(new Variable('this'), $param->var->name);
+                $coalesce = new Coalesce($param->var, $default);
+                $assign = new Assign($propertyFetch, $coalesce);
                 if ($param->type !== null) {
                     $param->type = $this->ensureNullableType($param->type);
                 }
             } else {
-                $assign = new \PhpParser\Node\Expr\AssignOp\Coalesce($param->var, $default);
+                $assign = new AssignCoalesce($param->var, $default);
             }
-            $stmts[] = new \PhpParser\Node\Stmt\Expression($assign);
+            $stmts[] = new Expression($assign);
             $param->default = $this->nodeFactory->createNull();
         }
         $functionLike->stmts = $functionLike->stmts ?? [];
@@ -156,21 +156,21 @@ CODE_SAMPLE
      */
     private function ensureNullableType($type)
     {
-        if ($type instanceof \PhpParser\Node\NullableType) {
+        if ($type instanceof NullableType) {
             return $type;
         }
-        if (!$type instanceof \PhpParser\Node\ComplexType) {
-            return new \PhpParser\Node\NullableType($type);
+        if (!$type instanceof ComplexType) {
+            return new NullableType($type);
         }
-        if ($type instanceof \PhpParser\Node\UnionType) {
+        if ($type instanceof UnionType) {
             if (!$this->hasNull($type)) {
-                $type->types[] = new \PhpParser\Node\Name('null');
+                $type->types[] = new Name('null');
             }
             return $type;
         }
-        throw new \Rector\Core\Exception\ShouldNotHappenException();
+        throw new ShouldNotHappenException();
     }
-    private function hasNull(\PhpParser\Node\UnionType $unionType) : bool
+    private function hasNull(UnionType $unionType) : bool
     {
         foreach ($unionType->types as $type) {
             if ($type->toLowerString() === 'null') {

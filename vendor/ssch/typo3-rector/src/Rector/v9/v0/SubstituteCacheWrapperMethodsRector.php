@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Deprecation-83116-CachingFrameworkWrapperMethodsInBackendUtility.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\SubstituteCacheWrapperMethodsRector\SubstituteCacheWrapperMethodsRectorTest
  */
-final class SubstituteCacheWrapperMethodsRector extends \Rector\Core\Rector\AbstractRector
+final class SubstituteCacheWrapperMethodsRector extends AbstractRector
 {
     /**
      * @var string
@@ -42,14 +42,14 @@ final class SubstituteCacheWrapperMethodsRector extends \Rector\Core\Rector\Abst
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['getHash', 'storeHash'])) {
@@ -63,8 +63,8 @@ final class SubstituteCacheWrapperMethodsRector extends \Rector\Core\Rector\Abst
         // At the end, remove the old method call node
         try {
             $this->removeNode($node);
-        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
-            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        } catch (ShouldNotHappenException $exception) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             $this->removeNode($parentNode);
         }
         return $node;
@@ -72,9 +72,9 @@ final class SubstituteCacheWrapperMethodsRector extends \Rector\Core\Rector\Abst
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Caching framework wrapper methods in BackendUtility', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Caching framework wrapper methods in BackendUtility', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 $hash = 'foo';
 $content = BackendUtility::getHash($hash);
@@ -94,31 +94,31 @@ $content = $hashContent;
 CODE_SAMPLE
 )]);
     }
-    private function createCacheManager() : \PhpParser\Node\Expr\StaticCall
+    private function createCacheManager() : StaticCall
     {
         return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Cache\\CacheManager')]);
     }
-    private function getCacheMethod(\PhpParser\Node\Expr\StaticCall $staticCall) : void
+    private function getCacheMethod(StaticCall $staticCall) : void
     {
         $this->addCacheManagerNode($staticCall);
-        $cacheEntryAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY), $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(self::CACHE_MANAGER, 'getCache', ['cache_hash']), 'get', [$staticCall->args[0]]));
+        $cacheEntryAssign = new Assign(new Variable(self::CACHE_ENTRY), $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(self::CACHE_MANAGER, 'getCache', ['cache_hash']), 'get', [$staticCall->args[0]]));
         $this->nodesToAddCollector->addNodeAfterNode($cacheEntryAssign, $staticCall);
-        $hashContentAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT), $this->nodeFactory->createNull());
+        $hashContentAssign = new Assign(new Variable(self::HASH_CONTENT), $this->nodeFactory->createNull());
         $this->nodesToAddCollector->addNodeAfterNode($hashContentAssign, $staticCall);
-        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY));
-        $if->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT), new \PhpParser\Node\Expr\Variable(self::CACHE_ENTRY)));
+        $if = new If_(new Variable(self::CACHE_ENTRY));
+        $if->stmts[] = new Expression(new Assign(new Variable(self::HASH_CONTENT), new Variable(self::CACHE_ENTRY)));
         $this->nodesToAddCollector->addNodeAfterNode($if, $staticCall);
-        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('content'), new \PhpParser\Node\Expr\Variable(self::HASH_CONTENT)), $staticCall);
+        $this->nodesToAddCollector->addNodeAfterNode(new Assign(new Variable('content'), new Variable(self::HASH_CONTENT)), $staticCall);
     }
-    private function addCacheManagerNode(\PhpParser\Node\Expr\StaticCall $staticCall) : void
+    private function addCacheManagerNode(StaticCall $staticCall) : void
     {
-        $cacheManagerAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::CACHE_MANAGER), $this->createCacheManager());
+        $cacheManagerAssign = new Assign(new Variable(self::CACHE_MANAGER), $this->createCacheManager());
         $this->nodesToAddCollector->addNodeAfterNode($cacheManagerAssign, $staticCall);
     }
-    private function setCacheMethod(\PhpParser\Node\Expr\StaticCall $staticCall) : void
+    private function setCacheMethod(StaticCall $staticCall) : void
     {
         $this->addCacheManagerNode($staticCall);
-        $arguments = [$staticCall->args[0], $staticCall->args[1], new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Scalar\String_('ident_'), $staticCall->args[2]->value))]), $this->nodeFactory->createArg(0)];
+        $arguments = [$staticCall->args[0], $staticCall->args[1], new Array_([new ArrayItem(new Concat(new String_('ident_'), $staticCall->args[2]->value))]), $this->nodeFactory->createArg(0)];
         $cacheEntryNode = $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(self::CACHE_MANAGER, 'getCache', ['cache_hash']), 'set', $arguments);
         $this->nodesToAddCollector->addNodeAfterNode($cacheEntryNode, $staticCall);
     }

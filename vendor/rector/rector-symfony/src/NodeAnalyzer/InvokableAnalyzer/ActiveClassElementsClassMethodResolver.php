@@ -23,26 +23,26 @@ final class ActiveClassElementsClassMethodResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\RectorPrefix20220527\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolve(\PhpParser\Node\Stmt\ClassMethod $actionClassMethod) : \Rector\Symfony\ValueObject\InvokableController\ActiveClassElements
+    public function resolve(ClassMethod $actionClassMethod) : ActiveClassElements
     {
         $usedLocalPropertyNames = $this->resolveLocalUsedPropertyNames($actionClassMethod);
         $usedLocalConstantNames = $this->resolveLocalUsedConstantNames($actionClassMethod);
         $usedLocalMethodNames = $this->resolveLocalUsedMethodNames($actionClassMethod);
-        return new \Rector\Symfony\ValueObject\InvokableController\ActiveClassElements($usedLocalPropertyNames, $usedLocalConstantNames, $usedLocalMethodNames);
+        return new ActiveClassElements($usedLocalPropertyNames, $usedLocalConstantNames, $usedLocalMethodNames);
     }
     /**
      * @return string[]
      */
-    private function resolveLocalUsedPropertyNames(\PhpParser\Node\Stmt\ClassMethod $actionClassMethod) : array
+    private function resolveLocalUsedPropertyNames(ClassMethod $actionClassMethod) : array
     {
         $usedLocalPropertyNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($actionClassMethod, function (\PhpParser\Node $node) use(&$usedLocalPropertyNames) {
-            if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($actionClassMethod, function (Node $node) use(&$usedLocalPropertyNames) {
+            if (!$node instanceof PropertyFetch) {
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node->var, 'this')) {
@@ -59,11 +59,11 @@ final class ActiveClassElementsClassMethodResolver
     /**
      * @return string[]
      */
-    private function resolveLocalUsedConstantNames(\PhpParser\Node\Stmt\ClassMethod $actionClassMethod) : array
+    private function resolveLocalUsedConstantNames(ClassMethod $actionClassMethod) : array
     {
         $usedLocalConstantNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($actionClassMethod, function (\PhpParser\Node $node) use(&$usedLocalConstantNames) {
-            if (!$node instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($actionClassMethod, function (Node $node) use(&$usedLocalConstantNames) {
+            if (!$node instanceof ClassConstFetch) {
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node->class, 'self')) {
@@ -80,11 +80,11 @@ final class ActiveClassElementsClassMethodResolver
     /**
      * @return string[]
      */
-    private function resolveLocalUsedMethodNames(\PhpParser\Node\Stmt\ClassMethod $actionClassMethod) : array
+    private function resolveLocalUsedMethodNames(ClassMethod $actionClassMethod) : array
     {
         $usedLocalMethodNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($actionClassMethod, function (\PhpParser\Node $node) use(&$usedLocalMethodNames) {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($actionClassMethod, function (Node $node) use(&$usedLocalMethodNames) {
+            if (!$node instanceof MethodCall) {
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node->var, 'this')) {

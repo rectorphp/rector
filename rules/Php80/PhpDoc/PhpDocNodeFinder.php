@@ -12,11 +12,11 @@ final class PhpDocNodeFinder
      * @param class-string<TNode> $nodeType
      * @return TNode[]
      */
-    public function findByType(\PHPStan\PhpDocParser\Ast\Node $node, string $nodeType) : array
+    public function findByType(Node $node, string $nodeType) : array
     {
         $foundNodes = [];
-        $phpDocNodeTraverser = new \RectorPrefix20220527\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($node, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use(&$foundNodes, $nodeType) {
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($node, '', function (Node $node) use(&$foundNodes, $nodeType) {
             if (!\is_a($node, $nodeType, \true)) {
                 return null;
             }

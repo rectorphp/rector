@@ -56,11 +56,11 @@ class Unescaper
     {
         switch ($value[1]) {
             case '0':
-                return "\0";
+                return "\x00";
             case 'a':
-                return "\7";
+                return "\x07";
             case 'b':
-                return "\10";
+                return "\x08";
             case 't':
                 return "\t";
             case "\t":
@@ -74,7 +74,7 @@ class Unescaper
             case 'r':
                 return "\r";
             case 'e':
-                return "\33";
+                return "\x1b";
             case ' ':
                 return ' ';
             case '"':
@@ -102,7 +102,7 @@ class Unescaper
             case 'U':
                 return self::utf8chr(\hexdec(\substr($value, 2, 8)));
             default:
-                throw new \RectorPrefix20220527\Symfony\Component\Yaml\Exception\ParseException(\sprintf('Found unknown escape character "%s".', $value));
+                throw new ParseException(\sprintf('Found unknown escape character "%s".', $value));
         }
     }
     /**

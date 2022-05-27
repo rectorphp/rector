@@ -43,14 +43,14 @@ final class ToManyRelationPropertyTypeResolver
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Doctrine\PhpDoc\ShortClassExpander $shortClassExpander, \Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ShortClassExpander $shortClassExpander, AttributeFinder $attributeFinder, ValueResolver $valueResolver)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->shortClassExpander = $shortClassExpander;
         $this->attributeFinder = $attributeFinder;
         $this->valueResolver = $valueResolver;
     }
-    public function resolve(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
+    public function resolve(Property $property) : ?Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(self::TO_MANY_ANNOTATION_CLASSES);
@@ -58,7 +58,7 @@ final class ToManyRelationPropertyTypeResolver
             return $this->processToManyRelation($property, $doctrineAnnotationTagValueNode);
         }
         $targetEntity = $this->attributeFinder->findAttributeByClassesArgByName($property, self::TO_MANY_ANNOTATION_CLASSES, 'targetEntity');
-        if (!$targetEntity instanceof \PhpParser\Node\Expr) {
+        if (!$targetEntity instanceof Expr) {
             return null;
         }
         return $this->resolveTypeFromTargetEntity($targetEntity, $property);
@@ -66,7 +66,7 @@ final class ToManyRelationPropertyTypeResolver
     /**
      * @return \PHPStan\Type\Type|null
      */
-    private function processToManyRelation(\PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    private function processToManyRelation(Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
         if (!\is_string($targetEntity)) {
@@ -77,16 +77,16 @@ final class ToManyRelationPropertyTypeResolver
     /**
      * @param \PhpParser\Node\Expr|string $targetEntity
      */
-    private function resolveTypeFromTargetEntity($targetEntity, \PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
+    private function resolveTypeFromTargetEntity($targetEntity, Property $property) : Type
     {
-        if ($targetEntity instanceof \PhpParser\Node\Expr) {
+        if ($targetEntity instanceof Expr) {
             $targetEntity = $this->valueResolver->getValue($targetEntity);
         }
         if (!\is_string($targetEntity)) {
-            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType(self::COLLECTION_TYPE);
+            return new FullyQualifiedObjectType(self::COLLECTION_TYPE);
         }
         $entityFullyQualifiedClass = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
-        $fullyQualifiedObjectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($entityFullyQualifiedClass);
-        return new \PHPStan\Type\Generic\GenericObjectType(self::COLLECTION_TYPE, [$fullyQualifiedObjectType]);
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType($entityFullyQualifiedClass);
+        return new GenericObjectType(self::COLLECTION_TYPE, [$fullyQualifiedObjectType]);
     }
 }

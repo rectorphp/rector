@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector\RemoveDeadConstructorRectorTest
  */
-final class RemoveDeadConstructorRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDeadConstructorRector extends AbstractRector
 {
     /**
      * @readonly
@@ -28,14 +28,14 @@ final class RemoveDeadConstructorRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\ClassMethodManipulator $classMethodManipulator, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
+    public function __construct(ClassMethodManipulator $classMethodManipulator, ParamAnalyzer $paramAnalyzer)
     {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->paramAnalyzer = $paramAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove empty constructor', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove empty constructor', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct()
@@ -55,29 +55,29 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$classLike instanceof Class_) {
             return null;
         }
         if ($this->shouldSkipPropertyPromotion($node)) {
             return null;
         }
-        if ($classLike->extends instanceof \PhpParser\Node\Name\FullyQualified) {
+        if ($classLike->extends instanceof FullyQualified) {
             return null;
         }
         $this->removeNode($node);
         return null;
     }
-    private function shouldSkipPropertyPromotion(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkipPropertyPromotion(ClassMethod $classMethod) : bool
     {
-        if (!$this->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if (!$this->isName($classMethod, MethodName::CONSTRUCT)) {
             return \true;
         }
         if ($classMethod->stmts === null) {

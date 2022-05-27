@@ -22,24 +22,24 @@ final class SimplePhpDocParser
      * @var \PHPStan\PhpDocParser\Lexer\Lexer
      */
     private $lexer;
-    public function __construct(\PHPStan\PhpDocParser\Parser\PhpDocParser $phpDocParser, \PHPStan\PhpDocParser\Lexer\Lexer $lexer)
+    public function __construct(PhpDocParser $phpDocParser, Lexer $lexer)
     {
         $this->phpDocParser = $phpDocParser;
         $this->lexer = $lexer;
     }
-    public function parseNode(\PhpParser\Node $node) : ?\RectorPrefix20220527\Symplify\Astral\PhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode
+    public function parseNode(Node $node) : ?SimplePhpDocNode
     {
         $docComment = $node->getDocComment();
-        if (!$docComment instanceof \PhpParser\Comment\Doc) {
+        if (!$docComment instanceof Doc) {
             return null;
         }
         return $this->parseDocBlock($docComment->getText());
     }
-    public function parseDocBlock(string $docBlock) : \RectorPrefix20220527\Symplify\Astral\PhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode
+    public function parseDocBlock(string $docBlock) : SimplePhpDocNode
     {
         $tokens = $this->lexer->tokenize($docBlock);
-        $tokenIterator = new \PHPStan\PhpDocParser\Parser\TokenIterator($tokens);
+        $tokenIterator = new TokenIterator($tokens);
         $phpDocNode = $this->phpDocParser->parse($tokenIterator);
-        return new \RectorPrefix20220527\Symplify\Astral\PhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode($phpDocNode->children);
+        return new SimplePhpDocNode($phpDocNode->children);
     }
 }

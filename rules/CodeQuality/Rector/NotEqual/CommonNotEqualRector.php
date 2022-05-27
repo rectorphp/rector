@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://stackoverflow.com/a/4294663/1348344
  * @see \Rector\Tests\CodeQuality\Rector\NotEqual\CommonNotEqualRector\CommonNotEqualRectorTest
  */
-final class CommonNotEqualRector extends \Rector\Core\Rector\AbstractRector
+final class CommonNotEqualRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use common != instead of less known <> with same meaning', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use common != instead of less known <> with same meaning', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one, $two)
@@ -42,15 +42,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp\NotEqual::class];
+        return [NotEqual::class];
     }
     /**
      * @param NotEqual $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\BinaryOp\NotEqual
+    public function refactor(Node $node) : NotEqual
     {
         // invoke override to default "!="
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
 }

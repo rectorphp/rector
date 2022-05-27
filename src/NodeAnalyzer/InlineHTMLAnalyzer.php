@@ -14,15 +14,15 @@ final class InlineHTMLAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function hasInlineHTML(\PhpParser\Node $node) : bool
+    public function hasInlineHTML(Node $node) : bool
     {
-        if ($node instanceof \PhpParser\Node\FunctionLike) {
-            return (bool) $this->betterNodeFinder->findInstanceOf((array) $node->getStmts(), \PhpParser\Node\Stmt\InlineHTML::class);
+        if ($node instanceof FunctionLike) {
+            return (bool) $this->betterNodeFinder->findInstanceOf((array) $node->getStmts(), InlineHTML::class);
         }
-        return (bool) $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Stmt\InlineHTML::class);
+        return (bool) $this->betterNodeFinder->findInstanceOf($node, InlineHTML::class);
     }
 }

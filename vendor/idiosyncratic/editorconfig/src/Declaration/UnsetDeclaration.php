@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220527\Idiosyncratic\EditorConfig\Declaration;
 
-final class UnsetDeclaration extends \RectorPrefix20220527\Idiosyncratic\EditorConfig\Declaration\Declaration
+final class UnsetDeclaration extends Declaration
 {
     public function __construct(string $name)
     {

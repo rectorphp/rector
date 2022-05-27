@@ -21,13 +21,13 @@ final class FileIncludeToImportStatementTypoScriptRector extends \Ssch\TYPO3Rect
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(\Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
+    public function __construct(CurrentFileProvider $currentFileProvider)
     {
         $this->currentFileProvider = $currentFileProvider;
     }
-    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20220527\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement) {
+        if (!$statement instanceof FileIncludeStatement) {
             return;
         }
         if (null !== $statement->condition) {
@@ -37,15 +37,15 @@ final class FileIncludeToImportStatementTypoScriptRector extends \Ssch\TYPO3Rect
             return;
         }
         $file = $this->currentFileProvider->getFile();
-        if ($file instanceof \Rector\Core\ValueObject\Application\File) {
-            $file->addRectorClassWithLine(new \Rector\ChangesReporting\ValueObject\RectorWithLineChange($this, $statement->sourceLine));
+        if ($file instanceof File) {
+            $file->addRectorClassWithLine(new RectorWithLineChange($this, $statement->sourceLine));
         }
         $this->hasChanged = \true;
         $statement->newSyntax = \true;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert old include statement to new import syntax', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert old include statement to new import syntax', [new CodeSample(<<<'CODE_SAMPLE'
 <INCLUDE_TYPOSCRIPT: source="FILE:conditions.typoscript">
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

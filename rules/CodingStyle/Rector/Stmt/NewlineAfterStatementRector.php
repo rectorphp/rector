@@ -33,15 +33,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Stmt\NewlineAfterStatementRector\NewlineAfterStatementRectorTest
  */
-final class NewlineAfterStatementRector extends \Rector\Core\Rector\AbstractRector
+final class NewlineAfterStatementRector extends AbstractRector
 {
     /**
      * @var array<class-string<Node>>
      */
-    private const STMTS_TO_HAVE_NEXT_NEWLINE = [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Stmt\ClassConst::class, \PhpParser\Node\Stmt\Namespace_::class, \PhpParser\Node\Stmt\TryCatch::class, \PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Trait_::class, \PhpParser\Node\Stmt\Interface_::class, \PhpParser\Node\Stmt\Switch_::class];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    private const STMTS_TO_HAVE_NEXT_NEWLINE = [ClassMethod::class, Function_::class, Property::class, If_::class, Foreach_::class, Do_::class, While_::class, For_::class, ClassConst::class, Namespace_::class, TryCatch::class, Class_::class, Trait_::class, Interface_::class, Switch_::class];
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add new line after statements to tidify code', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add new line after statements to tidify code', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function test()
@@ -71,18 +71,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt::class];
+        return [Stmt::class];
     }
     /**
      * @param Stmt $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!\in_array(\get_class($node), self::STMTS_TO_HAVE_NEXT_NEWLINE, \true)) {
             return null;
         }
-        $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        if (!$nextNode instanceof \PhpParser\Node) {
+        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof Node) {
             return null;
         }
         if ($this->shouldSkip($nextNode)) {
@@ -93,7 +93,7 @@ CODE_SAMPLE
         $rangeLine = $line - $endLine;
         if ($rangeLine > 1) {
             /** @var Comment[]|null $comments */
-            $comments = $nextNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS);
+            $comments = $nextNode->getAttribute(AttributeKey::COMMENTS);
             if ($this->hasNoComment($comments)) {
                 return null;
             }
@@ -109,7 +109,7 @@ CODE_SAMPLE
             }
         }
         // @todo refactor to direct return of array
-        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Nop(), $node);
+        $this->nodesToAddCollector->addNodeAfterNode(new Nop(), $node);
         return $node;
     }
     /**
@@ -122,11 +122,11 @@ CODE_SAMPLE
         }
         return !isset($comments[0]);
     }
-    private function shouldSkip(?\PhpParser\Node $nextNode) : bool
+    private function shouldSkip(?Node $nextNode) : bool
     {
-        if (!$nextNode instanceof \PhpParser\Node\Stmt) {
+        if (!$nextNode instanceof Stmt) {
             return \true;
         }
-        return \in_array(\get_class($nextNode), [\PhpParser\Node\Stmt\Else_::class, \PhpParser\Node\Stmt\ElseIf_::class, \PhpParser\Node\Stmt\Catch_::class, \PhpParser\Node\Stmt\Finally_::class], \true);
+        return \in_array(\get_class($nextNode), [Else_::class, ElseIf_::class, Catch_::class, Finally_::class], \true);
     }
 }

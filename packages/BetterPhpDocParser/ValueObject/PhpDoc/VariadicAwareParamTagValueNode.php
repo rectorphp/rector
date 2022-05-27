@@ -5,7 +5,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Stringable;
-final class VariadicAwareParamTagValueNode extends \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode
+final class VariadicAwareParamTagValueNode extends ParamTagValueNode
 {
     public function __toString() : string
     {

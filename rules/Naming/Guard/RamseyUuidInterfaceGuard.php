@@ -11,22 +11,22 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 /**
  * @implements ConflictingNameGuardInterface<PropertyRename>
  */
-final class RamseyUuidInterfaceGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
+final class RamseyUuidInterfaceGuard implements ConflictingNameGuardInterface
 {
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
      * @param PropertyRename $renameValueObject
      */
-    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
+    public function isConflicting(RenameValueObjectInterface $renameValueObject) : bool
     {
-        return $this->nodeTypeResolver->isObjectType($renameValueObject->getProperty(), new \PHPStan\Type\ObjectType('Ramsey\\Uuid\\UuidInterface'));
+        return $this->nodeTypeResolver->isObjectType($renameValueObject->getProperty(), new ObjectType('Ramsey\\Uuid\\UuidInterface'));
     }
 }

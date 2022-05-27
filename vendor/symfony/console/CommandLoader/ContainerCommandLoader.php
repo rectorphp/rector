@@ -18,7 +18,7 @@ use RectorPrefix20220527\Symfony\Component\Console\Exception\CommandNotFoundExce
  *
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
-class ContainerCommandLoader implements \RectorPrefix20220527\Symfony\Component\Console\CommandLoader\CommandLoaderInterface
+class ContainerCommandLoader implements CommandLoaderInterface
 {
     private $container;
     /**
@@ -28,7 +28,7 @@ class ContainerCommandLoader implements \RectorPrefix20220527\Symfony\Component\
     /**
      * @param array $commandMap An array with command names as keys and service ids as values
      */
-    public function __construct(\RectorPrefix20220527\Psr\Container\ContainerInterface $container, array $commandMap)
+    public function __construct(ContainerInterface $container, array $commandMap)
     {
         $this->container = $container;
         $this->commandMap = $commandMap;
@@ -36,10 +36,10 @@ class ContainerCommandLoader implements \RectorPrefix20220527\Symfony\Component\
     /**
      * {@inheritdoc}
      */
-    public function get(string $name) : \RectorPrefix20220527\Symfony\Component\Console\Command\Command
+    public function get(string $name) : Command
     {
         if (!$this->has($name)) {
-            throw new \RectorPrefix20220527\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('Command "%s" does not exist.', $name));
+            throw new CommandNotFoundException(\sprintf('Command "%s" does not exist.', $name));
         }
         return $this->container->get($this->commandMap[$name]);
     }
