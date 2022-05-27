@@ -60,7 +60,7 @@ final class Option
      */
     public const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
     /**
-     * @internal Use @see \Rector\Config\RectorConfig::symfonyContainerPhp()
+     * @deprecated Use @see \Rector\Config\RectorConfig::symfonyContainerPhp()
      * @var string
      */
     public const SYMFONY_CONTAINER_PHP_PATH_PARAMETER = 'symfony_container_php_path';
@@ -93,19 +93,23 @@ final class Option
      */
     public const SKIP = \RectorPrefix20220527\Symplify\Skipper\ValueObject\Option::SKIP;
     /**
+     * @deprecated Use RectorConfig::fileExtensions() instead
      * @var string
      */
     public const FILE_EXTENSIONS = 'file_extensions';
     /**
+     * @deprecated Use RectorConfig::nestedChainMethodCallLimit() instead
      * @var string
      */
     public const NESTED_CHAIN_METHOD_CALL_LIMIT = 'nested_chain_method_call_limit';
     /**
+     * @deprecated Use RectorConfig::cacheDirectory() instead
      * @var string
      */
     public const CACHE_DIR = 'cache_dir';
     /**
      * Cache backend. Most of the time we cache in files, but in ephemeral environment (e.g. CI), a faster `MemoryCacheStorage` can be usefull.
+     * @deprecated Use RectorConfig::cacheClass() instead
      *
      * @var class-string<CacheStorageInterface>
      * @internal

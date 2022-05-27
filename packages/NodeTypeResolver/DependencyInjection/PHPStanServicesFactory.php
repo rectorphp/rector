@@ -33,7 +33,9 @@ final class PHPStanServicesFactory
     {
         $containerFactory = new \PHPStan\DependencyInjection\ContainerFactory(\getcwd());
         $additionalConfigFiles = [];
-        $additionalConfigFiles[] = $parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH);
+        if ($parameterProvider->hasParameter(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH)) {
+            $additionalConfigFiles[] = $parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH);
+        }
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/static-reflection.neon';
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/better-infer.neon';
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/parser.neon';
