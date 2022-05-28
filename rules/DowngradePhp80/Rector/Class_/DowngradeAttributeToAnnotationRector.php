@@ -16,10 +16,10 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
-use Rector\PhpAttribute\Printer\DoctrineAnnotationFactory;
+use Rector\PhpAttribute\NodeFactory\DoctrineAnnotationFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220527\Webmozart\Assert\Assert;
+use RectorPrefix20220528\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/articles/php-attributes#syntax
  *
@@ -37,10 +37,10 @@ final class DowngradeAttributeToAnnotationRector extends \Rector\Core\Rector\Abs
     private $isDowngraded = \false;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\Printer\DoctrineAnnotationFactory
+     * @var \Rector\PhpAttribute\NodeFactory\DoctrineAnnotationFactory
      */
     private $doctrineAnnotationFactory;
-    public function __construct(\Rector\PhpAttribute\Printer\DoctrineAnnotationFactory $doctrineAnnotationFactory)
+    public function __construct(\Rector\PhpAttribute\NodeFactory\DoctrineAnnotationFactory $doctrineAnnotationFactory)
     {
         $this->doctrineAnnotationFactory = $doctrineAnnotationFactory;
     }
@@ -114,7 +114,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
+        \RectorPrefix20220528\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
         $this->attributesToAnnotations = $configuration;
     }
     /**

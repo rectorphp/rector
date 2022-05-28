@@ -14,7 +14,7 @@ use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,10 +34,10 @@ final class ReturnTypeWillChangeRector extends \Rector\Core\Rector\AbstractRecto
     private $phpAttributeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory
+     * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
-    public function __construct(\Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory)
+    public function __construct(\Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory $phpAttributeGroupFactory)
     {
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;

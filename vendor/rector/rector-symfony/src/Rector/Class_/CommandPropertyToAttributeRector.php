@@ -14,7 +14,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,7 +28,7 @@ final class CommandPropertyToAttributeRector extends \Rector\Core\Rector\Abstrac
     private const ATTRIBUTE = 'Symfony\\Component\\Console\\Attribute\\AsCommand';
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory
+     * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
     /**
@@ -41,7 +41,7 @@ final class CommandPropertyToAttributeRector extends \Rector\Core\Rector\Abstrac
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;

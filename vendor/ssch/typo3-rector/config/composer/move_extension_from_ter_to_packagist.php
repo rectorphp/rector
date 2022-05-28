@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220527;
+namespace RectorPrefix20220528;
 
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/../config.php');

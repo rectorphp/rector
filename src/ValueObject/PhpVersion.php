@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject;
 
-use RectorPrefix20220527\MyCLabs\Enum\Enum;
+use RectorPrefix20220528\MyCLabs\Enum\Enum;
 /**
  * @api
  */
-final class PhpVersion extends \RectorPrefix20220527\MyCLabs\Enum\Enum
+final class PhpVersion extends \RectorPrefix20220528\MyCLabs\Enum\Enum
 {
     /**
      * @var int

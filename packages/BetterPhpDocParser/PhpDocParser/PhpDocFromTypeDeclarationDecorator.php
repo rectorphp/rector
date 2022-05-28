@@ -22,10 +22,10 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20220527\ReturnTypeWillChange;
+use RectorPrefix20220528\ReturnTypeWillChange;
 /**
  * @see https://wiki.php.net/rfc/internal_method_return_types#proposal
  */
@@ -71,7 +71,7 @@ final class PhpDocFromTypeDeclarationDecorator
     private $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory
+     * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
     /**
@@ -79,7 +79,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;

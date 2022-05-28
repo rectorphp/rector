@@ -34,4 +34,17 @@ final class UseImportsResolver
             return $stmt instanceof \PhpParser\Node\Stmt\Use_ || $stmt instanceof \PhpParser\Node\Stmt\GroupUse;
         });
     }
+    /**
+     * @return Use_[]
+     */
+    public function resolveBareUsesForNode(\PhpParser\Node $node) : array
+    {
+        $namespace = $this->betterNodeFinder->findParentByTypes($node, [\PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class]);
+        if (!$namespace instanceof \PhpParser\Node) {
+            return [];
+        }
+        return \array_filter($namespace->stmts, function (\PhpParser\Node\Stmt $stmt) : bool {
+            return $stmt instanceof \PhpParser\Node\Stmt\Use_;
+        });
+    }
 }

@@ -13,11 +13,11 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220527\Webmozart\Assert\Assert;
+use RectorPrefix20220528\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/deprecate_dynamic_properties
  *
@@ -45,7 +45,7 @@ final class AddAllowDynamicPropertiesAttributeRector extends \Rector\Core\Rector
     private $phpAttributeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory
+     * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
     /**
@@ -53,7 +53,7 @@ final class AddAllowDynamicPropertiesAttributeRector extends \Rector\Core\Rector
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory $phpAttributeGroupFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
@@ -89,7 +89,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $transformOnNamespaces = $configuration;
-        \RectorPrefix20220527\Webmozart\Assert\Assert::allString($transformOnNamespaces);
+        \RectorPrefix20220528\Webmozart\Assert\Assert::allString($transformOnNamespaces);
         $this->transformOnNamespaces = $transformOnNamespaces;
     }
     /**

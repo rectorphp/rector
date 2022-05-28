@@ -18,13 +18,13 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeAnalyzer\AnnotationTargetResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php80\NodeFactory\AttributeFlagFactory;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220527\Webmozart\Assert\Assert;
+use RectorPrefix20220528\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/articles/php-attributes#syntax
  *
@@ -59,7 +59,7 @@ final class DoctrineAnnotationClassToAttributeRector extends \Rector\Core\Rector
     private $attributeFlagFactory;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory
+     * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
     /**
@@ -77,7 +77,7 @@ final class DoctrineAnnotationClassToAttributeRector extends \Rector\Core\Rector
      * @var \Rector\Php80\NodeAnalyzer\AnnotationTargetResolver
      */
     private $annotationTargetResolver;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\NodeFactory\AttributeFlagFactory $attributeFlagFactory, \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Php80\NodeAnalyzer\AnnotationTargetResolver $annotationTargetResolver)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\NodeFactory\AttributeFlagFactory $attributeFlagFactory, \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Php80\NodeAnalyzer\AnnotationTargetResolver $annotationTargetResolver)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->attributeFlagFactory = $attributeFlagFactory;
@@ -167,7 +167,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $shouldRemoveAnnotations = $configuration[self::REMOVE_ANNOTATIONS] ?? (bool) \current($configuration);
-        \RectorPrefix20220527\Webmozart\Assert\Assert::boolean($shouldRemoveAnnotations);
+        \RectorPrefix20220528\Webmozart\Assert\Assert::boolean($shouldRemoveAnnotations);
         $this->shouldRemoveAnnotations = $shouldRemoveAnnotations;
     }
     private function decorateTarget(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\AttributeGroup $attributeGroup) : void

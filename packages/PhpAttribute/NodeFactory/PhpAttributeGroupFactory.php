@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute\Printer;
+namespace Rector\PhpAttribute\NodeFactory;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Use_;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -17,8 +18,6 @@ use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\AttributeArrayNameInliner;
 use Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector;
-use Rector\PhpAttribute\NodeFactory\AttributeNameFactory;
-use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
 /**
  * @see \Rector\Tests\PhpAttribute\Printer\PhpAttributeGroupFactoryTest
  */
@@ -86,14 +85,15 @@ final class PhpAttributeGroupFactory
         $attribute = new \PhpParser\Node\Attribute($fullyQualified, $args);
         return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
-    public function create(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
+    /**
+     * @param Use_[] $uses
+     */
+    public function create(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute, array $uses) : \PhpParser\Node\AttributeGroup
     {
         $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
         $args = $this->createArgsFromItems($values, $annotationToAttribute->getAttributeClass());
-        // @todo this can be a different class then the unwrapped crated one
-        //$argumentNames = $this->namedArgumentsResolver->resolveFromClass($annotationToAttribute->getAttributeClass());
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
-        $attributeName = $this->attributeNameFactory->create($annotationToAttribute, $doctrineAnnotationTagValueNode);
+        $attributeName = $this->attributeNameFactory->create($annotationToAttribute, $doctrineAnnotationTagValueNode, $uses);
         $attribute = new \PhpParser\Node\Attribute($attributeName, $args);
         return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
