@@ -55,7 +55,7 @@ final class CommandMethodDecorator
     private function addArgumentsToConfigureMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $commandInputArguments) : void
     {
         foreach ($commandInputArguments as $commandInputArgument) {
-            $mode = $this->createMode((int) $commandInputArgument['mode']);
+            $mode = $this->createMode($commandInputArgument['mode']);
             $name = new \PhpParser\Node\Scalar\String_($commandInputArgument['name']);
             $description = new \PhpParser\Node\Scalar\String_($commandInputArgument['description']);
             $defaultValue = $commandInputArgument['default'];

@@ -88,7 +88,7 @@
         "rector": "@php vendor\/bin\/rector process --dry-run --ansi",
         "fix-rector": "@php vendor\/bin\/rector process --ansi",
         "check-typo3-rector": "@php vendor\/bin\/rector process src\/Helper --config templates\/rector.php --dry-run --ansi",
-        "update-composer-packages": "@php vendor\/bin\/rector add-composer-typo3-extensions-to-config",
+        "update-composer-packages": "@php vendor\/bin\/rector typo3-extensions --ansi",
         "lint-php": "@php vendor\/bin\/parallel-lint src config tests"
     },
     "extra": {

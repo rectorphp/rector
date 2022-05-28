@@ -61,6 +61,10 @@ final class LaravelSetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
+    public const LARAVEL_90 = __DIR__ . '/../../config/sets/laravel90.php';
+    /**
+     * @var string
+     */
     public const LARAVEL_STATIC_TO_INJECTION = __DIR__ . '/../../config/sets/laravel-static-to-injection.php';
     /**
      * @var string

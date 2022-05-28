@@ -57,7 +57,7 @@ final class AddSetConfigurationMethodToExceptionHandlerRector extends \Rector\Co
         if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return $node;
         }
-        $firstParameterName = (string) $this->getName($constructClassMethod->params[0]);
+        $firstParameterName = $this->getName($constructClassMethod->params[0]);
         // Add all statements from constructor to new configuration method
         $configurationMethod->stmts = (array) $constructClassMethod->stmts;
         $this->renameFirstConstructorParameterVariableName($constructClassMethod, $firstParameterName);

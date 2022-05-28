@@ -50,4 +50,8 @@ final class LaravelLevelSetList implements \Rector\Set\Contract\SetListInterface
      * @var string
      */
     public const UP_TO_LARAVEL_80 = __DIR__ . '/../../config/sets/level/up-to-laravel-80.php';
+    /**
+     * @var string
+     */
+    public const UP_TO_LARAVEL_90 = __DIR__ . '/../../config/sets/level/up-to-laravel-90.php';
 }

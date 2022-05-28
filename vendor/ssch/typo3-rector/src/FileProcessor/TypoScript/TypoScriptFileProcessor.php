@@ -192,7 +192,6 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             $smartFileInfo = $file->getSmartFileInfo();
             $errorFile = $smartFileInfo->getRelativeFilePath();
             $this->rectorOutputStyle->warning(\sprintf('TypoScriptParser Error in: %s. File skipped.', $errorFile));
-            return;
         }
     }
     /**

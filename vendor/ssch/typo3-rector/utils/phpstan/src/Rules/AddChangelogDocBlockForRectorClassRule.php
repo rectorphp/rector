@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Broker\Broker;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\FileTypeMapper;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
@@ -35,17 +35,17 @@ final class AddChangelogDocBlockForRectorClassRule implements \PHPStan\Rules\Rul
     private const ALLOWED_CLASSES_WITH_NON_CHANGELOG_DOC_BLOCK = [\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::class, \Ssch\TYPO3Rector\Rules\Rector\Misc\AddCodeCoverageIgnoreToMethodRectorDefinitionRector::class, \Ssch\TYPO3Rector\Rector\General\ConvertImplicitVariablesToExplicitGlobalsRector::class, \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector::class, \Ssch\TYPO3Rector\ComposerPackages\Rector\AddPackageVersionRector::class, \Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector::class];
     /**
      * @readonly
-     * @var \PHPStan\Broker\Broker
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $broker;
+    private $reflectionProvider;
     /**
      * @readonly
      * @var \PHPStan\Type\FileTypeMapper
      */
     private $fileTypeMapper;
-    public function __construct(\PHPStan\Broker\Broker $broker, \PHPStan\Type\FileTypeMapper $fileTypeMapper)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \PHPStan\Type\FileTypeMapper $fileTypeMapper)
     {
-        $this->broker = $broker;
+        $this->reflectionProvider = $reflectionProvider;
         $this->fileTypeMapper = $fileTypeMapper;
     }
     public function getNodeType() : string
@@ -63,7 +63,7 @@ final class AddChangelogDocBlockForRectorClassRule implements \PHPStan\Rules\Rul
             return [];
         }
         $fullyQualifiedClassName = $scope->getNamespace() . '\\' . $className;
-        $classReflection = $this->broker->getClass($fullyQualifiedClassName);
+        $classReflection = $this->reflectionProvider->getClass($fullyQualifiedClassName);
         if (!$classReflection->isSubclassOf(\Rector\Core\Contract\Rector\PhpRectorInterface::class)) {
             return [];
         }

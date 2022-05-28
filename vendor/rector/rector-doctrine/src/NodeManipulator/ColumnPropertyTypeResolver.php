@@ -56,6 +56,7 @@ final class ColumnPropertyTypeResolver
     {
         $doctrineTypeToScalarType = $doctrineTypeToScalarType ?? [
             'tinyint' => new \PHPStan\Type\BooleanType(),
+            'boolean' => new \PHPStan\Type\BooleanType(),
             // integers
             'smallint' => new \PHPStan\Type\IntegerType(),
             'mediumint' => new \PHPStan\Type\IntegerType(),

@@ -2101,12 +2101,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "4a907ede0f35a562aadc63eebadf34e8d3d3d388"
+                "reference": "b731f29b6f2ea04272be59b0d6aeee7d5a9d7852"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/4a907ede0f35a562aadc63eebadf34e8d3d3d388",
-                "reference": "4a907ede0f35a562aadc63eebadf34e8d3d3d388",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/b731f29b6f2ea04272be59b0d6aeee7d5a9d7852",
+                "reference": "b731f29b6f2ea04272be59b0d6aeee7d5a9d7852",
                 "shasum": ""
             },
             "require": {
@@ -2131,7 +2131,7 @@
                 "symplify\/rule-doc-generator": "^10.2",
                 "symplify\/vendor-patches": "^10.2"
             },
-            "time": "2022-05-12T05:32:05+00:00",
+            "time": "2022-05-28T16:51:32+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2246,12 +2246,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-laravel.git",
-                "reference": "b276a102c054be910d0ae0753001f7651b8d2a88"
+                "reference": "24ee01e965d9d0930327505abed239a8f7ae9f23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/b276a102c054be910d0ae0753001f7651b8d2a88",
-                "reference": "b276a102c054be910d0ae0753001f7651b8d2a88",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/24ee01e965d9d0930327505abed239a8f7ae9f23",
+                "reference": "24ee01e965d9d0930327505abed239a8f7ae9f23",
                 "shasum": ""
             },
             "require": {
@@ -2275,7 +2275,7 @@
                 "symplify\/rule-doc-generator": "^10.2",
                 "symplify\/vendor-patches": "^10.2"
             },
-            "time": "2022-05-27T17:35:24+00:00",
+            "time": "2022-05-28T08:02:34+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2668,12 +2668,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "1219aa92005714972d7a1a54fb44b00068f6e5fb"
+                "reference": "6e2c7f32f840e1422ab431830685c853ce5540ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/1219aa92005714972d7a1a54fb44b00068f6e5fb",
-                "reference": "1219aa92005714972d7a1a54fb44b00068f6e5fb",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/6e2c7f32f840e1422ab431830685c853ce5540ad",
+                "reference": "6e2c7f32f840e1422ab431830685c853ce5540ad",
                 "shasum": ""
             },
             "require": {
@@ -2703,7 +2703,7 @@
                 "symplify\/vendor-patches": "^10.2",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-05-27T16:50:58+00:00",
+            "time": "2022-05-28T14:56:25+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
