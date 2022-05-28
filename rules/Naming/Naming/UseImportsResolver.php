@@ -37,4 +37,20 @@ final class UseImportsResolver
             fn (Stmt $stmt): bool => $stmt instanceof Use_ || $stmt instanceof GroupUse
         );
     }
+
+    /**
+     * @return Use_[]
+     */
+    public function resolveBareUsesForNode(Node $node): array
+    {
+        $namespace = $this->betterNodeFinder->findParentByTypes(
+            $node,
+            [Namespace_::class, FileWithoutNamespace::class]
+        );
+        if (! $namespace instanceof Node) {
+            return [];
+        }
+
+        return array_filter($namespace->stmts, fn (Stmt $stmt): bool => $stmt instanceof Use_);
+    }
 }

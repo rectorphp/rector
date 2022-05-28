@@ -6,7 +6,7 @@ namespace Rector\Tests\PhpAttribute\Printer;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\AttributeGroup;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 use Rector\Tests\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture\Route;
 

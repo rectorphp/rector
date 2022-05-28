@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpAttribute\Printer;
+namespace Rector\PhpAttribute\NodeFactory;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;

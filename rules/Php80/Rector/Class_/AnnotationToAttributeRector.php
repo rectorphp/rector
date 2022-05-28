@@ -23,12 +23,13 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\Php80\NodeFactory\AttrGroupsFactory;
 use Rector\Php80\NodeManipulator\AttributeGroupNamedArgumentManipulator;
 use Rector\Php80\PhpDoc\PhpDocNodeFinder;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\PhpAttribute\RemovableAnnotationAnalyzer;
 use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -58,6 +59,7 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
         private readonly RemovableAnnotationAnalyzer $removableAnnotationAnalyzer,
         private readonly AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator,
         private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly UseImportsResolver $useImportsResolver,
     ) {
     }
 
@@ -122,11 +124,13 @@ CODE_SAMPLE
             return null;
         }
 
+        $uses = $this->useImportsResolver->resolveBareUsesForNode($node);
+
         // 1. generic tags
         $genericAttributeGroups = $this->processGenericTags($phpDocInfo);
 
         // 2. Doctrine annotation classes
-        $annotationAttributeGroups = $this->processDoctrineAnnotationClasses($phpDocInfo);
+        $annotationAttributeGroups = $this->processDoctrineAnnotationClasses($phpDocInfo, $uses);
 
         $attributeGroups = array_merge($genericAttributeGroups, $annotationAttributeGroups);
         if ($attributeGroups === []) {
@@ -202,9 +206,10 @@ CODE_SAMPLE
     }
 
     /**
+     * @param Node\Stmt\Use_[] $uses
      * @return AttributeGroup[]
      */
-    private function processDoctrineAnnotationClasses(PhpDocInfo $phpDocInfo): array
+    private function processDoctrineAnnotationClasses(PhpDocInfo $phpDocInfo, array $uses): array
     {
         if ($phpDocInfo->getPhpDocNode()->children === []) {
             return [];
@@ -267,7 +272,7 @@ CODE_SAMPLE
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNode);
         }
 
-        return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
+        return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes, $uses);
     }
 
     private function matchAnnotationToAttribute(

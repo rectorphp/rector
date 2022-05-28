@@ -4,30 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Php80\NodeManipulator;
 
-use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
-use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use PhpParser\Node\Scalar\String_;
 
 final class AttributeGroupNamedArgumentManipulator
 {
-    /**
-     * @var array<string, array<string, string|class-string<Expr>>>
-     */
-    private const SPECIAL_CLASS_TYPES = [
-        'JMS\Serializer\Annotation\AccessType' => [
-            'common_aliased' => 'JMS\AccessType',
-            'value' => 'PhpParser\Node\Scalar\String_',
-            'name' => 'type',
-        ],
-    ];
-
-    public function __construct(private readonly ArgsAnalyzer $argsAnalyzer)
-    {
-    }
-
     /**
      * @param AttributeGroup[] $attributeGroups
      * @return AttributeGroup[]
@@ -46,33 +29,29 @@ final class AttributeGroupNamedArgumentManipulator
         return $attributeGroups;
     }
 
+    /**
+     * Special case for JMS Access type, where string is replaced by specific value
+     */
     private function processReplaceAttr(Attribute $attribute, string $attrName): void
     {
-        foreach (self::SPECIAL_CLASS_TYPES as $classType => $specialClasssType) {
-            if ($attrName !== $classType && $attrName !== $specialClasssType['common_aliased']) {
-                continue;
-            }
-
-            $args = $attribute->args;
-            if (count($args) !== 1) {
-                continue;
-            }
-
-            if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($args, 0)) {
-                continue;
-            }
-
-            /** @var Arg $currentArg */
-            $currentArg = $args[0];
-            if ($currentArg->name !== null) {
-                continue;
-            }
-
-            if (! $currentArg->value instanceof $specialClasssType['value']) {
-                continue;
-            }
-
-            $currentArg->name = new Identifier($specialClasssType['name']);
+        if (! in_array($attrName, ['JMS\Serializer\Annotation\AccessType', 'JMS\AccessType'], true)) {
+            return;
         }
+
+        $args = $attribute->args;
+        if (count($args) !== 1) {
+            return;
+        }
+
+        $currentArg = $args[0];
+        if ($currentArg->name !== null) {
+            return;
+        }
+
+        if (! $currentArg->value instanceof String_) {
+            return;
+        }
+
+        $currentArg->name = new Identifier('type');
     }
 }
