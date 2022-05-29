@@ -6,7 +6,6 @@ namespace Rector\Core\Application;
 
 use DateTime;
 use Rector\Core\Exception\VersionException;
-use Symfony\Component\Process\Process;
 
 /**
  * Inspired by https://github.com/composer/composer/blob/master/src/Composer/Composer.php
@@ -27,32 +26,20 @@ final class VersionResolver
     public const RELEASE_DATE = '@release_date@';
 
     /**
-     * @var string
-     */
-    private const GIT = 'git';
-
-    /**
      * @var int
      */
     private const SUCCESS_CODE = 0;
 
     public static function resolvePackageVersion(): string
     {
-        // needed to keep exec() in the rector directory, not depending on cwd of run command of scoper
-        $repositoryDirectory = __DIR__ . '/../..';
-
         // resolve current tag
-        $commandLine = sprintf('cd %s && git tag --points-at', $repositoryDirectory);
-        exec($commandLine, $tagExecOutput, $tagExecResultCode);
+        exec('git tag --points-at', $tagExecOutput, $tagExecResultCode);
 
         if ($tagExecResultCode !== self::SUCCESS_CODE) {
             throw new VersionException(
                 'Ensure to run compile from composer git repository clone and that git binary is available.'
             );
         }
-
-        // debug output
-        var_dump($tagExecOutput);
 
         if ($tagExecOutput !== []) {
             $tag = $tagExecOutput[0];
@@ -61,8 +48,7 @@ final class VersionResolver
             }
         }
 
-        $commandLine = sprintf('cd %s && git log --pretty="%%H" -n1 HEAD', $repositoryDirectory);
-        exec($commandLine, $commitHashExecOutput, $commitHashResultCode);
+        exec('git log --pretty="%H" -n1 HEAD', $commitHashExecOutput, $commitHashResultCode);
 
         if ($commitHashResultCode !== 0) {
             throw new VersionException(
@@ -70,22 +56,19 @@ final class VersionResolver
             );
         }
 
-        // debug output
-        var_dump($commitHashExecOutput);
-
         $version = trim($commitHashExecOutput[0]);
         return trim($version, '"');
     }
 
     public static function resolverReleaseDateTime(): DateTime
     {
-        $process = new Process([self::GIT, 'log', '-n1', '--pretty=%ci', 'HEAD'], __DIR__);
-        if ($process->run() !== 0) {
+        exec('git log -n1 --pretty=%ci HEAD', $output, $resultCode);
+        if ($resultCode !== self::SUCCESS_CODE) {
             throw new VersionException(
                 'You must ensure to run compile from composer git repository clone and that git binary is available.'
             );
         }
 
-        return new DateTime(trim($process->getOutput()));
+        return new DateTime(trim($output[0]));
     }
 }
