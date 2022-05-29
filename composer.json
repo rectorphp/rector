@@ -76,7 +76,12 @@
         "timeweb/phpstan-enum": "dev-22-upgrade-phpstan-to-1.0"
     },
     "replace": {
-        "rector/rector": "self.version"
+        "rector/rector": "self.version",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-intl-grapheme": "*",
+        "symfony/polyfill-intl-normalizer": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php81": "*"
     },
     "autoload": {
         "psr-4": {
