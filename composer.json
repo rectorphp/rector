@@ -80,8 +80,7 @@
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-intl-grapheme": "*",
         "symfony/polyfill-intl-normalizer": "*",
-        "symfony/polyfill-mbstring": "*",
-        "symfony/polyfill-php81": "*"
+        "symfony/polyfill-mbstring": "*"
     },
     "autoload": {
         "psr-4": {
