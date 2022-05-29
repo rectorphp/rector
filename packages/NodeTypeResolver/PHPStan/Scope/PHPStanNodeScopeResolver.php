@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Name;
@@ -129,6 +130,9 @@ final class PHPStanNodeScopeResolver
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($smartFileInfo);
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $mutatingScope) use(&$nodeCallback, $isScopeRefreshing) : void {
+            if ($node instanceof \PhpParser\Node\Arg) {
+                $node->value->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+            }
             if ($node instanceof \PhpParser\Node\Stmt\Foreach_) {
                 // decorate value as well
                 $node->valueVar->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
