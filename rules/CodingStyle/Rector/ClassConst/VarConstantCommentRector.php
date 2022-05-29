@@ -101,7 +101,7 @@ CODE_SAMPLE
     }
     private function hasTwoAndMoreGenericClassStringTypes(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : bool
     {
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($constantArrayType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($constantArrayType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         if (!$typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode) {
             return \false;
         }

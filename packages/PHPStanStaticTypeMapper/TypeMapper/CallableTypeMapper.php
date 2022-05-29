@@ -39,19 +39,21 @@ final class CallableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
         return \PHPStan\Type\CallableType::class;
     }
     /**
+     * @param TypeKind::* $typeKind
      * @param CallableType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $returnTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getReturnType(), $typeKind);
         return new \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('callable'), [], $returnTypeNode);
     }
     /**
+     * @param TypeKind::* $typeKind
      * @param CallableType|ClosureType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
-        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY())) {
+        if ($typeKind === \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY) {
             return null;
         }
         return new \PhpParser\Node\Name('callable');

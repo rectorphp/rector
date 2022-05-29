@@ -162,7 +162,7 @@ CODE_SAMPLE
     {
         if ($this->nodeTypeResolver->isNullableType($property)) {
             $objectType = $this->getType($property);
-            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         }
     }
     private function decorateParamWithPropertyPhpDocInfo(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Param $param) : void

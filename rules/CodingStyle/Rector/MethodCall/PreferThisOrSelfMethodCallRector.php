@@ -26,7 +26,7 @@ final class PreferThisOrSelfMethodCallRector extends \Rector\Core\Rector\Abstrac
      */
     private const THIS = 'this';
     /**
-     * @var array<PreferenceSelfThis>
+     * @var array<string, PreferenceSelfThis::*>
      */
     private $typeToPreference = [];
     /**
@@ -62,7 +62,7 @@ final class SomeClass extends TestCase
     }
 }
 CODE_SAMPLE
-, ['PHPUnit\\Framework\\TestCase' => \Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_SELF()])]);
+, ['PHPUnit\\Framework\\TestCase' => \Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_SELF])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -80,8 +80,7 @@ CODE_SAMPLE
             if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType($type))) {
                 continue;
             }
-            /** @var PreferenceSelfThis $preference */
-            if ($preference->equals(\Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_SELF())) {
+            if ($preference === \Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_SELF) {
                 return $this->processToSelf($node);
             }
             return $this->processToThis($node);
@@ -94,7 +93,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         \RectorPrefix20220529\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220529\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\CodingStyle\Enum\PreferenceSelfThis::class);
+        \RectorPrefix20220529\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220529\Webmozart\Assert\Assert::allOneOf($configuration, [\Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_THIS, \Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_SELF]);
         $this->typeToPreference = $configuration;
     }
     /**
@@ -102,7 +102,7 @@ CODE_SAMPLE
      */
     private function processToSelf($node) : ?\PhpParser\Node\Expr\StaticCall
     {
-        if ($node instanceof \PhpParser\Node\Expr\StaticCall && !$this->isNames($node->class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()])) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall && !$this->isNames($node->class, [\Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::STATIC])) {
             return null;
         }
         if ($node instanceof \PhpParser\Node\Expr\MethodCall && !$this->isName($node->var, self::THIS)) {
@@ -116,7 +116,7 @@ CODE_SAMPLE
         if ($name === null) {
             return null;
         }
-        return $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::SELF(), $name, $node->args);
+        return $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::SELF, $name, $node->args);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
@@ -126,7 +126,7 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
-        if (!$this->isNames($node->class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()])) {
+        if (!$this->isNames($node->class, [\Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::STATIC])) {
             return null;
         }
         $name = $this->getName($node->name);

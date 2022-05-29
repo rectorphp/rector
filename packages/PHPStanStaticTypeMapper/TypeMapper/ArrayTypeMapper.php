@@ -85,15 +85,16 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         return \PHPStan\Type\ArrayType::class;
     }
     /**
+     * @param TypeKind::* $typeKind
      * @param ArrayType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $itemType = $type->getItemType();
         if ($itemType instanceof \PHPStan\Type\UnionType && !$type instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return $this->createArrayTypeNodeFromUnionType($itemType, $typeKind);
         }
-        if ($type instanceof \PHPStan\Type\Constant\ConstantArrayType && $typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN())) {
+        if ($type instanceof \PHPStan\Type\Constant\ConstantArrayType && $typeKind === \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN) {
             $arrayShapeNode = $this->arrayShapeTypeMapper->mapConstantArrayType($type);
             if ($arrayShapeNode instanceof \PHPStan\PhpDocParser\Ast\Type\TypeNode) {
                 return $arrayShapeNode;
@@ -115,11 +116,14 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @param ArrayType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
         return new \PhpParser\Node\Name('array');
     }
-    private function createArrayTypeNodeFromUnionType(\PHPStan\Type\UnionType $unionType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode
+    /**
+     * @param TypeKind::* $typeKind
+     */
+    private function createArrayTypeNodeFromUnionType(\PHPStan\Type\UnionType $unionType, string $typeKind) : \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode
     {
         $unionedArrayType = [];
         foreach ($unionType->getTypes() as $unionedType) {
@@ -163,7 +167,10 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         }
         return \false;
     }
-    private function createGenericArrayType(\PHPStan\Type\ArrayType $arrayType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind, bool $withKey = \false) : \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode
+    /**
+     * @param TypeKind::* $typeKind
+     */
+    private function createGenericArrayType(\PHPStan\Type\ArrayType $arrayType, string $typeKind, bool $withKey = \false) : \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode
     {
         $itemType = $arrayType->getItemType();
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType, $typeKind);
@@ -207,7 +214,10 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         }
         return !$arrayType->getItemType() instanceof \PHPStan\Type\ArrayType;
     }
-    private function narrowConstantArrayTypeOfUnionType(\PHPStan\Type\ArrayType $arrayType, \PHPStan\Type\Type $itemType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PHPStan\PhpDocParser\Ast\Type\TypeNode
+    /**
+     * @param TypeKind::* $typeKind
+     */
+    private function narrowConstantArrayTypeOfUnionType(\PHPStan\Type\ArrayType $arrayType, \PHPStan\Type\Type $itemType, string $typeKind) : ?\PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         if ($arrayType instanceof \PHPStan\Type\Constant\ConstantArrayType && $itemType instanceof \PHPStan\Type\UnionType) {
             $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
@@ -223,9 +233,10 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         return null;
     }
     /**
+     * @param TypeKind::* $typeKind
      * @return \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode
      */
-    private function createTypeNodeFromGenericClassStringType(\PHPStan\Type\Generic\GenericClassStringType $genericClassStringType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind)
+    private function createTypeNodeFromGenericClassStringType(\PHPStan\Type\Generic\GenericClassStringType $genericClassStringType, string $typeKind)
     {
         $genericType = $genericClassStringType->getGenericType();
         if ($genericType instanceof \PHPStan\Type\ObjectType && !$this->reflectionProvider->hasClass($genericType->getClassName())) {

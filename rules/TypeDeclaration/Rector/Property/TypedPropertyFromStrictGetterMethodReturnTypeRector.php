@@ -117,7 +117,7 @@ CODE_SAMPLE
         if ($node->isPublic() && !\PHPStan\Type\TypeCombinator::containsNull($getterReturnType)) {
             $getterReturnType = \PHPStan\Type\TypeCombinator::addNull($getterReturnType);
         }
-        $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($getterReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+        $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($getterReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
         if (!$propertyType instanceof \PhpParser\Node) {
             return null;
         }

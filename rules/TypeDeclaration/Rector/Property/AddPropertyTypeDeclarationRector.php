@@ -78,7 +78,7 @@ CODE_SAMPLE
             if (!$this->isName($node, $addPropertyTypeDeclaration->getPropertyName())) {
                 continue;
             }
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($addPropertyTypeDeclaration->getType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($addPropertyTypeDeclaration->getType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
             if ($typeNode === null) {
                 // invalid configuration
                 throw new \Rector\Core\Exception\ShouldNotHappenException();

@@ -60,7 +60,7 @@ final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20220529\Symplify\
             if (!$staticType->equals($oldToNewType->getOldType())) {
                 continue;
             }
-            $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($oldToNewType->getNewType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::ANY());
+            $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($oldToNewType->getNewType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::ANY);
             $parentType = $node->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::PARENT);
             if ($parentType instanceof \PHPStan\PhpDocParser\Ast\Type\TypeNode) {
                 // mirror attributes

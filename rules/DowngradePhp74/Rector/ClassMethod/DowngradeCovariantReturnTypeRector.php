@@ -125,7 +125,7 @@ CODE_SAMPLE
         // The return type name could either be a classname, without the leading "\",
         // or one among the reserved identifiers ("static", "self", "iterable", etc)
         // To find out which is the case, check if this name exists as a class
-        $parentReturnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parentReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $parentReturnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parentReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         if (!$parentReturnTypeNode instanceof \PhpParser\Node) {
             return null;
         }

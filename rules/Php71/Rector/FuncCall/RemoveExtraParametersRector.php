@@ -103,7 +103,7 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
             if (!$call->class instanceof \PhpParser\Node\Name) {
                 return \true;
             }
-            if ($this->isName($call->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+            if ($this->isName($call->class, \Rector\Core\Enum\ObjectReference::PARENT)) {
                 return \true;
             }
         }

@@ -229,7 +229,7 @@ CODE_SAMPLE
             /** @var string $paramName */
             $paramName = $this->getName($paramAndArg->getVariable());
             /** @var TypeNode $staticTypeNode */
-            $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+            $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
             $paramTagValueNode = $this->createParamTagNode($paramName, $staticTypeNode);
             $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
@@ -265,7 +265,7 @@ CODE_SAMPLE
         if ($staticType instanceof \PHPStan\Type\UnionType) {
             return;
         }
-        $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+        $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         if ($phpNodeType === null) {
             return;
         }

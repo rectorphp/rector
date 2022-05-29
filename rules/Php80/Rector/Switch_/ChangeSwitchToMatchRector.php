@@ -97,7 +97,7 @@ CODE_SAMPLE
         }
         $isReturn = \false;
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->equalsMatchKind(\Rector\Php80\Enum\MatchKind::RETURN())) {
+            if ($condAndExpr->equalsMatchKind(\Rector\Php80\Enum\MatchKind::RETURN)) {
                 $isReturn = \true;
                 break;
             }
@@ -190,7 +190,7 @@ CODE_SAMPLE
         if (!$assignExpr instanceof \PhpParser\Node\Expr) {
             $this->removeNode($nextNode);
         }
-        $condAndExprs[] = new \Rector\Php80\ValueObject\CondAndExpr([], $returnedExpr, \Rector\Php80\Enum\MatchKind::RETURN());
+        $condAndExprs[] = new \Rector\Php80\ValueObject\CondAndExpr([], $returnedExpr, \Rector\Php80\Enum\MatchKind::RETURN);
         return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
     /**
@@ -207,7 +207,7 @@ CODE_SAMPLE
         }
         $this->removeNode($nextNode);
         $throw = new \PhpParser\Node\Expr\Throw_($nextNode->expr);
-        $condAndExprs[] = new \Rector\Php80\ValueObject\CondAndExpr([], $throw, \Rector\Php80\Enum\MatchKind::RETURN());
+        $condAndExprs[] = new \Rector\Php80\ValueObject\CondAndExpr([], $throw, \Rector\Php80\Enum\MatchKind::RETURN);
         return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
 }

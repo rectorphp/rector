@@ -10,7 +10,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\Core\Enum\ObjectReference;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 /**
  * @implements TypeMapperInterface<ParentStaticType>
@@ -27,15 +26,15 @@ final class ParentStaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
     /**
      * @param ParentStaticType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(\Rector\Core\Enum\ObjectReference::PARENT()->getValue());
+        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(\Rector\Core\Enum\ObjectReference::PARENT);
     }
     /**
      * @param ParentStaticType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
-        return new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT()->getValue());
+        return new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT);
     }
 }

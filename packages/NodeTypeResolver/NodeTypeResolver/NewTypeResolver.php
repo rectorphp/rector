@@ -53,7 +53,7 @@ final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTyp
     {
         if ($node->class instanceof \PhpParser\Node\Name) {
             $className = $this->nodeNameResolver->getName($node->class);
-            if (!\in_array($className, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::PARENT()->getValue()], \true)) {
+            if (!\in_array($className, [\Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::PARENT], \true)) {
                 return new \PHPStan\Type\ObjectType($className);
             }
         }

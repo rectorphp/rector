@@ -13,7 +13,6 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use RectorPrefix20220529\Symfony\Contracts\Service\Attribute\Required;
 /**
@@ -42,7 +41,7 @@ final class IterableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     /**
      * @param IterableType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getItemType(), $typeKind);
         if ($itemTypeNode instanceof \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode) {
@@ -53,7 +52,7 @@ final class IterableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     /**
      * @param IterableType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
         return new \PhpParser\Node\Name('iterable');
     }

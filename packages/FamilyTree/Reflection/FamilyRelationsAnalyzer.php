@@ -116,7 +116,7 @@ final class FamilyRelationsAnalyzer
                 continue;
             }
             $varType = new \PHPStan\Type\UnionType([$varType, new \PHPStan\Type\NullType()]);
-            $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+            $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
             return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
         }
         return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);

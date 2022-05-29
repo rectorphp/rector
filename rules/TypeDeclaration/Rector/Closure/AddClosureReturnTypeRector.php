@@ -69,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         if ($returnTypeNode === null) {
             return null;
         }

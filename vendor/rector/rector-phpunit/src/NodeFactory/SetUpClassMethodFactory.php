@@ -52,7 +52,7 @@ final class SetUpClassMethodFactory
     }
     public function createParentStaticCall() : \PhpParser\Node\Stmt\Expression
     {
-        $parentSetupStaticCall = $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::PARENT(), \Rector\Core\ValueObject\MethodName::SET_UP);
+        $parentSetupStaticCall = $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::PARENT, \Rector\Core\ValueObject\MethodName::SET_UP);
         return new \PhpParser\Node\Stmt\Expression($parentSetupStaticCall);
     }
 }

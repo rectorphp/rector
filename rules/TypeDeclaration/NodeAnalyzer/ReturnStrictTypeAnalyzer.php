@@ -76,6 +76,6 @@ final class ReturnStrictTypeAnalyzer
         if ($returnType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
     }
 }

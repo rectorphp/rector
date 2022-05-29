@@ -164,7 +164,7 @@ CODE_SAMPLE
             if ($paramType->isSuperTypeOf(new \PHPStan\Type\MixedType())->yes()) {
                 continue;
             }
-            $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedParamType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+            $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedParamType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
             if ($this->shouldSkipParamTypeRefactor($param->type, $phpParserUnionType)) {
                 continue;
             }
@@ -201,7 +201,7 @@ CODE_SAMPLE
         if ($uniqueatedReturnType->isSuperTypeOf(new \PHPStan\Type\MixedType())->yes()) {
             return;
         }
-        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
             return;
         }

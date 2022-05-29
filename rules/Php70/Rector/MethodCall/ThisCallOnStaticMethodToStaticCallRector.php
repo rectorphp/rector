@@ -111,22 +111,25 @@ CODE_SAMPLE
         $objectReference = $this->resolveClassSelf($node);
         return $this->nodeFactory->createStaticCall($objectReference, $methodName, $node->args);
     }
-    private function resolveClassSelf(\PhpParser\Node\Expr\MethodCall $methodCall) : \Rector\Core\Enum\ObjectReference
+    /**
+     * @return ObjectReference::STATIC|ObjectReference::SELF
+     */
+    private function resolveClassSelf(\PhpParser\Node\Expr\MethodCall $methodCall) : string
     {
         $classLike = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\Class_::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
-            return \Rector\Core\Enum\ObjectReference::STATIC();
+            return \Rector\Core\Enum\ObjectReference::STATIC;
         }
         if ($classLike->isFinal()) {
-            return \Rector\Core\Enum\ObjectReference::SELF();
+            return \Rector\Core\Enum\ObjectReference::SELF;
         }
         $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
         if (!$methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
-            return \Rector\Core\Enum\ObjectReference::STATIC();
+            return \Rector\Core\Enum\ObjectReference::STATIC;
         }
         if (!$methodReflection->isPrivate()) {
-            return \Rector\Core\Enum\ObjectReference::STATIC();
+            return \Rector\Core\Enum\ObjectReference::STATIC;
         }
-        return \Rector\Core\Enum\ObjectReference::SELF();
+        return \Rector\Core\Enum\ObjectReference::SELF;
     }
 }

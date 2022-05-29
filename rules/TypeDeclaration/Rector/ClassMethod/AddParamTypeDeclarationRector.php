@@ -144,7 +144,7 @@ CODE_SAMPLE
                 return;
             }
         }
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($addParamTypeDeclaration->getParamType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($addParamTypeDeclaration->getParamType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         // remove it
         if ($addParamTypeDeclaration->getParamType() instanceof \PHPStan\Type\MixedType) {
             if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::MIXED_TYPE)) {

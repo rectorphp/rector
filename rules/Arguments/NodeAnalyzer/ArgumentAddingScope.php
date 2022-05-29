@@ -45,7 +45,7 @@ final class ArgumentAddingScope
             if (!$expr->class instanceof \PhpParser\Node\Name) {
                 return \false;
             }
-            if ($this->nodeNameResolver->isName($expr->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+            if ($this->nodeNameResolver->isName($expr->class, \Rector\Core\Enum\ObjectReference::PARENT)) {
                 return $scope === self::SCOPE_PARENT_CALL;
             }
             return $scope === self::SCOPE_METHOD_CALL;

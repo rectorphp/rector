@@ -135,7 +135,7 @@ CODE_SAMPLE
         if ($phpDocInfo->hasInvalidTag('@param')) {
             return \false;
         }
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
         // override existing type
         if ($paramTagValueNode !== null) {

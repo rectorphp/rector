@@ -86,13 +86,13 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
             return $type;
         }
         $loweredName = \strtolower($typeNode->name);
-        if ($loweredName === \Rector\Core\Enum\ObjectReference::SELF()->getValue()) {
+        if ($loweredName === \Rector\Core\Enum\ObjectReference::SELF) {
             return $this->mapSelf($node);
         }
-        if ($loweredName === \Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
+        if ($loweredName === \Rector\Core\Enum\ObjectReference::PARENT) {
             return $this->mapParent($node);
         }
-        if ($loweredName === \Rector\Core\Enum\ObjectReference::STATIC()->getValue()) {
+        if ($loweredName === \Rector\Core\Enum\ObjectReference::STATIC) {
             return $this->mapStatic($node);
         }
         if ($loweredName === 'iterable') {

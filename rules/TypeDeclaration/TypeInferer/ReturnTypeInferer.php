@@ -260,7 +260,7 @@ final class ReturnTypeInferer
         if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }
-        return $type->getClassName() === \Rector\Core\Enum\ObjectReference::STATIC()->getValue();
+        return $type->getClassName() === \Rector\Core\Enum\ObjectReference::STATIC;
     }
     /**
      * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers

@@ -156,7 +156,7 @@ final class AnonymousFunctionFactory
             return null;
         }
         if (!$functionVariantWithPhpDoc->getReturnType() instanceof \PHPStan\Type\MixedType) {
-            $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+            $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
             $anonymousFunction->returnType = $returnType;
         }
         // does method return something?
@@ -325,7 +325,7 @@ final class AnonymousFunctionFactory
         if ($parameterReflection->getType() instanceof \PHPStan\Type\MixedType) {
             return;
         }
-        $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+        $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
     }
     private function applyParamByReference(\PhpParser\Node\Param $param, \PHPStan\Reflection\ParameterReflection $parameterReflection) : void
     {

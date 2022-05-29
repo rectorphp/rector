@@ -122,7 +122,7 @@ CODE_SAMPLE
         if (!$staticCall->class instanceof \PhpParser\Node\Name) {
             return \true;
         }
-        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT)) {
             return \true;
         }
         return $class->extends instanceof \PhpParser\Node\Name\FullyQualified && !$this->reflectionProvider->hasClass($class->extends->toString());

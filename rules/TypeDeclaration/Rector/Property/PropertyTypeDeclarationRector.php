@@ -131,7 +131,7 @@ CODE_SAMPLE
     }
     private function completeTypedProperty(\PHPStan\Type\Type $type, \PhpParser\Node\Stmt\Property $property) : void
     {
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
         if ($propertyTypeNode === null) {
             return;
         }

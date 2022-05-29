@@ -41,19 +41,20 @@ final class VoidTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\T
     /**
      * @param VoidType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(self::VOID);
     }
     /**
+     * @param TypeKind::* $typeKind
      * @param VoidType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::VOID_TYPE)) {
             return null;
         }
-        if (\in_array($typeKind->getValue(), [\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY()], \true)) {
+        if (\in_array($typeKind, [\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY], \true)) {
             return null;
         }
         return new \PhpParser\Node\Name(self::VOID);

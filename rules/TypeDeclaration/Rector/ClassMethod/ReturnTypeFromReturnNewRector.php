@@ -110,7 +110,7 @@ CODE_SAMPLE
             $newTypes[] = $this->createObjectTypeFromNew($new);
         }
         $returnType = $this->typeFactory->createMixedPassedOrUnionType($newTypes);
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         $node->returnType = $returnTypeNode;
         return $node;
     }
@@ -127,12 +127,12 @@ CODE_SAMPLE
         if ($className === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if ($className === \Rector\Core\Enum\ObjectReference::STATIC()->getValue() || $className === \Rector\Core\Enum\ObjectReference::SELF()->getValue()) {
+        if ($className === \Rector\Core\Enum\ObjectReference::STATIC || $className === \Rector\Core\Enum\ObjectReference::SELF) {
             $classReflection = $this->reflectionResolver->resolveClassReflection($new);
             if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            if ($className === \Rector\Core\Enum\ObjectReference::SELF()->getValue()) {
+            if ($className === \Rector\Core\Enum\ObjectReference::SELF) {
                 return new \Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType($classReflection);
             }
             return new \PHPStan\Type\StaticType($classReflection);

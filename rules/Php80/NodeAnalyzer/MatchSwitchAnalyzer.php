@@ -105,13 +105,13 @@ final class MatchSwitchAnalyzer
     }
     /**
      * @param CondAndExpr[] $condAndExprs
-     * @return MatchKind[]
+     * @return array<MatchKind::*>
      */
     private function resolveUniqueKindsWithoutThrows(array $condAndExprs) : array
     {
         $condAndExprKinds = [];
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->equalsMatchKind(\Rector\Php80\Enum\MatchKind::THROW())) {
+            if ($condAndExpr->equalsMatchKind(\Rector\Php80\Enum\MatchKind::THROW)) {
                 continue;
             }
             $condAndExprKinds[] = $condAndExpr->getMatchKind();

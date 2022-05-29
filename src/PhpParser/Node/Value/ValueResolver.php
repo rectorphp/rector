@@ -97,7 +97,7 @@ final class ValueResolver
         }
         if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch && $resolvedClassReference) {
             $class = $this->nodeNameResolver->getName($expr->class);
-            if (\in_array($class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()], \true)) {
+            if (\in_array($class, [\Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::STATIC], \true)) {
                 // @todo scope is needed
                 $classLike = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\ClassLike::class);
                 if ($classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
@@ -255,7 +255,7 @@ final class ValueResolver
         if ($constant === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if ($class === \Rector\Core\Enum\ObjectReference::SELF()->getValue()) {
+        if ($class === \Rector\Core\Enum\ObjectReference::SELF) {
             $classLike = $this->betterNodeFinder->findParentType($classConstFetch, \PhpParser\Node\Stmt\ClassLike::class);
             if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();

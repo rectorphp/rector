@@ -113,7 +113,7 @@ CODE_SAMPLE
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $varType);
             return $node;
         }
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
         if (!$propertyTypeNode instanceof \PhpParser\Node) {
             return null;
         }

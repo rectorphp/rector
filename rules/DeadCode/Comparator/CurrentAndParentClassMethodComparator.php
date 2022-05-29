@@ -73,7 +73,7 @@ final class CurrentAndParentClassMethodComparator
         if (!$this->nodeNameResolver->areNamesEqual($staticCall->name, $classMethod->name)) {
             return \false;
         }
-        return $this->nodeNameResolver->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue());
+        return $this->nodeNameResolver->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT);
     }
     /**
      * @param Arg[]|VariadicPlaceholder[] $parentStaticCallArgs

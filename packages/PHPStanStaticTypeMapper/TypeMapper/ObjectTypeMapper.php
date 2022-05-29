@@ -43,7 +43,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
     /**
      * @param ObjectType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getClassName());
@@ -66,7 +66,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
     /**
      * @param ObjectType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
         if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType) {
             return new \PhpParser\Node\Name('self');
@@ -106,7 +106,10 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
-    private function mapGenericObjectType(\PHPStan\Type\Generic\GenericObjectType $genericObjectType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    /**
+     * @param TypeKind::* $typeKind
+     */
+    private function mapGenericObjectType(\PHPStan\Type\Generic\GenericObjectType $genericObjectType, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $name = $this->resolveGenericObjectTypeName($genericObjectType);
         $identifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($name);

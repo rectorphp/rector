@@ -81,7 +81,7 @@ final class GetClassToInstanceOfRector extends \Rector\Core\Rector\AbstractRecto
         if ($className === null) {
             return null;
         }
-        if ($className === \Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
+        if ($className === \Rector\Core\Enum\ObjectReference::PARENT) {
             return null;
         }
         $class = \in_array($className, self::NO_NAMESPACED_CLASSNAMES, \true) ? new \PhpParser\Node\Name($className) : new \PhpParser\Node\Name\FullyQualified($className);

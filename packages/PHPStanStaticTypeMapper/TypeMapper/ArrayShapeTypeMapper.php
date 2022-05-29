@@ -52,7 +52,7 @@ final class ArrayShapeTypeMapper
             }
             $keyDocTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($keyValue);
             $valueType = $constantArrayType->getValueTypes()[$index];
-            $valueDocTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($valueType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+            $valueDocTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($valueType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
             $arrayShapeItemNodes[] = new \PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode($keyDocTypeNode, $constantArrayType->isOptionalKey($index), $valueDocTypeNode);
         }
         return new \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode($arrayShapeItemNodes);

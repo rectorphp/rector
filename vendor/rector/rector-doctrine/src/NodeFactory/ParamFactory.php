@@ -70,7 +70,7 @@ final class ParamFactory
         $variable = new \PhpParser\Node\Expr\Variable($propertyName);
         $param = new \PhpParser\Node\Param($variable);
         $paramType = $this->nodeTypeResolver->getType($propertyFetch);
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         // the param is optional - make it nullable
         if (\in_array($propertyName, $optionalParamNames, \true)) {
             if (!$paramTypeNode instanceof \PhpParser\Node\ComplexType && $paramTypeNode !== null) {

@@ -192,7 +192,7 @@ CODE_SAMPLE
         if ($this->traitTypeAnalyzer->isTraitType($inferedType)) {
             return;
         }
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         if (!$paramTypeNode instanceof \PhpParser\Node) {
             return;
         }

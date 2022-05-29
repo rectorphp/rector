@@ -23,11 +23,12 @@ final class NeverTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         return \PHPStan\Type\NeverType::class;
     }
     /**
+     * @param TypeKind::* $typeKind
      * @param NeverType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN())) {
+        if ($typeKind === \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN) {
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('never');
         }
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('mixed');
@@ -35,7 +36,7 @@ final class NeverTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @param NeverType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
         return null;
     }

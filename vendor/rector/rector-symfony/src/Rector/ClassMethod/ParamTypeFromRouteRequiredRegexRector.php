@@ -99,7 +99,7 @@ CODE_SAMPLE
             if ($param->type !== null) {
                 continue;
             }
-            $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+            $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
             $param->type = $paramTypeNode;
             $hasChanged = \true;
         }

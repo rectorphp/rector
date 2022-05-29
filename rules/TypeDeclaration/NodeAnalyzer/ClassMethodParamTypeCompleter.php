@@ -58,7 +58,7 @@ final class ClassMethodParamTypeCompleter
             if ($this->shouldSkipArgumentStaticType($classMethod, $argumentStaticType, $position, $maxUnionTypes)) {
                 continue;
             }
-            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
             if (!$phpParserTypeNode instanceof \PhpParser\Node) {
                 continue;
             }

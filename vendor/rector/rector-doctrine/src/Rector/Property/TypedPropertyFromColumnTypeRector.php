@@ -108,7 +108,7 @@ CODE_SAMPLE
         if ($isNullable && !\PHPStan\Type\TypeCombinator::containsNull($propertyType)) {
             $propertyType = \PHPStan\Type\TypeCombinator::addNull($propertyType);
         }
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
         if ($typeNode === null) {
             return null;
         }

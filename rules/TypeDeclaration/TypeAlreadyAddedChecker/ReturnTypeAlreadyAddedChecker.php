@@ -70,7 +70,7 @@ final class ReturnTypeAlreadyAddedChecker
         if ($nodeReturnType === null) {
             return \false;
         }
-        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         if ($this->nodeComparator->areNodesEqual($nodeReturnType, $returnNode)) {
             return \true;
         }

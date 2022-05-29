@@ -192,7 +192,7 @@ final class ClassDependencyManipulator
     }
     private function createParentClassMethodCall(string $methodName) : \PhpParser\Node\Stmt\Expression
     {
-        $staticCall = new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT()->getValue()), $methodName);
+        $staticCall = new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT), $methodName);
         return new \PhpParser\Node\Stmt\Expression($staticCall);
     }
     private function isParamInConstructor(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : bool

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8be1dd83d2a978f00dd792e99c4ad670
+class ComposerStaticInit79a7d8eb53b40f14bbebc8ddde594b30
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -81,7 +81,6 @@ class ComposerStaticInit8be1dd83d2a978f00dd792e99c4ad670
             'RectorPrefix20220529\\Psr\\Container\\' => 35,
             'RectorPrefix20220529\\Psr\\Cache\\' => 31,
             'RectorPrefix20220529\\OndraM\\CiDetector\\' => 39,
-            'RectorPrefix20220529\\MyCLabs\\Enum\\' => 34,
             'RectorPrefix20220529\\Helmich\\TypoScriptParser\\' => 46,
             'RectorPrefix20220529\\Evenement\\' => 31,
             'RectorPrefix20220529\\Doctrine\\Inflector\\' => 40,
@@ -312,10 +311,6 @@ class ComposerStaticInit8be1dd83d2a978f00dd792e99c4ad670
         'RectorPrefix20220529\\OndraM\\CiDetector\\' => 
         array (
             0 => __DIR__ . '/..' . '/ondram/ci-detector/src',
-        ),
-        'RectorPrefix20220529\\MyCLabs\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
         'RectorPrefix20220529\\Helmich\\TypoScriptParser\\' => 
         array (
@@ -808,8 +803,6 @@ class ComposerStaticInit8be1dd83d2a978f00dd792e99c4ad670
         'RectorPrefix20220529\\Helmich\\TypoScriptParser\\Tokenizer\\TokenizerInterface' => __DIR__ . '/..' . '/helmich/typo3-typoscript-parser/src/Tokenizer/TokenizerInterface.php',
         'RectorPrefix20220529\\Helmich\\TypoScriptParser\\Tokenizer\\UnknownOperatorException' => __DIR__ . '/..' . '/helmich/typo3-typoscript-parser/src/Tokenizer/UnknownOperatorException.php',
         'RectorPrefix20220529\\Helmich\\TypoScriptParser\\TypoScriptParserExtension' => __DIR__ . '/..' . '/helmich/typo3-typoscript-parser/src/TypoScriptParserExtension.php',
-        'RectorPrefix20220529\\MyCLabs\\Enum\\Enum' => __DIR__ . '/..' . '/myclabs/php-enum/src/Enum.php',
-        'RectorPrefix20220529\\MyCLabs\\Enum\\PHPUnit\\Comparator' => __DIR__ . '/..' . '/myclabs/php-enum/src/PHPUnit/Comparator.php',
         'RectorPrefix20220529\\Nette\\ArgumentOutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix20220529\\Nette\\DeprecatedException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix20220529\\Nette\\DirectoryNotFoundException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
@@ -3850,9 +3843,9 @@ class ComposerStaticInit8be1dd83d2a978f00dd792e99c4ad670
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8be1dd83d2a978f00dd792e99c4ad670::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8be1dd83d2a978f00dd792e99c4ad670::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8be1dd83d2a978f00dd792e99c4ad670::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit79a7d8eb53b40f14bbebc8ddde594b30::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit79a7d8eb53b40f14bbebc8ddde594b30::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit79a7d8eb53b40f14bbebc8ddde594b30::$classMap;
 
         }, null, ClassLoader::class);
     }

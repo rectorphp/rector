@@ -215,7 +215,7 @@ final class InitializeArgumentsClassMethodFactory
         if ($this->isTraitType($inferredType)) {
             return self::MIXED;
         }
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferredType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferredType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         if ($paramTypeNode instanceof \PhpParser\Node\UnionType) {
             return self::MIXED;
         }

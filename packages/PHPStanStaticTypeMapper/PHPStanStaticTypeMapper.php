@@ -28,7 +28,10 @@ final class PHPStanStaticTypeMapper
     {
         $this->typeMappers = $typeMappers;
     }
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    /**
+     * @param TypeKind::* $typeKind
+     */
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         foreach ($this->typeMappers as $typeMapper) {
             if (!\is_a($type, $typeMapper->getNodeClass(), \true)) {
@@ -48,9 +51,10 @@ final class PHPStanStaticTypeMapper
         throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }
     /**
+     * @param TypeKind::* $typeKind
      * @return \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind)
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind)
     {
         foreach ($this->typeMappers as $typeMapper) {
             if (!\is_a($type, $typeMapper->getNodeClass(), \true)) {

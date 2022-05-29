@@ -143,9 +143,9 @@ CODE_SAMPLE
         }
         // rename ParentClass
         if ($this->isName($staticCall->class, $parentClassReflection->getName())) {
-            $staticCall->class = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT()->getValue());
+            $staticCall->class = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT);
         }
-        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT)) {
             return;
         }
         // it's not a parent PHP 4 constructor call

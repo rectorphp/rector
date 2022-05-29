@@ -105,7 +105,7 @@ CODE_SAMPLE
             return;
         }
         $inferedType = $this->paramTypeInferer->inferParam($param);
-        $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+        $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         if (!$paramType instanceof \PhpParser\Node) {
             return;
         }

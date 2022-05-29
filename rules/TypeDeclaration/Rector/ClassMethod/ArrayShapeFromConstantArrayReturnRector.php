@@ -105,7 +105,7 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $returnExprTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($returnExprType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $returnExprTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($returnExprType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         if ($returnExprTypeNode instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
             return null;
         }

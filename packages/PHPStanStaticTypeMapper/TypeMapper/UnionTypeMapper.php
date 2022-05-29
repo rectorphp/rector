@@ -103,7 +103,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @param UnionType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $unionTypesNodes = [];
         $skipIterable = $this->shouldSkipIterable($type);
@@ -119,7 +119,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @param UnionType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
         $arrayNode = $this->matchArrayTypes($type);
         if ($arrayNode !== null) {
@@ -199,13 +199,14 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     private function hasObjectAndStaticType(\PhpParser\Node\UnionType $phpParserUnionType) : bool
     {
         $typeNames = $this->nodeNameResolver->getNames($phpParserUnionType->types);
-        $diff = \array_diff(['object', \Rector\Core\Enum\ObjectReference::STATIC()->getValue()], $typeNames);
+        $diff = \array_diff(['object', \Rector\Core\Enum\ObjectReference::STATIC], $typeNames);
         return $diff === [];
     }
     /**
+     * @param TypeKind::* $typeKind
      * @return Name|FullyQualified|PhpParserUnionType|NullableType|null
      */
-    private function matchTypeForUnionedObjectTypes(\PHPStan\Type\UnionType $unionType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
+    private function matchTypeForUnionedObjectTypes(\PHPStan\Type\UnionType $unionType, string $typeKind) : ?\PhpParser\Node
     {
         $phpParserUnionType = $this->matchPhpParserUnionType($unionType, $typeKind);
         if ($phpParserUnionType !== null) {
@@ -254,7 +255,10 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         }
         return new \PhpParser\Node\Name\FullyQualified($compatibleObjectType->getClassName());
     }
-    private function matchPhpParserUnionType(\PHPStan\Type\UnionType $unionType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node\UnionType
+    /**
+     * @param TypeKind::* $typeKind
+     */
+    private function matchPhpParserUnionType(\PHPStan\Type\UnionType $unionType, string $typeKind) : ?\PhpParser\Node\UnionType
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES)) {
             return null;
@@ -271,7 +275,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
              *
              * @var Identifier|Name|null $phpParserNode
              */
-            $phpParserNode = $unionedType instanceof \PHPStan\Type\NullType && $typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY()) ? new \PhpParser\Node\Name('null') : $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionedType, $typeKind);
+            $phpParserNode = $unionedType instanceof \PHPStan\Type\NullType && $typeKind === \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY ? new \PhpParser\Node\Name('null') : $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionedType, $typeKind);
             if ($phpParserNode === null) {
                 return null;
             }

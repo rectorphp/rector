@@ -92,9 +92,9 @@ final class PropertyNodeParamTypeInferer implements \Rector\TypeDeclaration\Cont
                 return null;
             }
             $exprType = $this->nodeTypeResolver->getType($node->expr);
-            $nodeExprType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($exprType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+            $nodeExprType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($exprType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
             $varType = $this->nodeTypeResolver->getType($node->var);
-            $nodeVarType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::ANY());
+            $nodeVarType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::ANY);
             if ($nodeExprType instanceof \PhpParser\Node && !$this->nodeComparator->areNodesEqual($nodeExprType, $nodeVarType)) {
                 return null;
             }

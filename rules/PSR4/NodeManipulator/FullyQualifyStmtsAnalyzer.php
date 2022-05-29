@@ -60,7 +60,7 @@ final class FullyQualifyStmtsAnalyzer
                 return null;
             }
             $name = $this->nodeNameResolver->getName($node);
-            if (\Rector\Core\Enum\ObjectReference::isValid($name)) {
+            if (\in_array($name, [\Rector\Core\Enum\ObjectReference::STATIC, \Rector\Core\Enum\ObjectReference::PARENT, \Rector\Core\Enum\ObjectReference::SELF], \true)) {
                 return null;
             }
             if ($this->isNativeConstant($node)) {

@@ -21,7 +21,7 @@ final class SelfStaticParentTypeSpecifier implements \Rector\TypeDeclaration\Con
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
-        return \Rector\Core\Enum\ObjectReference::isValid($objectType->getClassName());
+        return \in_array($objectType->getClassName(), [\Rector\Core\Enum\ObjectReference::STATIC, \Rector\Core\Enum\ObjectReference::PARENT, \Rector\Core\Enum\ObjectReference::SELF], \true);
     }
     public function resolveObjectReferenceType(\PHPStan\Type\ObjectType $objectType, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\TypeWithClassName
     {
@@ -30,10 +30,10 @@ final class SelfStaticParentTypeSpecifier implements \Rector\TypeDeclaration\Con
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $classReference = $objectType->getClassName();
-        if (\Rector\Core\Enum\ObjectReference::STATIC()->getValue() === $classReference) {
+        if ($classReference === \Rector\Core\Enum\ObjectReference::STATIC) {
             return new \PHPStan\Type\StaticType($classReflection);
         }
-        if (\Rector\Core\Enum\ObjectReference::SELF()->getValue() === $classReference) {
+        if ($classReference === \Rector\Core\Enum\ObjectReference::SELF) {
             return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($classReference, null, $classReflection);
         }
         $parentClassReflection = $classReflection->getParentClass();

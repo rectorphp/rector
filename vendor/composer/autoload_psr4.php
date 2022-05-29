@@ -59,7 +59,6 @@ return array(
     'RectorPrefix20220529\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'RectorPrefix20220529\\Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
     'RectorPrefix20220529\\OndraM\\CiDetector\\' => array($vendorDir . '/ondram/ci-detector/src'),
-    'RectorPrefix20220529\\MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
     'RectorPrefix20220529\\Helmich\\TypoScriptParser\\' => array($vendorDir . '/helmich/typo3-typoscript-parser/src'),
     'RectorPrefix20220529\\Evenement\\' => array($vendorDir . '/evenement/evenement/src/Evenement'),
     'RectorPrefix20220529\\Doctrine\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Inflector'),

@@ -95,7 +95,7 @@ CODE_SAMPLE
             if (!$this->isIntersectionableType($paramType)) {
                 continue;
             }
-            $phpParserIntersectionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+            $phpParserIntersectionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
             if (!$phpParserIntersectionType instanceof \PhpParser\Node\IntersectionType) {
                 continue;
             }

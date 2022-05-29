@@ -125,7 +125,7 @@ CODE_SAMPLE
         /** @var StaticCall[] $staticCalls */
         $staticCalls = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Expr\StaticCall::class);
         foreach ($staticCalls as $staticCall) {
-            if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+            if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT)) {
                 continue;
             }
             if (!$this->isName($staticCall->name, $classMethodName)) {

@@ -48,7 +48,7 @@ final class PropertyTypeDecorator
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
-            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
             if ($phpParserType !== null) {
                 $property->type = $phpParserType;
                 if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {

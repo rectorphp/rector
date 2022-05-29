@@ -61,7 +61,7 @@ final class PropertyFetchAnalyzer
             if (!$node->class instanceof \PhpParser\Node\Name) {
                 return \false;
             }
-            return $this->nodeNameResolver->isNames($node->class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()]);
+            return $this->nodeNameResolver->isNames($node->class, [\Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::STATIC]);
         }
         return \false;
     }
@@ -87,7 +87,7 @@ final class PropertyFetchAnalyzer
         if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch && !$this->nodeNameResolver->isName($expr->var, self::THIS)) {
             return \false;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch && !$this->nodeNameResolver->isName($expr->class, \Rector\Core\Enum\ObjectReference::SELF()->getValue())) {
+        if ($expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch && !$this->nodeNameResolver->isName($expr->class, \Rector\Core\Enum\ObjectReference::SELF)) {
             return \false;
         }
         $class = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\Class_::class);

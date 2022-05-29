@@ -149,7 +149,7 @@ CODE_SAMPLE
         if ($resolvedType instanceof \PHPStan\Type\VoidType) {
             return null;
         }
-        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($resolvedType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($resolvedType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         if (!$returnType instanceof \PhpParser\Node) {
             return null;
         }

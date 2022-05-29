@@ -88,7 +88,7 @@ CODE_SAMPLE
         if ($propertyType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         if (!$propertyTypeNode instanceof \PhpParser\Node) {
             return null;
         }

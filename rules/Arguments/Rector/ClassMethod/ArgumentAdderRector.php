@@ -252,7 +252,7 @@ CODE_SAMPLE
         }
         $param = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($argumentName), \PhpParser\BuilderHelpers::normalizeValue($defaultValue));
         if ($type !== null) {
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
             $param->type = $typeNode;
         }
         $classMethod->params[$position] = $param;
@@ -267,7 +267,7 @@ CODE_SAMPLE
         if (!$staticCall->class instanceof \PhpParser\Node\Name) {
             return;
         }
-        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT)) {
             return;
         }
         $this->fillGapBetweenWithDefaultValue($staticCall, $position);

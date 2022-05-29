@@ -72,7 +72,7 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         if ($this->isExistingClass($name)) {
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($name);
         }
-        if (\Rector\Core\Enum\ObjectReference::isValid($name)) {
+        if (\in_array($name, [\Rector\Core\Enum\ObjectReference::STATIC, \Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::PARENT], \true)) {
             return $this->createClassReferenceType($node, $name);
         }
         return $this->createScalarType($name);
@@ -97,10 +97,10 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         }
         $className = (string) $this->nodeNameResolver->getName($classLike);
         $classReflection = $this->reflectionProvider->getClass($className);
-        if ($reference === \Rector\Core\Enum\ObjectReference::STATIC()->getValue()) {
+        if ($reference === \Rector\Core\Enum\ObjectReference::STATIC) {
             return new \PHPStan\Type\StaticType($classReflection);
         }
-        if ($reference === \Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
+        if ($reference === \Rector\Core\Enum\ObjectReference::PARENT) {
             $parentClassReflection = $classReflection->getParentClass();
             if ($parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
                 return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($parentClassReflection);

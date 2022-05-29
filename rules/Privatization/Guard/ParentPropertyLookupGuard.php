@@ -116,7 +116,7 @@ final class ParentPropertyLookupGuard
                 }
                 return $this->nodeNameResolver->isName($subNode, $propertyName);
             }
-            if (!$this->nodeNameResolver->isNames($subNode->class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue(), $className])) {
+            if (!$this->nodeNameResolver->isNames($subNode->class, [\Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::STATIC, $className])) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($subNode->name, $propertyName);

@@ -147,7 +147,7 @@ CODE_SAMPLE
             return \true;
         }
         $className = $this->getName($staticCall->class);
-        if (\Rector\Core\Enum\ObjectReference::isValid($className)) {
+        if (\in_array($className, [\Rector\Core\Enum\ObjectReference::PARENT, \Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::STATIC], \true)) {
             return \true;
         }
         if ($className === 'class') {

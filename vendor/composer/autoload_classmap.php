@@ -454,8 +454,6 @@ return array(
     'RectorPrefix20220529\\Helmich\\TypoScriptParser\\Tokenizer\\TokenizerInterface' => $vendorDir . '/helmich/typo3-typoscript-parser/src/Tokenizer/TokenizerInterface.php',
     'RectorPrefix20220529\\Helmich\\TypoScriptParser\\Tokenizer\\UnknownOperatorException' => $vendorDir . '/helmich/typo3-typoscript-parser/src/Tokenizer/UnknownOperatorException.php',
     'RectorPrefix20220529\\Helmich\\TypoScriptParser\\TypoScriptParserExtension' => $vendorDir . '/helmich/typo3-typoscript-parser/src/TypoScriptParserExtension.php',
-    'RectorPrefix20220529\\MyCLabs\\Enum\\Enum' => $vendorDir . '/myclabs/php-enum/src/Enum.php',
-    'RectorPrefix20220529\\MyCLabs\\Enum\\PHPUnit\\Comparator' => $vendorDir . '/myclabs/php-enum/src/PHPUnit/Comparator.php',
     'RectorPrefix20220529\\Nette\\ArgumentOutOfRangeException' => $vendorDir . '/nette/utils/src/exceptions.php',
     'RectorPrefix20220529\\Nette\\DeprecatedException' => $vendorDir . '/nette/utils/src/exceptions.php',
     'RectorPrefix20220529\\Nette\\DirectoryNotFoundException' => $vendorDir . '/nette/utils/src/exceptions.php',

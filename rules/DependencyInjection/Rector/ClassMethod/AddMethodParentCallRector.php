@@ -101,7 +101,7 @@ CODE_SAMPLE
     }
     private function createParentStaticCall(string $method) : \PhpParser\Node\Stmt\Expression
     {
-        $staticCall = $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::PARENT(), $method);
+        $staticCall = $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::PARENT, $method);
         return new \PhpParser\Node\Stmt\Expression($staticCall);
     }
     /**
@@ -113,7 +113,7 @@ CODE_SAMPLE
             if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
                 return \false;
             }
-            if (!$this->isName($node->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+            if (!$this->isName($node->class, \Rector\Core\Enum\ObjectReference::PARENT)) {
                 return \false;
             }
             return $this->isName($node->name, $method);

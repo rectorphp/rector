@@ -68,13 +68,13 @@ CODE_SAMPLE
         }
         $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
-            return $this->nodeFactory->createClassConstFetch(\Rector\Core\Enum\ObjectReference::STATIC(), 'class');
+            return $this->nodeFactory->createClassConstFetch(\Rector\Core\Enum\ObjectReference::STATIC, 'class');
         }
         if ($this->classAnalyzer->isAnonymousClass($class)) {
             return null;
         }
         if (!$class->isFinal()) {
-            return $this->nodeFactory->createClassConstFetch(\Rector\Core\Enum\ObjectReference::STATIC(), 'class');
+            return $this->nodeFactory->createClassConstFetch(\Rector\Core\Enum\ObjectReference::STATIC, 'class');
         }
         return null;
     }

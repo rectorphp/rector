@@ -150,7 +150,7 @@ final class ArrayCallableMethodMatcher
     private function resolveClassConstFetchType(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch)
     {
         $classConstantReference = $this->valueResolver->getValue($classConstFetch);
-        if (\Rector\Core\Enum\ObjectReference::STATIC()->getValue() === $classConstantReference) {
+        if ($classConstantReference === \Rector\Core\Enum\ObjectReference::STATIC) {
             $classLike = $this->betterNodeFinder->findParentType($classConstFetch, \PhpParser\Node\Stmt\Class_::class);
             if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
                 return new \PHPStan\Type\MixedType();

@@ -59,10 +59,10 @@ CODE_SAMPLE
         if (!$class->isFinal()) {
             return null;
         }
-        if (!$this->isName($node->class, \Rector\Core\Enum\ObjectReference::STATIC()->getValue())) {
+        if (!$this->isName($node->class, \Rector\Core\Enum\ObjectReference::STATIC)) {
             return null;
         }
-        $node->class = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF()->getValue());
+        $node->class = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF);
         return $node;
     }
 }

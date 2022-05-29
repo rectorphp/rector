@@ -9,6 +9,7 @@ use Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
 use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use ReflectionClass;
 use RectorPrefix20220529\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * @see \Rector\Core\Tests\Php\PhpVersionProviderTest
@@ -71,7 +72,10 @@ final class PhpVersionProvider
         if ($phpVersionFeatures === null) {
             return;
         }
-        if (\Rector\Core\ValueObject\PhpVersion::isValid($phpVersionFeatures)) {
+        // get all constants
+        $phpVersionReflectionClass = new \ReflectionClass(\Rector\Core\ValueObject\PhpVersion::class);
+        // @todo check
+        if (\in_array($phpVersionFeatures, $phpVersionReflectionClass->getConstants(), \true)) {
             return;
         }
         if (!\is_int($phpVersionFeatures)) {

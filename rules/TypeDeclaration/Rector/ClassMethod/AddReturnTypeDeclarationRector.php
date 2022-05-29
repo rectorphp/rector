@@ -109,7 +109,7 @@ CODE_SAMPLE
                 return;
             }
         }
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($newType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($newType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         $classMethod->returnType = $returnTypeNode;
     }
 }

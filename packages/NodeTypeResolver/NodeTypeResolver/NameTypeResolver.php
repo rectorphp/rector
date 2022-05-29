@@ -59,7 +59,7 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
      */
     public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
-        if ($node->toString() === \Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
+        if ($node->toString() === \Rector\Core\Enum\ObjectReference::PARENT) {
             return $this->resolveParent($node);
         }
         $fullyQualifiedName = $this->resolveFullyQualifiedName($node);
@@ -100,7 +100,7 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
     private function resolveFullyQualifiedName(\PhpParser\Node\Name $name) : string
     {
         $nameValue = $name->toString();
-        if (\in_array($nameValue, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue(), 'this'], \true)) {
+        if (\in_array($nameValue, [\Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::STATIC, 'this'], \true)) {
             $classLike = $this->betterNodeFinder->findParentType($name, \PhpParser\Node\Stmt\ClassLike::class);
             if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
                 return $name->toString();
