@@ -49,7 +49,7 @@ jobs:
             -   run: composer install --no-dev --ansi
 
             # resolve rector version
-            -   run: bin/resolve-version.php
+            -   run: php bin/resolve-version.php
 
             # early downgrade individual functions
             -   run: bin/rector process src/functions -c build/config/config-downgrade.php --ansi
