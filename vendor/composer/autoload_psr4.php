@@ -41,7 +41,6 @@ return array(
     'RectorPrefix20220529\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
     'RectorPrefix20220529\\Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'RectorPrefix20220529\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
-    'RectorPrefix20220529\\Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'RectorPrefix20220529\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'RectorPrefix20220529\\Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
     'RectorPrefix20220529\\Symfony\\Component\\DependencyInjection\\' => array($vendorDir . '/symfony/dependency-injection'),

@@ -26,7 +26,7 @@ class ProcessHelper extends \RectorPrefix20220529\Symfony\Component\Console\Help
     /**
      * Runs an external process.
      *
-     * @param array|Process $cmd      An instance of Process or an array of the command and arguments
+     * @param mixed[]|\Symfony\Component\Process\Process $cmd An instance of Process or an array of the command and arguments
      * @param callable|null $callback A PHP callback to run whenever there is some
      *                                output available on STDOUT or STDERR
      */
@@ -73,7 +73,7 @@ class ProcessHelper extends \RectorPrefix20220529\Symfony\Component\Console\Help
      * This is identical to run() except that an exception is thrown if the process
      * exits with a non-zero exit code.
      *
-     * @param array|Process $cmd      An instance of Process or a command to run
+     * @param mixed[]|\Symfony\Component\Process\Process $cmd An instance of Process or a command to run
      * @param callable|null $callback A PHP callback to run whenever there is some
      *                                output available on STDOUT or STDERR
      *
