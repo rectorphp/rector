@@ -51,6 +51,9 @@ final class VersionResolver
             );
         }
 
+        // debug output
+        var_dump($tagExecOutput);
+
         if ($tagExecOutput !== []) {
             $tag = $tagExecOutput[0];
             if ($tag !== '') {
@@ -66,6 +69,9 @@ final class VersionResolver
                 'Ensure to run compile from composer git repository clone and that git binary is available.'
             );
         }
+
+        // debug output
+        var_dump($commitHashExecOutput);
 
         $version = trim($commitHashExecOutput[0]);
         return trim($version, '"');
