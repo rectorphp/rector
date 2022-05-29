@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Name;
@@ -99,6 +100,10 @@ final class PHPStanNodeScopeResolver
             &$nodeCallback,
             $isScopeRefreshing
         ): void {
+            if ($node instanceof Arg) {
+                $node->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+
             if ($node instanceof Foreach_) {
                 // decorate value as well
                 $node->valueVar->setAttribute(AttributeKey::SCOPE, $mutatingScope);
