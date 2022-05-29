@@ -38,7 +38,7 @@ for directory in $directories; do
         CONFIG_PATH_DOWNGRADE="build/config/config-downgrade-parallel.php"
     fi
 
-    php -d memory_limit=-1 bin/rector process $BUILD_DIRECTORY/$directory --config $CONFIG_PATH_DOWNGRADE --ansi
+    php -d memory_limit=-1 bin/rector process $directory --config $CONFIG_PATH_DOWNGRADE --working-dir $BUILD_DIRECTORY --ansi
 
     unset CONFIG_PATH_DOWNGRADE
 done
