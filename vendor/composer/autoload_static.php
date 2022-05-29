@@ -4,9 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5783dc4ed9bfd5cfbffa51438f68170f
+class ComposerStaticInit9e5b8fb18069f28961cfcc076bc98922
 {
     public static $files = array (
+        '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
@@ -50,6 +51,7 @@ class ComposerStaticInit5783dc4ed9bfd5cfbffa51438f68170f
             'RectorPrefix20220529\\Symplify\\ComposerJsonManipulator\\' => 54,
             'RectorPrefix20220529\\Symplify\\AutowireArrayParameter\\' => 53,
             'RectorPrefix20220529\\Symplify\\Astral\\' => 37,
+            'RectorPrefix20220529\\Symfony\\Polyfill\\Php81\\' => 44,
             'RectorPrefix20220529\\Symfony\\Contracts\\' => 39,
             'RectorPrefix20220529\\Symfony\\Component\\Yaml\\' => 44,
             'RectorPrefix20220529\\Symfony\\Component\\String\\' => 46,
@@ -197,6 +199,10 @@ class ComposerStaticInit5783dc4ed9bfd5cfbffa51438f68170f
         'RectorPrefix20220529\\Symplify\\Astral\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/astral/src',
+        ),
+        'RectorPrefix20220529\\Symfony\\Polyfill\\Php81\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php81',
         ),
         'RectorPrefix20220529\\Symfony\\Contracts\\' => 
         array (
@@ -1426,6 +1432,7 @@ class ComposerStaticInit5783dc4ed9bfd5cfbffa51438f68170f
         'RectorPrefix20220529\\Symfony\\Contracts\\Translation\\TranslatableInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatableInterface.php',
         'RectorPrefix20220529\\Symfony\\Contracts\\Translation\\TranslatorInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorInterface.php',
         'RectorPrefix20220529\\Symfony\\Contracts\\Translation\\TranslatorTrait' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorTrait.php',
+        'RectorPrefix20220529\\Symfony\\Polyfill\\Php81\\Php81' => __DIR__ . '/..' . '/symfony/polyfill-php81/Php81.php',
         'RectorPrefix20220529\\Symplify\\Astral\\Contract\\NodeNameResolverInterface' => __DIR__ . '/..' . '/symplify/astral/src/Contract/NodeNameResolverInterface.php',
         'RectorPrefix20220529\\Symplify\\Astral\\Contract\\NodeValueResolver\\NodeValueResolverInterface' => __DIR__ . '/..' . '/symplify/astral/src/Contract/NodeValueResolver/NodeValueResolverInterface.php',
         'RectorPrefix20220529\\Symplify\\Astral\\Exception\\ShouldNotHappenException' => __DIR__ . '/..' . '/symplify/astral/src/Exception/ShouldNotHappenException.php',
@@ -3475,6 +3482,7 @@ class ComposerStaticInit5783dc4ed9bfd5cfbffa51438f68170f
         'Rector\\Visibility\\Rector\\ClassMethod\\ExplicitPublicClassMethodRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php',
         'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
         'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
+        'ReturnTypeWillChange' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/ReturnTypeWillChange.php',
         'Ssch\\TYPO3Rector\\Configuration\\Typo3Option' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Configuration/Typo3Option.php',
         'Ssch\\TYPO3Rector\\Contract\\FileProcessor\\FlexForms\\Rector\\FlexFormRectorInterface' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/FileProcessor/FlexForms/Rector/FlexFormRectorInterface.php',
         'Ssch\\TYPO3Rector\\Contract\\FileProcessor\\Fluid\\Rector\\FluidRectorInterface' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/FileProcessor/Fluid/Rector/FluidRectorInterface.php',
@@ -3806,9 +3814,9 @@ class ComposerStaticInit5783dc4ed9bfd5cfbffa51438f68170f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5783dc4ed9bfd5cfbffa51438f68170f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5783dc4ed9bfd5cfbffa51438f68170f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5783dc4ed9bfd5cfbffa51438f68170f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9e5b8fb18069f28961cfcc076bc98922::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9e5b8fb18069f28961cfcc076bc98922::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9e5b8fb18069f28961cfcc076bc98922::$classMap;
 
         }, null, ClassLoader::class);
     }
