@@ -12,6 +12,8 @@ use Symfony\Component\Process\Process;
 /**
  * Inspired by https://github.com/composer/composer/blob/master/src/Composer/Composer.php
  * See https://github.com/composer/composer/blob/6587715d0f8cae0cd39073b3bc5f018d0e6b84fe/src/Composer/Compiler.php#L208
+ *
+ * @see \Rector\Core\Tests\Application\VersionResolverTest
  */
 final class VersionResolver
 {
@@ -32,26 +34,31 @@ final class VersionResolver
 
     public static function resolvePackageVersion(): string
     {
-        $pointsAtProcess = new Process([self::GIT, 'tag', '--points-at'], __DIR__);
-        if ($pointsAtProcess->run() !== Command::SUCCESS) {
+        // resolve current tag
+        exec('git tag --points-at', $tagExecOutput, $tagExecResultCode);
+
+        if ($tagExecResultCode !== Command::SUCCESS) {
             throw new VersionException(
-                'You must ensure to run compile from composer git repository clone and that git binary is available.'
+                'Ensure to run compile from composer git repository clone and that git binary is available.'
             );
         }
 
-        $tag = trim($pointsAtProcess->getOutput());
-        if ($tag !== '' && $tag !== '0') {
-            return $tag;
+        if ($tagExecOutput !== []) {
+            $tag = $tagExecOutput[0];
+            if ($tag !== '') {
+                return $tag;
+            }
         }
 
-        $process = new Process([self::GIT, 'log', '--pretty="%H"', '-n1', 'HEAD'], __DIR__);
-        if ($process->run() !== Command::SUCCESS) {
+        exec('git log --pretty="%H" -n1 HEAD', $commitHashExecOutput, $commitHashResultCode);
+
+        if ($commitHashResultCode !== Command::SUCCESS) {
             throw new VersionException(
-                'You must ensure to run compile from composer git repository clone and that git binary is available.'
+                'Ensure to run compile from composer git repository clone and that git binary is available.'
             );
         }
 
-        $version = trim($process->getOutput());
+        $version = trim($commitHashExecOutput[0]);
         return trim($version, '"');
     }
 
