@@ -9,8 +9,11 @@ $loader = require_once __DIR__.'/autoload.php';
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20220529\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInit60f38889a608bb03580a069a00c85f45', false) && !interface_exists('ComposerAutoloaderInit60f38889a608bb03580a069a00c85f45', false) && !trait_exists('ComposerAutoloaderInit60f38889a608bb03580a069a00c85f45', false)) {
-    spl_autoload_call('RectorPrefix20220529\ComposerAutoloaderInit60f38889a608bb03580a069a00c85f45');
+if (!class_exists('VersionResolver', false) && !interface_exists('VersionResolver', false) && !trait_exists('VersionResolver', false)) {
+    spl_autoload_call('RectorPrefix20220529\VersionResolver');
+}
+if (!class_exists('ComposerAutoloaderInitff688ad1ad36414b5e0335c1fc3e9915', false) && !interface_exists('ComposerAutoloaderInitff688ad1ad36414b5e0335c1fc3e9915', false) && !trait_exists('ComposerAutoloaderInitff688ad1ad36414b5e0335c1fc3e9915', false)) {
+    spl_autoload_call('RectorPrefix20220529\ComposerAutoloaderInitff688ad1ad36414b5e0335c1fc3e9915');
 }
 if (!class_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !interface_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !trait_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false)) {
     spl_autoload_call('RectorPrefix20220529\Helmich\TypoScriptParser\Parser\AST\Statement');
@@ -59,9 +62,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20220529\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire60f38889a608bb03580a069a00c85f45')) {
-    function composerRequire60f38889a608bb03580a069a00c85f45() {
-        return \RectorPrefix20220529\composerRequire60f38889a608bb03580a069a00c85f45(...func_get_args());
+if (!function_exists('composerRequireff688ad1ad36414b5e0335c1fc3e9915')) {
+    function composerRequireff688ad1ad36414b5e0335c1fc3e9915() {
+        return \RectorPrefix20220529\composerRequireff688ad1ad36414b5e0335c1fc3e9915(...func_get_args());
     }
 }
 if (!function_exists('scanPath')) {
