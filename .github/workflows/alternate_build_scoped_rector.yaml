@@ -48,7 +48,7 @@ jobs:
             -  run: rm -rf rector-build/packages-tests rector-build/rules-tests rector-build/tests rector-build/bin/generate-changelog.php rector-build/bin/validate-phpstan-version.php rector-build/bin/clean-phpstan.php rector-build/vendor/tracy/tracy/examples
 
             # 2. downgrade rector
-            -   run: php -d memory_limit=-1 bin/rector process $BUILD_DIRECTORY/$directory --config build/config/config-downgrade-parallel.php --ansi
+            -   run: php -d memory_limit=-1 bin/rector process rector-builder --config build/config/config-downgrade-parallel.php --ansi
 
             # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
             -
