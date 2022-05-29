@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20220528\MyCLabs\Enum\PHPUnit;
+namespace RectorPrefix20220529\MyCLabs\Enum\PHPUnit;
 
-use RectorPrefix20220528\MyCLabs\Enum\Enum;
-use RectorPrefix20220528\SebastianBergmann\Comparator\ComparisonFailure;
+use RectorPrefix20220529\MyCLabs\Enum\Enum;
+use RectorPrefix20220529\SebastianBergmann\Comparator\ComparisonFailure;
 /**
  * Use this Comparator to get nice output when using PHPUnit assertEquals() with Enums.
  *
@@ -11,11 +11,11 @@ use RectorPrefix20220528\SebastianBergmann\Comparator\ComparisonFailure;
  *
  * \SebastianBergmann\Comparator\Factory::getInstance()->register(new \MyCLabs\Enum\PHPUnit\Comparator());
  */
-final class Comparator extends \RectorPrefix20220528\SebastianBergmann\Comparator\Comparator
+final class Comparator extends \RectorPrefix20220529\SebastianBergmann\Comparator\Comparator
 {
     public function accepts($expected, $actual)
     {
-        return $expected instanceof \RectorPrefix20220528\MyCLabs\Enum\Enum && ($actual instanceof \RectorPrefix20220528\MyCLabs\Enum\Enum || $actual === null);
+        return $expected instanceof \RectorPrefix20220529\MyCLabs\Enum\Enum && ($actual instanceof \RectorPrefix20220529\MyCLabs\Enum\Enum || $actual === null);
     }
     /**
      * @param Enum $expected
@@ -28,9 +28,9 @@ final class Comparator extends \RectorPrefix20220528\SebastianBergmann\Comparato
         if ($expected->equals($actual)) {
             return;
         }
-        throw new \RectorPrefix20220528\SebastianBergmann\Comparator\ComparisonFailure($expected, $actual, $this->formatEnum($expected), $this->formatEnum($actual), \false, 'Failed asserting that two Enums are equal.');
+        throw new \RectorPrefix20220529\SebastianBergmann\Comparator\ComparisonFailure($expected, $actual, $this->formatEnum($expected), $this->formatEnum($actual), \false, 'Failed asserting that two Enums are equal.');
     }
-    private function formatEnum(\RectorPrefix20220528\MyCLabs\Enum\Enum $enum = null)
+    private function formatEnum(\RectorPrefix20220529\MyCLabs\Enum\Enum $enum = null)
     {
         if ($enum === null) {
             return "null";

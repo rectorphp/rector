@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\NodeFactory;
 
-use RectorPrefix20220528\Nette\Utils\Strings;
+use RectorPrefix20220529\Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
@@ -56,13 +56,13 @@ final class AttributeNameFactory
                 }
                 $importName = $useUse->name->toString();
                 // previous keyword
-                $lastImportKeyword = \RectorPrefix20220528\Nette\Utils\Strings::after($importName, '\\', -1);
+                $lastImportKeyword = \RectorPrefix20220529\Nette\Utils\Strings::after($importName, '\\', -1);
                 if ($lastImportKeyword === null) {
                     continue;
                 }
                 // resolve new short name
-                $newShortname = \RectorPrefix20220528\Nette\Utils\Strings::after($annotationToAttribute->getAttributeClass(), $lastImportKeyword);
-                $beforeImportName = \RectorPrefix20220528\Nette\Utils\Strings::before($annotationToAttribute->getAttributeClass(), $lastImportKeyword) . $lastImportKeyword;
+                $newShortname = \RectorPrefix20220529\Nette\Utils\Strings::after($annotationToAttribute->getAttributeClass(), $lastImportKeyword);
+                $beforeImportName = \RectorPrefix20220529\Nette\Utils\Strings::before($annotationToAttribute->getAttributeClass(), $lastImportKeyword) . $lastImportKeyword;
                 return new \Rector\PhpAttribute\ValueObject\UseAliasMetadata($alias . $newShortname, $beforeImportName, $useUse);
             }
         }

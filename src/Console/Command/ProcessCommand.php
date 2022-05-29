@@ -18,10 +18,10 @@ use Rector\Core\Validation\EmptyConfigurableRectorChecker;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
-use RectorPrefix20220528\Symfony\Component\Console\Application;
-use RectorPrefix20220528\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220528\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220528\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220529\Symfony\Component\Console\Application;
+use RectorPrefix20220529\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220529\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220529\Symfony\Component\Console\Output\OutputInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
@@ -95,7 +95,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->setDescription('Upgrades or refactors source code with provided rectors');
         parent::configure();
     }
-    protected function execute(\RectorPrefix20220528\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220528\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(\RectorPrefix20220529\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220529\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $exitCode = $this->missingRectorRulesReporter->reportIfMissing();
         if ($exitCode !== null) {
@@ -105,7 +105,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->memoryLimiter->adjust($configuration);
         // disable console output in case of json output formatter
         if ($configuration->getOutputFormat() === \Rector\ChangesReporting\Output\JsonOutputFormatter::NAME) {
-            $this->rectorOutputStyle->setVerbosity(\RectorPrefix20220528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+            $this->rectorOutputStyle->setVerbosity(\RectorPrefix20220529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
         }
         $this->additionalAutoloader->autoloadInput($input);
         $this->additionalAutoloader->autoloadPaths();
@@ -128,10 +128,10 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->invalidateCacheForChangedAndErroredFiles($processResult);
         return $this->resolveReturnCode($processResult, $configuration);
     }
-    protected function initialize(\RectorPrefix20220528\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220528\Symfony\Component\Console\Output\OutputInterface $output) : void
+    protected function initialize(\RectorPrefix20220529\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220529\Symfony\Component\Console\Output\OutputInterface $output) : void
     {
         $application = $this->getApplication();
-        if (!$application instanceof \RectorPrefix20220528\Symfony\Component\Console\Application) {
+        if (!$application instanceof \RectorPrefix20220529\Symfony\Component\Console\Application) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $optionDebug = (bool) $input->getOption(\Rector\Core\Configuration\Option::DEBUG);
@@ -162,12 +162,12 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     {
         // some system errors were found → fail
         if ($processResult->getErrors() !== []) {
-            return \RectorPrefix20220528\Symfony\Component\Console\Command\Command::FAILURE;
+            return \RectorPrefix20220529\Symfony\Component\Console\Command\Command::FAILURE;
         }
         // inverse error code for CI dry-run
         if (!$configuration->isDryRun()) {
-            return \RectorPrefix20220528\Symfony\Component\Console\Command\Command::SUCCESS;
+            return \RectorPrefix20220529\Symfony\Component\Console\Command\Command::SUCCESS;
         }
-        return $processResult->getFileDiffs() === [] ? \RectorPrefix20220528\Symfony\Component\Console\Command\Command::SUCCESS : \RectorPrefix20220528\Symfony\Component\Console\Command\Command::FAILURE;
+        return $processResult->getFileDiffs() === [] ? \RectorPrefix20220529\Symfony\Component\Console\Command\Command::SUCCESS : \RectorPrefix20220529\Symfony\Component\Console\Command\Command::FAILURE;
     }
 }

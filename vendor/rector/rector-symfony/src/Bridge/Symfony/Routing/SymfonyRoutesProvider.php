@@ -6,8 +6,8 @@ namespace Rector\Symfony\Bridge\Symfony\Routing;
 use Rector\Symfony\Bridge\Symfony\ContainerServiceProvider;
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
-use RectorPrefix20220528\Symfony\Component\Routing\RouterInterface;
-use RectorPrefix20220528\Webmozart\Assert\Assert;
+use RectorPrefix20220529\Symfony\Component\Routing\RouterInterface;
+use RectorPrefix20220529\Webmozart\Assert\Assert;
 final class SymfonyRoutesProvider implements \Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface
 {
     /**
@@ -32,7 +32,7 @@ final class SymfonyRoutesProvider implements \Rector\Symfony\Contract\Bridge\Sym
             return $this->symfonyRouteMetadatas;
         }
         $router = $this->containerServiceProvider->provideByName('router');
-        \RectorPrefix20220528\Webmozart\Assert\Assert::isInstanceOf($router, 'Symfony\\Component\\Routing\\RouterInterface');
+        \RectorPrefix20220529\Webmozart\Assert\Assert::isInstanceOf($router, 'Symfony\\Component\\Routing\\RouterInterface');
         $symfonyRoutesMetadatas = [];
         /** @var RouterInterface $router */
         $routeCollection = $router->getRouteCollection();

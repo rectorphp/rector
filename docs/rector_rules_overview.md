@@ -1,4 +1,4 @@
-# 512 Rules Overview
+# 513 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (72)
+- [CodeQuality](#codequality) (73)
 
 - [CodingStyle](#codingstyle) (35)
 
@@ -909,6 +909,25 @@ Change inline if to explicit if
 +        if (is_null($userId)) {
 +            $userId = 5;
 +        }
+     }
+ }
+```
+
+<br>
+
+### InlineIsAInstanceOfRector
+
+Change `is_a()` with object and class name check to instanceof
+
+- class: [`Rector\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector`](../rules/CodeQuality/Rector/FuncCall/InlineIsAInstanceOfRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run(object $object)
+     {
+-        return is_a($object, SomeType::class);
++        return $object instanceof SomeType;
      }
  }
 ```
