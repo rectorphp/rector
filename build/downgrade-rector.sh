@@ -19,10 +19,7 @@ BUILD_DIRECTORY=$1
 # 1. downgrade it
 echo "[NOTE] Running downgrade in '$BUILD_DIRECTORY' directory\n";
 
-# 2. debug downgrade paths
-bin/rector downgrade-paths --config build/config/config-downgrade.php --working-dir $BUILD_DIRECTORY --ansi
-
-# 3. provide directories to downgrade; includes the rector dirs
+# 2. provide directories to downgrade; includes the rector dirs
 directories=$(php bin/rector downgrade-paths --config build/config/config-downgrade.php --working-dir $BUILD_DIRECTORY --ansi)
 # experimental
 
@@ -41,8 +38,7 @@ for directory in $directories; do
         CONFIG_PATH_DOWNGRADE="build/config/config-downgrade-parallel.php"
     fi
 
-    # --working-dir is needed, so "SKIP" parameter is applied in absolute path of nested directory
-    php -d memory_limit=-1 bin/rector process $directory --config $CONFIG_PATH_DOWNGRADE --working-dir $BUILD_DIRECTORY --ansi
+    php -d memory_limit=-1 bin/rector process $BUILD_DIRECTORY/$directory --config $CONFIG_PATH_DOWNGRADE -a $BUILD_DIRECTORY/vendor/autoload.php --ansi
 
     unset CONFIG_PATH_DOWNGRADE
 done
