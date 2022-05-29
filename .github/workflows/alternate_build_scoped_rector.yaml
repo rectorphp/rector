@@ -14,12 +14,12 @@ env:
     COMPOSER_ROOT_VERSION: "dev-main"
 
 jobs:
-    build_scoped_rector:
+    alternate_build_scoped_rector:
         # Don't run on forks.
         if: github.repository == 'rectorphp/rector-src'
 
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 20
 
         steps:
             -
@@ -48,7 +48,7 @@ jobs:
             -  run: rm -rf rector-build/packages-tests rector-build/rules-tests rector-build/tests rector-build/bin/generate-changelog.php rector-build/bin/validate-phpstan-version.php rector-build/bin/clean-phpstan.php rector-build/vendor/tracy/tracy/examples
 
             # 2. downgrade rector
-            -   run: php -d memory_limit=-1 bin/rector process rector-build/bin rector-build/src rector-build/packages rector-build/rules vendor --config build/config/config-downgrade-parallel.php --ansi
+            -   run: php -d memory_limit=-1 bin/rector process rector-build/bin rector-build/src rector-build/packages rector-build/rules rector-build/vendor --config build/config/config-downgrade-parallel.php --ansi
 
             # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
             -
