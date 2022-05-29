@@ -156,7 +156,7 @@ class Inline
                         $repr = \str_ireplace('INF', '.Inf', $repr);
                     } elseif (\floor($value) == $value && $repr == $value) {
                         // Preserve float data type since storing a whole number will result in integer value.
-                        if (\false === \strpos($repr, 'E')) {
+                        if (\strpos($repr, 'E') === \false) {
                             $repr = $repr . '.0';
                         }
                     }
@@ -174,6 +174,13 @@ class Inline
             case \RectorPrefix20220529\Symfony\Component\Yaml\Escaper::requiresDoubleQuoting($value):
                 return \RectorPrefix20220529\Symfony\Component\Yaml\Escaper::escapeWithDoubleQuotes($value);
             case \RectorPrefix20220529\Symfony\Component\Yaml\Escaper::requiresSingleQuoting($value):
+                $singleQuoted = \RectorPrefix20220529\Symfony\Component\Yaml\Escaper::escapeWithSingleQuotes($value);
+                if (\strpos($value, "'") === \false) {
+                    return $singleQuoted;
+                }
+                // Attempt double-quoting the string instead to see if it's more efficient.
+                $doubleQuoted = \RectorPrefix20220529\Symfony\Component\Yaml\Escaper::escapeWithDoubleQuotes($value);
+                return \strlen($doubleQuoted) < \strlen($singleQuoted) ? $doubleQuoted : $singleQuoted;
             case \RectorPrefix20220529\Symfony\Component\Yaml\Parser::preg_match('{^[0-9]+[_0-9]*$}', $value):
             case \RectorPrefix20220529\Symfony\Component\Yaml\Parser::preg_match(self::getHexRegex(), $value):
             case \RectorPrefix20220529\Symfony\Component\Yaml\Parser::preg_match(self::getTimestampRegex(), $value):
@@ -329,12 +336,12 @@ class Inline
                 default:
                     $value = self::parseScalar($sequence, $flags, [',', ']'], $i, null === $tag, $references, $isQuoted);
                     // the value can be an array if a reference has been resolved to an array var
-                    if (\is_string($value) && !$isQuoted && \false !== \strpos($value, ': ')) {
+                    if (\is_string($value) && !$isQuoted && \strpos($value, ': ') !== \false) {
                         // embedded mapping?
                         try {
                             $pos = 0;
                             $value = self::parseMapping('{' . $value . '}', $flags, $pos, $references);
-                        } catch (\InvalidArgumentException $e) {
+                        } catch (\InvalidArgumentException $exception) {
                             // no, it's not
                         }
                     }
@@ -490,7 +497,7 @@ class Inline
     {
         $isQuotedString = \false;
         $scalar = \trim($scalar);
-        if (0 === \strpos($scalar, '*')) {
+        if (\strncmp($scalar, '*', \strlen('*')) === 0) {
             if (\false !== ($pos = \strpos($scalar, '#'))) {
                 $value = \substr($scalar, 1, $pos - 2);
             } else {
@@ -517,16 +524,16 @@ class Inline
                 return \false;
             case '!' === $scalar[0]:
                 switch (\true) {
-                    case 0 === \strpos($scalar, '!!str '):
+                    case \strncmp($scalar, '!!str ', \strlen('!!str ')) === 0:
                         $s = (string) \substr($scalar, 6);
                         if (\in_array($s[0] ?? '', ['"', "'"], \true)) {
                             $isQuotedString = \true;
                             $s = self::parseQuotedScalar($s);
                         }
                         return $s;
-                    case 0 === \strpos($scalar, '! '):
+                    case \strncmp($scalar, '! ', \strlen('! ')) === 0:
                         return \substr($scalar, 2);
-                    case 0 === \strpos($scalar, '!php/object'):
+                    case \strncmp($scalar, '!php/object', \strlen('!php/object')) === 0:
                         if (self::$objectSupport) {
                             if (!isset($scalar[12])) {
                                 throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException('Missing value for tag "!php/object".', self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
@@ -537,7 +544,7 @@ class Inline
                             throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException('Object support when parsing a YAML file has been disabled.', self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                         }
                         return null;
-                    case 0 === \strpos($scalar, '!php/const'):
+                    case \strncmp($scalar, '!php/const', \strlen('!php/const')) === 0:
                         if (self::$constantSupport) {
                             if (!isset($scalar[11])) {
                                 throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException('Missing value for tag "!php/const".', self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
@@ -552,9 +559,9 @@ class Inline
                             throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException(\sprintf('The string "%s" could not be parsed as a constant. Did you forget to pass the "Yaml::PARSE_CONSTANT" flag to the parser?', $scalar), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                         }
                         return null;
-                    case 0 === \strpos($scalar, '!!float '):
+                    case \strncmp($scalar, '!!float ', \strlen('!!float ')) === 0:
                         return (float) \substr($scalar, 8);
-                    case 0 === \strpos($scalar, '!!binary '):
+                    case \strncmp($scalar, '!!binary ', \strlen('!!binary ')) === 0:
                         return self::evaluateBinaryScalar(\substr($scalar, 9));
                 }
                 throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException(\sprintf('The string "%s" could not be parsed as it uses an unsupported built-in tag.', $scalar), self::$parsedLineNumber, $scalar, self::$parsedFilename);
@@ -595,7 +602,7 @@ class Inline
                             if (\false !== ($scalar = $time->getTimestamp())) {
                                 return $scalar;
                             }
-                        } catch (\ValueError $e) {
+                        } catch (\ValueError $exception) {
                             // no-op
                         }
                         return $time->format('U');

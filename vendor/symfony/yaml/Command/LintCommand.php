@@ -34,6 +34,9 @@ use RectorPrefix20220529\Symfony\Component\Yaml\Yaml;
 #[AsCommand(name: 'lint:yaml', description: 'Lint a YAML file and outputs encountered errors')]
 class LintCommand extends \RectorPrefix20220529\Symfony\Component\Console\Command\Command
 {
+    /**
+     * @var \Symfony\Component\Yaml\Parser
+     */
     private $parser;
     /**
      * @var string|null
@@ -54,8 +57,8 @@ class LintCommand extends \RectorPrefix20220529\Symfony\Component\Console\Comman
     public function __construct(string $name = null, callable $directoryIteratorProvider = null, callable $isReadableProvider = null)
     {
         parent::__construct($name);
-        $this->directoryIteratorProvider = null === $directoryIteratorProvider || $directoryIteratorProvider instanceof \Closure ? $directoryIteratorProvider : \Closure::fromCallable($directoryIteratorProvider);
-        $this->isReadableProvider = null === $isReadableProvider || $isReadableProvider instanceof \Closure ? $isReadableProvider : \Closure::fromCallable($isReadableProvider);
+        $this->directoryIteratorProvider = null === $directoryIteratorProvider ? null : \Closure::fromCallable($directoryIteratorProvider);
+        $this->isReadableProvider = null === $isReadableProvider ? null : \Closure::fromCallable($isReadableProvider);
     }
     /**
      * {@inheritdoc}
@@ -166,7 +169,7 @@ EOF
                 ++$erroredFiles;
                 $io->text('<error> ERROR </error>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
                 $io->text(\sprintf('<error> >> %s</error>', $info['message']));
-                if (\false !== \strpos($info['message'], 'PARSE_CUSTOM_TAGS')) {
+                if (\strpos($info['message'], 'PARSE_CUSTOM_TAGS') !== \false) {
                     $suggestTagOption = \true;
                 }
                 if ($errorAsGithubAnnotations) {
@@ -189,7 +192,7 @@ EOF
             if (!$v['valid']) {
                 ++$errors;
             }
-            if (isset($v['message']) && \false !== \strpos($v['message'], 'PARSE_CUSTOM_TAGS')) {
+            if (isset($v['message']) && \strpos($v['message'], 'PARSE_CUSTOM_TAGS') !== \false) {
                 $v['message'] .= ' Use the --parse-tags option if you want parse custom tags.';
             }
         });

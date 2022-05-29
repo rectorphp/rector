@@ -99,7 +99,7 @@ class ParseException extends \RectorPrefix20220529\Symfony\Component\Yaml\Except
     {
         $this->message = $this->rawMessage;
         $dot = \false;
-        if ('.' === \substr($this->message, -1)) {
+        if (\substr_compare($this->message, '.', -\strlen('.')) === 0) {
             $this->message = \substr($this->message, 0, -1);
             $dot = \true;
         }

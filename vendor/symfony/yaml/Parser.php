@@ -172,14 +172,14 @@ class Parser
                     throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException('Complex mappings are not supported.', $this->getRealCurrentLineNb() + 1, $this->currentLine);
                 }
                 // array
-                if (isset($values['value']) && 0 === \strpos(\ltrim($values['value'], ' '), '-')) {
+                if (isset($values['value']) && \strncmp(\ltrim($values['value'], ' '), '-', \strlen('-')) === 0) {
                     // Inline first child
                     $currentLineNumber = $this->getRealCurrentLineNb();
                     $sequenceIndentation = \strlen($values['leadspaces']) + 1;
                     $sequenceYaml = \substr($this->currentLine, $sequenceIndentation);
                     $sequenceYaml .= "\n" . $this->getNextEmbedBlock($sequenceIndentation, \true);
                     $data[] = $this->parseBlock($currentLineNumber, \rtrim($sequenceYaml), $flags);
-                } elseif (!isset($values['value']) || '' == \trim($values['value'], ' ') || 0 === \strpos(\ltrim($values['value'], ' '), '#')) {
+                } elseif (!isset($values['value']) || '' == \trim($values['value'], ' ') || \strncmp(\ltrim($values['value'], ' '), '#', \strlen('#')) === 0) {
                     $data[] = $this->parseBlock($this->getRealCurrentLineNb() + 1, $this->getNextEmbedBlock(null, \true) ?? '', $flags);
                 } elseif (null !== ($subTag = $this->getLineTag(\ltrim($values['value'], ' '), $flags))) {
                     $data[] = new \RectorPrefix20220529\Symfony\Component\Yaml\Tag\TaggedValue($subTag, $this->parseBlock($this->getRealCurrentLineNb() + 1, $this->getNextEmbedBlock(null, \true), $flags));
@@ -199,7 +199,7 @@ class Parser
                     $this->refs[$isRef] = \end($data);
                     \array_pop($this->refsBeingParsed);
                 }
-            } elseif (self::preg_match('#^(?P<key>(?:![^\\s]++\\s++)?(?:' . \RectorPrefix20220529\Symfony\Component\Yaml\Inline::REGEX_QUOTED_STRING . '|(?:!?!php/const:)?[^ \'"\\[\\{!].*?)) *\\:(( |\\t)++(?P<value>.+))?$#u', \rtrim($this->currentLine), $values) && (\false === \strpos($values['key'], ' #') || \in_array($values['key'][0], ['"', "'"]))) {
+            } elseif (self::preg_match('#^(?P<key>(?:![^\\s]++\\s++)?(?:' . \RectorPrefix20220529\Symfony\Component\Yaml\Inline::REGEX_QUOTED_STRING . '|(?:!?!php/const:)?[^ \'"\\[\\{!].*?)) *\\:(( |\\t)++(?P<value>.+))?$#u', \rtrim($this->currentLine), $values) && (\strpos($values['key'], ' #') === \false || \in_array($values['key'][0], ['"', "'"]))) {
                 if ($context && 'sequence' == $context) {
                     throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException('You cannot define a mapping item when in a sequence.', $this->currentLineNb + 1, $this->currentLine, $this->filename);
                 }
@@ -280,7 +280,7 @@ class Parser
                 $subTag = null;
                 if ($mergeNode) {
                     // Merge keys
-                } elseif (!isset($values['value']) || '' === $values['value'] || 0 === \strpos($values['value'], '#') || null !== ($subTag = $this->getLineTag($values['value'], $flags)) || '<<' === $key) {
+                } elseif (!isset($values['value']) || '' === $values['value'] || \strncmp($values['value'], '#', \strlen('#')) === 0 || null !== ($subTag = $this->getLineTag($values['value'], $flags)) || '<<' === $key) {
                     // hash
                     // if next line is less indented or equal, then it means that the current value is null
                     if (!$this->isNextLineIndented() && !$this->isNextLineUnIndentedCollection()) {
@@ -409,7 +409,7 @@ class Parser
                         if (0 === $this->offset && !$deprecatedUsage && isset($line[0]) && ' ' === $line[0]) {
                             throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException('Unable to parse.', $this->getRealCurrentLineNb() + 1, $this->currentLine, $this->filename);
                         }
-                        if (\false !== \strpos($line, ': ')) {
+                        if (\strpos($line, ': ') !== \false) {
                             throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException('Mapping values are not allowed in multi-line blocks.', $this->getRealCurrentLineNb() + 1, $this->currentLine, $this->filename);
                         }
                         if ('' === $trimmedLine) {
@@ -417,7 +417,7 @@ class Parser
                         } elseif (!$previousLineWasNewline && !$previousLineWasTerminatedWithBackslash) {
                             $value .= ' ';
                         }
-                        if ('' !== $trimmedLine && '\\' === \substr($line, -1)) {
+                        if ('' !== $trimmedLine && \substr_compare($line, '\\', -\strlen('\\')) === 0) {
                             $value .= \ltrim(\substr($line, 0, -1));
                         } elseif ('' !== $trimmedLine) {
                             $value .= $trimmedLine;
@@ -425,7 +425,7 @@ class Parser
                         if ('' === $trimmedLine) {
                             $previousLineWasNewline = \true;
                             $previousLineWasTerminatedWithBackslash = \false;
-                        } elseif ('\\' === \substr($line, -1)) {
+                        } elseif (\substr_compare($line, '\\', -\strlen('\\')) === 0) {
                             $previousLineWasNewline = \false;
                             $previousLineWasTerminatedWithBackslash = \true;
                         } else {
@@ -435,7 +435,7 @@ class Parser
                     }
                     try {
                         return \RectorPrefix20220529\Symfony\Component\Yaml\Inline::parse(\trim($value));
-                    } catch (\RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException $e) {
+                    } catch (\RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException $exception) {
                         // fall-through to the ParseException thrown below
                     }
                 }
@@ -615,7 +615,7 @@ class Parser
      */
     private function parseValue(string $value, int $flags, string $context)
     {
-        if (0 === \strpos($value, '*')) {
+        if (\strncmp($value, '*', \strlen('*')) === 0) {
             if (\false !== ($pos = \strpos($value, '#'))) {
                 $value = \substr($value, 1, $pos - 2);
             } else {
@@ -681,7 +681,7 @@ class Parser
                     }
                     \RectorPrefix20220529\Symfony\Component\Yaml\Inline::$parsedLineNumber = $this->getRealCurrentLineNb();
                     $parsedValue = \RectorPrefix20220529\Symfony\Component\Yaml\Inline::parse($value, $flags, $this->refs);
-                    if ('mapping' === $context && \is_string($parsedValue) && '"' !== $value[0] && "'" !== $value[0] && '[' !== $value[0] && '{' !== $value[0] && '!' !== $value[0] && \false !== \strpos($parsedValue, ': ')) {
+                    if ('mapping' === $context && \is_string($parsedValue) && '"' !== $value[0] && "'" !== $value[0] && '[' !== $value[0] && '{' !== $value[0] && '!' !== $value[0] && \strpos($parsedValue, ': ') !== \false) {
                         throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException('A colon cannot be used in an unquoted mapping value.', $this->getRealCurrentLineNb() + 1, $value, $this->filename);
                     }
                     return $parsedValue;
@@ -871,7 +871,7 @@ class Parser
     }
     private function isStringUnIndentedCollectionItem() : bool
     {
-        return '-' === \rtrim($this->currentLine) || 0 === \strpos($this->currentLine, '- ');
+        return '-' === \rtrim($this->currentLine) || \strncmp($this->currentLine, '- ', \strlen('- ')) === 0;
     }
     /**
      * A local wrapper for "preg_match" which will throw a ParseException if there
@@ -907,6 +907,7 @@ class Parser
                     break;
                 default:
                     $error = 'Error.';
+                    break;
             }
             throw new \RectorPrefix20220529\Symfony\Component\Yaml\Exception\ParseException($error);
         }

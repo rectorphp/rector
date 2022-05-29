@@ -84,16 +84,12 @@ class Unescaper
             case '\\':
                 return '\\';
             case 'N':
-                // U+0085 NEXT LINE
                 return "";
             case '_':
-                // U+00A0 NO-BREAK SPACE
                 return " ";
             case 'L':
-                // U+2028 LINE SEPARATOR
                 return " ";
             case 'P':
-                // U+2029 PARAGRAPH SEPARATOR
                 return " ";
             case 'x':
                 return self::utf8chr(\hexdec(\substr($value, 2, 2)));
