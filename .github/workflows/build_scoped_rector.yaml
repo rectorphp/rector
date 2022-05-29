@@ -48,9 +48,6 @@ jobs:
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
             -   run: composer install --no-dev --ansi
 
-            # resolve rector version
-            -   run: php bin/resolve-version.php
-
             # early downgrade individual functions
             -   run: bin/rector process src/functions -c build/config/config-downgrade.php --ansi
 
