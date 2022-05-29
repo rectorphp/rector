@@ -6,7 +6,6 @@ namespace Rector\Core\Application;
 
 use DateTime;
 use Rector\Core\Exception\VersionException;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Process\Process;
 
 /**
@@ -32,12 +31,21 @@ final class VersionResolver
      */
     private const GIT = 'git';
 
+    /**
+     * @var int
+     */
+    private const SUCCESS_CODE = 0;
+
     public static function resolvePackageVersion(): string
     {
-        // resolve current tag
-        exec('git tag --points-at', $tagExecOutput, $tagExecResultCode);
+        // needed to keep exec() in the rector directory, not depending on cwd of run command of scoper
+        $repositoryDirectory = __DIR__ . '/../..';
 
-        if ($tagExecResultCode !== Command::SUCCESS) {
+        // resolve current tag
+        $commandLine = sprintf('cd %s && git tag --points-at', $repositoryDirectory);
+        exec($commandLine, $tagExecOutput, $tagExecResultCode);
+
+        if ($tagExecResultCode !== self::SUCCESS_CODE) {
             throw new VersionException(
                 'Ensure to run compile from composer git repository clone and that git binary is available.'
             );
@@ -50,9 +58,10 @@ final class VersionResolver
             }
         }
 
-        exec('git log --pretty="%H" -n1 HEAD', $commitHashExecOutput, $commitHashResultCode);
+        $commandLine = sprintf('cd %s && git log --pretty="%%H" -n1 HEAD', $repositoryDirectory);
+        exec($commandLine, $commitHashExecOutput, $commitHashResultCode);
 
-        if ($commitHashResultCode !== Command::SUCCESS) {
+        if ($commitHashResultCode !== 0) {
             throw new VersionException(
                 'Ensure to run compile from composer git repository clone and that git binary is available.'
             );
@@ -65,7 +74,7 @@ final class VersionResolver
     public static function resolverReleaseDateTime(): DateTime
     {
         $process = new Process([self::GIT, 'log', '-n1', '--pretty=%ci', 'HEAD'], __DIR__);
-        if ($process->run() !== Command::SUCCESS) {
+        if ($process->run() !== 0) {
             throw new VersionException(
                 'You must ensure to run compile from composer git repository clone and that git binary is available.'
             );
