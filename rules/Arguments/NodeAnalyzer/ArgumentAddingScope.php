@@ -45,7 +45,7 @@ final class ArgumentAddingScope
                 return false;
             }
 
-            if ($this->nodeNameResolver->isName($expr->class, ObjectReference::PARENT()->getValue())) {
+            if ($this->nodeNameResolver->isName($expr->class, ObjectReference::PARENT)) {
                 return $scope === self::SCOPE_PARENT_CALL;
             }
 

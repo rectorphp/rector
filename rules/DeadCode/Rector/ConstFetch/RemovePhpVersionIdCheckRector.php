@@ -17,6 +17,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
+use ReflectionClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -43,7 +44,13 @@ final class RemovePhpVersionIdCheckRector extends AbstractRector implements Conf
     {
         $phpVersion = $configuration[0];
         Assert::integer($phpVersion);
-        PhpVersion::assertValidValue($phpVersion);
+
+        // get all constants
+        $phpVersionReflectionClass = new ReflectionClass(PhpVersion::class);
+        // @todo check
+        if (in_array($phpVersion, $phpVersionReflectionClass->getConstants(), true)) {
+            return;
+        }
 
         // ensure cast to (string) first to allow string like "8.0" value to be converted to the int value
         /** @var PhpVersion::* $phpVersion */

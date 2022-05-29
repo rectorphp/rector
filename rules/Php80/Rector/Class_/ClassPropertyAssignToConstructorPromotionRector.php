@@ -159,7 +159,7 @@ CODE_SAMPLE
     {
         if ($this->nodeTypeResolver->isNullableType($property)) {
             $objectType = $this->getType($property);
-            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType, TypeKind::PARAM());
+            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType, TypeKind::PARAM);
         }
     }
 

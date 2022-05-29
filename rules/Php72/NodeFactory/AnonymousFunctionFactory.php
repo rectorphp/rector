@@ -125,7 +125,7 @@ final class AnonymousFunctionFactory
         if (! $functionVariantWithPhpDoc->getReturnType() instanceof MixedType) {
             $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                 $functionVariantWithPhpDoc->getReturnType(),
-                TypeKind::RETURN()
+                TypeKind::RETURN
             );
             $anonymousFunction->returnType = $returnType;
         }
@@ -349,7 +349,7 @@ final class AnonymousFunctionFactory
 
         $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $parameterReflection->getType(),
-            TypeKind::PARAM()
+            TypeKind::PARAM
         );
     }
 

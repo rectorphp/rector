@@ -149,7 +149,7 @@ final class ArrayCallableMethodMatcher
     {
         $classConstantReference = $this->valueResolver->getValue($classConstFetch);
 
-        if (ObjectReference::STATIC()->getValue() === $classConstantReference) {
+        if ($classConstantReference === ObjectReference::STATIC) {
             $classLike = $this->betterNodeFinder->findParentType($classConstFetch, Class_::class);
             if (! $classLike instanceof ClassLike) {
                 return new MixedType();

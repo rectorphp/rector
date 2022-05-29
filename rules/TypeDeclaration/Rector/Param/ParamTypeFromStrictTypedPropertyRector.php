@@ -160,7 +160,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY());
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
     }
 
     private function hasTypeChangedBeforeAssign(Assign $assign, string $paramName, Type $originalType): bool

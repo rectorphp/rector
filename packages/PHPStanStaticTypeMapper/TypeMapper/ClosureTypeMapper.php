@@ -34,7 +34,7 @@ final class ClosureTypeMapper implements TypeMapperInterface
     /**
      * @param ClosureType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind): TypeNode
     {
         $identifierTypeNode = new IdentifierTypeNode($type->getClassName());
 
@@ -47,11 +47,12 @@ final class ClosureTypeMapper implements TypeMapperInterface
     }
 
     /**
+     * @param TypeKind::* $typeKind
      * @param ClosureType $type
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
-        if ($typeKind->equals(TypeKind::PROPERTY())) {
+        if ($typeKind === TypeKind::PROPERTY) {
             return null;
         }
 

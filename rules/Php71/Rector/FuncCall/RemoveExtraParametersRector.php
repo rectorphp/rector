@@ -107,7 +107,7 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
                 return true;
             }
 
-            if ($this->isName($call->class, ObjectReference::PARENT()->getValue())) {
+            if ($this->isName($call->class, ObjectReference::PARENT)) {
                 return true;
             }
         }

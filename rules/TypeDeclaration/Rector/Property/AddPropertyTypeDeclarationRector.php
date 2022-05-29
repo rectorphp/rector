@@ -94,7 +94,7 @@ CODE_SAMPLE
 
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                 $addPropertyTypeDeclaration->getType(),
-                TypeKind::PROPERTY()
+                TypeKind::PROPERTY
             );
             if ($typeNode === null) {
                 // invalid configuration

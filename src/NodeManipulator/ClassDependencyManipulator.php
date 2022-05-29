@@ -194,7 +194,7 @@ final class ClassDependencyManipulator
 
     private function createParentClassMethodCall(string $methodName): Expression
     {
-        $staticCall = new StaticCall(new Name(ObjectReference::PARENT()->getValue()), $methodName);
+        $staticCall = new StaticCall(new Name(ObjectReference::PARENT), $methodName);
 
         return new Expression($staticCall);
     }

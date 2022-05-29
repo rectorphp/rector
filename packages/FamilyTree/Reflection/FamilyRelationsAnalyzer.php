@@ -106,7 +106,7 @@ final class FamilyRelationsAnalyzer
             $varType = new UnionType([$varType, new NullType()]);
             $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                 $varType,
-                TypeKind::PROPERTY()
+                TypeKind::PROPERTY
             );
 
             return new PropertyType($varType, $propertyTypeNode);

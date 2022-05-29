@@ -24,7 +24,11 @@ final class SelfStaticParentTypeSpecifier implements TypeWithClassTypeSpecifierI
             return false;
         }
 
-        return ObjectReference::isValid($objectType->getClassName());
+        return in_array(
+            $objectType->getClassName(),
+            [ObjectReference::STATIC, ObjectReference::PARENT, ObjectReference::SELF],
+            true
+        );
     }
 
     public function resolveObjectReferenceType(ObjectType $objectType, Scope $scope): TypeWithClassName
@@ -36,11 +40,11 @@ final class SelfStaticParentTypeSpecifier implements TypeWithClassTypeSpecifierI
 
         $classReference = $objectType->getClassName();
 
-        if (ObjectReference::STATIC()->getValue() === $classReference) {
+        if ($classReference === ObjectReference::STATIC) {
             return new StaticType($classReflection);
         }
 
-        if (ObjectReference::SELF()->getValue() === $classReference) {
+        if ($classReference === ObjectReference::SELF) {
             return new SelfObjectType($classReference, null, $classReflection);
         }
 

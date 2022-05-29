@@ -77,7 +77,7 @@ CODE_SAMPLE
 
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $inferedReturnType,
-            TypeKind::RETURN()
+            TypeKind::RETURN
         );
         if ($returnTypeNode === null) {
             return null;

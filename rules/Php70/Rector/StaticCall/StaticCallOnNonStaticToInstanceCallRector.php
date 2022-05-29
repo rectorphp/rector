@@ -150,7 +150,7 @@ CODE_SAMPLE
         }
 
         $className = $this->getName($staticCall->class);
-        if (ObjectReference::isValid($className)) {
+        if (in_array($className, [ObjectReference::PARENT, ObjectReference::SELF, ObjectReference::STATIC], true)) {
             return true;
         }
 

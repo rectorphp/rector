@@ -113,7 +113,7 @@ CODE_SAMPLE
 
         $returnExprTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode(
             $returnExprType,
-            TypeKind::RETURN()
+            TypeKind::RETURN
         );
 
         if ($returnExprTypeNode instanceof GenericTypeNode) {

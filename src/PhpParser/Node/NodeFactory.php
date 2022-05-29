@@ -98,18 +98,20 @@ final class NodeFactory
     }
 
     /**
+     * @param string|ObjectReference::* $className
      * Creates "\SomeClass::CONSTANT"
      */
-    public function createClassConstFetch(string|ObjectReference $className, string $constantName): ClassConstFetch
+    public function createClassConstFetch(string $className, string $constantName): ClassConstFetch
     {
         $name = $this->createName($className);
         return $this->createClassConstFetchFromName($name, $constantName);
     }
 
     /**
+     * @param string|ObjectReference::* $className
      * Creates "\SomeClass::class"
      */
-    public function createClassConstReference(string|ObjectReference $className): ClassConstFetch
+    public function createClassConstReference(string $className): ClassConstFetch
     {
         return $this->createClassConstFetch($className, 'class');
     }
@@ -185,7 +187,7 @@ final class NodeFactory
         $paramBuilder = new ParamBuilder($name);
 
         if ($type !== null) {
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM());
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
             if ($typeNode !== null) {
                 $paramBuilder->setType($typeNode);
             }
@@ -269,7 +271,7 @@ final class NodeFactory
     public function createParentConstructWithParams(array $params): StaticCall
     {
         return new StaticCall(
-            new Name(ObjectReference::PARENT()->getValue()),
+            new Name(ObjectReference::PARENT),
             new Identifier(MethodName::CONSTRUCT),
             $this->createArgsFromParams($params)
         );
@@ -319,7 +321,7 @@ final class NodeFactory
         $return = new Return_($propertyFetch);
         $methodBuilder->addStmt($return);
 
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::RETURN());
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::RETURN);
         if ($typeNode !== null) {
             $methodBuilder->setReturnType($typeNode);
         }
@@ -400,9 +402,10 @@ final class NodeFactory
     }
 
     /**
+     * @param string|ObjectReference::* $class
      * @param Node[] $args
      */
-    public function createStaticCall(string|ObjectReference $class, string $method, array $args = []): StaticCall
+    public function createStaticCall(string $class, string $method, array $args = []): StaticCall
     {
         $name = $this->createName($class);
         $args = $this->createArgs($args);
@@ -421,7 +424,7 @@ final class NodeFactory
 
     public function createSelfFetchConstant(string $constantName): ClassConstFetch
     {
-        $name = new Name(ObjectReference::SELF()->getValue());
+        $name = new Name(ObjectReference::SELF);
 
         return new ClassConstFetch($name, $constantName);
     }
@@ -450,7 +453,7 @@ final class NodeFactory
         $paramBuilder = new ParamBuilder($propertyMetadata->getName());
         $propertyType = $propertyMetadata->getType();
         if ($propertyType !== null) {
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY());
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
 
             if ($typeNode !== null) {
                 $paramBuilder->setType($typeNode);
@@ -484,16 +487,15 @@ final class NodeFactory
         return $this->createClosureFromClassMethod($classMethod);
     }
 
+    /**
+     * @param string|ObjectReference::* $constantName
+     */
     public function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
     {
         $classConstFetch = $this->builderFactory->classConstFetch($className, $constantName);
 
         $classNameString = $className->toString();
-        if (in_array(
-            $classNameString,
-            [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue()],
-            true
-        )) {
+        if (in_array($classNameString, [ObjectReference::SELF, ObjectReference::STATIC], true)) {
             $currentNode = $this->currentNodeProvider->getNode();
             if ($currentNode !== null) {
                 $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $className);
@@ -627,19 +629,18 @@ final class NodeFactory
     {
         $param = new Param($variable);
 
-        $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM());
+        $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
         $param->type = $phpParserTypeNode;
 
         return $param;
     }
 
-    private function createName(string|ObjectReference $className): FullyQualified|Name
+    /**
+     * @param string|ObjectReference::* $className
+     */
+    private function createName(string $className): FullyQualified|Name
     {
-        if ($className instanceof ObjectReference) {
-            return new Name($className->getValue());
-        }
-
-        if (ObjectReference::isValid($className)) {
+        if (in_array($className, [ObjectReference::PARENT, ObjectReference::SELF, ObjectReference::STATIC], true)) {
             return new Name($className);
         }
 

@@ -99,7 +99,7 @@ final class GetClassToInstanceOfRector extends AbstractRector
             return null;
         }
 
-        if ($className === ObjectReference::PARENT()->getValue()) {
+        if ($className === ObjectReference::PARENT) {
             return null;
         }
 

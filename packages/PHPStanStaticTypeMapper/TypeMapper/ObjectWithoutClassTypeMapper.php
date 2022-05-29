@@ -15,7 +15,6 @@ use Rector\BetterPhpDocParser\ValueObject\Type\EmptyGenericTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 
 /**
@@ -39,7 +38,7 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind): TypeNode
     {
         if ($type instanceof ParentObjectWithoutClassType) {
             return new IdentifierTypeNode('parent');
@@ -56,7 +55,7 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::OBJECT_TYPE)) {
             return null;

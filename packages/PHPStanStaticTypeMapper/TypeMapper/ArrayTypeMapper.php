@@ -83,9 +83,10 @@ final class ArrayTypeMapper implements TypeMapperInterface
     }
 
     /**
+     * @param TypeKind::* $typeKind
      * @param ArrayType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind): TypeNode
     {
         $itemType = $type->getItemType();
 
@@ -93,7 +94,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
             return $this->createArrayTypeNodeFromUnionType($itemType, $typeKind);
         }
 
-        if ($type instanceof ConstantArrayType && $typeKind->equals(TypeKind::RETURN())) {
+        if ($type instanceof ConstantArrayType && $typeKind === TypeKind::RETURN) {
             $arrayShapeNode = $this->arrayShapeTypeMapper->mapConstantArrayType($type);
             if ($arrayShapeNode instanceof TypeNode) {
                 return $arrayShapeNode;
@@ -121,14 +122,17 @@ final class ArrayTypeMapper implements TypeMapperInterface
     /**
      * @param ArrayType $type
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         return new Name('array');
     }
 
+    /**
+     * @param TypeKind::* $typeKind
+     */
     private function createArrayTypeNodeFromUnionType(
         UnionType $unionType,
-        TypeKind $typeKind
+        string $typeKind
     ): SpacingAwareArrayTypeNode {
         $unionedArrayType = [];
         foreach ($unionType->getTypes() as $unionedType) {
@@ -183,9 +187,12 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return false;
     }
 
+    /**
+     * @param TypeKind::* $typeKind
+     */
     private function createGenericArrayType(
         ArrayType $arrayType,
-        TypeKind $typeKind,
+        string $typeKind,
         bool $withKey = false
     ): GenericTypeNode {
         $itemType = $arrayType->getItemType();
@@ -248,10 +255,13 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return ! $arrayType->getItemType() instanceof ArrayType;
     }
 
+    /**
+     * @param TypeKind::* $typeKind
+     */
     private function narrowConstantArrayTypeOfUnionType(
         ArrayType $arrayType,
         Type $itemType,
-        TypeKind $typeKind
+        string $typeKind
     ): ?TypeNode {
         if ($arrayType instanceof ConstantArrayType && $itemType instanceof UnionType) {
             $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
@@ -272,9 +282,12 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return null;
     }
 
+    /**
+     * @param TypeKind::* $typeKind
+     */
     private function createTypeNodeFromGenericClassStringType(
         GenericClassStringType $genericClassStringType,
-        TypeKind $typeKind
+        string $typeKind
     ): IdentifierTypeNode|GenericTypeNode {
         $genericType = $genericClassStringType->getGenericType();
         if ($genericType instanceof ObjectType && ! $this->reflectionProvider->hasClass($genericType->getClassName())) {

@@ -117,7 +117,7 @@ CODE_SAMPLE
 
             $phpParserIntersectionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                 $paramType,
-                TypeKind::PARAM()
+                TypeKind::PARAM
             );
 
             if (! $phpParserIntersectionType instanceof Node\IntersectionType) {

@@ -137,7 +137,7 @@ CODE_SAMPLE
         $staticCalls = $this->betterNodeFinder->findInstanceOf($classMethod, StaticCall::class);
 
         foreach ($staticCalls as $staticCall) {
-            if (! $this->isName($staticCall->class, ObjectReference::PARENT()->getValue())) {
+            if (! $this->isName($staticCall->class, ObjectReference::PARENT)) {
                 continue;
             }
 

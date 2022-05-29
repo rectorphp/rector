@@ -10,7 +10,6 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 
 /**
@@ -29,7 +28,7 @@ final class SelfObjectTypeMapper implements TypeMapperInterface
     /**
      * @param SelfObjectType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind): TypeNode
     {
         return new IdentifierTypeNode('self');
     }
@@ -37,7 +36,7 @@ final class SelfObjectTypeMapper implements TypeMapperInterface
     /**
      * @param SelfObjectType $type
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         return new Name('self');
     }

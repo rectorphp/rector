@@ -31,7 +31,7 @@ final class ArrayTypeMapperTest extends AbstractTestCase
      */
     public function testWithoutKeys(ArrayType $arrayType, string $expectedResult): void
     {
-        $actualTypeNode = $this->arrayTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType, TypeKind::ANY());
+        $actualTypeNode = $this->arrayTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType, TypeKind::ANY);
         $this->assertSame($expectedResult, (string) $actualTypeNode);
     }
 
@@ -40,7 +40,7 @@ final class ArrayTypeMapperTest extends AbstractTestCase
      */
     public function testWithKeys(ArrayType $arrayType, string $expectedResult): void
     {
-        $actualTypeNode = $this->arrayTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType, TypeKind::ANY());
+        $actualTypeNode = $this->arrayTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType, TypeKind::ANY);
         $this->assertSame($expectedResult, (string) $actualTypeNode);
     }
 

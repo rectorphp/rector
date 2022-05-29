@@ -45,7 +45,7 @@ final class FullyQualifyStmtsAnalyzer
             }
 
             $name = $this->nodeNameResolver->getName($node);
-            if (ObjectReference::isValid($name)) {
+            if (in_array($name, [ObjectReference::STATIC, ObjectReference::PARENT, ObjectReference::SELF], true)) {
                 return null;
             }
 

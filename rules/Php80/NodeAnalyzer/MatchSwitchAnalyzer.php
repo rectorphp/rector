@@ -107,13 +107,13 @@ final class MatchSwitchAnalyzer
 
     /**
      * @param CondAndExpr[] $condAndExprs
-     * @return MatchKind[]
+     * @return array<MatchKind::*>
      */
     private function resolveUniqueKindsWithoutThrows(array $condAndExprs): array
     {
         $condAndExprKinds = [];
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->equalsMatchKind(MatchKind::THROW())) {
+            if ($condAndExpr->equalsMatchKind(MatchKind::THROW)) {
                 continue;
             }
 

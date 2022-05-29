@@ -47,11 +47,7 @@ final class NewTypeResolver implements NodeTypeResolverInterface
     {
         if ($node->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($node->class);
-            if (! in_array(
-                $className,
-                [ObjectReference::SELF()->getValue(), ObjectReference::PARENT()->getValue()],
-                true
-            )) {
+            if (! in_array($className, [ObjectReference::SELF, ObjectReference::PARENT], true)) {
                 return new ObjectType($className);
             }
         }

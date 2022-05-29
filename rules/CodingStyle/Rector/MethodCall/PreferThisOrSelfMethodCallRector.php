@@ -29,7 +29,7 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
     private const THIS = 'this';
 
     /**
-     * @var array<PreferenceSelfThis>
+     * @var array<string, PreferenceSelfThis::*>
      */
     private array $typeToPreference = [];
 
@@ -67,7 +67,7 @@ final class SomeClass extends TestCase
 CODE_SAMPLE
                 ,
                 [
-                    'PHPUnit\Framework\TestCase' => PreferenceSelfThis::PREFER_SELF(),
+                    'PHPUnit\Framework\TestCase' => PreferenceSelfThis::PREFER_SELF,
                 ]
             ),
         ]);
@@ -94,8 +94,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var PreferenceSelfThis $preference */
-            if ($preference->equals(PreferenceSelfThis::PREFER_SELF())) {
+            if ($preference === PreferenceSelfThis::PREFER_SELF) {
                 return $this->processToSelf($node);
             }
 
@@ -111,7 +110,9 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allString(array_keys($configuration));
-        Assert::allIsAOf($configuration, PreferenceSelfThis::class);
+        Assert::allString($configuration);
+
+        Assert::allOneOf($configuration, [PreferenceSelfThis::PREFER_THIS, PreferenceSelfThis::PREFER_SELF]);
 
         $this->typeToPreference = $configuration;
     }
@@ -120,7 +121,7 @@ CODE_SAMPLE
     {
         if ($node instanceof StaticCall && ! $this->isNames(
             $node->class,
-            [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue()]
+            [ObjectReference::SELF, ObjectReference::STATIC]
         )) {
             return null;
         }
@@ -139,7 +140,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->nodeFactory->createStaticCall(ObjectReference::SELF(), $name, $node->args);
+        return $this->nodeFactory->createStaticCall(ObjectReference::SELF, $name, $node->args);
     }
 
     private function processToThis(MethodCall | StaticCall $node): ?MethodCall
@@ -148,10 +149,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isNames(
-            $node->class,
-            [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue()]
-        )) {
+        if (! $this->isNames($node->class, [ObjectReference::SELF, ObjectReference::STATIC])) {
             return null;
         }
 

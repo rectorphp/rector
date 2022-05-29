@@ -129,7 +129,7 @@ CODE_SAMPLE
 
     private function createParentStaticCall(string $method): Expression
     {
-        $staticCall = $this->nodeFactory->createStaticCall(ObjectReference::PARENT(), $method);
+        $staticCall = $this->nodeFactory->createStaticCall(ObjectReference::PARENT, $method);
         return new Expression($staticCall);
     }
 
@@ -145,7 +145,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if (! $this->isName($node->class, ObjectReference::PARENT()->getValue())) {
+            if (! $this->isName($node->class, ObjectReference::PARENT)) {
                 return false;
             }
 

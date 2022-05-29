@@ -94,7 +94,7 @@ CODE_SAMPLE
         $isReturn = false;
 
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->equalsMatchKind(MatchKind::RETURN())) {
+            if ($condAndExpr->equalsMatchKind(MatchKind::RETURN)) {
                 $isReturn = true;
                 break;
             }
@@ -216,7 +216,7 @@ CODE_SAMPLE
             $this->removeNode($nextNode);
         }
 
-        $condAndExprs[] = new CondAndExpr([], $returnedExpr, MatchKind::RETURN());
+        $condAndExprs[] = new CondAndExpr([], $returnedExpr, MatchKind::RETURN);
         return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
 
@@ -238,7 +238,7 @@ CODE_SAMPLE
 
         $throw = new Throw_($nextNode->expr);
 
-        $condAndExprs[] = new CondAndExpr([], $throw, MatchKind::RETURN());
+        $condAndExprs[] = new CondAndExpr([], $throw, MatchKind::RETURN);
         return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
 }

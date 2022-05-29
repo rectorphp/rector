@@ -45,7 +45,7 @@ final class ClassMethodParamTypeCompleter
 
             $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                 $argumentStaticType,
-                TypeKind::PARAM()
+                TypeKind::PARAM
             );
 
             if (! $phpParserTypeNode instanceof Node) {

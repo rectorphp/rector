@@ -73,7 +73,7 @@ final class ValueResolver
         if ($expr instanceof ClassConstFetch && $resolvedClassReference) {
             $class = $this->nodeNameResolver->getName($expr->class);
 
-            if (in_array($class, [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue()], true)) {
+            if (in_array($class, [ObjectReference::SELF, ObjectReference::STATIC], true)) {
                 // @todo scope is needed
                 $classLike = $this->betterNodeFinder->findParentType($expr, ClassLike::class);
                 if ($classLike instanceof ClassLike) {
@@ -274,7 +274,7 @@ final class ValueResolver
             throw new ShouldNotHappenException();
         }
 
-        if ($class === ObjectReference::SELF()->getValue()) {
+        if ($class === ObjectReference::SELF) {
             $classLike = $this->betterNodeFinder->findParentType($classConstFetch, ClassLike::class);
             if (! $classLike instanceof ClassLike) {
                 throw new ShouldNotHappenException();

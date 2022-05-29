@@ -11,11 +11,12 @@ final class CondAndExpr
 {
     /**
      * @param Expr[]|null $condExprs
+     * @param MatchKind::* $matchKind
      */
     public function __construct(
         private readonly array|null $condExprs,
         private readonly Expr $expr,
-        private readonly MatchKind $matchKind
+        private readonly string $matchKind
     ) {
     }
 
@@ -37,13 +38,19 @@ final class CondAndExpr
         return $this->condExprs;
     }
 
-    public function getMatchKind(): MatchKind
+    /**
+     * @return MatchKind::*
+     */
+    public function getMatchKind(): string
     {
         return $this->matchKind;
     }
 
-    public function equalsMatchKind(MatchKind $matchKind): bool
+    /**
+     * @param MatchKind::* $matchKind
+     */
+    public function equalsMatchKind(string $matchKind): bool
     {
-        return $this->matchKind->equals($matchKind);
+        return $this->matchKind === $matchKind;
     }
 }

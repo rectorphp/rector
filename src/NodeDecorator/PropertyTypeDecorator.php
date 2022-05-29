@@ -33,7 +33,7 @@ final class PropertyTypeDecorator
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
-            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY());
+            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
 
             if ($phpParserType !== null) {
                 $property->type = $phpParserType;

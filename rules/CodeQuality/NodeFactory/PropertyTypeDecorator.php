@@ -65,7 +65,7 @@ final class PropertyTypeDecorator
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             $phpParserNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                 $propertyType,
-                TypeKind::PROPERTY()
+                TypeKind::PROPERTY
             );
             if (! $phpParserNode instanceof Node) {
                 // fallback to doc type in PHP 7.4
@@ -82,7 +82,7 @@ final class PropertyTypeDecorator
             return;
         }
 
-        $phpParserNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY());
+        $phpParserNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
         if (! $phpParserNode instanceof Node) {
             return;
         }

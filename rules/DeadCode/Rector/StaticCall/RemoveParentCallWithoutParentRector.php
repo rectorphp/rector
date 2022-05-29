@@ -124,7 +124,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->isName($staticCall->class, ObjectReference::PARENT()->getValue())) {
+        if (! $this->isName($staticCall->class, ObjectReference::PARENT)) {
             return true;
         }
 

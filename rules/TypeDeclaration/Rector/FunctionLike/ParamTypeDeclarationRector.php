@@ -181,7 +181,7 @@ CODE_SAMPLE
             return;
         }
 
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, TypeKind::PARAM());
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, TypeKind::PARAM);
         if (! $paramTypeNode instanceof Node) {
             return;
         }

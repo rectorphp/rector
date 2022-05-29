@@ -118,7 +118,7 @@ CODE_SAMPLE
         // To find out which is the case, check if this name exists as a class
         $parentReturnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $parentReturnType,
-            TypeKind::RETURN()
+            TypeKind::RETURN
         );
         if (! $parentReturnTypeNode instanceof Node) {
             return null;

@@ -164,10 +164,10 @@ CODE_SAMPLE
 
         // rename ParentClass
         if ($this->isName($staticCall->class, $parentClassReflection->getName())) {
-            $staticCall->class = new Name(ObjectReference::PARENT()->getValue());
+            $staticCall->class = new Name(ObjectReference::PARENT);
         }
 
-        if (! $this->isName($staticCall->class, ObjectReference::PARENT()->getValue())) {
+        if (! $this->isName($staticCall->class, ObjectReference::PARENT)) {
             return;
         }
 

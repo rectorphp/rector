@@ -62,7 +62,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 
             $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode(
                 $oldToNewType->getNewType(),
-                TypeKind::ANY()
+                TypeKind::ANY
             );
 
             $parentType = $node->getAttribute(PhpDocAttributeKey::PARENT);

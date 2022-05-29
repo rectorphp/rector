@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 
 /**
  * @implements TypeMapperInterface<AccessoryNonEmptyStringType>
@@ -29,7 +28,7 @@ final class AccessoryNonEmptyStringTypeMapper implements TypeMapperInterface
     /**
      * @param AccessoryNonEmptyStringType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind): TypeNode
     {
         return new IdentifierTypeNode('string');
     }
@@ -37,7 +36,7 @@ final class AccessoryNonEmptyStringTypeMapper implements TypeMapperInterface
     /**
      * @param AccessoryNonEmptyStringType $type
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         return new Name('string');
     }

@@ -109,7 +109,7 @@ CODE_SAMPLE
             $getterReturnType = TypeCombinator::addNull($getterReturnType);
         }
 
-        $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($getterReturnType, TypeKind::PROPERTY());
+        $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($getterReturnType, TypeKind::PROPERTY);
         if (! $propertyType instanceof Node) {
             return null;
         }

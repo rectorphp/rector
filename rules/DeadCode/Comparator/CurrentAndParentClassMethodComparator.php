@@ -56,7 +56,7 @@ final class CurrentAndParentClassMethodComparator
             return false;
         }
 
-        return $this->nodeNameResolver->isName($staticCall->class, ObjectReference::PARENT()->getValue());
+        return $this->nodeNameResolver->isName($staticCall->class, ObjectReference::PARENT);
     }
 
     /**

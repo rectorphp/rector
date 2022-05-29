@@ -122,26 +122,29 @@ CODE_SAMPLE
         return $this->nodeFactory->createStaticCall($objectReference, $methodName, $node->args);
     }
 
-    private function resolveClassSelf(MethodCall $methodCall): ObjectReference
+    /**
+     * @return ObjectReference::STATIC|ObjectReference::SELF
+     */
+    private function resolveClassSelf(MethodCall $methodCall): string
     {
         $classLike = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
         if (! $classLike instanceof Class_) {
-            return ObjectReference::STATIC();
+            return ObjectReference::STATIC;
         }
 
         if ($classLike->isFinal()) {
-            return ObjectReference::SELF();
+            return ObjectReference::SELF;
         }
 
         $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
         if (! $methodReflection instanceof PhpMethodReflection) {
-            return ObjectReference::STATIC();
+            return ObjectReference::STATIC;
         }
 
         if (! $methodReflection->isPrivate()) {
-            return ObjectReference::STATIC();
+            return ObjectReference::STATIC;
         }
 
-        return ObjectReference::SELF();
+        return ObjectReference::SELF;
     }
 }

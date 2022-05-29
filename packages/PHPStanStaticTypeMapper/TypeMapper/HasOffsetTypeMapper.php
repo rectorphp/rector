@@ -12,7 +12,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 
 /**
  * @implements TypeMapperInterface<HasOffsetType>
@@ -30,7 +29,7 @@ final class HasOffsetTypeMapper implements TypeMapperInterface
     /**
      * @param HasOffsetType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind): TypeNode
     {
         return new ArrayTypeNode(new IdentifierTypeNode('mixed'));
     }
@@ -38,7 +37,7 @@ final class HasOffsetTypeMapper implements TypeMapperInterface
     /**
      * @param HasOffsetType $type
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         return new Name('array');
     }

@@ -161,7 +161,7 @@ CODE_SAMPLE
 
             $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                 $uniqueatedParamType,
-                TypeKind::PARAM()
+                TypeKind::PARAM
             );
 
             if ($this->shouldSkipParamTypeRefactor($param->type, $phpParserUnionType)) {
@@ -209,7 +209,7 @@ CODE_SAMPLE
 
         $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $uniqueatedReturnType,
-            TypeKind::RETURN()
+            TypeKind::RETURN
         );
 
         if (! $phpParserUnionType instanceof PhpParserUnionType) {

@@ -10,6 +10,7 @@ use Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
 use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use ReflectionClass;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 /**
@@ -69,7 +70,10 @@ final class PhpVersionProvider
             return;
         }
 
-        if (PhpVersion::isValid($phpVersionFeatures)) {
+        // get all constants
+        $phpVersionReflectionClass = new ReflectionClass(PhpVersion::class);
+        // @todo check
+        if (in_array($phpVersionFeatures, $phpVersionReflectionClass->getConstants(), true)) {
             return;
         }
 

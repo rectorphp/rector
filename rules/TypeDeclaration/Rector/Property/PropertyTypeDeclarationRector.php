@@ -134,7 +134,7 @@ CODE_SAMPLE
 
     private function completeTypedProperty(Type $type, Property $property): void
     {
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY());
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
         if ($propertyTypeNode === null) {
             return;
         }

@@ -73,14 +73,14 @@ final class SwitchExprsResolver
                     return [];
                 }
 
-                $condAndExpr[] = new CondAndExpr($condExprs, $returnedExpr, MatchKind::RETURN());
+                $condAndExpr[] = new CondAndExpr($condExprs, $returnedExpr, MatchKind::RETURN);
             } elseif ($expr instanceof Assign) {
-                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::ASSIGN());
+                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::ASSIGN);
             } elseif ($expr instanceof Expr) {
-                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::NORMAL());
+                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::NORMAL);
             } elseif ($expr instanceof Throw_) {
                 $throwExpr = new Expr\Throw_($expr->expr);
-                $condAndExpr[] = new CondAndExpr($condExprs, $throwExpr, MatchKind::THROW());
+                $condAndExpr[] = new CondAndExpr($condExprs, $throwExpr, MatchKind::THROW);
             } else {
                 return [];
             }

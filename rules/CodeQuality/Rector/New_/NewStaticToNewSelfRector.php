@@ -70,11 +70,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isName($node->class, ObjectReference::STATIC()->getValue())) {
+        if (! $this->isName($node->class, ObjectReference::STATIC)) {
             return null;
         }
 
-        $node->class = new Name(ObjectReference::SELF()->getValue());
+        $node->class = new Name(ObjectReference::SELF);
 
         return $node;
     }

@@ -57,7 +57,7 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
             return new FullyQualifiedObjectType($name);
         }
 
-        if (ObjectReference::isValid($name)) {
+        if (in_array($name, [ObjectReference::STATIC, ObjectReference::SELF, ObjectReference::PARENT], true)) {
             return $this->createClassReferenceType($node, $name);
         }
 
@@ -88,11 +88,11 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         $className = (string) $this->nodeNameResolver->getName($classLike);
         $classReflection = $this->reflectionProvider->getClass($className);
 
-        if ($reference === ObjectReference::STATIC()->getValue()) {
+        if ($reference === ObjectReference::STATIC) {
             return new StaticType($classReflection);
         }
 
-        if ($reference === ObjectReference::PARENT()->getValue()) {
+        if ($reference === ObjectReference::PARENT) {
             $parentClassReflection = $classReflection->getParentClass();
             if ($parentClassReflection instanceof ClassReflection) {
                 return new ParentStaticType($parentClassReflection);

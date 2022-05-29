@@ -67,15 +67,15 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         }
 
         $loweredName = strtolower($typeNode->name);
-        if ($loweredName === ObjectReference::SELF()->getValue()) {
+        if ($loweredName === ObjectReference::SELF) {
             return $this->mapSelf($node);
         }
 
-        if ($loweredName === ObjectReference::PARENT()->getValue()) {
+        if ($loweredName === ObjectReference::PARENT) {
             return $this->mapParent($node);
         }
 
-        if ($loweredName === ObjectReference::STATIC()->getValue()) {
+        if ($loweredName === ObjectReference::STATIC) {
             return $this->mapStatic($node);
         }
 

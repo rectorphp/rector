@@ -15,7 +15,6 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -37,7 +36,7 @@ final class ClassStringTypeMapper implements TypeMapperInterface
     /**
      * @param ClassStringType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind): TypeNode
     {
         $attributeAwareIdentifierTypeNode = new IdentifierTypeNode('class-string');
 
@@ -59,7 +58,7 @@ final class ClassStringTypeMapper implements TypeMapperInterface
     /**
      * @param ClassStringType $type
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         return new Name('string');
     }

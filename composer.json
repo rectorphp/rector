@@ -14,7 +14,6 @@
         "composer/semver": "^3.3",
         "composer/xdebug-handler": "^3.0",
         "doctrine/inflector": "^2.0",
-        "myclabs/php-enum": "^1.8",
         "nette/utils": "^3.2.7",
         "nikic/php-parser": "^4.13.2",
         "ondram/ci-detector": "^4.1",

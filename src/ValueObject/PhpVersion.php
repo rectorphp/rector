@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject;
 
-use MyCLabs\Enum\Enum;
-
 /**
  * @api
  */
-final class PhpVersion extends Enum
+final class PhpVersion
 {
     /**
      * @var int

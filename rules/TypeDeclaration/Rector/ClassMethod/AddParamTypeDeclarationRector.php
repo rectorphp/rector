@@ -168,7 +168,7 @@ CODE_SAMPLE
 
         $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $addParamTypeDeclaration->getParamType(),
-            TypeKind::PARAM()
+            TypeKind::PARAM
         );
 
         // remove it

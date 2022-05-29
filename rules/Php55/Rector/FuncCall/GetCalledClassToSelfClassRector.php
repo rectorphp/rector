@@ -77,11 +77,11 @@ CODE_SAMPLE
         }
 
         if ($class->isFinal()) {
-            return $this->nodeFactory->createClassConstFetch(ObjectReference::SELF(), 'class');
+            return $this->nodeFactory->createClassConstFetch(ObjectReference::SELF, 'class');
         }
 
         if ($this->classAnalyzer->isAnonymousClass($class)) {
-            return $this->nodeFactory->createClassConstFetch(ObjectReference::SELF(), 'class');
+            return $this->nodeFactory->createClassConstFetch(ObjectReference::SELF, 'class');
         }
 
         return null;

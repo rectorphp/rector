@@ -4,33 +4,25 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper\Enum;
 
-use MyCLabs\Enum\Enum;
-
-/**
- * @method static TypeKind PROPERTY()
- * @method static TypeKind RETURN()
- * @method static TypeKind PARAM()
- * @method static TypeKind ANY()
- */
-final class TypeKind extends Enum
+final class TypeKind
 {
     /**
      * @var string
      */
-    private const PROPERTY = 'property';
+    public const PROPERTY = 'property';
 
     /**
      * @var string
      */
-    private const RETURN = 'return';
+    public const RETURN = 'return';
 
     /**
      * @var string
      */
-    private const PARAM = 'param';
+    public const PARAM = 'param';
 
     /**
      * @var string
      */
-    private const ANY = 'any';
+    public const ANY = 'any';
 }

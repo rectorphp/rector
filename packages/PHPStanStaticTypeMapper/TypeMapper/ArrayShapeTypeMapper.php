@@ -50,7 +50,7 @@ final class ArrayShapeTypeMapper
 
             $valueDocTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode(
                 $valueType,
-                TypeKind::RETURN()
+                TypeKind::RETURN
             );
 
             $arrayShapeItemNodes[] = new ArrayShapeItemNode(

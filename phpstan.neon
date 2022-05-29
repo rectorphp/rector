@@ -698,3 +698,8 @@ parameters:
         -
             message: '#Call to static method Webmozart\\Assert\\Assert\:\:(.*?)\(\) with (.*?) will always evaluate to (false|true)#'
             path: packages/Config/RectorConfig.php
+
+        # BC layer
+        -
+            message: '#Class has a static method must so must contains "Static" in its name#'
+            path: rules/CodingStyle/Enum/PreferenceSelfThis.php

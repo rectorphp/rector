@@ -119,7 +119,7 @@ final class ParentPropertyLookupGuard
 
             if (! $this->nodeNameResolver->isNames(
                 $subNode->class,
-                [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue(), $className]
+                [ObjectReference::SELF, ObjectReference::STATIC, $className]
             )) {
                 return false;
             }

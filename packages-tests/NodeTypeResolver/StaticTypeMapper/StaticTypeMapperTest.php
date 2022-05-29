@@ -63,7 +63,7 @@ final class StaticTypeMapperTest extends AbstractTestCase
 
         $phpStanDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode(
             $iterableType,
-            TypeKind::ANY()
+            TypeKind::ANY
         );
         $this->assertInstanceOf(ArrayTypeNode::class, $phpStanDocTypeNode);
 
@@ -77,7 +77,7 @@ final class StaticTypeMapperTest extends AbstractTestCase
 
         $phpStanDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode(
             $mixedType,
-            TypeKind::ANY()
+            TypeKind::ANY
         );
         $this->assertInstanceOf(IdentifierTypeNode::class, $phpStanDocTypeNode);
     }

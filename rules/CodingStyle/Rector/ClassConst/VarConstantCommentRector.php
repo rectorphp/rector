@@ -109,7 +109,7 @@ CODE_SAMPLE
     {
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode(
             $constantArrayType,
-            TypeKind::RETURN()
+            TypeKind::RETURN
         );
         if (! $typeNode instanceof ArrayTypeNode) {
             return false;

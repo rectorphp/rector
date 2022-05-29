@@ -140,7 +140,7 @@ CODE_SAMPLE
     {
         $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $inferedType,
-            TypeKind::RETURN()
+            TypeKind::RETURN
         );
 
         // nothing to change in PHP code

@@ -44,7 +44,7 @@ final class ObjectTypeMapper implements TypeMapperInterface
     /**
      * @param ObjectType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind): TypeNode
     {
         if ($type instanceof ShortenedObjectType) {
             return new IdentifierTypeNode($type->getClassName());
@@ -73,7 +73,7 @@ final class ObjectTypeMapper implements TypeMapperInterface
     /**
      * @param ObjectType $type
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         if ($type instanceof SelfObjectType) {
             return new Name('self');
@@ -122,7 +122,10 @@ final class ObjectTypeMapper implements TypeMapperInterface
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
 
-    private function mapGenericObjectType(GenericObjectType $genericObjectType, TypeKind $typeKind): TypeNode
+    /**
+     * @param TypeKind::* $typeKind
+     */
+    private function mapGenericObjectType(GenericObjectType $genericObjectType, string $typeKind): TypeNode
     {
         $name = $this->resolveGenericObjectTypeName($genericObjectType);
         $identifierTypeNode = new IdentifierTypeNode($name);

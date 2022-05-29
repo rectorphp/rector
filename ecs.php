@@ -58,8 +58,12 @@ return static function (ECSConfig $ecsConfig): void {
         // buggy - @todo fix on Symplify master
         DocBlockLineLengthFixer::class,
 
-        // double to Double false positive
-        PhpdocTypesFixer::class => [__DIR__ . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php'],
+        PhpdocTypesFixer::class => [
+            // double to Double false positive
+            __DIR__ . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php',
+            // skip for enum types
+            __DIR__ . '/rules/Php70/Rector/MethodCall/ThisCallOnStaticMethodToStaticCallRector.php',
+        ],
 
         // breaking and handled better by Rector PHPUnit code quality set, removed in symplify dev-main
         PhpUnitStrictFixer::class,

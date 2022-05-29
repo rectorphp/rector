@@ -54,8 +54,8 @@ final class PropertyFetchAnalyzer
             }
 
             return $this->nodeNameResolver->isNames($node->class, [
-                ObjectReference::SELF()->getValue(),
-                ObjectReference::STATIC()->getValue(),
+                ObjectReference::SELF,
+                ObjectReference::STATIC,
             ]);
         }
 
@@ -88,7 +88,7 @@ final class PropertyFetchAnalyzer
 
         if ($expr instanceof StaticPropertyFetch && ! $this->nodeNameResolver->isName(
             $expr->class,
-            ObjectReference::SELF()->getValue()
+            ObjectReference::SELF
         )) {
             return false;
         }

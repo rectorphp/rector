@@ -53,7 +53,7 @@ final class ReturnTypeAlreadyAddedChecker
             return false;
         }
 
-        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN());
+        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
         if ($this->nodeComparator->areNodesEqual($nodeReturnType, $returnNode)) {
             return true;
         }
