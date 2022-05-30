@@ -86,6 +86,13 @@ CODE_SAMPLE
                 continue;
             }
 
+            if (! $this->nodeNameResolver->isName(
+                $node->name,
+                $singleCallableInMethodCallToVariable->getMethodName()
+            )) {
+                continue;
+            }
+
             $position = $singleCallableInMethodCallToVariable->getArgumentPosition();
             if (! isset($node->args[$position])) {
                 continue;

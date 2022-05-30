@@ -25,5 +25,7 @@ jobs:
                 rm phpstan-for-rector.neon
                 touch phpstan-for-rector.neon
 
-            -   run: composer install --no-progress --ansi --no-dev
-            -   run: bin/rector list --ansi
+            -  run: |
+                 composer install --ansi
+                 composer install --no-progress --ansi --no-dev
+            -  run: bin/rector list --ansi
