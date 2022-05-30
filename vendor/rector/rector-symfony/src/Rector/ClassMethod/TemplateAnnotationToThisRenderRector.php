@@ -35,7 +35,7 @@ use Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer;
 use Rector\Symfony\TypeDeclaration\ReturnTypeDeclarationUpdater;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220529\Webmozart\Assert\Assert;
+use RectorPrefix20220530\Webmozart\Assert\Assert;
 /**
  * @see https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
  * @see https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
@@ -261,7 +261,7 @@ CODE_SAMPLE
     }
     private function refactorStmtsAwareNode(\PhpParser\Node\Stmt $stmtsAwareStmt, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, bool $hasThisRenderOrReturnsResponse, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
-        \RectorPrefix20220529\Webmozart\Assert\Assert::propertyExists($stmtsAwareStmt, 'stmts');
+        \RectorPrefix20220530\Webmozart\Assert\Assert::propertyExists($stmtsAwareStmt, 'stmts');
         foreach ((array) $stmtsAwareStmt->stmts as $stmt) {
             if (!$stmt instanceof \PhpParser\Node\Stmt\Return_) {
                 continue;

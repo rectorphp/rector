@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220529\Symfony\Component\Config\Resource;
+namespace RectorPrefix20220530\Symfony\Component\Config\Resource;
 
-use RectorPrefix20220529\Symfony\Component\Finder\Finder;
-use RectorPrefix20220529\Symfony\Component\Finder\Glob;
+use RectorPrefix20220530\Symfony\Component\Finder\Finder;
+use RectorPrefix20220530\Symfony\Component\Finder\Glob;
 /**
  * GlobResource represents a set of resources stored on the filesystem.
  *
@@ -23,7 +23,7 @@ use RectorPrefix20220529\Symfony\Component\Finder\Glob;
  *
  * @implements \IteratorAggregate<string, \SplFileInfo>
  */
-class GlobResource implements \IteratorAggregate, \RectorPrefix20220529\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class GlobResource implements \IteratorAggregate, \RectorPrefix20220530\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     /**
      * @var string
@@ -161,7 +161,7 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20220529\Symfony\
             }
             return;
         }
-        if (!\class_exists(\RectorPrefix20220529\Symfony\Component\Finder\Finder::class)) {
+        if (!\class_exists(\RectorPrefix20220530\Symfony\Component\Finder\Finder::class)) {
             throw new \LogicException(\sprintf('Extended glob pattern "%s" cannot be used as the Finder component is not installed.', $this->pattern));
         }
         if (\is_file($prefix = $this->prefix)) {
@@ -170,12 +170,12 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20220529\Symfony\
         } else {
             $pattern = $this->pattern;
         }
-        $regex = \RectorPrefix20220529\Symfony\Component\Finder\Glob::toRegex($pattern);
+        $regex = \RectorPrefix20220530\Symfony\Component\Finder\Glob::toRegex($pattern);
         if ($this->recursive) {
             $regex = \substr_replace($regex, '(/|$)', -2, 1);
         }
         $prefixLen = \strlen($prefix);
-        yield from (new \RectorPrefix20220529\Symfony\Component\Finder\Finder())->followLinks()->filter(function (\SplFileInfo $info) use($regex, $prefixLen, $prefix) {
+        yield from (new \RectorPrefix20220530\Symfony\Component\Finder\Finder())->followLinks()->filter(function (\SplFileInfo $info) use($regex, $prefixLen, $prefix) {
             $normalizedPath = \str_replace('\\', '/', $info->getPathname());
             if (!\preg_match($regex, \substr($normalizedPath, $prefixLen)) || !$info->isFile()) {
                 return \false;

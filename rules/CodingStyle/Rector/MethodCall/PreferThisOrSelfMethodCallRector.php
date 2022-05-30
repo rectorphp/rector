@@ -15,7 +15,7 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220529\Webmozart\Assert\Assert;
+use RectorPrefix20220530\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\PreferThisOrSelfMethodCallRectorTest
  */
@@ -92,9 +92,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220529\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220529\Webmozart\Assert\Assert::allString($configuration);
-        \RectorPrefix20220529\Webmozart\Assert\Assert::allOneOf($configuration, [\Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_THIS, \Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_SELF]);
+        \RectorPrefix20220530\Webmozart\Assert\Assert::allString(\array_keys($configuration));
+        \RectorPrefix20220530\Webmozart\Assert\Assert::allString($configuration);
+        \RectorPrefix20220530\Webmozart\Assert\Assert::allOneOf($configuration, [\Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_THIS, \Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_SELF]);
         $this->typeToPreference = $configuration;
     }
     /**

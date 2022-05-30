@@ -41,12 +41,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220529\\React\\EventLoop\\": "src"
+            "RectorPrefix20220530\\React\\EventLoop\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220529\\React\\Tests\\EventLoop\\": "tests"
+            "RectorPrefix20220530\\React\\Tests\\EventLoop\\": "tests"
         }
     }
 }

@@ -11,13 +11,13 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220529\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20220530\Symfony\Component\Console\Input\InputArgument;
 final class CommandMethodDecorator
 {
     /**
      * @var array<int, string>
      */
-    private const MODE_MAPPING = [\RectorPrefix20220529\Symfony\Component\Console\Input\InputArgument::OPTIONAL => 'OPTIONAL', \RectorPrefix20220529\Symfony\Component\Console\Input\InputArgument::REQUIRED => 'REQUIRED'];
+    private const MODE_MAPPING = [\RectorPrefix20220530\Symfony\Component\Console\Input\InputArgument::OPTIONAL => 'OPTIONAL', \RectorPrefix20220530\Symfony\Component\Console\Input\InputArgument::REQUIRED => 'REQUIRED'];
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
