@@ -23,7 +23,6 @@ return array(
     'Rector\\' => array($baseDir . '/packages', $baseDir . '/rules'),
     'RectorPrefix20220530\\cweagans\\Composer\\' => array($vendorDir . '/cweagans/composer-patches/src'),
     'RectorPrefix20220530\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
-    'RectorPrefix20220530\\Symplify\\VendorPatches\\' => array($vendorDir . '/symplify/vendor-patches/src'),
     'RectorPrefix20220530\\Symplify\\SymplifyKernel\\' => array($vendorDir . '/symplify/symplify-kernel/src'),
     'RectorPrefix20220530\\Symplify\\SmartFileSystem\\' => array($vendorDir . '/symplify/smart-file-system/src'),
     'RectorPrefix20220530\\Symplify\\Skipper\\' => array($vendorDir . '/symplify/skipper/src'),

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit89c7820a403b65de715531a05352cbca
+class ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382
 {
     public static $files = array (
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
@@ -41,7 +41,6 @@ class ComposerStaticInit89c7820a403b65de715531a05352cbca
             'Rector\\' => 7,
             'RectorPrefix20220530\\cweagans\\Composer\\' => 39,
             'RectorPrefix20220530\\Webmozart\\Assert\\' => 38,
-            'RectorPrefix20220530\\Symplify\\VendorPatches\\' => 44,
             'RectorPrefix20220530\\Symplify\\SymplifyKernel\\' => 45,
             'RectorPrefix20220530\\Symplify\\SmartFileSystem\\' => 46,
             'RectorPrefix20220530\\Symplify\\Skipper\\' => 38,
@@ -159,10 +158,6 @@ class ComposerStaticInit89c7820a403b65de715531a05352cbca
         'RectorPrefix20220530\\Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
-        ),
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/vendor-patches/src',
         ),
         'RectorPrefix20220530\\Symplify\\SymplifyKernel\\' => 
         array (
@@ -1585,17 +1580,6 @@ class ComposerStaticInit89c7820a403b65de715531a05352cbca
         'RectorPrefix20220530\\Symplify\\SymplifyKernel\\HttpKernel\\AbstractSymplifyKernel' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/HttpKernel/AbstractSymplifyKernel.php',
         'RectorPrefix20220530\\Symplify\\SymplifyKernel\\ValueObject\\KernelBootAndApplicationRun' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/ValueObject/KernelBootAndApplicationRun.php',
         'RectorPrefix20220530\\Symplify\\SymplifyKernel\\ValueObject\\SymplifyKernelConfig' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/ValueObject/SymplifyKernelConfig.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\Command\\GenerateCommand' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Command/GenerateCommand.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\Composer\\ComposerPatchesConfigurationUpdater' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Composer/ComposerPatchesConfigurationUpdater.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\Composer\\PackageNameResolver' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Composer/PackageNameResolver.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\Console\\GenerateCommandReporter' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Console/GenerateCommandReporter.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\Console\\VendorPatchesApplication' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Console/VendorPatchesApplication.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\Differ\\PatchDiffer' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Differ/PatchDiffer.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\FileSystem\\PathResolver' => __DIR__ . '/..' . '/symplify/vendor-patches/src/FileSystem/PathResolver.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\Finder\\OldToNewFilesFinder' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Finder/OldToNewFilesFinder.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\Kernel\\VendorPatchesKernel' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Kernel/VendorPatchesKernel.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\PatchFileFactory' => __DIR__ . '/..' . '/symplify/vendor-patches/src/PatchFileFactory.php',
-        'RectorPrefix20220530\\Symplify\\VendorPatches\\ValueObject\\OldAndNewFileInfo' => __DIR__ . '/..' . '/symplify/vendor-patches/src/ValueObject/OldAndNewFileInfo.php',
         'RectorPrefix20220530\\Tracy\\Bar' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Bar/Bar.php',
         'RectorPrefix20220530\\Tracy\\BlueScreen' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/BlueScreen/BlueScreen.php',
         'RectorPrefix20220530\\Tracy\\Bridges\\Nette\\Bridge' => __DIR__ . '/..' . '/tracy/tracy/src/Bridges/Nette/Bridge.php',
@@ -3800,9 +3784,9 @@ class ComposerStaticInit89c7820a403b65de715531a05352cbca
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit89c7820a403b65de715531a05352cbca::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit89c7820a403b65de715531a05352cbca::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit89c7820a403b65de715531a05352cbca::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382::$classMap;
 
         }, null, ClassLoader::class);
     }
