@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2782284158fe2d8a86e76f2c9e090291
+class ComposerStaticInita7a18625c2224d8ed6025f76e07edf25
 {
     public static $files = array (
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
@@ -1263,7 +1263,6 @@ class ComposerStaticInit2782284158fe2d8a86e76f2c9e090291
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/dependency-injection/Exception/RuntimeException.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Exception\\ServiceCircularReferenceException' => __DIR__ . '/..' . '/symfony/dependency-injection/Exception/ServiceCircularReferenceException.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Exception\\ServiceNotFoundException' => __DIR__ . '/..' . '/symfony/dependency-injection/Exception/ServiceNotFoundException.php',
-        'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\ExpressionLanguage' => __DIR__ . '/..' . '/symfony/dependency-injection/ExpressionLanguage.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Extension\\ConfigurationExtensionInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/ConfigurationExtensionInterface.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Extension\\Extension' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/Extension.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Extension\\ExtensionInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/ExtensionInterface.php',
@@ -3801,9 +3800,9 @@ class ComposerStaticInit2782284158fe2d8a86e76f2c9e090291
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2782284158fe2d8a86e76f2c9e090291::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2782284158fe2d8a86e76f2c9e090291::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2782284158fe2d8a86e76f2c9e090291::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita7a18625c2224d8ed6025f76e07edf25::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita7a18625c2224d8ed6025f76e07edf25::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita7a18625c2224d8ed6025f76e07edf25::$classMap;
 
         }, null, ClassLoader::class);
     }

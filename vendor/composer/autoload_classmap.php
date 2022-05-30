@@ -938,7 +938,6 @@ return array(
     'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Exception\\RuntimeException' => $vendorDir . '/symfony/dependency-injection/Exception/RuntimeException.php',
     'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Exception\\ServiceCircularReferenceException' => $vendorDir . '/symfony/dependency-injection/Exception/ServiceCircularReferenceException.php',
     'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Exception\\ServiceNotFoundException' => $vendorDir . '/symfony/dependency-injection/Exception/ServiceNotFoundException.php',
-    'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\ExpressionLanguage' => $vendorDir . '/symfony/dependency-injection/ExpressionLanguage.php',
     'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Extension\\ConfigurationExtensionInterface' => $vendorDir . '/symfony/dependency-injection/Extension/ConfigurationExtensionInterface.php',
     'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Extension\\Extension' => $vendorDir . '/symfony/dependency-injection/Extension/Extension.php',
     'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Extension\\ExtensionInterface' => $vendorDir . '/symfony/dependency-injection/Extension/ExtensionInterface.php',
