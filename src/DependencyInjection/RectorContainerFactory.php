@@ -33,9 +33,9 @@ final class RectorContainerFactory
                     $mainConfigFile,
                     PHP_EOL,
                 );
-                $symfonyStyle->warning($warningMessage);
+                $symfonyStyle->error($warningMessage);
                 // to make message noticable
-                sleep(5);
+                sleep(10);
             }
 
             /** @var ChangedFilesDetector $changedFilesDetector */
