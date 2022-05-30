@@ -9,7 +9,6 @@ use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\VersionResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\ProcessCommand;
-use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -48,18 +47,6 @@ final class ConsoleApplication extends Application
 
         $shouldFollowByNewline = false;
 
-        // switch working dir
-        $newWorkDir = $this->getNewWorkingDir($input);
-        if ($newWorkDir !== '') {
-            $oldWorkingDir = getcwd();
-            chdir($newWorkDir);
-
-            if ($output->isDebug()) {
-                $message = sprintf('Changed working directory from "%s" to "%s"', $oldWorkingDir, getcwd());
-                $output->writeln($message);
-            }
-        }
-
         // skip in this case, since generate content must be clear from meta-info
         if ($this->shouldPrintMetaInformation($input)) {
             $output->writeln($this->getLongVersion());
@@ -81,17 +68,6 @@ final class ConsoleApplication extends Application
         $this->addCustomOptions($defaultInputDefinition);
 
         return $defaultInputDefinition;
-    }
-
-    private function getNewWorkingDir(InputInterface $input): string
-    {
-        $workingDir = $input->getParameterOption('--working-dir');
-        if (is_string($workingDir) && ! is_dir($workingDir)) {
-            $errorMessage = sprintf('Invalid working directory specified, "%s" does not exist.', $workingDir);
-            throw new InvalidConfigurationException($errorMessage);
-        }
-
-        return (string) $workingDir;
     }
 
     private function shouldPrintMetaInformation(InputInterface $input): bool
@@ -148,13 +124,6 @@ final class ConsoleApplication extends Application
             null,
             InputOption::VALUE_NONE,
             'Clear cache'
-        ));
-
-        $inputDefinition->addOption(new InputOption(
-            Option::WORKING_DIR,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'If specified, use the given directory as working directory.'
         ));
     }
 
