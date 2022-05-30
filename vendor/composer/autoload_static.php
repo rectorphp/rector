@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6456f41afe3f213c35f571c937be027d
+class ComposerStaticInit6b9306cfef653abff59ef2acd0d14441
 {
     public static $files = array (
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
@@ -1097,12 +1097,6 @@ class ComposerStaticInit6456f41afe3f213c35f571c937be027d
         'RectorPrefix20220530\\Symfony\\Component\\Console\\Descriptor\\MarkdownDescriptor' => __DIR__ . '/..' . '/symfony/console/Descriptor/MarkdownDescriptor.php',
         'RectorPrefix20220530\\Symfony\\Component\\Console\\Descriptor\\TextDescriptor' => __DIR__ . '/..' . '/symfony/console/Descriptor/TextDescriptor.php',
         'RectorPrefix20220530\\Symfony\\Component\\Console\\Descriptor\\XmlDescriptor' => __DIR__ . '/..' . '/symfony/console/Descriptor/XmlDescriptor.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\EventListener\\ErrorListener' => __DIR__ . '/..' . '/symfony/console/EventListener/ErrorListener.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\Event\\ConsoleCommandEvent' => __DIR__ . '/..' . '/symfony/console/Event/ConsoleCommandEvent.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\Event\\ConsoleErrorEvent' => __DIR__ . '/..' . '/symfony/console/Event/ConsoleErrorEvent.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\Event\\ConsoleEvent' => __DIR__ . '/..' . '/symfony/console/Event/ConsoleEvent.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\Event\\ConsoleSignalEvent' => __DIR__ . '/..' . '/symfony/console/Event/ConsoleSignalEvent.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\Event\\ConsoleTerminateEvent' => __DIR__ . '/..' . '/symfony/console/Event/ConsoleTerminateEvent.php',
         'RectorPrefix20220530\\Symfony\\Component\\Console\\Exception\\CommandNotFoundException' => __DIR__ . '/..' . '/symfony/console/Exception/CommandNotFoundException.php',
         'RectorPrefix20220530\\Symfony\\Component\\Console\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/console/Exception/ExceptionInterface.php',
         'RectorPrefix20220530\\Symfony\\Component\\Console\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/symfony/console/Exception/InvalidArgumentException.php',
@@ -1167,11 +1161,6 @@ class ComposerStaticInit6456f41afe3f213c35f571c937be027d
         'RectorPrefix20220530\\Symfony\\Component\\Console\\Style\\StyleInterface' => __DIR__ . '/..' . '/symfony/console/Style/StyleInterface.php',
         'RectorPrefix20220530\\Symfony\\Component\\Console\\Style\\SymfonyStyle' => __DIR__ . '/..' . '/symfony/console/Style/SymfonyStyle.php',
         'RectorPrefix20220530\\Symfony\\Component\\Console\\Terminal' => __DIR__ . '/..' . '/symfony/console/Terminal.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\Tester\\ApplicationTester' => __DIR__ . '/..' . '/symfony/console/Tester/ApplicationTester.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\Tester\\CommandCompletionTester' => __DIR__ . '/..' . '/symfony/console/Tester/CommandCompletionTester.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\Tester\\CommandTester' => __DIR__ . '/..' . '/symfony/console/Tester/CommandTester.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\Tester\\Constraint\\CommandIsSuccessful' => __DIR__ . '/..' . '/symfony/console/Tester/Constraint/CommandIsSuccessful.php',
-        'RectorPrefix20220530\\Symfony\\Component\\Console\\Tester\\TesterTrait' => __DIR__ . '/..' . '/symfony/console/Tester/TesterTrait.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Alias' => __DIR__ . '/..' . '/symfony/dependency-injection/Alias.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Argument\\AbstractArgument' => __DIR__ . '/..' . '/symfony/dependency-injection/Argument/AbstractArgument.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Argument\\ArgumentInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/Argument/ArgumentInterface.php',
@@ -1275,7 +1264,6 @@ class ComposerStaticInit6456f41afe3f213c35f571c937be027d
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Exception\\ServiceCircularReferenceException' => __DIR__ . '/..' . '/symfony/dependency-injection/Exception/ServiceCircularReferenceException.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Exception\\ServiceNotFoundException' => __DIR__ . '/..' . '/symfony/dependency-injection/Exception/ServiceNotFoundException.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\ExpressionLanguage' => __DIR__ . '/..' . '/symfony/dependency-injection/ExpressionLanguage.php',
-        'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\ExpressionLanguageProvider' => __DIR__ . '/..' . '/symfony/dependency-injection/ExpressionLanguageProvider.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Extension\\ConfigurationExtensionInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/ConfigurationExtensionInterface.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Extension\\Extension' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/Extension.php',
         'RectorPrefix20220530\\Symfony\\Component\\DependencyInjection\\Extension\\ExtensionInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/ExtensionInterface.php',
@@ -1399,7 +1387,6 @@ class ComposerStaticInit6456f41afe3f213c35f571c937be027d
         'RectorPrefix20220530\\Symfony\\Contracts\\Cache\\CacheInterface' => __DIR__ . '/..' . '/symfony/contracts/Cache/CacheInterface.php',
         'RectorPrefix20220530\\Symfony\\Contracts\\Cache\\CacheTrait' => __DIR__ . '/..' . '/symfony/contracts/Cache/CacheTrait.php',
         'RectorPrefix20220530\\Symfony\\Contracts\\Cache\\CallbackInterface' => __DIR__ . '/..' . '/symfony/contracts/Cache/CallbackInterface.php',
-        'RectorPrefix20220530\\Symfony\\Contracts\\Cache\\ItemInterface' => __DIR__ . '/..' . '/symfony/contracts/Cache/ItemInterface.php',
         'RectorPrefix20220530\\Symfony\\Contracts\\Cache\\TagAwareCacheInterface' => __DIR__ . '/..' . '/symfony/contracts/Cache/TagAwareCacheInterface.php',
         'RectorPrefix20220530\\Symfony\\Contracts\\EventDispatcher\\Event' => __DIR__ . '/..' . '/symfony/contracts/EventDispatcher/Event.php',
         'RectorPrefix20220530\\Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface' => __DIR__ . '/..' . '/symfony/contracts/EventDispatcher/EventDispatcherInterface.php',
@@ -3814,9 +3801,9 @@ class ComposerStaticInit6456f41afe3f213c35f571c937be027d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6456f41afe3f213c35f571c937be027d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6456f41afe3f213c35f571c937be027d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6456f41afe3f213c35f571c937be027d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6b9306cfef653abff59ef2acd0d14441::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6b9306cfef653abff59ef2acd0d14441::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6b9306cfef653abff59ef2acd0d14441::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -19,7 +19,7 @@ class InvocationMockerDynamicReturnTypeExtension implements \PHPStan\Type\Dynami
     {
         return $methodReflection->getName() !== 'getMatcher';
     }
-    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
+    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : ?\PHPStan\Type\Type
     {
         return $scope->getType($methodCall->var);
     }
