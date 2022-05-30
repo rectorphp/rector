@@ -22,8 +22,7 @@ final class RectorContainerFactory
             if (\strpos($fileContents, 'ContainerConfigurator $containerConfigurator') !== \false) {
                 /** @var SymfonyStyle $symfonyStyle */
                 $symfonyStyle = $container->get(\RectorPrefix20220530\Symfony\Component\Console\Style\SymfonyStyle::class);
-                // @todo add link to blog post after release
-                $warningMessage = \sprintf('Your "%s" config is using old syntax with "ContainerConfigurator".%sUpgrade to "RectorConfig" that allows better autocomplete and future standard.', $mainConfigFile, \PHP_EOL);
+                $warningMessage = \sprintf('Your "%s" config is using old syntax with "ContainerConfigurator".%sUpgrade to "RectorConfig" that allows better autocomplete and future standard: https://getrector.org/blog/new-in-rector-012-introducing-rector-config-with-autocomplete', $mainConfigFile, \PHP_EOL);
                 $symfonyStyle->error($warningMessage);
                 // to make message noticable
                 \sleep(10);
