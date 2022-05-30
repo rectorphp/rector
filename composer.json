@@ -13,7 +13,6 @@
         "clue/ndjson-react": "^1.2",
         "composer/semver": "^3.3",
         "composer/xdebug-handler": "^3.0",
-        "cweagans/composer-patches": "^1.7.2",
         "doctrine/inflector": "^2.0",
         "nette/utils": "^3.2.7",
         "nikic/php-parser": "^4.13.2",
@@ -55,6 +54,7 @@
     },
     "require-dev": {
         "brianium/paratest": "^6.4",
+        "cweagans/composer-patches": "^1.7.2",
         "friendsofphp/php-cs-fixer": "^3.8",
         "nategood/httpful": "^0.3.2",
         "phpstan/extension-installer": "^1.1",
@@ -151,6 +151,7 @@
         "release": "vendor/bin/monorepo-builder release patch --ansi"
     },
     "extra": {
+        "composer-exit-on-patch-failure": true,
         "patches": {
             "nikic/php-parser": [
                 "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-expr-closure-php.patch",

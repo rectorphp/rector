@@ -45,7 +45,10 @@ jobs:
                 env:
                     COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-            # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
+            # install do not use composer/ramsey github action packges, it uses cache including "dev", we want to avoid it here
+            # this run is needed to install patches, the --no-dev skips them
+            -   run: composer install --ansi
+            # to remove dev dependencies
             -   run: composer install --no-dev --ansi
 
             # early downgrade individual functions
