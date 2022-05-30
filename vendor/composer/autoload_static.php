@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382
+class ComposerStaticInitb5967f63789da43689ff7019f8950005
 {
     public static $files = array (
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
@@ -39,7 +39,6 @@ class ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382
             'Rector\\Compiler\\' => 16,
             'Rector\\CakePHP\\' => 15,
             'Rector\\' => 7,
-            'RectorPrefix20220530\\cweagans\\Composer\\' => 39,
             'RectorPrefix20220530\\Webmozart\\Assert\\' => 38,
             'RectorPrefix20220530\\Symplify\\SymplifyKernel\\' => 45,
             'RectorPrefix20220530\\Symplify\\SmartFileSystem\\' => 46,
@@ -150,10 +149,6 @@ class ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382
         array (
             0 => __DIR__ . '/../..' . '/packages',
             1 => __DIR__ . '/../..' . '/rules',
-        ),
-        'RectorPrefix20220530\\cweagans\\Composer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/cweagans/composer-patches/src',
         ),
         'RectorPrefix20220530\\Webmozart\\Assert\\' => 
         array (
@@ -1609,9 +1604,6 @@ class ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382
         'RectorPrefix20220530\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'RectorPrefix20220530\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
         'RectorPrefix20220530\\Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
-        'RectorPrefix20220530\\cweagans\\Composer\\PatchEvent' => __DIR__ . '/..' . '/cweagans/composer-patches/src/PatchEvent.php',
-        'RectorPrefix20220530\\cweagans\\Composer\\PatchEvents' => __DIR__ . '/..' . '/cweagans/composer-patches/src/PatchEvents.php',
-        'RectorPrefix20220530\\cweagans\\Composer\\Patches' => __DIR__ . '/..' . '/cweagans/composer-patches/src/Patches.php',
         'Rector\\Arguments\\ArgumentDefaultValueReplacer' => __DIR__ . '/../..' . '/rules/Arguments/ArgumentDefaultValueReplacer.php',
         'Rector\\Arguments\\Contract\\ReplaceArgumentDefaultValueInterface' => __DIR__ . '/../..' . '/rules/Arguments/Contract/ReplaceArgumentDefaultValueInterface.php',
         'Rector\\Arguments\\NodeAnalyzer\\ArgumentAddingScope' => __DIR__ . '/../..' . '/rules/Arguments/NodeAnalyzer/ArgumentAddingScope.php',
@@ -3784,9 +3776,9 @@ class ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4b7528a120ab25a57889e0ba4bfe6382::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb5967f63789da43689ff7019f8950005::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb5967f63789da43689ff7019f8950005::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb5967f63789da43689ff7019f8950005::$classMap;
 
         }, null, ClassLoader::class);
     }

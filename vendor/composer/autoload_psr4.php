@@ -21,7 +21,6 @@ return array(
     'Rector\\Compiler\\' => array($baseDir . '/utils/compiler/src'),
     'Rector\\CakePHP\\' => array($vendorDir . '/rector/rector-cakephp/src'),
     'Rector\\' => array($baseDir . '/packages', $baseDir . '/rules'),
-    'RectorPrefix20220530\\cweagans\\Composer\\' => array($vendorDir . '/cweagans/composer-patches/src'),
     'RectorPrefix20220530\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'RectorPrefix20220530\\Symplify\\SymplifyKernel\\' => array($vendorDir . '/symplify/symplify-kernel/src'),
     'RectorPrefix20220530\\Symplify\\SmartFileSystem\\' => array($vendorDir . '/symplify/smart-file-system/src'),
