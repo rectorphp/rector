@@ -13,6 +13,7 @@
         "clue/ndjson-react": "^1.2",
         "composer/semver": "^3.3",
         "composer/xdebug-handler": "^3.0",
+        "cweagans/composer-patches": "^1.7.2",
         "doctrine/inflector": "^2.0",
         "nette/utils": "^3.2.7",
         "nikic/php-parser": "^4.13.2",
