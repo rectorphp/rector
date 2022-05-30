@@ -867,17 +867,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.7.3",
-            "version_normalized": "1.7.3.0",
+            "version": "1.7.4",
+            "version_normalized": "1.7.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "48c4621b1a6dde32aab2e9a79658b843ffb614f7"
+                "reference": "9381761d40a5daa3eee2ace98b9eaa8fed1f8ecc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/48c4621b1a6dde32aab2e9a79658b843ffb614f7",
-                "reference": "48c4621b1a6dde32aab2e9a79658b843ffb614f7",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/9381761d40a5daa3eee2ace98b9eaa8fed1f8ecc",
+                "reference": "9381761d40a5daa3eee2ace98b9eaa8fed1f8ecc",
                 "shasum": ""
             },
             "require": {
@@ -886,7 +886,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-05-29T11:36:09+00:00",
+            "time": "2022-05-30T12:42:52+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -905,7 +905,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.7.3"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.7.4"
             },
             "funding": [
                 {
