@@ -81,60 +81,60 @@ jobs:
             -   run: composer global require php-parallel-lint/php-parallel-lint
             -   run: /home/runner/.composer/vendor/bin/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/rector/rector-nette/tests --exclude rector-prefixed-downgraded/vendor/symfony/polyfill-mbstring/bootstrap80.php --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/ssch/typo3-rector/templates/maker --exclude rector-prefixed-downgraded/vendor/symfony/console/Event --exclude rector-prefixed-downgraded/vendor/symfony/console/EventListener --exclude rector-prefixed-downgraded/vendor/symfony/console/Tester --exclude rector-prefixed-downgraded/vendor/rector/rector-generator/templates --exclude rector-prefixed-downgraded/vendor/symfony/contracts/Cache/ItemInterface.php --exclude rector-prefixed-downgraded/vendor/symfony/dependency-injection/ExpressionLanguageProvider.php
 
-            # 5. copy repository meta files
-            -   run: |
-                    cp -R build/target-repository/. rector-prefixed-downgraded
-                    cp -R templates rector-prefixed-downgraded/
-                    cp CONTRIBUTING.md rector-prefixed-downgraded/
-                    cp preload.php rector-prefixed-downgraded/
-
-            # 6. clone remote repository, so we can push it
-            -
-                uses: "actions/checkout@v3"
-                with:
-                    repository: rectorphp/rector
-                    path: remote-repository
-                    token: ${{ secrets.ACCESS_TOKEN }}
-
-            # remove remote files, to avoid piling up dead code in remote repository
-            -   run: rm -rf remote-repository/.github remote-repository/e2e remote-repository/config remote-repository/src remote-repository/rules remote-repository/packages remote-repository/vendor remote-repository/stubs-rector
-
-            -   run: cp -a rector-prefixed-downgraded/. remote-repository
-
-            # 7. setup git
-            -
-                working-directory: remote-repository
-                run: |
-                    git config user.email "tomas.vot@gmail.com"
-                    git config user.name "Tomas Votruba"
-
-            # commit metadata
-            -
-                name: "Get Git log"
-                id: git-log
-                run: echo ::set-output name=log::$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='%H %s' | sed -e 's/^/https:\/\/github.com\/rectorphp\/rector-src\/commit\//')
-
-            # 8.A publish it to remote repository without tag
-            -
-                name: "Commit Prefixed - main"
-                working-directory: remote-repository
-                if: "!startsWith(github.ref, 'refs/tags/')"
-                run: |
-                    git add --all
-                    git commit -m "Updated Rector to commit ${{ github.event.after }}" -m "${{ steps.git-log.outputs.log }}"
-                    git push --quiet origin main
-
-            # 8.B publish it to remote repository with tag
-            -
-                name: "Commit Prefixed - tag"
-                working-directory: remote-repository
-                if: "startsWith(github.ref, 'refs/tags/')"
-                run: |
-                    git add --all
-                    git commit -m "Rector ${GITHUB_REF#refs/tags/}" -m "${{ steps.git-log.outputs.log }}"
-                    git push --quiet origin main
-                    git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
-                    git push --quiet origin ${GITHUB_REF#refs/tags/}
-
-            # run bare run test
-            -   run: cd remote-repository && bin/rector list --ansi && cd ..
+#            # 5. copy repository meta files
+#            -   run: |
+#                    cp -R build/target-repository/. rector-prefixed-downgraded
+#                    cp -R templates rector-prefixed-downgraded/
+#                    cp CONTRIBUTING.md rector-prefixed-downgraded/
+#                    cp preload.php rector-prefixed-downgraded/
+#
+#            # 6. clone remote repository, so we can push it
+#            -
+#                uses: "actions/checkout@v3"
+#                with:
+#                    repository: rectorphp/rector
+#                    path: remote-repository
+#                    token: ${{ secrets.ACCESS_TOKEN }}
+#
+#            # remove remote files, to avoid piling up dead code in remote repository
+#            -   run: rm -rf remote-repository/.github remote-repository/e2e remote-repository/config remote-repository/src remote-repository/rules remote-repository/packages remote-repository/vendor remote-repository/stubs-rector
+#
+#            -   run: cp -a rector-prefixed-downgraded/. remote-repository
+#
+#            # 7. setup git
+#            -
+#                working-directory: remote-repository
+#                run: |
+#                    git config user.email "tomas.vot@gmail.com"
+#                    git config user.name "Tomas Votruba"
+#
+#            # commit metadata
+#            -
+#                name: "Get Git log"
+#                id: git-log
+#                run: echo ::set-output name=log::$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='%H %s' | sed -e 's/^/https:\/\/github.com\/rectorphp\/rector-src\/commit\//')
+#
+#            # 8.A publish it to remote repository without tag
+#            -
+#                name: "Commit Prefixed - main"
+#                working-directory: remote-repository
+#                if: "!startsWith(github.ref, 'refs/tags/')"
+#                run: |
+#                    git add --all
+#                    git commit -m "Updated Rector to commit ${{ github.event.after }}" -m "${{ steps.git-log.outputs.log }}"
+#                    git push --quiet origin main
+#
+#            # 8.B publish it to remote repository with tag
+#            -
+#                name: "Commit Prefixed - tag"
+#                working-directory: remote-repository
+#                if: "startsWith(github.ref, 'refs/tags/')"
+#                run: |
+#                    git add --all
+#                    git commit -m "Rector ${GITHUB_REF#refs/tags/}" -m "${{ steps.git-log.outputs.log }}"
+#                    git push --quiet origin main
+#                    git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
+#                    git push --quiet origin ${GITHUB_REF#refs/tags/}
+#
+#            # run bare run test
+#            -   run: cd remote-repository && bin/rector list --ansi && cd ..
