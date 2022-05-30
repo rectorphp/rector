@@ -8,7 +8,6 @@ use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\VersionResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\ProcessCommand;
-use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use RectorPrefix20220530\Symfony\Component\Console\Application;
 use RectorPrefix20220530\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220530\Symfony\Component\Console\Input\InputDefinition;
@@ -41,16 +40,6 @@ final class ConsoleApplication extends \RectorPrefix20220530\Symfony\Component\C
             unset($xdebugHandler);
         }
         $shouldFollowByNewline = \false;
-        // switch working dir
-        $newWorkDir = $this->getNewWorkingDir($input);
-        if ($newWorkDir !== '') {
-            $oldWorkingDir = \getcwd();
-            \chdir($newWorkDir);
-            if ($output->isDebug()) {
-                $message = \sprintf('Changed working directory from "%s" to "%s"', $oldWorkingDir, \getcwd());
-                $output->writeln($message);
-            }
-        }
         // skip in this case, since generate content must be clear from meta-info
         if ($this->shouldPrintMetaInformation($input)) {
             $output->writeln($this->getLongVersion());
@@ -67,15 +56,6 @@ final class ConsoleApplication extends \RectorPrefix20220530\Symfony\Component\C
         $this->removeUnusedOptions($defaultInputDefinition);
         $this->addCustomOptions($defaultInputDefinition);
         return $defaultInputDefinition;
-    }
-    private function getNewWorkingDir(\RectorPrefix20220530\Symfony\Component\Console\Input\InputInterface $input) : string
-    {
-        $workingDir = $input->getParameterOption('--working-dir');
-        if (\is_string($workingDir) && !\is_dir($workingDir)) {
-            $errorMessage = \sprintf('Invalid working directory specified, "%s" does not exist.', $workingDir);
-            throw new \Rector\Core\Exception\Configuration\InvalidConfigurationException($errorMessage);
-        }
-        return (string) $workingDir;
     }
     private function shouldPrintMetaInformation(\RectorPrefix20220530\Symfony\Component\Console\Input\InputInterface $input) : bool
     {
@@ -102,7 +82,6 @@ final class ConsoleApplication extends \RectorPrefix20220530\Symfony\Component\C
         $inputDefinition->addOption(new \RectorPrefix20220530\Symfony\Component\Console\Input\InputOption(\Rector\Core\Configuration\Option::DEBUG, null, \RectorPrefix20220530\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Enable debug verbosity (-vvv)'));
         $inputDefinition->addOption(new \RectorPrefix20220530\Symfony\Component\Console\Input\InputOption(\Rector\Core\Configuration\Option::XDEBUG, null, \RectorPrefix20220530\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Allow running xdebug'));
         $inputDefinition->addOption(new \RectorPrefix20220530\Symfony\Component\Console\Input\InputOption(\Rector\Core\Configuration\Option::CLEAR_CACHE, null, \RectorPrefix20220530\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Clear cache'));
-        $inputDefinition->addOption(new \RectorPrefix20220530\Symfony\Component\Console\Input\InputOption(\Rector\Core\Configuration\Option::WORKING_DIR, null, \RectorPrefix20220530\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'If specified, use the given directory as working directory.'));
     }
     private function getDefaultConfigPath() : string
     {
