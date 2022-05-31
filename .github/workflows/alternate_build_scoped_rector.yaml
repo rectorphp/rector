@@ -1,6 +1,6 @@
 # builds the content of https://github.com/rectorphp/rector
 # inspiration from https://github.com/phpstan/phpstan-src/blob/master/.github/workflows/phar.yml
-name: Alternate Build Scoped Rector
+name: Build Scoped Rector
 
 on:
     push:
@@ -14,7 +14,7 @@ env:
     COMPOSER_ROOT_VERSION: "dev-main"
 
 jobs:
-    alternate_build_scoped_rector:
+    build_scoped_rector:
         # Don't run on forks.
         if: github.repository == 'rectorphp/rector-src'
 
