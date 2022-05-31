@@ -9,6 +9,10 @@ final class DowngradeLevelSetList implements \Rector\Set\Contract\SetListInterfa
     /**
      * @var string
      */
+    public const DOWN_TO_PHP_81 = __DIR__ . '/../../../config/set/level/down-to-php81.php';
+    /**
+     * @var string
+     */
     public const DOWN_TO_PHP_80 = __DIR__ . '/../../../config/set/level/down-to-php80.php';
     /**
      * @var string

@@ -131,14 +131,14 @@ final class VisibilityManipulator
         $this->addVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::READONLY);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
     public function isReadonly($node) : bool
     {
         return $this->hasVisibility($node, \Rector\Core\ValueObject\Visibility::READONLY);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
     public function removeReadonly($node) : void
     {

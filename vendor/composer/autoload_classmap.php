@@ -2024,6 +2024,7 @@ return array(
     'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradePureIntersectionTypeRector' => $baseDir . '/rules/DowngradePhp81/Rector/FunctionLike/DowngradePureIntersectionTypeRector.php',
     'Rector\\DowngradePhp81\\Rector\\Instanceof_\\DowngradePhp81ResourceReturnToObjectRector' => $baseDir . '/rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php',
     'Rector\\DowngradePhp81\\Rector\\Property\\DowngradeReadonlyPropertyRector' => $baseDir . '/rules/DowngradePhp81/Rector/Property/DowngradeReadonlyPropertyRector.php',
+    'Rector\\DowngradePhp82\\Rector\\Class_\\DowngradeReadonlyClassRector' => $baseDir . '/rules/DowngradePhp82/Rector/Class_/DowngradeReadonlyClassRector.php',
     'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => $baseDir . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
     'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => $baseDir . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
     'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => $baseDir . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',
