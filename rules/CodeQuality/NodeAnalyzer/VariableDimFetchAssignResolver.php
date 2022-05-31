@@ -47,10 +47,12 @@ final class VariableDimFetchAssignResolver
             }
             $assign = $stmtExpr;
             $keyExpr = $this->matchKeyOnArrayDimFetchOfVariable($assign, $variable);
-            if (!$keyExpr instanceof \PhpParser\Node\Expr) {
-                return [];
-            }
-            $keysAndExprs[] = new \Rector\CodeQuality\ValueObject\KeyAndExpr($keyExpr, $assign->expr);
+            $keysAndExprs[] = new \Rector\CodeQuality\ValueObject\KeyAndExpr($keyExpr, $assign->expr, $stmt->getComments());
+        }
+        // we can only work with same variable
+        // and exclusively various keys or empty keys
+        if (!$this->hasExclusivelyNullKeyOrFilledKey($keysAndExprs)) {
+            return [];
         }
         return $keysAndExprs;
     }
@@ -70,5 +72,24 @@ final class VariableDimFetchAssignResolver
             return null;
         }
         return $arrayDimFetch->dim;
+    }
+    /**
+     * @param KeyAndExpr[] $keysAndExprs
+     */
+    private function hasExclusivelyNullKeyOrFilledKey(array $keysAndExprs) : bool
+    {
+        $alwaysNullKey = \true;
+        $alwaysStringKey = \true;
+        foreach ($keysAndExprs as $keyAndExpr) {
+            if ($keyAndExpr->getKeyExpr() !== null) {
+                $alwaysNullKey = \false;
+            } else {
+                $alwaysStringKey = \false;
+            }
+        }
+        if ($alwaysNullKey) {
+            return \true;
+        }
+        return $alwaysStringKey;
     }
 }

@@ -15,6 +15,7 @@ use Rector\CodeQuality\NodeAnalyzer\VariableDimFetchAssignResolver;
 use Rector\CodeQuality\ValueObject\KeyAndExpr;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -127,7 +128,9 @@ CODE_SAMPLE
     {
         $arrayItems = [];
         foreach ($keysAndExprs as $keyAndExpr) {
-            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($keyAndExpr->getExpr(), $keyAndExpr->getKeyExpr());
+            $arrayItem = new \PhpParser\Node\Expr\ArrayItem($keyAndExpr->getExpr(), $keyAndExpr->getKeyExpr());
+            $arrayItem->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $keyAndExpr->getComments());
+            $arrayItems[] = $arrayItem;
         }
         return new \PhpParser\Node\Expr\Array_($arrayItems);
     }

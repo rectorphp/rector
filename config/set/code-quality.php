@@ -81,61 +81,6 @@ use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Assign\CombinedAssignRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\BooleanNot\ReplaceMultipleBooleanNotRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\SimplifyFuncGetArgsCountRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector::class);
-    $rectorConfig->rule(\Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Concat\JoinStringConcatRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\If_\CombineIfRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\For_\ForToForeachRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FunctionLike\RemoveAlwaysTrueConditionSetInConstructorRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\If_\ShortenElseIfRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector::class);
-    $rectorConfig->rule(\Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector::class);
     $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class, [
         'split' => 'explode',
         'join' => 'implode',
@@ -161,5 +106,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         'mbstrrpos' => 'mb_strrpos',
         'mbsubstr' => 'mb_substr',
     ]);
-    $rectorConfig->rules([\Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector::class, \Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector::class, \Rector\Php52\Rector\Property\VarToPublicPropertyRector::class, \Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector::class, \Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector::class, \Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector::class, \Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector::class, \Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector::class, \Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector::class, \Rector\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector::class, \Rector\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector::class, \Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector::class, \Rector\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRector::class, \Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector::class, \Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector::class, \Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector::class, \Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector::class, \Rector\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector::class, \Rector\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector::class, \Rector\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector::class]);
+    $rectorConfig->rules([\Rector\CodeQuality\Rector\Assign\CombinedAssignRector::class, \Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector::class, \Rector\CodeQuality\Rector\BooleanNot\ReplaceMultipleBooleanNotRector::class, \Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector::class, \Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector::class, \Rector\CodeQuality\Rector\FuncCall\SimplifyFuncGetArgsCountRector::class, \Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector::class, \Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector::class, \Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector::class, \Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector::class, \Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector::class, \Rector\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector::class, \Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector::class, \Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector::class, \Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector::class, \Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector::class, \Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector::class, \Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector::class, \Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector::class, \Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector::class, \Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector::class, \Rector\CodeQuality\Rector\Concat\JoinStringConcatRector::class, \Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class, \Rector\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector::class, \Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector::class, \Rector\CodeQuality\Rector\If_\CombineIfRector::class, \Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector::class, \Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector::class, \Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector::class, \Rector\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector::class, \Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector::class, \Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector::class, \Rector\CodeQuality\Rector\For_\ForToForeachRector::class, \Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector::class, \Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector::class, \Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector::class, \Rector\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector::class, \Rector\CodeQuality\Rector\FunctionLike\RemoveAlwaysTrueConditionSetInConstructorRector::class, \Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector::class, \Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector::class, \Rector\CodeQuality\Rector\If_\ShortenElseIfRector::class, \Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector::class, \Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector::class, \Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector::class, \Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector::class, \Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector::class, \Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector::class, \Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector::class, \Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector::class, \Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector::class, \Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector::class, \Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector::class, \Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector::class, \Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector::class, \Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector::class, \Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector::class, \Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector::class, \Rector\Php52\Rector\Property\VarToPublicPropertyRector::class, \Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector::class, \Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector::class, \Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector::class, \Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector::class, \Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector::class, \Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector::class, \Rector\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector::class, \Rector\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector::class, \Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector::class, \Rector\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRector::class, \Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector::class, \Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector::class, \Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector::class, \Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector::class, \Rector\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector::class, \Rector\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector::class, \Rector\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector::class]);
 };

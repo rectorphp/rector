@@ -66,16 +66,16 @@ final class RectorKernel implements \RectorPrefix20220531\Symplify\SymplifyKerne
      */
     private function createCompilerPasses() : array
     {
-        $compilerPasses = [];
-        // must run before AutowireArrayParameterCompilerPass, as the autowired array cannot contain removed services
-        $compilerPasses[] = new \Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass();
-        // autowire Rectors by default (mainly for tests)
-        $compilerPasses[] = new \RectorPrefix20220531\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass([\Rector\Core\Contract\Rector\RectorInterface::class]);
-        $compilerPasses[] = new \Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass();
-        // add all merged arguments of Rector services
-        $compilerPasses[] = new \Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector);
-        $compilerPasses[] = new \RectorPrefix20220531\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass();
-        return $compilerPasses;
+        return [
+            // must run before AutowireArrayParameterCompilerPass, as the autowired array cannot contain removed services
+            new \Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass(),
+            // autowire Rectors by default (mainly for tests)
+            new \RectorPrefix20220531\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass([\Rector\Core\Contract\Rector\RectorInterface::class]),
+            new \Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass(),
+            // add all merged arguments of Rector services
+            new \Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector),
+            new \RectorPrefix20220531\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass(),
+        ];
     }
     /**
      * @return string[]
