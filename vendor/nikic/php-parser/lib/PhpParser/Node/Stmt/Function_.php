@@ -20,7 +20,7 @@ class Function_ extends \PhpParser\Node\Stmt implements \PhpParser\Node\Function
     public $stmts;
     /** @var Node\AttributeGroup[] PHP attribute groups */
     public $attrGroups;
-    /** @var Node\Name Namespaced name (if using NameResolver) */
+    /** @var Node\Name|null Namespaced name (if using NameResolver) */
     public $namespacedName;
     /**
      * Constructs a function node.

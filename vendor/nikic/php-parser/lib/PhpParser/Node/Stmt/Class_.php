@@ -66,6 +66,10 @@ class Class_ extends \PhpParser\Node\Stmt\ClassLike
     {
         return (bool) ($this->flags & self::MODIFIER_FINAL);
     }
+    public function isReadonly() : bool
+    {
+        return (bool) ($this->flags & self::MODIFIER_READONLY);
+    }
     /**
      * Whether the class is anonymous.
      *
@@ -74,6 +78,24 @@ class Class_ extends \PhpParser\Node\Stmt\ClassLike
     public function isAnonymous() : bool
     {
         return null === $this->name;
+    }
+    /**
+     * @internal
+     */
+    public static function verifyClassModifier($a, $b)
+    {
+        if ($a & self::MODIFIER_ABSTRACT && $b & self::MODIFIER_ABSTRACT) {
+            throw new \PhpParser\Error('Multiple abstract modifiers are not allowed');
+        }
+        if ($a & self::MODIFIER_FINAL && $b & self::MODIFIER_FINAL) {
+            throw new \PhpParser\Error('Multiple final modifiers are not allowed');
+        }
+        if ($a & self::MODIFIER_READONLY && $b & self::MODIFIER_READONLY) {
+            throw new \PhpParser\Error('Multiple readonly modifiers are not allowed');
+        }
+        if ($a & 48 && $b & 48) {
+            throw new \PhpParser\Error('Cannot use the final modifier on an abstract class');
+        }
     }
     /**
      * @internal

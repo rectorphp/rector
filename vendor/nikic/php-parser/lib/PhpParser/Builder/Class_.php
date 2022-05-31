@@ -62,7 +62,7 @@ class Class_ extends \PhpParser\Builder\Declaration
      */
     public function makeAbstract()
     {
-        $this->flags = \PhpParser\BuilderHelpers::addModifier($this->flags, \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT);
+        $this->flags = \PhpParser\BuilderHelpers::addClassModifier($this->flags, \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT);
         return $this;
     }
     /**
@@ -72,7 +72,12 @@ class Class_ extends \PhpParser\Builder\Declaration
      */
     public function makeFinal()
     {
-        $this->flags = \PhpParser\BuilderHelpers::addModifier($this->flags, \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL);
+        $this->flags = \PhpParser\BuilderHelpers::addClassModifier($this->flags, \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL);
+        return $this;
+    }
+    public function makeReadonly()
+    {
+        $this->flags = \PhpParser\BuilderHelpers::addClassModifier($this->flags, \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY);
         return $this;
     }
     /**

@@ -24,6 +24,15 @@ class DNumber extends \PhpParser\Node\Scalar
         return ['value'];
     }
     /**
+     * @param mixed[] $attributes
+     */
+    public static function fromString(string $str, array $attributes = []) : \PhpParser\Node\Scalar\DNumber
+    {
+        $attributes['rawValue'] = $str;
+        $float = self::parse($str);
+        return new \PhpParser\Node\Scalar\DNumber($float, $attributes);
+    }
+    /**
      * @internal
      *
      * Parses a DNUMBER token like PHP would.

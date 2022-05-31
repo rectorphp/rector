@@ -10,7 +10,7 @@ class Const_ extends \PhpParser\NodeAbstract
     public $name;
     /** @var Expr Value */
     public $value;
-    /** @var Name Namespaced name (if using NameResolver) */
+    /** @var Name|null Namespaced name (if using NameResolver) */
     public $namespacedName;
     /**
      * Constructs a const node for use in class const and const statements.

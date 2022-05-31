@@ -53,36 +53,26 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->shouldSkip($node)) {
+        $rawValue = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RAW_VALUE);
+        if ($this->shouldSkip($node, $rawValue)) {
             return null;
         }
-        $numberValueAsString = (string) $node->value;
-        if (\strpos($numberValueAsString, '+') !== \false) {
+        if (\strpos((string) $rawValue, '+') !== \false) {
             return null;
         }
         // trigger reprint
         $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
-        if ($node instanceof \PhpParser\Node\Scalar\LNumber) {
-            return $node;
-        }
-        /**
-         * This code follows a guess, to avoid modifying floats needlessly.
-         * If the node is a float, but it doesn't contain ".",
-         * then it's likely that the number was forced to be a float
-         * by adding ".0" at the end (eg: 0.0).
-         * Then, add it again.
-         */
-        if (\strpos($numberValueAsString, '.') === \false) {
-            $numberValueAsString .= '.0';
-        }
-        $node->value = (float) $numberValueAsString;
         return $node;
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
+     * @param mixed $rawValue
      */
-    private function shouldSkip($node) : bool
+    private function shouldSkip($node, $rawValue) : bool
     {
+        if (!\is_string($rawValue)) {
+            return \true;
+        }
         // "_" notation can be applied to decimal numbers only
         if ($node instanceof \PhpParser\Node\Scalar\LNumber) {
             $numberKind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
@@ -90,12 +80,6 @@ CODE_SAMPLE
                 return \true;
             }
         }
-        // we have to hack around tokens to get original value, see https://github.com/nikic/PHP-Parser/pull/832
-        $oldTokens = $this->file->getOldTokens();
-        $tokenValue = $oldTokens[$node->getStartTokenPos()][1] ?? null;
-        if ($tokenValue === null) {
-            return \true;
-        }
-        return \strpos((string) $tokenValue, '_') === \false;
+        return \strpos($rawValue, '_') === \false;
     }
 }

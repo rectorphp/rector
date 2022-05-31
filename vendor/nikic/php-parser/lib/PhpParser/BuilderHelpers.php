@@ -258,4 +258,13 @@ final class BuilderHelpers
         \PhpParser\Node\Stmt\Class_::verifyModifier($modifiers, $modifier);
         return $modifiers | $modifier;
     }
+    /**
+     * Adds a modifier and returns new modifier bitmask.
+     * @return int New modifiers
+     */
+    public static function addClassModifier(int $existingModifiers, int $modifierToSet) : int
+    {
+        \PhpParser\Node\Stmt\Class_::verifyClassModifier($existingModifiers, $modifierToSet);
+        return $existingModifiers | $modifierToSet;
+    }
 }

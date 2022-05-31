@@ -719,6 +719,15 @@ abstract class ParserAbstract implements \PhpParser\Parser
         }
         return $attributes;
     }
+    protected function checkClassModifier($a, $b, $modifierPos)
+    {
+        try {
+            \PhpParser\Node\Stmt\Class_::verifyClassModifier($a, $b);
+        } catch (\PhpParser\Error $error) {
+            $error->setAttributes($this->getAttributesAt($modifierPos));
+            $this->emitError($error);
+        }
+    }
     protected function checkModifier($a, $b, $modifierPos)
     {
         // Jumping through some hoops here because verifyModifier() is also used elsewhere

@@ -40,6 +40,7 @@ class LNumber extends \PhpParser\Node\Scalar
      */
     public static function fromString(string $str, array $attributes = [], bool $allowInvalidOctal = \false) : \PhpParser\Node\Scalar\LNumber
     {
+        $attributes['rawValue'] = $str;
         $str = \str_replace('_', '', $str);
         if ('0' !== $str[0] || '0' === $str) {
             $attributes['kind'] = \PhpParser\Node\Scalar\LNumber::KIND_DEC;

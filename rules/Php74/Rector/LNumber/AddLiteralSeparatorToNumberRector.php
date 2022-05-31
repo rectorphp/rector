@@ -89,16 +89,16 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $numericValueAsString = (string) $node->value;
-        if ($this->shouldSkip($node, $numericValueAsString)) {
+        $rawValue = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RAW_VALUE);
+        if ($this->shouldSkip($node, $rawValue)) {
             return null;
         }
-        if (\strpos($numericValueAsString, '.') !== \false) {
-            [$mainPart, $decimalPart] = \explode('.', $numericValueAsString);
+        if (\strpos((string) $rawValue, '.') !== \false) {
+            [$mainPart, $decimalPart] = \explode('.', (string) $rawValue);
             $chunks = $this->strSplitNegative($mainPart, self::GROUP_SIZE);
             $literalSeparatedNumber = \implode('_', $chunks) . '.' . $decimalPart;
         } else {
-            $chunks = $this->strSplitNegative($numericValueAsString, self::GROUP_SIZE);
+            $chunks = $this->strSplitNegative($rawValue, self::GROUP_SIZE);
             $literalSeparatedNumber = \implode('_', $chunks);
             // PHP converts: (string) 1000.0 -> "1000"!
             if (\is_float($node->value)) {
@@ -114,24 +114,18 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
+     * @param mixed $rawValue
      */
-    private function shouldSkip($node, string $numericValueAsString) : bool
+    private function shouldSkip($node, $rawValue) : bool
     {
-        $startTokenPos = $node->getStartTokenPos();
-        $oldTokens = $this->file->getOldTokens();
-        $tokenValue = $oldTokens[$startTokenPos][1] ?? null;
-        if (!\is_string($tokenValue)) {
+        if (!\is_string($rawValue)) {
             return \true;
         }
         // already contains separator
-        if (\strpos($tokenValue, '_') !== \false) {
+        if (\strpos($rawValue, '_') !== \false) {
             return \true;
         }
-        if ($numericValueAsString < $this->limitValue) {
-            return \true;
-        }
-        // already separated
-        if (\strpos($numericValueAsString, '_') !== \false) {
+        if ($node->value < $this->limitValue) {
             return \true;
         }
         $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
@@ -139,11 +133,11 @@ CODE_SAMPLE
             return \true;
         }
         // e+/e-
-        if (\Rector\Core\Util\StringUtils::isMatch($numericValueAsString, '#e#i')) {
+        if (\Rector\Core\Util\StringUtils::isMatch($rawValue, '#e#i')) {
             return \true;
         }
         // too short
-        return \RectorPrefix20220531\Nette\Utils\Strings::length($numericValueAsString) <= self::GROUP_SIZE;
+        return \RectorPrefix20220531\Nette\Utils\Strings::length($rawValue) <= self::GROUP_SIZE;
     }
     /**
      * @return string[]

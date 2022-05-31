@@ -938,9 +938,7 @@ class Php5 extends \PhpParser\ParserAbstract
         }, 391 => function ($stackPos) {
             $this->semValue = new \PhpParser\Node\Expr\ArrayDimFetch($this->semStack[$stackPos - (4 - 1)], $this->semStack[$stackPos - (4 - 3)], $this->startAttributeStack[$stackPos - (4 - 1)] + $this->endAttributes);
         }, 392 => function ($stackPos) {
-            $attrs = $this->startAttributeStack[$stackPos - (4 - 1)] + $this->endAttributes;
-            $attrs['kind'] = $this->semStack[$stackPos - (4 - 1)][0] === "'" || $this->semStack[$stackPos - (4 - 1)][1] === "'" && ($this->semStack[$stackPos - (4 - 1)][0] === 'b' || $this->semStack[$stackPos - (4 - 1)][0] === 'B') ? \PhpParser\Node\Scalar\String_::KIND_SINGLE_QUOTED : \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED;
-            $this->semValue = new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Scalar\String_(\PhpParser\Node\Scalar\String_::parse($this->semStack[$stackPos - (4 - 1)]), $attrs), $this->semStack[$stackPos - (4 - 3)], $this->startAttributeStack[$stackPos - (4 - 1)] + $this->endAttributes);
+            $this->semValue = new \PhpParser\Node\Expr\ArrayDimFetch(\PhpParser\Node\Scalar\String_::fromString($this->semStack[$stackPos - (4 - 1)], $this->startAttributeStack[$stackPos - (4 - 1)] + $this->endAttributes), $this->semStack[$stackPos - (4 - 3)], $this->startAttributeStack[$stackPos - (4 - 1)] + $this->endAttributes);
         }, 393 => function ($stackPos) {
             $this->semValue = new \PhpParser\Node\Expr\ArrayDimFetch($this->semStack[$stackPos - (4 - 1)], $this->semStack[$stackPos - (4 - 3)], $this->startAttributeStack[$stackPos - (4 - 1)] + $this->endAttributes);
         }, 394 => function ($stackPos) {
@@ -1032,11 +1030,9 @@ class Php5 extends \PhpParser\ParserAbstract
         }, 433 => function ($stackPos) {
             $this->semValue = $this->parseLNumber($this->semStack[$stackPos - (1 - 1)], $this->startAttributeStack[$stackPos - (1 - 1)] + $this->endAttributes, \true);
         }, 434 => function ($stackPos) {
-            $this->semValue = new \PhpParser\Node\Scalar\DNumber(\PhpParser\Node\Scalar\DNumber::parse($this->semStack[$stackPos - (1 - 1)]), $this->startAttributeStack[$stackPos - (1 - 1)] + $this->endAttributes);
+            $this->semValue = \PhpParser\Node\Scalar\DNumber::fromString($this->semStack[$stackPos - (1 - 1)], $this->startAttributeStack[$stackPos - (1 - 1)] + $this->endAttributes);
         }, 435 => function ($stackPos) {
-            $attrs = $this->startAttributeStack[$stackPos - (1 - 1)] + $this->endAttributes;
-            $attrs['kind'] = $this->semStack[$stackPos - (1 - 1)][0] === "'" || $this->semStack[$stackPos - (1 - 1)][1] === "'" && ($this->semStack[$stackPos - (1 - 1)][0] === 'b' || $this->semStack[$stackPos - (1 - 1)][0] === 'B') ? \PhpParser\Node\Scalar\String_::KIND_SINGLE_QUOTED : \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED;
-            $this->semValue = new \PhpParser\Node\Scalar\String_(\PhpParser\Node\Scalar\String_::parse($this->semStack[$stackPos - (1 - 1)], \false), $attrs);
+            $this->semValue = \PhpParser\Node\Scalar\String_::fromString($this->semStack[$stackPos - (1 - 1)], $this->startAttributeStack[$stackPos - (1 - 1)] + $this->endAttributes, \false);
         }, 436 => function ($stackPos) {
             $this->semValue = new \PhpParser\Node\Scalar\MagicConst\Line($this->startAttributeStack[$stackPos - (1 - 1)] + $this->endAttributes);
         }, 437 => function ($stackPos) {
