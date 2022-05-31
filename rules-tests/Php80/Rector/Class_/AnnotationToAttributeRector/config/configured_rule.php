@@ -6,7 +6,9 @@ use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\Annotation\OpenApi\Annotation\NestedPastAnnotation;
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\Annotation\OpenApi\PastAnnotation;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\Attribute\OpenApi\Attribute\NestedFutureAttribute;
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\Attribute\OpenApi\FutureAttribute;
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation;
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericSingleImplicitAnnotation;
@@ -17,6 +19,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig
         ->ruleWithConfiguration(AnnotationToAttributeRector::class, [
             new AnnotationToAttribute(PastAnnotation::class, FutureAttribute::class),
+            new AnnotationToAttribute(NestedPastAnnotation::class, NestedFutureAttribute::class),
 
             // use always this annotation to test inner part of annotation - arguments, arrays, calls...
             new AnnotationToAttribute(GenericAnnotation::class),
