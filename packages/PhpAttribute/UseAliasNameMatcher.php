@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PhpAttribute;
 
-use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\ValueObject\UseAliasMetadata;
@@ -35,23 +34,31 @@ final class UseAliasNameMatcher
                     continue;
                 }
 
-                $importName = $useUse->name->toString();
-
-                // previous keyword
-                $lastImportKeyword = Strings::after($importName, '\\', -1);
-                if ($lastImportKeyword === null) {
+                $fullyQualifiedAnnotationName = $useUse->name->toString() . ltrim($shortAnnotationName, $alias);
+                if ($fullyQualifiedAnnotationName !== $annotationToAttribute->getTag()) {
                     continue;
                 }
 
-                // resolve new short name
-                $newShortname = Strings::after($annotationToAttribute->getAttributeClass(), $lastImportKeyword);
+                $annotationParts = explode('\\', $fullyQualifiedAnnotationName);
+                $attributeParts = explode('\\', $annotationToAttribute->getAttributeClass());
 
-                $beforeImportName = Strings::before(
-                    $annotationToAttribute->getAttributeClass(),
-                    $lastImportKeyword
-                ) . $lastImportKeyword;
+                // requirement for matching single part rename
+                if (count($annotationParts) !== count($attributeParts)) {
+                    continue;
+                }
 
-                return new UseAliasMetadata($alias . $newShortname, $beforeImportName, $useUse);
+                // now we now we are matching correct contanct and old and new have the same number of parts
+                $useImportPartCount = substr_count($useUse->name->toString(), '\\') + 1;
+                $newAttributeImportPart = array_slice($attributeParts, 0, $useImportPartCount);
+                $newAttributeImport = implode('\\', $newAttributeImportPart);
+
+                $shortNamePartCount = count($attributeParts) - $useImportPartCount;
+
+                // +1, to remove the alias part
+                $attributeParts = array_slice($attributeParts, -$shortNamePartCount);
+                $shortAttributeName = $alias . '\\' . implode('\\', $attributeParts);
+
+                return new UseAliasMetadata($shortAttributeName, $newAttributeImport, $useUse);
             }
         }
 
