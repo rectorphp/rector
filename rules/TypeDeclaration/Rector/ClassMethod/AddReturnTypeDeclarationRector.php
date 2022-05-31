@@ -28,6 +28,10 @@ final class AddReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractR
      */
     private $methodReturnTypes = [];
     /**
+     * @var bool
+     */
+    private $hasChanged = \false;
+    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
@@ -83,6 +87,9 @@ CODE_SAMPLE
                 continue;
             }
             $this->processClassMethodNodeWithTypehints($node, $methodReturnType->getReturnType());
+            if (!$this->hasChanged) {
+                return null;
+            }
             return $node;
         }
         return null;
@@ -111,5 +118,6 @@ CODE_SAMPLE
         }
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($newType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         $classMethod->returnType = $returnTypeNode;
+        $this->hasChanged = \true;
     }
 }
