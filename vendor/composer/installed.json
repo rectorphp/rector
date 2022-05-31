@@ -867,17 +867,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.7.6",
-            "version_normalized": "1.7.6.0",
+            "version": "1.7.7",
+            "version_normalized": "1.7.7.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "1af9271ea529f995e57a1f493bebba6b830a97d0"
+                "reference": "cadad14ac63d8a432e01ae89ac5d0ff6fc3b16ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/1af9271ea529f995e57a1f493bebba6b830a97d0",
-                "reference": "1af9271ea529f995e57a1f493bebba6b830a97d0",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/cadad14ac63d8a432e01ae89ac5d0ff6fc3b16ab",
+                "reference": "cadad14ac63d8a432e01ae89ac5d0ff6fc3b16ab",
                 "shasum": ""
             },
             "require": {
@@ -886,7 +886,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-05-30T21:29:45+00:00",
+            "time": "2022-05-31T13:58:21+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -905,7 +905,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.7.6"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.7.7"
             },
             "funding": [
                 {
@@ -2277,12 +2277,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpoffice.git",
-                "reference": "e00fa9187605c28af79a0ac6c4b13080363ed24e"
+                "reference": "86b0213361c31b215dc8b2e0438460d355702b02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpoffice\/zipball\/e00fa9187605c28af79a0ac6c4b13080363ed24e",
-                "reference": "e00fa9187605c28af79a0ac6c4b13080363ed24e",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpoffice\/zipball\/86b0213361c31b215dc8b2e0438460d355702b02",
+                "reference": "86b0213361c31b215dc8b2e0438460d355702b02",
                 "shasum": ""
             },
             "require": {
@@ -2306,7 +2306,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-05-30T20:09:22+00:00",
+            "time": "2022-05-31T13:58:39+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

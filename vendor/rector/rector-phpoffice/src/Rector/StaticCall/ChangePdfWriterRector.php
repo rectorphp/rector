@@ -73,7 +73,7 @@ CODE_SAMPLE
                 return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('PhpOffice\\PhpSpreadsheet\\Writer\\Pdf\\Mpdf'), [$node->args[0]]);
             }
         }
-        return $node;
+        return null;
     }
     private function isSettingsPdfRendererStaticCall(\PHPStan\Type\Type $callerType, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {

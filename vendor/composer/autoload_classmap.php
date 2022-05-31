@@ -2644,6 +2644,7 @@ return array(
     'Rector\\PhpAttribute\\NodeFactory\\PhpAttributeGroupFactory' => $baseDir . '/packages/PhpAttribute/NodeFactory/PhpAttributeGroupFactory.php',
     'Rector\\PhpAttribute\\RemovableAnnotationAnalyzer' => $baseDir . '/packages/PhpAttribute/RemovableAnnotationAnalyzer.php',
     'Rector\\PhpAttribute\\UnwrapableAnnotationAnalyzer' => $baseDir . '/packages/PhpAttribute/UnwrapableAnnotationAnalyzer.php',
+    'Rector\\PhpAttribute\\UseAliasNameMatcher' => $baseDir . '/packages/PhpAttribute/UseAliasNameMatcher.php',
     'Rector\\PhpAttribute\\ValueObject\\UseAliasMetadata' => $baseDir . '/packages/PhpAttribute/ValueObject/UseAliasMetadata.php',
     'Rector\\PostRector\\Application\\PostFileProcessor' => $baseDir . '/packages/PostRector/Application/PostFileProcessor.php',
     'Rector\\PostRector\\Collector\\NodesToAddCollector' => $baseDir . '/packages/PostRector/Collector/NodesToAddCollector.php',

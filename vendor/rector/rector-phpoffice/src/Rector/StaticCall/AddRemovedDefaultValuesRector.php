@@ -19,6 +19,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddRemovedDefaultValuesRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete removed default values explicitly', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -52,7 +56,7 @@ CODE_SAMPLE
     }
     /**
      * @param StaticCall|MethodCall $node
-     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
+     * @return null|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
      */
     public function refactor(\PhpParser\Node $node)
     {
@@ -66,6 +70,9 @@ CODE_SAMPLE
                 }
                 $this->refactorArgs($node, $defaultValuesByPosition);
             }
+        }
+        if (!$this->hasChanged) {
+            return null;
         }
         return $node;
     }
@@ -88,6 +95,7 @@ CODE_SAMPLE
                 $arg = $this->nodeFactory->createArg($defaultValue);
             }
             $node->args[$position] = $arg;
+            $this->hasChanged = \true;
         }
     }
     /**
