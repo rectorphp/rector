@@ -19,7 +19,7 @@ jobs:
         if: github.repository == 'rectorphp/rector-src'
 
         runs-on: ubuntu-latest
-        timeout-minutes: 20
+        timeout-minutes: 10
 
         steps:
             # sometime, when 2 or more consecutive PRs merged, the checkout rectorphp/rector-src is overlapped
@@ -28,7 +28,7 @@ jobs:
             -
                 name: "Wait before checkout rectorphp/rector-src on create a tag"
                 if: "startsWith(github.ref, 'refs/tags/')"
-                run: sleep 120
+                run: sleep 60
 
             -
                 uses: actions/checkout@v3
