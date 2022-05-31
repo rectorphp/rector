@@ -34,6 +34,8 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
      */
     private array $addParamTypeDeclarations = [];
 
+    private bool $hasChanged = false;
+
     public function __construct(
         private readonly TypeComparator $typeComparator,
         private readonly PhpVersionProvider $phpVersionProvider,
@@ -99,6 +101,10 @@ CODE_SAMPLE
             $this->refactorClassMethodWithTypehintByParameterPosition($node, $addParamTypeDeclaration);
         }
 
+        if (! $this->hasChanged) {
+            return null;
+        }
+
         return $node;
     }
 
@@ -157,7 +163,6 @@ CODE_SAMPLE
 
     private function refactorParameter(Param $param, AddParamTypeDeclaration $addParamTypeDeclaration): void
     {
-
         // already set → no change
         if ($param->type !== null) {
             $currentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
@@ -170,6 +175,8 @@ CODE_SAMPLE
             $addParamTypeDeclaration->getParamType(),
             TypeKind::PARAM
         );
+
+        $this->hasChanged = true;
 
         // remove it
         if ($addParamTypeDeclaration->getParamType() instanceof MixedType) {
