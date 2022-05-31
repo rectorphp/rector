@@ -8,6 +8,7 @@ use Iterator;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\UseAliasNameMatcher;
 use Rector\PhpAttribute\ValueObject\UseAliasMetadata;
@@ -39,7 +40,10 @@ final class UseAliasNameMatcherTest extends AbstractTestCase
         string $expectedAttributeUseImportName,
         string $expectedShortAttributeName,
     ): void {
-        $uses = [new Use_([new UseUse(new Name($useImportName), $useAlias), $useAlias])];
+        $useUse = new UseUse(new Name($useImportName), $useAlias);
+        $useUse->setAttribute(AttributeKey::ORIGINAL_NODE, $useUse);
+
+        $uses = [new Use_([$useUse, $useAlias])];
 
         // uses
         $useAliasMetadata = $this->useAliasNameMatcher->match($uses, $shortAnnotationName, $annotationToAttribute);

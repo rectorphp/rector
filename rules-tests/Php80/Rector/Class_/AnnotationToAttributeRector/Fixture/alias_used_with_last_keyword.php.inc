@@ -10,6 +10,11 @@ final class AliasUsedWithUsePartialRename
      * @OA\PastAnnotation
      */
     public $value;
+
+    /**
+     * @OA\PastAnnotation
+     */
+    public $secondValue;
 }
 
 ?>
@@ -24,6 +29,9 @@ final class AliasUsedWithUsePartialRename
 {
     #[OA\FutureAttribute]
     public $value;
+
+    #[OA\FutureAttribute]
+    public $secondValue;
 }
 
 ?>
