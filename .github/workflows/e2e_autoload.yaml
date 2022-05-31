@@ -1,0 +1,45 @@
+name: End to End tests
+
+on:
+    pull_request:
+        branches:
+            - main
+    push:
+        branches:
+            - main
+
+env:
+    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+    COMPOSER_ROOT_VERSION: "dev-main"
+
+jobs:
+    end_to_end:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php_version: ['8.1']
+                directory:
+                    - 'e2e/parent-property-empty'
+
+        name: End to end test - ${{ matrix.directory }}
+
+        steps:
+            -   uses: actions/checkout@v3
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php_version }}
+                    coverage: none
+
+            # run in root rector-src
+            -   run: composer install --ansi
+
+            # run in e2e subdir
+            -
+                run: composer install --ansi
+                working-directory: ${{ matrix.directory }}
+
+            # run e2e test
+            -   run: php ../e2eTestRunner.php -a vendor/autoload.php
+                working-directory: ${{ matrix.directory }}

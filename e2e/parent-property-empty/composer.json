@@ -1,0 +1,7 @@
+{
+    "require": {
+        "php": "^8.1",
+        "nette/application": "^3.0",
+        "nette/security": "^3.0"
+    }
+}

@@ -27,6 +27,10 @@ if (isset($argv[1]) && $argv[1] === '--config') {
     $e2eCommand .= ' --config ' . $argv[2];
 }
 
+if (isset($argv[1]) && $argv[1] === '-a') {
+    $e2eCommand .= ' -a ' . $argv[2];
+}
+
 exec($e2eCommand, $output, $exitCode);
 $output = trim(implode("\n", $output));
 

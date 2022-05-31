@@ -1,0 +1,28 @@
+1 file with changes
+===================
+
+1) src/ProfilePresenter.php:15
+
+    ---------- begin diff ----------
+@@ @@
+
+ class ProfilePresenter extends MyBasePresenter
+ {
++    /**
++     * @inject
++     */
++    public \Nette\Security\Passwords $passwords;
+     public function profileFormSucceed(Form $form)
+     {
+-        $this->user->password = Passwords::hash($form->getValues()->password);
++        $this->user->password = $this->passwords->hash($form->getValues()->password);
+     }
+ }
+    ----------- end diff -----------
+
+Applied rules:
+ * PropertyAddingPostRector
+ * StaticCallToMethodCallRector
+
+
+ [OK] 1 file would have changed (dry-run) by Rector
