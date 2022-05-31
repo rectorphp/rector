@@ -37,6 +37,7 @@ use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\PostRector\Rector\NameImportingPostRector;
 use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v10\v0\ExtbasePersistenceTypoScriptRector;
 use Ssch\TYPO3Rector\Rector\General\ConvertImplicitVariablesToExplicitGlobalsRector;
 use Ssch\TYPO3Rector\Rector\General\ExtEmConfRector;
 use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
@@ -118,15 +119,17 @@ return static function (RectorConfig $rectorConfig): void {
     // @see https://github.com/sabbelasichon/typo3-rector/blob/main/docs/beyond_php_file_processors.md
 
     // Adapt your composer.json dependencies to the latest available version for the defined SetList
-    // $recto$servicesrConfig->sets([
+    // $rectorConfig->sets([
     //    Typo3SetList::COMPOSER_PACKAGES_104_CORE,
     //    Typo3SetList::COMPOSER_PACKAGES_104_EXTENSIONS,
     // ]);
 
     // Rewrite your extbase persistence class mapping from typoscript into php according to official docs.
-    // This processor will create a summarized file with all of the typoscript rewrites combined into a single file.
-    // The filename can be passed as argument, "Configuration_Extbase_Persistence_Classes.php" is default.
-    // $rectorConfig->rule(ExtbasePersistenceTypoScriptRector::class);
+    // This processor will create a summarized file with all the typoscript rewrites combined into a single file.
+    // The absolute filename must be passed as argument.
+    /* $rectorConfig->ruleWithConfiguration(ExtbasePersistenceTypoScriptRector::class, [
+        ExtbasePersistenceTypoScriptRector::FILENAME => 'absolute/path/to/Configuration/Extbase/Persistence/Classes.php'
+    ]); */
     // Add some general TYPO3 rules
     $rectorConfig->rule(ConvertImplicitVariablesToExplicitGlobalsRector::class);
     $rectorConfig->rule(ExtEmConfRector::class);

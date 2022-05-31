@@ -110,7 +110,7 @@ Refactor AdditionalFieldProvider classes
 
 Use array syntax for additionalHeaders
 
-- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AdditionalHeadersToArrayTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/AdditionalHeadersToArrayTypoScriptRector.php)
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v7\v1\AdditionalHeadersToArrayTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/v7/v1/AdditionalHeadersToArrayTypoScriptRector.php)
 
 ```diff
 -config.additionalHeaders = Content-type:application/json
@@ -780,7 +780,7 @@ Convert extbase TypoScript persistence configuration to classes one
 
 :wrench: **configure it!**
 
-- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\ExtbasePersistenceTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/ExtbasePersistenceTypoScriptRector.php)
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v10\v0\ExtbasePersistenceTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/v10/v0/ExtbasePersistenceTypoScriptRector.php)
 
 ```php
 <?php
@@ -788,7 +788,7 @@ Convert extbase TypoScript persistence configuration to classes one
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\ExtbasePersistenceTypoScriptRector;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v10\v0\ExtbasePersistenceTypoScriptRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(ExtbasePersistenceTypoScriptRector::class, [ExtbasePersistenceTypoScriptRector::FILENAME => 'path/to/Configuration/Extbase/Persistence/Classes.php']);
@@ -875,7 +875,7 @@ Substitute `ExtensionManagementUtility::extRelPath()`
 
 Convert old include statement to new import syntax
 
-- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\FileIncludeToImportStatementTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/FileIncludeToImportStatementTypoScriptRector.php)
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v9\v0\FileIncludeToImportStatementTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/v9/v0/FileIncludeToImportStatementTypoScriptRector.php)
 
 ```diff
 -<INCLUDE_TYPOSCRIPT: source="FILE:conditions.typoscript">
@@ -1249,7 +1249,7 @@ Instantiate PageRenderer explicitly
 
 Convert lib.fluidContent to lib.contentElement
 
-- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\PostRector\LibFluidContentToContentElementTypoScriptPostRector`](../src/FileProcessor/TypoScript/PostRector/LibFluidContentToContentElementTypoScriptPostRector.php)
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\PostRector\v8\v7\LibFluidContentToContentElementTypoScriptPostRector`](../src/FileProcessor/TypoScript/PostRector/v8/v7/LibFluidContentToContentElementTypoScriptPostRector.php)
 
 ```diff
 -lib.fluidContent.templateRootPaths.200 = EXT:your_extension_key/Resources/Private/Templates/
@@ -1262,7 +1262,7 @@ Convert lib.fluidContent to lib.contentElement
 
 Convert lib.fluidContent to lib.contentElement
 
-- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\LibFluidContentToLibContentElementRector`](../src/FileProcessor/TypoScript/Rector/LibFluidContentToLibContentElementRector.php)
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v8\v7\LibFluidContentToLibContentElementRector`](../src/FileProcessor/TypoScript/Rector/v8/v7/LibFluidContentToLibContentElementRector.php)
 
 ```diff
 -lib.fluidContent {
@@ -1836,7 +1836,7 @@ Turns fetching of dependencies via `$objectManager->get()` to constructor inject
 
 Convert old conditions to Symfony Expression Language
 
-- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\OldConditionToExpressionLanguageTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/OldConditionToExpressionLanguageTypoScriptRector.php)
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v9\v4\OldConditionToExpressionLanguageTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/v9/v4/OldConditionToExpressionLanguageTypoScriptRector.php)
 
 ```diff
 -[globalVar = TSFE:id=17, TSFE:id=24]
@@ -2761,7 +2761,7 @@ Remove `@flushesCaches` annotation
 
 Remove constants FORMAT_PLAINTEXT and FORMAT_HTML of class `TYPO3\CMS\Form\Domain\Finishers\EmailFinisher`
 
-- class: [`Ssch\TYPO3Rector\Rector\v10\v4\RemoveFormatConstantsEmailFinisherRector`](../src/Rector/v10/v4/RemoveFormatConstantsEmailFinisherRector.php)
+- class: [`Ssch\TYPO3Rector\Rector\v10\v0\RemoveFormatConstantsEmailFinisherRector`](../src/Rector/v10/v0/RemoveFormatConstantsEmailFinisherRector.php)
 
 ```diff
 -$this->setOption(self::FORMAT, EmailFinisher::FORMAT_HTML);
@@ -4169,7 +4169,7 @@ Substitute `TemplateService->splitConfArray()` with `TypoScriptService->explodeC
 
 Convert TEMPLATE to FLUIDTEMPLATE
 
-- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\TemplateToFluidTemplateTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/TemplateToFluidTemplateTypoScriptRector.php)
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v11\v0\TemplateToFluidTemplateTypoScriptRector`](../src/FileProcessor/TypoScript/Rector/v11/v0/TemplateToFluidTemplateTypoScriptRector.php)
 
 ```diff
 -page.10 = TEMPLATE
