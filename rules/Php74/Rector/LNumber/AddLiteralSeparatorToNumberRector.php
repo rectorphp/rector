@@ -107,18 +107,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $numericValueAsString = (string) $node->value;
-        if ($this->shouldSkip($node, $numericValueAsString)) {
+        $rawValue = $node->getAttribute(AttributeKey::RAW_VALUE);
+
+        if ($this->shouldSkip($node, $rawValue)) {
             return null;
         }
 
-        if (\str_contains($numericValueAsString, '.')) {
-            [$mainPart, $decimalPart] = explode('.', $numericValueAsString);
+        if (\str_contains((string) $rawValue, '.')) {
+            [$mainPart, $decimalPart] = explode('.', (string) $rawValue);
 
             $chunks = $this->strSplitNegative($mainPart, self::GROUP_SIZE);
             $literalSeparatedNumber = implode('_', $chunks) . '.' . $decimalPart;
         } else {
-            $chunks = $this->strSplitNegative($numericValueAsString, self::GROUP_SIZE);
+            $chunks = $this->strSplitNegative($rawValue, self::GROUP_SIZE);
             $literalSeparatedNumber = implode('_', $chunks);
 
             // PHP converts: (string) 1000.0 -> "1000"!
@@ -137,28 +138,18 @@ CODE_SAMPLE
         return PhpVersionFeature::LITERAL_SEPARATOR;
     }
 
-    private function shouldSkip(LNumber | DNumber $node, string $numericValueAsString): bool
+    private function shouldSkip(LNumber | DNumber $node, mixed $rawValue): bool
     {
-        $startTokenPos = $node->getStartTokenPos();
-
-        $oldTokens = $this->file->getOldTokens();
-        $tokenValue = $oldTokens[$startTokenPos][1] ?? null;
-
-        if (! is_string($tokenValue)) {
+        if (! is_string($rawValue)) {
             return true;
         }
 
         // already contains separator
-        if (str_contains($tokenValue, '_')) {
+        if (str_contains($rawValue, '_')) {
             return true;
         }
 
-        if ($numericValueAsString < $this->limitValue) {
-            return true;
-        }
-
-        // already separated
-        if (\str_contains($numericValueAsString, '_')) {
+        if ($node->value < $this->limitValue) {
             return true;
         }
 
@@ -168,12 +159,12 @@ CODE_SAMPLE
         }
 
         // e+/e-
-        if (StringUtils::isMatch($numericValueAsString, '#e#i')) {
+        if (StringUtils::isMatch($rawValue, '#e#i')) {
             return true;
         }
 
         // too short
-        return Strings::length($numericValueAsString) <= self::GROUP_SIZE;
+        return Strings::length($rawValue) <= self::GROUP_SIZE;
     }
 
     /**

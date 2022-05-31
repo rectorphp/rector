@@ -10,6 +10,12 @@ namespace Rector\NodeTypeResolver\Node;
 final class AttributeKey
 {
     /**
+     * Internal php-parser key for String_, LNumber and DNumber nodes to hold original value (with "_" separators etc.)
+     * @var string
+     */
+    public const RAW_VALUE = 'rawValue';
+
+    /**
      * @var string
      */
     public const VIRTUAL_NODE = 'virtual_node';
@@ -102,14 +108,6 @@ final class AttributeKey
      * @var string
      */
     public const DOC_INDENTATION = 'docIndentation';
-
-    /**
-     * Internal php-parser name.
-     * Do not change this even if you want!
-     *
-     * @var string
-     */
-    public const START_TOKEN_POSITION = 'startTokenPos';
 
     /**
      * @var string

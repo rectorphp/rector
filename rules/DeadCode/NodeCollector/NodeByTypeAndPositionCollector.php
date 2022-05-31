@@ -60,7 +60,6 @@ final class NodeByTypeAndPositionCollector
 
         foreach ($assignedVariablesUse as $assignedVariableUse) {
             $startTokenPos = $assignedVariableUse->getStartTokenPos();
-
             // "-1" is empty value default
             if ($startTokenPos === -1) {
                 continue;

@@ -60,6 +60,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
+    \Rector\NodeTypeResolver\Node\AttributeKey::RAW_VALUE,
 );
 
 expectedArguments(
@@ -79,4 +80,5 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
+    \Rector\NodeTypeResolver\Node\AttributeKey::RAW_VALUE,
 );
