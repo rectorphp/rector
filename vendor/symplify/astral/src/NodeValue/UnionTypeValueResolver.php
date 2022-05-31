@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220530\Symplify\Astral\NodeValue;
+namespace RectorPrefix20220531\Symplify\Astral\NodeValue;
 
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\UnionType;

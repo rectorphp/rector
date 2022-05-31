@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220530;
+namespace RectorPrefix20220531;
 
 use Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector;
 use Rector\Arguments\ValueObject\SwapFuncCallArguments;

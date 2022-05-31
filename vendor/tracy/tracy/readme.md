@@ -143,7 +143,8 @@ In order to detect misspellings when assigning to an object, we use [trait Nette
 Content Security Policy
 -----------------------
 
-If your site uses Content Security Policy, you'll need to add `'nonce-<value>'` to `script-src` and eventually the same nonce to `style-src` for Tracy to work properly. Some 3rd plugins may require additional directives. Avoid adding `'unsafe-inline'` & `'unsafe-eval'` in production mode, if you can.
+If your site uses Content Security Policy, you'll need to add `'nonce-<value>'` to `script-src` for Tracy to work properly. Some 3rd plugins may require additional directives.
+Nonce is not supported in the `style-src` directive, if you use this directive you need to add `'unsafe-inline'`, but this should be avoided in production mode.
 
 Configuration example for [Nette Framework](https://nette.org):
 
@@ -151,7 +152,13 @@ Configuration example for [Nette Framework](https://nette.org):
 http:
 	csp:
 		script-src: nonce
-		style-src: nonce
+```
+
+Example in pure PHP:
+
+```php
+$nonce = base64_encode(random_bytes(20));
+header("Content-Security-Policy: script-src 'nonce-$nonce';");
 ```
 
 

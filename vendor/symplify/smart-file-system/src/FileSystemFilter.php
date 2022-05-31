@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220530\Symplify\SmartFileSystem;
+namespace RectorPrefix20220531\Symplify\SmartFileSystem;
 
 /**
  * @see \Symplify\SmartFileSystem\Tests\FileSystemFilter\FileSystemFilterTest

@@ -6,6 +6,11 @@
 	--tracy-space: 16px;
 }
 
+html, body {
+	display: block;
+	overflow: visible;
+}
+
 #tracy-bs {
 	font: 9pt/1.5 Verdana, sans-serif;
 	background: white;

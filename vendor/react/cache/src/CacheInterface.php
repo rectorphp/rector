@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20220530\React\Cache;
+namespace RectorPrefix20220531\React\Cache;
 
-use RectorPrefix20220530\React\Promise\PromiseInterface;
+use RectorPrefix20220531\React\Promise\PromiseInterface;
 interface CacheInterface
 {
     /**

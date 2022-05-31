@@ -2,8 +2,8 @@
  * This file is part of the Tracy (https://tracy.nette.org)
  */
 
-tracy-div,
-tracy-div * {
+tracy-div:not(a b),
+tracy-div:not(a b) * {
 	font: inherit;
 	line-height: inherit;
 	color: inherit;
@@ -29,173 +29,178 @@ tracy-div * {
 	min-height: initial;
 }
 
-tracy-div *:not(svg):not(img):not(table) {
+tracy-div:not(a b) *:hover {
+	color: inherit;
+	background: transparent;
+}
+
+tracy-div:not(a b) *:not(svg):not(img):not(table) {
 	width: initial;
 	height: initial;
 }
 
-tracy-div:before,
-tracy-div:after,
-tracy-div *:before,
-tracy-div *:after {
+tracy-div:not(a b):before,
+tracy-div:not(a b):after,
+tracy-div:not(a b) *:before,
+tracy-div:not(a b) *:after {
 	all: unset;
 }
 
-tracy-div b,
-tracy-div strong {
+tracy-div:not(a b) b,
+tracy-div:not(a b) strong {
 	font-weight: bold;
 }
 
-tracy-div small {
+tracy-div:not(a b) small {
 	font-size: smaller;
 }
 
-tracy-div i,
-tracy-div em {
+tracy-div:not(a b) i,
+tracy-div:not(a b) em {
 	font-style: italic;
 }
 
-tracy-div big {
+tracy-div:not(a b) big {
 	font-size: larger;
 }
 
-tracy-div small,
-tracy-div sub,
-tracy-div sup {
+tracy-div:not(a b) small,
+tracy-div:not(a b) sub,
+tracy-div:not(a b) sup {
 	font-size: smaller;
 }
 
-tracy-div ins {
+tracy-div:not(a b) ins {
 	text-decoration: underline;
 }
 
-tracy-div del {
+tracy-div:not(a b) del {
 	text-decoration: line-through;
 }
 
-tracy-div table {
+tracy-div:not(a b) table {
 	border-collapse: collapse;
 }
 
-tracy-div pre {
+tracy-div:not(a b) pre {
 	font-family: monospace;
 	white-space: pre;
 }
 
-tracy-div code,
-tracy-div kbd,
-tracy-div samp {
+tracy-div:not(a b) code,
+tracy-div:not(a b) kbd,
+tracy-div:not(a b) samp {
 	font-family: monospace;
 }
 
-tracy-div input {
+tracy-div:not(a b) input {
 	background-color: white;
 	padding: 1px;
 	border: 1px solid;
 }
 
-tracy-div textarea {
+tracy-div:not(a b) textarea {
 	background-color: white;
 	border: 1px solid;
 	padding: 2px;
 	white-space: pre-wrap;
 }
 
-tracy-div select {
+tracy-div:not(a b) select {
 	border: 1px solid;
 	white-space: pre;
 }
 
-tracy-div article,
-tracy-div aside,
-tracy-div details,
-tracy-div div,
-tracy-div figcaption,
-tracy-div footer,
-tracy-div form,
-tracy-div header,
-tracy-div hgroup,
-tracy-div main,
-tracy-div nav,
-tracy-div section,
-tracy-div summary,
-tracy-div pre,
-tracy-div p,
-tracy-div dl,
-tracy-div dd,
-tracy-div dt,
-tracy-div blockquote,
-tracy-div figure,
-tracy-div address,
-tracy-div h1,
-tracy-div h2,
-tracy-div h3,
-tracy-div h4,
-tracy-div h5,
-tracy-div h6,
-tracy-div ul,
-tracy-div ol,
-tracy-div li,
-tracy-div hr {
+tracy-div:not(a b) article,
+tracy-div:not(a b) aside,
+tracy-div:not(a b) details,
+tracy-div:not(a b) div,
+tracy-div:not(a b) figcaption,
+tracy-div:not(a b) footer,
+tracy-div:not(a b) form,
+tracy-div:not(a b) header,
+tracy-div:not(a b) hgroup,
+tracy-div:not(a b) main,
+tracy-div:not(a b) nav,
+tracy-div:not(a b) section,
+tracy-div:not(a b) summary,
+tracy-div:not(a b) pre,
+tracy-div:not(a b) p,
+tracy-div:not(a b) dl,
+tracy-div:not(a b) dd,
+tracy-div:not(a b) dt,
+tracy-div:not(a b) blockquote,
+tracy-div:not(a b) figure,
+tracy-div:not(a b) address,
+tracy-div:not(a b) h1,
+tracy-div:not(a b) h2,
+tracy-div:not(a b) h3,
+tracy-div:not(a b) h4,
+tracy-div:not(a b) h5,
+tracy-div:not(a b) h6,
+tracy-div:not(a b) ul,
+tracy-div:not(a b) ol,
+tracy-div:not(a b) li,
+tracy-div:not(a b) hr {
 	display: block;
 }
 
-tracy-div a,
-tracy-div b,
-tracy-div big,
-tracy-div code,
-tracy-div em,
-tracy-div i,
-tracy-div small,
-tracy-div span,
-tracy-div strong {
+tracy-div:not(a b) a,
+tracy-div:not(a b) b,
+tracy-div:not(a b) big,
+tracy-div:not(a b) code,
+tracy-div:not(a b) em,
+tracy-div:not(a b) i,
+tracy-div:not(a b) small,
+tracy-div:not(a b) span,
+tracy-div:not(a b) strong {
 	display: inline;
 }
 
-tracy-div table {
+tracy-div:not(a b) table {
 	display: table;
 }
 
-tracy-div tr {
+tracy-div:not(a b) tr {
 	display: table-row;
 }
 
-tracy-div col {
+tracy-div:not(a b) col {
 	display: table-column;
 }
 
-tracy-div colgroup {
+tracy-div:not(a b) colgroup {
 	display: table-column-group;
 }
 
-tracy-div tbody {
+tracy-div:not(a b) tbody {
 	display: table-row-group;
 }
 
-tracy-div thead {
+tracy-div:not(a b) thead {
 	display: table-header-group;
 }
 
-tracy-div tfoot {
+tracy-div:not(a b) tfoot {
 	display: table-footer-group;
 }
 
-tracy-div td {
+tracy-div:not(a b) td {
 	display: table-cell;
 }
 
-tracy-div th {
+tracy-div:not(a b) th {
 	display: table-cell;
 }
 
 
 
 /* TableSort */
-tracy-div .tracy-sortable > :first-child > tr:first-child > * {
+tracy-div:not(a b) .tracy-sortable > :first-child > tr:first-child > * {
 	position: relative;
 }
 
-tracy-div .tracy-sortable > :first-child > tr:first-child > *:hover:before {
+tracy-div:not(a b) .tracy-sortable > :first-child > tr:first-child > *:hover:before {
 	position: absolute;
 	right: .3em;
 	content: "\21C5";
@@ -205,33 +210,33 @@ tracy-div .tracy-sortable > :first-child > tr:first-child > *:hover:before {
 
 
 /* dump */
-tracy-div .tracy-dump div {
+tracy-div:not(a b) .tracy-dump div {
 	padding-left: 3ex;
 }
 
-tracy-div .tracy-dump div div {
+tracy-div:not(a b) .tracy-dump div div {
 	border-left: 1px solid rgba(0, 0, 0, .1);
 	margin-left: .5ex;
 }
 
-tracy-div .tracy-dump div div:hover {
+tracy-div:not(a b) .tracy-dump div div:hover {
 	border-left-color: rgba(0, 0, 0, .25);
 }
 
-tracy-div .tracy-dump {
+tracy-div:not(a b) .tracy-dump {
 	background: #FDF5CE;
 	padding: .4em .7em;
 	border: 1px dotted silver;
 	overflow: auto;
 }
 
-tracy-div table .tracy-dump {
+tracy-div:not(a b) table .tracy-dump.tracy-dump { /* overwrite .tracy-dump.tracy-light etc. */
 	padding: 0;
 	margin: 0;
 	border: none;
 }
 
-tracy-div .tracy-dump-location {
+tracy-div:not(a b) .tracy-dump-location {
 	color: gray;
 	font-size: 80%;
 	text-decoration: none;
@@ -241,33 +246,33 @@ tracy-div .tracy-dump-location {
 	cursor: pointer;
 }
 
-tracy-div .tracy-dump-location:hover,
-tracy-div .tracy-dump-location:focus {
+tracy-div:not(a b) .tracy-dump-location:hover,
+tracy-div:not(a b) .tracy-dump-location:focus {
 	color: gray;
 	background: none;
 	opacity: 1;
 }
 
-tracy-div .tracy-dump-array,
-tracy-div .tracy-dump-object {
+tracy-div:not(a b) .tracy-dump-array,
+tracy-div:not(a b) .tracy-dump-object {
 	color: #C22;
 }
 
-tracy-div .tracy-dump-string {
+tracy-div:not(a b) .tracy-dump-string {
 	color: #35D;
 	white-space: break-spaces;
 }
 
-tracy-div div.tracy-dump-string {
+tracy-div:not(a b) div.tracy-dump-string {
 	position: relative;
 	padding-left: 3.5ex;
 }
 
-tracy-div .tracy-dump-lq {
+tracy-div:not(a b) .tracy-dump-lq {
 	margin-left: calc(-1ex - 1px);
 }
 
-tracy-div div.tracy-dump-string:before {
+tracy-div:not(a b) div.tracy-dump-string:before {
 	content: '';
 	position: absolute;
 	left: calc(3ex - 1px);
@@ -276,59 +281,59 @@ tracy-div div.tracy-dump-string:before {
 	border-left: 1px solid rgba(0, 0, 0, .1);
 }
 
-tracy-div .tracy-dump-virtual span,
-tracy-div .tracy-dump-dynamic span,
-tracy-div .tracy-dump-string span {
+tracy-div:not(a b) .tracy-dump-virtual span,
+tracy-div:not(a b) .tracy-dump-dynamic span,
+tracy-div:not(a b) .tracy-dump-string span {
 	color: rgba(0, 0, 0, 0.5);
 }
 
-tracy-div .tracy-dump-virtual i,
-tracy-div .tracy-dump-dynamic i,
-tracy-div .tracy-dump-string i {
+tracy-div:not(a b) .tracy-dump-virtual i,
+tracy-div:not(a b) .tracy-dump-dynamic i,
+tracy-div:not(a b) .tracy-dump-string i {
 	font-size: 80%;
 	font-style: normal;
 	color: rgba(0, 0, 0, 0.5);
 	user-select: none;
 }
 
-tracy-div .tracy-dump-number {
+tracy-div:not(a b) .tracy-dump-number {
 	color: #090;
 }
 
-tracy-div .tracy-dump-null,
-tracy-div .tracy-dump-bool {
+tracy-div:not(a b) .tracy-dump-null,
+tracy-div:not(a b) .tracy-dump-bool {
 	color: #850;
 }
 
-tracy-div .tracy-dump-virtual {
+tracy-div:not(a b) .tracy-dump-virtual {
 	font-style: italic;
 }
 
-tracy-div .tracy-dump-public::after {
+tracy-div:not(a b) .tracy-dump-public::after {
 	content: ' pub';
 }
 
-tracy-div .tracy-dump-protected::after {
+tracy-div:not(a b) .tracy-dump-protected::after {
 	content: ' pro';
 }
 
-tracy-div .tracy-dump-private::after {
+tracy-div:not(a b) .tracy-dump-private::after {
 	content: ' pri';
 }
 
-tracy-div .tracy-dump-public::after,
-tracy-div .tracy-dump-protected::after,
-tracy-div .tracy-dump-private::after,
-tracy-div .tracy-dump-hash {
+tracy-div:not(a b) .tracy-dump-public::after,
+tracy-div:not(a b) .tracy-dump-protected::after,
+tracy-div:not(a b) .tracy-dump-private::after,
+tracy-div:not(a b) .tracy-dump-hash {
 	font-size: 85%;
 	color: rgba(0, 0, 0, 0.5);
 }
 
-tracy-div .tracy-dump-indent {
+tracy-div:not(a b) .tracy-dump-indent {
 	display: none;
 }
 
-tracy-div .tracy-dump-highlight {
+tracy-div:not(a b) .tracy-dump-highlight {
 	background: #C22;
 	color: white;
 	border-radius: 2px;
@@ -336,13 +341,13 @@ tracy-div .tracy-dump-highlight {
 	margin: 0 -2px;
 }
 
-tracy-div span[data-tracy-href] {
+tracy-div:not(a b) span[data-tracy-href] {
 	border-bottom: 1px dotted rgba(0, 0, 0, .2);
 }
 
 
 /* toggle */
-tracy-div .tracy-toggle:after {
+tracy-div:not(a b) .tracy-toggle:after {
 	content: '';
 	display: inline-block;
 	vertical-align: middle;
@@ -356,16 +361,16 @@ tracy-div .tracy-toggle:after {
 	opacity: .5;
 }
 
-tracy-div .tracy-toggle.tracy-collapsed:after {
+tracy-div:not(a b) .tracy-toggle.tracy-collapsed:after {
 	transform: rotate(-90deg) scale(1, 1.5) translate(.1ex, 0);
 }
 
 
 /* tabs */
-tracy-div .tracy-tab-label {
+tracy-div:not(a b) .tracy-tab-label {
 	user-select: none;
 }
 
-tracy-div .tracy-tab-panel:not(.tracy-active) {
+tracy-div:not(a b) .tracy-tab-panel:not(.tracy-active) {
 	display: none;
 }

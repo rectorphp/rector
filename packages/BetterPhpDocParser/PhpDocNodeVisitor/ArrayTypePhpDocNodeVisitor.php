@@ -8,8 +8,8 @@ use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
-use RectorPrefix20220530\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class ArrayTypePhpDocNodeVisitor extends \RectorPrefix20220530\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
+use RectorPrefix20220531\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class ArrayTypePhpDocNodeVisitor extends \RectorPrefix20220531\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
      * @readonly

@@ -29,20 +29,11 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
-## Read a First Book About Rector
+## Learn Rector Faster
 
-Are you curious, how Rector works internally, how to create your own rules and test them and why Rector was born? In May 2021 we've released the very first book: *Rector - The Power of Automated Refactoring*.
+Rector is a tool that [we develop](https://getrector.org/) and share for free, so anyone can save hundreds of hours on refactoring. But not everyone has time to understand Rector and AST complexity. You have 2 ways to speed this process up:
 
-<a href="https://leanpub.com/rector-the-power-of-automated-refactoring">
-<img src="https://github.com/rectorphp/the-power-of-automated-refactoring-feedback/raw/main/images/book_title.png">
-</a>
+* read a book - <a href="https://leanpub.com/rector-the-power-of-automated-refactoring">The Power of Automated Refactoring</a>
+* hire our experienced team to <a href="https://getrector.org/contact">improve your code base</a>
 
-By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring) you directly support maintainers who are working on Rector.
-
-<br>
-
-## Support
-
-Rector is a tool that [we develop](https://getrector.org/) and share for free, so anyone can automate their refactoring. But not everyone has dozens of hours to understand complexity of abstract-syntax-tree in their own time. **That's why we provide commercial support - to save your time**.
-
-Would you like to apply Rector on your code base but don't have time for the struggle with your project? [Hire us](https://getrector.org/contact) to get there faster.
+Both ways support us to and improve Rector in sustainable way by learning from practical projects.

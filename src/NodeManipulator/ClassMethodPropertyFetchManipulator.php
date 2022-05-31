@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220530\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220531\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ClassMethodPropertyFetchManipulator
 {
     /**
@@ -36,7 +36,7 @@ final class ClassMethodPropertyFetchManipulator
      * @var \Rector\Core\NodeManipulator\FunctionLikeManipulator
      */
     private $functionLikeManipulator;
-    public function __construct(\RectorPrefix20220530\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator)
+    public function __construct(\RectorPrefix20220531\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
