@@ -30,6 +30,8 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
      */
     private array $methodReturnTypes = [];
 
+    private bool $hasChanged = false;
+
     public function __construct(
         private readonly TypeComparator $typeComparator,
         private readonly PhpVersionProvider $phpVersionProvider,
@@ -89,6 +91,10 @@ CODE_SAMPLE
 
             $this->processClassMethodNodeWithTypehints($node, $methodReturnType->getReturnType());
 
+            if (! $this->hasChanged) {
+                return null;
+            }
+
             return $node;
         }
 
@@ -125,5 +131,7 @@ CODE_SAMPLE
 
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($newType, TypeKind::RETURN);
         $classMethod->returnType = $returnTypeNode;
+
+        $this->hasChanged = true;
     }
 }
