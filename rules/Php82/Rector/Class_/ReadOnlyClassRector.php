@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php82\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -104,22 +105,18 @@ CODE_SAMPLE
     }
     private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
-        // need to have test fixture once feature added to  nikic/PHP-Parser
-        if ($this->visibilityManipulator->hasVisibility($class, \Rector\Core\ValueObject\Visibility::READONLY)) {
-            return \true;
-        }
-        if ($this->classAnalyzer->isAnonymousClass($class)) {
-            return \true;
-        }
-        if (!$class->isFinal()) {
-            return \true;
-        }
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE)) {
+        if ($this->shouldSkipClass($class)) {
             return \true;
         }
         $properties = $class->getProperties();
         if ($this->hasWritableProperty($properties)) {
             return \true;
+        }
+        foreach ($properties as $property) {
+            // properties of readonly class must always have type
+            if ($property->type === null) {
+                return \true;
+            }
         }
         $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
@@ -131,13 +128,7 @@ CODE_SAMPLE
             // no params means no property promotion, skip if class has no property defined
             return $properties === [];
         }
-        foreach ($params as $param) {
-            // has non-property promotion, skip
-            if (!$this->visibilityManipulator->hasVisibility($param, \Rector\Core\ValueObject\Visibility::READONLY)) {
-                return \true;
-            }
-        }
-        return \false;
+        return $this->shouldSkipParams($params);
     }
     /**
      * @param Property[] $properties
@@ -146,6 +137,37 @@ CODE_SAMPLE
     {
         foreach ($properties as $property) {
             if (!$property->isReadonly()) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    private function shouldSkipClass(\PhpParser\Node\Stmt\Class_ $class) : bool
+    {
+        // need to have test fixture once feature added to  nikic/PHP-Parser
+        if ($this->visibilityManipulator->hasVisibility($class, \Rector\Core\ValueObject\Visibility::READONLY)) {
+            return \true;
+        }
+        if ($this->classAnalyzer->isAnonymousClass($class)) {
+            return \true;
+        }
+        if (!$class->isFinal()) {
+            return \true;
+        }
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE);
+    }
+    /**
+     * @param Param[] $params
+     */
+    private function shouldSkipParams(array $params) : bool
+    {
+        foreach ($params as $param) {
+            // has non-property promotion, skip
+            if (!$this->visibilityManipulator->hasVisibility($param, \Rector\Core\ValueObject\Visibility::READONLY)) {
+                return \true;
+            }
+            // type is missing, invalid syntax
+            if ($param->type === null) {
                 return \true;
             }
         }
