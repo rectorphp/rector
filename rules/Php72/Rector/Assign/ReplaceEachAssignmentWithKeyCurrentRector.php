@@ -123,17 +123,13 @@ CODE_SAMPLE
      */
     private function createNewNodes(Expr $assignVariable, Expr $eachedVariable): array
     {
-        $newNodes = [];
-
-        $newNodes[] = $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 1, 'current');
-        $newNodes[] = $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 'value', 'current');
-
-        $newNodes[] = $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 0, self::KEY);
-        $newNodes[] = $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, self::KEY, self::KEY);
-
-        $newNodes[] = $this->nodeFactory->createFuncCall('next', [new Arg($eachedVariable)]);
-
-        return $newNodes;
+        return [
+            $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 1, 'current'),
+            $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 'value', 'current'),
+            $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 0, self::KEY),
+            $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, self::KEY, self::KEY),
+            $this->nodeFactory->createFuncCall('next', [new Arg($eachedVariable)]),
+        ];
     }
 
     private function createDimFetchAssignWithFuncCall(

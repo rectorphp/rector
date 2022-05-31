@@ -75,20 +75,19 @@ final class RectorKernel implements LightKernelInterface
      */
     private function createCompilerPasses(): array
     {
-        $compilerPasses = [];
+        return [
 
-        // must run before AutowireArrayParameterCompilerPass, as the autowired array cannot contain removed services
-        $compilerPasses[] = new RemoveSkippedRectorsCompilerPass();
+            // must run before AutowireArrayParameterCompilerPass, as the autowired array cannot contain removed services
+            new RemoveSkippedRectorsCompilerPass(),
 
-        // autowire Rectors by default (mainly for tests)
-        $compilerPasses[] = new AutowireInterfacesCompilerPass([RectorInterface::class]);
-        $compilerPasses[] = new MakeRectorsPublicCompilerPass();
+            // autowire Rectors by default (mainly for tests)
+            new AutowireInterfacesCompilerPass([RectorInterface::class]),
+            new MakeRectorsPublicCompilerPass(),
 
-        // add all merged arguments of Rector services
-        $compilerPasses[] = new MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector);
-        $compilerPasses[] = new AutowireArrayParameterCompilerPass();
-
-        return $compilerPasses;
+            // add all merged arguments of Rector services
+            new MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector),
+            new AutowireArrayParameterCompilerPass(),
+        ];
     }
 
     /**

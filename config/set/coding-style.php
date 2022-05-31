@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector;
-
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
@@ -34,38 +33,39 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rule(PHPStormVarAnnotationRector::class);
-    $rectorConfig->rule(NullableCompareToNullRector::class);
-    $rectorConfig->rule(BinarySwitchToIfElseRector::class);
-    $rectorConfig->rule(ConsistentImplodeRector::class);
-    $rectorConfig->rule(TernaryConditionVariableAssignmentRector::class);
-    $rectorConfig->rule(SymplifyQuoteEscapeRector::class);
-    $rectorConfig->rule(SplitGroupedConstantsAndPropertiesRector::class);
-    $rectorConfig->rule(StringClassNameToClassConstantRector::class);
-    $rectorConfig->rule(ConsistentPregDelimiterRector::class);
-    $rectorConfig->rule(CatchExceptionNameMatchingTypeRector::class);
-    $rectorConfig->rule(UseIncrementAssignRector::class);
-    $rectorConfig->rule(SplitDoubleAssignRector::class);
-    $rectorConfig->rule(VarConstantCommentRector::class);
-    $rectorConfig->rule(EncapsedStringsToSprintfRector::class);
-    $rectorConfig->rule(WrapEncapsedVariableInCurlyBracesRector::class);
-    $rectorConfig->rule(NewlineBeforeNewAssignSetRector::class);
-    $rectorConfig->rule(AddArrayDefaultToArrayPropertyRector::class);
-    $rectorConfig->rule(AddFalseDefaultToBoolPropertyRector::class);
-    $rectorConfig->rule(MakeInheritedMethodVisibilitySameAsParentRector::class);
-    $rectorConfig->rule(CallUserFuncArrayToVariadicRector::class);
-    $rectorConfig->rule(VersionCompareFuncCallToConstantRector::class);
-
     $rectorConfig
         ->ruleWithConfiguration(FuncCallToConstFetchRector::class, [
             'php_sapi_name' => 'PHP_SAPI',
             'pi' => 'M_PI',
         ]);
 
-    $rectorConfig->rule(SeparateMultiUseImportsRector::class);
-    $rectorConfig->rule(RemoveDoubleUnderscoreInMethodNameRector::class);
-    $rectorConfig->rule(PostIncDecToPreIncDecRector::class);
-    $rectorConfig->rule(UnSpreadOperatorRector::class);
-    $rectorConfig->rule(NewlineAfterStatementRector::class);
-    $rectorConfig->rule(RemoveFinalFromConstRector::class);
+    $rectorConfig->rules([
+        SeparateMultiUseImportsRector::class,
+        RemoveDoubleUnderscoreInMethodNameRector::class,
+        PostIncDecToPreIncDecRector::class,
+        UnSpreadOperatorRector::class,
+        NewlineAfterStatementRector::class,
+        RemoveFinalFromConstRector::class,
+        PHPStormVarAnnotationRector::class,
+        NullableCompareToNullRector::class,
+        BinarySwitchToIfElseRector::class,
+        ConsistentImplodeRector::class,
+        TernaryConditionVariableAssignmentRector::class,
+        SymplifyQuoteEscapeRector::class,
+        SplitGroupedConstantsAndPropertiesRector::class,
+        StringClassNameToClassConstantRector::class,
+        ConsistentPregDelimiterRector::class,
+        CatchExceptionNameMatchingTypeRector::class,
+        UseIncrementAssignRector::class,
+        SplitDoubleAssignRector::class,
+        VarConstantCommentRector::class,
+        EncapsedStringsToSprintfRector::class,
+        WrapEncapsedVariableInCurlyBracesRector::class,
+        NewlineBeforeNewAssignSetRector::class,
+        AddArrayDefaultToArrayPropertyRector::class,
+        AddFalseDefaultToBoolPropertyRector::class,
+        MakeInheritedMethodVisibilitySameAsParentRector::class,
+        CallUserFuncArrayToVariadicRector::class,
+        VersionCompareFuncCallToConstantRector::class,
+    ]);
 };

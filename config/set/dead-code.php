@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
-
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
@@ -51,51 +50,52 @@ use Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector;
 use Rector\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rule(UnwrapFutureCompatibleIfFunctionExistsRector::class);
-    $rectorConfig->rule(UnwrapFutureCompatibleIfPhpVersionRector::class);
-    $rectorConfig->rule(RecastingRemovalRector::class);
-    $rectorConfig->rule(RemoveDeadStmtRector::class);
-    $rectorConfig->rule(RemoveDuplicatedArrayKeyRector::class);
-    $rectorConfig->rule(RemoveUnusedForeachKeyRector::class);
-    $rectorConfig->rule(RemoveParentCallWithoutParentRector::class);
-    $rectorConfig->rule(RemoveEmptyClassMethodRector::class);
-    $rectorConfig->rule(RemoveDoubleAssignRector::class);
-    $rectorConfig->rule(SimplifyMirrorAssignRector::class);
-    $rectorConfig->rule(RemoveOverriddenValuesRector::class);
-    $rectorConfig->rule(RemoveUnusedPrivatePropertyRector::class);
-    $rectorConfig->rule(RemoveUnusedPrivateClassConstantRector::class);
-    $rectorConfig->rule(RemoveUnusedPrivateMethodRector::class);
-    $rectorConfig->rule(RemoveDeadConstructorRector::class);
-    $rectorConfig->rule(RemoveDeadReturnRector::class);
-    $rectorConfig->rule(RemoveDeadContinueRector::class);
-    $rectorConfig->rule(RemoveDeadIfForeachForRector::class);
-    $rectorConfig->rule(RemoveAndTrueRector::class);
-    $rectorConfig->rule(RemoveConcatAutocastRector::class);
-    $rectorConfig->rule(SimplifyUselessVariableRector::class);
-    $rectorConfig->rule(RemoveDelegatingParentCallRector::class);
-    $rectorConfig->rule(RemoveDuplicatedInstanceOfRector::class);
-    $rectorConfig->rule(RemoveDuplicatedCaseInSwitchRector::class);
-    $rectorConfig->rule(RemoveNullPropertyInitializationRector::class);
-    $rectorConfig->rule(RemoveUnreachableStatementRector::class);
-    $rectorConfig->rule(SimplifyIfElseWithSameContentRector::class);
-    $rectorConfig->rule(TernaryToBooleanOrFalseToBooleanAndRector::class);
-    $rectorConfig->rule(RemoveEmptyTestMethodRector::class);
-    $rectorConfig->rule(RemoveDeadTryCatchRector::class);
-    $rectorConfig->rule(RemoveUnusedVariableAssignRector::class);
-    $rectorConfig->rule(RemoveDuplicatedIfReturnRector::class);
-    $rectorConfig->rule(RemoveUnusedNonEmptyArrayBeforeForeachRector::class);
-    $rectorConfig->rule(RemoveEmptyMethodCallRector::class);
-    $rectorConfig->rule(RemoveDeadConditionAboveReturnRector::class);
-    $rectorConfig->rule(RemoveUnusedConstructorParamRector::class);
-    $rectorConfig->rule(RemoveDeadInstanceOfRector::class);
-    $rectorConfig->rule(RemoveDeadLoopRector::class);
-    $rectorConfig->rule(RemoveUnusedPrivateMethodParameterRector::class);
-    $rectorConfig->rule(RemoveUnusedParamInRequiredAutowireRector::class);
-
-    // docblock
-    $rectorConfig->rule(RemoveUselessParamTagRector::class);
-    $rectorConfig->rule(RemoveUselessReturnTagRector::class);
-    $rectorConfig->rule(RemoveNonExistingVarAnnotationRector::class);
-    $rectorConfig->rule(RemoveUnusedPromotedPropertyRector::class);
-    $rectorConfig->rule(RemoveLastReturnRector::class);
+    $rectorConfig->rules([
+        UnwrapFutureCompatibleIfFunctionExistsRector::class,
+        UnwrapFutureCompatibleIfPhpVersionRector::class,
+        RecastingRemovalRector::class,
+        RemoveDeadStmtRector::class,
+        RemoveDuplicatedArrayKeyRector::class,
+        RemoveUnusedForeachKeyRector::class,
+        RemoveParentCallWithoutParentRector::class,
+        RemoveEmptyClassMethodRector::class,
+        RemoveDoubleAssignRector::class,
+        SimplifyMirrorAssignRector::class,
+        RemoveOverriddenValuesRector::class,
+        RemoveUnusedPrivatePropertyRector::class,
+        RemoveUnusedPrivateClassConstantRector::class,
+        RemoveUnusedPrivateMethodRector::class,
+        RemoveDeadConstructorRector::class,
+        RemoveDeadReturnRector::class,
+        RemoveDeadContinueRector::class,
+        RemoveDeadIfForeachForRector::class,
+        RemoveAndTrueRector::class,
+        RemoveConcatAutocastRector::class,
+        SimplifyUselessVariableRector::class,
+        RemoveDelegatingParentCallRector::class,
+        RemoveDuplicatedInstanceOfRector::class,
+        RemoveDuplicatedCaseInSwitchRector::class,
+        RemoveNullPropertyInitializationRector::class,
+        RemoveUnreachableStatementRector::class,
+        SimplifyIfElseWithSameContentRector::class,
+        TernaryToBooleanOrFalseToBooleanAndRector::class,
+        RemoveEmptyTestMethodRector::class,
+        RemoveDeadTryCatchRector::class,
+        RemoveUnusedVariableAssignRector::class,
+        RemoveDuplicatedIfReturnRector::class,
+        RemoveUnusedNonEmptyArrayBeforeForeachRector::class,
+        RemoveEmptyMethodCallRector::class,
+        RemoveDeadConditionAboveReturnRector::class,
+        RemoveUnusedConstructorParamRector::class,
+        RemoveDeadInstanceOfRector::class,
+        RemoveDeadLoopRector::class,
+        RemoveUnusedPrivateMethodParameterRector::class,
+        RemoveUnusedParamInRequiredAutowireRector::class,
+        // docblock
+        RemoveUselessParamTagRector::class,
+        RemoveUselessReturnTagRector::class,
+        RemoveNonExistingVarAnnotationRector::class,
+        RemoveUnusedPromotedPropertyRector::class,
+        RemoveLastReturnRector::class,
+    ]);
 };

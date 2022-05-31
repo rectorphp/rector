@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector;
-
 use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector;
@@ -82,61 +81,6 @@ use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rule(CombinedAssignRector::class);
-    $rectorConfig->rule(SimplifyEmptyArrayCheckRector::class);
-    $rectorConfig->rule(ReplaceMultipleBooleanNotRector::class);
-    $rectorConfig->rule(ForeachToInArrayRector::class);
-    $rectorConfig->rule(SimplifyForeachToCoalescingRector::class);
-    $rectorConfig->rule(SimplifyFuncGetArgsCountRector::class);
-    $rectorConfig->rule(SimplifyInArrayValuesRector::class);
-    $rectorConfig->rule(SimplifyStrposLowerRector::class);
-    $rectorConfig->rule(GetClassToInstanceOfRector::class);
-    $rectorConfig->rule(SimplifyArraySearchRector::class);
-    $rectorConfig->rule(SimplifyConditionsRector::class);
-    $rectorConfig->rule(SimplifyIfNotNullReturnRector::class);
-    $rectorConfig->rule(SimplifyIfReturnBoolRector::class);
-    $rectorConfig->rule(SimplifyUselessVariableRector::class);
-    $rectorConfig->rule(UnnecessaryTernaryExpressionRector::class);
-    $rectorConfig->rule(RemoveExtraParametersRector::class);
-    $rectorConfig->rule(SimplifyDeMorganBinaryRector::class);
-    $rectorConfig->rule(SimplifyTautologyTernaryRector::class);
-    $rectorConfig->rule(SimplifyForeachToArrayFilterRector::class);
-    $rectorConfig->rule(SingleInArrayToCompareRector::class);
-    $rectorConfig->rule(SimplifyIfElseToTernaryRector::class);
-    $rectorConfig->rule(JoinStringConcatRector::class);
-    $rectorConfig->rule(ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class);
-    $rectorConfig->rule(SimplifyIfIssetToNullCoalescingRector::class);
-    $rectorConfig->rule(ExplicitBoolCompareRector::class);
-    $rectorConfig->rule(CombineIfRector::class);
-    $rectorConfig->rule(UseIdenticalOverEqualWithSameTypeRector::class);
-    $rectorConfig->rule(SimplifyBoolIdenticalTrueRector::class);
-    $rectorConfig->rule(SimplifyRegexPatternRector::class);
-    $rectorConfig->rule(BooleanNotIdenticalToNotIdenticalRector::class);
-    $rectorConfig->rule(CallableThisArrayToAnonymousFunctionRector::class);
-    $rectorConfig->rule(AndAssignsToSeparateLinesRector::class);
-    $rectorConfig->rule(ForToForeachRector::class);
-    $rectorConfig->rule(CompactToVariablesRector::class);
-    $rectorConfig->rule(CompleteDynamicPropertiesRector::class);
-    $rectorConfig->rule(IsAWithStringWithThirdArgumentRector::class);
-    $rectorConfig->rule(StrlenZeroToIdenticalEmptyStringRector::class);
-    $rectorConfig->rule(RemoveAlwaysTrueConditionSetInConstructorRector::class);
-    $rectorConfig->rule(ThrowWithPreviousExceptionRector::class);
-    $rectorConfig->rule(RemoveSoleValueSprintfRector::class);
-    $rectorConfig->rule(ShortenElseIfRector::class);
-    $rectorConfig->rule(AddPregQuoteDelimiterRector::class);
-    $rectorConfig->rule(ArrayMergeOfNonArraysToSimpleArrayRector::class);
-    $rectorConfig->rule(IntvalToTypeCastRector::class);
-    $rectorConfig->rule(ArrayKeyExistsTernaryThenValueToCoalescingRector::class);
-    $rectorConfig->rule(AbsolutizeRequireAndIncludePathRector::class);
-    $rectorConfig->rule(ChangeArrayPushToArrayAssignRector::class);
-    $rectorConfig->rule(ForRepeatedCountToOwnVariableRector::class);
-    $rectorConfig->rule(ForeachItemsAssignToEmptyArrayToAssignRector::class);
-    $rectorConfig->rule(InlineIfToExplicitIfRector::class);
-    $rectorConfig->rule(ArrayKeysAndInArrayToArrayKeyExistsRector::class);
-    $rectorConfig->rule(SplitListAssignToSeparateLineRector::class);
-    $rectorConfig->rule(UnusedForeachValueToArrayKeysRector::class);
-    $rectorConfig->rule(ArrayThisCallToThisMethodCallRector::class);
-    $rectorConfig->rule(CommonNotEqualRector::class);
     $rectorConfig
         ->ruleWithConfiguration(RenameFunctionRector::class, [
             'split' => 'explode',
@@ -165,6 +109,61 @@ return static function (RectorConfig $rectorConfig): void {
         ]);
 
     $rectorConfig->rules([
+        CombinedAssignRector::class,
+        SimplifyEmptyArrayCheckRector::class,
+        ReplaceMultipleBooleanNotRector::class,
+        ForeachToInArrayRector::class,
+        SimplifyForeachToCoalescingRector::class,
+        SimplifyFuncGetArgsCountRector::class,
+        SimplifyInArrayValuesRector::class,
+        SimplifyStrposLowerRector::class,
+        GetClassToInstanceOfRector::class,
+        SimplifyArraySearchRector::class,
+        SimplifyConditionsRector::class,
+        SimplifyIfNotNullReturnRector::class,
+        SimplifyIfReturnBoolRector::class,
+        SimplifyUselessVariableRector::class,
+        UnnecessaryTernaryExpressionRector::class,
+        RemoveExtraParametersRector::class,
+        SimplifyDeMorganBinaryRector::class,
+        SimplifyTautologyTernaryRector::class,
+        SimplifyForeachToArrayFilterRector::class,
+        SingleInArrayToCompareRector::class,
+        SimplifyIfElseToTernaryRector::class,
+        JoinStringConcatRector::class,
+        ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class,
+        SimplifyIfIssetToNullCoalescingRector::class,
+        ExplicitBoolCompareRector::class,
+        CombineIfRector::class,
+        UseIdenticalOverEqualWithSameTypeRector::class,
+        SimplifyBoolIdenticalTrueRector::class,
+        SimplifyRegexPatternRector::class,
+        BooleanNotIdenticalToNotIdenticalRector::class,
+        CallableThisArrayToAnonymousFunctionRector::class,
+        AndAssignsToSeparateLinesRector::class,
+        ForToForeachRector::class,
+        CompactToVariablesRector::class,
+        CompleteDynamicPropertiesRector::class,
+        IsAWithStringWithThirdArgumentRector::class,
+        StrlenZeroToIdenticalEmptyStringRector::class,
+        RemoveAlwaysTrueConditionSetInConstructorRector::class,
+        ThrowWithPreviousExceptionRector::class,
+        RemoveSoleValueSprintfRector::class,
+        ShortenElseIfRector::class,
+        AddPregQuoteDelimiterRector::class,
+        ArrayMergeOfNonArraysToSimpleArrayRector::class,
+        IntvalToTypeCastRector::class,
+        ArrayKeyExistsTernaryThenValueToCoalescingRector::class,
+        AbsolutizeRequireAndIncludePathRector::class,
+        ChangeArrayPushToArrayAssignRector::class,
+        ForRepeatedCountToOwnVariableRector::class,
+        ForeachItemsAssignToEmptyArrayToAssignRector::class,
+        InlineIfToExplicitIfRector::class,
+        ArrayKeysAndInArrayToArrayKeyExistsRector::class,
+        SplitListAssignToSeparateLineRector::class,
+        UnusedForeachValueToArrayKeysRector::class,
+        ArrayThisCallToThisMethodCallRector::class,
+        CommonNotEqualRector::class,
         SetTypeToCastRector::class,
         LogicalToBooleanRector::class,
         VarToPublicPropertyRector::class,
