@@ -32,6 +32,10 @@ final class AddParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRe
      */
     private $addParamTypeDeclarations = [];
     /**
+     * @var bool
+     */
+    private $hasChanged = \false;
+    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
@@ -92,6 +96,9 @@ CODE_SAMPLE
             }
             $this->refactorClassMethodWithTypehintByParameterPosition($node, $addParamTypeDeclaration);
         }
+        if (!$this->hasChanged) {
+            return null;
+        }
         return $node;
     }
     /**
@@ -145,6 +152,7 @@ CODE_SAMPLE
             }
         }
         $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($addParamTypeDeclaration->getParamType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
+        $this->hasChanged = \true;
         // remove it
         if ($addParamTypeDeclaration->getParamType() instanceof \PHPStan\Type\MixedType) {
             if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::MIXED_TYPE)) {
