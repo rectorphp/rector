@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd0e617c025a4e84ea7b03323d7053dd1
+class ComposerStaticInit8301977485a4848b0885a70a7d8ad775
 {
     public static $files = array (
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
@@ -1584,7 +1584,10 @@ class ComposerStaticInitd0e617c025a4e84ea7b03323d7053dd1
         'RectorPrefix20220531\\Tracy\\Dumper\\Exposer' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Exposer.php',
         'RectorPrefix20220531\\Tracy\\Dumper\\Renderer' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Renderer.php',
         'RectorPrefix20220531\\Tracy\\Dumper\\Value' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Value.php',
+        'RectorPrefix20220531\\Tracy\\FireLogger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Logger/FireLogger.php',
         'RectorPrefix20220531\\Tracy\\Helpers' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Helpers.php',
+        'RectorPrefix20220531\\Tracy\\ILogger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Logger/ILogger.php',
+        'RectorPrefix20220531\\Tracy\\Logger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Logger/Logger.php',
         'RectorPrefix20220531\\Tracy\\OutputDebugger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/OutputDebugger/OutputDebugger.php',
         'RectorPrefix20220531\\Tracy\\ProductionStrategy' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Debugger/ProductionStrategy.php',
         'RectorPrefix20220531\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
@@ -3762,9 +3765,9 @@ class ComposerStaticInitd0e617c025a4e84ea7b03323d7053dd1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd0e617c025a4e84ea7b03323d7053dd1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd0e617c025a4e84ea7b03323d7053dd1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd0e617c025a4e84ea7b03323d7053dd1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8301977485a4848b0885a70a7d8ad775::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8301977485a4848b0885a70a7d8ad775::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8301977485a4848b0885a70a7d8ad775::$classMap;
 
         }, null, ClassLoader::class);
     }
