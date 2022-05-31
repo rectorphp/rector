@@ -122,12 +122,12 @@ final class VisibilityManipulator
         $this->addVisibilityFlag($node, Visibility::READONLY);
     }
 
-    public function isReadonly(Property | Param $node): bool
+    public function isReadonly(Class_ | Property | Param $node): bool
     {
         return $this->hasVisibility($node, Visibility::READONLY);
     }
 
-    public function removeReadonly(Property | Param $node): void
+    public function removeReadonly(Class_ | Property | Param $node): void
     {
         $this->removeVisibilityFlag($node, Visibility::READONLY);
     }
