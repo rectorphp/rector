@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayItemNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayItemNode.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayNode.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprFalseNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprFalseNode.php',
@@ -1093,6 +1094,8 @@ return array(
     'RectorPrefix20220601\\Symfony\\Contracts\\Translation\\TranslatableInterface' => $vendorDir . '/symfony/contracts/Translation/TranslatableInterface.php',
     'RectorPrefix20220601\\Symfony\\Contracts\\Translation\\TranslatorInterface' => $vendorDir . '/symfony/contracts/Translation/TranslatorInterface.php',
     'RectorPrefix20220601\\Symfony\\Contracts\\Translation\\TranslatorTrait' => $vendorDir . '/symfony/contracts/Translation/TranslatorTrait.php',
+    'RectorPrefix20220601\\Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Normalizer.php',
+    'RectorPrefix20220601\\Symfony\\Polyfill\\Mbstring\\Mbstring' => $vendorDir . '/symfony/polyfill-mbstring/Mbstring.php',
     'RectorPrefix20220601\\Symfony\\Polyfill\\Php81\\Php81' => $vendorDir . '/symfony/polyfill-php81/Php81.php',
     'RectorPrefix20220601\\Symplify\\Astral\\Contract\\NodeNameResolverInterface' => $vendorDir . '/symplify/astral/src/Contract/NodeNameResolverInterface.php',
     'RectorPrefix20220601\\Symplify\\Astral\\Contract\\NodeValueResolver\\NodeValueResolverInterface' => $vendorDir . '/symplify/astral/src/Contract/NodeValueResolver/NodeValueResolverInterface.php',

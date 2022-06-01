@@ -4,10 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit82a5e777944ddc17739e2b506d2d5962
+class ComposerStaticInit4fe32367a27a832c394393ad55e40ad7
 {
     public static $files = array (
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
@@ -50,6 +52,8 @@ class ComposerStaticInit82a5e777944ddc17739e2b506d2d5962
             'RectorPrefix20220601\\Symplify\\AutowireArrayParameter\\' => 53,
             'RectorPrefix20220601\\Symplify\\Astral\\' => 37,
             'RectorPrefix20220601\\Symfony\\Polyfill\\Php81\\' => 44,
+            'RectorPrefix20220601\\Symfony\\Polyfill\\Mbstring\\' => 47,
+            'RectorPrefix20220601\\Symfony\\Polyfill\\Intl\\Normalizer\\' => 54,
             'RectorPrefix20220601\\Symfony\\Contracts\\' => 39,
             'RectorPrefix20220601\\Symfony\\Component\\Yaml\\' => 44,
             'RectorPrefix20220601\\Symfony\\Component\\String\\' => 46,
@@ -194,6 +198,14 @@ class ComposerStaticInit82a5e777944ddc17739e2b506d2d5962
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php81',
         ),
+        'RectorPrefix20220601\\Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'RectorPrefix20220601\\Symfony\\Polyfill\\Intl\\Normalizer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
+        ),
         'RectorPrefix20220601\\Symfony\\Contracts\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/contracts',
@@ -322,6 +334,7 @@ class ComposerStaticInit82a5e777944ddc17739e2b506d2d5962
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayItemNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayItemNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprFalseNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprFalseNode.php',
@@ -1408,6 +1421,8 @@ class ComposerStaticInit82a5e777944ddc17739e2b506d2d5962
         'RectorPrefix20220601\\Symfony\\Contracts\\Translation\\TranslatableInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatableInterface.php',
         'RectorPrefix20220601\\Symfony\\Contracts\\Translation\\TranslatorInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorInterface.php',
         'RectorPrefix20220601\\Symfony\\Contracts\\Translation\\TranslatorTrait' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorTrait.php',
+        'RectorPrefix20220601\\Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Normalizer.php',
+        'RectorPrefix20220601\\Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
         'RectorPrefix20220601\\Symfony\\Polyfill\\Php81\\Php81' => __DIR__ . '/..' . '/symfony/polyfill-php81/Php81.php',
         'RectorPrefix20220601\\Symplify\\Astral\\Contract\\NodeNameResolverInterface' => __DIR__ . '/..' . '/symplify/astral/src/Contract/NodeNameResolverInterface.php',
         'RectorPrefix20220601\\Symplify\\Astral\\Contract\\NodeValueResolver\\NodeValueResolverInterface' => __DIR__ . '/..' . '/symplify/astral/src/Contract/NodeValueResolver/NodeValueResolverInterface.php',
@@ -3767,9 +3782,9 @@ class ComposerStaticInit82a5e777944ddc17739e2b506d2d5962
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit82a5e777944ddc17739e2b506d2d5962::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit82a5e777944ddc17739e2b506d2d5962::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit82a5e777944ddc17739e2b506d2d5962::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4fe32367a27a832c394393ad55e40ad7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4fe32367a27a832c394393ad55e40ad7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4fe32367a27a832c394393ad55e40ad7::$classMap;
 
         }, null, ClassLoader::class);
     }

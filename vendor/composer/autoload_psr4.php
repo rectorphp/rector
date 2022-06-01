@@ -32,6 +32,8 @@ return array(
     'RectorPrefix20220601\\Symplify\\AutowireArrayParameter\\' => array($vendorDir . '/symplify/autowire-array-parameter/src'),
     'RectorPrefix20220601\\Symplify\\Astral\\' => array($vendorDir . '/symplify/astral/src'),
     'RectorPrefix20220601\\Symfony\\Polyfill\\Php81\\' => array($vendorDir . '/symfony/polyfill-php81'),
+    'RectorPrefix20220601\\Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'RectorPrefix20220601\\Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
     'RectorPrefix20220601\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
     'RectorPrefix20220601\\Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'RectorPrefix20220601\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
