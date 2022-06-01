@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit12b79b18dd89cdd5167f5528c1474958
+class ComposerStaticInit556465aba0dafd245547eb9bc41abeff
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2904,6 +2904,7 @@ class ComposerStaticInit12b79b18dd89cdd5167f5528c1474958
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrposMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrposMatchAndRefactor.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\SubstrMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/SubstrMatchAndRefactor.php',
         'Rector\\Php80\\NodeAnalyzer\\AnnotationTargetResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/AnnotationTargetResolver.php',
+        'Rector\\Php80\\NodeAnalyzer\\EnumConstListClassDetector' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/EnumConstListClassDetector.php',
         'Rector\\Php80\\NodeAnalyzer\\MatchSwitchAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/MatchSwitchAnalyzer.php',
         'Rector\\Php80\\NodeAnalyzer\\PhpAttributeAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/PhpAttributeAnalyzer.php',
         'Rector\\Php80\\NodeAnalyzer\\PromotedPropertyCandidateResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/PromotedPropertyCandidateResolver.php',
@@ -2927,6 +2928,7 @@ class ComposerStaticInit12b79b18dd89cdd5167f5528c1474958
         'Rector\\Php80\\Rector\\ClassMethod\\SetStateToStaticRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/SetStateToStaticRector.php',
         'Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/AnnotationToAttributeRector.php',
         'Rector\\Php80\\Rector\\Class_\\ClassPropertyAssignToConstructorPromotionRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php',
+        'Rector\\Php80\\Rector\\Class_\\ConstantListClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/ConstantListClassToEnumRector.php',
         'Rector\\Php80\\Rector\\Class_\\DoctrineAnnotationClassToAttributeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/DoctrineAnnotationClassToAttributeRector.php',
         'Rector\\Php80\\Rector\\Class_\\StringableForToStringRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/StringableForToStringRector.php',
         'Rector\\Php80\\Rector\\FuncCall\\ClassOnObjectRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FuncCall/ClassOnObjectRector.php',
@@ -3782,9 +3784,9 @@ class ComposerStaticInit12b79b18dd89cdd5167f5528c1474958
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit12b79b18dd89cdd5167f5528c1474958::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit12b79b18dd89cdd5167f5528c1474958::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit12b79b18dd89cdd5167f5528c1474958::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit556465aba0dafd245547eb9bc41abeff::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit556465aba0dafd245547eb9bc41abeff::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit556465aba0dafd245547eb9bc41abeff::$classMap;
 
         }, null, ClassLoader::class);
     }
