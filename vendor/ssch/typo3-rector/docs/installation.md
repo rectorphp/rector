@@ -22,7 +22,7 @@ $ composer require --dev rector/rector
 
 ## Non composer installations
 
-If you have a non composer TYPO3 installation. Don´t worry.
+If you have a non composer TYPO3 installation. Don't worry.
 Install typo3-rector either as a global dependency:
 
 ```bash
@@ -129,7 +129,7 @@ $configurationManager = new ConfigurationManager();
 $GLOBALS['TYPO3_CONF_VARS'] = $configurationManager->getDefaultConfiguration();
 
 $cache = new PhpFrontend('core', new NullBackend('production', []));
-$packageStateCache = new PackageStatesPackageCache(Environment::getLegacyConfigPath() . '/PackageStates.php', $cache);  
+$packageStateCache = new PackageStatesPackageCache(Environment::getLegacyConfigPath() . '/PackageStates.php', $cache);
 // Set all packages to active
 $packageManager = Bootstrap::createPackageManager(UnitTestPackageManager::class, $packageStateCache);
 

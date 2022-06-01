@@ -10,7 +10,7 @@
 1. [Contribution](./contribution.md)
 
 # Examples in action
-Let´s say you have a Fluid ViewHelper looking like this:
+Let's say you have a Fluid ViewHelper looking like this:
 
 ```php
 class InArrayViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
@@ -33,13 +33,20 @@ class InArrayViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHel
 }
 ```
 
-What´s "wrong" with this code? Well, it depends on the context. But, if we assume you would like to have this code ready for TYPO3 version 10 you should move the render method arguments to the method initializeArguments and you should rename the namespace \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper to \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper.
+What's "wrong" with this code? Well, it depends on the context. But, if we assume you would like to have this code ready
+for TYPO3 version 10 you should move the render method arguments to the method `initializeArguments` and you should
+rename the namespace `\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper` to
+`\TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper`.
 
-And we are not talking about the superfluous else statement, not having Type Declarations or in_array could be used. That´s a different story.
+And we are not talking about the superfluous else statement, not having Type Declarations or in_array could be used.
+That's a different story.
 
-Do you like to do these changes manually on a codebase with let´s say 40-100 ViewHelpers? We don´t. So let Rector do the heavy work for us and apply the "rules" MoveRenderArgumentsToInitializeArgumentsMethodRector and RenameClassMapAliasRector for Version 9.5.
+Do you like to do these changes manually on a codebase with let's say 40-100 ViewHelpers? We don't.
+So let Rector do the heavy work for us and apply the "rules" `MoveRenderArgumentsToInitializeArgumentsMethodRector` and
+`RenameClassMapAliasRector` for Version 9.5.
 
 Rector transforms this code for us to the following one:
+
 ```php
 class InArrayViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
 {
@@ -66,9 +73,10 @@ class InArrayViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHe
     }
 }
 ```
-Isn´t this amazing? You don´t even have to know that these change has to be done. Your changelog resides in living code.
+Isn't this amazing? You don't even have to know that these change has to be done. Your changelog resides in living code.
 
-Let´s see another one:
+Let's see another one:
+
 ```php
 final class SomeService
 {
@@ -79,7 +87,12 @@ final class SomeService
     protected $injectMe;
 }
 ```
-So we guess, everyone knows that TYPO3 switched to Doctrine Annotations on the one hand and you should better use either constructor injection or setter injection. Again, if you have only one class, this change is not a problem. But most of the time you have hundreds of them and you have to remember what to do. This is cumbersome and error prone. So let´s run Rector for us with the InjectAnnotationRector and you get this:
+
+So we guess, everyone knows that TYPO3 switched to Doctrine Annotations on one hand, and you should better use either
+constructor injection or setter injection. Again, if you have only one class, this change is not a problem.
+But most of the time you have hundreds of them, and you have to remember what to do.
+This is cumbersome and error-prone. So let's run Rector for us with the `InjectAnnotationRector` and you get this:
+
 ```php
 use Ssch\TYPO3Rector\Tests\Rector\Annotation\Source\InjectionClass;
 
@@ -96,9 +109,10 @@ final class SomeInjectClass
     }
 }
 ```
+
 Cool. Let me show you one more example.
 
-Let´s say you want to upgrade from version 9 to 10 and you have the following code:
+Let's say you want to upgrade from version 9 to 10, and you have the following code:
 
 ```php
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -110,19 +124,20 @@ class MyActionController extends ActionController
     {
         $foo = 'foo';
         $bar = 'bar';
-        if($foo !== $bar) {
+        if ($foo !== $bar) {
             throw new NoSuchOptionException();
         }
     }
 }
 ```
 
-Can you spot the error? Guess not. At least i couldn´t.
-The exception class NoSuchOptionException does not exist anymore in version 10. What. But it still worked in version 9. Why?
-Because TYPO3 offers a nice way to deprecate such changes for one major version with these handy ClassAliasMap.php files.
+Can you spot the error? Guess not. At least I couldn't.
+The exception class NoSuchOptionException does not exist anymore in version 10. What? But it still worked in version 9. Why?
+Because TYPO3 offers a nice way to deprecate such changes for one major version with these handy `ClassAliasMap.php` files.
 But, postponed is not abandoned. You have to react to these changes at a certain time. Do you know all these changes by heart? Sure not.
 
-So, again, let rector do it for you with the RenameClassMapAliasRector. Have a look at an example [config file](/config/v9/typo3-95.php#L44) shipped with typo3-rector
+So, again, let rector do it for you with the `RenameClassMapAliasRector`.
+Have a look at an example [config file](/config/v9/typo3-95.php#L44) shipped with typo3-rector
 
 And there is more...
 

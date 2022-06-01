@@ -21,10 +21,9 @@ You can use typo3-rector in various ways:
 
 ## Guide for a good upgrade
 
-
 ### TLDR;
 
-- apply older or current version rulesets first (if you're going from v8 to v10, apply v7/v8 sets first )
+- apply older or current version rulesets first (if you're going from v8 to v10, apply v7/v8 sets first)
 - composer package versions update via SetList (see [composer section below](#composer-packages-update))
 - add ClassAliasMap in case you're upgrading 2 versions to provide old classes to migrate (see [ClassAliasMap](#classaliasmap))
 - apply rulesets stepwise by version; first TCA only, then full set or combined
@@ -32,17 +31,16 @@ You can use typo3-rector in various ways:
 - don't use class aliases for Nimut Testing Framework (see [Migrating Testing Framework](#migrating-testing-framework))
 
 ### Starting
+
 Starting with an upgrade should start with installing typo3-rector and checking for the rector rules/sets of your current version, not the one you're targeting.
 Often there are things that were missed out in previous upgrades while rector adds rulesets for those.
 
-
-So if you're on TYPO3 v8 you should start with applying the rulesets for v7 first and v8 afterwards to make sure you're current code base.
+So if you're on TYPO3 v8 you should start with applying the rulesets for v7 first and v8 afterwards to make sure your current code base.
 
 Examples for often missed out upgrade steps:
 - ext:lang key changes OR the full ext:lang replacement
-- TCA renderType addition on type="single"
+- TCA renderType addition on `type="single"`
 - TCA fieldwizard OR overrideChildTCA rewrite
-
 
 ### Ongoing upgrade
 
@@ -50,7 +48,9 @@ After making sure your current code base is properly upgraded you go on with the
 This requires manual action like allowing the core versions in your composer.json and ext_emconf.php files depending on your individual setup.
 
 #### Composer packages update
-We got your back with the version constraints of your packages though! For core packages but also extension packages we got a SetList that can be used to be processed and apply changes to your composer.json.
+
+We got your back with the version constraints of your packages though!
+For core packages but also extension packages we got a SetList that can be used to be processed and apply changes to your composer.json.
 
 ```php
 use Ssch\TYPO3Rector\Set\Typo3SetList;
@@ -61,7 +61,7 @@ $rectorConfig->import(Typo3SetList::COMPOSER_PACKAGES_95_EXTENSIONS);
 
 This will add the fitting constraints for each package available on packagist - **Be aware:** The list is based on extensions that got a dependency against *typo3/cms-core*
 
-Also: core packages that are not supported anymore (e.g. css_styled_content) will not be updated of course. This helps you to clean up a little!
+Also: core packages that are not supported anymore (e.g. `css_styled_content`) will not be updated of course. This helps you to clean up a little!
 
 #### Applying rulesets
 
@@ -72,13 +72,13 @@ It also comes in handy to divide between TCA and TYPO3 changes AND/OR you're pac
 
 **The TYPO3 sets always include the TCA sets!**
 
-TCA changes are often not that big in their impact but necessary. Also custom packages do not necesserily provide that much own TCA.
+TCA changes are often not that big in their impact but necessary. Also, custom packages do not necessarily provide that much own TCA.
 Both of that is reason to gather multiple packages for a combined TCA run with the following config:
 
 ```php
     $rectorConfig->import(Typo3SetList::TCA_95);
 
-    $parameters->set(Option::PATHS, [
+    $rectorConfig->paths([
         __DIR__ . '/packages/package_numberone',
         __DIR__ . '/packages/package_thesecond',
         __DIR__ . '/packages/package_thirdone',
@@ -174,6 +174,7 @@ That's why rector provides a message to inform you about changes made and necess
 
 An example for this would be the TCA change of replacing `'internal_type' => 'file'` with FAL.
 
-The TCA is changed easy, but the whole DB record type changes as previously the whole name of the file was saved into the DB column, while now with FAL, it would only create an index-count - the reference to the new files that are saved in sys_file and connected via sys_file_reference.
+The TCA is changed easy, but the whole DB record type changes as previously the whole name of the file was saved into the
+DB column, while now with FAL, it would only create an index-count - the reference to the new files that are saved in sys_file and connected via sys_file_reference.
 (see [internal_type deprecation changelog](https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.5/Deprecation-86406-TCATypeGroupInternal_typeFileAndFile_reference.html))
 

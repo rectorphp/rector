@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220531\Symfony\Component\Config\Definition;
+namespace RectorPrefix20220601\Symfony\Component\Config\Definition;
 
-use RectorPrefix20220531\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+use RectorPrefix20220601\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
@@ -19,5 +19,5 @@ interface ConfigurableInterface
     /**
      * Generates the configuration tree builder.
      */
-    public function configure(\RectorPrefix20220531\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator $definition) : void;
+    public function configure(\RectorPrefix20220601\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator $definition) : void;
 }

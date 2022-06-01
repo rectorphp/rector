@@ -1,5 +1,5 @@
 <?php
 
-namespace RectorPrefix20220531;
+namespace RectorPrefix20220601;
 
 return ['TYPO3\\CMS\\Extbase\\Service\\TypoScriptService' => 'TYPO3\\CMS\\Core\\TypoScript\\TypoScriptService'];

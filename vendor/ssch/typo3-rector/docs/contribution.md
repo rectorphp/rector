@@ -12,7 +12,7 @@
 # Contributing
 
 Want to help? Great!
-Joing TYPO3 slack channel [#ext-typo3-rector](https://typo3.slack.com/archives/C019R5LAA6A)
+Join TYPO3 slack channel [#ext-typo3-rector](https://typo3.slack.com/archives/C019R5LAA6A)
 
 ## Fork the project
 
@@ -21,6 +21,7 @@ Fork this project into your own account.
 ## Install typo3-rector
 
 Install the project using composer:
+
 ```bash
 git clone git@github.com:your-account/typo3-rector.git
 cd typo3-rector
@@ -33,19 +34,20 @@ https://github.com/sabbelasichon/typo3-rector/issues You can filter by tags
 
 ## Assign the issue to yourself
 
-Assign the issue to yourself so others can see that you are working on it.
+Assign the issue to yourself if you are member of the project, so others can see that you are working on it. If you are
+not member of the project, make a comment to let everyone know that you are working on it.
 
 ## Create an own Rector
 
-Run command and answer all questions properly
+Run the following command and answer all questions
+
 ```bash
-./vendor/bin/rector typo3-generate
+vendor/bin/rector typo3-generate
 ```
 
 This command will ask you some questions to provide a proper rector setup.
 Following this will lead to the creation of the overall rector structure necessay.
 It will create the skeleton for the rector with the class, test class, fixtures and directories to start coding - basically everything you need to start!
-
 
 ### Useful infos:
 
@@ -89,19 +91,20 @@ final class GeneralUtilityToUpperAndLowerRector extends AbstractRector
         if (! $this->isNames($node->name, ['strtoupper', 'strtolower'])) {
             return null;
         }
-...
+
+        // ...
+    }
+}
 ```
 
-
-
-## All Tests must be Green
+## All Tests must be green
 
 Make sure you have a test in place for your Rector
 
 All unit tests must pass before submitting a pull request.
 
 ```bash
-./vendor/bin/phpunit
+vendor/bin/phpunit
 ```
 
 Overall hints for testing:
@@ -109,10 +112,8 @@ Overall hints for testing:
 - testing happens via fixture files (*.php.inc)
 - those files display the code before and after execution, separated by `-----`
 - rector keeps spaces etc. as its job is migration and not code cleaning, so keep that in mind
-- provide custom test classes via "Source" folder, that will be tested, but *will not* be affected by your rector to to test and prevent side effects of your rule
+- provide custom test classes via "Source" folder, that will be tested, but *will not* be affected by your rector to test and prevent side effects of your rule
 
 ## Submit your changes
 
 Great, now you can submit your changes in a pull request
-
-

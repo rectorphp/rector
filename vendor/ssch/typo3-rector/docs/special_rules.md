@@ -13,7 +13,8 @@
 
 Some of our rules require more than just executing them.
 
-This means some further steps are necessary to fully migrate the code. We can only partly prepare the full migration, but the finishing checks have to be done by each use case.
+This means some further steps are necessary to fully migrate the code. We can only partly prepare the full migration,
+but the finishing checks have to be done by each use case.
 
 All special rules can be included via config file (rector.php) in the following way:
 
@@ -23,9 +24,8 @@ $services = $containerConfigurator->services();
 $services->set(CLASSNAME);
 ```
 
-
 ## Affected rules
 
-See each listed class with its changelog restfile and processing output for further todo's.
+See each listed class with its changelog restfile and processing output for further todos.
 
 - \Ssch\TYPO3Rector\Rector\v11\v3\RemoveBackendUtilityViewOnClickUsageRector

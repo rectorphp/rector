@@ -23,7 +23,7 @@ In TYPO3 Rector specifically we have already five of them:
 1. FormYamlProcessor
 
 ## IconsProcessor
-Let´s start with the simplest one the IconsProcessor:
+Let's start with the simplest one the IconsProcessor:
 
 The IconsProcessor takes the ext_icon.* in your extension directory and moves it under the Resources/Public/Icons/ directory with the name Extension.*
 
