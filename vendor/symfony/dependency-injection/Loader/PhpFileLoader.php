@@ -10,7 +10,6 @@
  */
 namespace RectorPrefix20220601\Symfony\Component\DependencyInjection\Loader;
 
-use Rector\Config\RectorConfig;
 use RectorPrefix20220601\Symfony\Component\Config\Builder\ConfigBuilderGenerator;
 use RectorPrefix20220601\Symfony\Component\Config\Builder\ConfigBuilderGeneratorInterface;
 use RectorPrefix20220601\Symfony\Component\Config\Builder\ConfigBuilderInterface;
@@ -59,7 +58,10 @@ class PhpFileLoader extends \RectorPrefix20220601\Symfony\Component\DependencyIn
         try {
             $callback = $load($path, $this->env);
             if (\is_object($callback) && \is_callable($callback)) {
-                $this->executeCallback($callback, new \Rector\Config\RectorConfig($this->container, $this, $this->instanceof, $path, $resource, $this->env), $path);
+                // generic solution
+                $reflectionFunction = new \ReflectionFunction($callback);
+                $containerConfiguratorClass = $reflectionFunction->getParameters()[0]->getType()->getName();
+                $this->executeCallback($callback, new $containerConfiguratorClass($this->container, $this, $this->instanceof, $path, $resource, $this->env), $path);
             }
         } finally {
             $this->instanceof = [];
@@ -108,28 +110,26 @@ class PhpFileLoader extends \RectorPrefix20220601\Symfony\Component\DependencyIn
                 throw new \InvalidArgumentException(\sprintf('Could not resolve argument "$%s" for "%s". You must typehint it (for example with "%s" or "%s").', $parameter->getName(), $path, \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class, \RectorPrefix20220601\Symfony\Component\DependencyInjection\ContainerBuilder::class));
             }
             $type = $reflectionType->getName();
-            switch ($type) {
-                case \Rector\Config\RectorConfig::class:
-                    $arguments[] = $containerConfigurator;
-                    break;
-                case \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class:
-                    $arguments[] = $containerConfigurator;
-                    break;
-                case \RectorPrefix20220601\Symfony\Component\DependencyInjection\ContainerBuilder::class:
-                    $arguments[] = $this->container;
-                    break;
-                case \RectorPrefix20220601\Symfony\Component\DependencyInjection\Loader\FileLoader::class:
-                case self::class:
-                    $arguments[] = $this;
-                    break;
-                default:
-                    try {
-                        $configBuilder = $this->configBuilder($type);
-                    } catch (\RectorPrefix20220601\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException|\LogicException $e) {
-                        throw new \InvalidArgumentException(\sprintf('Could not resolve argument "%s" for "%s".', $type . ' $' . $parameter->getName(), $path), 0, $e);
-                    }
-                    $configBuilders[] = $configBuilder;
-                    $arguments[] = $configBuilder;
+            if (\is_a($type, \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class, \true)) {
+                $arguments[] = $containerConfigurator;
+            } else {
+                switch ($type) {
+                    case \RectorPrefix20220601\Symfony\Component\DependencyInjection\ContainerBuilder::class:
+                        $arguments[] = $this->container;
+                        break;
+                    case \RectorPrefix20220601\Symfony\Component\DependencyInjection\Loader\FileLoader::class:
+                    case self::class:
+                        $arguments[] = $this;
+                        break;
+                    default:
+                        try {
+                            $configBuilder = $this->configBuilder($type);
+                        } catch (\RectorPrefix20220601\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException|\LogicException $e) {
+                            throw new \InvalidArgumentException(\sprintf('Could not resolve argument "%s" for "%s".', $type . ' $' . $parameter->getName(), $path), 0, $e);
+                        }
+                        $configBuilders[] = $configBuilder;
+                        $arguments[] = $configBuilder;
+                }
             }
         }
         // Force load ContainerConfigurator to make env(), param() etc available.
