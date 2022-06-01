@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
@@ -130,7 +131,7 @@ CODE_SAMPLE
             $paramTagValueNode = $classMethodPhpDocInfo->getParamTagValueNodeByName($paramName);
 
             if (! $paramTagValueNode instanceof ParamTagValueNode) {
-                $this->decorateParamWithPropertyPhpDocInfo($property, $param);
+                $this->decorateParamWithPropertyPhpDocInfo($constructClassMethod, $property, $param, $paramName);
             } elseif ($paramTagValueNode->parameterName !== '$' . $propertyName) {
                 $paramTagValueNode->parameterName = '$' . $propertyName;
                 $paramTagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
@@ -163,8 +164,12 @@ CODE_SAMPLE
         }
     }
 
-    private function decorateParamWithPropertyPhpDocInfo(Property $property, Param $param): void
-    {
+    private function decorateParamWithPropertyPhpDocInfo(
+        ClassMethod $classMethod,
+        Property $property,
+        Param $param,
+        string $paramName
+    ): void {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $propertyPhpDocInfo->markAsChanged();
 
@@ -172,10 +177,18 @@ CODE_SAMPLE
 
         // make sure the docblock is useful
         if ($param->type === null) {
-            return;
+            $varTagValueNode = $propertyPhpDocInfo->getVarTagValueNode();
+            if (! $varTagValueNode instanceof VarTagValueNode) {
+                return;
+            }
+
+            $paramType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTagValueNode, $property);
+            $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            $this->phpDocTypeChanger->changeParamType($classMethodPhpDocInfo, $paramType, $param, $paramName);
+        } else {
+            $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         }
 
-        $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($param, $paramType);
     }
 
