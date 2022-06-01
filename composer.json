@@ -43,18 +43,19 @@
         "symplify/autowire-array-parameter": "^10.2",
         "symplify/composer-json-manipulator": "^10.2",
         "symplify/easy-parallel": "^10.2",
+        "symplify/easy-testing": "^10.2",
         "symplify/package-builder": "^10.2",
         "symplify/rule-doc-generator-contracts": "^10.2",
         "symplify/skipper": "^10.2",
         "symplify/smart-file-system": "^10.2",
         "symplify/symplify-kernel": "^10.2",
-        "symplify/easy-testing": "^10.2",
         "tracy/tracy": "^2.9",
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
         "brianium/paratest": "^6.4",
         "cweagans/composer-patches": "^1.7.2",
+        "dg/composer-cleaner": "^2.2",
         "friendsofphp/php-cs-fixer": "^3.8",
         "nategood/httpful": "^0.3.2",
         "phpstan/extension-installer": "^1.1",
@@ -185,7 +186,8 @@
         "allow-plugins": {
             "phpstan/extension-installer": true,
             "rector/extension-installer": true,
-            "cweagans/composer-patches": true
+            "cweagans/composer-patches": true,
+            "dg/composer-cleaner": true
         }
     }
 }
