@@ -80,6 +80,11 @@
             "@fix-rector",
             "@fix-style"
         ],
+        "contribute": [
+            "@fix-rector",
+            "@fix-style",
+            "@analyze"
+        ],
         "check-style": "@php vendor\/bin\/ecs check --ansi",
         "fix-style": "@php vendor\/bin\/ecs check --fix --ansi",
         "analyze": "@php vendor\/bin\/phpstan analyse --memory-limit=-1 --ansi --error-format symplify",
