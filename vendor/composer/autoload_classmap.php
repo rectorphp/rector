@@ -1982,6 +1982,7 @@ return array(
     'Rector\\DowngradePhp74\\Rector\\LNumber\\DowngradeNumericLiteralSeparatorRector' => $baseDir . '/rules/DowngradePhp74/Rector/LNumber/DowngradeNumericLiteralSeparatorRector.php',
     'Rector\\DowngradePhp74\\Rector\\MethodCall\\DowngradeReflectionGetTypeRector' => $baseDir . '/rules/DowngradePhp74/Rector/MethodCall/DowngradeReflectionGetTypeRector.php',
     'Rector\\DowngradePhp74\\Rector\\Property\\DowngradeTypedPropertyRector' => $baseDir . '/rules/DowngradePhp74/Rector/Property/DowngradeTypedPropertyRector.php',
+    'Rector\\DowngradePhp80\\NodeAnalyzer\\EnumAnalyzer' => $baseDir . '/rules/DowngradePhp80/NodeAnalyzer/EnumAnalyzer.php',
     'Rector\\DowngradePhp80\\NodeAnalyzer\\NamedToUnnamedArgs' => $baseDir . '/rules/DowngradePhp80/NodeAnalyzer/NamedToUnnamedArgs.php',
     'Rector\\DowngradePhp80\\NodeAnalyzer\\UnnamedArgumentResolver' => $baseDir . '/rules/DowngradePhp80/NodeAnalyzer/UnnamedArgumentResolver.php',
     'Rector\\DowngradePhp80\\Rector\\ArrayDimFetch\\DowngradeDereferenceableOperationRector' => $baseDir . '/rules/DowngradePhp80/Rector/ArrayDimFetch/DowngradeDereferenceableOperationRector.php',

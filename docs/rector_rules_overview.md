@@ -1,4 +1,4 @@
-# 513 Rules Overview
+# 516 Rules Overview
 
 <br>
 
@@ -38,9 +38,11 @@
 
 - [DowngradePhp74](#downgradephp74) (12)
 
-- [DowngradePhp80](#downgradephp80) (28)
+- [DowngradePhp80](#downgradephp80) (29)
 
 - [DowngradePhp81](#downgradephp81) (9)
+
+- [DowngradePhp82](#downgradephp82) (1)
 
 - [EarlyReturn](#earlyreturn) (11)
 
@@ -70,7 +72,7 @@
 
 - [Php74](#php74) (14)
 
-- [Php80](#php80) (17)
+- [Php80](#php80) (18)
 
 - [Php81](#php81) (9)
 
@@ -2192,13 +2194,12 @@ Changes `$this->...` and static:: to self:: or vise versa for given types
 
 ```php
 use PHPUnit\Framework\TestCase;
-use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(PreferThisOrSelfMethodCallRector::class, [
-        TestCase::class => PreferenceSelfThis::PREFER_SELF(),
+        TestCase::class => 'prefer_self',
     ]);
 };
 ```
@@ -5413,6 +5414,26 @@ Add parentheses around non-dereferenceable expressions.
 
 <br>
 
+### DowngradeEnumToConstantListClassRector
+
+Downgrade enum to constant list class
+
+- class: [`Rector\DowngradePhp80\Rector\Enum_\DowngradeEnumToConstantListClassRector`](../rules/DowngradePhp80/Rector/Enum_/DowngradeEnumToConstantListClassRector.php)
+
+```diff
+-enum Direction
++class Direction
+ {
+-    case LEFT;
++    public const LEFT = 'left';
+
+-    case RIGHT;
++    public const RIGHT = 'right';
+ }
+```
+
+<br>
+
 ### DowngradeMatchToSwitchRector
 
 Downgrade `match()` to `switch()`
@@ -6040,6 +6061,30 @@ Remove "readonly" property type, add a "@readonly" tag instead
 +     * @readonly
 +     */
 +    public string $foo;
+
+     public function __construct()
+     {
+         $this->foo = 'foo';
+     }
+ }
+```
+
+<br>
+
+## DowngradePhp82
+
+### DowngradeReadonlyClassRector
+
+Remove "readonly" class type, decorate all properties to "readonly"
+
+- class: [`Rector\DowngradePhp82\Rector\Class_\DowngradeReadonlyClassRector`](../rules/DowngradePhp82/Rector/Class_/DowngradeReadonlyClassRector.php)
+
+```diff
+-final readonly class SomeClass
++final class SomeClass
+ {
+-    public string $foo;
++    public readonly string $foo;
 
      public function __construct()
      {
@@ -8173,6 +8218,26 @@ Change simple property init and assign to constructor promotion
      ) {
 -        $this->someVariable = $someVariable;
      }
+ }
+```
+
+<br>
+
+### ConstantListClassToEnumRector
+
+Upgrade constant list classes to full blown enum
+
+- class: [`Rector\Php80\Rector\Class_\ConstantListClassToEnumRector`](../rules/Php80/Rector/Class_/ConstantListClassToEnumRector.php)
+
+```diff
+-class Direction
++enum Direction
+ {
+-    public const LEFT = 'left';
++    case LEFT;
+
+-    public const RIGHT = 'right';
++    case RIGHT;
  }
 ```
 

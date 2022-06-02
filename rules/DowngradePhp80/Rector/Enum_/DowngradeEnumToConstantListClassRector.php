@@ -4,9 +4,20 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Enum_;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Enum_;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp80\NodeAnalyzer\EnumAnalyzer;
 use Rector\Php81\NodeFactory\ClassFromEnumFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,9 +31,21 @@ final class DowngradeEnumToConstantListClassRector extends \Rector\Core\Rector\A
      * @var \Rector\Php81\NodeFactory\ClassFromEnumFactory
      */
     private $classFromEnumFactory;
-    public function __construct(\Rector\Php81\NodeFactory\ClassFromEnumFactory $classFromEnumFactory)
+    /**
+     * @readonly
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    /**
+     * @readonly
+     * @var \Rector\DowngradePhp80\NodeAnalyzer\EnumAnalyzer
+     */
+    private $enumAnalyzer;
+    public function __construct(\Rector\Php81\NodeFactory\ClassFromEnumFactory $classFromEnumFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\DowngradePhp80\NodeAnalyzer\EnumAnalyzer $enumAnalyzer)
     {
         $this->classFromEnumFactory = $classFromEnumFactory;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->enumAnalyzer = $enumAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -49,13 +72,51 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Enum_::class];
+        return [\PhpParser\Node\Stmt\Enum_::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param Enum_ $node
+     * @param Enum_|ClassMethod $node
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|null
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Stmt\Class_
+    public function refactor(\PhpParser\Node $node)
     {
-        return $this->classFromEnumFactory->createFromEnum($node);
+        if ($node instanceof \PhpParser\Node\Stmt\Enum_) {
+            return $this->classFromEnumFactory->createFromEnum($node);
+        }
+        $hasChanged = \false;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        foreach ($node->params as $param) {
+            if (!$param->type instanceof \PhpParser\Node\Name) {
+                continue;
+            }
+            // is enum type?
+            $typeName = $this->getName($param->type);
+            if (!$this->reflectionProvider->hasClass($typeName)) {
+                continue;
+            }
+            $classLikeReflection = $this->reflectionProvider->getClass($typeName);
+            if (!$classLikeReflection->isEnum()) {
+                continue;
+            }
+            $param->type = $this->resolveParamType($classLikeReflection);
+            $hasChanged = \true;
+            $this->decorateParamDocType($classLikeReflection, $param, $phpDocInfo);
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+    public function resolveParamType(\PHPStan\Reflection\ClassReflection $classReflection) : ?\PhpParser\Node\Identifier
+    {
+        return $this->enumAnalyzer->resolveType($classReflection);
+    }
+    private function decorateParamDocType(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Param $param, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
+    {
+        $constFetchNode = new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode('\\' . $classReflection->getName(), '*');
+        $constTypeNode = new \PHPStan\PhpDocParser\Ast\Type\ConstTypeNode($constFetchNode);
+        $paramName = '$' . $this->getName($param);
+        $paramTagValueNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode($constTypeNode, \false, $paramName, '');
+        $phpDocInfo->addTagValueNode($paramTagValueNode);
     }
 }

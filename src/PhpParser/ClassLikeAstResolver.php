@@ -18,7 +18,7 @@ final class ClassLikeAstResolver
      * Parsing files is very heavy performance, so this will help to leverage it
      * The value can be also null, as the method might not exist in the class.
      *
-     * @var array<class-string, Class_|Trait_|Interface_|null>
+     * @var array<class-string, Class_|Trait_|Interface_|Enum_|null>
      */
     private $classLikesByName = [];
     /**
@@ -39,7 +39,7 @@ final class ClassLikeAstResolver
     /**
      * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
-    public function resolveClassFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection, string $className)
+    public function resolveClassFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection, string $desiredClassName)
     {
         if ($classReflection->isBuiltin()) {
             return null;
@@ -60,11 +60,11 @@ final class ClassLikeAstResolver
             $this->classLikesByName[$classReflection->getName()] = null;
             return null;
         }
-        /** @var array<Class_|Trait_|Interface_> $classLikes */
+        /** @var array<Class_|Trait_|Interface_|Enum_> $classLikes */
         $classLikes = $this->betterNodeFinder->findInstanceOf($stmts, \PhpParser\Node\Stmt\ClassLike::class);
         $reflectionClassName = $classReflection->getName();
         foreach ($classLikes as $classLike) {
-            if ($reflectionClassName !== $className) {
+            if ($reflectionClassName !== $desiredClassName) {
                 continue;
             }
             $this->classLikesByName[$classReflection->getName()] = $classLike;

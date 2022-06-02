@@ -48,7 +48,7 @@ final readonly class SomeClass
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-final readonly class SomeClass
+final class SomeClass
 {
     public readonly string $foo;
 
