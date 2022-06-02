@@ -1918,12 +1918,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-cakephp.git",
-                "reference": "7e0a6f9cd11dd75a0e42447cb64fda363a88b148"
+                "reference": "1ba95e5865f924a599b231a429ce1fef18d6a403"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/7e0a6f9cd11dd75a0e42447cb64fda363a88b148",
-                "reference": "7e0a6f9cd11dd75a0e42447cb64fda363a88b148",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/1ba95e5865f924a599b231a429ce1fef18d6a403",
+                "reference": "1ba95e5865f924a599b231a429ce1fef18d6a403",
                 "shasum": ""
             },
             "require": {
@@ -1949,7 +1949,7 @@
                 "symplify\/rule-doc-generator": "^10.2",
                 "symplify\/vendor-patches": "^10.2"
             },
-            "time": "2022-05-30T20:07:41+00:00",
+            "time": "2022-06-02T07:28:18+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

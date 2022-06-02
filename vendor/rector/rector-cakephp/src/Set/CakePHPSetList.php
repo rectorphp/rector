@@ -49,5 +49,9 @@ final class CakePHPSetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
+    public const CAKEPHP_44 = __DIR__ . '/../../config/sets/cakephp44.php';
+    /**
+     * @var string
+     */
     public const CAKEPHP_FLUENT_OPTIONS = __DIR__ . '/../../config/sets/cakephp-fluent-options.php';
 }
