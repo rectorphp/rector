@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\NodeAnalyzer;
 
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -27,7 +28,7 @@ final class EnumAnalyzer
             return false;
         }
 
-        if ($class->extends === null) {
+        if (! $class->extends instanceof Name) {
             return false;
         }
 

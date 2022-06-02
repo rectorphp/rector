@@ -20,7 +20,7 @@ final class ClassLikeAstResolver
      * Parsing files is very heavy performance, so this will help to leverage it
      * The value can be also null, as the method might not exist in the class.
      *
-     * @var array<class-string, Class_|Trait_|Interface_|null>
+     * @var array<class-string, Class_|Trait_|Interface_|Enum_|null>
      */
     private array $classLikesByName = [];
 
@@ -32,7 +32,7 @@ final class ClassLikeAstResolver
 
     public function resolveClassFromClassReflection(
         ClassReflection $classReflection,
-        string $className
+        string $desiredClassName
     ): Trait_ | Class_ | Interface_ | Enum_ | null {
         if ($classReflection->isBuiltin()) {
             return null;
@@ -58,12 +58,12 @@ final class ClassLikeAstResolver
             return null;
         }
 
-        /** @var array<Class_|Trait_|Interface_> $classLikes */
+        /** @var array<Class_|Trait_|Interface_|Enum_> $classLikes */
         $classLikes = $this->betterNodeFinder->findInstanceOf($stmts, ClassLike::class);
 
         $reflectionClassName = $classReflection->getName();
         foreach ($classLikes as $classLike) {
-            if ($reflectionClassName !== $className) {
+            if ($reflectionClassName !== $desiredClassName) {
                 continue;
             }
 
