@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PHPStan\PhpDocParser\Parser\TypeParser;
+use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
@@ -40,6 +41,7 @@ use Symplify\EasyCI\ValueObject\Option;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::TYPES_TO_SKIP, [
+        PhpDocNodeDecoratorInterface::class,
         Command::class,
         Application::class,
         RectorInterface::class,

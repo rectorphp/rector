@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Php80\NodeAnalyzer;
 
+use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class EnumConstListClassDetector
@@ -30,10 +32,8 @@ final class EnumConstListClassDetector
         }
 
         // all constant must be public
-        foreach ($classConstants as $classConstant) {
-            if (! $classConstant->isPublic()) {
-                return false;
-            }
+        if (! $this->hasExclusivelyPublicClassConsts($classConstants)) {
+            return false;
         }
 
         // all constants must have exactly 1 value
@@ -43,26 +43,49 @@ final class EnumConstListClassDetector
             }
         }
 
-        $constantUniqueTypeCount = $this->resolveConstantUniqueTypeCount($classConstants);
+        // only scalar values are allowed
+        foreach ($classConstants as $classConstant) {
+            $onlyConstConst = $classConstant->consts[0];
+            if (! $onlyConstConst->value instanceof Scalar) {
+                return false;
+            }
+        }
+
+        $uniqueTypeClasses = $this->resolveClassConstTypes($classConstants);
+
         // must be exactly 1 type
-        return $constantUniqueTypeCount === 1;
+        return count($uniqueTypeClasses) === 1;
     }
 
     /**
      * @param ClassConst[] $classConsts
+     * @return array<class-string<Type>>
      */
-    private function resolveConstantUniqueTypeCount(array $classConsts): int
+    private function resolveClassConstTypes(array $classConsts): array
     {
         $typeClasses = [];
 
         // all constants must have same type
         foreach ($classConsts as $classConst) {
             $const = $classConst->consts[0];
-            $constantType = $this->nodeTypeResolver->getType($const->value);
-            $typeClasses[] = $constantType::class;
+            $type = $this->nodeTypeResolver->getType($const->value);
+            $typeClasses[] = $type::class;
         }
 
-        $uniqueTypeClasses = array_unique($typeClasses);
-        return count($uniqueTypeClasses);
+        return array_unique($typeClasses);
+    }
+
+    /**
+     * @param ClassConst[] $classConsts
+     */
+    private function hasExclusivelyPublicClassConsts(array $classConsts): bool
+    {
+        foreach ($classConsts as $classConst) {
+            if (! $classConst->isPublic()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -35,7 +35,7 @@ final class PhpDocInfoFactory
         private readonly StaticTypeMapper $staticTypeMapper,
         private readonly AnnotationNaming $annotationNaming,
         private readonly RectorChangeCollector $rectorChangeCollector,
-        private readonly PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder
+        private readonly PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder,
     ) {
     }
 

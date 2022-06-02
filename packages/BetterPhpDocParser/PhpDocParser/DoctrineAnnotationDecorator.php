@@ -14,17 +14,16 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
+use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\ValueObject\DoctrineAnnotation\SilentKeyMap;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
-use Rector\Core\Configuration\CurrentNodeProvider;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StringUtils;
 
-final class DoctrineAnnotationDecorator
+final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
 {
     /**
      * Special short annotations, that are resolved as FQN by Doctrine annotation parser
@@ -45,7 +44,6 @@ final class DoctrineAnnotationDecorator
     private const NESTED_ANNOTATION_END_REGEX = '#(\s+)?\}\)(\s+)?#';
 
     public function __construct(
-        private readonly CurrentNodeProvider $currentNodeProvider,
         private readonly ClassAnnotationMatcher $classAnnotationMatcher,
         private readonly StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser,
         private readonly TokenIteratorFactory $tokenIteratorFactory,
@@ -53,16 +51,11 @@ final class DoctrineAnnotationDecorator
     ) {
     }
 
-    public function decorate(PhpDocNode $phpDocNode): void
+    public function decorate(PhpDocNode $phpDocNode, Node $phpNode): void
     {
-        $currentPhpNode = $this->currentNodeProvider->getNode();
-        if (! $currentPhpNode instanceof Node) {
-            throw new ShouldNotHappenException();
-        }
-
         // merge split doctrine nested tags
         $this->mergeNestedDoctrineAnnotations($phpDocNode);
-        $this->transformGenericTagValueNodesToDoctrineAnnotationTagValueNodes($phpDocNode, $currentPhpNode);
+        $this->transformGenericTagValueNodesToDoctrineAnnotationTagValueNodes($phpDocNode, $phpNode);
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
+use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -14,10 +15,12 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
+use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -26,17 +29,18 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
  */
 final class BetterPhpDocParser extends PhpDocParser
 {
-    private readonly PrivatesCaller $privatesCaller;
-
+    /**
+     * @param PhpDocNodeDecoratorInterface[] $phpDocNodeDecorators
+     */
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
+        private readonly CurrentNodeProvider $currentNodeProvider,
         private readonly TokenIteratorFactory $tokenIteratorFactory,
-        private readonly DoctrineAnnotationDecorator $doctrineAnnotationDecorator
+        private readonly array $phpDocNodeDecorators,
+        private readonly PrivatesCaller $privatesCaller = new PrivatesCaller(),
     ) {
         parent::__construct($typeParser, $constExprParser);
-
-        $this->privatesCaller = new PrivatesCaller();
     }
 
     public function parse(TokenIterator $tokenIterator): PhpDocNode
@@ -59,14 +63,23 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
 
         $phpDocNode = new PhpDocNode($children);
-        // replace generic nodes with DoctrineAnnotations
-        $this->doctrineAnnotationDecorator->decorate($phpDocNode);
+
+        // decorate FQN classes etc.
+        $node = $this->currentNodeProvider->getNode();
+        if (! $node instanceof Node) {
+            throw new ShouldNotHappenException();
+        }
+
+        foreach ($this->phpDocNodeDecorators as $phpDocNodeDecorator) {
+            $phpDocNodeDecorator->decorate($phpDocNode, $node);
+        }
 
         return $phpDocNode;
     }
 
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
     {
+        // replace generic nodes with DoctrineAnnotations
         if (! $tokenIterator instanceof BetterTokenIterator) {
             throw new ShouldNotHappenException();
         }
