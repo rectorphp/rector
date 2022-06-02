@@ -17,6 +17,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->ruleWithConfiguration(\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::class, [__DIR__ . '/../../Migrations/TYPO3/12.0/typo3/sysext/backend/Migrations/Code/ClassAliasMap.php', __DIR__ . '/../../Migrations/TYPO3/12.0/typo3/sysext/frontend/Migrations/Code/ClassAliasMap.php']);
     $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v12\v0\ReplacePreviewUrlMethodRector::class);
     $rectorConfig->rule(\Ssch\TYPO3Rector\FileProcessor\Resources\Files\Rector\RenameExtTypoScriptFilesFileRector::class);
+    $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v12\v0\typo3\ReplaceTSFECheckEnableFieldsRector::class);
     $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v12\v0\typo3\ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector::class);
     $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v12\v0\typo3\RemoveUpdateRootlineDataRector::class);
 };

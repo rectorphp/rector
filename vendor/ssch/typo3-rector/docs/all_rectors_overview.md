@@ -1,4 +1,4 @@
-# 243 Rules Overview
+# 244 Rules Overview
 
 ## AddRenderTypeToSelectFieldRector
 
@@ -3613,6 +3613,33 @@ Replaces all direct calls to `$GLOBALS['TSFE']->ATagParams.`
 ```diff
 -$foo = $GLOBALS['TSFE']->ATagParams;
 +$foo = $GLOBALS['TSFE']->config['config']['ATagParams'] ?? '';
+```
+
+<br>
+
+## ReplaceTSFECheckEnableFieldsRector
+
+Replace TSFE calls to checkEnableFields with new RecordAccessVoter->accessGranted method
+
+- class: [`Ssch\TYPO3Rector\Rector\v12\v0\typo3\ReplaceTSFECheckEnableFieldsRector`](../src/Rector/v12/v0/typo3/ReplaceTSFECheckEnableFieldsRector.php)
+
+```diff
++use TYPO3\CMS\Core\Domain\Access\RecordAccessVoter\RecordAccessVoter;
+ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+
+ $row = [];
+
+-$foo = $GLOBALS['TSFE']->checkEnableFields($row);
+-$foofoo = $GLOBALS['TSFE']->checkPagerecordForIncludeSection($row);
++$foo = GeneralUtility::makeInstance(RecordAccessVoter::class)->accessGranted('pages', $row, $GLOBALS['TSFE']->getContext());
++$foofoo = GeneralUtility::makeInstance(RecordAccessVoter::class)->accessGrantedForPageInRootLine($row, $GLOBALS['TSFE']->getContext());
+
+ /** @var TypoScriptFrontendController $typoscriptFrontendController */
+ $typoscriptFrontendController = $GLOBALS['TSFE'];
+-$bar = $typoscriptFrontendController->checkEnableFields($row);
+-$baz = $typoscriptFrontendController->checkPagerecordForIncludeSection($row);
++$bar = GeneralUtility::makeInstance(RecordAccessVoter::class)->accessGranted('pages', $row, $typoscriptFrontendController->getContext());
++$baz = GeneralUtility::makeInstance(RecordAccessVoter::class)->accessGrantedForPageInRootLine($row, $typoscriptFrontendController->getContext());
 ```
 
 <br>

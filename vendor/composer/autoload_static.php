@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687
+class ComposerStaticInit5d1be6c7a55a96b27577953683119c6d
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2321,6 +2321,7 @@ class ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687
         'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeTrailingCommasInParamUseRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/ClassMethod/DowngradeTrailingCommasInParamUseRector.php',
         'Rector\\DowngradePhp80\\Rector\\Class_\\DowngradeAttributeToAnnotationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/Class_/DowngradeAttributeToAnnotationRector.php',
         'Rector\\DowngradePhp80\\Rector\\Class_\\DowngradePropertyPromotionRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/Class_/DowngradePropertyPromotionRector.php',
+        'Rector\\DowngradePhp80\\Rector\\Enum_\\DowngradeEnumToConstantListClassRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/Enum_/DowngradeEnumToConstantListClassRector.php',
         'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeMatchToSwitchRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/Expression/DowngradeMatchToSwitchRector.php',
         'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeThrowExprRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/Expression/DowngradeThrowExprRector.php',
         'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeArrayFilterNullableCallbackRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeArrayFilterNullableCallbackRector.php',
@@ -2949,6 +2950,7 @@ class ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687
         'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
         'Rector\\Php80\\ValueObject\\StrStartsWith' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/StrStartsWith.php',
         'Rector\\Php81\\NodeAnalyzer\\ComplexNewAnalyzer' => __DIR__ . '/../..' . '/rules/Php81/NodeAnalyzer/ComplexNewAnalyzer.php',
+        'Rector\\Php81\\NodeFactory\\ClassFromEnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/ClassFromEnumFactory.php',
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
         'Rector\\Php81\\Rector\\ClassConst\\FinalizePublicClassConstantRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php',
         'Rector\\Php81\\Rector\\ClassMethod\\NewInInitializerRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassMethod/NewInInitializerRector.php',
@@ -3615,6 +3617,7 @@ class ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687
         'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\ReplacePreviewUrlMethodRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/ReplacePreviewUrlMethodRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\RemoveUpdateRootlineDataRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/RemoveUpdateRootlineDataRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector.php',
+        'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\ReplaceTSFECheckEnableFieldsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/ReplaceTSFECheckEnableFieldsRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveDivider2TabsConfigurationRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveDivider2TabsConfigurationRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveMethodCallConnectDbRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveMethodCallConnectDbRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveMethodCallLoadTcaRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveMethodCallLoadTcaRector.php',
@@ -3787,9 +3790,9 @@ class ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5d1be6c7a55a96b27577953683119c6d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5d1be6c7a55a96b27577953683119c6d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5d1be6c7a55a96b27577953683119c6d::$classMap;
 
         }, null, ClassLoader::class);
     }
