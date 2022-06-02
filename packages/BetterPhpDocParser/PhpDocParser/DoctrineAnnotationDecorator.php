@@ -13,16 +13,15 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
+use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\ValueObject\DoctrineAnnotation\SilentKeyMap;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
-use Rector\Core\Configuration\CurrentNodeProvider;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StringUtils;
-final class DoctrineAnnotationDecorator
+final class DoctrineAnnotationDecorator implements \Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface
 {
     /**
      * Special short annotations, that are resolved as FQN by Doctrine annotation parser
@@ -39,11 +38,6 @@ final class DoctrineAnnotationDecorator
      * @var string
      */
     private const NESTED_ANNOTATION_END_REGEX = '#(\\s+)?\\}\\)(\\s+)?#';
-    /**
-     * @readonly
-     * @var \Rector\Core\Configuration\CurrentNodeProvider
-     */
-    private $currentNodeProvider;
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
@@ -64,23 +58,18 @@ final class DoctrineAnnotationDecorator
      * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
     private $attributeMirrorer;
-    public function __construct(\Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher, \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser, \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory $tokenIteratorFactory, \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher, \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser, \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory $tokenIteratorFactory, \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)
     {
-        $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->staticDoctrineAnnotationParser = $staticDoctrineAnnotationParser;
         $this->tokenIteratorFactory = $tokenIteratorFactory;
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function decorate(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode) : void
+    public function decorate(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \PhpParser\Node $phpNode) : void
     {
-        $currentPhpNode = $this->currentNodeProvider->getNode();
-        if (!$currentPhpNode instanceof \PhpParser\Node) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
-        }
         // merge split doctrine nested tags
         $this->mergeNestedDoctrineAnnotations($phpDocNode);
-        $this->transformGenericTagValueNodesToDoctrineAnnotationTagValueNodes($phpDocNode, $currentPhpNode);
+        $this->transformGenericTagValueNodesToDoctrineAnnotationTagValueNodes($phpDocNode, $phpNode);
     }
     /**
      * Join token iterator with all the following nodes if nested

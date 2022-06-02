@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit19e05005cf0d4a302b3e979edd7c8a41
+class ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1626,6 +1626,7 @@ class ComposerStaticInit19e05005cf0d4a302b3e979edd7c8a41
         'Rector\\BetterPhpDocParser\\Attributes\\AttributeMirrorer' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Attributes/AttributeMirrorer.php',
         'Rector\\BetterPhpDocParser\\Comment\\CommentsMerger' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Comment/CommentsMerger.php',
         'Rector\\BetterPhpDocParser\\Contract\\BasePhpDocNodeVisitorInterface' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Contract/BasePhpDocNodeVisitorInterface.php',
+        'Rector\\BetterPhpDocParser\\Contract\\PhpDocParser\\PhpDocNodeDecoratorInterface' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Contract/PhpDocParser/PhpDocNodeDecoratorInterface.php',
         'Rector\\BetterPhpDocParser\\DataProvider\\CurrentTokenIteratorProvider' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/DataProvider/CurrentTokenIteratorProvider.php',
         'Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php',
         'Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfoFactory' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfoFactory.php',
@@ -1647,6 +1648,7 @@ class ComposerStaticInit19e05005cf0d4a302b3e979edd7c8a41
         'Rector\\BetterPhpDocParser\\PhpDocParser\\BetterPhpDocParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\BetterTypeParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\ClassAnnotationMatcher' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/ClassAnnotationMatcher.php',
+        'Rector\\BetterPhpDocParser\\PhpDocParser\\ConstExprClassNameDecorator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/ConstExprClassNameDecorator.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/DoctrineAnnotationDecorator.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\PhpDocFromTypeDeclarationDecorator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/PhpDocFromTypeDeclarationDecorator.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser.php',
@@ -2903,6 +2905,7 @@ class ComposerStaticInit19e05005cf0d4a302b3e979edd7c8a41
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\SubstrMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/SubstrMatchAndRefactor.php',
         'Rector\\Php80\\NodeAnalyzer\\AnnotationTargetResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/AnnotationTargetResolver.php',
         'Rector\\Php80\\NodeAnalyzer\\EnumConstListClassDetector' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/EnumConstListClassDetector.php',
+        'Rector\\Php80\\NodeAnalyzer\\EnumParamAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/EnumParamAnalyzer.php',
         'Rector\\Php80\\NodeAnalyzer\\MatchSwitchAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/MatchSwitchAnalyzer.php',
         'Rector\\Php80\\NodeAnalyzer\\PhpAttributeAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/PhpAttributeAnalyzer.php',
         'Rector\\Php80\\NodeAnalyzer\\PromotedPropertyCandidateResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/PromotedPropertyCandidateResolver.php',
@@ -3784,9 +3787,9 @@ class ComposerStaticInit19e05005cf0d4a302b3e979edd7c8a41
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit19e05005cf0d4a302b3e979edd7c8a41::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit19e05005cf0d4a302b3e979edd7c8a41::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit19e05005cf0d4a302b3e979edd7c8a41::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitecab57cd86e1acfc1267198cfd0fd687::$classMap;
 
         }, null, ClassLoader::class);
     }
