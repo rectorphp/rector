@@ -1,4 +1,4 @@
-# 241 Rules Overview
+# 243 Rules Overview
 
 ## AddRenderTypeToSelectFieldRector
 
@@ -85,13 +85,12 @@ Refactor AdditionalFieldProvider classes
 -use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
 +use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
  use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
+
 -class FileCleanupTaskAdditionalFields implements AdditionalFieldProviderInterface
-+
 +class FileCleanupTaskAdditionalFields extends AbstractAdditionalFieldProvider
  {
      public function getAdditionalFields (array &$taskInfo, $task, SchedulerModuleController $parentObject)
      {
--
          if (!isset($taskInfo[$this->fieldAgeInDays])) {
 -            if ($parentObject->CMD == 'edit') {
 +            if ((string) $parentObject->getCurrentAction() == 'edit') {
@@ -237,11 +236,12 @@ BackendUtility::getRecordsByField to QueryBuilder
 
 ```diff
 -use TYPO3\CMS\Backend\Utility\BackendUtility;
--$rows = BackendUtility::getRecordsByField('table', 'uid', 3);
-+use TYPO3\CMS\Core\Utility\GeneralUtility;
 +use TYPO3\CMS\Core\Database\ConnectionPool;
 +use TYPO3\CMS\Core\Database\Query\Restriction\BackendWorkspaceRestriction;
 +use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
++use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+-$rows = BackendUtility::getRecordsByField('table', 'uid', 3);
 +$queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('table');
 +$queryBuilder->getRestrictions()->removeAll()->add(GeneralUtility::makeInstance(BackendWorkspaceRestriction::class));
 +$queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
@@ -259,9 +259,10 @@ Refactor method call `BackendUtility::getViewDomain()` to PageRouter
 
 ```diff
 -use TYPO3\CMS\Backend\Utility\BackendUtility;
--$domain1 = BackendUtility::getViewDomain(1);
 +use TYPO3\CMS\Core\Site\SiteFinder;
 +use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+-$domain1 = BackendUtility::getViewDomain(1);
 +$site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId(1);
 +$domain1 = $site->getRouter()->generateUri(1);
 ```
@@ -362,9 +363,10 @@ Move from CharsetConverter methods to mb_string functions
 
 ```diff
 -use TYPO3\CMS\Core\Charset\CharsetConverter;
--        use TYPO3\CMS\Core\Utility\GeneralUtility;
--        $charsetConverter = GeneralUtility::makeInstance(CharsetConverter::class);
--        $charsetConverter->strlen('utf-8', 'string');
+-use TYPO3\CMS\Core\Utility\GeneralUtility;
+-
+-$charsetConverter = GeneralUtility::makeInstance(CharsetConverter::class);
+-$charsetConverter->strlen('utf-8', 'string');
 +mb_strlen('string', 'utf-8');
 ```
 
@@ -377,15 +379,13 @@ Change the extensions to check for info instead of info_pagetsconfig.
 - class: [`Ssch\TYPO3Rector\Rector\v9\v0\CheckForExtensionInfoRector`](../src/Rector/v9/v0/CheckForExtensionInfoRector.php)
 
 ```diff
--if(ExtensionManagementUtility::isLoaded('info_pagetsconfig')) {
-+if(ExtensionManagementUtility::isLoaded('info')) {
-
+-if (ExtensionManagementUtility::isLoaded('info_pagetsconfig')) {
++if (ExtensionManagementUtility::isLoaded('info')) {
  }
 
  $packageManager = GeneralUtility::makeInstance(PackageManager::class);
--if($packageManager->isActive('info_pagetsconfig')) {
-+if($packageManager->isActive('info')) {
-
+-if ($packageManager->isActive('info_pagetsconfig')) {
++if ($packageManager->isActive('info')) {
  }
 ```
 
@@ -487,9 +487,10 @@ Copy method getPidForModTSconfig of class BackendUtility over
 - class: [`Ssch\TYPO3Rector\Rector\v9\v3\CopyMethodGetPidForModTSconfigRector`](../src/Rector/v9/v3/CopyMethodGetPidForModTSconfigRector.php)
 
 ```diff
--use TYPO3\CMS\Backend\Utility\BackendUtility;BackendUtility::getPidForModTSconfig('pages', 1, 2);
+-use TYPO3\CMS\Backend\Utility\BackendUtility;
 +use TYPO3\CMS\Core\Utility\MathUtility;
-+
+
+-BackendUtility::getPidForModTSconfig('pages', 1, 2);
 +$table = 'pages';
 +$uid = 1;
 +$pid = 2;
@@ -538,14 +539,14 @@ Refactor legacy calls of DatabaseConnection to Dbal
 ```diff
 -$GLOBALS['TYPO3_DB']->exec_INSERTquery(
 +$connectionPool = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Database\ConnectionPool::class);
-+        $databaseConnectionForPages = $connectionPool->getConnectionForTable('pages');
-+        $databaseConnectionForPages->insert(
-             'pages',
-             [
-                 'pid' => 0,
-                 'title' => 'Home',
-             ]
-         );
++$databaseConnectionForPages = $connectionPool->getConnectionForTable('pages');
++$databaseConnectionForPages->insert(
+     'pages',
+     [
+         'pid' => 0,
+         'title' => 'Home',
+     ]
+ );
 ```
 
 <br>
@@ -560,6 +561,7 @@ Use DateTimeAspect instead of superglobals like `$GLOBALS['EXEC_TIME']`
 -$currentTimestamp = $GLOBALS['EXEC_TIME'];
 +use TYPO3\CMS\Core\Context\Context;
 +use TYPO3\CMS\Core\Utility\GeneralUtility;
++
 +$currentTimestamp = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp');
 ```
 
@@ -761,6 +763,7 @@ Extbase controller actions must return ResponseInterface
 ```diff
 +use Psr\Http\Message\ResponseInterface;
  use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+
  class MyController extends ActionController
  {
 -    public function someAction()
@@ -839,17 +842,16 @@ return static function (RectorConfig $rectorConfig): void {
 
 ```diff
  {
--    "require": {
--      "typo3/cms-core": "^9.5"
-+   "require": {
-+      "typo3/cms-core": "^10.4"
-    },
+     "require": {
+-        "typo3/cms-core": "^9.5"
++        "typo3/cms-core": "^10.4"
+     },
 -    "extra": {}
-+   "extra": {
-+      "typo3/cms": {
-+         "extension-key": "my_extension"
-+      }
-+   }
++    "extra": {
++        "typo3/cms": {
++            "extension-key": "my_extension"
++        }
++    }
  }
 ```
 
@@ -907,8 +909,9 @@ Replace deprecated FlexFormTools methods with ArrayUtility methods
 
 ```diff
 -use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
--$flexFormTools = new FlexFormTools();
 +use TYPO3\CMS\Core\Utility\ArrayUtility;
+
+-$flexFormTools = new FlexFormTools();
  $searchArray = [];
 -$value = $flexFormTools->getArrayValueByPath('search/path', $searchArray);
 +$value = ArrayUtility::getValueByPath($searchArray, 'search/path');
@@ -949,7 +952,7 @@ Return `TYPO3\CMS\Extbase\Http\ForwardResponse` instead of `TYPO3\CMS\Extbase\Mv
 +use Psr\Http\Message\ResponseInterface;
  use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 +use TYPO3\CMS\Extbase\Http\ForwardResponse;
-+
+
  class FooController extends ActionController
  {
 -   public function listAction()
@@ -1218,10 +1221,13 @@ Inject EnvironmentService if needed in subclass of Response
 
 ```diff
  namespace App\Service;
+
  use \TYPO3\CMS\Core\Cache\CacheManager;
+
  class Service
  {
      private CacheManager $cacheManager;
+
 -    public function injectCacheManager(CacheManager $cacheManager): void
 +    public function __construct(CacheManager $cacheManager)
      {
@@ -1857,10 +1863,11 @@ Option constructor arguments to hard requirement
 -use TYPO3\CMS\Extbase\Object\ObjectManager;
  use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
  use TYPO3\CMS\Fluid\View\StandaloneView;
+
  class MyClass
  {
--public function __construct(Dispatcher $dispatcher = null, StandaloneView $view = null, BackendUtility $backendUtility = null, string $test = null)
-+public function __construct(Dispatcher $dispatcher, StandaloneView $view, BackendUtility $backendUtility, string $test = null)
+-    public function __construct(Dispatcher $dispatcher = null, StandaloneView $view = null, BackendUtility $backendUtility = null, string $test = null)
++    public function __construct(Dispatcher $dispatcher, StandaloneView $view, BackendUtility $backendUtility, string $test = null)
      {
 -        $dispatcher = $dispatcher ?? GeneralUtility::makeInstance(ObjectManager::class)->get(Dispatcher::class);
 -        $view = $view ?? GeneralUtility::makeInstance(StandaloneView::class);
@@ -1885,6 +1892,7 @@ Page Not Found And Error handling in Frontend
 +use TYPO3\CMS\Core\Utility\GeneralUtility;
  use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 +use TYPO3\CMS\Frontend\Controller\ErrorController;
+
  class SomeController extends ActionController
  {
      public function unavailableAction(): void
@@ -2008,7 +2016,7 @@ Deprecated random generator methods in GeneralUtility
 ```diff
 +use TYPO3\CMS\Core\Crypto\Random;
  use TYPO3\CMS\Core\Utility\GeneralUtility;
--
+
 -$randomBytes = GeneralUtility::generateRandomBytes();
 -$randomHex = GeneralUtility::getRandomHexString();
 +$randomBytes = GeneralUtility::makeInstance(Random::class)->generateRandomBytes();
@@ -2187,13 +2195,13 @@ Refactor printContent methods of classes TaskModuleController and PageLayoutCont
 
 ```diff
  use TYPO3\CMS\Backend\Controller\PageLayoutController;
--use TYPO3\CMS\Core\Utility\GeneralUtility;
--use TYPO3\CMS\Taskcenter\Controller\TaskModuleController;
-+use TYPO3\CMS\Core\Utility\GeneralUtility;use TYPO3\CMS\Taskcenter\Controller\TaskModuleController;
+ use TYPO3\CMS\Core\Utility\GeneralUtility;
+ use TYPO3\CMS\Taskcenter\Controller\TaskModuleController;
+
  $pageLayoutController = GeneralUtility::makeInstance(PageLayoutController::class);
 -$pageLayoutController->printContent();
--
 +echo $pageLayoutController->getModuleTemplate()->renderContent();
+
  $taskLayoutController = GeneralUtility::makeInstance(TaskModuleController::class);
 -$taskLayoutController->printContent();
 +echo $taskLayoutController->content;
@@ -2232,6 +2240,7 @@ Refactor some properties of TypoScriptFrontendController
 -$loginAllowedInBranch = $GLOBALS['TSFE']->loginAllowedInBranch;
 +use TYPO3\CMS\Core\Utility\GeneralUtility;
 +use TYPO3\CMS\Core\Context\Context;
++
 +$previewBeUserUid = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('backend.user', 'id', 0);
 +$workspacePreview = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('workspace', 'id', 0);
 +$loginAllowedInBranch = $GLOBALS['TSFE']->checkIfLoginAllowedInBranch();
@@ -2260,7 +2269,6 @@ Refactor removed Marker-related methods from ContentObjectRenderer.
 - class: [`Ssch\TYPO3Rector\Rector\v8\v7\RefactorRemovedMarkerMethodsFromContentObjectRendererRector`](../src/Rector/v8/v7/RefactorRemovedMarkerMethodsFromContentObjectRendererRector.php)
 
 ```diff
- // build template
 -$template = $this->cObj->getSubpart($this->config['templateFile'], '###TEMPLATE###');
 -$html = $this->cObj->substituteSubpart($html, '###ADDITONAL_KEYWORD###', '');
 -$html2 = $this->cObj->substituteSubpartArray($html2, []);
@@ -2272,6 +2280,7 @@ Refactor removed Marker-related methods from ContentObjectRenderer.
 -$content .= $this->cObj->fillInMarkerArray($markContentArray, $row, $fieldList, $nl2br, $prefix, $HSC);
 +use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 +use TYPO3\CMS\Core\Utility\GeneralUtility;
++
 +$template = GeneralUtility::makeInstance(MarkerBasedTemplateService::class)->getSubpart($this->config['templateFile'], '###TEMPLATE###');
 +$html = GeneralUtility::makeInstance(MarkerBasedTemplateService::class)->substituteSubpart($html, '###ADDITONAL_KEYWORD###', '');
 +$html2 = GeneralUtility::makeInstance(MarkerBasedTemplateService::class)->substituteSubpartArray($html2, []);
@@ -2296,7 +2305,6 @@ Refactor removed Marker-related methods from HtmlParser.
 
  final class HtmlParserMarkerRendererMethods
  {
-
      public function doSomething(): void
      {
          $template = '';
@@ -2322,8 +2330,6 @@ Refactor removed Marker-related methods from HtmlParser.
 +        $content .= \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Service\MarkerBasedTemplateService::class)->substituteMarkerAndSubpartArrayRecursive($content, $markersAndSubparts, $wrap, $uppercase, $deleteUnused);
 +        $content = $htmlparser->HTMLcleaner($content);
      }
-
-
  }
 ```
 
@@ -2517,10 +2523,10 @@ Remove TypoScript option addQueryString.method
 
 ```diff
  $this->uriBuilder->setUseCacheHash(true)
-                          ->setCreateAbsoluteUri(true)
-                          ->setAddQueryString(true)
--                         ->setAddQueryStringMethod('GET')
-                          ->build();
+     ->setCreateAbsoluteUri(true)
+     ->setAddQueryString(true)
+-    ->setAddQueryStringMethod('GET')
+     ->build();
 ```
 
 <br>
@@ -2948,6 +2954,7 @@ Remove language mode methods from class Typo3QuerySettings
 
 ```diff
  use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+
  $querySettings = new Typo3QuerySettings();
 -$querySettings->setLanguageUid(0)->setLanguageMode()->getLanguageMode();
 +$querySettings->setLanguageUid(0);
@@ -2989,7 +2996,7 @@ Remove `EidUtility::connectDB()` call
 - class: [`Ssch\TYPO3Rector\Rector\v7\v0\RemoveMethodCallConnectDbRector`](../src/Rector/v7/v0/RemoveMethodCallConnectDbRector.php)
 
 ```diff
--'GeneralUtility::loadTCA()'
+-EidUtility::connectDB()
 +-
 ```
 
@@ -3016,6 +3023,7 @@ Remove superfluous EidUtility::initTCA call
 
 ```diff
 -use TYPO3\CMS\Frontend\Utility\EidUtility;
+-
 -EidUtility::initTCA();
 +-
 ```
@@ -3030,11 +3038,12 @@ Remove EidUtility and various TSFE methods
 
 ```diff
 -use TYPO3\CMS\Frontend\Utility\EidUtility;
+-
 -EidUtility::initExtensionTCA('foo');
 -EidUtility::initFeUser();
 -EidUtility::initLanguage();
 -EidUtility::initTCA();
-+''
++-
 ```
 
 <br>
@@ -3141,8 +3150,8 @@ Use method getControllerExtensionName from `$request` property instead of remove
  {
      public function myMethod()
      {
--        if($this->extensionName === 'whatever') {
-+        if($this->request->getControllerExtensionName() === 'whatever') {
+-        if ($this->extensionName === 'whatever') {
++        if ($this->request->getControllerExtensionName() === 'whatever') {
 
          }
 
@@ -3165,8 +3174,8 @@ Use method getBackendUserAuthentication instead of removed property `$userAuthen
  {
      public function myMethod()
      {
--        if($this->userAuthentication !== null) {
-+        if($this->getBackendUserAuthentication() !== null) {
+-        if ($this->userAuthentication !== null) {
++        if ($this->getBackendUserAuthentication() !== null) {
 
          }
      }
@@ -3186,13 +3195,11 @@ remove evalWriteFile method from RteHtmlparser.
 
  final class RteHtmlParserRemovedMethods
  {
-
      public function doSomething(): void
      {
          $rtehtmlparser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(RteHtmlParser::class);
 -        $rtehtmlparser->evalWriteFile();
      }
-
  }
 ```
 
@@ -3282,6 +3289,20 @@ TCA option setToDefaultOnCopy removed
      'columns' => [
      ],
  ];
+```
+
+<br>
+
+## RemoveUpdateRootlineDataRector
+
+Remove unused `TemplateService->updateRootlineData()` calls
+
+- class: [`Ssch\TYPO3Rector\Rector\v12\v0\typo3\RemoveUpdateRootlineDataRector`](../src/Rector/v12/v0/typo3/RemoveUpdateRootlineDataRector.php)
+
+```diff
+-$templateService = GeneralUtility::makeInstance(TemplateService::class);
+-$templateService->updateRootlineData();
++$templateService = GeneralUtility::makeInstance(TemplateService::class);
 ```
 
 <br>
@@ -3488,6 +3509,20 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
+## ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector
+
+Replace usages of `ContentObjectRenderer->getMailTo()` with `EmailLinkBuilder->processEmailLink()`
+
+- class: [`Ssch\TYPO3Rector\Rector\v12\v0\typo3\ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector`](../src/Rector/v12/v0/typo3/ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector.php)
+
+```diff
+-$result = $cObj->getMailTo($mailAddress, $linktxt)
++$result = GeneralUtility::makeInstance(EmailLinkBuilder::class, $cObj, $cObj->getTypoScriptFrontendController())
++    ->processEmailLink((string)$mailAddress, (string)$linktxt);
+```
+
+<br>
+
 ## ReplaceExtKeyWithExtensionKeyRector
 
 Replace $_EXTKEY with extension key
@@ -3563,8 +3598,8 @@ Replace GeneralUtility::stdAuthCode with GeneralUtility::hmac
 - class: [`Ssch\TYPO3Rector\Rector\v11\v3\ReplaceStdAuthCodeWithHmacRector`](../src/Rector/v11/v3/ReplaceStdAuthCodeWithHmacRector.php)
 
 ```diff
--// Just a warning
-+// Only outputting a warning message
+-\TYPO3\CMS\Core\Utility\GeneralUtility::stdAuthCode(5);
++// You have to migrate GeneralUtility::stdAuthCode to GeneralUtility::hmac(). To make types work you should check the old function implementation
 ```
 
 <br>
@@ -3646,16 +3681,16 @@ Remove second argument of HTMLcleaner_db getKeepTags. Substitute calls for siteU
 
 ```diff
  use TYPO3\CMS\Core\Html\RteHtmlParser;
--
-             $rteHtmlParser = new RteHtmlParser();
--            $rteHtmlParser->HTMLcleaner_db('arg1', 'arg2');
--            $rteHtmlParser->getKeepTags('arg1', 'arg2');
--            $rteHtmlParser->getUrl('http://domain.com');
--            $rteHtmlParser->siteUrl();
-+            $rteHtmlParser->HTMLcleaner_db('arg1');
-+            $rteHtmlParser->getKeepTags('arg1');
-+            \TYPO3\CMS\Core\Utility\GeneralUtility::getUrl('http://domain.com');
-+             \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+
+ $rteHtmlParser = new RteHtmlParser();
+-$rteHtmlParser->HTMLcleaner_db('arg1', 'arg2');
+-$rteHtmlParser->getKeepTags('arg1', 'arg2');
+-$rteHtmlParser->getUrl('http://example.com');
+-$rteHtmlParser->siteUrl();
++$rteHtmlParser->HTMLcleaner_db('arg1');
++$rteHtmlParser->getKeepTags('arg1');
++\TYPO3\CMS\Core\Utility\GeneralUtility::getUrl('http://example.com');
++\TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
 ```
 
 <br>
@@ -4276,8 +4311,8 @@ GeneralUtility::verifyFilenameAgainstDenyPattern GeneralUtility::makeInstance(Fi
  use TYPO3\CMS\Core\Utility\GeneralUtility;
 
  $filename = 'somefile.php';
--if(!GeneralUtility::verifyFilenameAgainstDenyPattern($filename)) {
-+if(!GeneralUtility::makeInstance(FileNameValidator::class)->isValid($filename)) {
+-if (!GeneralUtility::verifyFilenameAgainstDenyPattern($filename)) {
++if (!GeneralUtility::makeInstance(FileNameValidator::class)->isValid($filename)) {
  }
 
 -if ($GLOBALS['TYPO3_CONF_VARS']['BE']['fileDenyPattern'] != FILE_DENY_PATTERN_DEFAULT)
@@ -4818,16 +4853,16 @@ Use the signal afterExtensionInstall of class InstallUtility
  use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 -use TYPO3\CMS\Extensionmanager\Service\ExtensionManagementService;
 +use TYPO3\CMS\Extensionmanager\Utility\InstallUtility;
+
  $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
--$signalSlotDispatcher->connect(
--        ExtensionManagementService::class,
--        'hasInstalledExtensions',
-+    $signalSlotDispatcher->connect(
-+        InstallUtility::class,
-+        'afterExtensionInstall',
-         \stdClass::class,
-         'foo'
-     );
+ $signalSlotDispatcher->connect(
+-    ExtensionManagementService::class,
+-    'hasInstalledExtensions',
++    InstallUtility::class,
++    'afterExtensionInstall',
+     \stdClass::class,
+     'foo'
+ );
 ```
 
 <br>
@@ -4843,15 +4878,15 @@ Use the signal tablesDefinitionIsBeingBuilt of class SqlExpectedSchemaService
  use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 -use TYPO3\CMS\Extensionmanager\Utility\InstallUtility;
 +use TYPO3\CMS\Install\Service\SqlExpectedSchemaService;
+
  $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
--$signalSlotDispatcher->connect(
--        InstallUtility::class,
-+    $signalSlotDispatcher->connect(
-+        SqlExpectedSchemaService::class,
-         'tablesDefinitionIsBeingBuilt',
-         \stdClass::class,
-         'foo'
-     );
+ $signalSlotDispatcher->connect(
+-    InstallUtility::class,
++    SqlExpectedSchemaService::class,
+     'tablesDefinitionIsBeingBuilt',
+     \stdClass::class,
+     'foo'
+ );
 ```
 
 <br>

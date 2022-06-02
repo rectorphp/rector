@@ -62,16 +62,16 @@ final class RemoveAddQueryStringMethodRector extends \Rector\Core\Rector\Abstrac
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove TypoScript option addQueryString.method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $this->uriBuilder->setUseCacheHash(true)
-                         ->setCreateAbsoluteUri(true)
-                         ->setAddQueryString(true)
-                         ->setAddQueryStringMethod('GET')
-                         ->build();
+    ->setCreateAbsoluteUri(true)
+    ->setAddQueryString(true)
+    ->setAddQueryStringMethod('GET')
+    ->build();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $this->uriBuilder->setUseCacheHash(true)
-                         ->setCreateAbsoluteUri(true)
-                         ->setAddQueryString(true)
-                         ->build();
+    ->setCreateAbsoluteUri(true)
+    ->setAddQueryString(true)
+    ->build();
 CODE_SAMPLE
 )]);
     }

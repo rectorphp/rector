@@ -26,6 +26,7 @@ final class ForwardResponseInsteadOfForwardMethodRector extends \Rector\Core\Rec
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Return TYPO3\\CMS\\Extbase\\Http\\ForwardResponse instead of TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController::forward()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+
 class FooController extends ActionController
 {
    public function listAction()

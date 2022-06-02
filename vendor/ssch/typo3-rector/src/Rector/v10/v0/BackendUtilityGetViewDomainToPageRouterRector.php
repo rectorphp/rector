@@ -46,11 +46,13 @@ final class BackendUtilityGetViewDomainToPageRouterRector extends \Rector\Core\R
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor method call BackendUtility::getViewDomain() to PageRouter', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+
 $domain1 = BackendUtility::getViewDomain(1);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId(1);
 $domain1 = $site->getRouter()->generateUri(1);
 CODE_SAMPLE

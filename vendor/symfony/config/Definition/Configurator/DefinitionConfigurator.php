@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220601\Symfony\Component\Config\Definition\Configurator;
+namespace RectorPrefix20220602\Symfony\Component\Config\Definition\Configurator;
 
-use RectorPrefix20220601\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use RectorPrefix20220601\Symfony\Component\Config\Definition\Builder\NodeDefinition;
-use RectorPrefix20220601\Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use RectorPrefix20220601\Symfony\Component\Config\Definition\Loader\DefinitionFileLoader;
+use RectorPrefix20220602\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use RectorPrefix20220602\Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use RectorPrefix20220602\Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use RectorPrefix20220602\Symfony\Component\Config\Definition\Loader\DefinitionFileLoader;
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
@@ -35,7 +35,7 @@ class DefinitionConfigurator
      * @var string
      */
     private $file;
-    public function __construct(\RectorPrefix20220601\Symfony\Component\Config\Definition\Builder\TreeBuilder $treeBuilder, \RectorPrefix20220601\Symfony\Component\Config\Definition\Loader\DefinitionFileLoader $loader, string $path, string $file)
+    public function __construct(\RectorPrefix20220602\Symfony\Component\Config\Definition\Builder\TreeBuilder $treeBuilder, \RectorPrefix20220602\Symfony\Component\Config\Definition\Loader\DefinitionFileLoader $loader, string $path, string $file)
     {
         $this->treeBuilder = $treeBuilder;
         $this->loader = $loader;

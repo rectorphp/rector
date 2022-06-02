@@ -7,7 +7,7 @@ use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220601\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20220602\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -34,7 +34,7 @@ final class ExtensionComposerRector implements \Rector\Composer\Contract\Rector\
     {
         $this->currentFileProvider = $currentFileProvider;
     }
-    public function refactor(\RectorPrefix20220601\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20220602\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         if ('typo3-cms-extension' !== $composerJson->getType()) {
             return;
@@ -65,26 +65,26 @@ final class ExtensionComposerRector implements \Rector\Composer\Contract\Rector\
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add extra extension_key in `composer.json` and add option default constraint', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 {
     "require": {
-      "typo3/cms-core": "^9.5"
-   },
+        "typo3/cms-core": "^9.5"
+    },
     "extra": {}
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 {
-   "require": {
-      "typo3/cms-core": "^10.4"
-   },
-   "extra": {
-      "typo3/cms": {
-         "extension-key": "my_extension"
-      }
-   }
+    "require": {
+        "typo3/cms-core": "^10.4"
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "my_extension"
+        }
+    }
 }
 CODE_SAMPLE
 , [self::TYPO3_VERSION_CONSTRAINT => '^10.4'])]);
     }
-    private function addExtensionKey(\RectorPrefix20220601\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    private function addExtensionKey(\RectorPrefix20220602\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $extra = $composerJson->getExtra();
         if (isset($extra['typo3/cms']['extension-key'])) {
@@ -97,7 +97,7 @@ CODE_SAMPLE
         $extra['typo3/cms']['extension-key'] = \basename(\dirname($fileInfo->getRealPath()));
         $composerJson->setExtra($extra);
     }
-    private function addDescription(\RectorPrefix20220601\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    private function addDescription(\RectorPrefix20220602\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $description = $composerJson->getDescription();
         if ('' !== $description && null !== $description) {
@@ -105,7 +105,7 @@ CODE_SAMPLE
         }
         $composerJson->setDescription('Add description...');
     }
-    private function addLicense(\RectorPrefix20220601\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    private function addLicense(\RectorPrefix20220602\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $license = $composerJson->getLicense();
         if ('' !== $license && null !== $license && [] !== $license) {
@@ -113,7 +113,7 @@ CODE_SAMPLE
         }
         $composerJson->setLicense('GPL-2.0-or-later');
     }
-    private function fixPackageName(\RectorPrefix20220601\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    private function fixPackageName(\RectorPrefix20220602\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $name = $composerJson->getName();
         if ('' === $name) {

@@ -54,6 +54,7 @@ final class PageNotFoundAndErrorHandlingRector extends \Rector\Core\Rector\Abstr
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Page Not Found And Error handling in Frontend', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+
 class SomeController extends ActionController
 {
     public function unavailableAction(): void
@@ -68,6 +69,7 @@ use TYPO3\CMS\Core\Http\ImmediateResponseException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Frontend\Controller\ErrorController;
+
 class SomeController extends ActionController
 {
     public function unavailableAction(): void

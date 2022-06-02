@@ -57,6 +57,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Crypto\Random;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 $randomBytes = GeneralUtility::makeInstance(Random::class)->generateRandomBytes();
 $randomHex = GeneralUtility::makeInstance(Random::class)->generateRandomHexString();
 CODE_SAMPLE

@@ -52,7 +52,9 @@ final class CopyMethodGetPidForModTSconfigRector extends \Rector\Core\Rector\Abs
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Copy method getPidForModTSconfig of class BackendUtility over', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-use TYPO3\CMS\Backend\Utility\BackendUtility;BackendUtility::getPidForModTSconfig('pages', 1, 2);
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+
+BackendUtility::getPidForModTSconfig('pages', 1, 2);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\MathUtility;

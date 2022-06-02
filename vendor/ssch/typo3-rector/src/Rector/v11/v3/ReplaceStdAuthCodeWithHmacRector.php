@@ -56,10 +56,10 @@ final class ReplaceStdAuthCodeWithHmacRector extends \Rector\Core\Rector\Abstrac
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace GeneralUtility::stdAuthCode with GeneralUtility::hmac', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-// Just a warning
+\TYPO3\CMS\Core\Utility\GeneralUtility::stdAuthCode(5);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-// Only outputting a warning message
+// You have to migrate GeneralUtility::stdAuthCode to GeneralUtility::hmac(). To make types work you should check the old function implementation
 CODE_SAMPLE
 )]);
     }

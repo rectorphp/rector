@@ -45,24 +45,20 @@ final class CheckForExtensionInfoRector extends \Rector\Core\Rector\AbstractRect
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change the extensions to check for info instead of info_pagetsconfig.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-if(ExtensionManagementUtility::isLoaded('info_pagetsconfig')) {
-
+if (ExtensionManagementUtility::isLoaded('info_pagetsconfig')) {
 }
 
 $packageManager = GeneralUtility::makeInstance(PackageManager::class);
-if($packageManager->isActive('info_pagetsconfig')) {
-
+if ($packageManager->isActive('info_pagetsconfig')) {
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 
-if(ExtensionManagementUtility::isLoaded('info')) {
-
+if (ExtensionManagementUtility::isLoaded('info')) {
 }
 
 $packageManager = GeneralUtility::makeInstance(PackageManager::class);
-if($packageManager->isActive('info')) {
-
+if ($packageManager->isActive('info')) {
 }
 CODE_SAMPLE
 )]);

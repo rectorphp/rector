@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v10\v0;
 
-use RectorPrefix20220601\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
-use RectorPrefix20220601\Helmich\TypoScriptParser\Parser\AST\Scalar as ScalarValue;
+use RectorPrefix20220602\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
+use RectorPrefix20220602\Helmich\TypoScriptParser\Parser\AST\Scalar as ScalarValue;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
-use RectorPrefix20220601\Nette\Utils\Strings;
+use RectorPrefix20220602\Nette\Utils\Strings;
 use PhpParser\Comment;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\String_;
@@ -75,7 +75,7 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
     }
     public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20220601\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
+        if (!$statement instanceof \RectorPrefix20220602\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;
         }
         if (\strpos($statement->object->absoluteName, 'persistence.classes') === \false) {
@@ -135,7 +135,7 @@ CODE_SAMPLE
         }
         $return = new \PhpParser\Node\Stmt\Return_($persistenceArray);
         $content = $this->betterStandardPrinter->prettyPrintFile([$return]);
-        $content = \RectorPrefix20220601\Nette\Utils\Strings::replace($content, self::REMOVE_EMPTY_LINES, '');
+        $content = \RectorPrefix20220602\Nette\Utils\Strings::replace($content, self::REMOVE_EMPTY_LINES, '');
         return new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($this->filename, $content);
     }
     public function getMessage() : string
@@ -152,7 +152,7 @@ CODE_SAMPLE
     /**
      * @param string[] $paths
      */
-    private function extractSubClasses(array $paths, \RectorPrefix20220601\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
+    private function extractSubClasses(array $paths, \RectorPrefix20220602\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
     {
         if (!\in_array(self::SUBCLASSES, $paths, \true)) {
             return;
@@ -168,7 +168,7 @@ CODE_SAMPLE
     /**
      * @param string[] $paths
      */
-    private function extractMapping(string $name, array $paths, \RectorPrefix20220601\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
+    private function extractMapping(string $name, array $paths, \RectorPrefix20220602\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
     {
         if (!\in_array($name, $paths, \true)) {
             return;
@@ -184,7 +184,7 @@ CODE_SAMPLE
     /**
      * @param string[] $paths
      */
-    private function extractColumns(array $paths, \RectorPrefix20220601\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
+    private function extractColumns(array $paths, \RectorPrefix20220602\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
     {
         if (!\in_array('columns', $paths, \true)) {
             return;

@@ -80,6 +80,7 @@ final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends \R
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Extbase controller actions must return ResponseInterface', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+
 class MyController extends ActionController
 {
     public function someAction()
@@ -91,6 +92,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+
 class MyController extends ActionController
 {
     public function someAction(): ResponseInterface

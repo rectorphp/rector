@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v12\v0;
 
-use RectorPrefix20220601\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
+use RectorPrefix20220602\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -30,7 +30,7 @@ final class RemoveDisableCharsetHeaderConfigTypoScriptRector extends \Ssch\TYPO3
     }
     public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20220601\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
+        if (!$statement instanceof \RectorPrefix20220602\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;
         }
         if ('config.disableCharsetHeader' !== $statement->object->absoluteName) {

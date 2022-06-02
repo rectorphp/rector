@@ -67,7 +67,6 @@ use TYPO3\CMS\Core\Html\HtmlParser;
 
 final class HtmlParserMarkerRendererMethods
 {
-
     public function doSomething(): void
     {
         $template = '';
@@ -86,8 +85,6 @@ final class HtmlParserMarkerRendererMethods
         $content .= $htmlparser->substituteMarkerAndSubpartArrayRecursive($content, $markersAndSubparts, $wrap, $uppercase, $deleteUnused);
         $content = $htmlparser->XHTML_clean($content);
     }
-
-
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -95,7 +92,6 @@ use TYPO3\CMS\Core\Html\HtmlParser;
 
 final class HtmlParserMarkerRendererMethods
 {
-
     public function doSomething(): void
     {
         $template = '';
@@ -111,8 +107,6 @@ final class HtmlParserMarkerRendererMethods
         $content .= \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Service\MarkerBasedTemplateService::class)->substituteMarkerAndSubpartArrayRecursive($content, $markersAndSubparts, $wrap, $uppercase, $deleteUnused);
         $content = $htmlparser->HTMLcleaner($content);
     }
-
-
 }
 CODE_SAMPLE
 )]);

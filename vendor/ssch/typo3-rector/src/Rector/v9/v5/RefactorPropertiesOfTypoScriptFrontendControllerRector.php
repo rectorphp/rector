@@ -72,6 +72,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Context\Context;
+
 $previewBeUserUid = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('backend.user', 'id', 0);
 $workspacePreview = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('workspace', 'id', 0);
 $loginAllowedInBranch = $GLOBALS['TSFE']->checkIfLoginAllowedInBranch();

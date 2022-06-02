@@ -35,10 +35,13 @@ final class InjectMethodToConstructorInjectionRector extends \Rector\Core\Rector
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 namespace App\Service;
+
 use \TYPO3\CMS\Core\Cache\CacheManager;
+
 class Service
 {
     private CacheManager $cacheManager;
+
     public function injectCacheManager(CacheManager $cacheManager): void
     {
         $this->cacheManager = $cacheManager;
@@ -47,10 +50,13 @@ class Service
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 namespace App\Service;
+
 use \TYPO3\CMS\Core\Cache\CacheManager;
+
 class Service
 {
     private CacheManager $cacheManager;
+
     public function __construct(CacheManager $cacheManager)
     {
         $this->cacheManager = $cacheManager;

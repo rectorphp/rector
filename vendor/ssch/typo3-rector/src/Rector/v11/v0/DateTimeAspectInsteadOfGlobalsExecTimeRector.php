@@ -52,6 +52,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 $currentTimestamp = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp');
 CODE_SAMPLE
 )]);

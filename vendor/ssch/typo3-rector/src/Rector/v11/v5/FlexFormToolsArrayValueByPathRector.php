@@ -54,6 +54,7 @@ final class FlexFormToolsArrayValueByPathRector extends \Rector\Core\Rector\Abst
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace deprecated FlexFormTools methods with ArrayUtility methods', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
+
 $flexFormTools = new FlexFormTools();
 $searchArray = [];
 $value = $flexFormTools->getArrayValueByPath('search/path', $searchArray);
@@ -62,6 +63,7 @@ $flexFormTools->setArrayValueByPath('set/path', $dataArray, $value);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\ArrayUtility;
+
 $searchArray = [];
 $value = ArrayUtility::getValueByPath($searchArray, 'search/path');
 

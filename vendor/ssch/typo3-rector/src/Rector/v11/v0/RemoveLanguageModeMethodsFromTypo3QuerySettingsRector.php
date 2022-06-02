@@ -60,11 +60,13 @@ final class RemoveLanguageModeMethodsFromTypo3QuerySettingsRector extends \Recto
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove language mode methods from class Typo3QuerySettings', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+
 $querySettings = new Typo3QuerySettings();
 $querySettings->setLanguageUid(0)->setLanguageMode()->getLanguageMode();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+
 $querySettings = new Typo3QuerySettings();
 $querySettings->setLanguageUid(0);
 CODE_SAMPLE

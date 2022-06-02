@@ -43,6 +43,7 @@ final class RemoveMethodInitTCARector extends \Rector\Core\Rector\AbstractRector
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove superfluous EidUtility::initTCA call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Frontend\Utility\EidUtility;
+
 EidUtility::initTCA();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
