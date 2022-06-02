@@ -16,7 +16,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
@@ -122,7 +121,7 @@ final class DeadParamTagValueNodeAnalyzer
 
     private function isUnionIdentifier(PhpDocTagNode $phpDocTagNode): bool
     {
-        if (! $phpDocTagNode->value instanceof VariadicAwareParamTagValueNode) {
+        if (! $phpDocTagNode->value instanceof ParamTagValueNode) {
             return true;
         }
 

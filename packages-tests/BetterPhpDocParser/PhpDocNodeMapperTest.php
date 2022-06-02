@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class PhpDocNodeMapperTest extends AbstractTestCase
@@ -36,7 +35,7 @@ final class PhpDocNodeMapperTest extends AbstractTestCase
         // test param tag
         /** @var PhpDocTagNode $childNode */
         $propertyTagValueNode = $childNode->value;
-        $this->assertInstanceOf(VariadicAwareParamTagValueNode::class, $propertyTagValueNode);
+        $this->assertInstanceOf(ParamTagValueNode::class, $propertyTagValueNode);
     }
 
     /**
