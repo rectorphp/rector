@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0a36232315aecc79ab3b8f1f069516fb
+class ComposerStaticInitd98d7f4fbccf02db77cd270c4720d67f
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1642,7 +1642,6 @@ class ComposerStaticInit0a36232315aecc79ab3b8f1f069516fb
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\CallableTypePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/CallableTypePhpDocNodeVisitor.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\ChangedPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/ChangedPhpDocNodeVisitor.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\IntersectionTypeNodePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/IntersectionTypeNodePhpDocNodeVisitor.php',
-        'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\ParamPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/ParamPhpDocNodeVisitor.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\TemplatePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/TemplatePhpDocNodeVisitor.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\UnionTypeNodePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/UnionTypeNodePhpDocNodeVisitor.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\BetterPhpDocParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php',
@@ -1666,7 +1665,6 @@ class ComposerStaticInit0a36232315aecc79ab3b8f1f069516fb
         'Rector\\BetterPhpDocParser\\ValueObject\\PhpDoc\\DoctrineAnnotation\\AbstractValuesAwareNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\PhpDoc\\DoctrineAnnotation\\CurlyListNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/CurlyListNode.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\PhpDoc\\SpacingAwareTemplateTagValueNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/PhpDoc/SpacingAwareTemplateTagValueNode.php',
-        'Rector\\BetterPhpDocParser\\ValueObject\\PhpDoc\\VariadicAwareParamTagValueNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/PhpDoc/VariadicAwareParamTagValueNode.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\StartAndEnd' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/StartAndEnd.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\Type\\BracketsAwareIntersectionTypeNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/Type/BracketsAwareIntersectionTypeNode.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\Type\\BracketsAwareUnionTypeNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/Type/BracketsAwareUnionTypeNode.php',
@@ -3786,9 +3784,9 @@ class ComposerStaticInit0a36232315aecc79ab3b8f1f069516fb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0a36232315aecc79ab3b8f1f069516fb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0a36232315aecc79ab3b8f1f069516fb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0a36232315aecc79ab3b8f1f069516fb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd98d7f4fbccf02db77cd270c4720d67f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd98d7f4fbccf02db77cd270c4720d67f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd98d7f4fbccf02db77cd270c4720d67f::$classMap;
 
         }, null, ClassLoader::class);
     }
