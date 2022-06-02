@@ -708,3 +708,4 @@ parameters:
         # optional rule for PHP 8.0
         - '#Register "Rector\\Php80\\Rector\\Class_\\ConstantListClassToEnumRector" service to "php80\.php" config set#'
         - '#Rule Rector\\Php80\\Rector\\Class_\\ConstantListClassToEnumRector must implements Rector\\VersionBonding\\Contract\\MinPhpVersionInterface#'
+        - '#Register "Rector\\DowngradePhp80\\Rector\\Enum_\\DowngradeEnumToConstantListClassRector" service to "downgrade\-php80\.php" config set#'
