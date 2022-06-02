@@ -7,6 +7,7 @@ namespace Rector\Php74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
@@ -171,16 +172,20 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($node instanceof NullableType && $this->isName($node->type, 'mixed')) {
+            return true;
+        }
+
         // false positive
         if (! $node instanceof Name) {
             return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
         }
 
-        if (! $this->isName($node, 'mixed')) {
-            return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
+        if ($this->isName($node, 'mixed')) {
+            return true;
         }
 
-        return true;
+        return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
     }
 
     private function removeDefaultValueForDoctrineCollection(Property $property, Type $propertyType): void
