@@ -19,7 +19,7 @@ use Rector\Core\ValueObject\PhpVersion;
 use ReflectionClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220602\Webmozart\Assert\Assert;
+use RectorPrefix20220603\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ConstFetch\RemovePhpVersionIdCheckRector\RemovePhpVersionIdCheckRectorTest
  */
@@ -44,7 +44,7 @@ final class RemovePhpVersionIdCheckRector extends \Rector\Core\Rector\AbstractRe
     public function configure(array $configuration) : void
     {
         $phpVersion = $configuration[0];
-        \RectorPrefix20220602\Webmozart\Assert\Assert::integer($phpVersion);
+        \RectorPrefix20220603\Webmozart\Assert\Assert::integer($phpVersion);
         // get all constants
         $phpVersionReflectionClass = new \ReflectionClass(\Rector\Core\ValueObject\PhpVersion::class);
         // @todo check

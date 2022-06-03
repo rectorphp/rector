@@ -9,6 +9,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -100,9 +101,6 @@ CODE_SAMPLE
     }
     private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
     {
-        if ($classMethod->params === []) {
-            return null;
-        }
         // enum param types doc requires a docblock
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
@@ -112,10 +110,33 @@ CODE_SAMPLE
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
+        // refactor params
+        $haveParamsChanged = $this->refactorParams($methodReflection, $phpDocInfo, $classMethod);
+        $hasReturnChanged = $this->refactorReturn($phpDocInfo, $classMethod);
+        if ($haveParamsChanged) {
+            return $classMethod;
+        }
+        if ($hasReturnChanged) {
+            return $classMethod;
+        }
+        return null;
+    }
+    private function getParamByName(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $desiredParamName) : ?\PhpParser\Node\Param
+    {
+        foreach ($classMethod->params as $param) {
+            if (!$this->nodeNameResolver->isName($param, $desiredParamName)) {
+                continue;
+            }
+            return $param;
+        }
+        return null;
+    }
+    private function refactorParams(\PHPStan\Reflection\MethodReflection $methodReflection, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    {
         $hasNodeChanged = \false;
         $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
         foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
-            $enumLikeClass = $this->enumParamAnalyzer->matchClassName($parameterReflection, $phpDocInfo);
+            $enumLikeClass = $this->enumParamAnalyzer->matchParameterClassName($parameterReflection, $phpDocInfo);
             if ($enumLikeClass === null) {
                 continue;
             }
@@ -130,19 +151,18 @@ CODE_SAMPLE
             $paramTagValueNode = $phpDocInfo->getParamTagValueByName($parameterReflection->getName());
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
         }
-        if ($hasNodeChanged) {
-            return $classMethod;
-        }
-        return null;
+        return $hasNodeChanged;
     }
-    private function getParamByName(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $desiredParamName) : ?\PhpParser\Node\Param
+    private function refactorReturn(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        foreach ($classMethod->params as $param) {
-            if (!$this->nodeNameResolver->isName($param, $desiredParamName)) {
-                continue;
-            }
-            return $param;
+        $returnType = $this->enumParamAnalyzer->matchReturnClassName($phpDocInfo);
+        if ($returnType === null) {
+            return \false;
         }
-        return null;
+        $classMethod->returnType = new \PhpParser\Node\Name\FullyQualified($returnType);
+        /** @var ReturnTagValueNode $returnTagValueNode */
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $returnTagValueNode);
+        return \true;
     }
 }

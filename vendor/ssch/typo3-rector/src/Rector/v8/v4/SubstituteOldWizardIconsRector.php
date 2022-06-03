@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220602\Webmozart\Assert\Assert;
+use RectorPrefix20220603\Webmozart\Assert\Assert;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.4/Breaking-77630-RemoveWizardIcons.html
  * Backport to v7.6 available
@@ -123,9 +123,9 @@ final class SubstituteOldWizardIconsRector extends \Rector\Core\Rector\AbstractR
     public function configure(array $configuration) : void
     {
         $oldToNewFileLocations = $configuration[self::OLD_TO_NEW_FILE_LOCATIONS] ?? $configuration;
-        \RectorPrefix20220602\Webmozart\Assert\Assert::isArray($oldToNewFileLocations);
-        \RectorPrefix20220602\Webmozart\Assert\Assert::allString(\array_keys($oldToNewFileLocations));
-        \RectorPrefix20220602\Webmozart\Assert\Assert::allString($oldToNewFileLocations);
+        \RectorPrefix20220603\Webmozart\Assert\Assert::isArray($oldToNewFileLocations);
+        \RectorPrefix20220603\Webmozart\Assert\Assert::allString(\array_keys($oldToNewFileLocations));
+        \RectorPrefix20220603\Webmozart\Assert\Assert::allString($oldToNewFileLocations);
         $this->oldToNewFileLocations = $oldToNewFileLocations;
     }
     /**

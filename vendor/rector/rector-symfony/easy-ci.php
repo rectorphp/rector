@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220602;
+namespace RectorPrefix20220603;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Set\Contract\SetListInterface;

@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20220602\React\Socket;
+namespace RectorPrefix20220603\React\Socket;
 
-use RectorPrefix20220602\Evenement\EventEmitterInterface;
+use RectorPrefix20220603\Evenement\EventEmitterInterface;
 /**
  * The `ServerInterface` is responsible for providing an interface for accepting
  * incoming streaming connections, such as a normal TCP/IP connection.
@@ -45,7 +45,7 @@ use RectorPrefix20220602\Evenement\EventEmitterInterface;
  *
  * @see ConnectionInterface
  */
-interface ServerInterface extends \RectorPrefix20220602\Evenement\EventEmitterInterface
+interface ServerInterface extends \RectorPrefix20220603\Evenement\EventEmitterInterface
 {
     /**
      * Returns the full address (URI) this server is currently listening on

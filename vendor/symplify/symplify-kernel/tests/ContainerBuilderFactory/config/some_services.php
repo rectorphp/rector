@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220602;
+namespace RectorPrefix20220603;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220602\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220603\Symplify\SmartFileSystem\SmartFileSystem;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(\RectorPrefix20220602\Symplify\SmartFileSystem\SmartFileSystem::class);
+    $services->set(\RectorPrefix20220603\Symplify\SmartFileSystem\SmartFileSystem::class);
 };

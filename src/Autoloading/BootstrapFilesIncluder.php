@@ -8,9 +8,9 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
-use RectorPrefix20220602\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220603\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
-use RectorPrefix20220602\Webmozart\Assert\Assert;
+use RectorPrefix20220603\Webmozart\Assert\Assert;
 final class BootstrapFilesIncluder
 {
     /**
@@ -18,7 +18,7 @@ final class BootstrapFilesIncluder
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\RectorPrefix20220602\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\RectorPrefix20220603\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->parameterProvider = $parameterProvider;
     }
@@ -29,7 +29,7 @@ final class BootstrapFilesIncluder
     public function includeBootstrapFiles() : void
     {
         $bootstrapFiles = $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES);
-        \RectorPrefix20220602\Webmozart\Assert\Assert::allString($bootstrapFiles);
+        \RectorPrefix20220603\Webmozart\Assert\Assert::allString($bootstrapFiles);
         /** @var string[] $bootstrapFiles */
         foreach ($bootstrapFiles as $bootstrapFile) {
             if (!\is_file($bootstrapFile)) {
