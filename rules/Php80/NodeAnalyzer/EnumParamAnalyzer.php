@@ -6,12 +6,14 @@ namespace Rector\Php80\NodeAnalyzer;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+use Rector\Php80\ValueObject\ClassNameAndTagValueNode;
 /**
  * Detects enum-like params, e.g.
  * Direction::*
@@ -27,7 +29,7 @@ final class EnumParamAnalyzer
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function matchParameterClassName(\PHPStan\Reflection\ParameterReflection $parameterReflection, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : ?string
+    public function matchParameterClassName(\PHPStan\Reflection\ParameterReflection $parameterReflection, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : ?\Rector\Php80\ValueObject\ClassNameAndTagValueNode
     {
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($parameterReflection->getName());
         if (!$paramTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode) {
@@ -40,15 +42,31 @@ final class EnumParamAnalyzer
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
-        return $className;
+        return new \Rector\Php80\ValueObject\ClassNameAndTagValueNode($className, $paramTagValueNode);
     }
-    public function matchReturnClassName(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : ?string
+    public function matchReturnClassName(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : ?\Rector\Php80\ValueObject\ClassNameAndTagValueNode
     {
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();
         if (!$returnTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode) {
             return null;
         }
-        return $this->resolveClassFromConstType($returnTagValueNode->type);
+        $className = $this->resolveClassFromConstType($returnTagValueNode->type);
+        if (!\is_string($className)) {
+            return null;
+        }
+        return new \Rector\Php80\ValueObject\ClassNameAndTagValueNode($className, $returnTagValueNode);
+    }
+    public function matchPropertyClassName(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : ?\Rector\Php80\ValueObject\ClassNameAndTagValueNode
+    {
+        $varTagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+            return null;
+        }
+        $className = $this->resolveClassFromConstType($varTagValueNode->type);
+        if (!\is_string($className)) {
+            return null;
+        }
+        return new \Rector\Php80\ValueObject\ClassNameAndTagValueNode($className, $varTagValueNode);
     }
     private function resolveClassFromConstType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode) : ?string
     {

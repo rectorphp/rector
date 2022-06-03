@@ -2619,6 +2619,7 @@ return array(
     'Rector\\Php80\\ValueObjectFactory\\StrStartsWithFactory' => $baseDir . '/rules/Php80/ValueObjectFactory/StrStartsWithFactory.php',
     'Rector\\Php80\\ValueObject\\AnnotationToAttribute' => $baseDir . '/rules/Php80/ValueObject/AnnotationToAttribute.php',
     'Rector\\Php80\\ValueObject\\ArrayDimFetchAndConstFetch' => $baseDir . '/rules/Php80/ValueObject/ArrayDimFetchAndConstFetch.php',
+    'Rector\\Php80\\ValueObject\\ClassNameAndTagValueNode' => $baseDir . '/rules/Php80/ValueObject/ClassNameAndTagValueNode.php',
     'Rector\\Php80\\ValueObject\\CondAndExpr' => $baseDir . '/rules/Php80/ValueObject/CondAndExpr.php',
     'Rector\\Php80\\ValueObject\\DoctrineTagAndAnnotationToAttribute' => $baseDir . '/rules/Php80/ValueObject/DoctrineTagAndAnnotationToAttribute.php',
     'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => $baseDir . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',

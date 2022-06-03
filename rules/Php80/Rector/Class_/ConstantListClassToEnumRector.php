@@ -8,8 +8,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -18,6 +17,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Php80\NodeAnalyzer\EnumConstListClassDetector;
 use Rector\Php80\NodeAnalyzer\EnumParamAnalyzer;
+use Rector\Php80\ValueObject\ClassNameAndTagValueNode;
 use Rector\Php81\NodeFactory\EnumFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -84,10 +84,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\ClassMethod::class];
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class];
     }
     /**
-     * @param Class_|ClassMethod $node
+     * @param Class_|ClassMethod|Property $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
@@ -97,7 +97,10 @@ CODE_SAMPLE
             }
             return $this->enumFactory->createFromClass($node);
         }
-        return $this->refactorClassMethod($node);
+        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return $this->refactorClassMethod($node);
+        }
+        return $this->refactorProperty($node);
     }
     private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
     {
@@ -136,8 +139,8 @@ CODE_SAMPLE
         $hasNodeChanged = \false;
         $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
         foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
-            $enumLikeClass = $this->enumParamAnalyzer->matchParameterClassName($parameterReflection, $phpDocInfo);
-            if ($enumLikeClass === null) {
+            $classNameAndTagValueNode = $this->enumParamAnalyzer->matchParameterClassName($parameterReflection, $phpDocInfo);
+            if (!$classNameAndTagValueNode instanceof \Rector\Php80\ValueObject\ClassNameAndTagValueNode) {
                 continue;
             }
             $param = $this->getParamByName($classMethod, $parameterReflection->getName());
@@ -145,24 +148,34 @@ CODE_SAMPLE
                 continue;
             }
             // change and remove
-            $param->type = new \PhpParser\Node\Name\FullyQualified($enumLikeClass);
+            $param->type = new \PhpParser\Node\Name\FullyQualified($classNameAndTagValueNode->getEnumClass());
             $hasNodeChanged = \true;
-            /** @var ParamTagValueNode $paramTagValueNode */
-            $paramTagValueNode = $phpDocInfo->getParamTagValueByName($parameterReflection->getName());
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $classNameAndTagValueNode->getTagValueNode());
         }
         return $hasNodeChanged;
     }
     private function refactorReturn(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        $returnType = $this->enumParamAnalyzer->matchReturnClassName($phpDocInfo);
-        if ($returnType === null) {
+        $classNameAndTagValueNode = $this->enumParamAnalyzer->matchReturnClassName($phpDocInfo);
+        if (!$classNameAndTagValueNode instanceof \Rector\Php80\ValueObject\ClassNameAndTagValueNode) {
             return \false;
         }
-        $classMethod->returnType = new \PhpParser\Node\Name\FullyQualified($returnType);
-        /** @var ReturnTagValueNode $returnTagValueNode */
-        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $returnTagValueNode);
+        $classMethod->returnType = new \PhpParser\Node\Name\FullyQualified($classNameAndTagValueNode->getEnumClass());
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $classNameAndTagValueNode->getTagValueNode());
         return \true;
+    }
+    private function refactorProperty(\PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+            return null;
+        }
+        $classNameAndTagValueNode = $this->enumParamAnalyzer->matchPropertyClassName($phpDocInfo);
+        if (!$classNameAndTagValueNode instanceof \Rector\Php80\ValueObject\ClassNameAndTagValueNode) {
+            return null;
+        }
+        $property->type = new \PhpParser\Node\Name\FullyQualified($classNameAndTagValueNode->getEnumClass());
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $classNameAndTagValueNode->getTagValueNode());
+        return $property;
     }
 }
