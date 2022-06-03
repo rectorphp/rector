@@ -6,9 +6,10 @@ namespace Rector\Php80\NodeAnalyzer;
 
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Reflection\Php\PhpParameterReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
@@ -24,33 +25,46 @@ final class EnumParamAnalyzer
     ) {
     }
 
-    public function matchClassName(ParameterReflection $parameterReflection, PhpDocInfo $phpDocInfo): ?string
+    public function matchParameterClassName(ParameterReflection $parameterReflection, PhpDocInfo $phpDocInfo): ?string
     {
-        if (! $parameterReflection instanceof PhpParameterReflection) {
-            return null;
-        }
-
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($parameterReflection->getName());
         if (! $paramTagValueNode instanceof ParamTagValueNode) {
             return null;
         }
 
-        if (! $paramTagValueNode->type instanceof ConstTypeNode) {
+        $className = $this->resolveClassFromConstType($paramTagValueNode->type);
+        if ($className === null) {
             return null;
         }
-
-        $constTypeNode = $paramTagValueNode->type;
-        if (! $constTypeNode->constExpr instanceof ConstFetchNode) {
-            return null;
-        }
-
-        $constExpr = $constTypeNode->constExpr;
-        $className = $constExpr->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
 
         if (! $this->reflectionProvider->hasClass($className)) {
             return null;
         }
 
         return $className;
+    }
+
+    public function matchReturnClassName(PhpDocInfo $phpDocInfo): ?string
+    {
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (! $returnTagValueNode instanceof ReturnTagValueNode) {
+            return null;
+        }
+
+        return $this->resolveClassFromConstType($returnTagValueNode->type);
+    }
+
+    private function resolveClassFromConstType(TypeNode $typeNode): ?string
+    {
+        if (! $typeNode instanceof ConstTypeNode) {
+            return null;
+        }
+
+        if (! $typeNode->constExpr instanceof ConstFetchNode) {
+            return null;
+        }
+
+        $constExpr = $typeNode->constExpr;
+        return $constExpr->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
     }
 }
