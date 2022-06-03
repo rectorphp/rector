@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita6ff48621c9ea268c95f35fbe0101c77
+class ComposerStaticInit70d9fa13935352588022b44d3b6a76a8
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2074,6 +2074,7 @@ class ComposerStaticInita6ff48621c9ea268c95f35fbe0101c77
         'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNodeAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\InstanceOfUniqueKeyResolver' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/InstanceOfUniqueKeyResolver.php',
         'Rector\\DeadCode\\NodeAnalyzer\\IsClassMethodUsedAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/IsClassMethodUsedAnalyzer.php',
+        'Rector\\DeadCode\\NodeAnalyzer\\JustPropertyFetchVariableAssignMatcher' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/JustPropertyFetchVariableAssignMatcher.php',
         'Rector\\DeadCode\\NodeAnalyzer\\UsedVariableNameAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/UsedVariableNameAnalyzer.php',
         'Rector\\DeadCode\\NodeCollector\\ModifiedVariableNamesCollector' => __DIR__ . '/../..' . '/rules/DeadCode/NodeCollector/ModifiedVariableNamesCollector.php',
         'Rector\\DeadCode\\NodeCollector\\NodeByTypeAndPositionCollector' => __DIR__ . '/../..' . '/rules/DeadCode/NodeCollector/NodeByTypeAndPositionCollector.php',
@@ -2134,6 +2135,7 @@ class ComposerStaticInita6ff48621c9ea268c95f35fbe0101c77
         'Rector\\DeadCode\\Rector\\Return_\\RemoveDeadConditionAboveReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Return_/RemoveDeadConditionAboveReturnRector.php',
         'Rector\\DeadCode\\Rector\\StaticCall\\RemoveParentCallWithoutParentRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/StaticCall/RemoveParentCallWithoutParentRector.php',
         'Rector\\DeadCode\\Rector\\Stmt\\RemoveUnreachableStatementRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Stmt/RemoveUnreachableStatementRector.php',
+        'Rector\\DeadCode\\Rector\\StmtsAwareInterface\\RemoveJustPropertyFetchForAssignRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchForAssignRector.php',
         'Rector\\DeadCode\\Rector\\Switch_\\RemoveDuplicatedCaseInSwitchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Switch_/RemoveDuplicatedCaseInSwitchRector.php',
         'Rector\\DeadCode\\Rector\\Ternary\\TernaryToBooleanOrFalseToBooleanAndRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Ternary/TernaryToBooleanOrFalseToBooleanAndRector.php',
         'Rector\\DeadCode\\Rector\\TryCatch\\RemoveDeadTryCatchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/TryCatch/RemoveDeadTryCatchRector.php',
@@ -2143,6 +2145,7 @@ class ComposerStaticInita6ff48621c9ea268c95f35fbe0101c77
         'Rector\\DeadCode\\TypeNodeAnalyzer\\MixedArrayTypeNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/TypeNodeAnalyzer/MixedArrayTypeNodeAnalyzer.php',
         'Rector\\DeadCode\\UselessIfCondBeforeForeachDetector' => __DIR__ . '/../..' . '/rules/DeadCode/UselessIfCondBeforeForeachDetector.php',
         'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
+        'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
         'Rector\\DeadCode\\ValueObject\\VariableNodeUse' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableNodeUse.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
         'Rector\\Defluent\\NodeAnalyzer\\FluentChainMethodCallNodeAnalyzer' => __DIR__ . '/../..' . '/packages/Defluent/NodeAnalyzer/FluentChainMethodCallNodeAnalyzer.php',
@@ -3792,9 +3795,9 @@ class ComposerStaticInita6ff48621c9ea268c95f35fbe0101c77
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita6ff48621c9ea268c95f35fbe0101c77::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita6ff48621c9ea268c95f35fbe0101c77::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita6ff48621c9ea268c95f35fbe0101c77::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit70d9fa13935352588022b44d3b6a76a8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit70d9fa13935352588022b44d3b6a76a8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit70d9fa13935352588022b44d3b6a76a8::$classMap;
 
         }, null, ClassLoader::class);
     }

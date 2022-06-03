@@ -1,4 +1,4 @@
-# 516 Rules Overview
+# 517 Rules Overview
 
 <br>
 
@@ -14,7 +14,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (48)
+- [DeadCode](#deadcode) (49)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -3226,6 +3226,29 @@ Remove empty method call
 -$some = new SomeClass();
 -$some->callThis();
 +$some = new SomeClass();
+```
+
+<br>
+
+### RemoveJustPropertyFetchForAssignRector
+
+Remove assign of property, just for value assign
+
+- class: [`Rector\DeadCode\Rector\StmtsAwareInterface\RemoveJustPropertyFetchForAssignRector`](../rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchForAssignRector.php)
+
+```diff
+ class SomeClass
+ {
+     private $items = [];
+
+     public function run()
+     {
+-        $items = $this->items;
+-        $items[] = 1000;
+-        $this->items = $items ;
++        $this->items[] = 1000;
+     }
+ }
 ```
 
 <br>
