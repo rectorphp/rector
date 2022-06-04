@@ -436,7 +436,7 @@ final class BetterNodeFinder
         if (!$foundNode instanceof \PhpParser\Node) {
             return null;
         }
-        $parentFunctionLike = $this->findParentByTypes($foundNode, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class]);
+        $parentFunctionLike = $this->findParentByTypes($foundNode, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\Class_::class]);
         if ($parentFunctionLike !== $functionLike) {
             return null;
         }

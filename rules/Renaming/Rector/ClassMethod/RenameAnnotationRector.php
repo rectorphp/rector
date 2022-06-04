@@ -86,8 +86,10 @@ CODE_SAMPLE
             if ($renameAnnotation instanceof \Rector\Renaming\ValueObject\RenameAnnotationByType && !$this->isObjectType($classLike, $renameAnnotation->getObjectType())) {
                 continue;
             }
-            $this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, $renameAnnotation->getOldAnnotation(), $renameAnnotation->getNewAnnotation());
-            $hasChanged = \true;
+            $hasDocBlockChanged = $this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, $renameAnnotation->getOldAnnotation(), $renameAnnotation->getNewAnnotation());
+            if ($hasDocBlockChanged) {
+                $hasChanged = \true;
+            }
         }
         if (!$hasChanged) {
             return null;

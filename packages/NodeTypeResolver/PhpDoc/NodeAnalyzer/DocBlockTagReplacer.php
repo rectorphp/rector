@@ -18,8 +18,9 @@ final class DocBlockTagReplacer
     {
         $this->annotationNaming = $annotationNaming;
     }
-    public function replaceTagByAnother(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, string $oldTag, string $newTag) : void
+    public function replaceTagByAnother(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, string $oldTag, string $newTag) : bool
     {
+        $hasChanged = \false;
         $oldTag = $this->annotationNaming->normalizeName($oldTag);
         $newTag = $this->annotationNaming->normalizeName($newTag);
         $phpDocNode = $phpDocInfo->getPhpDocNode();
@@ -32,6 +33,8 @@ final class DocBlockTagReplacer
             }
             unset($phpDocNode->children[$key]);
             $phpDocNode->children[] = new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($newTag, new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode(''));
+            $hasChanged = \true;
         }
+        return $hasChanged;
     }
 }
