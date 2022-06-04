@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit58cd8190dae33fe52cda172fd214e71c
+class ComposerStaticInit30d228050aea7b411321acaf1ecbd7d5
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1942,7 +1942,6 @@ class ComposerStaticInit58cd8190dae33fe52cda172fd214e71c
         'Rector\\Core\\Exception\\Configuration\\InvalidConfigurationException' => __DIR__ . '/../..' . '/src/Exception/Configuration/InvalidConfigurationException.php',
         'Rector\\Core\\Exception\\NotImplementedYetException' => __DIR__ . '/../..' . '/src/Exception/NotImplementedYetException.php',
         'Rector\\Core\\Exception\\ShouldNotHappenException' => __DIR__ . '/../..' . '/src/Exception/ShouldNotHappenException.php',
-        'Rector\\Core\\Exception\\Template\\TemplateTypeNotFoundException' => __DIR__ . '/../..' . '/src/Exception/Template/TemplateTypeNotFoundException.php',
         'Rector\\Core\\Exception\\VersionException' => __DIR__ . '/../..' . '/src/Exception/VersionException.php',
         'Rector\\Core\\Exclusion\\ExclusionManager' => __DIR__ . '/../..' . '/src/Exclusion/ExclusionManager.php',
         'Rector\\Core\\FileSystem\\FilesFinder' => __DIR__ . '/../..' . '/src/FileSystem/FilesFinder.php',
@@ -2037,7 +2036,6 @@ class ComposerStaticInit58cd8190dae33fe52cda172fd214e71c
         'Rector\\Core\\StaticReflection\\DynamicSourceLocatorDecorator' => __DIR__ . '/../..' . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
         'Rector\\Core\\StaticReflection\\SourceLocator\\ParentAttributeSourceLocator' => __DIR__ . '/../..' . '/src/StaticReflection/SourceLocator/ParentAttributeSourceLocator.php',
         'Rector\\Core\\StaticReflection\\SourceLocator\\RenamedClassesSourceLocator' => __DIR__ . '/../..' . '/src/StaticReflection/SourceLocator/RenamedClassesSourceLocator.php',
-        'Rector\\Core\\Template\\DefaultResolver' => __DIR__ . '/../..' . '/src/Template/DefaultResolver.php',
         'Rector\\Core\\Util\\MemoryLimiter' => __DIR__ . '/../..' . '/src/Util/MemoryLimiter.php',
         'Rector\\Core\\Util\\PhpVersionFactory' => __DIR__ . '/../..' . '/src/Util/PhpVersionFactory.php',
         'Rector\\Core\\Util\\StaticRectorStrings' => __DIR__ . '/../..' . '/src/Util/StaticRectorStrings.php',
@@ -3792,9 +3790,9 @@ class ComposerStaticInit58cd8190dae33fe52cda172fd214e71c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit58cd8190dae33fe52cda172fd214e71c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit58cd8190dae33fe52cda172fd214e71c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit58cd8190dae33fe52cda172fd214e71c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit30d228050aea7b411321acaf1ecbd7d5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit30d228050aea7b411321acaf1ecbd7d5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit30d228050aea7b411321acaf1ecbd7d5::$classMap;
 
         }, null, ClassLoader::class);
     }
