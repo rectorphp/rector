@@ -23,7 +23,7 @@ final class Preloader
         $cacheDir = \dirname($file);
         $classes = [];
         foreach ($list as $item) {
-            if (0 === \strpos($item, $cacheDir)) {
+            if (\strncmp($item, $cacheDir, \strlen($cacheDir)) === 0) {
                 \file_put_contents($file, \sprintf("require_once __DIR__.%s;\n", \var_export(\strtr(\substr($item, \strlen($cacheDir)), \DIRECTORY_SEPARATOR, '/'), \true)), \FILE_APPEND);
                 continue;
             }
@@ -88,7 +88,7 @@ final class Preloader
                 }
                 self::preloadType($m->getReturnType(), $preloaded);
             }
-        } catch (\Throwable $e) {
+        } catch (\Throwable $exception) {
             // ignore missing classes
         }
     }

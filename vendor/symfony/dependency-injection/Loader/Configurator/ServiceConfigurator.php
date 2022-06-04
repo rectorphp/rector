@@ -37,6 +37,9 @@ class ServiceConfigurator extends \RectorPrefix20220604\Symfony\Component\Depend
     use Traits\SyntheticTrait;
     use Traits\TagTrait;
     public const FACTORY = 'services';
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
+     */
     private $container;
     /**
      * @var mixed[]

@@ -27,6 +27,9 @@ use RectorPrefix20220604\Symfony\Component\Console\Formatter\OutputFormatterInte
  */
 class ConsoleOutput extends \RectorPrefix20220604\Symfony\Component\Console\Output\StreamOutput implements \RectorPrefix20220604\Symfony\Component\Console\Output\ConsoleOutputInterface
 {
+    /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
     private $stderr;
     /**
      * @var mixed[]

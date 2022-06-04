@@ -72,7 +72,7 @@ final class CompletionInput extends \RectorPrefix20220604\Symfony\Component\Cons
                 $this->completionValue = $relevantToken;
                 return;
             }
-            if (null !== $option && $option->acceptValue()) {
+            if (($option2 = $option) ? $option2->acceptValue() : null) {
                 $this->completionType = self::TYPE_OPTION_VALUE;
                 $this->completionName = $option->getName();
                 $this->completionValue = $optionValue ?: (\strncmp($optionToken, '--', \strlen('--')) !== 0 ? \substr($optionToken, 2) : '');
@@ -83,7 +83,7 @@ final class CompletionInput extends \RectorPrefix20220604\Symfony\Component\Cons
         if ('-' === $previousToken[0] && '' !== \trim($previousToken, '-')) {
             // check if previous option accepted a value
             $previousOption = $this->getOptionFromToken($previousToken);
-            if (null !== $previousOption && $previousOption->acceptValue()) {
+            if (($previousOption2 = $previousOption) ? $previousOption2->acceptValue() : null) {
                 $this->completionType = self::TYPE_OPTION_VALUE;
                 $this->completionName = $previousOption->getName();
                 $this->completionValue = $relevantToken;
@@ -159,7 +159,7 @@ final class CompletionInput extends \RectorPrefix20220604\Symfony\Component\Cons
     {
         try {
             return parent::parseToken($token, $parseOptions);
-        } catch (\RectorPrefix20220604\Symfony\Component\Console\Exception\RuntimeException $e) {
+        } catch (\RectorPrefix20220604\Symfony\Component\Console\Exception\RuntimeException $exception) {
             // suppress errors, completed input is almost never valid
         }
         return $parseOptions;

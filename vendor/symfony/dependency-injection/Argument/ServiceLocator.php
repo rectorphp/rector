@@ -43,15 +43,22 @@ class ServiceLocator extends \RectorPrefix20220604\Symfony\Component\DependencyI
      */
     public function get(string $id)
     {
-        return isset($this->serviceMap[$id]) ? ($this->factory)(...$this->serviceMap[$id]) : parent::get($id);
+        switch (\count($this->serviceMap[$id] ?? [])) {
+            case 0:
+                return parent::get($id);
+            case 1:
+                return $this->serviceMap[$id][0];
+            default:
+                return ($this->factory)(...$this->serviceMap[$id]);
+        }
     }
     /**
      * {@inheritdoc}
      */
     public function getProvidedServices() : array
     {
-        return $this->serviceTypes ?? ($this->serviceTypes = \array_map(function () {
+        return $this->serviceTypes = $this->serviceTypes ?? \array_map(function () {
             return '?';
-        }, $this->serviceMap));
+        }, $this->serviceMap);
     }
 }

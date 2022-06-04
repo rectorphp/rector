@@ -23,8 +23,17 @@ use RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\PhpFileLoa
 class ServicesConfigurator extends \RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     public const FACTORY = 'services';
+    /**
+     * @var \Symfony\Component\DependencyInjection\Definition
+     */
     private $defaults;
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
+     */
     private $container;
+    /**
+     * @var \Symfony\Component\DependencyInjection\Loader\PhpFileLoader
+     */
     private $loader;
     /**
      * @var mixed[]

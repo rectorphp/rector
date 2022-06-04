@@ -76,7 +76,10 @@ class Application implements \RectorPrefix20220604\Symfony\Contracts\Service\Res
      * @var bool
      */
     private $wantHelps = \false;
-    private $runningCommand = null;
+    /**
+     * @var \Symfony\Component\Console\Command\Command|null
+     */
+    private $runningCommand;
     /**
      * @var string
      */
@@ -85,7 +88,10 @@ class Application implements \RectorPrefix20220604\Symfony\Contracts\Service\Res
      * @var string
      */
     private $version;
-    private $commandLoader = null;
+    /**
+     * @var \Symfony\Component\Console\CommandLoader\CommandLoaderInterface|null
+     */
+    private $commandLoader;
     /**
      * @var bool
      */
@@ -94,9 +100,21 @@ class Application implements \RectorPrefix20220604\Symfony\Contracts\Service\Res
      * @var bool
      */
     private $autoExit = \true;
+    /**
+     * @var \Symfony\Component\Console\Input\InputDefinition
+     */
     private $definition;
+    /**
+     * @var \Symfony\Component\Console\Helper\HelperSet
+     */
     private $helperSet;
-    private $dispatcher = null;
+    /**
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface|null
+     */
+    private $dispatcher;
+    /**
+     * @var \Symfony\Component\Console\Terminal
+     */
     private $terminal;
     /**
      * @var string
@@ -110,6 +128,9 @@ class Application implements \RectorPrefix20220604\Symfony\Contracts\Service\Res
      * @var bool
      */
     private $initialized = \false;
+    /**
+     * @var \Symfony\Component\Console\SignalRegistry\SignalRegistry
+     */
     private $signalRegistry;
     /**
      * @var mixed[]
@@ -236,7 +257,7 @@ class Application implements \RectorPrefix20220604\Symfony\Contracts\Service\Res
         try {
             // Makes ArgvInput::getFirstArgument() able to distinguish an option from an argument.
             $input->bind($this->getDefinition());
-        } catch (\RectorPrefix20220604\Symfony\Component\Console\Exception\ExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Component\Console\Exception\ExceptionInterface $exception) {
             // Errors must be ignored, full binding/validation happens later when the command is known.
         }
         $name = $this->getCommandName($input);
@@ -508,7 +529,7 @@ class Application implements \RectorPrefix20220604\Symfony\Contracts\Service\Res
     public function has(string $name) : bool
     {
         $this->init();
-        return isset($this->commands[$name]) || $this->commandLoader && $this->commandLoader->has($name) && $this->add($this->commandLoader->get($name));
+        return isset($this->commands[$name]) || (($commandLoader = $this->commandLoader) ? $commandLoader->has($name) : null) && $this->add($this->commandLoader->get($name));
     }
     /**
      * Returns an array of all unique namespaces used by currently registered commands.
@@ -873,7 +894,7 @@ class Application implements \RectorPrefix20220604\Symfony\Contracts\Service\Res
         try {
             $command->mergeApplicationDefinition();
             $input->bind($command->getDefinition());
-        } catch (\RectorPrefix20220604\Symfony\Component\Console\Exception\ExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Component\Console\Exception\ExceptionInterface $exception) {
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
         $event = new \RectorPrefix20220604\Symfony\Component\Console\Event\ConsoleCommandEvent($command, $input, $output);

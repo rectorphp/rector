@@ -160,12 +160,12 @@ abstract class HttpClientTestCase extends \RectorPrefix20220604\PHPUnit\Framewor
         try {
             $response->getHeaders();
             $this->fail(\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface::class . ' expected');
-        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface) {
         }
         try {
             $response->getContent();
             $this->fail(\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface::class . ' expected');
-        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface) {
         }
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame(['application/json'], $response->getHeaders(\false)['content-type']);
@@ -176,7 +176,7 @@ abstract class HttpClientTestCase extends \RectorPrefix20220604\PHPUnit\Framewor
                 $this->assertTrue($chunk->isFirst());
             }
             $this->fail(\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface::class . ' expected');
-        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface) {
         }
     }
     public function testIgnoreErrors()
@@ -192,13 +192,13 @@ abstract class HttpClientTestCase extends \RectorPrefix20220604\PHPUnit\Framewor
         try {
             $response->getStatusCode();
             $this->fail(\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface::class . ' expected');
-        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface) {
             $this->addToAssertionCount(1);
         }
         try {
             $response->getStatusCode();
             $this->fail(\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface::class . ' still expected');
-        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface) {
             $this->addToAssertionCount(1);
         }
         $response = $client->request('GET', 'http://localhost:8057/301/bad-tld');
@@ -206,7 +206,7 @@ abstract class HttpClientTestCase extends \RectorPrefix20220604\PHPUnit\Framewor
             foreach ($client->stream($response) as $r => $chunk) {
             }
             $this->fail(\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface::class . ' expected');
-        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface) {
             $this->addToAssertionCount(1);
         }
         $this->assertSame($response, $r);
@@ -239,10 +239,14 @@ abstract class HttpClientTestCase extends \RectorPrefix20220604\PHPUnit\Framewor
         $this->assertSame(304, $response->getStatusCode());
         $this->assertSame('', $response->getContent(\false));
     }
-    public function testRedirects()
+    /**
+     * @testWith [[]]
+     *           [["Content-Length: 7"]]
+     */
+    public function testRedirects(array $headers = [])
     {
         $client = $this->getHttpClient(__FUNCTION__);
-        $response = $client->request('POST', 'http://localhost:8057/301', ['auth_basic' => 'foo:bar', 'body' => function () {
+        $response = $client->request('POST', 'http://localhost:8057/301', ['auth_basic' => 'foo:bar', 'headers' => $headers, 'body' => function () {
             (yield 'foo=bar');
         }]);
         $body = $response->toArray();
@@ -297,7 +301,7 @@ abstract class HttpClientTestCase extends \RectorPrefix20220604\PHPUnit\Framewor
         try {
             $response->getHeaders();
             $this->fail(\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface::class . ' expected');
-        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface) {
         }
         $this->assertSame(302, $response->getStatusCode());
         $this->assertSame(1, $response->getInfo('redirect_count'));
@@ -594,7 +598,7 @@ abstract class HttpClientTestCase extends \RectorPrefix20220604\PHPUnit\Framewor
                 try {
                     $response->getContent();
                     $this->fail(\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface::class . ' expected');
-                } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface $e) {
+                } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface) {
                 }
             }
             $responses = [];
@@ -621,7 +625,7 @@ abstract class HttpClientTestCase extends \RectorPrefix20220604\PHPUnit\Framewor
                 try {
                     unset($response);
                     $this->fail(\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface::class . ' expected');
-                } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface $e) {
+                } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface) {
                 }
             }
             $duration = \microtime(\true) - $start;
@@ -781,7 +785,7 @@ abstract class HttpClientTestCase extends \RectorPrefix20220604\PHPUnit\Framewor
         $start = \microtime(\true);
         try {
             $response->getContent();
-        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface) {
             $this->addToAssertionCount(1);
         }
         $duration = \microtime(\true) - $start;

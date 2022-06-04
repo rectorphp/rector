@@ -251,6 +251,11 @@ class XmlFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyIn
             $factory = $factories[0];
             if ($function = $factory->getAttribute('function')) {
                 $definition->setFactory($function);
+            } elseif ($expression = $factory->getAttribute('expression')) {
+                if (!\class_exists(\RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression::class)) {
+                    throw new \LogicException('The "expression" attribute cannot be used on factories without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
+                }
+                $definition->setFactory('@=' . $expression);
             } else {
                 if ($childService = $factory->getAttribute('service')) {
                     $class = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference($childService, \RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE);
@@ -331,7 +336,7 @@ class XmlFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyIn
     private function parseFileToDOM(string $file) : \DOMDocument
     {
         try {
-            $dom = \RectorPrefix20220604\Symfony\Component\Config\Util\XmlUtils::loadFile($file, [$this, 'validateSchema']);
+            $dom = \RectorPrefix20220604\Symfony\Component\Config\Util\XmlUtils::loadFile($file, \Closure::fromCallable([$this, 'validateSchema']));
         } catch (\InvalidArgumentException $e) {
             throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Unable to parse file "%s": ', $file) . $e->getMessage(), $e->getCode(), $e);
         }
@@ -406,7 +411,7 @@ class XmlFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyIn
             } elseif ('null' == $onInvalid) {
                 $invalidBehavior = \RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE;
             }
-            switch ($arg->getAttribute('type')) {
+            switch ($type = $arg->getAttribute('type')) {
                 case 'service':
                     if ('' === $arg->getAttribute('id')) {
                         throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Tag "<%s>" with type="service" has no or empty "id" attribute in "%s".', $name, $file));
@@ -424,30 +429,31 @@ class XmlFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyIn
                     break;
                 case 'iterator':
                     $arg = $this->getArgumentsAsPhp($arg, $name, $file);
-                    try {
-                        $arguments[$key] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\IteratorArgument($arg);
-                    } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException $e) {
-                        throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Tag "<%s>" with type="iterator" only accepts collections of type="service" references in "%s".', $name, $file));
-                    }
+                    $arguments[$key] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\IteratorArgument($arg);
                     break;
+                case 'closure':
                 case 'service_closure':
-                    if ('' === $arg->getAttribute('id')) {
-                        throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Tag "<%s>" with type="service_closure" has no or empty "id" attribute in "%s".', $name, $file));
+                    if ('' !== $arg->getAttribute('id')) {
+                        $arg = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference($arg->getAttribute('id'), $invalidBehavior);
+                    } else {
+                        $arg = $this->getArgumentsAsPhp($arg, $name, $file);
                     }
-                    $arguments[$key] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument(new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference($arg->getAttribute('id'), $invalidBehavior));
+                    switch ($type) {
+                        case 'service_closure':
+                            $arguments[$key] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument($arg);
+                            break;
+                        case 'closure':
+                            $arguments[$key] = (new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Definition('Closure'))->setFactory(['Closure', 'fromCallable'])->addArgument($arg);
+                            break;
+                    }
                     break;
                 case 'service_locator':
                     $arg = $this->getArgumentsAsPhp($arg, $name, $file);
-                    try {
-                        $arguments[$key] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument($arg);
-                    } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException $e) {
-                        throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Tag "<%s>" with type="service_locator" only accepts maps of type="service" references in "%s".', $name, $file));
-                    }
+                    $arguments[$key] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument($arg);
                     break;
                 case 'tagged':
                 case 'tagged_iterator':
                 case 'tagged_locator':
-                    $type = $arg->getAttribute('type');
                     $forLocator = 'tagged_locator' === $type;
                     if (!$arg->getAttribute('tag')) {
                         throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Tag "<%s>" with type="%s" has no or empty "tag" attribute in "%s".', $name, $type, $file));

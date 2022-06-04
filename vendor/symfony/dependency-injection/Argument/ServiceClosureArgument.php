@@ -11,7 +11,6 @@
 namespace RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument;
 
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference;
 /**
  * Represents a service wrapped in a memoizing closure.
  *
@@ -23,9 +22,12 @@ class ServiceClosureArgument implements \RectorPrefix20220604\Symfony\Component\
      * @var mixed[]
      */
     private $values;
-    public function __construct(\RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference $reference)
+    /**
+     * @param mixed $value
+     */
+    public function __construct($value)
     {
-        $this->values = [$reference];
+        $this->values = [$value];
     }
     /**
      * {@inheritdoc}
@@ -39,8 +41,8 @@ class ServiceClosureArgument implements \RectorPrefix20220604\Symfony\Component\
      */
     public function setValues(array $values)
     {
-        if ([0] !== \array_keys($values) || !($values[0] instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference || null === $values[0])) {
-            throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('A ServiceClosureArgument must hold one and only one Reference.');
+        if ([0] !== \array_keys($values)) {
+            throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('A ServiceClosureArgument must hold one and only one value.');
         }
         $this->values = $values;
     }

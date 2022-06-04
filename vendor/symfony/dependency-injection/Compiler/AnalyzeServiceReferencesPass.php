@@ -15,7 +15,9 @@ use RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\Iterator
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\LogicException;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * Run this pass before passes that need to know more about the relation of
  * your services.
@@ -28,8 +30,14 @@ use RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference;
  */
 class AnalyzeServiceReferencesPass extends \RectorPrefix20220604\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph
+     */
     private $graph;
-    private $currentDefinition = null;
+    /**
+     * @var \Symfony\Component\DependencyInjection\Definition|null
+     */
+    private $currentDefinition;
     /**
      * @var bool
      */
@@ -107,9 +115,9 @@ class AnalyzeServiceReferencesPass extends \RectorPrefix20220604\Symfony\Compone
         if ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference) {
             $targetId = $this->getDefinitionId((string) $value);
             $targetDefinition = null !== $targetId ? $this->container->getDefinition($targetId) : null;
-            $this->graph->connect($this->currentId, $this->currentDefinition, $targetId, $targetDefinition, $value, $this->lazy || $this->hasProxyDumper && $targetDefinition && $targetDefinition->isLazy(), \RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE === $value->getInvalidBehavior(), $this->byConstructor);
+            $this->graph->connect($this->currentId, $this->currentDefinition, $targetId, $targetDefinition, $value, $this->lazy || $this->hasProxyDumper && (($targetDefinition2 = $targetDefinition) ? $targetDefinition2->isLazy() : null), \RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE === $value->getInvalidBehavior(), $this->byConstructor);
             if ($inExpression) {
-                $this->graph->connect('.internal.reference_in_expression', null, $targetId, $targetDefinition, $value, $this->lazy || $targetDefinition && $targetDefinition->isLazy(), \true);
+                $this->graph->connect('.internal.reference_in_expression', null, $targetId, $targetDefinition, $value, $this->lazy || (($targetDefinition2 = $targetDefinition) ? $targetDefinition2->isLazy() : null), \true);
             }
             return $value;
         }
@@ -129,7 +137,13 @@ class AnalyzeServiceReferencesPass extends \RectorPrefix20220604\Symfony\Compone
         $this->byConstructor = $isRoot || $byConstructor;
         $byFactory = $this->byFactory;
         $this->byFactory = \true;
-        $this->processValue($value->getFactory());
+        if (\is_string($factory = $value->getFactory()) && \strncmp($factory, '@=', \strlen('@=')) === 0) {
+            if (!\class_exists(\RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression::class)) {
+                throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\LogicException('Expressions cannot be used in service factories without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
+            }
+            $factory = new \RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression(\substr($factory, 2));
+        }
+        $this->processValue($factory);
         $this->byFactory = $byFactory;
         $this->processValue($value->getArguments());
         $properties = $value->getProperties();

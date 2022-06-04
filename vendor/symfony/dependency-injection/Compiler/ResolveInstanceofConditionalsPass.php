@@ -62,7 +62,7 @@ class ResolveInstanceofConditionalsPass implements \RectorPrefix20220604\Symfony
         $reflectionClass = null;
         $parent = $definition instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\ChildDefinition ? $definition->getParent() : null;
         foreach ($conditionals as $interface => $instanceofDefs) {
-            if ($interface !== $class && !($reflectionClass ?? ($reflectionClass = $container->getReflectionClass($class, \false) ?: \false))) {
+            if ($interface !== $class && !($reflectionClass = $reflectionClass ?? ($container->getReflectionClass($class, \false) ?: \false))) {
                 continue;
             }
             if ($interface !== $class && !\is_subclass_of($class, $interface)) {

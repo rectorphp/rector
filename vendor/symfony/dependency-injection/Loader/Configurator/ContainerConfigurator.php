@@ -27,7 +27,13 @@ use RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression;
 class ContainerConfigurator extends \RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     public const FACTORY = 'container';
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
+     */
     private $container;
+    /**
+     * @var \Symfony\Component\DependencyInjection\Loader\PhpFileLoader
+     */
     private $loader;
     /**
      * @var mixed[]
@@ -147,17 +153,19 @@ function iterator(array $values) : \RectorPrefix20220604\Symfony\Component\Depen
 }
 /**
  * Creates a lazy iterator by tag name.
+ * @param string|mixed[] $exclude
  */
-function tagged_iterator(string $tag, string $indexAttribute = null, string $defaultIndexMethod = null, string $defaultPriorityMethod = null) : \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument
+function tagged_iterator(string $tag, string $indexAttribute = null, string $defaultIndexMethod = null, string $defaultPriorityMethod = null, $exclude = []) : \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument
 {
-    return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($tag, $indexAttribute, $defaultIndexMethod, \false, $defaultPriorityMethod);
+    return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($tag, $indexAttribute, $defaultIndexMethod, \false, $defaultPriorityMethod, (array) $exclude);
 }
 /**
  * Creates a service locator by tag name.
+ * @param string|mixed[] $exclude
  */
-function tagged_locator(string $tag, string $indexAttribute = null, string $defaultIndexMethod = null, string $defaultPriorityMethod = null) : \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument
+function tagged_locator(string $tag, string $indexAttribute = null, string $defaultIndexMethod = null, string $defaultPriorityMethod = null, $exclude = []) : \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument
 {
-    return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument(new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($tag, $indexAttribute, $defaultIndexMethod, \true, $defaultPriorityMethod));
+    return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument(new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($tag, $indexAttribute, $defaultIndexMethod, \true, $defaultPriorityMethod, (array) $exclude));
 }
 /**
  * Creates an expression.
@@ -186,4 +194,12 @@ function env(string $name) : \RectorPrefix20220604\Symfony\Component\DependencyI
 function service_closure(string $serviceId) : \RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\Configurator\ClosureReferenceConfigurator
 {
     return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\Configurator\ClosureReferenceConfigurator($serviceId);
+}
+/**
+ * Creates a closure.
+ * @param string|mixed[]|\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator|\Symfony\Component\ExpressionLanguage\Expression $callable
+ */
+function closure($callable) : \RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
+{
+    return (new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator(new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Definition('Closure')))->factory(['Closure', 'fromCallable'])->args([$callable]);
 }

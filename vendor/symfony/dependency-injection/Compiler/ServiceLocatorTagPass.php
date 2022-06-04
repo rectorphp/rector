@@ -57,12 +57,11 @@ final class ServiceLocatorTagPass extends \RectorPrefix20220604\Symfony\Componen
             if ($v instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
                 continue;
             }
-            if (!$v instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference) {
-                throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid definition for service "%s": an array of references is expected as first argument when the "container.service_locator" tag is set, "%s" found for key "%s".', $this->currentId, \get_debug_type($v), $k));
-            }
             if ($i === $k) {
-                unset($services[$k]);
-                $k = (string) $v;
+                if ($v instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference) {
+                    unset($services[$k]);
+                    $k = (string) $v;
+                }
                 ++$i;
             } elseif (\is_int($k)) {
                 $i = null;
@@ -81,18 +80,12 @@ final class ServiceLocatorTagPass extends \RectorPrefix20220604\Symfony\Componen
         $this->container->setDefinition($id, $value->setPublic(\false));
         return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference($id);
     }
-    /**
-     * @param Reference[] $refMap
-     */
-    public static function register(\RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $refMap, string $callerId = null) : \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference
+    public static function register(\RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $map, string $callerId = null) : \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference
     {
-        foreach ($refMap as $id => $ref) {
-            if (!$ref instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference) {
-                throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid service locator definition: only services can be referenced, "%s" found for key "%s". Inject parameter values using constructors instead.', \get_debug_type($ref), $id));
-            }
-            $refMap[$id] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument($ref);
+        foreach ($map as $k => $v) {
+            $map[$k] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument($v);
         }
-        $locator = (new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Definition(\RectorPrefix20220604\Symfony\Component\DependencyInjection\ServiceLocator::class))->addArgument($refMap)->addTag('container.service_locator');
+        $locator = (new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Definition(\RectorPrefix20220604\Symfony\Component\DependencyInjection\ServiceLocator::class))->addArgument($map)->addTag('container.service_locator');
         if (null !== $callerId && $container->hasDefinition($callerId)) {
             $locator->setBindings($container->getDefinition($callerId)->getBindings());
         }

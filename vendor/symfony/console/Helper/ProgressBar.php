@@ -76,6 +76,9 @@ final class ProgressBar
      * @var float
      */
     private $maxSecondsBetweenRedraws = 1;
+    /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
     private $output;
     /**
      * @var int
@@ -109,11 +112,17 @@ final class ProgressBar
      * @var bool
      */
     private $overwrite = \true;
+    /**
+     * @var \Symfony\Component\Console\Terminal
+     */
     private $terminal;
     /**
      * @var string|null
      */
     private $previousMessage;
+    /**
+     * @var \Symfony\Component\Console\Cursor
+     */
     private $cursor;
     /**
      * @var mixed[]
@@ -479,7 +488,6 @@ final class ProgressBar
     private function determineBestFormat() : string
     {
         switch ($this->output->getVerbosity()) {
-            // OutputInterface::VERBOSITY_QUIET: display is disabled anyway
             case \RectorPrefix20220604\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE:
                 return $this->max ? self::FORMAT_VERBOSE : self::FORMAT_VERBOSE_NOMAX;
             case \RectorPrefix20220604\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE:

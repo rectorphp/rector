@@ -18,6 +18,9 @@ use RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterfac
  */
 class ContainerParametersResourceChecker implements \RectorPrefix20220604\Symfony\Component\Config\ResourceCheckerInterface
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
     private $container;
     public function __construct(\RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface $container)
     {

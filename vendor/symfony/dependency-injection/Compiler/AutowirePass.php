@@ -13,14 +13,18 @@ namespace RectorPrefix20220604\Symfony\Component\DependencyInjection\Compiler;
 use RectorPrefix20220604\Symfony\Component\Config\Resource\ClassExistenceResource;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute\Autowire;
+use RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute\MapDecorated;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute\Target;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\AutowiringFailedException;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper;
+use RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Inspects existing service definitions and wires the autowired ones using the type hints of their classes.
@@ -222,7 +226,7 @@ class AutowirePass extends \RectorPrefix20220604\Symfony\Component\DependencyInj
                 if ($namedArguments || !$value instanceof $this->defaultArgument) {
                     continue;
                 }
-                if (\PHP_VERSION_ID >= 80100 && (\is_array($value->value) ? $value->value : \is_object($value->value))) {
+                if (\is_array($value->value) ? $value->value : \is_object($value->value)) {
                     unset($arguments[$j]);
                     $namedArguments = $value->names;
                 } else {
@@ -257,12 +261,26 @@ class AutowirePass extends \RectorPrefix20220604\Symfony\Component\DependencyInj
                 foreach (\method_exists($parameter, 'getAttributes') ? $parameter->getAttributes() : [] as $attribute) {
                     if (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute\TaggedIterator::class === $attribute->getName()) {
                         $attribute = $attribute->newInstance();
-                        $arguments[$index] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($attribute->tag, $attribute->indexAttribute, $attribute->defaultIndexMethod, \false, $attribute->defaultPriorityMethod);
+                        $arguments[$index] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($attribute->tag, $attribute->indexAttribute, $attribute->defaultIndexMethod, \false, $attribute->defaultPriorityMethod, (array) $attribute->exclude);
                         break;
                     }
                     if (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute\TaggedLocator::class === $attribute->getName()) {
                         $attribute = $attribute->newInstance();
-                        $arguments[$index] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument(new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($attribute->tag, $attribute->indexAttribute, $attribute->defaultIndexMethod, \true, $attribute->defaultPriorityMethod));
+                        $arguments[$index] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument(new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($attribute->tag, $attribute->indexAttribute, $attribute->defaultIndexMethod, \true, $attribute->defaultPriorityMethod, (array) $attribute->exclude));
+                        break;
+                    }
+                    if (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute\Autowire::class === $attribute->getName()) {
+                        $value = $attribute->newInstance()->value;
+                        $value = $this->container->getParameterBag()->resolveValue($value);
+                        if ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference && $parameter->allowsNull()) {
+                            $value = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference($value, \RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE);
+                        }
+                        $arguments[$index] = $value;
+                        break;
+                    }
+                    if (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute\MapDecorated::class === $attribute->getName()) {
+                        $definition = $this->container->getDefinition($this->currentId);
+                        $arguments[$index] = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference($definition->innerServiceId ?? $this->currentId . '.inner', $definition->decorationOnInvalid ?? \RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE);
                         break;
                     }
                 }

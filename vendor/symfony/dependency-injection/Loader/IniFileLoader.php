@@ -77,12 +77,14 @@ class IniFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyIn
         switch (\true) {
             case \defined($value):
                 return \constant($value);
-            case 'yes' === $lowercaseValue || 'on' === $lowercaseValue:
+            case 'yes' === $lowercaseValue:
+            case 'on' === $lowercaseValue:
                 return \true;
-            case 'no' === $lowercaseValue || 'off' === $lowercaseValue || 'none' === $lowercaseValue:
+            case 'no' === $lowercaseValue:
+            case 'off' === $lowercaseValue:
+            case 'none' === $lowercaseValue:
                 return \false;
             case isset($value[1]) && ("'" === $value[0] && "'" === $value[\strlen($value) - 1] || '"' === $value[0] && '"' === $value[\strlen($value) - 1]):
-                // quoted string
                 return \substr($value, 1, -1);
             default:
                 return \RectorPrefix20220604\Symfony\Component\Config\Util\XmlUtils::phpize($value);

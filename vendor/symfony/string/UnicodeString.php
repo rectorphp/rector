@@ -126,7 +126,7 @@ class UnicodeString extends \RectorPrefix20220604\Symfony\Component\String\Abstr
         }
         try {
             $i = $this->ignoreCase ? \grapheme_stripos($this->string, $needle, $offset) : \grapheme_strpos($this->string, $needle, $offset);
-        } catch (\ValueError $e) {
+        } catch (\ValueError $exception) {
             return null;
         }
         return \false === $i ? null : $i;

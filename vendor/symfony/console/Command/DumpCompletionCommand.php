@@ -10,8 +10,7 @@
  */
 namespace RectorPrefix20220604\Symfony\Component\Console\Command;
 
-use RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix20220604\Symfony\Component\Console\Attribute\AsCommand;
 use RectorPrefix20220604\Symfony\Component\Console\Input\InputArgument;
 use RectorPrefix20220604\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220604\Symfony\Component\Console\Input\InputOption;
@@ -23,50 +22,64 @@ use RectorPrefix20220604\Symfony\Component\Process\Process;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
+#[AsCommand(name: 'completion', description: 'Dump the shell completion script')]
 final class DumpCompletionCommand extends \RectorPrefix20220604\Symfony\Component\Console\Command\Command
 {
+    /**
+     * @deprecated since Symfony 6.1
+     */
     protected static $defaultName = 'completion';
+    /**
+     * @deprecated since Symfony 6.1
+     */
     protected static $defaultDescription = 'Dump the shell completion script';
-    public function complete(\RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
-    {
-        if ($input->mustSuggestArgumentValuesFor('shell')) {
-            $suggestions->suggestValues($this->getSupportedShells());
-        }
-    }
+    /**
+     * @var mixed[]
+     */
+    private $supportedShells;
     protected function configure()
     {
         $fullCommand = $_SERVER['PHP_SELF'];
         $commandName = \basename($fullCommand);
         $fullCommand = @\realpath($fullCommand) ?: $fullCommand;
+        $shell = $this->guessShell();
+        switch ($shell) {
+            case 'fish':
+                [$rcFile, $completionFile] = ['~/.config/fish/config.fish', "/etc/fish/completions/{$commandName}.fish"];
+                break;
+            default:
+                [$rcFile, $completionFile] = ['~/.bashrc', "/etc/bash_completion.d/{$commandName}"];
+                break;
+        }
         $this->setHelp(<<<EOH
 The <info>%command.name%</> command dumps the shell completion script required
-to use shell autocompletion (currently only bash completion is supported).
+to use shell autocompletion (currently, bash and fish completion is supported).
 
 <comment>Static installation
 -------------------</>
 
 Dump the script to a global completion file and restart your shell:
 
-    <info>%command.full_name% bash | sudo tee /etc/bash_completion.d/{$commandName}</>
+    <info>%command.full_name% {$shell} | sudo tee {$completionFile}</>
 
 Or dump the script to a local file and source it:
 
-    <info>%command.full_name% bash > completion.sh</>
+    <info>%command.full_name% {$shell} > completion.sh</>
 
     <comment># source the file whenever you use the project</>
     <info>source completion.sh</>
 
-    <comment># or add this line at the end of your "~/.bashrc" file:</>
+    <comment># or add this line at the end of your "{$rcFile}" file:</>
     <info>source /path/to/completion.sh</>
 
 <comment>Dynamic installation
 --------------------</>
 
-Add this to the end of your shell configuration file (e.g. <info>"~/.bashrc"</>):
+Add this to the end of your shell configuration file (e.g. <info>"{$rcFile}"</>):
 
-    <info>eval "\$({$fullCommand} completion bash)"</>
+    <info>eval "\$({$fullCommand} completion {$shell})"</>
 EOH
-)->addArgument('shell', \RectorPrefix20220604\Symfony\Component\Console\Input\InputArgument::OPTIONAL, 'The shell type (e.g. "bash"), the value of the "$SHELL" env var will be used if this is not given')->addOption('debug', null, \RectorPrefix20220604\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Tail the completion debug log');
+)->addArgument('shell', \RectorPrefix20220604\Symfony\Component\Console\Input\InputArgument::OPTIONAL, 'The shell type (e.g. "bash"), the value of the "$SHELL" env var will be used if this is not given', null, \Closure::fromCallable([$this, 'getSupportedShells']))->addOption('debug', null, \RectorPrefix20220604\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Tail the completion debug log');
     }
     protected function execute(\RectorPrefix20220604\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220604\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
@@ -105,7 +118,7 @@ EOH
      */
     private function getSupportedShells() : array
     {
-        return \array_map(function ($f) {
+        return $this->supportedShells = $this->supportedShells ?? \array_map(function ($f) {
             return \pathinfo($f, \PATHINFO_EXTENSION);
         }, \glob(__DIR__ . '/../Resources/completion.*'));
     }

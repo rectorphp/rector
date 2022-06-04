@@ -17,5 +17,20 @@ namespace RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument;
  */
 class IteratorArgument implements \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
 {
-    use ReferenceSetArgumentTrait;
+    /**
+     * @var mixed[]
+     */
+    private $values;
+    public function __construct(array $values)
+    {
+        $this->setValues($values);
+    }
+    public function getValues() : array
+    {
+        return $this->values;
+    }
+    public function setValues(array $values)
+    {
+        $this->values = $values;
+    }
 }

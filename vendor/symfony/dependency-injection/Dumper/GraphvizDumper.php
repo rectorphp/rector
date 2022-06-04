@@ -129,12 +129,12 @@ class GraphvizDumper extends \RectorPrefix20220604\Symfony\Component\DependencyI
         $container = $this->cloneContainer();
         foreach ($container->getDefinitions() as $id => $definition) {
             $class = $definition->getClass();
-            if ('\\' === \substr($class, 0, 1)) {
+            if (\strncmp($class, '\\', \strlen('\\')) === 0) {
                 $class = \substr($class, 1);
             }
             try {
                 $class = $this->container->getParameterBag()->resolveValue($class);
-            } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
+            } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $exception) {
             }
             $nodes[$id] = ['class' => \str_replace('\\', '\\\\', $class), 'attributes' => \array_merge($this->options['node.definition'], ['style' => $definition->isShared() ? 'filled' : 'dotted'])];
             $container->setDefinition($id, new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Definition('stdClass'));

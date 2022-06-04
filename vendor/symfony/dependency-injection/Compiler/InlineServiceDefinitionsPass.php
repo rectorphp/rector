@@ -22,6 +22,9 @@ use RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference;
  */
 class InlineServiceDefinitionsPass extends \RectorPrefix20220604\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass|null
+     */
     private $analyzingPass;
     /**
      * @var mixed[]
@@ -43,7 +46,10 @@ class InlineServiceDefinitionsPass extends \RectorPrefix20220604\Symfony\Compone
      * @var mixed[]
      */
     private $notInlinableIds = [];
-    private $graph = null;
+    /**
+     * @var \Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph|null
+     */
+    private $graph;
     public function __construct(\RectorPrefix20220604\Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass $analyzingPass = null)
     {
         $this->analyzingPass = $analyzingPass;

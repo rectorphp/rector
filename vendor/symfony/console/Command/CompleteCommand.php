@@ -10,10 +10,12 @@
  */
 namespace RectorPrefix20220604\Symfony\Component\Console\Command;
 
+use RectorPrefix20220604\Symfony\Component\Console\Attribute\AsCommand;
 use RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionInput;
 use RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionSuggestions;
 use RectorPrefix20220604\Symfony\Component\Console\Completion\Output\BashCompletionOutput;
 use RectorPrefix20220604\Symfony\Component\Console\Completion\Output\CompletionOutputInterface;
+use RectorPrefix20220604\Symfony\Component\Console\Completion\Output\FishCompletionOutput;
 use RectorPrefix20220604\Symfony\Component\Console\Exception\CommandNotFoundException;
 use RectorPrefix20220604\Symfony\Component\Console\Exception\ExceptionInterface;
 use RectorPrefix20220604\Symfony\Component\Console\Input\InputInterface;
@@ -24,9 +26,16 @@ use RectorPrefix20220604\Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
+#[AsCommand(name: '|_complete', description: 'Internal command to provide shell completion suggestions')]
 final class CompleteCommand extends \RectorPrefix20220604\Symfony\Component\Console\Command\Command
 {
+    /**
+     * @deprecated since Symfony 6.1
+     */
     protected static $defaultName = '|_complete';
+    /**
+     * @deprecated since Symfony 6.1
+     */
     protected static $defaultDescription = 'Internal command to provide shell completion suggestions';
     private $completionOutputs;
     private $isDebug = \false;
@@ -36,7 +45,7 @@ final class CompleteCommand extends \RectorPrefix20220604\Symfony\Component\Cons
     public function __construct(array $completionOutputs = [])
     {
         // must be set before the parent constructor, as the property value is used in configure()
-        $this->completionOutputs = $completionOutputs + ['bash' => \RectorPrefix20220604\Symfony\Component\Console\Completion\Output\BashCompletionOutput::class];
+        $this->completionOutputs = $completionOutputs + ['bash' => \RectorPrefix20220604\Symfony\Component\Console\Completion\Output\BashCompletionOutput::class, 'fish' => \RectorPrefix20220604\Symfony\Component\Console\Completion\Output\FishCompletionOutput::class];
         parent::__construct();
     }
     protected function configure() : void
@@ -121,7 +130,7 @@ final class CompleteCommand extends \RectorPrefix20220604\Symfony\Component\Cons
         $completionInput = \RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionInput::fromTokens($input->getOption('input'), (int) $currentIndex);
         try {
             $completionInput->bind($this->getApplication()->getDefinition());
-        } catch (\RectorPrefix20220604\Symfony\Component\Console\Exception\ExceptionInterface $e) {
+        } catch (\RectorPrefix20220604\Symfony\Component\Console\Exception\ExceptionInterface $exception) {
         }
         return $completionInput;
     }
@@ -133,7 +142,7 @@ final class CompleteCommand extends \RectorPrefix20220604\Symfony\Component\Cons
                 return null;
             }
             return $this->getApplication()->find($inputName);
-        } catch (\RectorPrefix20220604\Symfony\Component\Console\Exception\CommandNotFoundException $e) {
+        } catch (\RectorPrefix20220604\Symfony\Component\Console\Exception\CommandNotFoundException $exception) {
         }
         return null;
     }

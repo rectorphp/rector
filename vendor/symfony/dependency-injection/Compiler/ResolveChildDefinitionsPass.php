@@ -65,7 +65,6 @@ class ResolveChildDefinitionsPass extends \RectorPrefix20220604\Symfony\Componen
             throw $e;
         } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\ExceptionInterface $e) {
             $r = new \ReflectionProperty($e, 'message');
-            $r->setAccessible(\true);
             $r->setValue($e, \sprintf('Service "%s": %s', $this->currentId, $e->getMessage()));
             throw $e;
         }

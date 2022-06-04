@@ -27,7 +27,13 @@ use RectorPrefix20220604\Symfony\Component\DependencyInjection\TypedReference;
  */
 class ResolveInvalidReferencesPass implements \RectorPrefix20220604\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
+     */
     private $container;
+    /**
+     * @var \Symfony\Component\DependencyInjection\Exception\RuntimeException
+     */
     private $signalingException;
     /**
      * @var string

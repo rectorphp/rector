@@ -11,6 +11,7 @@
 namespace RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use RectorPrefix20220604\Symfony\Component\Config\Loader\ParamConfigurator;
+use RectorPrefix20220604\Symfony\Component\DependencyInjection\Alias;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
 use RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
@@ -26,7 +27,8 @@ abstract class AbstractConfigurator
      * @var callable(mixed, bool $allowService)|null
      */
     public static $valuePreProcessor;
-    /** @internal */
+    /** @internal
+     * @var \Symfony\Component\DependencyInjection\Definition|\Symfony\Component\DependencyInjection\Alias|null */
     protected $definition = null;
     public function __call(string $method, array $args)
     {

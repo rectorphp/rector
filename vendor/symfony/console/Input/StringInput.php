@@ -22,6 +22,9 @@ use RectorPrefix20220604\Symfony\Component\Console\Exception\InvalidArgumentExce
  */
 class StringInput extends \RectorPrefix20220604\Symfony\Component\Console\Input\ArgvInput
 {
+    /**
+     * @deprecated since Symfony 6.1
+     */
     public const REGEX_STRING = '([^\\s]+?)(?:\\s|(?<!\\\\)"|(?<!\\\\)\'|$)';
     public const REGEX_UNQUOTED_STRING = '([^\\s\\\\]+?)';
     public const REGEX_QUOTED_STRING = '(?:"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\')';

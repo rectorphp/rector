@@ -75,12 +75,21 @@ class ContainerBuilder extends \RectorPrefix20220604\Symfony\Component\Dependenc
      * @var array<string, array<array<string, mixed>>>
      */
     private $extensionConfigs = [];
+    /**
+     * @var \Symfony\Component\DependencyInjection\Compiler\Compiler
+     */
     private $compiler;
     /**
      * @var bool
      */
     private $trackResources;
-    private $proxyInstantiator = null;
+    /**
+     * @var \Symfony\Component\DependencyInjection\LazyProxy\Instantiator\InstantiatorInterface|null
+     */
+    private $proxyInstantiator;
+    /**
+     * @var \Symfony\Component\DependencyInjection\ExpressionLanguage
+     */
     private $expressionLanguage;
     /**
      * @var ExpressionFunctionProviderInterface[]
@@ -855,14 +864,20 @@ class ContainerBuilder extends \RectorPrefix20220604\Symfony\Component\Dependenc
         if (null !== $definition->getFile()) {
             require_once $parameterBag->resolveValue($definition->getFile());
         }
-        $arguments = $this->doResolveServices($parameterBag->unescapeValue($parameterBag->resolveValue($definition->getArguments())), $inlineServices, $isConstructorArgument);
+        $arguments = $definition->getArguments();
         if (null !== ($factory = $definition->getFactory())) {
             if (\is_array($factory)) {
                 $factory = [$this->doResolveServices($parameterBag->resolveValue($factory[0]), $inlineServices, $isConstructorArgument), $factory[1]];
             } elseif (!\is_string($factory)) {
                 throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('Cannot create service "%s" because of invalid factory.', $id));
+            } elseif (\strncmp($factory, '@=', \strlen('@=')) === 0) {
+                $factory = function (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocator $arguments) use($factory) {
+                    return $this->getExpressionLanguage()->evaluate(\substr($factory, 2), ['container' => $this, 'args' => $arguments]);
+                };
+                $arguments = [new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument($arguments)];
             }
         }
+        $arguments = $this->doResolveServices($parameterBag->unescapeValue($parameterBag->resolveValue($arguments)), $inlineServices, $isConstructorArgument);
         if (null !== $id && $definition->isShared() && isset($this->services[$id]) && ($tryProxy || !$definition->isLazy())) {
             return $this->services[$id];
         }
@@ -979,10 +994,8 @@ class ContainerBuilder extends \RectorPrefix20220604\Symfony\Component\Dependenc
         } elseif ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument) {
             $refs = $types = [];
             foreach ($value->getValues() as $k => $v) {
-                if ($v) {
-                    $refs[$k] = [$v];
-                    $types[$k] = $v instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\TypedReference ? $v->getType() : '?';
-                }
+                $refs[$k] = [$v, null];
+                $types[$k] = $v instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\TypedReference ? $v->getType() : '?';
             }
             $value = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocator(\Closure::fromCallable([$this, 'resolveServices']), $refs, $types);
         } elseif ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference) {
@@ -1366,10 +1379,10 @@ class ContainerBuilder extends \RectorPrefix20220604\Symfony\Component\Dependenc
     private function getExpressionLanguage() : \RectorPrefix20220604\Symfony\Component\DependencyInjection\ExpressionLanguage
     {
         if (!isset($this->expressionLanguage)) {
-            if (!\class_exists(\RectorPrefix20220604\Symfony\Component\ExpressionLanguage\ExpressionLanguage::class)) {
-                throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\LogicException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed.');
+            if (!\class_exists(\RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression::class)) {
+                throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\LogicException('Expressions cannot be used without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
             }
-            $this->expressionLanguage = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\ExpressionLanguage(null, $this->expressionLanguageProviders);
+            $this->expressionLanguage = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\ExpressionLanguage(null, $this->expressionLanguageProviders, null, \Closure::fromCallable([$this, 'getEnv']));
         }
         return $this->expressionLanguage;
     }

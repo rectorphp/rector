@@ -19,6 +19,9 @@ use RectorPrefix20220604\Symfony\Component\Console\Output\OutputInterface;
 class ProgressIndicator
 {
     private const FORMATS = ['normal' => ' %indicator% %message%', 'normal_no_ansi' => ' %message%', 'verbose' => ' %indicator% %message% (%elapsed:6s%)', 'verbose_no_ansi' => ' %message% (%elapsed:6s%)', 'very_verbose' => ' %indicator% %message% (%elapsed:6s%, %memory:6s%)', 'very_verbose_no_ansi' => ' %message% (%elapsed:6s%, %memory:6s%)'];
+    /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
     private $output;
     /**
      * @var int
@@ -175,7 +178,6 @@ class ProgressIndicator
     private function determineBestFormat() : string
     {
         switch ($this->output->getVerbosity()) {
-            // OutputInterface::VERBOSITY_QUIET: display is disabled anyway
             case \RectorPrefix20220604\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE:
                 return $this->output->isDecorated() ? 'verbose' : 'verbose_no_ansi';
             case \RectorPrefix20220604\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE:

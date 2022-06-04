@@ -33,6 +33,9 @@ class PrototypeConfigurator extends \RectorPrefix20220604\Symfony\Component\Depe
     use Traits\ShareTrait;
     use Traits\TagTrait;
     public const FACTORY = 'load';
+    /**
+     * @var \Symfony\Component\DependencyInjection\Loader\PhpFileLoader
+     */
     private $loader;
     /**
      * @var string

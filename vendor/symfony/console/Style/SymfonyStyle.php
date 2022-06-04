@@ -35,14 +35,29 @@ use RectorPrefix20220604\Symfony\Component\Console\Terminal;
 class SymfonyStyle extends \RectorPrefix20220604\Symfony\Component\Console\Style\OutputStyle
 {
     public const MAX_LINE_LENGTH = 120;
+    /**
+     * @var \Symfony\Component\Console\Input\InputInterface
+     */
     private $input;
+    /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
     private $output;
+    /**
+     * @var \Symfony\Component\Console\Helper\SymfonyQuestionHelper
+     */
     private $questionHelper;
+    /**
+     * @var \Symfony\Component\Console\Helper\ProgressBar
+     */
     private $progressBar;
     /**
      * @var int
      */
     private $lineLength;
+    /**
+     * @var \Symfony\Component\Console\Output\TrimmedBufferOutput
+     */
     private $bufferedOutput;
     public function __construct(\RectorPrefix20220604\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220604\Symfony\Component\Console\Output\OutputInterface $output)
     {

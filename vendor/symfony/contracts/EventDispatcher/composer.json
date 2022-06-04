@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "php": ">=8.0.2",
+        "php": ">=8.1",
         "psr\/event-dispatcher": "^1"
     },
     "suggest": {
@@ -37,7 +37,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-main": "3.0-dev"
+            "dev-main": "3.1-dev"
         },
         "thanks": {
             "name": "symfony\/contracts",

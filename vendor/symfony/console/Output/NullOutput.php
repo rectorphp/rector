@@ -22,6 +22,9 @@ use RectorPrefix20220604\Symfony\Component\Console\Formatter\OutputFormatterInte
  */
 class NullOutput implements \RectorPrefix20220604\Symfony\Component\Console\Output\OutputInterface
 {
+    /**
+     * @var \Symfony\Component\Console\Formatter\NullOutputFormatter
+     */
     private $formatter;
     /**
      * {@inheritdoc}

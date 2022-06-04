@@ -85,7 +85,7 @@ class XmlDumper extends \RectorPrefix20220604\Symfony\Component\DependencyInject
             $service->setAttribute('id', $id);
         }
         if ($class = $definition->getClass()) {
-            if ('\\' === \substr($class, 0, 1)) {
+            if (\strncmp($class, '\\', \strlen('\\')) === 0) {
                 $class = \substr($class, 1);
             }
             $service->setAttribute('class', $class);
@@ -271,6 +271,9 @@ class XmlDumper extends \RectorPrefix20220604\Symfony\Component\DependencyInject
                 $this->convertParameters($value->getValues(), $type, $element, 'key');
             } elseif ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument) {
                 $element->setAttribute('type', 'service_locator');
+                $this->convertParameters($value->getValues(), $type, $element, 'key');
+            } elseif ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument && !$value->getValues()[0] instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference) {
+                $element->setAttribute('type', 'service_closure');
                 $this->convertParameters($value->getValues(), $type, $element, 'key');
             } elseif ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference || $value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
                 $element->setAttribute('type', 'service');

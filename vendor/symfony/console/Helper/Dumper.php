@@ -19,8 +19,17 @@ use RectorPrefix20220604\Symfony\Component\VarDumper\Dumper\CliDumper;
  */
 final class Dumper
 {
+    /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
     private $output;
+    /**
+     * @var \Symfony\Component\VarDumper\Dumper\CliDumper|null
+     */
     private $dumper;
+    /**
+     * @var \Symfony\Component\VarDumper\Cloner\ClonerInterface|null
+     */
     private $cloner;
     /**
      * @var \Closure
@@ -33,9 +42,9 @@ final class Dumper
         $this->cloner = $cloner;
         if (\class_exists(\RectorPrefix20220604\Symfony\Component\VarDumper\Dumper\CliDumper::class)) {
             $this->handler = function ($var) : string {
-                $dumper = $this->dumper ?? ($this->dumper = new \RectorPrefix20220604\Symfony\Component\VarDumper\Dumper\CliDumper(null, null, \RectorPrefix20220604\Symfony\Component\VarDumper\Dumper\CliDumper::DUMP_LIGHT_ARRAY | \RectorPrefix20220604\Symfony\Component\VarDumper\Dumper\CliDumper::DUMP_COMMA_SEPARATOR));
+                $dumper = $this->dumper = $this->dumper ?? new \RectorPrefix20220604\Symfony\Component\VarDumper\Dumper\CliDumper(null, null, \RectorPrefix20220604\Symfony\Component\VarDumper\Dumper\CliDumper::DUMP_LIGHT_ARRAY | \RectorPrefix20220604\Symfony\Component\VarDumper\Dumper\CliDumper::DUMP_COMMA_SEPARATOR);
                 $dumper->setColors($this->output->isDecorated());
-                return \rtrim($dumper->dump(($this->cloner ?? ($this->cloner = new \RectorPrefix20220604\Symfony\Component\VarDumper\Cloner\VarCloner()))->cloneVar($var)->withRefHandles(\false), \true));
+                return \rtrim($dumper->dump(($this->cloner = $this->cloner ?? new \RectorPrefix20220604\Symfony\Component\VarDumper\Cloner\VarCloner())->cloneVar($var)->withRefHandles(\false), \true));
             };
         } else {
             $this->handler = function ($var) : string {

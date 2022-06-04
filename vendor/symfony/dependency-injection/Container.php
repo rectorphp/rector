@@ -181,7 +181,7 @@ class Container implements \RectorPrefix20220604\Symfony\Component\DependencyInj
      */
     public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE) : ?object
     {
-        return $this->services[$id] ?? $this->services[$id = $this->aliases[$id] ?? $id] ?? ('service_container' === $id ? $this : ($this->factories[$id] ?? [$this, 'make'])($id, $invalidBehavior));
+        return $this->services[$id] ?? $this->services[$id = $this->aliases[$id] ?? $id] ?? ('service_container' === $id ? $this : ($this->factories[$id] ?? \Closure::fromCallable([$this, 'make']))($id, $invalidBehavior));
     }
     /**
      * Creates a service.
@@ -255,7 +255,7 @@ class Container implements \RectorPrefix20220604\Symfony\Component\DependencyInj
                 if ($service instanceof \RectorPrefix20220604\Symfony\Contracts\Service\ResetInterface) {
                     $service->reset();
                 }
-            } catch (\Throwable $e) {
+            } catch (\Throwable $exception) {
                 continue;
             }
         }
@@ -349,7 +349,7 @@ class Container implements \RectorPrefix20220604\Symfony\Component\DependencyInj
             return \false !== $registry ? $this->{$registry}[$id] ?? null : null;
         }
         if (\false !== $registry) {
-            return $this->{$registry}[$id] ?? ($this->{$registry}[$id] = $load ? $this->load($method) : $this->{$method}());
+            return $this->{$registry}[$id] = $this->{$registry}[$id] ?? ($load ? $this->load($method) : $this->{$method}());
         }
         if (!$load) {
             return $this->{$method}();

@@ -31,6 +31,9 @@ abstract class Output implements \RectorPrefix20220604\Symfony\Component\Console
      * @var int
      */
     private $verbosity;
+    /**
+     * @var \Symfony\Component\Console\Formatter\OutputFormatterInterface
+     */
     private $formatter;
     /**
      * @param int|null                      $verbosity The verbosity level (one of the VERBOSITY constants in OutputInterface)

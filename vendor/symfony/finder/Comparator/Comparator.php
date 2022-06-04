@@ -62,7 +62,8 @@ class Comparator
                 return $test <= $this->target;
             case '!=':
                 return $test != $this->target;
+            default:
+                return $test == $this->target;
         }
-        return $test == $this->target;
     }
 }

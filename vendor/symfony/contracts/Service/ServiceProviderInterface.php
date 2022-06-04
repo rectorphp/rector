@@ -16,9 +16,21 @@ use RectorPrefix20220604\Psr\Container\ContainerInterface;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  * @author Mateusz Sip <mateusz.sip@gmail.com>
+ *
+ * @template T of mixed
  */
 interface ServiceProviderInterface extends \RectorPrefix20220604\Psr\Container\ContainerInterface
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @return mixed
+     */
+    public function get(string $id);
+    /**
+     * {@inheritdoc}
+     */
+    public function has(string $id) : bool;
     /**
      * Returns an associative array of service types keyed by the identifiers provided by the current container.
      *

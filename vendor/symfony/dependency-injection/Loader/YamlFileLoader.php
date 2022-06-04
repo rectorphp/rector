@@ -41,6 +41,9 @@ class YamlFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyI
     private const PROTOTYPE_KEYWORDS = ['resource' => 'resource', 'namespace' => 'namespace', 'exclude' => 'exclude', 'parent' => 'parent', 'shared' => 'shared', 'lazy' => 'lazy', 'public' => 'public', 'abstract' => 'abstract', 'deprecated' => 'deprecated', 'factory' => 'factory', 'arguments' => 'arguments', 'properties' => 'properties', 'configurator' => 'configurator', 'calls' => 'calls', 'tags' => 'tags', 'autowire' => 'autowire', 'autoconfigure' => 'autoconfigure', 'bind' => 'bind'];
     private const INSTANCEOF_KEYWORDS = ['shared' => 'shared', 'lazy' => 'lazy', 'public' => 'public', 'properties' => 'properties', 'configurator' => 'configurator', 'calls' => 'calls', 'tags' => 'tags', 'autowire' => 'autowire', 'bind' => 'bind'];
     private const DEFAULTS_KEYWORDS = ['public' => 'public', 'tags' => 'tags', 'autowire' => 'autowire', 'autoconfigure' => 'autoconfigure', 'bind' => 'bind'];
+    /**
+     * @var YamlParser
+     */
     private $yamlParser;
     /**
      * @var int
@@ -527,6 +530,15 @@ class YamlFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyI
     private function parseCallable($callable, string $parameter, string $id, string $file)
     {
         if (\is_string($callable)) {
+            if (\strncmp($callable, '@=', \strlen('@=')) === 0) {
+                if ('factory' !== $parameter) {
+                    throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Using expressions in "%s" for the "%s" service is not supported in "%s".', $parameter, $id, $file));
+                }
+                if (!\class_exists(\RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression::class)) {
+                    throw new \LogicException('The "@=" expression syntax cannot be used without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
+                }
+                return $callable;
+            }
             if ('' !== $callable && '@' === $callable[0]) {
                 if (\strpos($callable, ':') === \false) {
                     return [$this->resolveServices($callable, $file), '__invoke'];
@@ -585,7 +597,7 @@ class YamlFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyI
             throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The service file "%s" is not valid. It should contain an array. Check your YAML syntax.', $file));
         }
         foreach ($content as $namespace => $data) {
-            if (\in_array($namespace, ['imports', 'parameters', 'services']) || 0 === \strpos($namespace, 'when@')) {
+            if (\in_array($namespace, ['imports', 'parameters', 'services']) || \strncmp($namespace, 'when@', \strlen('when@')) === 0) {
                 continue;
             }
             if (!$this->container->hasExtension($namespace)) {
@@ -605,22 +617,19 @@ class YamlFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyI
     {
         if ($value instanceof \RectorPrefix20220604\Symfony\Component\Yaml\Tag\TaggedValue) {
             $argument = $value->getValue();
+            if ('closure' === $value->getTag()) {
+                $argument = $this->resolveServices($argument, $file, $isParameter);
+                return (new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Definition('Closure'))->setFactory(['Closure', 'fromCallable'])->addArgument($argument);
+            }
             if ('iterator' === $value->getTag()) {
                 if (!\is_array($argument)) {
                     throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('"!iterator" tag only accepts sequences in "%s".', $file));
                 }
                 $argument = $this->resolveServices($argument, $file, $isParameter);
-                try {
-                    return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\IteratorArgument($argument);
-                } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException $e) {
-                    throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('"!iterator" tag only accepts arrays of "@service" references in "%s".', $file));
-                }
+                return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\IteratorArgument($argument);
             }
             if ('service_closure' === $value->getTag()) {
                 $argument = $this->resolveServices($argument, $file, $isParameter);
-                if (!$argument instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference) {
-                    throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('"!service_closure" tag only accepts service references in "%s".', $file));
-                }
                 return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument($argument);
             }
             if ('service_locator' === $value->getTag()) {
@@ -628,11 +637,7 @@ class YamlFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyI
                     throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('"!service_locator" tag only accepts maps in "%s".', $file));
                 }
                 $argument = $this->resolveServices($argument, $file, $isParameter);
-                try {
-                    return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument($argument);
-                } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException $e) {
-                    throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('"!service_locator" tag only accepts maps of "@service" references in "%s".', $file));
-                }
+                return new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument($argument);
             }
             if (\in_array($value->getTag(), ['tagged', 'tagged_iterator', 'tagged_locator'], \true)) {
                 $forLocator = 'tagged_locator' === $value->getTag();
@@ -709,7 +714,7 @@ class YamlFileLoader extends \RectorPrefix20220604\Symfony\Component\DependencyI
     private function loadFromExtensions(array $content)
     {
         foreach ($content as $namespace => $values) {
-            if (\in_array($namespace, ['imports', 'parameters', 'services']) || 0 === \strpos($namespace, 'when@')) {
+            if (\in_array($namespace, ['imports', 'parameters', 'services']) || \strncmp($namespace, 'when@', \strlen('when@')) === 0) {
                 continue;
             }
             if (!\is_array($values) && null !== $values) {

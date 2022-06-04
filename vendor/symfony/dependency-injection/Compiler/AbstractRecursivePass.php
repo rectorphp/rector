@@ -33,6 +33,9 @@ abstract class AbstractRecursivePass implements \RectorPrefix20220604\Symfony\Co
      * @var bool
      */
     private $processExpressions = \false;
+    /**
+     * @var \Symfony\Component\DependencyInjection\ExpressionLanguage
+     */
     private $expressionLanguage;
     /**
      * @var bool
@@ -82,14 +85,23 @@ abstract class AbstractRecursivePass implements \RectorPrefix20220604\Symfony\Co
         } elseif ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ArgumentInterface) {
             $value->setValues($this->processValue($value->getValues()));
         } elseif ($value instanceof \RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression && $this->processExpressions) {
-            $this->getExpressionLanguage()->compile((string) $value, ['this' => 'container']);
+            $this->getExpressionLanguage()->compile((string) $value, ['this' => 'container', 'args' => 'args']);
         } elseif ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Definition) {
             $value->setArguments($this->processValue($value->getArguments()));
             $value->setProperties($this->processValue($value->getProperties()));
             $value->setMethodCalls($this->processValue($value->getMethodCalls()));
             $changes = $value->getChanges();
             if (isset($changes['factory'])) {
-                $value->setFactory($this->processValue($value->getFactory()));
+                if (\is_string($factory = $value->getFactory()) && \strncmp($factory, '@=', \strlen('@=')) === 0) {
+                    if (!\class_exists(\RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression::class)) {
+                        throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\LogicException('Expressions cannot be used in service factories without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
+                    }
+                    $factory = new \RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression(\substr($factory, 2));
+                }
+                if (($factory = $this->processValue($factory)) instanceof \RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression) {
+                    $factory = '@=' . $factory;
+                }
+                $value->setFactory($factory);
             }
             if (isset($changes['configurator'])) {
                 $value->setConfigurator($this->processValue($value->getConfigurator()));
@@ -106,6 +118,10 @@ abstract class AbstractRecursivePass implements \RectorPrefix20220604\Symfony\Co
             return null;
         }
         if (\is_string($factory = $definition->getFactory())) {
+            if (\strncmp($factory, '@=', \strlen('@=')) === 0) {
+                return new \ReflectionFunction(static function (...$args) {
+                });
+            }
             if (!\function_exists($factory)) {
                 throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('Invalid service "%s": function "%s" does not exist.', $this->currentId, $factory));
             }

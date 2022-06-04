@@ -586,7 +586,7 @@ class Finder implements \IteratorAggregate, \Countable
                 $resolvedDirs[] = [$this->normalizeDir($dir)];
             } elseif ($glob = \glob($dir, (\defined('GLOB_BRACE') ? \GLOB_BRACE : 0) | \GLOB_ONLYDIR | \GLOB_NOSORT)) {
                 \sort($glob);
-                $resolvedDirs[] = \array_map([$this, 'normalizeDir'], $glob);
+                $resolvedDirs[] = \array_map(\Closure::fromCallable([$this, 'normalizeDir']), $glob);
             } else {
                 throw new \RectorPrefix20220604\Symfony\Component\Finder\Exception\DirectoryNotFoundException(\sprintf('The "%s" directory does not exist.', $dir));
             }

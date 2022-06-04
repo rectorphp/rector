@@ -18,6 +18,9 @@ use RectorPrefix20220604\Symfony\Component\Console\Color;
  */
 class OutputFormatterStyle implements \RectorPrefix20220604\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
 {
+    /**
+     * @var \Symfony\Component\Console\Color
+     */
     private $color;
     /**
      * @var string

@@ -71,7 +71,7 @@ class DecoratorServicePass extends \RectorPrefix20220604\Symfony\Component\Depen
             } else {
                 throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($inner, $id);
             }
-            if ($decoratedDefinition && $decoratedDefinition->isSynthetic()) {
+            if (($decoratedDefinition2 = $decoratedDefinition) ? $decoratedDefinition2->isSynthetic() : null) {
                 throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('A synthetic service cannot be decorated: service "%s" cannot decorate "%s".', $id, $inner));
             }
             if (isset($decoratingDefinitions[$inner])) {

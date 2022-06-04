@@ -341,7 +341,7 @@ class QuestionHelper extends \RectorPrefix20220604\Symfony\Component\Console\Hel
         if ('\\' === \DIRECTORY_SEPARATOR) {
             $exe = __DIR__ . '/../Resources/bin/hiddeninput.exe';
             // handle code running from a phar
-            if ('phar:' === \substr(__FILE__, 0, 5)) {
+            if (\strncmp(__FILE__, 'phar:', \strlen('phar:')) === 0) {
                 $tmpExe = \sys_get_temp_dir() . '/hiddeninput.exe';
                 \copy($exe, $tmpExe);
                 $exe = $tmpExe;

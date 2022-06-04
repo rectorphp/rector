@@ -423,7 +423,7 @@ abstract class AbstractString implements \JsonSerializable
             if (\false === ($chunks = \preg_split($delimiter, $this->string, $limit, $flags))) {
                 $lastError = \preg_last_error();
                 foreach (\get_defined_constants(\true)['pcre'] as $k => $v) {
-                    if ($lastError === $v && '_ERROR' === \substr($k, -6)) {
+                    if ($lastError === $v && \substr_compare($k, '_ERROR', -\strlen('_ERROR')) === 0) {
                         throw new \RectorPrefix20220604\Symfony\Component\String\Exception\RuntimeException('Splitting failed with ' . $k . '.');
                     }
                 }
@@ -517,6 +517,7 @@ abstract class AbstractString implements \JsonSerializable
     public function trimPrefix($prefix)
     {
         if (\is_array($prefix) || $prefix instanceof \Traversable) {
+            // don't use is_iterable(), it's slow
             foreach ($prefix as $s) {
                 $t = $this->trimPrefix($s);
                 if ($t->string !== $this->string) {
@@ -547,6 +548,7 @@ abstract class AbstractString implements \JsonSerializable
     public function trimSuffix($suffix)
     {
         if (\is_array($suffix) || $suffix instanceof \Traversable) {
+            // don't use is_iterable(), it's slow
             foreach ($suffix as $s) {
                 $t = $this->trimSuffix($s);
                 if ($t->string !== $this->string) {

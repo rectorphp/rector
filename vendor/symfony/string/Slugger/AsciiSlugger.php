@@ -65,7 +65,7 @@ class AsciiSlugger implements \RectorPrefix20220604\Symfony\Component\String\Slu
     {
         $locale = $locale ?? $this->defaultLocale;
         $transliterator = [];
-        if ($locale && ('de' === $locale || 0 === \strpos($locale, 'de_'))) {
+        if ($locale && ('de' === $locale || \strncmp($locale, 'de_', \strlen('de_')) === 0)) {
             // Use the shortcut for German in UnicodeString::ascii() if possible (faster and no requirement on intl)
             $transliterator = ['de-ASCII'];
         } elseif (\function_exists('transliterator_transliterate') && $locale) {

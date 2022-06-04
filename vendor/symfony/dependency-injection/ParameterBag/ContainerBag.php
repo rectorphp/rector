@@ -16,6 +16,9 @@ use RectorPrefix20220604\Symfony\Component\DependencyInjection\Container;
  */
 class ContainerBag extends \RectorPrefix20220604\Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag implements \RectorPrefix20220604\Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\Container
+     */
     private $container;
     public function __construct(\RectorPrefix20220604\Symfony\Component\DependencyInjection\Container $container)
     {

@@ -29,11 +29,19 @@ class TaggedLocator
      * @var string|null
      */
     public $defaultPriorityMethod;
-    public function __construct(string $tag, ?string $indexAttribute = null, ?string $defaultIndexMethod = null, ?string $defaultPriorityMethod = null)
+    /**
+     * @var string|mixed[]
+     */
+    public $exclude = [];
+    /**
+     * @param string|mixed[] $exclude
+     */
+    public function __construct(string $tag, ?string $indexAttribute = null, ?string $defaultIndexMethod = null, ?string $defaultPriorityMethod = null, $exclude = [])
     {
         $this->tag = $tag;
         $this->indexAttribute = $indexAttribute;
         $this->defaultIndexMethod = $defaultIndexMethod;
         $this->defaultPriorityMethod = $defaultPriorityMethod;
+        $this->exclude = $exclude;
     }
 }

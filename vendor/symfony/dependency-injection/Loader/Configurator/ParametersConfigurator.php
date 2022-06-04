@@ -19,6 +19,9 @@ use RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression;
 class ParametersConfigurator extends \RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     public const FACTORY = 'parameters';
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
+     */
     private $container;
     public function __construct(\RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {

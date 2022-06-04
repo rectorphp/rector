@@ -14,6 +14,7 @@ use RectorPrefix20220604\Symfony\Component\Console\Application;
 use RectorPrefix20220604\Symfony\Component\Console\Attribute\AsCommand;
 use RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionInput;
 use RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix20220604\Symfony\Component\Console\Completion\Suggestion;
 use RectorPrefix20220604\Symfony\Component\Console\Exception\ExceptionInterface;
 use RectorPrefix20220604\Symfony\Component\Console\Exception\InvalidArgumentException;
 use RectorPrefix20220604\Symfony\Component\Console\Exception\LogicException;
@@ -36,13 +37,20 @@ class Command
     public const INVALID = 2;
     /**
      * @var string|null The default command name
+     *
+     * @deprecated since Symfony 6.1, use the AsCommand attribute instead
      */
     protected static $defaultName;
     /**
      * @var string|null The default command description
+     *
+     * @deprecated since Symfony 6.1, use the AsCommand attribute instead
      */
     protected static $defaultDescription;
-    private $application = null;
+    /**
+     * @var \Symfony\Component\Console\Application|null
+     */
+    private $application;
     /**
      * @var string|null
      */
@@ -55,6 +63,9 @@ class Command
      * @var mixed[]
      */
     private $aliases = [];
+    /**
+     * @var \Symfony\Component\Console\Input\InputDefinition
+     */
     private $definition;
     /**
      * @var bool
@@ -68,7 +79,10 @@ class Command
      * @var string
      */
     private $description = '';
-    private $fullDefinition = null;
+    /**
+     * @var \Symfony\Component\Console\Input\InputDefinition|null
+     */
+    private $fullDefinition;
     /**
      * @var bool
      */
@@ -85,7 +99,10 @@ class Command
      * @var mixed[]
      */
     private $usages = [];
-    private $helperSet = null;
+    /**
+     * @var \Symfony\Component\Console\Helper\HelperSet|null
+     */
+    private $helperSet;
     public static function getDefaultName() : ?string
     {
         $class = static::class;
@@ -93,7 +110,11 @@ class Command
             return $attribute[0]->newInstance()->name;
         }
         $r = new \ReflectionProperty($class, 'defaultName');
-        return $class === $r->class ? static::$defaultName : null;
+        if ($class !== $r->class || null === static::$defaultName) {
+            return null;
+        }
+        trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultName" for setting a command name is deprecated. Add the "%s" attribute to the "%s" class instead.', \RectorPrefix20220604\Symfony\Component\Console\Attribute\AsCommand::class, static::class);
+        return static::$defaultName;
     }
     public static function getDefaultDescription() : ?string
     {
@@ -102,7 +123,11 @@ class Command
             return $attribute[0]->newInstance()->description;
         }
         $r = new \ReflectionProperty($class, 'defaultDescription');
-        return $class === $r->class ? static::$defaultDescription : null;
+        if ($class !== $r->class || null === static::$defaultDescription) {
+            return null;
+        }
+        trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultDescription" for setting a command description is deprecated. Add the "%s" attribute to the "%s" class instead.', \RectorPrefix20220604\Symfony\Component\Console\Attribute\AsCommand::class, static::class);
+        return static::$defaultDescription;
     }
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
@@ -291,6 +316,12 @@ class Command
      */
     public function complete(\RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
     {
+        $definition = $this->getDefinition();
+        if (\RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionInput::TYPE_OPTION_VALUE === $input->getCompletionType() && $definition->hasOption($input->getCompletionName())) {
+            $definition->getOption($input->getCompletionName())->complete($input, $suggestions);
+        } elseif (\RectorPrefix20220604\Symfony\Component\Console\Completion\CompletionInput::TYPE_ARGUMENT_VALUE === $input->getCompletionType() && $definition->hasArgument($input->getCompletionName())) {
+            $definition->getArgument($input->getCompletionName())->complete($input, $suggestions);
+        }
     }
     /**
      * Sets the code to execute when running this command.
@@ -392,8 +423,9 @@ class Command
     /**
      * Adds an argument.
      *
-     * @param int|null $mode    The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
-     * @param mixed    $default The default value (for InputArgument::OPTIONAL mode only)
+     * @param $mode    The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
+     * @param $default The default value (for InputArgument::OPTIONAL mode only)
+     * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      *
      * @throws InvalidArgumentException When argument mode is not valid
      *
@@ -401,10 +433,12 @@ class Command
      */
     public function addArgument(string $name, int $mode = null, string $description = '', $default = null)
     {
-        $this->definition->addArgument(new \RectorPrefix20220604\Symfony\Component\Console\Input\InputArgument($name, $mode, $description, $default));
-        if (null !== $this->fullDefinition) {
-            $this->fullDefinition->addArgument(new \RectorPrefix20220604\Symfony\Component\Console\Input\InputArgument($name, $mode, $description, $default));
+        $suggestedValues = 5 <= \func_num_args() ? \func_get_arg(4) : [];
+        if (!\is_array($suggestedValues) && !$suggestedValues instanceof \Closure) {
+            throw new \TypeError(\sprintf('Argument 5 passed to "%s()" must be array or \\Closure, "%s" given.', __METHOD__, \get_debug_type($suggestedValues)));
         }
+        $this->definition->addArgument(new \RectorPrefix20220604\Symfony\Component\Console\Input\InputArgument($name, $mode, $description, $default, $suggestedValues));
+        ($fullDefinition = $this->fullDefinition) ? $fullDefinition->addArgument(new \RectorPrefix20220604\Symfony\Component\Console\Input\InputArgument($name, $mode, $description, $default, $suggestedValues)) : null;
         return $this;
     }
     /**
@@ -413,6 +447,7 @@ class Command
      * @param $shortcut The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
      * @param $mode     The option mode: One of the InputOption::VALUE_* constants
      * @param $default  The default value (must be null for InputOption::VALUE_NONE)
+     * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      *
      * @throws InvalidArgumentException If option mode is invalid or incompatible
      *
@@ -420,10 +455,12 @@ class Command
      */
     public function addOption(string $name, $shortcut = null, int $mode = null, string $description = '', $default = null)
     {
-        $this->definition->addOption(new \RectorPrefix20220604\Symfony\Component\Console\Input\InputOption($name, $shortcut, $mode, $description, $default));
-        if (null !== $this->fullDefinition) {
-            $this->fullDefinition->addOption(new \RectorPrefix20220604\Symfony\Component\Console\Input\InputOption($name, $shortcut, $mode, $description, $default));
+        $suggestedValues = 6 <= \func_num_args() ? \func_get_arg(5) : [];
+        if (!\is_array($suggestedValues) && !$suggestedValues instanceof \Closure) {
+            throw new \TypeError(\sprintf('Argument 5 passed to "%s()" must be array or \\Closure, "%s" given.', __METHOD__, \get_debug_type($suggestedValues)));
         }
+        $this->definition->addOption(new \RectorPrefix20220604\Symfony\Component\Console\Input\InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues));
+        ($fullDefinition = $this->fullDefinition) ? $fullDefinition->addOption(new \RectorPrefix20220604\Symfony\Component\Console\Input\InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues)) : null;
         return $this;
     }
     /**
@@ -522,7 +559,7 @@ class Command
     public function getProcessedHelp() : string
     {
         $name = $this->name;
-        $isSingleCommand = $this->application && $this->application->isSingleCommand();
+        $isSingleCommand = ($application = $this->application) ? $application->isSingleCommand() : null;
         $placeholders = ['%command.name%', '%command.full_name%'];
         $replacements = [$name, $isSingleCommand ? $_SERVER['PHP_SELF'] : $_SERVER['PHP_SELF'] . ' ' . $name];
         return \str_replace($placeholders, $replacements, $this->getHelp() ?: $this->getDescription());

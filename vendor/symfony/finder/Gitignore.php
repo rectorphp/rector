@@ -38,7 +38,7 @@ class Gitignore
         $res = self::lineToRegex('');
         foreach ($gitignoreLines as $line) {
             $line = \preg_replace('~(?<!\\\\)[ \\t]+$~', '', $line);
-            if ('!' === \substr($line, 0, 1)) {
+            if (\strncmp($line, '!', \strlen('!')) === 0) {
                 $line = \substr($line, 1);
                 $isNegative = \true;
             } else {

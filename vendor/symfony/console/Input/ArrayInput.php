@@ -105,7 +105,7 @@ class ArrayInput extends \RectorPrefix20220604\Symfony\Component\Console\Input\I
                     $params[] = $param . ('' != $val ? $glue . $this->escapeToken($val) : '');
                 }
             } else {
-                $params[] = \is_array($val) ? \implode(' ', \array_map([$this, 'escapeToken'], $val)) : $this->escapeToken($val);
+                $params[] = \is_array($val) ? \implode(' ', \array_map(\Closure::fromCallable([$this, 'escapeToken']), $val)) : $this->escapeToken($val);
             }
         }
         return \implode(' ', $params);

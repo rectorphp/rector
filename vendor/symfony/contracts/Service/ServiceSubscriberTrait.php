@@ -11,6 +11,7 @@
 namespace RectorPrefix20220604\Symfony\Contracts\Service;
 
 use RectorPrefix20220604\Psr\Container\ContainerInterface;
+use RectorPrefix20220604\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20220604\Symfony\Contracts\Service\Attribute\SubscribedService;
 /**
  * Implementation of ServiceSubscriberInterface that determines subscribed services from

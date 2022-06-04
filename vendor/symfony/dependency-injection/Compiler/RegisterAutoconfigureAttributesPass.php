@@ -50,7 +50,6 @@ final class RegisterAutoconfigureAttributesPass implements \RectorPrefix20220604
             return (self::$registerForAutoconfiguration)($container, $class, $attribute);
         }
         $parseDefinitions = new \ReflectionMethod(\RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\YamlFileLoader::class, 'parseDefinitions');
-        $parseDefinitions->setAccessible(\true);
         $yamlLoader = $parseDefinitions->getDeclaringClass()->newInstanceWithoutConstructor();
         self::$registerForAutoconfiguration = static function (\RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerBuilder $container, \ReflectionClass $class, \ReflectionAttribute $attribute) use($parseDefinitions, $yamlLoader) {
             $attribute = (array) $attribute->newInstance();

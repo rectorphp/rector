@@ -31,6 +31,9 @@ class ConsoleSectionOutput extends \RectorPrefix20220604\Symfony\Component\Conso
      * @var mixed[]
      */
     private $sections;
+    /**
+     * @var \Symfony\Component\Console\Terminal
+     */
     private $terminal;
     /**
      * @param resource               $stream

@@ -30,7 +30,7 @@ class DateComparator extends \RectorPrefix20220604\Symfony\Component\Finder\Comp
         try {
             $date = new \DateTime($matches[2]);
             $target = $date->format('U');
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             throw new \InvalidArgumentException(\sprintf('"%s" is not a valid date.', $matches[2]));
         }
         $operator = $matches[1] ?? '==';

@@ -277,7 +277,7 @@ final class EnglishInflector implements \RectorPrefix20220604\Symfony\Component\
                 if ($j === $suffixLength) {
                     // Is there any character preceding the suffix in the plural string?
                     if ($j < $pluralLength) {
-                        $nextIsVocal = \false !== \strpos('aeiou', $lowerPluralRev[$j]);
+                        $nextIsVocal = \strpos('aeiou', $lowerPluralRev[$j]) !== \false;
                         if (!$map[2] && $nextIsVocal) {
                             // suffix may not succeed a vocal but next char is one
                             break;
@@ -341,7 +341,7 @@ final class EnglishInflector implements \RectorPrefix20220604\Symfony\Component\
                 if ($j === $suffixLength) {
                     // Is there any character preceding the suffix in the plural string?
                     if ($j < $singularLength) {
-                        $nextIsVocal = \false !== \strpos('aeiou', $lowerSingularRev[$j]);
+                        $nextIsVocal = \strpos('aeiou', $lowerSingularRev[$j]) !== \false;
                         if (!$map[2] && $nextIsVocal) {
                             // suffix may not succeed a vocal but next char is one
                             break;

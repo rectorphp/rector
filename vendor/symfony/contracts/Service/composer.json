@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "php": ">=8.0.2",
+        "php": ">=8.1",
         "psr\/container": "^2.0"
     },
     "conflict": {
@@ -35,12 +35,15 @@
     "autoload": {
         "psr-4": {
             "RectorPrefix20220604\\Symfony\\Contracts\\Service\\": ""
-        }
+        },
+        "exclude-from-classmap": [
+            "\/Test\/"
+        ]
     },
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-main": "3.0-dev"
+            "dev-main": "3.1-dev"
         },
         "thanks": {
             "name": "symfony\/contracts",

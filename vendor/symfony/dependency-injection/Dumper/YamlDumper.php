@@ -35,6 +35,9 @@ use RectorPrefix20220604\Symfony\Component\Yaml\Yaml;
  */
 class YamlDumper extends \RectorPrefix20220604\Symfony\Component\DependencyInjection\Dumper\Dumper
 {
+    /**
+     * @var YmlDumper
+     */
     private $dumper;
     /**
      * Dumps the service container as an YAML string.
@@ -51,7 +54,7 @@ class YamlDumper extends \RectorPrefix20220604\Symfony\Component\DependencyInjec
     {
         $code = "    {$id}:\n";
         if ($class = $definition->getClass()) {
-            if ('\\' === \substr($class, 0, 1)) {
+            if (\strncmp($class, '\\', \strlen('\\')) === 0) {
                 $class = \substr($class, 1);
             }
             $code .= \sprintf("        class: %s\n", $this->dumper->dump($class));
@@ -206,7 +209,7 @@ class YamlDumper extends \RectorPrefix20220604\Symfony\Component\DependencyInjec
     {
         if ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
             $value = $value->getValues()[0];
-            return new \RectorPrefix20220604\Symfony\Component\Yaml\Tag\TaggedValue('service_closure', $this->getServiceCall((string) $value, $value));
+            return new \RectorPrefix20220604\Symfony\Component\Yaml\Tag\TaggedValue('service_closure', $this->dumpValue($value));
         }
         if ($value instanceof \RectorPrefix20220604\Symfony\Component\DependencyInjection\Argument\ArgumentInterface) {
             $tag = $value;

@@ -4,11 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e
+class ComposerStaticInit58cd8190dae33fe52cda172fd214e71c
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -51,7 +50,6 @@ class ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e
             'RectorPrefix20220604\\Symplify\\ComposerJsonManipulator\\' => 54,
             'RectorPrefix20220604\\Symplify\\AutowireArrayParameter\\' => 53,
             'RectorPrefix20220604\\Symplify\\Astral\\' => 37,
-            'RectorPrefix20220604\\Symfony\\Polyfill\\Php81\\' => 44,
             'RectorPrefix20220604\\Symfony\\Polyfill\\Mbstring\\' => 47,
             'RectorPrefix20220604\\Symfony\\Polyfill\\Intl\\Normalizer\\' => 54,
             'RectorPrefix20220604\\Symfony\\Contracts\\' => 39,
@@ -193,10 +191,6 @@ class ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e
         'RectorPrefix20220604\\Symplify\\Astral\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/astral/src',
-        ),
-        'RectorPrefix20220604\\Symfony\\Polyfill\\Php81\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php81',
         ),
         'RectorPrefix20220604\\Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -1089,6 +1083,7 @@ class ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e
         'RectorPrefix20220604\\Symfony\\Component\\Console\\Completion\\CompletionSuggestions' => __DIR__ . '/..' . '/symfony/console/Completion/CompletionSuggestions.php',
         'RectorPrefix20220604\\Symfony\\Component\\Console\\Completion\\Output\\BashCompletionOutput' => __DIR__ . '/..' . '/symfony/console/Completion/Output/BashCompletionOutput.php',
         'RectorPrefix20220604\\Symfony\\Component\\Console\\Completion\\Output\\CompletionOutputInterface' => __DIR__ . '/..' . '/symfony/console/Completion/Output/CompletionOutputInterface.php',
+        'RectorPrefix20220604\\Symfony\\Component\\Console\\Completion\\Output\\FishCompletionOutput' => __DIR__ . '/..' . '/symfony/console/Completion/Output/FishCompletionOutput.php',
         'RectorPrefix20220604\\Symfony\\Component\\Console\\Completion\\Suggestion' => __DIR__ . '/..' . '/symfony/console/Completion/Suggestion.php',
         'RectorPrefix20220604\\Symfony\\Component\\Console\\ConsoleEvents' => __DIR__ . '/..' . '/symfony/console/ConsoleEvents.php',
         'RectorPrefix20220604\\Symfony\\Component\\Console\\Cursor' => __DIR__ . '/..' . '/symfony/console/Cursor.php',
@@ -1175,9 +1170,12 @@ class ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Argument\\ServiceLocator' => __DIR__ . '/..' . '/symfony/dependency-injection/Argument/ServiceLocator.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Argument\\ServiceLocatorArgument' => __DIR__ . '/..' . '/symfony/dependency-injection/Argument/ServiceLocatorArgument.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Argument\\TaggedIteratorArgument' => __DIR__ . '/..' . '/symfony/dependency-injection/Argument/TaggedIteratorArgument.php',
+        'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Attribute\\AsDecorator' => __DIR__ . '/..' . '/symfony/dependency-injection/Attribute/AsDecorator.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Attribute\\AsTaggedItem' => __DIR__ . '/..' . '/symfony/dependency-injection/Attribute/AsTaggedItem.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Attribute\\Autoconfigure' => __DIR__ . '/..' . '/symfony/dependency-injection/Attribute/Autoconfigure.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Attribute\\AutoconfigureTag' => __DIR__ . '/..' . '/symfony/dependency-injection/Attribute/AutoconfigureTag.php',
+        'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Attribute\\Autowire' => __DIR__ . '/..' . '/symfony/dependency-injection/Attribute/Autowire.php',
+        'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Attribute\\MapDecorated' => __DIR__ . '/..' . '/symfony/dependency-injection/Attribute/MapDecorated.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Attribute\\TaggedIterator' => __DIR__ . '/..' . '/symfony/dependency-injection/Attribute/TaggedIterator.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Attribute\\TaggedLocator' => __DIR__ . '/..' . '/symfony/dependency-injection/Attribute/TaggedLocator.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Attribute\\Target' => __DIR__ . '/..' . '/symfony/dependency-injection/Attribute/Target.php',
@@ -1188,6 +1186,7 @@ class ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Compiler\\AnalyzeServiceReferencesPass' => __DIR__ . '/..' . '/symfony/dependency-injection/Compiler/AnalyzeServiceReferencesPass.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Compiler\\AttributeAutoconfigurationPass' => __DIR__ . '/..' . '/symfony/dependency-injection/Compiler/AttributeAutoconfigurationPass.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Compiler\\AutoAliasServicePass' => __DIR__ . '/..' . '/symfony/dependency-injection/Compiler/AutoAliasServicePass.php',
+        'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Compiler\\AutowireAsDecoratorPass' => __DIR__ . '/..' . '/symfony/dependency-injection/Compiler/AutowireAsDecoratorPass.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Compiler\\AutowirePass' => __DIR__ . '/..' . '/symfony/dependency-injection/Compiler/AutowirePass.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Compiler\\AutowireRequiredMethodsPass' => __DIR__ . '/..' . '/symfony/dependency-injection/Compiler/AutowireRequiredMethodsPass.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Compiler\\AutowireRequiredPropertiesPass' => __DIR__ . '/..' . '/symfony/dependency-injection/Compiler/AutowireRequiredPropertiesPass.php',
@@ -1266,9 +1265,12 @@ class ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/dependency-injection/Exception/RuntimeException.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Exception\\ServiceCircularReferenceException' => __DIR__ . '/..' . '/symfony/dependency-injection/Exception/ServiceCircularReferenceException.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Exception\\ServiceNotFoundException' => __DIR__ . '/..' . '/symfony/dependency-injection/Exception/ServiceNotFoundException.php',
+        'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Extension\\AbstractExtension' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/AbstractExtension.php',
+        'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Extension\\ConfigurableExtensionInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/ConfigurableExtensionInterface.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Extension\\ConfigurationExtensionInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/ConfigurationExtensionInterface.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Extension\\Extension' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/Extension.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Extension\\ExtensionInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/ExtensionInterface.php',
+        'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Extension\\ExtensionTrait' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/ExtensionTrait.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\Extension\\PrependExtensionInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/PrependExtensionInterface.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\LazyProxy\\Instantiator\\InstantiatorInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/LazyProxy/Instantiator/InstantiatorInterface.php',
         'RectorPrefix20220604\\Symfony\\Component\\DependencyInjection\\LazyProxy\\Instantiator\\RealServiceInstantiator' => __DIR__ . '/..' . '/symfony/dependency-injection/LazyProxy/Instantiator/RealServiceInstantiator.php',
@@ -1423,7 +1425,6 @@ class ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e
         'RectorPrefix20220604\\Symfony\\Contracts\\Translation\\TranslatorTrait' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorTrait.php',
         'RectorPrefix20220604\\Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Normalizer.php',
         'RectorPrefix20220604\\Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
-        'RectorPrefix20220604\\Symfony\\Polyfill\\Php81\\Php81' => __DIR__ . '/..' . '/symfony/polyfill-php81/Php81.php',
         'RectorPrefix20220604\\Symplify\\Astral\\Contract\\NodeNameResolverInterface' => __DIR__ . '/..' . '/symplify/astral/src/Contract/NodeNameResolverInterface.php',
         'RectorPrefix20220604\\Symplify\\Astral\\Contract\\NodeValueResolver\\NodeValueResolverInterface' => __DIR__ . '/..' . '/symplify/astral/src/Contract/NodeValueResolver/NodeValueResolverInterface.php',
         'RectorPrefix20220604\\Symplify\\Astral\\Exception\\ShouldNotHappenException' => __DIR__ . '/..' . '/symplify/astral/src/Exception/ShouldNotHappenException.php',
@@ -3457,7 +3458,6 @@ class ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e
         'Rector\\Visibility\\Rector\\ClassMethod\\ExplicitPublicClassMethodRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php',
         'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
         'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
-        'ReturnTypeWillChange' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/ReturnTypeWillChange.php',
         'Ssch\\TYPO3Rector\\Configuration\\Typo3Option' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Configuration/Typo3Option.php',
         'Ssch\\TYPO3Rector\\Contract\\FileProcessor\\FlexForms\\Rector\\FlexFormRectorInterface' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/FileProcessor/FlexForms/Rector/FlexFormRectorInterface.php',
         'Ssch\\TYPO3Rector\\Contract\\FileProcessor\\Fluid\\Rector\\FluidRectorInterface' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/FileProcessor/Fluid/Rector/FluidRectorInterface.php',
@@ -3792,9 +3792,9 @@ class ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdbbd139aceaca9d0c37ec18fb314ef3e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit58cd8190dae33fe52cda172fd214e71c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit58cd8190dae33fe52cda172fd214e71c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit58cd8190dae33fe52cda172fd214e71c::$classMap;
 
         }, null, ClassLoader::class);
     }

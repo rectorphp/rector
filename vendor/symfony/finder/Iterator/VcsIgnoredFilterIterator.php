@@ -11,6 +11,9 @@
 namespace RectorPrefix20220604\Symfony\Component\Finder\Iterator;
 
 use RectorPrefix20220604\Symfony\Component\Finder\Gitignore;
+/**
+ * @extends \FilterIterator<string, \SplFileInfo>
+ */
 final class VcsIgnoredFilterIterator extends \FilterIterator
 {
     /**
@@ -25,9 +28,18 @@ final class VcsIgnoredFilterIterator extends \FilterIterator
      * @var array<string, bool>
      */
     private $ignoredPathsCache = [];
+    /**
+     * @param \Iterator<string, \SplFileInfo> $iterator
+     */
     public function __construct(\Iterator $iterator, string $baseDir)
     {
         $this->baseDir = $this->normalizePath($baseDir);
+        foreach ($this->parentDirectoriesUpwards($this->baseDir) as $parentDirectory) {
+            if (@\is_dir("{$parentDirectory}/.git")) {
+                $this->baseDir = $parentDirectory;
+                break;
+            }
+        }
         parent::__construct($iterator);
     }
     public function accept() : bool
@@ -45,7 +57,7 @@ final class VcsIgnoredFilterIterator extends \FilterIterator
             return $this->ignoredPathsCache[$fileRealPath];
         }
         $ignored = \false;
-        foreach ($this->parentsDirectoryDownward($fileRealPath) as $parentDirectory) {
+        foreach ($this->parentDirectoriesDownwards($fileRealPath) as $parentDirectory) {
             if ($this->isIgnored($parentDirectory)) {
                 // rules in ignored directories are ignored, no need to check further.
                 break;
@@ -68,23 +80,32 @@ final class VcsIgnoredFilterIterator extends \FilterIterator
     /**
      * @return list<string>
      */
-    private function parentsDirectoryDownward(string $fileRealPath) : array
+    private function parentDirectoriesUpwards(string $from) : array
     {
         $parentDirectories = [];
-        $parentDirectory = $fileRealPath;
+        $parentDirectory = $from;
         while (\true) {
             $newParentDirectory = \dirname($parentDirectory);
             // dirname('/') = '/'
             if ($newParentDirectory === $parentDirectory) {
                 break;
             }
-            $parentDirectory = $newParentDirectory;
-            if (0 !== \strpos($parentDirectory, $this->baseDir)) {
-                break;
-            }
-            $parentDirectories[] = $parentDirectory;
+            $parentDirectories[] = $parentDirectory = $newParentDirectory;
         }
-        return \array_reverse($parentDirectories);
+        return $parentDirectories;
+    }
+    private function parentDirectoriesUpTo(string $from, string $upTo) : array
+    {
+        return \array_filter($this->parentDirectoriesUpwards($from), static function (string $directory) use($upTo) : bool {
+            return \strncmp($directory, $upTo, \strlen($upTo)) === 0;
+        });
+    }
+    /**
+     * @return list<string>
+     */
+    private function parentDirectoriesDownwards(string $fileRealPath) : array
+    {
+        return \array_reverse($this->parentDirectoriesUpTo($fileRealPath, $this->baseDir));
     }
     /**
      * @return array{0: string, 1: string}|null

@@ -18,6 +18,9 @@ use RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\Runtime
  */
 class EnvVarProcessor implements \RectorPrefix20220604\Symfony\Component\DependencyInjection\EnvVarProcessorInterface
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
     private $container;
     /**
      * @var \Traversable
@@ -78,7 +81,7 @@ class EnvVarProcessor implements \RectorPrefix20220604\Symfony\Component\Depende
                 if ('' !== $env && null !== $env) {
                     return $env;
                 }
-            } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\EnvNotFoundException $e) {
+            } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\EnvNotFoundException $exception) {
                 // no-op
             }
             return '' === $default ? null : $this->container->getParameter($default);
@@ -129,7 +132,7 @@ class EnvVarProcessor implements \RectorPrefix20220604\Symfony\Component\Depende
                     if ($ended || $count === $i) {
                         $loaders = $this->loaders;
                     }
-                } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException $e) {
+                } catch (\RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException $exception) {
                     // skip loaders that need an env var that is not defined
                 } finally {
                     $this->loaders = $loaders;

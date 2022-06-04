@@ -19,7 +19,13 @@ use RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\Service
  */
 final class ReverseContainer
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\Container
+     */
     private $serviceContainer;
+    /**
+     * @var \Psr\Container\ContainerInterface
+     */
     private $reversibleLocator;
     /**
      * @var string

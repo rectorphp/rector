@@ -33,6 +33,9 @@ class Table
     private const SEPARATOR_BOTTOM = 3;
     private const BORDER_OUTSIDE = 0;
     private const BORDER_INSIDE = 1;
+    private const DISPLAY_ORIENTATION_DEFAULT = 'default';
+    private const DISPLAY_ORIENTATION_HORIZONTAL = 'horizontal';
+    private const DISPLAY_ORIENTATION_VERTICAL = 'vertical';
     /**
      * @var string|null
      */
@@ -50,10 +53,6 @@ class Table
      */
     private $rows = [];
     /**
-     * @var bool
-     */
-    private $horizontal = \false;
-    /**
      * @var mixed[]
      */
     private $effectiveColumnWidths = [];
@@ -61,7 +60,13 @@ class Table
      * @var int
      */
     private $numberOfColumns;
+    /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
     private $output;
+    /**
+     * @var \Symfony\Component\Console\Helper\TableStyle
+     */
     private $style;
     /**
      * @var mixed[]
@@ -79,6 +84,10 @@ class Table
      * @var bool
      */
     private $rendered = \false;
+    /**
+     * @var string
+     */
+    private $displayOrientation = self::DISPLAY_ORIENTATION_DEFAULT;
     /**
      * @var mixed[]
      */
@@ -274,7 +283,15 @@ class Table
      */
     public function setHorizontal(bool $horizontal = \true)
     {
-        $this->horizontal = $horizontal;
+        $this->displayOrientation = $horizontal ? self::DISPLAY_ORIENTATION_HORIZONTAL : self::DISPLAY_ORIENTATION_DEFAULT;
+        return $this;
+    }
+    /**
+     * @return $this
+     */
+    public function setVertical(bool $vertical = \true)
+    {
+        $this->displayOrientation = $vertical ? self::DISPLAY_ORIENTATION_VERTICAL : self::DISPLAY_ORIENTATION_DEFAULT;
         return $this;
     }
     /**
@@ -293,8 +310,13 @@ class Table
     public function render()
     {
         $divider = new \RectorPrefix20220604\Symfony\Component\Console\Helper\TableSeparator();
-        if ($this->horizontal) {
-            $rows = [];
+        $isCellWithColspan = static function ($cell) {
+            return $cell instanceof \RectorPrefix20220604\Symfony\Component\Console\Helper\TableCell && $cell->getColspan() >= 2;
+        };
+        $horizontal = self::DISPLAY_ORIENTATION_HORIZONTAL === $this->displayOrientation;
+        $vertical = self::DISPLAY_ORIENTATION_VERTICAL === $this->displayOrientation;
+        $rows = [];
+        if ($horizontal) {
             foreach ($this->headers[0] ?? [] as $i => $header) {
                 $rows[$i] = [$header];
                 foreach ($this->rows as $row) {
@@ -303,10 +325,39 @@ class Table
                     }
                     if (isset($row[$i])) {
                         $rows[$i][] = $row[$i];
-                    } elseif ($rows[$i][0] instanceof \RectorPrefix20220604\Symfony\Component\Console\Helper\TableCell && $rows[$i][0]->getColspan() >= 2) {
+                    } elseif ($isCellWithColspan($rows[$i][0])) {
                         // Noop, there is a "title"
                     } else {
                         $rows[$i][] = null;
+                    }
+                }
+            }
+        } elseif ($vertical) {
+            $formatter = $this->output->getFormatter();
+            $maxHeaderLength = \array_reduce($this->headers[0] ?? [], static function ($max, $header) use($formatter) {
+                return \max($max, \RectorPrefix20220604\Symfony\Component\Console\Helper\Helper::width(\RectorPrefix20220604\Symfony\Component\Console\Helper\Helper::removeDecoration($formatter, $header)));
+            }, 0);
+            foreach ($this->rows as $row) {
+                if ($row instanceof \RectorPrefix20220604\Symfony\Component\Console\Helper\TableSeparator) {
+                    continue;
+                }
+                if ($rows) {
+                    $rows[] = [$divider];
+                }
+                $containsColspan = \false;
+                foreach ($row as $cell) {
+                    if ($containsColspan = $isCellWithColspan($cell)) {
+                        break;
+                    }
+                }
+                $headers = $this->headers[0] ?? [];
+                $maxRows = \max(\count($headers), \count($row));
+                for ($i = 0; $i < $maxRows; ++$i) {
+                    $cell = (string) ($row[$i] ?? '');
+                    if ($headers && !$containsColspan) {
+                        $rows[] = [\sprintf('<comment>%s</>: %s', \str_pad($headers[$i] ?? '', $maxHeaderLength, ' ', \STR_PAD_LEFT), $cell)];
+                    } elseif ('' !== $cell) {
+                        $rows[] = [$cell];
                     }
                 }
             }
@@ -316,8 +367,8 @@ class Table
         $this->calculateNumberOfColumns($rows);
         $rowGroups = $this->buildTableRows($rows);
         $this->calculateColumnsWidth($rowGroups);
-        $isHeader = !$this->horizontal;
-        $isFirstRow = $this->horizontal;
+        $isHeader = !$horizontal;
+        $isFirstRow = $horizontal;
         $hasTitle = (bool) $this->headerTitle;
         foreach ($rowGroups as $rowGroup) {
             $isHeaderSeparatorRendered = \false;
@@ -344,7 +395,11 @@ class Table
                     $isFirstRow = \false;
                     $hasTitle = \false;
                 }
-                if ($this->horizontal) {
+                if ($vertical) {
+                    $isHeader = \false;
+                    $isFirstRow = \false;
+                }
+                if ($horizontal) {
                     $this->renderRow($row, $this->style->getCellRowFormat(), $this->style->getCellHeaderFormat());
                 } else {
                     $this->renderRow($row, $isHeader ? $this->style->getCellHeaderFormat() : $this->style->getCellRowFormat());
@@ -364,7 +419,7 @@ class Table
      */
     private function renderRowSeparator(int $type = self::SEPARATOR_MID, string $title = null, string $titleFormat = null)
     {
-        if (0 === ($count = $this->numberOfColumns)) {
+        if (!($count = $this->numberOfColumns)) {
             return;
         }
         $borders = $this->style->getBorderChars();
@@ -465,11 +520,11 @@ class Table
                     $tag = \http_build_query($cell->getStyle()->getTagOptions(), '', ';');
                     $cellFormat = '<' . $tag . '>%s</>';
                 }
-                if (\strstr($content, '</>')) {
+                if (\strpos($content, '</>') !== \false) {
                     $content = \str_replace('</>', '', $content);
                     $width -= 3;
                 }
-                if (\strstr($content, '<fg=default;bg=default>')) {
+                if (\strpos($content, '<fg=default;bg=default>') !== \false) {
                     $content = \str_replace('<fg=default;bg=default>', '', $content);
                     $width -= \strlen('<fg=default;bg=default>');
                 }
@@ -505,7 +560,7 @@ class Table
                 if (isset($this->columnMaxWidths[$column]) && \RectorPrefix20220604\Symfony\Component\Console\Helper\Helper::width(\RectorPrefix20220604\Symfony\Component\Console\Helper\Helper::removeDecoration($formatter, $cell)) > $this->columnMaxWidths[$column]) {
                     $cell = $formatter->formatAndWrap($cell, $this->columnMaxWidths[$column] * $colspan);
                 }
-                if (!\strstr($cell ?? '', "\n")) {
+                if (\strpos($cell ?? '', "\n") === \false) {
                     continue;
                 }
                 $escaped = \implode("\n", \array_map([\RectorPrefix20220604\Symfony\Component\Console\Formatter\OutputFormatter::class, 'escapeTrailingBackslash'], \explode("\n", $cell)));
@@ -545,7 +600,7 @@ class Table
             ++$numberOfRows;
             // Add row for header separator
         }
-        if (\count($this->rows) > 0) {
+        if ($this->rows) {
             ++$numberOfRows;
             // Add row for footer separator
         }
@@ -566,7 +621,7 @@ class Table
             if ($cell instanceof \RectorPrefix20220604\Symfony\Component\Console\Helper\TableCell && $cell->getRowspan() > 1) {
                 $nbLines = $cell->getRowspan() - 1;
                 $lines = [$cell];
-                if (\strstr($cell, "\n")) {
+                if (\strpos($cell, "\n") !== \false) {
                     $lines = \explode("\n", \str_replace("\n", "<fg=default;bg=default>\n</>", $cell));
                     $nbLines = \count($lines) > $nbLines ? \substr_count($cell, "\n") : $nbLines;
                     $rows[$line][$column] = new \RectorPrefix20220604\Symfony\Component\Console\Helper\TableCell($lines[0], ['colspan' => $cell->getColspan(), 'style' => $cell->getStyle()]);

@@ -19,7 +19,13 @@ namespace RectorPrefix20220604\Symfony\Component\DependencyInjection\Compiler;
  */
 class ServiceReferenceGraphEdge
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraphNode
+     */
     private $sourceNode;
+    /**
+     * @var \Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraphNode
+     */
     private $destNode;
     /**
      * @var mixed

@@ -16,6 +16,9 @@ use RectorPrefix20220604\Symfony\Component\Console\Output\OutputInterface;
  */
 final class Cursor
 {
+    /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
     private $output;
     private $input;
     /**

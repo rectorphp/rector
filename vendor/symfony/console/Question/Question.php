@@ -164,7 +164,7 @@ class Question
         } elseif ($values instanceof \Traversable) {
             $valueCache = null;
             $callback = static function () use($values, &$valueCache) {
-                return $valueCache ?? ($valueCache = \iterator_to_array($values, \false));
+                return $valueCache = $valueCache ?? \iterator_to_array($values, \false);
             };
         } else {
             $callback = null;
@@ -190,7 +190,7 @@ class Question
         if ($this->hidden && null !== $callback) {
             throw new \RectorPrefix20220604\Symfony\Component\Console\Exception\LogicException('A hidden question cannot use the autocompleter.');
         }
-        $this->autocompleterCallback = null === $callback || $callback instanceof \Closure ? $callback : \Closure::fromCallable($callback);
+        $this->autocompleterCallback = null === $callback ? null : \Closure::fromCallable($callback);
         return $this;
     }
     /**
@@ -200,7 +200,7 @@ class Question
      */
     public function setValidator(callable $validator = null)
     {
-        $this->validator = null === $validator || $validator instanceof \Closure ? $validator : \Closure::fromCallable($validator);
+        $this->validator = null === $validator ? null : \Closure::fromCallable($validator);
         return $this;
     }
     /**
@@ -245,7 +245,7 @@ class Question
      */
     public function setNormalizer(callable $normalizer)
     {
-        $this->normalizer = $normalizer instanceof \Closure ? $normalizer : \Closure::fromCallable($normalizer);
+        $this->normalizer = \Closure::fromCallable($normalizer);
         return $this;
     }
     /**
