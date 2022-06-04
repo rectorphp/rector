@@ -88,64 +88,33 @@ CODE_SAMPLE
         }
 
         $middleAssign = $secondStmt->expr;
+        $assignVar = $middleAssign->var;
 
-        if ($middleAssign->var instanceof Variable) {
-            return $this->refactorToVariableAssign($middleAssign, $variableAndPropertyFetchAssign, $node);
+        // unwrap all array dim fetch nesting
+        $lastArrayDimFetch = null;
+        while ($assignVar instanceof ArrayDimFetch) {
+            $lastArrayDimFetch = $assignVar;
+            $assignVar = $assignVar->var;
         }
 
-        if ($middleAssign->var instanceof ArrayDimFetch) {
-            return $this->removeToArrayDimFetchAssign($middleAssign, $variableAndPropertyFetchAssign, $node);
-        }
-
-        return null;
-    }
-
-    private function refactorToVariableAssign(
-        Assign $middleAssign,
-        VariableAndPropertyFetchAssign $variableAndPropertyFetchAssign,
-        StmtsAwareInterface $stmtsAware
-    ): StmtsAwareInterface|Node|null {
-        $middleVariable = $middleAssign->var;
-
-        if (! $this->nodeComparator->areNodesEqual($middleVariable, $variableAndPropertyFetchAssign->getVariable())) {
+        if (! $assignVar instanceof Variable) {
             return null;
         }
 
-        // remove just-assign stmts
-        unset($stmtsAware->stmts[0]);
-        unset($stmtsAware->stmts[2]);
-
-        $middleAssign->var = $variableAndPropertyFetchAssign->getPropertyFetch();
-
-        return $stmtsAware;
-    }
-
-    private function removeToArrayDimFetchAssign(
-        Assign $middleAssign,
-        VariableAndPropertyFetchAssign $variableAndPropertyFetchAssign,
-        StmtsAwareInterface $stmtsAware
-    ): StmtsAwareInterface|null {
-        $middleArrayDimFetch = $middleAssign->var;
-        if (! $middleArrayDimFetch instanceof ArrayDimFetch) {
+        if (! $this->nodeComparator->areNodesEqual($assignVar, $variableAndPropertyFetchAssign->getVariable())) {
             return null;
         }
 
-        if ($middleArrayDimFetch->var instanceof Variable) {
-            $middleNestedVariable = $middleArrayDimFetch->var;
-            if (! $this->nodeComparator->areNodesEqual(
-                $middleNestedVariable,
-                $variableAndPropertyFetchAssign->getVariable()
-            )) {
-                return null;
-            }
-
-            $middleArrayDimFetch->var = $variableAndPropertyFetchAssign->getPropertyFetch();
+        if ($lastArrayDimFetch instanceof ArrayDimFetch) {
+            $lastArrayDimFetch->var = $variableAndPropertyFetchAssign->getPropertyFetch();
+        } else {
+            $middleAssign->var = $variableAndPropertyFetchAssign->getPropertyFetch();
         }
 
         // remove just-assign stmts
-        unset($stmtsAware->stmts[0]);
-        unset($stmtsAware->stmts[2]);
+        unset($node->stmts[0]);
+        unset($node->stmts[2]);
 
-        return $stmtsAware;
+        return $node;
     }
 }

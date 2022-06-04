@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DeadCode\Rector\StmtsAwareInterface\RemoveJustPropertyFetchForAssignRector\Fixture;
 
-class SomeClass
+final class SomeClass
 {
     private $items = [];
 
@@ -20,7 +20,7 @@ class SomeClass
 
 namespace Rector\Tests\DeadCode\Rector\StmtsAwareInterface\RemoveJustPropertyFetchForAssignRector\Fixture;
 
-class SomeClass
+final class SomeClass
 {
     private $items = [];
 

@@ -55,6 +55,7 @@
     "require-dev": {
         "brianium/paratest": "^6.4",
         "cweagans/composer-patches": "^1.7.2",
+        "myclabs/php-enum": "^1.8",
         "nategood/httpful": "^0.3.2",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-nette": "^1.0",

@@ -41,6 +41,7 @@ final class JustPropertyFetchVariableAssignMatcher
             return null;
         }
 
+        // property fetch are the same
         if (! $this->nodeComparator->areNodesEqual(
             $firstVariableAndPropertyFetchAssign->getPropertyFetch(),
             $thirdVariableAndPropertyFetchAssign->getPropertyFetch()
@@ -48,6 +49,7 @@ final class JustPropertyFetchVariableAssignMatcher
             return null;
         }
 
+        // variables are the same
         if (! $this->nodeComparator->areNodesEqual(
             $firstVariableAndPropertyFetchAssign->getVariable(),
             $thirdVariableAndPropertyFetchAssign->getVariable()
