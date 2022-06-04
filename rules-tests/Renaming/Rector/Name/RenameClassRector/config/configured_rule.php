@@ -45,5 +45,6 @@ return static function (RectorConfig $rectorConfig): void {
             SomeNonFinalClass::class => SomeFinalClass::class,
             'Foo\Bar' => 'Foo\Bar\BarInterface',
             'Doctrine\DBAL\DBALException' => 'Doctrine\DBAL\Exception',
+            'Bar' => 'BarInterface',
         ]);
 };
