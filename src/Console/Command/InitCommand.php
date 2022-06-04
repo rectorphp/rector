@@ -7,29 +7,26 @@ namespace Rector\Core\Console\Command;
 use Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Console\OutputStyleInterface;
-use Rector\Core\Contract\Template\TemplateResolverInterface;
-use Rector\Core\Exception\Template\TemplateTypeNotFoundException;
 use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\Template\DefaultResolver;
-use Stringable;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symplify\SmartFileSystem\FileSystemGuard;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class InitCommand extends Command
 {
     /**
-     * @param TemplateResolverInterface[] $templateResolvers
+     * @var string
      */
+    private const TEMPLATE_PATH = __DIR__ . '/../../../templates/rector.php.dist';
+
     public function __construct(
-        private readonly FileSystemGuard $fileSystemGuard,
         private readonly SmartFileSystem $smartFileSystem,
         private readonly OutputStyleInterface $rectorOutputStyle,
-        private readonly array $templateResolvers,
-        private readonly PhpVersionProvider $phpVersionProvider
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly SymfonyStyle $symfonyStyle
     ) {
         parent::__construct();
     }
@@ -40,22 +37,25 @@ final class InitCommand extends Command
 
         $this->setDescription('Generate rector.php configuration file');
 
+        // deprecated
         $this->addOption(
             Option::TEMPLATE_TYPE,
             null,
             InputOption::VALUE_OPTIONAL,
-            'A template type like default, nette, doctrine etc.',
-            DefaultResolver::TYPE,
+            'A template type like default, nette, doctrine etc.'
         );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $templateType = (string) $input->getOption(Option::TEMPLATE_TYPE);
-
-        $rectorTemplateFilePath = $this->resolveTemplateFilePathByType($templateType);
-
-        $this->fileSystemGuard->ensureFileExists($rectorTemplateFilePath, __METHOD__);
+        if ($templateType !== '') {
+            // notice warning
+            $this->symfonyStyle->warning(
+                'The option "--type" is deprecated. Custom config should be part of project documentation instead.'
+            );
+            sleep(3);
+        }
 
         $rectorRootFilePath = getcwd() . '/rector.php';
 
@@ -63,7 +63,7 @@ final class InitCommand extends Command
         if ($doesFileExist) {
             $this->rectorOutputStyle->warning('Config file "rector.php" already exists');
         } else {
-            $this->smartFileSystem->copy($rectorTemplateFilePath, $rectorRootFilePath);
+            $this->smartFileSystem->copy(self::TEMPLATE_PATH, $rectorRootFilePath);
 
             $fullPHPVersion = (string) $this->phpVersionProvider->provide();
             $phpVersion = Strings::substring($fullPHPVersion, 0, 1) . Strings::substring($fullPHPVersion, 2, 1);
@@ -80,32 +80,5 @@ final class InitCommand extends Command
         }
 
         return Command::SUCCESS;
-    }
-
-    private function resolveTemplateFilePathByType(string $templateType): string
-    {
-        $rectorTemplateFilePath = null;
-
-        foreach ($this->templateResolvers as $templateResolver) {
-            if ($templateResolver->supports($templateType)) {
-                $rectorTemplateFilePath = $templateResolver->provide();
-                break;
-            }
-        }
-
-        if ($rectorTemplateFilePath === null) {
-            $templateResolverTypes = [];
-            foreach ($this->templateResolvers as $templateResolver) {
-                if (method_exists($templateResolver, 'getType')) {
-                    $templateResolverTypes[] = $templateResolver->getType();
-                } elseif ($templateResolver instanceof Stringable) {
-                    $templateResolverTypes[] = (string) $templateResolver;
-                }
-            }
-
-            throw new TemplateTypeNotFoundException($templateType, $templateResolverTypes);
-        }
-
-        return $rectorTemplateFilePath;
     }
 }

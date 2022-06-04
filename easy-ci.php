@@ -10,6 +10,7 @@ use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Contract\Template\TemplateResolverInterface;
 use Rector\Core\NodeManipulator\MethodCallManipulator;
 use Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer;
 use Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator;
@@ -77,5 +78,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ParentNodeReadAnalyzerInterface::class,
         StmtsAwareInterface::class,
         \Rector\CodeQuality\NodeTypeGroup::class,
+        // deprecated, keep it for now
+        TemplateResolverInterface::class,
     ]);
 };
