@@ -1222,7 +1222,6 @@ return array(
     'RectorPrefix20220604\\Symplify\\PackageBuilder\\Exception\\InvalidPrivatePropertyTypeException' => $vendorDir . '/symplify/package-builder/src/Exception/InvalidPrivatePropertyTypeException.php',
     'RectorPrefix20220604\\Symplify\\PackageBuilder\\Exception\\MissingPrivatePropertyException' => $vendorDir . '/symplify/package-builder/src/Exception/MissingPrivatePropertyException.php',
     'RectorPrefix20220604\\Symplify\\PackageBuilder\\Matcher\\ArrayStringAndFnMatcher' => $vendorDir . '/symplify/package-builder/src/Matcher/ArrayStringAndFnMatcher.php',
-    'RectorPrefix20220604\\Symplify\\PackageBuilder\\Neon\\NeonPrinter' => $vendorDir . '/symplify/package-builder/src/Neon/NeonPrinter.php',
     'RectorPrefix20220604\\Symplify\\PackageBuilder\\Parameter\\ParameterProvider' => $vendorDir . '/symplify/package-builder/src/Parameter/ParameterProvider.php',
     'RectorPrefix20220604\\Symplify\\PackageBuilder\\Php\\TypeChecker' => $vendorDir . '/symplify/package-builder/src/Php/TypeChecker.php',
     'RectorPrefix20220604\\Symplify\\PackageBuilder\\Reflection\\ClassLikeExistenceChecker' => $vendorDir . '/symplify/package-builder/src/Reflection/ClassLikeExistenceChecker.php',

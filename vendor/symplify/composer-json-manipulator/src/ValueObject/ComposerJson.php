@@ -126,6 +126,10 @@ final class ComposerJson
      * @var string|null
      */
     private $version;
+    /**
+     * @var array<string, string>
+     */
+    private $provide = [];
     public function __construct()
     {
         $this->composerPackageSorter = new \RectorPrefix20220604\Symplify\ComposerJsonManipulator\Sorter\ComposerPackageSorter();
@@ -315,7 +319,7 @@ final class ComposerJson
         return \RectorPrefix20220604\Nette\Utils\Strings::after($this->name, '/', -1);
     }
     /**
-     * @return string[]
+     * @return array<string, string>
      */
     public function getReplace() : array
     {
@@ -326,7 +330,7 @@ final class ComposerJson
         return isset($this->replace[$packageName]);
     }
     /**
-     * @param string[] $replace
+     * @param array<string, string> $replace
      */
     public function setReplace(array $replace) : void
     {
@@ -342,7 +346,7 @@ final class ComposerJson
      */
     public function getJsonArray() : array
     {
-        $array = \array_filter([\RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::NAME => $this->name, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::DESCRIPTION => $this->description, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::KEYWORDS => $this->keywords, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::HOMEPAGE => $this->homepage, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::LICENSE => $this->license, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTHORS => $this->authors, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::TYPE => $this->type, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE => $this->require, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE_DEV => $this->requireDev, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD => $this->autoload, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD_DEV => $this->autoloadDev, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPOSITORIES => $this->repositories, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::EXTRA => $this->extra, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::BIN => $this->bin, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS => $this->scripts, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS_DESCRIPTIONS => $this->scriptsDescriptions, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SUGGEST => $this->suggest, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFIG => $this->config, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPLACE => $this->replace, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFLICT => $this->conflicts, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::VERSION => $this->version]);
+        $array = \array_filter([\RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::NAME => $this->name, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::DESCRIPTION => $this->description, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::KEYWORDS => $this->keywords, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::HOMEPAGE => $this->homepage, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::LICENSE => $this->license, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTHORS => $this->authors, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::TYPE => $this->type, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE => $this->require, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE_DEV => $this->requireDev, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD => $this->autoload, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD_DEV => $this->autoloadDev, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPOSITORIES => $this->repositories, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::EXTRA => $this->extra, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::BIN => $this->bin, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS => $this->scripts, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS_DESCRIPTIONS => $this->scriptsDescriptions, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SUGGEST => $this->suggest, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFIG => $this->config, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPLACE => $this->replace, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFLICT => $this->conflicts, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::PROVIDE => $this->provide, \RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::VERSION => $this->version]);
         if ($this->minimumStability !== null) {
             $array[\RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::MINIMUM_STABILITY] = $this->minimumStability;
             $this->moveValueToBack(\RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::MINIMUM_STABILITY);
@@ -628,6 +632,32 @@ final class ComposerJson
     {
         return \array_keys($this->require);
     }
+    /**
+     * @return array<string, string>
+     */
+    public function getProvide() : array
+    {
+        return $this->provide;
+    }
+    public function isProvidePackageSet(string $packageName) : bool
+    {
+        return isset($this->provide[$packageName]);
+    }
+    /**
+     * @param array<string, string> $provide
+     */
+    public function setProvide(array $provide) : void
+    {
+        \ksort($provide);
+        $this->provide = $provide;
+    }
+    public function setProvidePackage(string $packageName, string $version) : void
+    {
+        $this->provide[$packageName] = $version;
+    }
+    /**
+     * @param ComposerJsonSection::* $valueName
+     */
     private function moveValueToBack(string $valueName) : void
     {
         $key = \array_search($valueName, $this->orderedKeys, \true);

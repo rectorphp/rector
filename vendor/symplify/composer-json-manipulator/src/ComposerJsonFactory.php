@@ -121,6 +121,9 @@ final class ComposerJsonFactory
         if (isset($jsonArray[\RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::VERSION])) {
             $composerJson->setVersion($jsonArray[\RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::VERSION]);
         }
+        if (isset($jsonArray[\RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::PROVIDE])) {
+            $composerJson->setProvide($jsonArray[\RectorPrefix20220604\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::PROVIDE]);
+        }
         $orderedKeys = \array_keys($jsonArray);
         $composerJson->setOrderedKeys($orderedKeys);
         return $composerJson;
