@@ -78,16 +78,18 @@ CODE_SAMPLE
     {
         $this->newNamespace = null;
         if ($node instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
-            $stmts = $this->refactorStmts($node->stmts);
-            $node->stmts = $stmts;
+            $changedStmts = $this->refactorStmts($node->stmts);
+            if ($changedStmts === null) {
+                return null;
+            }
+            $node->stmts = $changedStmts;
             // add a new namespace?
             if ($this->newNamespace !== null) {
-                return new \PhpParser\Node\Stmt\Namespace_(new \PhpParser\Node\Name($this->newNamespace), $stmts);
+                return new \PhpParser\Node\Stmt\Namespace_(new \PhpParser\Node\Name($this->newNamespace), $changedStmts);
             }
         }
         if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
-            $this->refactorStmts([$node]);
-            return $node;
+            return $this->refactorNamespace($node);
         }
         return null;
     }
@@ -101,26 +103,32 @@ CODE_SAMPLE
     }
     /**
      * @param Stmt[] $stmts
-     * @return Stmt[]
+     * @return Stmt[]|null
      */
-    private function refactorStmts(array $stmts) : array
+    private function refactorStmts(array $stmts) : ?array
     {
-        $this->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) : ?Node {
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use(&$hasChanged) : ?Node {
             if (!$node instanceof \PhpParser\Node\Name && !$node instanceof \PhpParser\Node\Identifier && !$node instanceof \PhpParser\Node\Stmt\Property && !$node instanceof \PhpParser\Node\FunctionLike) {
                 return null;
             }
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-            // replace on @var/@param/@return/@throws
-            foreach ($this->pseudoNamespacesToNamespaces as $pseudoNamespaceToNamespace) {
-                $this->phpDocTypeRenamer->changeUnderscoreType($phpDocInfo, $node, $pseudoNamespaceToNamespace);
+            if ($this->refactorPhpDoc($node)) {
+                $hasChanged = \true;
             }
             // @todo - update rule to allow for bool instanceof check
             if ($node instanceof \PhpParser\Node\Name || $node instanceof \PhpParser\Node\Identifier) {
-                return $this->processNameOrIdentifier($node);
+                $changedNode = $this->processNameOrIdentifier($node);
+                if ($changedNode instanceof \PhpParser\Node) {
+                    $hasChanged = \true;
+                    return $changedNode;
+                }
             }
             return null;
         });
-        return $stmts;
+        if ($hasChanged) {
+            return $stmts;
+        }
+        return null;
     }
     /**
      * @return Identifier|Name|null
@@ -174,5 +182,29 @@ CODE_SAMPLE
         $this->newNamespace = $newNamespace;
         $identifier->name = $lastNewNamePart;
         return $identifier;
+    }
+    private function refactorNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace) : ?\PhpParser\Node\Stmt\Namespace_
+    {
+        $changedStmts = $this->refactorStmts($namespace->stmts);
+        if ($changedStmts === null) {
+            return null;
+        }
+        return $namespace;
+    }
+    /**
+     * @param \PhpParser\Node\Name|\PhpParser\Node\FunctionLike|\PhpParser\Node\Identifier|\PhpParser\Node\Stmt\Property $node
+     */
+    private function refactorPhpDoc($node) : bool
+    {
+        $hasChanged = \false;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        // replace on @var/@param/@return/@throws
+        foreach ($this->pseudoNamespacesToNamespaces as $pseudoNamespaceToNamespace) {
+            $hasDocTypeChanged = $this->phpDocTypeRenamer->changeUnderscoreType($phpDocInfo, $node, $pseudoNamespaceToNamespace);
+            if ($hasDocTypeChanged) {
+                $hasChanged = \true;
+            }
+        }
+        return $hasChanged;
     }
 }

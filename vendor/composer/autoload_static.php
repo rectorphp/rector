@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInited211136b2176d4962c85dca53c94647
+class ComposerStaticInit6644991d8153f63a37b73dfa0ef3e4a4
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1638,7 +1638,6 @@ class ComposerStaticInited211136b2176d4962c85dca53c94647
         'Rector\\BetterPhpDocParser\\PhpDocManipulator\\VarAnnotationManipulator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocManipulator/VarAnnotationManipulator.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeFinder\\PhpDocNodeByTypeFinder' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeFinder/PhpDocNodeByTypeFinder.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeMapper' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeMapper.php',
-        'Rector\\BetterPhpDocParser\\PhpDocNodeTraverser\\ChangedPhpDocNodeTraverserFactory' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeTraverser/ChangedPhpDocNodeTraverserFactory.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\ArrayTypePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/ArrayTypePhpDocNodeVisitor.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\CallableTypePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/CallableTypePhpDocNodeVisitor.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\ChangedPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/ChangedPhpDocNodeVisitor.php',
@@ -2660,9 +2659,6 @@ class ComposerStaticInited211136b2176d4962c85dca53c94647
         'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockNameImporter' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockNameImporter.php',
         'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockNamespaceRenamer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockNamespaceRenamer.php',
         'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockTagReplacer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockTagReplacer.php',
-        'Rector\\NodeTypeResolver\\PhpDoc\\PhpDocNodeTraverser\\ImportingPhpDocNodeTraverserFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/PhpDocNodeTraverser/ImportingPhpDocNodeTraverserFactory.php',
-        'Rector\\NodeTypeResolver\\PhpDoc\\PhpDocNodeTraverser\\RenamingPhpDocNodeVisitorFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/PhpDocNodeTraverser/RenamingPhpDocNodeVisitorFactory.php',
-        'Rector\\NodeTypeResolver\\PhpDoc\\PhpDocNodeTraverser\\UnderscorePhpDocNodeTraverserFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/PhpDocNodeTraverser/UnderscorePhpDocNodeTraverserFactory.php',
         'Rector\\NodeTypeResolver\\PhpDoc\\PhpDocTypeRenamer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/PhpDocTypeRenamer.php',
         'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\RectorBetterReflectionSourceLocatorFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Reflection/BetterReflection/RectorBetterReflectionSourceLocatorFactory.php',
         'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\SourceLocatorProvider\\DynamicSourceLocatorProvider' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php',
@@ -3795,9 +3791,9 @@ class ComposerStaticInited211136b2176d4962c85dca53c94647
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInited211136b2176d4962c85dca53c94647::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInited211136b2176d4962c85dca53c94647::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInited211136b2176d4962c85dca53c94647::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6644991d8153f63a37b73dfa0ef3e4a4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6644991d8153f63a37b73dfa0ef3e4a4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6644991d8153f63a37b73dfa0ef3e4a4::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -74,6 +74,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         __DIR__ . '/../packages/BetterPhpDocParser/PhpDoc',
         __DIR__ . '/../packages/PHPStanStaticTypeMapper/Enum',
         __DIR__ . '/../packages/Caching/Cache.php',
+        __DIR__ . '/../packages/NodeTypeResolver/PhpDocNodeVisitor/UnderscoreRenamePhpDocNodeVisitor.php',
         // used in PHPStan
         __DIR__ . '/../packages/NodeTypeResolver/Reflection/BetterReflection/RectorBetterReflectionSourceLocatorFactory.php',
         __DIR__ . '/../packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php',
