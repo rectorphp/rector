@@ -38,9 +38,11 @@ final class JustPropertyFetchVariableAssignMatcher
         if (!$thirdVariableAndPropertyFetchAssign instanceof \Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign) {
             return null;
         }
+        // property fetch are the same
         if (!$this->nodeComparator->areNodesEqual($firstVariableAndPropertyFetchAssign->getPropertyFetch(), $thirdVariableAndPropertyFetchAssign->getPropertyFetch())) {
             return null;
         }
+        // variables are the same
         if (!$this->nodeComparator->areNodesEqual($firstVariableAndPropertyFetchAssign->getVariable(), $thirdVariableAndPropertyFetchAssign->getVariable())) {
             return null;
         }

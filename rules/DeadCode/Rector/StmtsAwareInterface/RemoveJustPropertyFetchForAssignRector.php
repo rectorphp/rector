@@ -80,48 +80,27 @@ CODE_SAMPLE
             return null;
         }
         $middleAssign = $secondStmt->expr;
-        if ($middleAssign->var instanceof \PhpParser\Node\Expr\Variable) {
-            return $this->refactorToVariableAssign($middleAssign, $variableAndPropertyFetchAssign, $node);
+        $assignVar = $middleAssign->var;
+        // unwrap all array dim fetch nesting
+        $lastArrayDimFetch = null;
+        while ($assignVar instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            $lastArrayDimFetch = $assignVar;
+            $assignVar = $assignVar->var;
         }
-        if ($middleAssign->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            return $this->removeToArrayDimFetchAssign($middleAssign, $variableAndPropertyFetchAssign, $node);
-        }
-        return null;
-    }
-    /**
-     * @return \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node|null
-     */
-    private function refactorToVariableAssign(\PhpParser\Node\Expr\Assign $middleAssign, \Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign $variableAndPropertyFetchAssign, \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmtsAware)
-    {
-        $middleVariable = $middleAssign->var;
-        if (!$this->nodeComparator->areNodesEqual($middleVariable, $variableAndPropertyFetchAssign->getVariable())) {
+        if (!$assignVar instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
-        // remove just-assign stmts
-        unset($stmtsAware->stmts[0]);
-        unset($stmtsAware->stmts[2]);
-        $middleAssign->var = $variableAndPropertyFetchAssign->getPropertyFetch();
-        return $stmtsAware;
-    }
-    /**
-     * @return \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface|null
-     */
-    private function removeToArrayDimFetchAssign(\PhpParser\Node\Expr\Assign $middleAssign, \Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign $variableAndPropertyFetchAssign, \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmtsAware)
-    {
-        $middleArrayDimFetch = $middleAssign->var;
-        if (!$middleArrayDimFetch instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if (!$this->nodeComparator->areNodesEqual($assignVar, $variableAndPropertyFetchAssign->getVariable())) {
             return null;
         }
-        if ($middleArrayDimFetch->var instanceof \PhpParser\Node\Expr\Variable) {
-            $middleNestedVariable = $middleArrayDimFetch->var;
-            if (!$this->nodeComparator->areNodesEqual($middleNestedVariable, $variableAndPropertyFetchAssign->getVariable())) {
-                return null;
-            }
-            $middleArrayDimFetch->var = $variableAndPropertyFetchAssign->getPropertyFetch();
+        if ($lastArrayDimFetch instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            $lastArrayDimFetch->var = $variableAndPropertyFetchAssign->getPropertyFetch();
+        } else {
+            $middleAssign->var = $variableAndPropertyFetchAssign->getPropertyFetch();
         }
         // remove just-assign stmts
-        unset($stmtsAware->stmts[0]);
-        unset($stmtsAware->stmts[2]);
-        return $stmtsAware;
+        unset($node->stmts[0]);
+        unset($node->stmts[2]);
+        return $node;
     }
 }
