@@ -2703,6 +2703,7 @@ return array(
     'Rector\\ReadWrite\\NodeAnalyzer\\ReadWritePropertyAnalyzer' => $baseDir . '/packages/ReadWrite/NodeAnalyzer/ReadWritePropertyAnalyzer.php',
     'Rector\\ReadWrite\\NodeFinder\\NodeUsageFinder' => $baseDir . '/packages/ReadWrite/NodeFinder/NodeUsageFinder.php',
     'Rector\\ReadWrite\\ParentNodeReadAnalyzer\\ArgParentNodeReadAnalyzer' => $baseDir . '/packages/ReadWrite/ParentNodeReadAnalyzer/ArgParentNodeReadAnalyzer.php',
+    'Rector\\ReadWrite\\ParentNodeReadAnalyzer\\ArrayDimFetchParentNodeReadAnalyzer' => $baseDir . '/packages/ReadWrite/ParentNodeReadAnalyzer/ArrayDimFetchParentNodeReadAnalyzer.php',
     'Rector\\ReadWrite\\ParentNodeReadAnalyzer\\IncDecParentNodeReadAnalyzer' => $baseDir . '/packages/ReadWrite/ParentNodeReadAnalyzer/IncDecParentNodeReadAnalyzer.php',
     'Rector\\ReadWrite\\ReadNodeAnalyzer\\JustReadExprAnalyzer' => $baseDir . '/packages/ReadWrite/ReadNodeAnalyzer/JustReadExprAnalyzer.php',
     'Rector\\ReadWrite\\ReadNodeAnalyzer\\LocalPropertyFetchReadNodeAnalyzer' => $baseDir . '/packages/ReadWrite/ReadNodeAnalyzer/LocalPropertyFetchReadNodeAnalyzer.php',
