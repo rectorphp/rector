@@ -39,8 +39,7 @@ final class ArrayManipulator
             if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
-            $key = $item->key;
-            if (!$this->isAllowedArrayKey($key)) {
+            if (!$this->isAllowedArrayKey($item->key)) {
                 return \true;
             }
             $value = $item->value;

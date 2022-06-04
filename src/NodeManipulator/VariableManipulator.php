@@ -157,8 +157,7 @@ final class VariableManipulator
         if (!$assign->var instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
-        $variable = $assign->var;
-        $variableUsages = $this->collectVariableUsages($classMethod, $variable, $assign);
+        $variableUsages = $this->collectVariableUsages($classMethod, $assign->var, $assign);
         foreach ($variableUsages as $variableUsage) {
             $parent = $variableUsage->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             if ($parent instanceof \PhpParser\Node\Arg && !$this->variableToConstantGuard->isReadArg($parent)) {

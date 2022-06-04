@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc94c6e503b4a43bcfd0da89630c243ef
+class ComposerStaticInitcd109bfaf077a7f2657c468440727e78
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2133,6 +2133,7 @@ class ComposerStaticInitc94c6e503b4a43bcfd0da89630c243ef
         'Rector\\DeadCode\\Rector\\StaticCall\\RemoveParentCallWithoutParentRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/StaticCall/RemoveParentCallWithoutParentRector.php',
         'Rector\\DeadCode\\Rector\\Stmt\\RemoveUnreachableStatementRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Stmt/RemoveUnreachableStatementRector.php',
         'Rector\\DeadCode\\Rector\\StmtsAwareInterface\\RemoveJustPropertyFetchForAssignRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchForAssignRector.php',
+        'Rector\\DeadCode\\Rector\\StmtsAwareInterface\\RemoveJustPropertyFetchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchRector.php',
         'Rector\\DeadCode\\Rector\\Switch_\\RemoveDuplicatedCaseInSwitchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Switch_/RemoveDuplicatedCaseInSwitchRector.php',
         'Rector\\DeadCode\\Rector\\Ternary\\TernaryToBooleanOrFalseToBooleanAndRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Ternary/TernaryToBooleanOrFalseToBooleanAndRector.php',
         'Rector\\DeadCode\\Rector\\TryCatch\\RemoveDeadTryCatchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/TryCatch/RemoveDeadTryCatchRector.php',
@@ -2142,6 +2143,7 @@ class ComposerStaticInitc94c6e503b4a43bcfd0da89630c243ef
         'Rector\\DeadCode\\TypeNodeAnalyzer\\MixedArrayTypeNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/TypeNodeAnalyzer/MixedArrayTypeNodeAnalyzer.php',
         'Rector\\DeadCode\\UselessIfCondBeforeForeachDetector' => __DIR__ . '/../..' . '/rules/DeadCode/UselessIfCondBeforeForeachDetector.php',
         'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
+        'Rector\\DeadCode\\ValueObject\\PropertyFetchToVariableAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/PropertyFetchToVariableAssign.php',
         'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
         'Rector\\DeadCode\\ValueObject\\VariableNodeUse' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableNodeUse.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
@@ -3789,9 +3791,9 @@ class ComposerStaticInitc94c6e503b4a43bcfd0da89630c243ef
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc94c6e503b4a43bcfd0da89630c243ef::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc94c6e503b4a43bcfd0da89630c243ef::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc94c6e503b4a43bcfd0da89630c243ef::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcd109bfaf077a7f2657c468440727e78::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcd109bfaf077a7f2657c468440727e78::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcd109bfaf077a7f2657c468440727e78::$classMap;
 
         }, null, ClassLoader::class);
     }

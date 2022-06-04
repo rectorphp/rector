@@ -42,9 +42,8 @@ final class NullableTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpD
      */
     public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
     {
-        $type = $typeNode->type;
-        if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
-            $type = $this->identifierTypeMapper->mapToPHPStanType($type, $node, $nameScope);
+        if ($typeNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+            $type = $this->identifierTypeMapper->mapToPHPStanType($typeNode->type, $node, $nameScope);
             return new \PHPStan\Type\UnionType([new \PHPStan\Type\NullType(), $type]);
         }
         // fallback to PHPStan resolver

@@ -34,7 +34,7 @@ final class BinaryOpConditionsCollector
         while ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
             $conditions[] = $expr->right;
             $expr = $expr->left;
-            if (\get_class($expr) !== $binaryOpClass) {
+            if ($binaryOpClass !== \get_class($expr)) {
                 $conditions[] = $expr;
                 break;
             }

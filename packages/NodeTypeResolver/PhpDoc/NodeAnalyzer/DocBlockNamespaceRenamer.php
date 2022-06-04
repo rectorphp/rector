@@ -45,9 +45,8 @@ final class DocBlockNamespaceRenamer
             if (!$docNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
                 return null;
             }
-            $name = $docNode->name;
             $trimmedName = \ltrim($docNode->name, '\\');
-            if ($name === $trimmedName) {
+            if ($docNode->name === $trimmedName) {
                 return null;
             }
             $renamedNamespaceValueObject = $this->namespaceMatcher->matchRenamedNamespace($trimmedName, $oldToNewNamespaces);

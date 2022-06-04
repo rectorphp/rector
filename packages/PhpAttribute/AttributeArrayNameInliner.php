@@ -33,9 +33,10 @@ final class AttributeArrayNameInliner
             if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
-            $key = $arrayItem->key;
-            if ($key instanceof \PhpParser\Node\Scalar\String_) {
-                $args[] = new \PhpParser\Node\Arg($arrayItem->value, \false, \false, [], new \PhpParser\Node\Identifier($key->value));
+            if ($arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
+                $string = $arrayItem->key;
+                $argumentName = new \PhpParser\Node\Identifier($string->value);
+                $args[] = new \PhpParser\Node\Arg($arrayItem->value, \false, \false, [], $argumentName);
             } else {
                 $args[] = new \PhpParser\Node\Arg($arrayItem->value);
             }

@@ -13,11 +13,10 @@ final class ForeachManipulator
      */
     public function matchOnlyStmt(\PhpParser\Node\Stmt\Foreach_ $foreach, callable $callable) : ?\PhpParser\Node
     {
-        $stmts = $foreach->stmts;
-        if (\count($stmts) !== 1) {
+        if (\count($foreach->stmts) !== 1) {
             return null;
         }
-        $innerNode = $stmts[0];
+        $innerNode = $foreach->stmts[0];
         $innerNode = $innerNode instanceof \PhpParser\Node\Stmt\Expression ? $innerNode->expr : $innerNode;
         return $callable($innerNode, $foreach);
     }

@@ -71,8 +71,7 @@ final class ArrayCallableMethodMatcher
      */
     public function match(\PhpParser\Node\Expr\Array_ $array)
     {
-        $arrayItems = $array->items;
-        if (\count($arrayItems) !== 2) {
+        if (\count($array->items) !== 2) {
             return null;
         }
         if ($this->shouldSkipNullItems($array)) {
