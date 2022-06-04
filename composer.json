@@ -72,8 +72,7 @@
         "symplify/phpstan-extensions": "^10.2",
         "symplify/phpstan-rules": "^10.2",
         "symplify/rule-doc-generator": "^10.2",
-        "symplify/vendor-patches": "^10.2",
-        "timeweb/phpstan-enum": "dev-22-upgrade-phpstan-to-1.0"
+        "symplify/vendor-patches": "^10.2"
     },
     "replace": {
         "rector/rector": "self.version",
