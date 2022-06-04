@@ -498,8 +498,9 @@ final class BetterNodeFinder
 
         $parentFunctionLike = $this->findParentByTypes(
             $foundNode,
-            [ClassMethod::class, Function_::class, Closure::class]
+            [ClassMethod::class, Function_::class, Closure::class, Class_::class]
         );
+
         if ($parentFunctionLike !== $functionLike) {
             return null;
         }

@@ -717,3 +717,5 @@ parameters:
         -
             message:  '#Offset \d+ does not exist on array<PhpParser\\Node\\Stmt>\|null#'
             path: rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchForAssignRector.php
+
+        - '#Method "replaceTagByAnother\(\)" returns bool type, so the name should start with is/has/was#'

@@ -102,12 +102,15 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->docBlockTagReplacer->replaceTagByAnother(
+            $hasDocBlockChanged = $this->docBlockTagReplacer->replaceTagByAnother(
                 $phpDocInfo,
                 $renameAnnotation->getOldAnnotation(),
                 $renameAnnotation->getNewAnnotation()
             );
-            $hasChanged = true;
+
+            if ($hasDocBlockChanged) {
+                $hasChanged = true;
+            }
         }
 
         if (! $hasChanged) {

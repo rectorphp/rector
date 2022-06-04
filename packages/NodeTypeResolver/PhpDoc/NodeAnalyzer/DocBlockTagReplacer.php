@@ -16,8 +16,10 @@ final class DocBlockTagReplacer
     ) {
     }
 
-    public function replaceTagByAnother(PhpDocInfo $phpDocInfo, string $oldTag, string $newTag): void
+    public function replaceTagByAnother(PhpDocInfo $phpDocInfo, string $oldTag, string $newTag): bool
     {
+        $hasChanged = false;
+
         $oldTag = $this->annotationNaming->normalizeName($oldTag);
         $newTag = $this->annotationNaming->normalizeName($newTag);
 
@@ -33,6 +35,9 @@ final class DocBlockTagReplacer
 
             unset($phpDocNode->children[$key]);
             $phpDocNode->children[] = new PhpDocTagNode($newTag, new GenericTagValueNode(''));
+            $hasChanged = true;
         }
+
+        return $hasChanged;
     }
 }

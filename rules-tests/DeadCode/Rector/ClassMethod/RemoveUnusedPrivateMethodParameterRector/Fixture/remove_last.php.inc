@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector\Fixture;
+
 final class RemoveLast
 {
     private function run(string $used, int $notUsed)
@@ -11,6 +13,8 @@ final class RemoveLast
 ?>
 -----
 <?php
+
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector\Fixture;
 
 final class RemoveLast
 {
