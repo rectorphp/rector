@@ -44,10 +44,9 @@ final class DocBlockNamespaceRenamer
                     return null;
                 }
 
-                $name = $docNode->name;
                 $trimmedName = ltrim($docNode->name, '\\');
 
-                if ($name === $trimmedName) {
+                if ($docNode->name === $trimmedName) {
                     return null;
                 }
 

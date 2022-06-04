@@ -114,7 +114,6 @@ final class PhpDocInfoFactory
 
         $phpDocChildNodes = $phpDocNode->children;
         $phpDocChildNode = array_pop($phpDocChildNodes);
-
         $startAndEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
 
         if ($startAndEnd instanceof StartAndEnd) {

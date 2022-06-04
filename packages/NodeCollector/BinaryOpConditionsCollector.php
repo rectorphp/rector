@@ -38,7 +38,7 @@ final class BinaryOpConditionsCollector
             $conditions[] = $expr->right;
             $expr = $expr->left;
 
-            if ($expr::class !== $binaryOpClass) {
+            if ($binaryOpClass !== $expr::class) {
                 $conditions[] = $expr;
                 break;
             }

@@ -156,8 +156,7 @@ final class VariableManipulator
             return false;
         }
 
-        $variable = $assign->var;
-        $variableUsages = $this->collectVariableUsages($classMethod, $variable, $assign);
+        $variableUsages = $this->collectVariableUsages($classMethod, $assign->var, $assign);
 
         foreach ($variableUsages as $variableUsage) {
             $parent = $variableUsage->getAttribute(AttributeKey::PARENT_NODE);

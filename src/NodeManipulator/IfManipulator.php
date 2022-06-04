@@ -43,12 +43,11 @@ final class IfManipulator
      */
     public function matchIfNotNullReturnValue(If_ $if): ?Expr
     {
-        $stmts = $if->stmts;
-        if (count($stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return null;
         }
 
-        $insideIfNode = $stmts[0];
+        $insideIfNode = $if->stmts[0];
         if (! $insideIfNode instanceof Return_) {
             return null;
         }

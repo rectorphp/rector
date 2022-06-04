@@ -35,9 +35,7 @@ final class ArrayManipulator
                 continue;
             }
 
-            $key = $item->key;
-
-            if (! $this->isAllowedArrayKey($key)) {
+            if (! $this->isAllowedArrayKey($item->key)) {
                 return true;
             }
 

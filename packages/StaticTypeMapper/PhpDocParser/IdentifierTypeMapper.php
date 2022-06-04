@@ -84,8 +84,7 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         }
 
         if (str_starts_with($typeNode->name, '\\')) {
-            $type = $typeNode->name;
-            $typeWithoutPreslash = Strings::substring($type, 1);
+            $typeWithoutPreslash = Strings::substring($typeNode->name, 1);
             $objectType = new FullyQualifiedObjectType($typeWithoutPreslash);
         } else {
             if ($typeNode->name === 'scalar') {

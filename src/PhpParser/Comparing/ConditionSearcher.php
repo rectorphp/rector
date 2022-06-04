@@ -23,11 +23,11 @@ final class ConditionSearcher
 
     public function hasIfAndElseForVariableRedeclaration(Assign $assign, If_ $if): bool
     {
-        $elseNode = $if->else;
-
-        if (! $elseNode instanceof Else_) {
+        if (! $if->else instanceof Else_) {
             return false;
         }
+
+        $ifElse = $if->else;
 
         /** @var Variable $varNode */
         $varNode = $assign->var;
@@ -51,7 +51,7 @@ final class ConditionSearcher
             return false;
         }
 
-        return $this->hasVariableRedeclaration($varNode, $elseNode->stmts);
+        return $this->hasVariableRedeclaration($varNode, $ifElse->stmts);
     }
 
     /**
@@ -96,11 +96,14 @@ final class ConditionSearcher
             return false;
         }
 
-        $assignVar = $stmt->expr->var;
-        if (! $assignVar instanceof Variable) {
+        $assign = $stmt->expr;
+
+        if (! $assign->var instanceof Variable) {
             return false;
         }
 
-        return $variable->name === $assignVar->name;
+        $assignedVariable = $assign->var;
+
+        return $variable->name === $assignedVariable->name;
     }
 }

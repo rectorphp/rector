@@ -48,8 +48,7 @@ final class ArrayCallableMethodMatcher
      */
     public function match(Array_ $array): null | ArrayCallableDynamicMethod | ArrayCallable
     {
-        $arrayItems = $array->items;
-        if (count($arrayItems) !== 2) {
+        if (count($array->items) !== 2) {
             return null;
         }
 

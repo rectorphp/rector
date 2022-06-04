@@ -15,13 +15,11 @@ final class ForeachManipulator
      */
     public function matchOnlyStmt(Foreach_ $foreach, callable $callable): ?Node
     {
-        $stmts = $foreach->stmts;
-
-        if (count($stmts) !== 1) {
+        if (count($foreach->stmts) !== 1) {
             return null;
         }
 
-        $innerNode = $stmts[0];
+        $innerNode = $foreach->stmts[0];
         $innerNode = $innerNode instanceof Expression ? $innerNode->expr : $innerNode;
 
         return $callable($innerNode, $foreach);

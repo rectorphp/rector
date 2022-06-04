@@ -26,12 +26,11 @@ final class CompactFuncCallAnalyzer
             return false;
         }
 
-        $variableName = $variable->name;
-        if (! is_string($variableName)) {
+        if (! is_string($variable->name)) {
             return false;
         }
 
-        return $this->isInArgOrArrayItemNodes($funcCall->args, $variableName);
+        return $this->isInArgOrArrayItemNodes($funcCall->args, $variable->name);
     }
 
     /**
