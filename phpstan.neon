@@ -722,3 +722,6 @@ parameters:
         - '#Method "refactorPhpDoc\(\)" returns bool type, so the name should start with is/has/was#'
 
         - '#Cognitive complexity for "Rector\\Renaming\\Rector\\FileWithoutNamespace\\PseudoNamespaceToNamespaceRector\:\:refactorStmts\(\)" is 11, keep it under 10#'
+
+        # resolve later with configurable types
+        - '#On passing a constant, the method should have an enum type\. See https\://phpstan\.org/writing\-php\-code/phpdoc\-types\#literals\-and\-constants#'

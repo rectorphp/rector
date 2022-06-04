@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\ArrayType;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
@@ -118,6 +119,12 @@ CODE_SAMPLE
         }
 
         if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotEmpty($if, $foreachExpr)) {
+            return true;
+        }
+
+        // we know it's an array
+        $condType = $this->getType($if->cond);
+        if ($condType instanceof ArrayType) {
             return true;
         }
 
