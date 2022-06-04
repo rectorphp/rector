@@ -39,9 +39,7 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
             return null;
         }
 
-        $functionName = $node->name;
-
-        $namespaceName = $functionName->getAttribute(AttributeKey::NAMESPACED_NAME);
+        $namespaceName = $node->name->getAttribute(AttributeKey::NAMESPACED_NAME);
         if ($namespaceName instanceof FullyQualified) {
             $functionFqnName = $namespaceName->toString();
 
@@ -50,6 +48,6 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
             }
         }
 
-        return (string) $functionName;
+        return (string) $node->name;
     }
 }

@@ -138,10 +138,8 @@ final class FamilyRelationsAnalyzer
 
         if ($classLike instanceof Class_) {
             if ($classLike->extends instanceof Name) {
-                $extendName = $classLike->extends;
-
-                $ancestorNames[] = $this->nodeNameResolver->getName($extendName);
-                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendName));
+                $ancestorNames[] = $this->nodeNameResolver->getName($classLike->extends);
+                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($classLike->extends));
             }
 
             foreach ($classLike->implements as $implement) {

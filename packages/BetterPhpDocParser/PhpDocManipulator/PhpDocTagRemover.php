@@ -26,13 +26,11 @@ final class PhpDocTagRemover
                 $phpDocInfo->markAsChanged();
             }
 
-            if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode) {
-                $doctrineAnnotationTagValueNode = $phpDocChildNode->value;
-
-                if ($doctrineAnnotationTagValueNode->hasClassName($name)) {
-                    unset($phpDocNode->children[$key]);
-                    $phpDocInfo->markAsChanged();
-                }
+            if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode && $phpDocChildNode->value->hasClassName(
+                $name
+            )) {
+                unset($phpDocNode->children[$key]);
+                $phpDocInfo->markAsChanged();
             }
         }
     }

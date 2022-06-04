@@ -7,6 +7,7 @@ use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\StmtsAwareInterface\RemoveJustPropertyFetchRector;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
@@ -42,6 +43,8 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(ReturnArrayClassMethodToYieldRector::class, [
         new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*'),
     ]);
+
+    // $rectorConfig->rule(RemoveJustPropertyFetchRector::class);
 
     $rectorConfig->paths([
         __DIR__ . '/bin',

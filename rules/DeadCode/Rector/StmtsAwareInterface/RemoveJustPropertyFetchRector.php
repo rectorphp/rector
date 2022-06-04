@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\ValueObject\PropertyFetchToVariableAssign;
@@ -206,6 +207,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isPropertyFetchCallerNode($assign->expr)) {
+            return null;
+        }
+
         // keep property fetch nesting
         if ($assign->expr->var instanceof PropertyFetch) {
             return null;
@@ -216,5 +221,19 @@ CODE_SAMPLE
         }
 
         return new PropertyFetchToVariableAssign($assign->var, $assign->expr);
+    }
+
+    private function isPropertyFetchCallerNode(PropertyFetch $propertyFetch): bool
+    {
+        // skip nodes as mostly used with public property fetches
+        $propertyFetchCallerType = $this->getType($propertyFetch->var);
+
+        if (! $propertyFetchCallerType instanceof ObjectType) {
+            return false;
+        }
+
+        $nodeObjectType = new ObjectType('PhpParser\Node');
+        return $nodeObjectType->isSuperTypeOf($propertyFetchCallerType)
+            ->yes();
     }
 }

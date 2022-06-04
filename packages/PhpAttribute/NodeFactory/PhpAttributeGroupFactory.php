@@ -125,12 +125,12 @@ final class PhpAttributeGroupFactory
                 continue;
             }
 
-            $arrayItemKey = $item->key;
-            if (! $arrayItemKey instanceof String_) {
+            if (! $item->key instanceof String_) {
                 continue;
             }
 
-            if (! in_array($arrayItemKey->value, $unwrappeColumns, true)) {
+            $stringItemKey = $item->key;
+            if (! in_array($stringItemKey->value, $unwrappeColumns, true)) {
                 continue;
             }
 

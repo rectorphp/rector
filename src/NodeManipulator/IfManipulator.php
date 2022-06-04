@@ -72,13 +72,11 @@ final class IfManipulator
      */
     public function matchIfValueReturnValue(If_ $if): ?Expr
     {
-        $stmts = $if->stmts;
-
-        if (count($stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return null;
         }
 
-        $insideIfStmt = $stmts[0];
+        $insideIfStmt = $if->stmts[0];
         if (! $insideIfStmt instanceof Return_) {
             return null;
         }

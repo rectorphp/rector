@@ -24,8 +24,8 @@ final class AliasNameResolver
             $prefix = $use instanceof GroupUse
                 ? $use->prefix . '\\'
                 : '';
-            $useUses = $use->uses;
-            foreach ($useUses as $useUse) {
+
+            foreach ($use->uses as $useUse) {
                 if (! $useUse->alias instanceof Identifier) {
                     continue;
                 }

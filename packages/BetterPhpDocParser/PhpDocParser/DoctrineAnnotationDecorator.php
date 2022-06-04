@@ -242,11 +242,10 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         GenericTagValueNode $genericTagValueNode,
         string $fullyQualifiedAnnotationClass
     ): SpacelessPhpDocTagNode {
-        $annotationContent = $genericTagValueNode->value;
         $formerStartEnd = $genericTagValueNode->getAttribute(PhpDocAttributeKey::START_AND_END);
 
         return $this->createDoctrineSpacelessPhpDocTagNode(
-            $annotationContent,
+            $genericTagValueNode->value,
             $tagName,
             $fullyQualifiedAnnotationClass,
             $formerStartEnd
