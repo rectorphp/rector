@@ -38,7 +38,7 @@ final class GenerateChangelogCommand extends Command
     /**
      * @var string[]
      */
-    private const EXCLUDED_THANKS_NAMES = ['TomasVotruba'];
+    private const EXCLUDED_THANKS_NAMES = ['TomasVotruba', 'samsonasik'];
 
     /**
      * @var string
