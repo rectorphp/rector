@@ -719,3 +719,6 @@ parameters:
             path: rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchForAssignRector.php
 
         - '#Method "replaceTagByAnother\(\)" returns bool type, so the name should start with is/has/was#'
+        - '#Method "refactorPhpDoc\(\)" returns bool type, so the name should start with is/has/was#'
+
+        - '#Cognitive complexity for "Rector\\Renaming\\Rector\\FileWithoutNamespace\\PseudoNamespaceToNamespaceRector\:\:refactorStmts\(\)" is 11, keep it under 10#'

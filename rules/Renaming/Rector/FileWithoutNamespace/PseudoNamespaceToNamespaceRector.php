@@ -85,18 +85,21 @@ CODE_SAMPLE
         $this->newNamespace = null;
 
         if ($node instanceof FileWithoutNamespace) {
-            $stmts = $this->refactorStmts($node->stmts);
-            $node->stmts = $stmts;
+            $changedStmts = $this->refactorStmts($node->stmts);
+            if ($changedStmts === null) {
+                return null;
+            }
+
+            $node->stmts = $changedStmts;
 
             // add a new namespace?
             if ($this->newNamespace !== null) {
-                return new Namespace_(new Name($this->newNamespace), $stmts);
+                return new Namespace_(new Name($this->newNamespace), $changedStmts);
             }
         }
 
         if ($node instanceof Namespace_) {
-            $this->refactorStmts([$node]);
-            return $node;
+            return $this->refactorNamespace($node);
         }
 
         return null;
@@ -114,31 +117,38 @@ CODE_SAMPLE
 
     /**
      * @param Stmt[] $stmts
-     * @return Stmt[]
+     * @return Stmt[]|null
      */
-    private function refactorStmts(array $stmts): array
+    private function refactorStmts(array $stmts): ?array
     {
-        $this->traverseNodesWithCallable($stmts, function (Node $node): ?Node {
+        $hasChanged = false;
+
+        $this->traverseNodesWithCallable($stmts, function (Node $node) use (&$hasChanged): ?Node {
             if (! $node instanceof Name && ! $node instanceof Identifier && ! $node instanceof Property && ! $node instanceof FunctionLike) {
                 return null;
             }
 
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-
-            // replace on @var/@param/@return/@throws
-            foreach ($this->pseudoNamespacesToNamespaces as $pseudoNamespaceToNamespace) {
-                $this->phpDocTypeRenamer->changeUnderscoreType($phpDocInfo, $node, $pseudoNamespaceToNamespace);
+            if ($this->refactorPhpDoc($node)) {
+                $hasChanged = true;
             }
 
             // @todo - update rule to allow for bool instanceof check
             if ($node instanceof Name || $node instanceof Identifier) {
-                return $this->processNameOrIdentifier($node);
+                $changedNode = $this->processNameOrIdentifier($node);
+                if ($changedNode instanceof Node) {
+                    $hasChanged = true;
+                    return $changedNode;
+                }
             }
 
             return null;
         });
 
-        return $stmts;
+        if ($hasChanged) {
+            return $stmts;
+        }
+
+        return null;
     }
 
     /**
@@ -207,5 +217,36 @@ CODE_SAMPLE
         $identifier->name = $lastNewNamePart;
 
         return $identifier;
+    }
+
+    private function refactorNamespace(Namespace_ $namespace): ?Namespace_
+    {
+        $changedStmts = $this->refactorStmts($namespace->stmts);
+        if ($changedStmts === null) {
+            return null;
+        }
+
+        return $namespace;
+    }
+
+    private function refactorPhpDoc(Name|FunctionLike|Identifier|Property $node): bool
+    {
+        $hasChanged = false;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
+        // replace on @var/@param/@return/@throws
+        foreach ($this->pseudoNamespacesToNamespaces as $pseudoNamespaceToNamespace) {
+            $hasDocTypeChanged = $this->phpDocTypeRenamer->changeUnderscoreType(
+                $phpDocInfo,
+                $node,
+                $pseudoNamespaceToNamespace
+            );
+
+            if ($hasDocTypeChanged) {
+                $hasChanged = true;
+            }
+        }
+
+        return $hasChanged;
     }
 }

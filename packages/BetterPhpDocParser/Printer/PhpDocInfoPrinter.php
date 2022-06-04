@@ -17,7 +17,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocNodeTraverser\ChangedPhpDocNodeTraverserFactory;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
@@ -83,9 +82,11 @@ final class PhpDocInfoPrinter
         private readonly DocBlockInliner $docBlockInliner,
         private readonly RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver,
         private readonly ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor,
-        ChangedPhpDocNodeTraverserFactory $changedPhpDocNodeTraverserFactory
     ) {
-        $this->changedPhpDocNodeTraverser = $changedPhpDocNodeTraverserFactory->create();
+        $changedPhpDocNodeTraverser = new PhpDocNodeTraverser();
+        $changedPhpDocNodeTraverser->addPhpDocNodeVisitor($this->changedPhpDocNodeVisitor);
+
+        $this->changedPhpDocNodeTraverser = $changedPhpDocNodeTraverser;
     }
 
     public function printNew(PhpDocInfo $phpDocInfo): string

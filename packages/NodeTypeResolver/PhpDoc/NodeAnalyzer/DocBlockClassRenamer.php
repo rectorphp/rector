@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser\RenamingPhpDocNodeVisitorFactory;
 use Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
+use Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 
 final class DocBlockClassRenamer
 {
     public function __construct(
         private readonly ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor,
-        private readonly RenamingPhpDocNodeVisitorFactory $renamingPhpDocNodeVisitorFactory
     ) {
     }
 
@@ -26,7 +25,9 @@ final class DocBlockClassRenamer
             return;
         }
 
-        $phpDocNodeTraverser = $this->renamingPhpDocNodeVisitorFactory->create();
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->classRenamePhpDocNodeVisitor);
+
         $this->classRenamePhpDocNodeVisitor->setOldToNewTypes($oldToNewTypes);
 
         $phpDocNodeTraverser->traverse($phpDocInfo->getPhpDocNode());
