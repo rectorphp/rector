@@ -22,7 +22,9 @@ composer clear-cache
 composer install --ansi
 composer install --no-dev --ansi
 
-bin/rector process src/functions -c build/config/config-downgrade.php --ansi
+# early downgrade individual functions
+bin/rector process src/functions -c build/config/config-downgrade.php --ansi --clear-cache
+bin/rector process vendor/symfony/string/Resources/functions.php -c build/config/config-downgrade.php --ansi --clear-cache
 
 rsync --exclude rector-build -av * rector-build --quiet
 
@@ -32,6 +34,10 @@ php -d memory_limit=-1 bin/rector process rector-build/bin rector-build/config r
 
 # Prefixing build only works on php <= 8.0, can be used locally with PHP80_BIN_PATH env
 sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
+
+# verify syntax valid in php 7.2
+composer global require php-parallel-lint/php-parallel-lint
+~/.composer/vendor/bin/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/ssch/typo3-rector/templates/maker --exclude rector-prefixed-downgraded/vendor/rector/rector-generator/templates --exclude rector-prefixed-downgraded/vendor/symfony/contracts/Cache
 
 # Check php 7.2 can be used locally with PHP72_BIN_PATH env
 # rector-prefixed-downgraded check
@@ -59,3 +65,6 @@ git checkout src/functions
 
 # back to get dev dependencies
 composer install --ansi
+
+# remove php-parallel-lint from global dependencies
+composer global remove php-parallel-lint/php-parallel-lint

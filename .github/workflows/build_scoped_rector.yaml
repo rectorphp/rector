@@ -52,7 +52,9 @@ jobs:
             -   run: composer install --no-dev --ansi
 
             # early downgrade individual functions
-            -   run: bin/rector process src/functions -c build/config/config-downgrade.php --ansi
+            -   run: |
+                    bin/rector process src/functions -c build/config/config-downgrade.php --ansi
+                    bin/rector process vendor/symfony/string/Resources/functions.php -c build/config/config-downgrade.php --ansi
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
             -  run: rsync --exclude rector-build -av * rector-build --quiet
@@ -83,7 +85,7 @@ jobs:
                     php-version: 7.2
                     coverage: none
             -   run: composer global require php-parallel-lint/php-parallel-lint
-            -   run: /home/runner/.composer/vendor/bin/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/ssch/typo3-rector/templates/maker --exclude rector-prefixed-downgraded/vendor/rector/rector-generator/templates
+            -   run: /home/runner/.composer/vendor/bin/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/ssch/typo3-rector/templates/maker --exclude rector-prefixed-downgraded/vendor/rector/rector-generator/templates --exclude rector-prefixed-downgraded/vendor/symfony/contracts/Cache
 
             # 5. copy repository meta files
             -   run: |
