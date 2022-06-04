@@ -19,7 +19,7 @@
         "ondram/ci-detector": "^4.1",
         "phpstan/phpdoc-parser": "^1.5.1",
         "phpstan/phpstan": "^1.7.10",
-        "phpstan/phpstan-phpunit": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.1",
         "react/child-process": "^0.6.4",
         "react/event-loop": "^1.3",
         "react/socket": "^1.11",
