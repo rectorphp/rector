@@ -193,9 +193,8 @@ final class DoctrineAnnotationDecorator implements \Rector\BetterPhpDocParser\Co
     }
     private function createSpacelessPhpDocTagNode(string $tagName, \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode $genericTagValueNode, string $fullyQualifiedAnnotationClass) : \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode
     {
-        $annotationContent = $genericTagValueNode->value;
         $formerStartEnd = $genericTagValueNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
-        return $this->createDoctrineSpacelessPhpDocTagNode($annotationContent, $tagName, $fullyQualifiedAnnotationClass, $formerStartEnd);
+        return $this->createDoctrineSpacelessPhpDocTagNode($genericTagValueNode->value, $tagName, $fullyQualifiedAnnotationClass, $formerStartEnd);
     }
     private function createDoctrineSpacelessPhpDocTagNode(string $annotationContent, string $tagName, string $fullyQualifiedAnnotationClass, \Rector\BetterPhpDocParser\ValueObject\StartAndEnd $startAndEnd) : \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode
     {

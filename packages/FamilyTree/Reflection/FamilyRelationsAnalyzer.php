@@ -142,9 +142,8 @@ final class FamilyRelationsAnalyzer
         }
         if ($classLike instanceof \PhpParser\Node\Stmt\Class_) {
             if ($classLike->extends instanceof \PhpParser\Node\Name) {
-                $extendName = $classLike->extends;
-                $ancestorNames[] = $this->nodeNameResolver->getName($extendName);
-                $ancestorNames = \array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendName));
+                $ancestorNames[] = $this->nodeNameResolver->getName($classLike->extends);
+                $ancestorNames = \array_merge($ancestorNames, $this->getClassLikeAncestorNames($classLike->extends));
             }
             foreach ($classLike->implements as $implement) {
                 $ancestorNames[] = $this->nodeNameResolver->getName($implement);

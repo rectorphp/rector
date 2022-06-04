@@ -39,14 +39,13 @@ final class FuncCallNameResolver implements \Rector\NodeNameResolver\Contract\No
         if ($node->name instanceof \PhpParser\Node\Expr) {
             return null;
         }
-        $functionName = $node->name;
-        $namespaceName = $functionName->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME);
+        $namespaceName = $node->name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME);
         if ($namespaceName instanceof \PhpParser\Node\Name\FullyQualified) {
             $functionFqnName = $namespaceName->toString();
             if ($this->reflectionProvider->hasFunction($namespaceName, null)) {
                 return $functionFqnName;
             }
         }
-        return (string) $functionName;
+        return (string) $node->name;
     }
 }

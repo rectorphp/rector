@@ -42,8 +42,7 @@ final class ArrayManipulator
             if (!$this->isAllowedArrayKey($item->key)) {
                 return \true;
             }
-            $value = $item->value;
-            if (!$this->isAllowedArrayValue($value)) {
+            if (!$this->isAllowedArrayValue($item->value)) {
                 return \true;
             }
         }

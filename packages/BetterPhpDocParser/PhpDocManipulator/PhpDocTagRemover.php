@@ -21,12 +21,9 @@ final class PhpDocTagRemover
                 unset($phpDocNode->children[$key]);
                 $phpDocInfo->markAsChanged();
             }
-            if ($phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-                $doctrineAnnotationTagValueNode = $phpDocChildNode->value;
-                if ($doctrineAnnotationTagValueNode->hasClassName($name)) {
-                    unset($phpDocNode->children[$key]);
-                    $phpDocInfo->markAsChanged();
-                }
+            if ($phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode && $phpDocChildNode->value->hasClassName($name)) {
+                unset($phpDocNode->children[$key]);
+                $phpDocInfo->markAsChanged();
             }
         }
     }

@@ -95,11 +95,10 @@ final class IfManipulator
      */
     public function matchIfValueReturnValue(\PhpParser\Node\Stmt\If_ $if) : ?\PhpParser\Node\Expr
     {
-        $stmts = $if->stmts;
-        if (\count($stmts) !== 1) {
+        if (\count($if->stmts) !== 1) {
             return null;
         }
-        $insideIfStmt = $stmts[0];
+        $insideIfStmt = $if->stmts[0];
         if (!$insideIfStmt instanceof \PhpParser\Node\Stmt\Return_) {
             return null;
         }

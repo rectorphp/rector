@@ -23,8 +23,7 @@ final class AliasNameResolver
         $nameString = $name->toString();
         foreach ($uses as $use) {
             $prefix = $use instanceof \PhpParser\Node\Stmt\GroupUse ? $use->prefix . '\\' : '';
-            $useUses = $use->uses;
-            foreach ($useUses as $useUse) {
+            foreach ($use->uses as $useUse) {
                 if (!$useUse->alias instanceof \PhpParser\Node\Identifier) {
                     continue;
                 }

@@ -124,11 +124,11 @@ final class PhpAttributeGroupFactory
             if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
-            $arrayItemKey = $item->key;
-            if (!$arrayItemKey instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$item->key instanceof \PhpParser\Node\Scalar\String_) {
                 continue;
             }
-            if (!\in_array($arrayItemKey->value, $unwrappeColumns, \true)) {
+            $stringItemKey = $item->key;
+            if (!\in_array($stringItemKey->value, $unwrappeColumns, \true)) {
                 continue;
             }
             unset($items[$key]);

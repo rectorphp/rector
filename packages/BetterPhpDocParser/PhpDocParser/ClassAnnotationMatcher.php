@@ -81,13 +81,11 @@ final class ClassAnnotationMatcher
     {
         foreach ($uses as $use) {
             $prefix = $use instanceof \PhpParser\Node\Stmt\GroupUse ? $use->prefix . '\\' : '';
-            $useUses = $use->uses;
-            foreach ($useUses as $useUse) {
+            foreach ($use->uses as $useUse) {
                 if (!$useUse->alias instanceof \PhpParser\Node\Identifier) {
                     continue;
                 }
-                $alias = $useUse->alias;
-                if ($alias->toString() === $tag) {
+                if ($useUse->alias->toString() === $tag) {
                     return $prefix . $useUse->name->toString();
                 }
             }
