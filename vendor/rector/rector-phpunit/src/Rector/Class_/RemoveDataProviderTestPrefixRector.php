@@ -21,10 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDataProviderTestPrefixRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var array<string, string>
-     */
-    private $providerMethodNamesToNewNames = [];
-    /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */

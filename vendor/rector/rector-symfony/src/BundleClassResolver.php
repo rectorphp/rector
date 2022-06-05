@@ -57,10 +57,10 @@ final class BundleClassResolver
             $bundleFiles = (array) \glob($controllerDirectory . '/**Bundle.php');
             $controllerDirectory = \dirname($controllerDirectory);
         }
+        /** @var string[] $bundleFiles */
         if ($bundleFiles === []) {
             return null;
         }
-        /** @var string $bundleFile */
         $bundleFile = $bundleFiles[0];
         $bundleClassName = $this->resolveClassNameFromFilePath($bundleFile);
         if ($bundleClassName !== null) {

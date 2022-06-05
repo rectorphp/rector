@@ -15,7 +15,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->skip(['*/Fixture/*', '*/Source/*', '*/Source*/*', '*/tests/*/Fixture*/Expected/*', \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class => [__DIR__ . '/config'], \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
         // "data" => "datum" false positive
         __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
-    ]]);
+    ], \Rector\Renaming\Rector\Name\RenameClassRector::class]);
     $rectorConfig->ruleWithConfiguration(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class, [
         'Symfony\\*',
         'Twig_*',

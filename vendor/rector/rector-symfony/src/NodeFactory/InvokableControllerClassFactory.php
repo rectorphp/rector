@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Symfony\NodeAnalyzer\InvokableAnalyzer\ActiveClassElementsClassMethodResolver;
@@ -56,9 +57,10 @@ final class InvokableControllerClassFactory
     }
     private function createControllerName(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $actionClassMethod) : string
     {
-        /** @var Identifier $className */
-        $className = $class->name;
-        return $this->invokableControllerNameFactory->createControllerName($className, $actionClassMethod->name->toString());
+        if (!$class->name instanceof \PhpParser\Node\Identifier) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        return $this->invokableControllerNameFactory->createControllerName($class->name, $actionClassMethod->name->toString());
     }
     private function filterOutUnusedDependencies(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\Symfony\ValueObject\InvokableController\ActiveClassElements $activeClassElements) : \PhpParser\Node\Stmt\ClassMethod
     {

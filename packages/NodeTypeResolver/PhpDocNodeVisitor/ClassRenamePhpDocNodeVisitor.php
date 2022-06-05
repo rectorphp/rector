@@ -15,7 +15,6 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -56,19 +55,13 @@ final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20220605\Symplify\
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
-     */
-    private $nodeComparator;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->useImportsResolver = $useImportsResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeComparator = $nodeComparator;
     }
     public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {
@@ -128,11 +121,11 @@ final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20220605\Symplify\
             return $this->resolveNamefromUse($uses, $name);
         }
         $originalNode = $namespace->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
-        if (!$this->nodeComparator->areNodesEqual($originalNode, $namespace)) {
+        $namespaceName = (string) $this->nodeNameResolver->getName($namespace);
+        if ($originalNode instanceof \PhpParser\Node\Stmt\Namespace_ && !$this->nodeNameResolver->isName($originalNode, $namespaceName)) {
             return $name;
         }
         if ($uses === []) {
-            $namespaceName = $this->nodeNameResolver->getName($namespace);
             return $namespaceName . '\\' . $name;
         }
         return $this->resolveNamefromUse($uses, $name);
