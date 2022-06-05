@@ -1,4 +1,4 @@
-# 517 Rules Overview
+# 518 Rules Overview
 
 <br>
 
@@ -14,7 +14,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (49)
+- [DeadCode](#deadcode) (50)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -3247,6 +3247,29 @@ Remove assign of property, just for value assign
 -        $items[] = 1000;
 -        $this->items = $items ;
 +        $this->items[] = 1000;
+     }
+ }
+```
+
+<br>
+
+### RemoveJustPropertyFetchRector
+
+Inline property fetch assign to a variable, that has no added value
+
+- class: [`Rector\DeadCode\Rector\StmtsAwareInterface\RemoveJustPropertyFetchRector`](../rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchRector.php)
+
+```diff
+ final class SomeClass
+ {
+     private $name;
+
+     public function run()
+     {
+-        $name = $this->name;
+-
+-        return $name;
++        return $this->name;
      }
  }
 ```
