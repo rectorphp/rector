@@ -9,7 +9,22 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
-require __DIR__ . '/../vendor/autoload.php';
+$possiblePaths = [
+    // rector-src
+    __DIR__ . '/../vendor/autoload.php',
+    // rector package dependnecy
+    __DIR__ . '/../../../../vendor/autoload.php',
+];
+
+foreach ($possiblePaths as $possiblePath) {
+    if (! file_exists($possiblePath)) {
+        continue;
+    }
+
+    require $possiblePath;
+    break;
+}
+
 
 $buildDirectory = $argv[1];
 
