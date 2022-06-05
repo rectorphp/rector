@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\NeonParser;
 
-use RectorPrefix20220604\Nette\Neon\Node;
+use RectorPrefix20220605\Nette\Neon\Node;
 use Rector\Nette\Contract\Rector\NeonRectorInterface;
 use Rector\Nette\NeonParser\Contract\NeonNodeVisitorInterface;
 use Rector\Nette\NeonParser\Node\Service_;
@@ -35,7 +35,7 @@ final class NeonNodeTraverser
     {
         $this->neonRectors[] = $neonRector;
     }
-    public function traverse(\RectorPrefix20220604\Nette\Neon\Node $node) : \RectorPrefix20220604\Nette\Neon\Node
+    public function traverse(\RectorPrefix20220605\Nette\Neon\Node $node) : \RectorPrefix20220605\Nette\Neon\Node
     {
         foreach ($this->neonRectors as $neonRector) {
             // is service node?

@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20220605\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix20220605\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220605\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220605\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ParametersConfigurator extends \RectorPrefix20220604\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
+class ParametersConfigurator extends \RectorPrefix20220605\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     public const FACTORY = 'parameters';
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerBuilder
      */
     private $container;
-    public function __construct(\RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function __construct(\RectorPrefix20220605\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->container = $container;
     }
@@ -33,8 +33,8 @@ class ParametersConfigurator extends \RectorPrefix20220604\Symfony\Component\Dep
      */
     public final function set(string $name, $value)
     {
-        if ($value instanceof \RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression) {
-            throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Using an expression in parameter "%s" is not allowed.', $name));
+        if ($value instanceof \RectorPrefix20220605\Symfony\Component\ExpressionLanguage\Expression) {
+            throw new \RectorPrefix20220605\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Using an expression in parameter "%s" is not allowed.', $name));
         }
         $this->container->setParameter($name, static::processValue($value, \true));
         return $this;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220604\Psr\Log;
+namespace RectorPrefix20220605\Psr\Log;
 
 /**
  * Describes a logger-aware instance.
@@ -14,5 +14,5 @@ interface LoggerAwareInterface
      *
      * @return void
      */
-    public function setLogger(\RectorPrefix20220604\Psr\Log\LoggerInterface $logger) : void;
+    public function setLogger(\RectorPrefix20220605\Psr\Log\LoggerInterface $logger) : void;
 }

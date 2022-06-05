@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute;
+namespace RectorPrefix20220605\Symfony\Component\DependencyInjection\Attribute;
 
-use RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20220605\Symfony\Component\DependencyInjection\ContainerInterface;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class AsDecorator
 {
@@ -25,8 +25,8 @@ class AsDecorator
     /**
      * @var int
      */
-    public $onInvalid = \RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
-    public function __construct(string $decorates, int $priority = 0, int $onInvalid = \RectorPrefix20220604\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
+    public $onInvalid = \RectorPrefix20220605\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
+    public function __construct(string $decorates, int $priority = 0, int $onInvalid = \RectorPrefix20220605\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
     {
         $this->decorates = $decorates;
         $this->priority = $priority;

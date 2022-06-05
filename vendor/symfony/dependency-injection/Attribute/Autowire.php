@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220604\Symfony\Component\DependencyInjection\Attribute;
+namespace RectorPrefix20220605\Symfony\Component\DependencyInjection\Attribute;
 
-use RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\LogicException;
-use RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix20220605\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix20220605\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20220605\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * Attribute to tell a parameter how to be autowired.
  *
@@ -36,7 +36,7 @@ class Autowire
     public function __construct(?string $value = null, ?string $service = null, ?string $expression = null)
     {
         if (!($service xor $expression xor null !== $value)) {
-            throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\LogicException('#[Autowire] attribute must declare exactly one of $service, $expression, or $value.');
+            throw new \RectorPrefix20220605\Symfony\Component\DependencyInjection\Exception\LogicException('#[Autowire] attribute must declare exactly one of $service, $expression, or $value.');
         }
         if (null !== $value && \strncmp($value, '@', \strlen('@')) === 0) {
             switch (\true) {
@@ -53,13 +53,13 @@ class Autowire
         }
         switch (\true) {
             case null !== $service:
-                $this->value = new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Reference($service);
+                $this->value = new \RectorPrefix20220605\Symfony\Component\DependencyInjection\Reference($service);
                 break;
             case null !== $expression:
-                if (!\class_exists(\RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression::class)) {
-                    throw new \RectorPrefix20220604\Symfony\Component\DependencyInjection\Exception\LogicException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed. Try running "composer require symfony/expression-language".');
+                if (!\class_exists(\RectorPrefix20220605\Symfony\Component\ExpressionLanguage\Expression::class)) {
+                    throw new \RectorPrefix20220605\Symfony\Component\DependencyInjection\Exception\LogicException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed. Try running "composer require symfony/expression-language".');
                 }
-                $this->value = new \RectorPrefix20220604\Symfony\Component\ExpressionLanguage\Expression($expression);
+                $this->value = new \RectorPrefix20220605\Symfony\Component\ExpressionLanguage\Expression($expression);
                 break;
             case null !== $value:
                 $this->value = $value;

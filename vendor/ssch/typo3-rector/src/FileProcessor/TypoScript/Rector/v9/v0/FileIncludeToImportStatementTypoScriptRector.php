@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v9\v0;
 
-use RectorPrefix20220604\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement;
+use RectorPrefix20220605\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -28,7 +28,7 @@ final class FileIncludeToImportStatementTypoScriptRector extends \Ssch\TYPO3Rect
     }
     public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20220604\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement) {
+        if (!$statement instanceof \RectorPrefix20220605\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement) {
             return;
         }
         if (null !== $statement->condition) {

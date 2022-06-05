@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
-use RectorPrefix20220604\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220605\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 /**
  * Decorate node with fully qualified class name for const epxr,
  * e.g. Direction::*
@@ -28,7 +28,7 @@ final class ConstExprClassNameDecorator implements \Rector\BetterPhpDocParser\Co
      * @var \Symplify\Astral\PhpDocParser\PhpDocNodeTraverser
      */
     private $phpDocNodeTraverser;
-    public function __construct(\Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory, \RectorPrefix20220604\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser $phpDocNodeTraverser)
+    public function __construct(\Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory, \RectorPrefix20220605\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser $phpDocNodeTraverser)
     {
         $this->nameScopeFactory = $nameScopeFactory;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;

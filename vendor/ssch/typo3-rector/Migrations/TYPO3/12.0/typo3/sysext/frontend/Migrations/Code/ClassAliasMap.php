@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220604;
+namespace RectorPrefix20220605;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -15,4 +15,4 @@ namespace RectorPrefix20220604;
  *
  * The TYPO3 project - inspiring people to share!
  */
-return ['TYPO3\\CMS\\Frontend\\Service\\TypoLinkCodecService' => \RectorPrefix20220604\TYPO3\CMS\Core\LinkHandling\TypoLinkCodecService::class];
+return ['TYPO3\\CMS\\Frontend\\Service\\TypoLinkCodecService' => \RectorPrefix20220605\TYPO3\CMS\Core\LinkHandling\TypoLinkCodecService::class];

@@ -5,7 +5,7 @@ namespace Rector\Core\Configuration;
 
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use RectorPrefix20220604\Symplify\Skipper\ValueObject\Option as SkipperOption;
+use RectorPrefix20220605\Symplify\Skipper\ValueObject\Option as SkipperOption;
 final class Option
 {
     /**
@@ -85,7 +85,7 @@ final class Option
      * @deprecated Use @see \Rector\Config\RectorConfig::skip() instead
      * @var string
      */
-    public const SKIP = \RectorPrefix20220604\Symplify\Skipper\ValueObject\Option::SKIP;
+    public const SKIP = \RectorPrefix20220605\Symplify\Skipper\ValueObject\Option::SKIP;
     /**
      * @deprecated Use RectorConfig::fileExtensions() instead
      * @var string

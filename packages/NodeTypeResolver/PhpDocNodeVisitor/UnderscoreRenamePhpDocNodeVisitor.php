@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
-use RectorPrefix20220604\Nette\Utils\Strings;
+use RectorPrefix20220605\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20220604\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220604\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+use RectorPrefix20220605\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220605\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var bool
@@ -56,7 +56,7 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220604\Symp
         }
         $this->hasChanged = \true;
         // change underscore to \\
-        $slashedName = '\\' . \RectorPrefix20220604\Nette\Utils\Strings::replace($staticType->getClassName(), '#_#', '\\');
+        $slashedName = '\\' . \RectorPrefix20220605\Nette\Utils\Strings::replace($staticType->getClassName(), '#_#', '\\');
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($slashedName);
     }
     public function hasChanged() : bool
