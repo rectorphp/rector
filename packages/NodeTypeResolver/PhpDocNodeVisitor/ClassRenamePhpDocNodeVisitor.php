@@ -16,7 +16,6 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -39,8 +38,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         private readonly CurrentNodeProvider $currentNodeProvider,
         private readonly UseImportsResolver $useImportsResolver,
         private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly NodeComparator $nodeComparator
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -121,12 +119,13 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
 
         $originalNode = $namespace->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if (! $this->nodeComparator->areNodesEqual($originalNode, $namespace)) {
+        $namespaceName = (string) $this->nodeNameResolver->getName($namespace);
+
+        if ($originalNode instanceof Namespace_ && ! $this->nodeNameResolver->isName($originalNode, $namespaceName)) {
             return $name;
         }
 
         if ($uses === []) {
-            $namespaceName = $this->nodeNameResolver->getName($namespace);
             return $namespaceName . '\\' . $name;
         }
 
