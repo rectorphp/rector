@@ -185,6 +185,11 @@ PHP;
 
         $fileRealPath = $splFileInfo->getRealPath();
 
+        // file not found, e.g. in rector-src dev dependency
+        if ($fileRealPath === false) {
+            return 0;
+        }
+
         foreach ($highPriorityFiles as $position => $highPriorityFile) {
             if (str_ends_with($fileRealPath, '/' . $highPriorityFile)) {
                 return $position;
