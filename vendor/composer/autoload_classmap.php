@@ -1699,7 +1699,6 @@ return array(
     'Rector\\Core\\PhpParser\\Printer\\BetterStandardPrinter' => $baseDir . '/src/PhpParser/Printer/BetterStandardPrinter.php',
     'Rector\\Core\\PhpParser\\Printer\\FormatPerservingPrinter' => $baseDir . '/src/PhpParser/Printer/FormatPerservingPrinter.php',
     'Rector\\Core\\PhpParser\\Printer\\NodesWithFileDestinationPrinter' => $baseDir . '/src/PhpParser/Printer/NodesWithFileDestinationPrinter.php',
-    'Rector\\Core\\PhpParser\\Printer\\Whitespace\\IndentCharacterDetector' => $baseDir . '/src/PhpParser/Printer/Whitespace/IndentCharacterDetector.php',
     'Rector\\Core\\PhpParser\\ValueObject\\StmtsAndTokens' => $baseDir . '/src/PhpParser/ValueObject/StmtsAndTokens.php',
     'Rector\\Core\\Php\\PhpVersionProvider' => $baseDir . '/src/Php/PhpVersionProvider.php',
     'Rector\\Core\\Php\\PhpVersionResolver\\ProjectComposerJsonPhpVersionResolver' => $baseDir . '/src/Php/PhpVersionResolver/ProjectComposerJsonPhpVersionResolver.php',

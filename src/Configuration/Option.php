@@ -183,4 +183,14 @@ final class Option
      * @var string
      */
     public const MEMORY_LIMIT = 'memory-limit';
+    /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::indent() method
+     * @var string
+     */
+    public const INDENT_CHAR = 'indent-char';
+    /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::indent() method
+     * @var string
+     */
+    public const INDENT_SIZE = 'indent-size';
 }

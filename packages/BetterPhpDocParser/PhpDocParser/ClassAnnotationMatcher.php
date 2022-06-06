@@ -84,7 +84,7 @@ final class ClassAnnotationMatcher
                 if (\strpos($tag, '\\') === \false) {
                     return $this->resolveAsAliased($uses, $tag, $returnNullOnUnknownClass);
                 }
-                if (\strncmp($tag, '\\', \strlen('\\')) === 0 && $this->reflectionProvider->hasClass($tag)) {
+                if ($this->isPreslashedExistingClass($tag)) {
                     // Global or absolute Class
                     return $tag;
                 }
@@ -115,10 +115,17 @@ final class ClassAnnotationMatcher
     }
     private function resolveClass(?string $class, bool $returnNullOnUnknownClass) : ?string
     {
-        if (null === $class) {
+        if ($class === null) {
             return null;
         }
         $resolvedClass = $this->reflectionProvider->hasClass($class) ? $class : null;
         return $returnNullOnUnknownClass ? $resolvedClass : $class;
+    }
+    private function isPreslashedExistingClass(string $tag) : bool
+    {
+        if (\strncmp($tag, '\\', \strlen('\\')) !== 0) {
+            return \false;
+        }
+        return $this->reflectionProvider->hasClass($tag);
     }
 }

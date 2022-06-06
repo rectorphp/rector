@@ -192,4 +192,13 @@ final class RectorConfig extends \Symfony\Component\DependencyInjection\Loader\C
         $parameters = $this->parameters();
         $parameters->set(\Rector\Core\Configuration\Option::CACHE_CLASS, $cacheClass);
     }
+    /**
+     * @see https://github.com/nikic/PHP-Parser/issues/723#issuecomment-712401963
+     */
+    public function indent(string $character, int $count) : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(\Rector\Core\Configuration\Option::INDENT_CHAR, $character);
+        $parameters->set(\Rector\Core\Configuration\Option::INDENT_SIZE, $count);
+    }
 }

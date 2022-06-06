@@ -61,6 +61,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->parallel(120, 16, 20);
     $rectorConfig->disableImportNames();
     $rectorConfig->importShortClasses();
+    $rectorConfig->indent(' ', 4);
     $rectorConfig->fileExtensions(['php']);
     $rectorConfig->nestedChainMethodCallLimit(60);
     $rectorConfig->cacheDirectory(\sys_get_temp_dir() . '/rector_cached_files');

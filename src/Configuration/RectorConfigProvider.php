@@ -31,4 +31,12 @@ final class RectorConfigProvider
     {
         return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
     }
+    public function getIndentChar() : string
+    {
+        return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::INDENT_CHAR);
+    }
+    public function getIndentSize() : int
+    {
+        return $this->parameterProvider->provideIntParameter(\Rector\Core\Configuration\Option::INDENT_SIZE);
+    }
 }

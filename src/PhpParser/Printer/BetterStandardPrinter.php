@@ -26,9 +26,9 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
@@ -71,21 +71,21 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard impl
     private $tabOrSpaceIndentCharacter = ' ';
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector
-     */
-    private $indentCharacterDetector;
-    /**
-     * @readonly
      * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
     private $docBlockUpdater;
     /**
+     * @readonly
+     * @var \Rector\Core\Configuration\RectorConfigProvider
+     */
+    private $rectorConfigProvider;
+    /**
      * @param mixed[] $options
      */
-    public function __construct(\Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector $indentCharacterDetector, \Rector\Comments\NodeDocBlock\DocBlockUpdater $docBlockUpdater, array $options = [])
+    public function __construct(\Rector\Comments\NodeDocBlock\DocBlockUpdater $docBlockUpdater, \Rector\Core\Configuration\RectorConfigProvider $rectorConfigProvider, array $options = [])
     {
-        $this->indentCharacterDetector = $indentCharacterDetector;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->rectorConfigProvider = $rectorConfigProvider;
         parent::__construct($options);
         // print return type double colon right after the bracket "function(): string"
         $this->initializeInsertionMap();
@@ -102,8 +102,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard impl
     public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens) : string
     {
         $newStmts = $this->resolveNewStmts($stmts);
-        // detect per print
-        $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($origTokens);
+        $this->tabOrSpaceIndentCharacter = $this->rectorConfigProvider->getIndentChar();
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
         // add new line in case of added stmts
         if (\count($stmts) !== \count($origStmts) && !\Rector\Core\Util\StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
