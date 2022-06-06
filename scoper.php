@@ -6,7 +6,6 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\Unprefixer;
-use Rector\Compiler\ValueObject\ScoperOption;
 use Rector\Core\Application\VersionResolver;
 
 require_once __DIR__ . '/vendor/autoload.php';
