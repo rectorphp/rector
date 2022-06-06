@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php80\Rector\Class_;
+namespace Rector\Php81\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
@@ -15,20 +15,20 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Php80\NodeAnalyzer\EnumConstListClassDetector;
 use Rector\Php80\NodeAnalyzer\EnumParamAnalyzer;
 use Rector\Php80\ValueObject\ClassNameAndTagValueNode;
+use Rector\Php81\NodeAnalyzer\EnumConstListClassDetector;
 use Rector\Php81\NodeFactory\EnumFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\Php80\Rector\Class_\ConstantListClassToEnumRector\ConstantListClassToEnumRectorTest
+ * @see \Rector\Tests\Php81\Rector\Class_\ConstantListClassToEnumRector\ConstantListClassToEnumRectorTest
  */
 final class ConstantListClassToEnumRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\EnumConstListClassDetector
+     * @var \Rector\Php81\NodeAnalyzer\EnumConstListClassDetector
      */
     private $enumConstListClassDetector;
     /**
@@ -51,7 +51,7 @@ final class ConstantListClassToEnumRector extends \Rector\Core\Rector\AbstractRe
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
-    public function __construct(\Rector\Php80\NodeAnalyzer\EnumConstListClassDetector $enumConstListClassDetector, \Rector\Php81\NodeFactory\EnumFactory $enumFactory, \Rector\Php80\NodeAnalyzer\EnumParamAnalyzer $enumParamAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
+    public function __construct(\Rector\Php81\NodeAnalyzer\EnumConstListClassDetector $enumConstListClassDetector, \Rector\Php81\NodeFactory\EnumFactory $enumFactory, \Rector\Php80\NodeAnalyzer\EnumParamAnalyzer $enumParamAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
     {
         $this->enumConstListClassDetector = $enumConstListClassDetector;
         $this->enumFactory = $enumFactory;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php80\NodeAnalyzer;
+namespace Rector\Php81\NodeAnalyzer;
 
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;

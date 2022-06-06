@@ -8273,7 +8273,7 @@ Change simple property init and assign to constructor promotion
 
 Upgrade constant list classes to full blown enum
 
-- class: [`Rector\Php80\Rector\Class_\ConstantListClassToEnumRector`](../rules/Php80/Rector/Class_/ConstantListClassToEnumRector.php)
+- class: [`Rector\Php81\Rector\Class_\ConstantListClassToEnumRector`](../rules/Php80/Rector/Class_/ConstantListClassToEnumRector.php)
 
 ```diff
 -class Direction
