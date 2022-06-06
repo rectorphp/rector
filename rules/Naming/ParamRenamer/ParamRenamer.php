@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Naming\ParamRenamer;
+namespace RectorPrefix20220606\Rector\Naming\ParamRenamer;
 
-use PhpParser\Node\Param;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
-use Rector\Naming\ValueObject\ParamRename;
-use Rector\Naming\VariableRenamer;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
+use RectorPrefix20220606\Rector\Naming\ValueObject\ParamRename;
+use RectorPrefix20220606\Rector\Naming\VariableRenamer;
 final class ParamRenamer
 {
     /**
@@ -19,12 +19,12 @@ final class ParamRenamer
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator
      */
     private $propertyDocBlockManipulator;
-    public function __construct(\Rector\Naming\VariableRenamer $variableRenamer, \Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator $propertyDocBlockManipulator)
+    public function __construct(VariableRenamer $variableRenamer, PropertyDocBlockManipulator $propertyDocBlockManipulator)
     {
         $this->variableRenamer = $variableRenamer;
         $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
     }
-    public function rename(\Rector\Naming\ValueObject\ParamRename $paramRename) : void
+    public function rename(ParamRename $paramRename) : void
     {
         // 1. rename param
         $paramRename->getVariable()->name = $paramRename->getExpectedName();

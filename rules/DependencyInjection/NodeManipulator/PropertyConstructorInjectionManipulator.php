@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DependencyInjection\NodeManipulator;
+namespace RectorPrefix20220606\Rector\DependencyInjection\NodeManipulator;
 
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PostRector\Collector\PropertyToAddCollector;
-use Rector\PostRector\ValueObject\PropertyMetadata;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\PostRector\Collector\PropertyToAddCollector;
+use RectorPrefix20220606\Rector\PostRector\ValueObject\PropertyMetadata;
 final class PropertyConstructorInjectionManipulator
 {
     /**
@@ -47,7 +47,7 @@ final class PropertyConstructorInjectionManipulator
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, PhpDocTagRemover $phpDocTagRemover, PropertyToAddCollector $propertyToAddCollector, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -56,17 +56,17 @@ final class PropertyConstructorInjectionManipulator
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function refactor(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $type, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
+    public function refactor(Property $property, Type $type, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
     {
         $propertyName = $this->nodeNameResolver->getName($property);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
-        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
+        if (!$class instanceof Class_) {
+            throw new ShouldNotHappenException();
         }
-        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $type, $property->flags);
+        $propertyMetadata = new PropertyMetadata($propertyName, $type, $property->flags);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
     }
 }

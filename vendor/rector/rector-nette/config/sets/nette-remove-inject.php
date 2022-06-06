@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use Rector\Config\RectorConfig;
-use Rector\Nette\Rector\Property\NetteInjectToConstructorInjectionRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\Nette\Rector\Property\NetteInjectToConstructorInjectionRector::class);
+use RectorPrefix20220606\Rector\Config\RectorConfig;
+use RectorPrefix20220606\Rector\Nette\Rector\Property\NetteInjectToConstructorInjectionRector;
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(NetteInjectToConstructorInjectionRector::class);
 };

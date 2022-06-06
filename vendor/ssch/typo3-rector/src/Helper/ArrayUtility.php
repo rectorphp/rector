@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Helper;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Helper;
 
 use InvalidArgumentException;
 final class ArrayUtility
@@ -12,7 +12,7 @@ final class ArrayUtility
     public static function trimExplode(string $delimiter, string $string, bool $removeEmptyValues = \false, int $limit = 0) : array
     {
         if ('' === $delimiter) {
-            throw new \InvalidArgumentException('Please define a correct delimiter');
+            throw new InvalidArgumentException('Please define a correct delimiter');
         }
         $result = \explode($delimiter, $string);
         if ($removeEmptyValues) {

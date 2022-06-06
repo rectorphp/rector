@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute;
+namespace RectorPrefix20220606\Rector\PhpAttribute;
 
-use PhpParser\BuilderHelpers;
-use PhpParser\Node\Expr;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use Rector\PhpAttribute\Enum\DocTagNodeState;
+use RectorPrefix20220606\PhpParser\BuilderHelpers;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use RectorPrefix20220606\Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
+use RectorPrefix20220606\Rector\PhpAttribute\Enum\DocTagNodeState;
 /**
  * @see \Rector\Tests\PhpAttribute\AnnotationToAttributeMapper\AnnotationToAttributeMapperTest
  */
@@ -36,14 +36,14 @@ final class AnnotationToAttributeMapper
                 return $annotationToAttributeMapper->map($value);
             }
         }
-        if ($value instanceof \PhpParser\Node\Expr) {
+        if ($value instanceof Expr) {
             return $value;
         }
         // remove node, as handled elsewhere
-        if ($value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-            return \Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY;
+        if ($value instanceof DoctrineAnnotationTagValueNode) {
+            return DocTagNodeState::REMOVE_ARRAY;
         }
         // fallback
-        return \PhpParser\BuilderHelpers::normalizeValue($value);
+        return BuilderHelpers::normalizeValue($value);
     }
 }

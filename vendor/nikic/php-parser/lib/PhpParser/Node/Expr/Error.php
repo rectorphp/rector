@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node\Expr;
+namespace RectorPrefix20220606\PhpParser\Node\Expr;
 
-use PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr;
 /**
  * Error node used during parsing with error recovery.
  *
  * An error node may be placed at a position where an expression is required, but an error occurred.
  * Error nodes will not be present if the parser is run in throwOnError mode (the default).
  */
-class Error extends \PhpParser\Node\Expr
+class Error extends Expr
 {
     /**
      * Constructs an error node.

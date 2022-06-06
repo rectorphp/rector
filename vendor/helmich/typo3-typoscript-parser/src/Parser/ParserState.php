@@ -15,22 +15,22 @@ class ParserState
     private $statements;
     /** @var TokenStream */
     private $tokens;
-    public function __construct(\RectorPrefix20220606\Helmich\TypoScriptParser\Parser\TokenStream $tokens, \ArrayObject $statements = null)
+    public function __construct(TokenStream $tokens, ArrayObject $statements = null)
     {
         if ($statements === null) {
-            $statements = new \ArrayObject();
+            $statements = new ArrayObject();
         }
         $this->statements = $statements;
         $this->tokens = $tokens;
-        $this->context = new \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\RootObjectPath();
+        $this->context = new RootObjectPath();
     }
-    public function withContext(\RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ObjectPath $context) : self
+    public function withContext(ObjectPath $context) : self
     {
         $clone = clone $this;
         $clone->context = $context;
         return $clone;
     }
-    public function withStatements(\ArrayObject $statements) : self
+    public function withStatements(ArrayObject $statements) : self
     {
         $clone = clone $this;
         $clone->statements = $statements;
@@ -40,7 +40,7 @@ class ParserState
      * @param int $lookAhead
      * @return TokenInterface
      */
-    public function token(int $lookAhead = 0) : \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+    public function token(int $lookAhead = 0) : TokenInterface
     {
         return $this->tokens->current($lookAhead);
     }
@@ -62,14 +62,14 @@ class ParserState
     /**
      * @return ObjectPath
      */
-    public function context() : \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ObjectPath
+    public function context() : ObjectPath
     {
         return $this->context;
     }
     /**
      * @return ArrayObject
      */
-    public function statements() : \ArrayObject
+    public function statements() : ArrayObject
     {
         return $this->statements;
     }

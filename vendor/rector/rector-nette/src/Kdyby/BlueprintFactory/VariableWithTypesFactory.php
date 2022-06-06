@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\Kdyby\BlueprintFactory;
+namespace RectorPrefix20220606\Rector\Nette\Kdyby\BlueprintFactory;
 
-use PhpParser\Node\Arg;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\StaticType;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\Nette\Kdyby\ValueObject\VariableWithType;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\StaticTypeMapper\StaticTypeMapper;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\StaticType;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Naming\Naming\VariableNaming;
+use RectorPrefix20220606\Rector\Nette\Kdyby\ValueObject\VariableWithType;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
 final class VariableWithTypesFactory
 {
     /**
@@ -29,7 +29,7 @@ final class VariableWithTypesFactory
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Naming\Naming\VariableNaming $variableNaming)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, StaticTypeMapper $staticTypeMapper, VariableNaming $variableNaming)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -46,14 +46,14 @@ final class VariableWithTypesFactory
             $staticType = $this->nodeTypeResolver->getType($arg->value);
             $variableName = $this->variableNaming->resolveFromNodeAndType($arg, $staticType);
             if ($variableName === null) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
+                throw new ShouldNotHappenException();
             }
             // compensate for static
-            if ($staticType instanceof \PHPStan\Type\StaticType) {
-                $staticType = new \PHPStan\Type\ObjectType($staticType->getClassName());
+            if ($staticType instanceof StaticType) {
+                $staticType = new ObjectType($staticType->getClassName());
             }
-            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
-            $variablesWithTypes[] = new \Rector\Nette\Kdyby\ValueObject\VariableWithType($variableName, $staticType, $phpParserTypeNode);
+            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, TypeKind::PROPERTY);
+            $variablesWithTypes[] = new VariableWithType($variableName, $staticType, $phpParserTypeNode);
         }
         return $variablesWithTypes;
     }

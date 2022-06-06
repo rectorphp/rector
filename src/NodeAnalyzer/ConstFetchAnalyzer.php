@@ -1,38 +1,38 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Core\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\ConstFetch;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
 /**
  * Read-only utils for ClassConstAnalyzer Node:
  * "false, true..."
  */
 final class ConstFetchAnalyzer
 {
-    public function isTrueOrFalse(\PhpParser\Node $node) : bool
+    public function isTrueOrFalse(Node $node) : bool
     {
         if ($this->isTrue($node)) {
             return \true;
         }
         return $this->isFalse($node);
     }
-    public function isFalse(\PhpParser\Node $node) : bool
+    public function isFalse(Node $node) : bool
     {
         return $this->isConstantWithLowercasedName($node, 'false');
     }
-    public function isTrue(\PhpParser\Node $node) : bool
+    public function isTrue(Node $node) : bool
     {
         return $this->isConstantWithLowercasedName($node, 'true');
     }
-    public function isNull(\PhpParser\Node $node) : bool
+    public function isNull(Node $node) : bool
     {
         return $this->isConstantWithLowercasedName($node, 'null');
     }
-    private function isConstantWithLowercasedName(\PhpParser\Node $node, string $name) : bool
+    private function isConstantWithLowercasedName(Node $node, string $name) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if (!$node instanceof ConstFetch) {
             return \false;
         }
         return $node->name->toLowerString() === $name;

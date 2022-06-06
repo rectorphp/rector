@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Composer\Guard;
+namespace RectorPrefix20220606\Rector\Composer\Guard;
 
 use RectorPrefix20220606\Composer\Semver\VersionParser;
-use Rector\Composer\Contract\VersionAwareInterface;
+use RectorPrefix20220606\Rector\Composer\Contract\VersionAwareInterface;
 final class VersionGuard
 {
     /**
@@ -12,7 +12,7 @@ final class VersionGuard
      * @var \Composer\Semver\VersionParser
      */
     private $versionParser;
-    public function __construct(\RectorPrefix20220606\Composer\Semver\VersionParser $versionParser)
+    public function __construct(VersionParser $versionParser)
     {
         $this->versionParser = $versionParser;
     }

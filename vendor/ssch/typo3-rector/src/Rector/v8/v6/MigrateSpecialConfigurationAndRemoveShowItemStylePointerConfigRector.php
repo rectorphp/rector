@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v8\v6;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v6;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar\String_;
-use Ssch\TYPO3Rector\Helper\ArrayUtility;
-use Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\ArrayUtility;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79440-TcaChanges.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\MigrateSpecialConfigurationAndRemoveShowItemStylePointerConfigRector\MigrateSpecialConfigurationAndRemoveShowItemStylePointerConfigRectorTest
  */
-final class MigrateSpecialConfigurationAndRemoveShowItemStylePointerConfigRector extends \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector
+final class MigrateSpecialConfigurationAndRemoveShowItemStylePointerConfigRector extends AbstractTcaRector
 {
     /**
      * @var string
@@ -40,9 +40,9 @@ final class MigrateSpecialConfigurationAndRemoveShowItemStylePointerConfigRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move special configuration to columns overrides', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move special configuration to columns overrides', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'types' => [
         0 => [
@@ -71,24 +71,24 @@ CODE_SAMPLE
     {
         $this->defaultExtrasFromColumns = [];
     }
-    protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
+    protected function refactorColumn(Expr $columnName, Expr $columnTca) : void
     {
-        if (!$columnTca instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$columnTca instanceof Array_) {
             return;
         }
         $defaultExtras = $this->extractArrayValueByKey($columnTca, 'defaultExtras');
-        if (!$defaultExtras instanceof \PhpParser\Node\Expr) {
+        if (!$defaultExtras instanceof Expr) {
             return;
         }
         $this->defaultExtrasFromColumns[$this->valueResolver->getValue($columnName)] = $this->valueResolver->getValue($defaultExtras);
     }
-    protected function refactorType(\PhpParser\Node\Expr $typeKey, \PhpParser\Node\Expr $typeConfiguration) : void
+    protected function refactorType(Expr $typeKey, Expr $typeConfiguration) : void
     {
-        if (!$typeConfiguration instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$typeConfiguration instanceof Array_) {
             return;
         }
         $showitemNode = $this->extractArrayValueByKey($typeConfiguration, 'showitem');
-        if (!$showitemNode instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$showitemNode instanceof String_) {
             return;
         }
         $showitem = $this->valueResolver->getValue($showitemNode);
@@ -105,7 +105,7 @@ CODE_SAMPLE
             $fieldString = \rtrim($fieldString, ';');
             // Unpack the field definition, migrate and remove as much as possible
             // Keep empty parameters in trimExplode here (third parameter FALSE), so position is not changed
-            $fieldArray = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(';', $fieldString);
+            $fieldArray = ArrayUtility::trimExplode(';', $fieldString);
             $fieldArray = [self::FIELD_NAME => $fieldArray[0] ?? '', self::FIELD_LABEL => $fieldArray[1] ?? null, self::PALETTE_NAME => $fieldArray[2] ?? null, self::FIELD_EXTRA => $fieldArray[3] ?? null];
             $fieldName = $fieldArray[self::FIELD_NAME];
             if (null !== $fieldArray[self::FIELD_EXTRA]) {
@@ -121,16 +121,16 @@ CODE_SAMPLE
                 $newDefaultExtras = \implode(':', $newDefaultExtras);
                 if ('' !== $newDefaultExtras) {
                     $columnsOverridesArray = $this->extractSubArrayByKey($typeConfiguration, 'columnsOverrides');
-                    if (!$columnsOverridesArray instanceof \PhpParser\Node\Expr\Array_) {
-                        $columnsOverridesArray = new \PhpParser\Node\Expr\Array_([]);
-                        $typeConfiguration->items[] = new \PhpParser\Node\Expr\ArrayItem($columnsOverridesArray, new \PhpParser\Node\Scalar\String_('columnsOverrides'));
+                    if (!$columnsOverridesArray instanceof Array_) {
+                        $columnsOverridesArray = new Array_([]);
+                        $typeConfiguration->items[] = new ArrayItem($columnsOverridesArray, new String_('columnsOverrides'));
                     }
                     $columnOverrideArray = $this->extractSubArrayByKey($columnsOverridesArray, $fieldName);
-                    if (!$columnOverrideArray instanceof \PhpParser\Node\Expr\Array_) {
-                        $columnOverrideArray = new \PhpParser\Node\Expr\Array_([]);
-                        $columnsOverridesArray->items[] = new \PhpParser\Node\Expr\ArrayItem($columnOverrideArray, new \PhpParser\Node\Scalar\String_($fieldName));
+                    if (!$columnOverrideArray instanceof Array_) {
+                        $columnOverrideArray = new Array_([]);
+                        $columnsOverridesArray->items[] = new ArrayItem($columnOverrideArray, new String_($fieldName));
                     }
-                    $columnOverrideArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_($newDefaultExtras), new \PhpParser\Node\Scalar\String_('defaultExtras'));
+                    $columnOverrideArray->items[] = new ArrayItem(new String_($newDefaultExtras), new String_('defaultExtras'));
                     $this->hasAstBeenChanged = \true;
                 }
             }

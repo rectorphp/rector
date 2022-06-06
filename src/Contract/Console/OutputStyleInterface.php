@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Contract\Console;
+namespace RectorPrefix20220606\Rector\Core\Contract\Console;
 
 interface OutputStyleInterface
 {

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\ValueObject;
+namespace RectorPrefix20220606\Rector\Doctrine\ValueObject;
 
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 final class PropertyNamesAndPhpDocInfos
 {
     /**

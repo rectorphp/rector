@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp72\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\DowngradePhp72\NodeAnalyzer;
 
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ClassReflection;
-use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class BuiltInMethodAnalyzer
 {
     /**
@@ -19,12 +19,12 @@ final class BuiltInMethodAnalyzer
      * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
     private $classChildAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, ClassChildAnalyzer $classChildAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classChildAnalyzer = $classChildAnalyzer;
     }
-    public function isImplementsBuiltInInterface(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function isImplementsBuiltInInterface(ClassReflection $classReflection, ClassMethod $classMethod) : bool
     {
         if (!$classReflection->isClass()) {
             return \false;

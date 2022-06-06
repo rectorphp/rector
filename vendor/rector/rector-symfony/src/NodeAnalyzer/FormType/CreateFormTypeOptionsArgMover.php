@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\NodeAnalyzer\FormType;
+namespace RectorPrefix20220606\Rector\Symfony\NodeAnalyzer\FormType;
 
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\PhpParser\Node\NodeFactory;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
 use ReflectionMethod;
 final class CreateFormTypeOptionsArgMover
 {
@@ -23,7 +23,7 @@ final class CreateFormTypeOptionsArgMover
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(ReflectionProvider $reflectionProvider, NodeFactory $nodeFactory)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeFactory = $nodeFactory;
@@ -31,20 +31,20 @@ final class CreateFormTypeOptionsArgMover
     /**
      * @param Arg[] $argNodes
      */
-    public function moveArgumentsToOptions(\PhpParser\Node\Expr\MethodCall $methodCall, int $position, int $optionsPosition, string $className, array $argNodes) : ?\PhpParser\Node\Expr\MethodCall
+    public function moveArgumentsToOptions(MethodCall $methodCall, int $position, int $optionsPosition, string $className, array $argNodes) : ?MethodCall
     {
         $namesToArgs = $this->resolveNamesToArgs($className, $argNodes);
         // set default data in between
         if ($position + 1 !== $optionsPosition && !isset($methodCall->args[$position + 1])) {
-            $methodCall->args[$position + 1] = new \PhpParser\Node\Arg($this->nodeFactory->createNull());
+            $methodCall->args[$position + 1] = new Arg($this->nodeFactory->createNull());
         }
         // @todo decopule and name, so I know what it is
         if (!isset($methodCall->args[$optionsPosition])) {
-            $array = new \PhpParser\Node\Expr\Array_();
+            $array = new Array_();
             foreach ($namesToArgs as $name => $arg) {
-                $array->items[] = new \PhpParser\Node\Expr\ArrayItem($arg->value, new \PhpParser\Node\Scalar\String_($name));
+                $array->items[] = new ArrayItem($arg->value, new String_($name));
             }
-            $methodCall->args[$optionsPosition] = new \PhpParser\Node\Arg($array);
+            $methodCall->args[$optionsPosition] = new Arg($array);
         }
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
@@ -68,7 +68,7 @@ final class CreateFormTypeOptionsArgMover
         $classReflection = $this->reflectionProvider->getClass($className);
         $nativeReflection = $classReflection->getNativeReflection();
         $constructorReflectionMethod = $nativeReflection->getConstructor();
-        if (!$constructorReflectionMethod instanceof \ReflectionMethod) {
+        if (!$constructorReflectionMethod instanceof ReflectionMethod) {
             return [];
         }
         return $this->createArgsByName($constructorReflectionMethod, $args);
@@ -77,7 +77,7 @@ final class CreateFormTypeOptionsArgMover
      * @param Arg[] $args
      * @return array<string, Arg>
      */
-    private function createArgsByName(\ReflectionMethod $constructorReflectionMethod, array $args) : array
+    private function createArgsByName(ReflectionMethod $constructorReflectionMethod, array $args) : array
     {
         $namesToArgs = [];
         foreach ($constructorReflectionMethod->getParameters() as $position => $reflectionParameter) {

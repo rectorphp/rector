@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v9\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
-use Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
+use RectorPrefix20220606\Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Feature-82869-ReplaceInjectWithTYPO3CMSExtbaseAnnotationInject.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\InjectAnnotationRector\InjectAnnotationRectorTest
  */
-final class InjectAnnotationRector extends \Rector\Core\Rector\AbstractRector
+final class InjectAnnotationRector extends AbstractRector
 {
     /**
      * @var string
@@ -35,7 +35,7 @@ final class InjectAnnotationRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer
      */
     private $docBlockTagReplacer;
-    public function __construct(\Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory $injectMethodFactory, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer $docBlockTagReplacer)
+    public function __construct(InjectMethodFactory $injectMethodFactory, DocBlockTagReplacer $docBlockTagReplacer)
     {
         $this->injectMethodFactory = $injectMethodFactory;
         $this->docBlockTagReplacer = $docBlockTagReplacer;
@@ -45,12 +45,12 @@ final class InjectAnnotationRector extends \Rector\Core\Rector\AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $injectMethods = [];
         $properties = $node->getProperties();
@@ -72,9 +72,9 @@ final class InjectAnnotationRector extends \Rector\Core\Rector\AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns properties with `@inject` to setter injection', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns properties with `@inject` to setter injection', [new CodeSample(<<<'CODE_SAMPLE'
 /**
  * @var SomeService
  * @inject

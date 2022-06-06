@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\BetterPhpDocParser\ValueObject\Type;
+namespace RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\Type;
 
-use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Stringable;
-final class SpacingAwareCallableTypeNode extends \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode
+final class SpacingAwareCallableTypeNode extends CallableTypeNode
 {
     public function __toString() : string
     {

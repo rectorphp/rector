@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute\Contract;
+namespace RectorPrefix20220606\Rector\PhpAttribute\Contract;
 
-use PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr;
 /**
  * @template T as mixed
  */
@@ -16,5 +16,5 @@ interface AnnotationToAttributeMapperInterface
     /**
      * @param T $value
      */
-    public function map($value) : \PhpParser\Node\Expr;
+    public function map($value) : Expr;
 }

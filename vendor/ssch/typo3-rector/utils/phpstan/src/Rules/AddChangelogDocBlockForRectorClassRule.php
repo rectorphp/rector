@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\PHPStan\Rules;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\PHPStan\Rules;
 
-use PhpParser\Comment\Doc;
-use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\Class_;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\Rule;
-use PHPStan\Type\FileTypeMapper;
-use Rector\Core\Contract\Rector\PhpRectorInterface;
-use Rector\Core\Contract\Rector\RectorInterface;
-use Ssch\TYPO3Rector\ComposerPackages\Rector\AddPackageVersionRector;
-use Ssch\TYPO3Rector\Rector\General\ConvertImplicitVariablesToExplicitGlobalsRector;
-use Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector;
-use Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector;
-use Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
-use Ssch\TYPO3Rector\Rules\Rector\Misc\AddCodeCoverageIgnoreToMethodRectorDefinitionRector;
+use RectorPrefix20220606\PhpParser\Comment\Doc;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
+use RectorPrefix20220606\PHPStan\Rules\Rule;
+use RectorPrefix20220606\PHPStan\Type\FileTypeMapper;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\PhpRectorInterface;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
+use RectorPrefix20220606\Ssch\TYPO3Rector\ComposerPackages\Rector\AddPackageVersionRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Rector\General\ConvertImplicitVariablesToExplicitGlobalsRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Rules\Rector\Misc\AddCodeCoverageIgnoreToMethodRectorDefinitionRector;
 /**
  * @see \Ssch\TYPO3Rector\PHPStan\Tests\Rules\AddChangelogDocBlockForRectorClass\AddChangelogDocBlockForRectorClassTest
  * @implements Rule<Class_>
  */
-final class AddChangelogDocBlockForRectorClassRule implements \PHPStan\Rules\Rule
+final class AddChangelogDocBlockForRectorClassRule implements Rule
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ final class AddChangelogDocBlockForRectorClassRule implements \PHPStan\Rules\Rul
     /**
      * @var array<class-string<RectorInterface>>
      */
-    private const ALLOWED_CLASSES_WITH_NON_CHANGELOG_DOC_BLOCK = [\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::class, \Ssch\TYPO3Rector\Rules\Rector\Misc\AddCodeCoverageIgnoreToMethodRectorDefinitionRector::class, \Ssch\TYPO3Rector\Rector\General\ConvertImplicitVariablesToExplicitGlobalsRector::class, \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector::class, \Ssch\TYPO3Rector\ComposerPackages\Rector\AddPackageVersionRector::class, \Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector::class];
+    private const ALLOWED_CLASSES_WITH_NON_CHANGELOG_DOC_BLOCK = [RenameClassMapAliasRector::class, AddCodeCoverageIgnoreToMethodRectorDefinitionRector::class, ConvertImplicitVariablesToExplicitGlobalsRector::class, AbstractTcaRector::class, AddPackageVersionRector::class, MethodGetInstanceToMakeInstanceCallRector::class];
     /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
@@ -43,35 +43,35 @@ final class AddChangelogDocBlockForRectorClassRule implements \PHPStan\Rules\Rul
      * @var \PHPStan\Type\FileTypeMapper
      */
     private $fileTypeMapper;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \PHPStan\Type\FileTypeMapper $fileTypeMapper)
+    public function __construct(ReflectionProvider $reflectionProvider, FileTypeMapper $fileTypeMapper)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->fileTypeMapper = $fileTypeMapper;
     }
     public function getNodeType() : string
     {
-        return \PhpParser\Node\Stmt\Class_::class;
+        return Class_::class;
     }
     /**
      * @param Class_ $node
      * @return string[]
      */
-    public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : array
+    public function processNode(Node $node, Scope $scope) : array
     {
         $className = $node->name;
-        if (!$className instanceof \PhpParser\Node\Identifier) {
+        if (!$className instanceof Identifier) {
             return [];
         }
         $fullyQualifiedClassName = $scope->getNamespace() . '\\' . $className;
         $classReflection = $this->reflectionProvider->getClass($fullyQualifiedClassName);
-        if (!$classReflection->isSubclassOf(\Rector\Core\Contract\Rector\PhpRectorInterface::class)) {
+        if (!$classReflection->isSubclassOf(PhpRectorInterface::class)) {
             return [];
         }
         if (\in_array($fullyQualifiedClassName, self::ALLOWED_CLASSES_WITH_NON_CHANGELOG_DOC_BLOCK, \true)) {
             return [];
         }
         $docComment = $node->getDocComment();
-        if (!$docComment instanceof \PhpParser\Comment\Doc) {
+        if (!$docComment instanceof Doc) {
             return [\sprintf(self::ERROR_MESSAGE, $className)];
         }
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc($scope->getFile(), $classReflection->getName(), null, null, $docComment->getText());

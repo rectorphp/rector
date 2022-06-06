@@ -1,32 +1,32 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\Rector\Class_;
+namespace RectorPrefix20220606\Rector\Nette\Rector\Class_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
-use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory;
-use Rector\Nette\NodeFinder\FormFieldsFinder;
-use Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder;
-use Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder;
-use Rector\Nette\NodeFinder\FormVariableFinder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use RectorPrefix20220606\Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use RectorPrefix20220606\Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory;
+use RectorPrefix20220606\Rector\Nette\NodeFinder\FormFieldsFinder;
+use RectorPrefix20220606\Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder;
+use RectorPrefix20220606\Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder;
+use RectorPrefix20220606\Rector\Nette\NodeFinder\FormVariableFinder;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @see https://doc.nette.org/en/3.1/form-presenter#toc-mapping-to-classes
  * @see \Rector\Nette\Tests\Rector\Class_\FormDataRector\FormDataRectorTest
  */
-final class FormDataRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class FormDataRector extends AbstractRector implements ConfigurableRectorInterface
 {
     public const FORM_DATA_CLASS_PARENT = 'form_data_class_parent';
     public const FORM_DATA_CLASS_TRAITS = 'form_data_class_traits';
@@ -73,7 +73,7 @@ final class FormDataRector extends \Rector\Core\Rector\AbstractRector implements
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(\Rector\Nette\NodeFinder\FormVariableFinder $formVariableFinder, \Rector\Nette\NodeFinder\FormFieldsFinder $formFieldsFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder $formOnSuccessCallbackFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder $formOnSuccessCallbackValuesParamFinder, \Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    public function __construct(FormVariableFinder $formVariableFinder, FormFieldsFinder $formFieldsFinder, FormOnSuccessCallbackFinder $formOnSuccessCallbackFinder, FormOnSuccessCallbackValuesParamFinder $formOnSuccessCallbackValuesParamFinder, ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory, NodePrinterInterface $nodePrinter, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->formVariableFinder = $formVariableFinder;
         $this->formFieldsFinder = $formFieldsFinder;
@@ -83,9 +83,9 @@ final class FormDataRector extends \Rector\Core\Rector\AbstractRector implements
         $this->nodePrinter = $nodePrinter;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Create form data class with all fields of Form', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Create form data class with all fields of Form', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class MyFormFactory
 {
     public function create()
@@ -125,7 +125,7 @@ CODE_SAMPLE
     }
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param mixed[] $configuration
@@ -134,20 +134,20 @@ CODE_SAMPLE
     {
         if (isset($configuration[self::FORM_DATA_CLASS_PARENT])) {
             $formDataClassParent = $configuration[self::FORM_DATA_CLASS_PARENT];
-            \RectorPrefix20220606\Webmozart\Assert\Assert::string($formDataClassParent);
+            Assert::string($formDataClassParent);
             $this->formDataClassParent = $formDataClassParent;
         }
         if (isset($configuration[self::FORM_DATA_CLASS_TRAITS])) {
             $formDataClassTraits = $configuration[self::FORM_DATA_CLASS_TRAITS];
-            \RectorPrefix20220606\Webmozart\Assert\Assert::isArray($formDataClassTraits);
-            \RectorPrefix20220606\Webmozart\Assert\Assert::allString($formDataClassTraits);
+            Assert::isArray($formDataClassTraits);
+            Assert::allString($formDataClassTraits);
             $this->formDataClassTraits = $formDataClassTraits;
         }
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->name === null) {
             return null;
@@ -155,7 +155,7 @@ CODE_SAMPLE
         $shortClassName = $this->nodeNameResolver->getShortName($node);
         $fullClassName = $this->getName($node);
         $form = $this->formVariableFinder->find($node);
-        if (!$form instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$form instanceof Variable) {
             return null;
         }
         $formFields = $this->formFieldsFinder->find($node, $form);
@@ -172,17 +172,17 @@ CODE_SAMPLE
         $printedClassContent = "<?php\n\n" . $this->nodePrinter->print($formDataClass) . "\n";
         $smartFileInfo = $this->file->getSmartFileInfo();
         $targetFilePath = $smartFileInfo->getRealPathDirectory() . '/' . $formDataClassName . '.php';
-        $addedFileWithContent = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($targetFilePath, $printedClassContent);
+        $addedFileWithContent = new AddedFileWithContent($targetFilePath, $printedClassContent);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
         $onSuccessCallback = $this->formOnSuccessCallbackFinder->find($node, $form);
-        if (!$onSuccessCallback instanceof \PhpParser\Node\Expr) {
+        if (!$onSuccessCallback instanceof Expr) {
             return null;
         }
         $valuesParam = $this->formOnSuccessCallbackValuesParamFinder->find($node, $onSuccessCallback);
-        if (!$valuesParam instanceof \PhpParser\Node\Param) {
+        if (!$valuesParam instanceof Param) {
             return null;
         }
-        $valuesParam->type = new \PhpParser\Node\Identifier($fullFormDataClassName);
+        $valuesParam->type = new Identifier($fullFormDataClassName);
         return $node;
     }
 }

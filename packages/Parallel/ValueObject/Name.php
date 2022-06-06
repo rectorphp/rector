@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Parallel\ValueObject;
+namespace RectorPrefix20220606\Rector\Parallel\ValueObject;
 
 /**
  * Helpers constant for passing constant names around

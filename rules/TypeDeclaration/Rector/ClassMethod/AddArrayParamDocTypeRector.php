@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\Rector\ClassMethod;
+namespace RectorPrefix20220606\Rector\TypeDeclaration\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\CallableType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\NodeAnalyzer\ParamAnalyzer;
-use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
-use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Type\ArrayType;
+use RectorPrefix20220606\PHPStan\Type\CallableType;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\PHPStan\Type\NullType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\PHPStan\Type\UnionType;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ParamAnalyzer;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
+use RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector\AddArrayParamDocTypeRectorTest
  */
-final class AddArrayParamDocTypeRector extends \Rector\Core\Rector\AbstractRector
+final class AddArrayParamDocTypeRector extends AbstractRector
 {
     /**
      * @readonly
@@ -45,16 +45,16 @@ final class AddArrayParamDocTypeRector extends \Rector\Core\Rector\AbstractRecto
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
+    public function __construct(ParamTypeInferer $paramTypeInferer, PhpDocTypeChanger $phpDocTypeChanger, ParamTagRemover $paramTagRemover, ParamAnalyzer $paramAnalyzer)
     {
         $this->paramTypeInferer = $paramTypeInferer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->paramTagRemover = $paramTagRemover;
         $this->paramAnalyzer = $paramAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Adds @param annotation to array parameters inferred from the rest of the code', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Adds @param annotation to array parameters inferred from the rest of the code', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -92,12 +92,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->getParams() === []) {
             return null;
@@ -109,14 +109,14 @@ CODE_SAMPLE
                 continue;
             }
             $paramType = $this->paramTypeInferer->inferParam($param);
-            if ($paramType instanceof \PHPStan\Type\MixedType) {
+            if ($paramType instanceof MixedType) {
                 continue;
             }
-            if ($paramType instanceof \PHPStan\Type\CallableType) {
+            if ($paramType instanceof CallableType) {
                 continue;
             }
-            if ($this->paramAnalyzer->isNullable($param) && !$paramType instanceof \PHPStan\Type\UnionType) {
-                $paramType = new \PHPStan\Type\UnionType([$paramType, new \PHPStan\Type\NullType()]);
+            if ($this->paramAnalyzer->isNullable($param) && !$paramType instanceof UnionType) {
+                $paramType = new UnionType([$paramType, new NullType()]);
             }
             $paramName = $this->getName($param);
             $this->phpDocTypeChanger->changeParamType($phpDocInfo, $paramType, $param, $paramName);
@@ -128,7 +128,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkipParam(\PhpParser\Node\Param $param) : bool
+    private function shouldSkipParam(Param $param) : bool
     {
         // type missing at all
         if ($param->type === null) {
@@ -137,7 +137,7 @@ CODE_SAMPLE
         // not an array type
         $paramType = $this->nodeTypeResolver->getType($param->type);
         // weird case for maybe interface
-        if ($paramType->isIterable()->maybe() && $paramType instanceof \PHPStan\Type\ObjectType) {
+        if ($paramType->isIterable()->maybe() && $paramType instanceof ObjectType) {
             return \true;
         }
         $isArrayable = $paramType->isIterable()->yes() || $paramType->isArray()->yes() || ($paramType->isIterable()->maybe() || $paramType->isArray()->maybe());
@@ -146,13 +146,13 @@ CODE_SAMPLE
         }
         return $this->isArrayExplicitMixed($paramType);
     }
-    private function isArrayExplicitMixed(\PHPStan\Type\Type $type) : bool
+    private function isArrayExplicitMixed(Type $type) : bool
     {
-        if (!$type instanceof \PHPStan\Type\ArrayType) {
+        if (!$type instanceof ArrayType) {
             return \false;
         }
         $iterableValueType = $type->getIterableValueType();
-        if (!$iterableValueType instanceof \PHPStan\Type\MixedType) {
+        if (!$iterableValueType instanceof MixedType) {
             return \false;
         }
         return $iterableValueType->isExplicitMixed();

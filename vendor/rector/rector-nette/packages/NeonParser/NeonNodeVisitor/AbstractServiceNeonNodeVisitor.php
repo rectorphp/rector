@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\NeonParser\NeonNodeVisitor;
+namespace RectorPrefix20220606\Rector\Nette\NeonParser\NeonNodeVisitor;
 
-use Rector\Nette\NeonParser\Contract\NeonNodeVisitorInterface;
-abstract class AbstractServiceNeonNodeVisitor implements \Rector\Nette\NeonParser\Contract\NeonNodeVisitorInterface
+use RectorPrefix20220606\Rector\Nette\NeonParser\Contract\NeonNodeVisitorInterface;
+abstract class AbstractServiceNeonNodeVisitor implements NeonNodeVisitorInterface
 {
 }

@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Doctrine\Inflector;
 
-class CachedWordInflector implements \RectorPrefix20220606\Doctrine\Inflector\WordInflector
+class CachedWordInflector implements WordInflector
 {
     /** @var WordInflector */
     private $wordInflector;
     /** @var string[] */
     private $cache = [];
-    public function __construct(\RectorPrefix20220606\Doctrine\Inflector\WordInflector $wordInflector)
+    public function __construct(WordInflector $wordInflector)
     {
         $this->wordInflector = $wordInflector;
     }

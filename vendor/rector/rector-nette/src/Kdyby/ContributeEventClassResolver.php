@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\Kdyby;
+namespace RectorPrefix20220606\Rector\Nette\Kdyby;
 
-use PhpParser\Node\Identifier;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Param;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\StaticTypeMapper\StaticTypeMapper;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\NullableType;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Naming\Naming\VariableNaming;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
 final class ContributeEventClassResolver
 {
     /**
@@ -50,26 +50,26 @@ final class ContributeEventClassResolver
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Naming\Naming\VariableNaming $variableNaming)
+    public function __construct(NodeNameResolver $nodeNameResolver, StaticTypeMapper $staticTypeMapper, VariableNaming $variableNaming)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->variableNaming = $variableNaming;
     }
-    public function resolveGetterMethodByEventClassAndParam(string $eventClass, \PhpParser\Node\Param $param) : string
+    public function resolveGetterMethodByEventClassAndParam(string $eventClass, Param $param) : string
     {
         $getterMethodsWithType = self::CONTRIBUTTE_EVENT_GETTER_METHODS_WITH_TYPE[$eventClass] ?? null;
         $paramType = $param->type;
         // unwrap nullable type
-        if ($paramType instanceof \PhpParser\Node\NullableType) {
+        if ($paramType instanceof NullableType) {
             $paramType = $paramType->type;
         }
-        if ($paramType === null || $paramType instanceof \PhpParser\Node\Identifier) {
+        if ($paramType === null || $paramType instanceof Identifier) {
             return $this->resolveParamType($paramType, $param);
         }
         $type = $this->nodeNameResolver->getName($paramType);
         if ($type === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         // system contribute event
         if (isset($getterMethodsWithType[$type])) {
@@ -78,17 +78,17 @@ final class ContributeEventClassResolver
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($paramType);
         return $this->createGetterFromParamAndStaticType($param, $staticType);
     }
-    private function createGetterFromParamAndStaticType(\PhpParser\Node\Param $param, \PHPStan\Type\Type $type) : string
+    private function createGetterFromParamAndStaticType(Param $param, Type $type) : string
     {
         $variableName = $this->variableNaming->resolveFromNodeAndType($param, $type);
         if ($variableName === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         return 'get' . \ucfirst($variableName);
     }
-    private function resolveParamType(?\PhpParser\Node\Identifier $identifier, \PhpParser\Node\Param $param) : string
+    private function resolveParamType(?Identifier $identifier, Param $param) : string
     {
-        $staticType = $identifier === null ? new \PHPStan\Type\MixedType() : $this->staticTypeMapper->mapPhpParserNodePHPStanType($identifier);
+        $staticType = $identifier === null ? new MixedType() : $this->staticTypeMapper->mapPhpParserNodePHPStanType($identifier);
         return $this->createGetterFromParamAndStaticType($param, $staticType);
     }
 }

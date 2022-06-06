@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp81\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\DowngradePhp81\NodeAnalyzer;
 
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
 final class ArraySpreadAnalyzer
 {
-    public function isArrayWithUnpack(\PhpParser\Node\Expr\Array_ $array) : bool
+    public function isArrayWithUnpack(Array_ $array) : bool
     {
         // Check that any item in the array is the spread
         foreach ($array->items as $item) {
-            if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$item instanceof ArrayItem) {
                 continue;
             }
             if ($item->unpack) {

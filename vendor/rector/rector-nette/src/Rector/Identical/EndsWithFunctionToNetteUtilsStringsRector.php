@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\Rector\Identical;
+namespace RectorPrefix20220606\Rector\Nette\Rector\Identical;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\BooleanNot;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Nette\NodeAnalyzer\StrlenEndsWithResolver;
-use Rector\Nette\ValueObject\ContentExprAndNeedleExpr;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Identical;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Nette\NodeAnalyzer\StrlenEndsWithResolver;
+use RectorPrefix20220606\Rector\Nette\ValueObject\ContentExprAndNeedleExpr;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/nette/utils/blob/master/src/Utils/Strings.php
  * @see \Rector\Nette\Tests\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector\EndsWithFunctionToNetteUtilsStringsRectorTest
  */
-final class EndsWithFunctionToNetteUtilsStringsRector extends \Rector\Core\Rector\AbstractRector
+final class EndsWithFunctionToNetteUtilsStringsRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Nette\NodeAnalyzer\StrlenEndsWithResolver
      */
     private $strlenEndsWithResolver;
-    public function __construct(\Rector\Nette\NodeAnalyzer\StrlenEndsWithResolver $strlenEndsWithResolver)
+    public function __construct(StrlenEndsWithResolver $strlenEndsWithResolver)
     {
         $this->strlenEndsWithResolver = $strlenEndsWithResolver;
     }
@@ -32,11 +32,11 @@ final class EndsWithFunctionToNetteUtilsStringsRector extends \Rector\Core\Recto
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class];
+        return [Identical::class, NotIdentical::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use Nette\\Utils\\Strings::endsWith() over bare string-functions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use Nette\\Utils\\Strings::endsWith() over bare string-functions', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function end($needle)
@@ -64,15 +64,15 @@ CODE_SAMPLE
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $contentExprAndNeedleExpr = $this->strlenEndsWithResolver->resolveBinaryOpForFunction($node);
-        if (!$contentExprAndNeedleExpr instanceof \Rector\Nette\ValueObject\ContentExprAndNeedleExpr) {
+        if (!$contentExprAndNeedleExpr instanceof ContentExprAndNeedleExpr) {
             return null;
         }
         $staticCall = $this->nodeFactory->createStaticCall('Nette\\Utils\\Strings', 'endsWith', [$contentExprAndNeedleExpr->getContentExpr(), $contentExprAndNeedleExpr->getNeedleExpr()]);
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
-            return new \PhpParser\Node\Expr\BooleanNot($staticCall);
+        if ($node instanceof NotIdentical) {
+            return new BooleanNot($staticCall);
         }
         return $staticCall;
     }

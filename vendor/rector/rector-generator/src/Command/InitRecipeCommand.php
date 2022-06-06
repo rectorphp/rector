@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\RectorGenerator\Command;
+namespace RectorPrefix20220606\Rector\RectorGenerator\Command;
 
-use Rector\RectorGenerator\TemplateInitializer;
+use RectorPrefix20220606\Rector\RectorGenerator\TemplateInitializer;
 use RectorPrefix20220606\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface;
-final class InitRecipeCommand extends \RectorPrefix20220606\Symfony\Component\Console\Command\Command
+final class InitRecipeCommand extends Command
 {
     /**
      * @readonly
      * @var \Rector\RectorGenerator\TemplateInitializer
      */
     private $templateInitializer;
-    public function __construct(\Rector\RectorGenerator\TemplateInitializer $templateInitializer)
+    public function __construct(TemplateInitializer $templateInitializer)
     {
         $this->templateInitializer = $templateInitializer;
         parent::__construct();
@@ -24,7 +24,7 @@ final class InitRecipeCommand extends \RectorPrefix20220606\Symfony\Component\Co
         $this->setName('init-recipe');
         $this->setDescription('[DEV] Initialize "rector-recipe.php" config');
     }
-    protected function execute(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $this->templateInitializer->initialize(__DIR__ . '/../../templates/rector-recipe.php', 'rector-recipe.php');
         return self::SUCCESS;

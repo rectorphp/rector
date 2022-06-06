@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Symfony\NodeAnalyzer;
 
-use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\String_;
-use Rector\Core\PhpParser\Node\NodeFactory;
+use RectorPrefix20220606\PhpParser\Node\Expr\CallLike;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\New_;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
 final class LiteralCallLikeConstFetchReplacer
 {
     /**
@@ -17,7 +17,7 @@ final class LiteralCallLikeConstFetchReplacer
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
@@ -28,14 +28,14 @@ final class LiteralCallLikeConstFetchReplacer
      * @param array<string|int, string> $constantMap
      * @return null|\PhpParser\Node\Expr\CallLike
      */
-    public function replaceArgOnPosition(\PhpParser\Node\Expr\CallLike $callLike, int $argPosition, string $className, array $constantMap)
+    public function replaceArgOnPosition(CallLike $callLike, int $argPosition, string $className, array $constantMap)
     {
         $args = $callLike->getArgs();
         if (!isset($args[$argPosition])) {
             return null;
         }
         $arg = $args[$argPosition];
-        if (!$arg->value instanceof \PhpParser\Node\Scalar\String_ && !$arg->value instanceof \PhpParser\Node\Scalar\LNumber) {
+        if (!$arg->value instanceof String_ && !$arg->value instanceof LNumber) {
             return null;
         }
         $scalar = $arg->value;

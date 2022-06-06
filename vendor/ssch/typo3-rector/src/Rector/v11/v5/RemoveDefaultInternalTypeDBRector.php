@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v11\v5;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v11\v5;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
-use Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\TcaHelperTrait;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.5/Important-95384-TCAInternal_typedbOptionalForTypegroup.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v5\RemoveDefaultInternalTypeDBRector\RemoveDefaultInternalTypeDBRectorTest
  */
-final class RemoveDefaultInternalTypeDBRector extends \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector
+final class RemoveDefaultInternalTypeDBRector extends AbstractTcaRector
 {
     use TcaHelperTrait;
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove the default type for internal_type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove the default type for internal_type', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
     ],
@@ -51,17 +51,17 @@ return [
 CODE_SAMPLE
 )]);
     }
-    protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
+    protected function refactorColumn(Expr $columnName, Expr $columnTca) : void
     {
         $configArray = $this->extractSubArrayByKey($columnTca, self::CONFIG);
-        if (!$configArray instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$configArray instanceof Array_) {
             return;
         }
         if (!$this->configIsOfInternalType($configArray, 'db')) {
             return;
         }
         $toRemoveArrayItem = $this->extractArrayItemByKey($configArray, 'internal_type');
-        if ($toRemoveArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if ($toRemoveArrayItem instanceof ArrayItem) {
             $this->removeNode($toRemoveArrayItem);
             $this->hasAstBeenChanged = \true;
         }

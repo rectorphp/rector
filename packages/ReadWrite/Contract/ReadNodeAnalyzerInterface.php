@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\ReadWrite\Contract;
+namespace RectorPrefix20220606\Rector\ReadWrite\Contract;
 
-use PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr;
 /**
  * @template TExpr as Expr
  */
 interface ReadNodeAnalyzerInterface
 {
-    public function supports(\PhpParser\Node\Expr $expr) : bool;
+    public function supports(Expr $expr) : bool;
     /**
      * @param TExpr $expr
      */
-    public function isRead(\PhpParser\Node\Expr $expr) : bool;
+    public function isRead(Expr $expr) : bool;
 }

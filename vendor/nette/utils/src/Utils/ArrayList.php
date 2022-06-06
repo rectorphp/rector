@@ -24,8 +24,8 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public static function from(array $array)
     {
-        if (!\RectorPrefix20220606\Nette\Utils\Arrays::isList($array)) {
-            throw new \RectorPrefix20220606\Nette\InvalidArgumentException('Array is not valid list.');
+        if (!Arrays::isList($array)) {
+            throw new Nette\InvalidArgumentException('Array is not valid list.');
         }
         $obj = new static();
         $obj->list = $array;
@@ -57,7 +57,7 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
         if ($index === null) {
             $this->list[] = $value;
         } elseif (!\is_int($index) || $index < 0 || $index >= \count($this->list)) {
-            throw new \RectorPrefix20220606\Nette\OutOfRangeException('Offset invalid or out of range');
+            throw new Nette\OutOfRangeException('Offset invalid or out of range');
         } else {
             $this->list[$index] = $value;
         }
@@ -72,7 +72,7 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
     public function offsetGet($index)
     {
         if (!\is_int($index) || $index < 0 || $index >= \count($this->list)) {
-            throw new \RectorPrefix20220606\Nette\OutOfRangeException('Offset invalid or out of range');
+            throw new Nette\OutOfRangeException('Offset invalid or out of range');
         }
         return $this->list[$index];
     }
@@ -92,7 +92,7 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
     public function offsetUnset($index) : void
     {
         if (!\is_int($index) || $index < 0 || $index >= \count($this->list)) {
-            throw new \RectorPrefix20220606\Nette\OutOfRangeException('Offset invalid or out of range');
+            throw new Nette\OutOfRangeException('Offset invalid or out of range');
         }
         \array_splice($this->list, $index, 1);
     }

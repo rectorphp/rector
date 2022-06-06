@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Set\ValueObject;
+namespace RectorPrefix20220606\Rector\Set\ValueObject;
 
-use Rector\Set\Contract\SetListInterface;
-final class LevelSetList implements \Rector\Set\Contract\SetListInterface
+use RectorPrefix20220606\Rector\Set\Contract\SetListInterface;
+final class LevelSetList implements SetListInterface
 {
     /**
      * @var string

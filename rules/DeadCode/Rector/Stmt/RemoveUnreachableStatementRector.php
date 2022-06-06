@@ -1,37 +1,37 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\Rector\Stmt;
+namespace RectorPrefix20220606\Rector\DeadCode\Rector\Stmt;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Exit_;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\Continue_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Finally_;
-use PhpParser\Node\Stmt\Goto_;
-use PhpParser\Node\Stmt\InlineHTML;
-use PhpParser\Node\Stmt\Label;
-use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Throw_;
-use PhpParser\Node\Stmt\TryCatch;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Exit_;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Break_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Continue_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Finally_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Goto_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\InlineHTML;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Label;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Nop;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Throw_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\TryCatch;
+use RectorPrefix20220606\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/phpstan/phpstan/blob/83078fe308a383c618b8c1caec299e5765d9ac82/src/Node/UnreachableStatementNode.php
  *
  * @see \Rector\Tests\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector\RemoveUnreachableStatementRectorTest
  */
-final class RemoveUnreachableStatementRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveUnreachableStatementRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unreachable statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unreachable statements', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -58,12 +58,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface::class];
+        return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -86,7 +86,7 @@ CODE_SAMPLE
             if (!isset($stmts[$key - 1])) {
                 continue;
             }
-            if ($stmt instanceof \PhpParser\Node\Stmt\Nop) {
+            if ($stmt instanceof Nop) {
                 continue;
             }
             $previousStmt = $stmts[$key - 1];
@@ -98,31 +98,31 @@ CODE_SAMPLE
         }
         return $stmts;
     }
-    private function shouldRemove(\PhpParser\Node\Stmt $previousStmt, \PhpParser\Node\Stmt $currentStmt) : bool
+    private function shouldRemove(Stmt $previousStmt, Stmt $currentStmt) : bool
     {
-        if ($currentStmt instanceof \PhpParser\Node\Stmt\InlineHTML) {
+        if ($currentStmt instanceof InlineHTML) {
             return \false;
         }
-        if ($previousStmt instanceof \PhpParser\Node\Stmt\Throw_) {
+        if ($previousStmt instanceof Throw_) {
             return \true;
         }
-        if ($previousStmt instanceof \PhpParser\Node\Stmt\Expression && $previousStmt->expr instanceof \PhpParser\Node\Expr\Exit_) {
+        if ($previousStmt instanceof Expression && $previousStmt->expr instanceof Exit_) {
             return \true;
         }
-        if ($previousStmt instanceof \PhpParser\Node\Stmt\Goto_ && $currentStmt instanceof \PhpParser\Node\Stmt\Label) {
+        if ($previousStmt instanceof Goto_ && $currentStmt instanceof Label) {
             return \false;
         }
-        if (\in_array(\get_class($previousStmt), [\PhpParser\Node\Stmt\Return_::class, \PhpParser\Node\Stmt\Break_::class, \PhpParser\Node\Stmt\Continue_::class, \PhpParser\Node\Stmt\Goto_::class], \true)) {
+        if (\in_array(\get_class($previousStmt), [Return_::class, Break_::class, Continue_::class, Goto_::class], \true)) {
             return \true;
         }
-        if (!$previousStmt instanceof \PhpParser\Node\Stmt\TryCatch) {
+        if (!$previousStmt instanceof TryCatch) {
             return \false;
         }
-        $isUnreachable = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE);
+        $isUnreachable = $currentStmt->getAttribute(AttributeKey::IS_UNREACHABLE);
         if ($isUnreachable !== \true) {
             return \false;
         }
-        if (!$previousStmt->finally instanceof \PhpParser\Node\Stmt\Finally_) {
+        if (!$previousStmt->finally instanceof Finally_) {
             return \false;
         }
         return $this->cleanNop($previousStmt->finally->stmts) !== [];
@@ -133,8 +133,8 @@ CODE_SAMPLE
      */
     private function cleanNop(array $stmts) : array
     {
-        return \array_filter($stmts, function (\PhpParser\Node\Stmt $stmt) : bool {
-            return !$stmt instanceof \PhpParser\Node\Stmt\Nop;
+        return \array_filter($stmts, function (Stmt $stmt) : bool {
+            return !$stmt instanceof Nop;
         });
     }
 }

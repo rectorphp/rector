@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Reporting;
+namespace RectorPrefix20220606\Rector\Core\Reporting;
 
-use Rector\Core\Contract\Console\OutputStyleInterface;
-use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use RectorPrefix20220606\Rector\Core\Contract\Console\OutputStyleInterface;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
+use RectorPrefix20220606\Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
+use RectorPrefix20220606\Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix20220606\Symfony\Component\Console\Command\Command;
 final class MissingRectorRulesReporter
 {
@@ -23,24 +23,24 @@ final class MissingRectorRulesReporter
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle)
+    public function __construct(array $rectors, OutputStyleInterface $rectorOutputStyle)
     {
         $this->rectors = $rectors;
         $this->rectorOutputStyle = $rectorOutputStyle;
     }
     public function reportIfMissing() : ?int
     {
-        $activeRectors = \array_filter($this->rectors, function (\Rector\Core\Contract\Rector\RectorInterface $rector) : bool {
-            if ($rector instanceof \Rector\PostRector\Contract\Rector\PostRectorInterface) {
+        $activeRectors = \array_filter($this->rectors, function (RectorInterface $rector) : bool {
+            if ($rector instanceof PostRectorInterface) {
                 return \false;
             }
-            return !$rector instanceof \Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
+            return !$rector instanceof ComplementaryRectorInterface;
         });
         if ($activeRectors !== []) {
             return null;
         }
         $this->report();
-        return \RectorPrefix20220606\Symfony\Component\Console\Command\Command::FAILURE;
+        return Command::FAILURE;
     }
     public function report() : void
     {

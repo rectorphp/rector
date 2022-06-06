@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Builder;
+namespace RectorPrefix20220606\PhpParser\Builder;
 
 use RectorPrefix20220606\PhpParser;
-use PhpParser\BuilderHelpers;
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
-class Trait_ extends \PhpParser\Builder\Declaration
+use RectorPrefix20220606\PhpParser\BuilderHelpers;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+class Trait_ extends Declaration
 {
     protected $name;
     protected $uses = [];
@@ -33,12 +33,12 @@ class Trait_ extends \PhpParser\Builder\Declaration
      */
     public function addStmt($stmt)
     {
-        $stmt = \PhpParser\BuilderHelpers::normalizeNode($stmt);
-        if ($stmt instanceof \PhpParser\Node\Stmt\Property) {
+        $stmt = BuilderHelpers::normalizeNode($stmt);
+        if ($stmt instanceof Stmt\Property) {
             $this->properties[] = $stmt;
-        } elseif ($stmt instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        } elseif ($stmt instanceof Stmt\ClassMethod) {
             $this->methods[] = $stmt;
-        } elseif ($stmt instanceof \PhpParser\Node\Stmt\TraitUse) {
+        } elseif ($stmt instanceof Stmt\TraitUse) {
             $this->uses[] = $stmt;
         } else {
             throw new \LogicException(\sprintf('Unexpected node of type "%s"', $stmt->getType()));
@@ -54,7 +54,7 @@ class Trait_ extends \PhpParser\Builder\Declaration
      */
     public function addAttribute($attribute)
     {
-        $this->attributeGroups[] = \PhpParser\BuilderHelpers::normalizeAttribute($attribute);
+        $this->attributeGroups[] = BuilderHelpers::normalizeAttribute($attribute);
         return $this;
     }
     /**
@@ -62,8 +62,8 @@ class Trait_ extends \PhpParser\Builder\Declaration
      *
      * @return Stmt\Trait_ The built interface node
      */
-    public function getNode() : \PhpParser\Node
+    public function getNode() : PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\Trait_($this->name, ['stmts' => \array_merge($this->uses, $this->properties, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
+        return new Stmt\Trait_($this->name, ['stmts' => \array_merge($this->uses, $this->properties, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
     }
 }

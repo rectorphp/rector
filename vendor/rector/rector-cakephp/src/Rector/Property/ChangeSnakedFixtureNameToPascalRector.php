@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CakePHP\Rector\Property;
+namespace RectorPrefix20220606\Rector\CakePHP\Rector\Property;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
-use Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PhpParser\Node\Stmt\PropertyProperty;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
 use RectorPrefix20220606\Symfony\Component\String\UnicodeString;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToPascal\ChangeSnakedFixtureNameToPascalTest
  *
  * @see https://book.cakephp.org/3.0/en/appendices/3-7-migration-guide.html
  */
-final class ChangeSnakedFixtureNameToPascalRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeSnakedFixtureNameToPascalRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes $fixtures style from snake_case to PascalCase.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes $fixtures style from snake_case to PascalCase.', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeTest
 {
     protected $fixtures = [
@@ -48,15 +48,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         if (!$this->isName($node, 'fixtures')) {
@@ -67,29 +67,29 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function refactorPropertyWithArrayDefault(\PhpParser\Node\Stmt\PropertyProperty $propertyProperty) : void
+    private function refactorPropertyWithArrayDefault(PropertyProperty $propertyProperty) : void
     {
-        if (!$propertyProperty->default instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$propertyProperty->default instanceof Array_) {
             return;
         }
         $array = $propertyProperty->default;
         foreach ($array->items as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
             $itemValue = $arrayItem->value;
-            if (!$itemValue instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$itemValue instanceof String_) {
                 continue;
             }
             $this->renameFixtureName($itemValue);
         }
     }
-    private function renameFixtureName(\PhpParser\Node\Scalar\String_ $string) : void
+    private function renameFixtureName(String_ $string) : void
     {
         [$prefix, $table] = \explode('.', $string->value);
         $tableParts = \explode('/', $table);
         $pascalCaseTableParts = \array_map(function (string $token) : string {
-            $tokenUnicodeString = new \RectorPrefix20220606\Symfony\Component\String\UnicodeString($token);
+            $tokenUnicodeString = new UnicodeString($token);
             return \ucfirst($tokenUnicodeString->camel()->toString());
         }, $tableParts);
         $table = \implode('/', $pascalCaseTableParts);

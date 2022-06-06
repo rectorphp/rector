@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Composer\Application\FileProcessor;
+namespace RectorPrefix20220606\Rector\Composer\Application\FileProcessor;
 
-use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
-use Rector\Composer\Contract\Rector\ComposerRectorInterface;
-use Rector\Core\Contract\Processor\FileProcessorInterface;
-use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Configuration;
-use Rector\Core\ValueObject\Error\SystemError;
-use Rector\Core\ValueObject\Reporting\FileDiff;
-use Rector\Parallel\ValueObject\Bridge;
-use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use RectorPrefix20220606\Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
+use RectorPrefix20220606\Rector\Composer\Contract\Rector\ComposerRectorInterface;
+use RectorPrefix20220606\Rector\Core\Contract\Processor\FileProcessorInterface;
+use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
+use RectorPrefix20220606\Rector\Core\ValueObject\Configuration;
+use RectorPrefix20220606\Rector\Core\ValueObject\Error\SystemError;
+use RectorPrefix20220606\Rector\Core\ValueObject\Reporting\FileDiff;
+use RectorPrefix20220606\Rector\Parallel\ValueObject\Bridge;
+use RectorPrefix20220606\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix20220606\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use RectorPrefix20220606\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
+final class ComposerFileProcessor implements FileProcessorInterface
 {
     /**
      * @readonly
@@ -40,7 +40,7 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
     /**
      * @param ComposerRectorInterface[] $composerRectors
      */
-    public function __construct(\RectorPrefix20220606\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20220606\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter $composerJsonPrinter, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory, array $composerRectors)
+    public function __construct(ComposerJsonFactory $composerJsonFactory, ComposerJsonPrinter $composerJsonPrinter, FileDiffFactory $fileDiffFactory, array $composerRectors)
     {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->composerJsonPrinter = $composerJsonPrinter;
@@ -50,9 +50,9 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
+    public function process(File $file, Configuration $configuration) : array
     {
-        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
+        $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
         if ($this->composerRectors === []) {
             return $systemErrorsAndFileDiffs;
         }
@@ -71,10 +71,10 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
         $changedFileContent = $this->composerJsonPrinter->printToString($composerJson);
         $file->changeFileContent($changedFileContent);
         $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldFileContents, $changedFileContent);
-        $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] = [$fileDiff];
+        $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] = [$fileDiff];
         return $systemErrorsAndFileDiffs;
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    public function supports(File $file, Configuration $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->isJsonInTests($smartFileInfo)) {
@@ -89,9 +89,9 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
     {
         return ['json'];
     }
-    private function isJsonInTests(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : bool
+    private function isJsonInTests(SmartFileInfo $fileInfo) : bool
     {
-        if (!\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if (!StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return \false;
         }
         return $fileInfo->hasSuffixes(['json']);

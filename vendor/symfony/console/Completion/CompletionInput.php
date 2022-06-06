@@ -22,7 +22,7 @@ use RectorPrefix20220606\Symfony\Component\Console\Input\InputOption;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-final class CompletionInput extends \RectorPrefix20220606\Symfony\Component\Console\Input\ArgvInput
+final class CompletionInput extends ArgvInput
 {
     public const TYPE_ARGUMENT_VALUE = 'argument_value';
     public const TYPE_OPTION_VALUE = 'option_value';
@@ -59,7 +59,7 @@ final class CompletionInput extends \RectorPrefix20220606\Symfony\Component\Cons
     /**
      * {@inheritdoc}
      */
-    public function bind(\RectorPrefix20220606\Symfony\Component\Console\Input\InputDefinition $definition) : void
+    public function bind(InputDefinition $definition) : void
     {
         parent::bind($definition);
         $relevantToken = $this->getRelevantToken();
@@ -159,12 +159,12 @@ final class CompletionInput extends \RectorPrefix20220606\Symfony\Component\Cons
     {
         try {
             return parent::parseToken($token, $parseOptions);
-        } catch (\RectorPrefix20220606\Symfony\Component\Console\Exception\RuntimeException $exception) {
+        } catch (RuntimeException $exception) {
             // suppress errors, completed input is almost never valid
         }
         return $parseOptions;
     }
-    private function getOptionFromToken(string $optionToken) : ?\RectorPrefix20220606\Symfony\Component\Console\Input\InputOption
+    private function getOptionFromToken(string $optionToken) : ?InputOption
     {
         $optionName = \ltrim($optionToken, '-');
         if (!$optionName) {

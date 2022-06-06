@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
+namespace RectorPrefix20220606\Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
-use PhpParser\Node;
-use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
-use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use Rector\Core\ValueObject\Application\File;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\Rector\CodingStyle\ClassNameImport\ShortNameResolver;
+use RectorPrefix20220606\Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
+use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 /**
  * Prevents adding:
  *
@@ -17,18 +17,18 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  *
  * class SomeClass {}
  */
-final class ClassLikeNameClassNameImportSkipVoter implements \Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface
+final class ClassLikeNameClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
 {
     /**
      * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\ShortNameResolver
      */
     private $shortNameResolver;
-    public function __construct(\Rector\CodingStyle\ClassNameImport\ShortNameResolver $shortNameResolver)
+    public function __construct(ShortNameResolver $shortNameResolver)
     {
         $this->shortNameResolver = $shortNameResolver;
     }
-    public function shouldSkip(\Rector\Core\ValueObject\Application\File $file, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool
+    public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
     {
         $classLikeNames = $this->shortNameResolver->resolveShortClassLikeNamesForNode($node);
         if ($classLikeNames === []) {

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Transform\ValueObject;
+namespace RectorPrefix20220606\Rector\Transform\ValueObject;
 
-use PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
 final class MethodCallToStaticCall
 {
     /**
@@ -33,9 +33,9 @@ final class MethodCallToStaticCall
         $this->newClass = $newClass;
         $this->newMethod = $newMethod;
     }
-    public function getOldObjectType() : \PHPStan\Type\ObjectType
+    public function getOldObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->oldClass);
+        return new ObjectType($this->oldClass);
     }
     public function getOldMethod() : string
     {

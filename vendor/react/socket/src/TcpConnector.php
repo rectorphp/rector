@@ -7,13 +7,13 @@ use RectorPrefix20220606\React\EventLoop\LoopInterface;
 use RectorPrefix20220606\React\Promise;
 use InvalidArgumentException;
 use RuntimeException;
-final class TcpConnector implements \RectorPrefix20220606\React\Socket\ConnectorInterface
+final class TcpConnector implements ConnectorInterface
 {
     private $loop;
     private $context;
-    public function __construct(\RectorPrefix20220606\React\EventLoop\LoopInterface $loop = null, array $context = array())
+    public function __construct(LoopInterface $loop = null, array $context = array())
     {
-        $this->loop = $loop ?: \RectorPrefix20220606\React\EventLoop\Loop::get();
+        $this->loop = $loop ?: Loop::get();
         $this->context = $context;
     }
     public function connect($uri)
@@ -23,11 +23,11 @@ final class TcpConnector implements \RectorPrefix20220606\React\Socket\Connector
         }
         $parts = \parse_url($uri);
         if (!$parts || !isset($parts['scheme'], $parts['host'], $parts['port']) || $parts['scheme'] !== 'tcp') {
-            return \RectorPrefix20220606\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" is invalid (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
+            return Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" is invalid (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
         }
         $ip = \trim($parts['host'], '[]');
         if (@\inet_pton($ip) === \false) {
-            return \RectorPrefix20220606\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" does not contain a valid host IP (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
+            return Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" does not contain a valid host IP (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
         }
         // use context given in constructor
         $context = array('socket' => $this->context);
@@ -57,11 +57,11 @@ final class TcpConnector implements \RectorPrefix20220606\React\Socket\Connector
         $remote = 'tcp://' . $parts['host'] . ':' . $parts['port'];
         $stream = @\stream_socket_client($remote, $errno, $errstr, 0, \STREAM_CLIENT_CONNECT | \STREAM_CLIENT_ASYNC_CONNECT, \stream_context_create($context));
         if (\false === $stream) {
-            return \RectorPrefix20220606\React\Promise\reject(new \RuntimeException('Connection to ' . $uri . ' failed: ' . $errstr . \RectorPrefix20220606\React\Socket\SocketServer::errconst($errno), $errno));
+            return Promise\reject(new \RuntimeException('Connection to ' . $uri . ' failed: ' . $errstr . SocketServer::errconst($errno), $errno));
         }
         // wait for connection
         $loop = $this->loop;
-        return new \RectorPrefix20220606\React\Promise\Promise(function ($resolve, $reject) use($loop, $stream, $uri) {
+        return new Promise\Promise(function ($resolve, $reject) use($loop, $stream, $uri) {
             $loop->addWriteStream($stream, function ($stream) use($loop, $resolve, $reject, $uri) {
                 $loop->removeWriteStream($stream);
                 // The following hack looks like the only way to
@@ -91,9 +91,9 @@ final class TcpConnector implements \RectorPrefix20220606\React\Socket\Connector
                     }
                     // @codeCoverageIgnoreEnd
                     \fclose($stream);
-                    $reject(new \RuntimeException('Connection to ' . $uri . ' failed: ' . $errstr . \RectorPrefix20220606\React\Socket\SocketServer::errconst($errno), $errno));
+                    $reject(new \RuntimeException('Connection to ' . $uri . ' failed: ' . $errstr . SocketServer::errconst($errno), $errno));
                 } else {
-                    $resolve(new \RectorPrefix20220606\React\Socket\Connection($stream, $loop));
+                    $resolve(new Connection($stream, $loop));
                 }
             });
         }, function () use($loop, $stream, $uri) {

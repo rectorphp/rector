@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\PHPOffice\\": "src"
+            "RectorPrefix20220606\\Rector\\PHPOffice\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\PHPOffice\\Tests\\": "tests"
+            "RectorPrefix20220606\\Rector\\PHPOffice\\Tests\\": "tests"
         }
     },
     "scripts": {

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\NodeFactory;
+namespace RectorPrefix20220606\Rector\PHPUnit\NodeFactory;
 
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 final class ExpectExceptionFactory
 {
     /**
@@ -19,12 +19,12 @@ final class ExpectExceptionFactory
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function create(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Expr\MethodCall
+    public function create(MethodCall $methodCall, Variable $variable) : ?MethodCall
     {
         if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($methodCall, 'assertInstanceOf')) {
             return null;
@@ -37,6 +37,6 @@ final class ExpectExceptionFactory
         if (!$this->nodeNameResolver->isName($variable, $argumentVariableName)) {
             return null;
         }
-        return new \PhpParser\Node\Expr\MethodCall($methodCall->var, 'expectException', [$methodCall->args[0]]);
+        return new MethodCall($methodCall->var, 'expectException', [$methodCall->args[0]]);
     }
 }

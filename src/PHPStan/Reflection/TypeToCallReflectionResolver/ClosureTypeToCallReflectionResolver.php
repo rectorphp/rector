@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
+namespace RectorPrefix20220606\Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
 
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\Native\NativeFunctionReflection;
-use PHPStan\TrinaryLogic;
-use PHPStan\Type\ClosureType;
-use PHPStan\Type\Type;
-use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PHPStan\Reflection\Native\NativeFunctionReflection;
+use RectorPrefix20220606\PHPStan\TrinaryLogic;
+use RectorPrefix20220606\PHPStan\Type\ClosureType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface;
 /**
  * @implements TypeToCallReflectionResolverInterface<ClosureType>
  */
-final class ClosureTypeToCallReflectionResolver implements \Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface
+final class ClosureTypeToCallReflectionResolver implements TypeToCallReflectionResolverInterface
 {
-    public function supports(\PHPStan\Type\Type $type) : bool
+    public function supports(Type $type) : bool
     {
-        return $type instanceof \PHPStan\Type\ClosureType;
+        return $type instanceof ClosureType;
     }
     /**
      * @param ClosureType $type
      */
-    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope) : \PHPStan\Reflection\Native\NativeFunctionReflection
+    public function resolve(Type $type, Scope $scope) : NativeFunctionReflection
     {
-        return new \PHPStan\Reflection\Native\NativeFunctionReflection('{closure}', $type->getCallableParametersAcceptors($scope), null, \PHPStan\TrinaryLogic::createMaybe(), \false);
+        return new NativeFunctionReflection('{closure}', $type->getCallableParametersAcceptors($scope), null, TrinaryLogic::createMaybe(), \false);
     }
 }

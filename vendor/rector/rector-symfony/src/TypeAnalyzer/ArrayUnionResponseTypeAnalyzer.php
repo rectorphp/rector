@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\TypeAnalyzer;
+namespace RectorPrefix20220606\Rector\Symfony\TypeAnalyzer;
 
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
+use RectorPrefix20220606\PHPStan\Type\ArrayType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
+use RectorPrefix20220606\PHPStan\Type\UnionType;
 final class ArrayUnionResponseTypeAnalyzer
 {
     /**
      * @param class-string $className
      */
-    public function isArrayUnionResponseType(\PHPStan\Type\Type $type, string $className) : bool
+    public function isArrayUnionResponseType(Type $type, string $className) : bool
     {
-        if (!$type instanceof \PHPStan\Type\UnionType) {
+        if (!$type instanceof UnionType) {
             return \false;
         }
         $hasArrayType = \false;
         $hasResponseType = \false;
         foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType instanceof \PHPStan\Type\ArrayType) {
+            if ($unionedType instanceof ArrayType) {
                 $hasArrayType = \true;
                 continue;
             }
@@ -39,12 +39,12 @@ final class ArrayUnionResponseTypeAnalyzer
     /**
      * @param class-string $className
      */
-    private function isTypeOfClassName(\PHPStan\Type\Type $type, string $className) : bool
+    private function isTypeOfClassName(Type $type, string $className) : bool
     {
-        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$type instanceof TypeWithClassName) {
             return \false;
         }
-        $objectType = new \PHPStan\Type\ObjectType($className);
+        $objectType = new ObjectType($className);
         return $objectType->isSuperTypeOf($type)->yes();
     }
 }

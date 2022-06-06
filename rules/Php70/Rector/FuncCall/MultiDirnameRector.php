@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php70\Rector\FuncCall;
+namespace RectorPrefix20220606\Rector\Php70\Rector\FuncCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Scalar\LNumber;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
+use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php70\Rector\FuncCall\MultiDirnameRector\MultiDirnameRectorTest
  */
-final class MultiDirnameRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class MultiDirnameRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -25,21 +25,21 @@ final class MultiDirnameRector extends \Rector\Core\Rector\AbstractRector implem
      * @var int
      */
     private $nestingLevel = 0;
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes multiple dirname() calls to one with nesting level', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('dirname(dirname($path));', 'dirname($path, 2);')]);
+        return new RuleDefinition('Changes multiple dirname() calls to one with nesting level', [new CodeSample('dirname(dirname($path));', 'dirname($path, 2);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $this->nestingLevel = 0;
         if (!$this->isName($node, self::DIRNAME)) {
@@ -55,14 +55,14 @@ final class MultiDirnameRector extends \Rector\Core\Rector\AbstractRector implem
             return $activeFuncCallNode;
         }
         $node->args[0] = $lastFuncCallNode->args[0];
-        $node->args[1] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\LNumber($this->nestingLevel));
+        $node->args[1] = new Arg(new LNumber($this->nestingLevel));
         return $node;
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::DIRNAME_LEVELS;
+        return PhpVersionFeature::DIRNAME_LEVELS;
     }
-    private function matchNestedDirnameFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
+    private function matchNestedDirnameFuncCall(FuncCall $funcCall) : ?FuncCall
     {
         if (!$this->isName($funcCall, self::DIRNAME)) {
             return null;
@@ -73,7 +73,7 @@ final class MultiDirnameRector extends \Rector\Core\Rector\AbstractRector implem
         }
         // dirname($path, <LEVEL>);
         if (\count($args) === 2) {
-            if (!$args[1]->value instanceof \PhpParser\Node\Scalar\LNumber) {
+            if (!$args[1]->value instanceof LNumber) {
                 return null;
             }
             /** @var LNumber $levelNumber */
@@ -83,7 +83,7 @@ final class MultiDirnameRector extends \Rector\Core\Rector\AbstractRector implem
             ++$this->nestingLevel;
         }
         $nestedFuncCallNode = $args[0]->value;
-        if (!$nestedFuncCallNode instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$nestedFuncCallNode instanceof FuncCall) {
             return null;
         }
         if ($this->isName($nestedFuncCallNode, self::DIRNAME)) {

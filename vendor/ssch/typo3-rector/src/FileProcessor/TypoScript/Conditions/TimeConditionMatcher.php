@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
-use Ssch\TYPO3Rector\Helper\ArrayUtility;
-final class TimeConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
+use RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\ArrayUtility;
+final class TimeConditionMatcher implements TyposcriptConditionMatcher
 {
     /**
      * @var string
@@ -25,7 +25,7 @@ final class TimeConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProce
         $time = $matches['time'] ?? '';
         $value = $matches['operatorsAndValues'] ?? '';
         $newConditions = [];
-        $operatorsAndValues = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $value, \true);
+        $operatorsAndValues = ArrayUtility::trimExplode(',', $value, \true);
         foreach ($operatorsAndValues as $operatorAndValue) {
             \preg_match('#(?<operator>' . self::ALLOWED_OPERATORS_REGEX . '|\\b)' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<value>.*)$#Ui', $operatorAndValue, $operatorAndValueMatches);
             if (!\is_array($operatorAndValueMatches)) {
@@ -42,6 +42,6 @@ final class TimeConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProce
     }
     public function shouldApply(string $condition) : bool
     {
-        return null !== \RectorPrefix20220606\Nette\Utils\Strings::match($condition, '#' . self::ALLOWED_TIME_CONSTANTS . '#Ui');
+        return null !== Strings::match($condition, '#' . self::ALLOWED_TIME_CONSTANTS . '#Ui');
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node\Stmt;
+namespace RectorPrefix20220606\PhpParser\Node\Stmt;
 
-use PhpParser\Node;
-class DeclareDeclare extends \PhpParser\Node\Stmt
+use RectorPrefix20220606\PhpParser\Node;
+class DeclareDeclare extends Node\Stmt
 {
     /** @var Node\Identifier Key */
     public $key;
@@ -17,10 +17,10 @@ class DeclareDeclare extends \PhpParser\Node\Stmt
      * @param Node\Expr              $value      Value
      * @param array                  $attributes Additional attributes
      */
-    public function __construct($key, \PhpParser\Node\Expr $value, array $attributes = [])
+    public function __construct($key, Node\Expr $value, array $attributes = [])
     {
         $this->attributes = $attributes;
-        $this->key = \is_string($key) ? new \PhpParser\Node\Identifier($key) : $key;
+        $this->key = \is_string($key) ? new Node\Identifier($key) : $key;
         $this->value = $value;
     }
     public function getSubNodeNames() : array

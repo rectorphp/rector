@@ -1,36 +1,36 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v8\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\New_;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.0/Deprecation-73185-DeprecateNullTimeTracker.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v0\TimeTrackerInsteadOfNullTimeTrackerRector\TimeTrackerInsteadOfNullTimeTrackerRectorTest
  */
-final class TimeTrackerInsteadOfNullTimeTrackerRector extends \Rector\Core\Rector\AbstractRector
+final class TimeTrackerInsteadOfNullTimeTrackerRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\New_::class];
+        return [StaticCall::class, MethodCall::class, New_::class];
     }
     /**
      * @param MethodCall|StaticCall|New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\New_) {
+        if ($node instanceof New_) {
             return $this->renameClassIfNeeded($node);
         }
         return $this->addAdditionalArgumentIfNeeded($node);
@@ -38,9 +38,9 @@ final class TimeTrackerInsteadOfNullTimeTrackerRector extends \Rector\Core\Recto
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use class TimeTracker instead of NullTimeTracker', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use class TimeTracker instead of NullTimeTracker', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 $timeTracker1 = new NullTimeTracker();
@@ -54,9 +54,9 @@ $timeTracker2 = GeneralUtility::makeInstance(TimeTracker::class, false);
 CODE_SAMPLE
 )]);
     }
-    private function addAdditionalArgumentIfNeeded(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function addAdditionalArgumentIfNeeded(Node $node) : ?Node
     {
-        if (!$node instanceof \PhpParser\Node\Expr\MethodCall && !$node instanceof \PhpParser\Node\Expr\StaticCall) {
+        if (!$node instanceof MethodCall && !$node instanceof StaticCall) {
             return null;
         }
         if (!$this->isMakeInstanceCall($node) && !$this->isObjectManagerCall($node)) {
@@ -74,32 +74,32 @@ CODE_SAMPLE
         $node->args[1] = $this->nodeFactory->createArg(\false);
         return $node;
     }
-    private function isMakeInstanceCall(\PhpParser\Node $node) : bool
+    private function isMakeInstanceCall(Node $node) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
+        if (!$node instanceof StaticCall) {
             return \false;
         }
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return \false;
         }
         return $this->isName($node->name, 'makeInstance');
     }
-    private function isObjectManagerCall(\PhpParser\Node $node) : bool
+    private function isObjectManagerCall(Node $node) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$node instanceof MethodCall) {
             return \false;
         }
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Object\\ObjectManager'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Extbase\\Object\\ObjectManager'))) {
             return \false;
         }
         return $this->isName($node->name, 'get');
     }
-    private function renameClassIfNeeded(\PhpParser\Node\Expr\New_ $new) : ?\PhpParser\Node
+    private function renameClassIfNeeded(New_ $new) : ?Node
     {
-        if (!$this->isObjectType($new, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\TimeTracker\\NullTimeTracker'))) {
+        if (!$this->isObjectType($new, new ObjectType('TYPO3\\CMS\\Core\\TimeTracker\\NullTimeTracker'))) {
             return null;
         }
         $arguments = $this->nodeFactory->createArgs([$this->nodeFactory->createFalse()]);
-        return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker'), $arguments);
+        return new New_(new Name('TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker'), $arguments);
     }
 }

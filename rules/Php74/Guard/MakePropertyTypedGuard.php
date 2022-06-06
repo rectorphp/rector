@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php74\Guard;
+namespace RectorPrefix20220606\Rector\Php74\Guard;
 
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ClassReflection;
-use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
-use Rector\Core\NodeManipulator\PropertyManipulator;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\Privatization\Guard\ParentPropertyLookupGuard;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\Rector\Core\NodeAnalyzer\PropertyAnalyzer;
+use RectorPrefix20220606\Rector\Core\NodeManipulator\PropertyManipulator;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\Privatization\Guard\ParentPropertyLookupGuard;
 final class MakePropertyTypedGuard
 {
     /**
@@ -37,7 +37,7 @@ final class MakePropertyTypedGuard
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Privatization\Guard\ParentPropertyLookupGuard $parentPropertyLookupGuard, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, PropertyAnalyzer $propertyAnalyzer, PropertyManipulator $propertyManipulator, ParentPropertyLookupGuard $parentPropertyLookupGuard, ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyAnalyzer = $propertyAnalyzer;
@@ -45,7 +45,7 @@ final class MakePropertyTypedGuard
         $this->parentPropertyLookupGuard = $parentPropertyLookupGuard;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isLegal(\PhpParser\Node\Stmt\Property $property, bool $inlinePublic = \true) : bool
+    public function isLegal(Property $property, bool $inlinePublic = \true) : bool
     {
         if ($property->type !== null) {
             return \false;
@@ -54,7 +54,7 @@ final class MakePropertyTypedGuard
             return \false;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($property);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         /**
@@ -76,7 +76,7 @@ final class MakePropertyTypedGuard
         }
         return $this->isSafeProtectedProperty($property, $classReflection);
     }
-    private function isSafeProtectedProperty(\PhpParser\Node\Stmt\Property $property, \PHPStan\Reflection\ClassReflection $classReflection) : bool
+    private function isSafeProtectedProperty(Property $property, ClassReflection $classReflection) : bool
     {
         if (!$property->isProtected()) {
             return \false;

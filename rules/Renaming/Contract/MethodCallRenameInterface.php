@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Renaming\Contract;
+namespace RectorPrefix20220606\Rector\Renaming\Contract;
 
-use PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
 interface MethodCallRenameInterface
 {
     public function getClass() : string;
-    public function getObjectType() : \PHPStan\Type\ObjectType;
+    public function getObjectType() : ObjectType;
     public function getOldMethod() : string;
     public function getNewMethod() : string;
 }

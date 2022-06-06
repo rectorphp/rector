@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality\Rector\New_;
+namespace RectorPrefix20220606\Rector\CodeQuality\Rector\New_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
-use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\New_;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\Rector\Core\Enum\ObjectReference;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/phpstan/phpstan-src/blob/699c420f8193da66927e54494a0afa0c323c6458/src/Rules/Classes/NewStaticRule.php
  *
  * @see \Rector\Tests\CodeQuality\Rector\New_\NewStaticToNewSelfRector\NewStaticToNewSelfRectorTest
  */
-final class NewStaticToNewSelfRector extends \Rector\Core\Rector\AbstractRector
+final class NewStaticToNewSelfRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change unsafe new static() to new self()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change unsafe new static() to new self()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function build()
@@ -45,24 +45,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\New_::class];
+        return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$class instanceof Class_) {
             return null;
         }
         if (!$class->isFinal()) {
             return null;
         }
-        if (!$this->isName($node->class, \Rector\Core\Enum\ObjectReference::STATIC)) {
+        if (!$this->isName($node->class, ObjectReference::STATIC)) {
             return null;
         }
-        $node->class = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF);
+        $node->class = new Name(ObjectReference::SELF);
         return $node;
     }
 }

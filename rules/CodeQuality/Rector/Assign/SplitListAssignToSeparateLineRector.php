@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality\Rector\Assign;
+namespace RectorPrefix20220606\Rector\CodeQuality\Rector\Assign;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\List_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://mobile.twitter.com/ivanhoe011/status/1246376872931401728
  *
  * @see \Rector\Tests\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector\SplitListAssignToSeparateLineRectorTest
  */
-final class SplitListAssignToSeparateLineRector extends \Rector\Core\Rector\AbstractRector
+final class SplitListAssignToSeparateLineRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Splits `[$a, $b] = [5, 10]` scalar assign to standalone lines', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Splits `[$a, $b] = [5, 10]` scalar assign to standalone lines', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -47,15 +47,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Expression::class];
+        return [Expression::class];
     }
     /**
      * @param Expression $node
      * @return Expression[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor(Node $node) : ?array
     {
-        if (!$node->expr instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$node->expr instanceof Assign) {
             return null;
         }
         $assign = $node->expr;
@@ -68,13 +68,13 @@ CODE_SAMPLE
         $rightArray = $assign->expr;
         return $this->createStandaloneAssignExpressions($leftArray, $rightArray);
     }
-    private function shouldSkipAssign(\PhpParser\Node\Expr\Assign $assign) : bool
+    private function shouldSkipAssign(Assign $assign) : bool
     {
-        if (!$assign->var instanceof \PhpParser\Node\Expr\Array_ && !$assign->var instanceof \PhpParser\Node\Expr\List_) {
+        if (!$assign->var instanceof Array_ && !$assign->var instanceof List_) {
             return \true;
         }
         $assignExpr = $assign->expr;
-        if (!$assignExpr instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$assignExpr instanceof Array_) {
             return \true;
         }
         if (\count($assign->var->items) !== \count($assignExpr->items)) {
@@ -87,7 +87,7 @@ CODE_SAMPLE
      * @return Expression[]
      * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $expr
      */
-    private function createStandaloneAssignExpressions($expr, \PhpParser\Node\Expr\Array_ $rightArray) : array
+    private function createStandaloneAssignExpressions($expr, Array_ $rightArray) : array
     {
         $standaloneAssignExpresssions = [];
         foreach ($expr->items as $key => $leftArrayItem) {
@@ -95,18 +95,18 @@ CODE_SAMPLE
                 continue;
             }
             $rightArrayItem = $rightArray->items[$key];
-            if (!$rightArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$rightArrayItem instanceof ArrayItem) {
                 continue;
             }
-            $assign = new \PhpParser\Node\Expr\Assign($leftArrayItem->value, $rightArrayItem);
-            $standaloneAssignExpresssions[] = new \PhpParser\Node\Stmt\Expression($assign);
+            $assign = new Assign($leftArrayItem->value, $rightArrayItem);
+            $standaloneAssignExpresssions[] = new Expression($assign);
         }
         return $standaloneAssignExpresssions;
     }
     /**
      * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $expr
      */
-    private function isValueSwap($expr, \PhpParser\Node\Expr\Array_ $secondArray) : bool
+    private function isValueSwap($expr, Array_ $secondArray) : bool
     {
         $firstArrayItemsHash = $this->getArrayItemsHash($expr);
         $secondArrayItemsHash = $this->getArrayItemsHash($secondArray);

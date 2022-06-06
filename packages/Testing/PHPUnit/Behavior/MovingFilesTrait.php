@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Testing\PHPUnit\Behavior;
+namespace RectorPrefix20220606\Rector\Testing\PHPUnit\Behavior;
 
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
-use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use RectorPrefix20220606\Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use RectorPrefix20220606\Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
+use RectorPrefix20220606\Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
@@ -13,16 +13,16 @@ use RectorPrefix20220606\Webmozart\Assert\Assert;
  */
 trait MovingFilesTrait
 {
-    protected function assertFileWasNotChanged(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : void
+    protected function assertFileWasNotChanged(SmartFileInfo $smartFileInfo) : void
     {
         $hasFileInfo = $this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo);
         $this->assertFalse($hasFileInfo);
     }
-    protected function assertFileWasAdded(\Rector\FileSystemRector\ValueObject\AddedFileWithContent $addedFileWithContent) : void
+    protected function assertFileWasAdded(AddedFileWithContent $addedFileWithContent) : void
     {
         $this->assertFilesWereAdded([$addedFileWithContent]);
     }
-    protected function assertFileWasRemoved(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : void
+    protected function assertFileWasRemoved(SmartFileInfo $smartFileInfo) : void
     {
         $isFileRemoved = $this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo);
         $this->assertTrue($isFileRemoved);
@@ -32,12 +32,12 @@ trait MovingFilesTrait
      */
     protected function assertFilesWereAdded(array $expectedAddedFileWithContents) : void
     {
-        \RectorPrefix20220606\Webmozart\Assert\Assert::allIsAOf($expectedAddedFileWithContents, \Rector\FileSystemRector\ValueObject\AddedFileWithContent::class);
+        Assert::allIsAOf($expectedAddedFileWithContents, AddedFileWithContent::class);
         \sort($expectedAddedFileWithContents);
         $addedFilePathsWithContents = $this->resolveAddedFilePathsWithContents();
         \sort($addedFilePathsWithContents);
         // there should be at least some added files
-        \RectorPrefix20220606\Webmozart\Assert\Assert::notEmpty($addedFilePathsWithContents);
+        Assert::notEmpty($addedFilePathsWithContents);
         foreach ($addedFilePathsWithContents as $key => $addedFilePathWithContent) {
             $expectedFilePathWithContent = $expectedAddedFileWithContents[$key];
             /**
@@ -57,11 +57,11 @@ trait MovingFilesTrait
     private function resolveAddedFilePathsWithContents() : array
     {
         $addedFilePathsWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
-        $nodesWithFileDestinationPrinter = $this->getService(\Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter::class);
+        $nodesWithFileDestinationPrinter = $this->getService(NodesWithFileDestinationPrinter::class);
         $movedFiles = $this->removedAndAddedFilesCollector->getMovedFiles();
         foreach ($movedFiles as $movedFile) {
             $fileContent = $nodesWithFileDestinationPrinter->printNodesWithFileDestination($movedFile);
-            $addedFilePathsWithContents[] = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($movedFile->getNewFilePath(), $fileContent);
+            $addedFilePathsWithContents[] = new AddedFileWithContent($movedFile->getNewFilePath(), $fileContent);
         }
         $addedFilesWithNodes = $this->removedAndAddedFilesCollector->getAddedFilesWithNodes();
         if ($addedFilesWithNodes === []) {
@@ -69,7 +69,7 @@ trait MovingFilesTrait
         }
         foreach ($addedFilesWithNodes as $addedFileWithNode) {
             $fileContent = $nodesWithFileDestinationPrinter->printNodesWithFileDestination($addedFileWithNode);
-            $addedFilePathsWithContents[] = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($addedFileWithNode->getFilePath(), $fileContent);
+            $addedFilePathsWithContents[] = new AddedFileWithContent($addedFileWithNode->getFilePath(), $fileContent);
         }
         return $addedFilePathsWithContents;
     }

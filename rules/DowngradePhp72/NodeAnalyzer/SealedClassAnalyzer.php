@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp72\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\DowngradePhp72\NodeAnalyzer;
 
-use PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
 final class SealedClassAnalyzer
 {
     /**
      * This method is perfectly sealed, nothing to downgrade here
      */
-    public function isSealedClass(\PHPStan\Reflection\ClassReflection $classReflection) : bool
+    public function isSealedClass(ClassReflection $classReflection) : bool
     {
         if (!$classReflection->isClass()) {
             return \false;

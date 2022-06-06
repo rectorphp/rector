@@ -14,13 +14,13 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\Container;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ContainerBag extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag implements \RectorPrefix20220606\Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface
+class ContainerBag extends FrozenParameterBag implements ContainerBagInterface
 {
     /**
      * @var \Symfony\Component\DependencyInjection\Container
      */
     private $container;
-    public function __construct(\RectorPrefix20220606\Symfony\Component\DependencyInjection\Container $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }

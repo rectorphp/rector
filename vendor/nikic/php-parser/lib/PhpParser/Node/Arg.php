@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node;
+namespace RectorPrefix20220606\PhpParser\Node;
 
-use PhpParser\Node\VariadicPlaceholder;
-use PhpParser\NodeAbstract;
-class Arg extends \PhpParser\NodeAbstract
+use RectorPrefix20220606\PhpParser\Node\VariadicPlaceholder;
+use RectorPrefix20220606\PhpParser\NodeAbstract;
+class Arg extends NodeAbstract
 {
     /** @var Identifier|null Parameter name (for named parameters) */
     public $name;
@@ -24,7 +24,7 @@ class Arg extends \PhpParser\NodeAbstract
      * @param array $attributes Additional attributes
      * @param Identifier|null $name Parameter name (for named parameters)
      */
-    public function __construct(\PhpParser\Node\Expr $value, bool $byRef = \false, bool $unpack = \false, array $attributes = [], \PhpParser\Node\Identifier $name = null)
+    public function __construct(Expr $value, bool $byRef = \false, bool $unpack = \false, array $attributes = [], Identifier $name = null)
     {
         $this->attributes = $attributes;
         $this->name = $name;

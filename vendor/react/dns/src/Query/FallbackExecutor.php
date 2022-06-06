@@ -3,21 +3,21 @@
 namespace RectorPrefix20220606\React\Dns\Query;
 
 use RectorPrefix20220606\React\Promise\Promise;
-final class FallbackExecutor implements \RectorPrefix20220606\React\Dns\Query\ExecutorInterface
+final class FallbackExecutor implements ExecutorInterface
 {
     private $executor;
     private $fallback;
-    public function __construct(\RectorPrefix20220606\React\Dns\Query\ExecutorInterface $executor, \RectorPrefix20220606\React\Dns\Query\ExecutorInterface $fallback)
+    public function __construct(ExecutorInterface $executor, ExecutorInterface $fallback)
     {
         $this->executor = $executor;
         $this->fallback = $fallback;
     }
-    public function query(\RectorPrefix20220606\React\Dns\Query\Query $query)
+    public function query(Query $query)
     {
         $cancelled = \false;
         $fallback = $this->fallback;
         $promise = $this->executor->query($query);
-        return new \RectorPrefix20220606\React\Promise\Promise(function ($resolve, $reject) use(&$promise, $fallback, $query, &$cancelled) {
+        return new Promise(function ($resolve, $reject) use(&$promise, $fallback, $query, &$cancelled) {
             $promise->then($resolve, function (\Exception $e1) use($fallback, $query, $resolve, $reject, &$cancelled, &$promise) {
                 // reject if primary resolution rejected due to cancellation
                 if ($cancelled) {

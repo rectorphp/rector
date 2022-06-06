@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace PHPStan\PhpDocParser\Ast\ConstExpr;
+namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\ConstExpr;
 
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-class ConstExprStringNode implements \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
+class ConstExprStringNode implements ConstExprNode
 {
     use NodeAttributes;
     /** @var string */

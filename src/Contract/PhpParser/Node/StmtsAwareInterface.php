@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Contract\PhpParser\Node;
+namespace RectorPrefix20220606\Rector\Core\Contract\PhpParser\Node;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
 /**
  * @property Stmt[]|null $stmts
  */
-interface StmtsAwareInterface extends \PhpParser\Node
+interface StmtsAwareInterface extends Node
 {
 }

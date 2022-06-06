@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\ValueObject;
+namespace RectorPrefix20220606\Rector\Nette\ValueObject;
 
 final class FormField
 {

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\CodeQuality\NodeAnalyzer;
 
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\PhpParser\Node\FunctionLike;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class ReturnAnalyzer
 {
     /**
@@ -13,14 +13,14 @@ final class ReturnAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function hasByRefReturn(\PhpParser\Node\Stmt\Return_ $return) : bool
+    public function hasByRefReturn(Return_ $return) : bool
     {
-        $parentFunctionLike = $this->betterNodeFinder->findParentType($return, \PhpParser\Node\FunctionLike::class);
-        if ($parentFunctionLike instanceof \PhpParser\Node\FunctionLike) {
+        $parentFunctionLike = $this->betterNodeFinder->findParentType($return, FunctionLike::class);
+        if ($parentFunctionLike instanceof FunctionLike) {
             return $parentFunctionLike->returnsByRef();
         }
         return \false;

@@ -1,37 +1,37 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\EarlyReturn\Rector\If_;
+namespace RectorPrefix20220606\Rector\EarlyReturn\Rector\If_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\NodeManipulator\IfManipulator;
-use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Instanceof_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\Rector\Core\NodeManipulator\IfManipulator;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\ChangeOrIfReturnToEarlyReturnRector\ChangeOrIfReturnToEarlyReturnRectorTest
  */
-final class ChangeOrIfReturnToEarlyReturnRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeOrIfReturnToEarlyReturnRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
+    public function __construct(IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes if || with return to early return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes if || with return to early return', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($a, $b)
@@ -67,18 +67,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\If_::class];
+        return [If_::class];
     }
     /**
      * @param If_ $node
      * @return null|If_[]
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor(Node $node) : ?array
     {
-        if (!$this->ifManipulator->isIfWithOnly($node, \PhpParser\Node\Stmt\Return_::class)) {
+        if (!$this->ifManipulator->isIfWithOnly($node, Return_::class)) {
             return null;
         }
-        if (!$node->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
+        if (!$node->cond instanceof BooleanOr) {
             return null;
         }
         if ($this->isInstanceofCondOnly($node->cond)) {
@@ -87,8 +87,8 @@ CODE_SAMPLE
         /** @var Return_ $return */
         $return = $node->stmts[0];
         // same return? skip
-        $next = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        if ($next instanceof \PhpParser\Node\Stmt\Return_ && $this->nodeComparator->areNodesEqual($return, $next)) {
+        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if ($next instanceof Return_ && $this->nodeComparator->areNodesEqual($return, $next)) {
             return null;
         }
         $ifs = $this->createMultipleIfs($node->cond, $return, []);
@@ -103,9 +103,9 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function createMultipleIfs(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr, \PhpParser\Node\Stmt\Return_ $return, array $ifs) : array
+    private function createMultipleIfs(BooleanOr $booleanOr, Return_ $return, array $ifs) : array
     {
-        while ($booleanOr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
+        while ($booleanOr instanceof BooleanOr) {
             $ifs = \array_merge($ifs, $this->collectLeftBooleanOrToIfs($booleanOr, $return, $ifs));
             $ifs[] = $this->createIf($booleanOr->right, $return);
             $booleanOr = $booleanOr->right;
@@ -116,29 +116,29 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function collectLeftBooleanOrToIfs(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr, \PhpParser\Node\Stmt\Return_ $return, array $ifs) : array
+    private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Return_ $return, array $ifs) : array
     {
         $left = $booleanOr->left;
-        if (!$left instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
+        if (!$left instanceof BooleanOr) {
             return [$this->createIf($left, $return)];
         }
         return $this->createMultipleIfs($left, $return, $ifs);
     }
-    private function createIf(\PhpParser\Node\Expr $expr, \PhpParser\Node\Stmt\Return_ $return) : \PhpParser\Node\Stmt\If_
+    private function createIf(Expr $expr, Return_ $return) : If_
     {
-        return new \PhpParser\Node\Stmt\If_($expr, ['stmts' => [$return]]);
+        return new If_($expr, ['stmts' => [$return]]);
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\BooleanOr|\PhpParser\Node\Expr\BinaryOp $booleanOr
      */
     private function isInstanceofCondOnly($booleanOr) : bool
     {
-        if ($booleanOr->left instanceof \PhpParser\Node\Expr\BinaryOp) {
+        if ($booleanOr->left instanceof BinaryOp) {
             return $this->isInstanceofCondOnly($booleanOr->left);
         }
-        if ($booleanOr->right instanceof \PhpParser\Node\Expr\BinaryOp) {
+        if ($booleanOr->right instanceof BinaryOp) {
             return $this->isInstanceofCondOnly($booleanOr->right);
         }
-        return $booleanOr->left instanceof \PhpParser\Node\Expr\Instanceof_ || $booleanOr->right instanceof \PhpParser\Node\Expr\Instanceof_;
+        return $booleanOr->left instanceof Instanceof_ || $booleanOr->right instanceof Instanceof_;
     }
 }

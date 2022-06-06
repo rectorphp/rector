@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Configuration;
+namespace RectorPrefix20220606\Rector\Core\Configuration;
 
-use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
-use Rector\Caching\ValueObject\Storage\FileCacheStorage;
+use RectorPrefix20220606\Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
+use RectorPrefix20220606\Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use RectorPrefix20220606\Symplify\Skipper\ValueObject\Option as SkipperOption;
 final class Option
 {
@@ -85,7 +85,7 @@ final class Option
      * @deprecated Use @see \Rector\Config\RectorConfig::skip() instead
      * @var string
      */
-    public const SKIP = \RectorPrefix20220606\Symplify\Skipper\ValueObject\Option::SKIP;
+    public const SKIP = SkipperOption::SKIP;
     /**
      * @deprecated Use RectorConfig::fileExtensions() instead
      * @var string
@@ -108,7 +108,7 @@ final class Option
      * @var class-string<CacheStorageInterface>
      * @internal
      */
-    public const CACHE_CLASS = \Rector\Caching\ValueObject\Storage\FileCacheStorage::class;
+    public const CACHE_CLASS = FileCacheStorage::class;
     /**
      * @var string
      */

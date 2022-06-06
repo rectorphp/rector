@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v10\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v10\v0;
 
 use RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
 use RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Scalar as ScalarValue;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 use RectorPrefix20220606\Nette\Utils\Strings;
-use PhpParser\Comment;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Return_;
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface;
-use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Comment;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
+use RectorPrefix20220606\Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use RectorPrefix20220606\Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface;
+use RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Breaking-87623-ReplaceConfigpersistenceclassesTyposcriptConfiguration.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\TypoScriptProcessorTest
  */
-final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ExtbasePersistenceTypoScriptRector extends AbstractTypoScriptRector implements ConvertToPhpFileInterface, ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -66,16 +66,16 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(ReflectionProvider $reflectionProvider, BetterStandardPrinter $betterStandardPrinter, NodeFactory $nodeFactory)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeFactory = $nodeFactory;
         $this->filename = \getcwd() . '/Configuration_Extbase_Persistence_Classes.php';
     }
-    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
+        if (!$statement instanceof Assignment) {
             return;
         }
         if (\strpos($statement->object->absoluteName, 'persistence.classes') === \false) {
@@ -89,9 +89,9 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
         $this->extractMapping('recordType', $paths, $statement);
         $this->extractColumns($paths, $statement);
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert extbase TypoScript persistence configuration to classes one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert extbase TypoScript persistence configuration to classes one', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 config.tx_extbase.persistence.classes {
     GeorgRinger\News\Domain\Model\FileReference {
         mapping {
@@ -109,34 +109,34 @@ return [
 CODE_SAMPLE
 , [self::FILENAME => 'path/to/Configuration/Extbase/Persistence/Classes.php'])]);
     }
-    public function convert() : ?\Rector\FileSystemRector\ValueObject\AddedFileWithContent
+    public function convert() : ?AddedFileWithContent
     {
         if ([] === self::$persistenceArray) {
             return null;
         }
         $persistenceArray = $this->nodeFactory->createArray([]);
         foreach (self::$persistenceArray as $class => $configuration) {
-            $key = new \PhpParser\Node\Scalar\String_($class);
+            $key = new String_($class);
             if ($this->reflectionProvider->hasClass($class)) {
                 $key = $this->nodeFactory->createClassConstReference($class);
             }
             $subArray = $this->nodeFactory->createArray([]);
             foreach (['recordType', 'tableName'] as $subKey) {
                 if (\array_key_exists($subKey, $configuration)) {
-                    $subArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_($configuration[$subKey]), new \PhpParser\Node\Scalar\String_($subKey), \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
+                    $subArray->items[] = new ArrayItem(new String_($configuration[$subKey]), new String_($subKey), \false, [AttributeKey::COMMENTS => [new Comment(\PHP_EOL)]]);
                 }
             }
             foreach ([self::PROPERTIES, 'subclasses'] as $subKey) {
                 if (\array_key_exists($subKey, $configuration)) {
-                    $subArray->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray($configuration[$subKey]), new \PhpParser\Node\Scalar\String_($subKey), \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
+                    $subArray->items[] = new ArrayItem($this->nodeFactory->createArray($configuration[$subKey]), new String_($subKey), \false, [AttributeKey::COMMENTS => [new Comment(\PHP_EOL)]]);
                 }
             }
-            $persistenceArray->items[] = new \PhpParser\Node\Expr\ArrayItem($subArray, $key, \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
+            $persistenceArray->items[] = new ArrayItem($subArray, $key, \false, [AttributeKey::COMMENTS => [new Comment(\PHP_EOL)]]);
         }
-        $return = new \PhpParser\Node\Stmt\Return_($persistenceArray);
+        $return = new Return_($persistenceArray);
         $content = $this->betterStandardPrinter->prettyPrintFile([$return]);
-        $content = \RectorPrefix20220606\Nette\Utils\Strings::replace($content, self::REMOVE_EMPTY_LINES, '');
-        return new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($this->filename, $content);
+        $content = Strings::replace($content, self::REMOVE_EMPTY_LINES, '');
+        return new AddedFileWithContent($this->filename, $content);
     }
     public function getMessage() : string
     {
@@ -152,7 +152,7 @@ CODE_SAMPLE
     /**
      * @param string[] $paths
      */
-    private function extractSubClasses(array $paths, \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
+    private function extractSubClasses(array $paths, Assignment $statement) : void
     {
         if (!\in_array(self::SUBCLASSES, $paths, \true)) {
             return;
@@ -168,7 +168,7 @@ CODE_SAMPLE
     /**
      * @param string[] $paths
      */
-    private function extractMapping(string $name, array $paths, \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
+    private function extractMapping(string $name, array $paths, Assignment $statement) : void
     {
         if (!\in_array($name, $paths, \true)) {
             return;
@@ -184,7 +184,7 @@ CODE_SAMPLE
     /**
      * @param string[] $paths
      */
-    private function extractColumns(array $paths, \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
+    private function extractColumns(array $paths, Assignment $statement) : void
     {
         if (!\in_array('columns', $paths, \true)) {
             return;

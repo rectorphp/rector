@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Contract\Rector;
+namespace RectorPrefix20220606\Rector\Core\Contract\Rector;
 
-use PhpParser\Node;
-use PHPStan\Analyser\Scope;
-interface ScopeAwarePhpRectorInterface extends \Rector\Core\Contract\Rector\PhpRectorInterface
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+interface ScopeAwarePhpRectorInterface extends PhpRectorInterface
 {
     /**
      * Process Node of matched type with its PHPStan scope
      * @return Node|Node[]|null
      */
-    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope);
+    public function refactorWithScope(Node $node, Scope $scope);
 }

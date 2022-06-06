@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node\Scalar;
+namespace RectorPrefix20220606\PhpParser\Node\Scalar;
 
-use PhpParser\Node\Scalar;
-class DNumber extends \PhpParser\Node\Scalar
+use RectorPrefix20220606\PhpParser\Node\Scalar;
+class DNumber extends Scalar
 {
     /** @var float Number value */
     public $value;
@@ -26,11 +26,11 @@ class DNumber extends \PhpParser\Node\Scalar
     /**
      * @param mixed[] $attributes
      */
-    public static function fromString(string $str, array $attributes = []) : \PhpParser\Node\Scalar\DNumber
+    public static function fromString(string $str, array $attributes = []) : DNumber
     {
         $attributes['rawValue'] = $str;
         $float = self::parse($str);
-        return new \PhpParser\Node\Scalar\DNumber($float, $attributes);
+        return new DNumber($float, $attributes);
     }
     /**
      * @internal

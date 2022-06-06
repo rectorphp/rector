@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\CodeQuality\NodeAnalyzer;
 
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
 final class ArrayItemsAnalyzer
 {
-    public function hasArrayExclusiveDefinedVariableNames(\PhpParser\Node\Expr\Array_ $array, \PHPStan\Analyser\Scope $scope) : bool
+    public function hasArrayExclusiveDefinedVariableNames(Array_ $array, Scope $scope) : bool
     {
         foreach ($array->items as $arrayItem) {
             $variableName = $this->resolveStringValue($arrayItem);
@@ -23,7 +23,7 @@ final class ArrayItemsAnalyzer
         }
         return \true;
     }
-    public function hasArrayExclusiveUndefinedVariableNames(\PhpParser\Node\Expr\Array_ $array, \PHPStan\Analyser\Scope $scope) : bool
+    public function hasArrayExclusiveUndefinedVariableNames(Array_ $array, Scope $scope) : bool
     {
         foreach ($array->items as $arrayItem) {
             $variableName = $this->resolveStringValue($arrayItem);
@@ -37,12 +37,12 @@ final class ArrayItemsAnalyzer
         }
         return \true;
     }
-    private function resolveStringValue(?\PhpParser\Node\Expr\ArrayItem $arrayItem) : ?string
+    private function resolveStringValue(?ArrayItem $arrayItem) : ?string
     {
-        if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$arrayItem instanceof ArrayItem) {
             return null;
         }
-        if (!$arrayItem->value instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$arrayItem->value instanceof String_) {
             return null;
         }
         return $arrayItem->value->value;

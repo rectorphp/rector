@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php80\NodeResolver;
+namespace RectorPrefix20220606\Rector\Php80\NodeResolver;
 
-use PHPStan\Reflection\FunctionReflection;
-use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
+use RectorPrefix20220606\PHPStan\Reflection\FunctionReflection;
+use RectorPrefix20220606\PHPStan\Reflection\MethodReflection;
+use RectorPrefix20220606\PHPStan\Reflection\ParameterReflection;
+use RectorPrefix20220606\PHPStan\Reflection\ParametersAcceptorSelector;
 final class RequireOptionalParamResolver
 {
     /**
@@ -15,7 +15,7 @@ final class RequireOptionalParamResolver
      */
     public function resolveFromReflection($functionLikeReflection) : array
     {
-        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
         $optionalParams = [];
         $requireParams = [];
         foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {

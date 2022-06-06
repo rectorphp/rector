@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Privatization\TypeManipulator;
+namespace RectorPrefix20220606\Rector\Privatization\TypeManipulator;
 
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\Constant\ConstantBooleanType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeTraverser;
+use RectorPrefix20220606\PHPStan\Type\BooleanType;
+use RectorPrefix20220606\PHPStan\Type\Constant\ConstantBooleanType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\PHPStan\Type\TypeTraverser;
 final class TypeNormalizer
 {
     /**
      * Generalize false/true type to bool,
      * as mostly default value but accepts both
      */
-    public function generalizeConstantBoolTypes(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
+    public function generalizeConstantBoolTypes(Type $type) : Type
     {
-        return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $type, callable $traverseCallback) {
-            if ($type instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
-                return new \PHPStan\Type\BooleanType();
+        return TypeTraverser::map($type, function (Type $type, callable $traverseCallback) {
+            if ($type instanceof ConstantBooleanType) {
+                return new BooleanType();
             }
             return $traverseCallback($type, $traverseCallback);
         });

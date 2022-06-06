@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Caching\ValueObject;
+namespace RectorPrefix20220606\Rector\Caching\ValueObject;
 
 /**
  * Inspired by

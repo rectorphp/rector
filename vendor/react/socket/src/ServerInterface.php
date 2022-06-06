@@ -45,7 +45,7 @@ use RectorPrefix20220606\Evenement\EventEmitterInterface;
  *
  * @see ConnectionInterface
  */
-interface ServerInterface extends \RectorPrefix20220606\Evenement\EventEmitterInterface
+interface ServerInterface extends EventEmitterInterface
 {
     /**
      * Returns the full address (URI) this server is currently listening on

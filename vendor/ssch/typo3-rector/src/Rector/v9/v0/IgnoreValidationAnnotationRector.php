@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v9\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Feature-83094-ReplaceIgnorevalidationWithTYPO3CMSExtbaseAnnotationIgnoreValidation.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\IgnoreValidationAnnotationRector\IgnoreValidationAnnotationRectorTest
  */
-final class IgnoreValidationAnnotationRector extends \Rector\Core\Rector\AbstractRector
+final class IgnoreValidationAnnotationRector extends AbstractRector
 {
     /**
      * @var string
@@ -37,7 +37,7 @@ final class IgnoreValidationAnnotationRector extends \Rector\Core\Rector\Abstrac
      * @var \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory
      */
     private $importExtbaseAnnotationIfMissingFactory;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory $importExtbaseAnnotationIfMissingFactory)
+    public function __construct(PhpDocTagRemover $phpDocTagRemover, ImportExtbaseAnnotationIfMissingFactory $importExtbaseAnnotationIfMissingFactory)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->importExtbaseAnnotationIfMissingFactory = $importExtbaseAnnotationIfMissingFactory;
@@ -47,12 +47,12 @@ final class IgnoreValidationAnnotationRector extends \Rector\Core\Rector\Abstrac
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if (!$phpDocInfo->hasByNames([self::OLD_ANNOTATION, self::VERY_OLD_ANNOTATION])) {
@@ -67,9 +67,9 @@ final class IgnoreValidationAnnotationRector extends \Rector\Core\Rector\Abstrac
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns properties with `@ignorevalidation` to properties with `@TYPO3\\CMS\\Extbase\\Annotation\\IgnoreValidation`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns properties with `@ignorevalidation` to properties with `@TYPO3\\CMS\\Extbase\\Annotation\\IgnoreValidation`', [new CodeSample(<<<'CODE_SAMPLE'
 /**
  * @ignorevalidation $param
  */
@@ -88,7 +88,7 @@ public function method($param)
 CODE_SAMPLE
 )]);
     }
-    private function refactorValidation(string $oldAnnotation, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\ClassMethod $node) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function refactorValidation(string $oldAnnotation, PhpDocInfo $phpDocInfo, ClassMethod $node) : ?ClassMethod
     {
         $tagNode = $phpDocInfo->getTagsByName($oldAnnotation)[0];
         if (!\property_exists($tagNode, 'value')) {
@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
         $tagName = '@Extbase\\IgnoreValidation("' . \ltrim((string) $tagNode->value, '$') . '")';
         $tag = '@' . \ltrim($tagName, '@');
-        $phpDocTagNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($tag, new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode(''));
+        $phpDocTagNode = new PhpDocTagNode($tag, new GenericTagValueNode(''));
         $phpDocInfo->addPhpDocTagNode($phpDocTagNode);
         $this->phpDocTagRemover->removeByName($phpDocInfo, $oldAnnotation);
         return $node;

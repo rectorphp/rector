@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\MethodCall;
+namespace RectorPrefix20220606\Rector\Symfony\Rector\MethodCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Scalar\String_;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
-use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
-use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
+use RectorPrefix20220606\Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
+use RectorPrefix20220606\Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRectorTest
  */
-final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -39,15 +39,15 @@ final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends \Rec
      * @var \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer
      */
     private $formCollectionAnalyzer;
-    public function __construct(\Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher $formOptionsArrayMatcher, \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer $formCollectionAnalyzer)
+    public function __construct(FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, FormOptionsArrayMatcher $formOptionsArrayMatcher, FormCollectionAnalyzer $formCollectionAnalyzer)
     {
         $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
         $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
         $this->formCollectionAnalyzer = $formCollectionAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename `type` option to `entry_type` in CollectionType', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename `type` option to `entry_type` in CollectionType', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -88,12 +88,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->formAddMethodCallAnalyzer->isMatching($node)) {
             return null;
@@ -102,13 +102,13 @@ CODE_SAMPLE
             return null;
         }
         $optionsArray = $this->formOptionsArrayMatcher->match($node);
-        if (!$optionsArray instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$optionsArray instanceof Array_) {
             return null;
         }
         $this->refactorOptionsArray($optionsArray);
         return $node;
     }
-    private function refactorOptionsArray(\PhpParser\Node\Expr\Array_ $optionsArray) : void
+    private function refactorOptionsArray(Array_ $optionsArray) : void
     {
         foreach ($optionsArray->items as $arrayItem) {
             if ($arrayItem === null) {
@@ -121,7 +121,7 @@ CODE_SAMPLE
                 if (!$this->valueResolver->isValue($arrayItem->key, $oldName)) {
                     continue;
                 }
-                $arrayItem->key = new \PhpParser\Node\Scalar\String_($newName);
+                $arrayItem->key = new String_($newName);
             }
         }
     }

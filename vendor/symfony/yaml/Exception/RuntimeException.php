@@ -15,6 +15,6 @@ namespace RectorPrefix20220606\Symfony\Component\Yaml\Exception;
  *
  * @author Romain Neutron <imprec@gmail.com>
  */
-class RuntimeException extends \RuntimeException implements \RectorPrefix20220606\Symfony\Component\Yaml\Exception\ExceptionInterface
+class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
 }

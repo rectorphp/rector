@@ -10,7 +10,7 @@ use Helmich\TypoScriptParser\Parser\AST\Statement;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\Traverser
  */
-class AggregatingVisitor implements \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\Traverser\Visitor
+class AggregatingVisitor implements Visitor
 {
     /** @var Visitor[] */
     private $visitors = [];
@@ -18,7 +18,7 @@ class AggregatingVisitor implements \RectorPrefix20220606\Helmich\TypoScriptPars
      * @param Visitor $visitor
      * @return void
      */
-    public function addVisitor(\RectorPrefix20220606\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
+    public function addVisitor(Visitor $visitor) : void
     {
         $this->visitors[\spl_object_hash($visitor)] = $visitor;
     }
@@ -36,7 +36,7 @@ class AggregatingVisitor implements \RectorPrefix20220606\Helmich\TypoScriptPars
      * @param Statement $statement
      * @return void
      */
-    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(Statement $statement) : void
     {
         foreach ($this->visitors as $visitor) {
             $visitor->enterNode($statement);
@@ -46,7 +46,7 @@ class AggregatingVisitor implements \RectorPrefix20220606\Helmich\TypoScriptPars
      * @param Statement $statement
      * @return void
      */
-    public function exitNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function exitNode(Statement $statement) : void
     {
         foreach ($this->visitors as $visitor) {
             $visitor->exitNode($statement);

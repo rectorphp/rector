@@ -106,27 +106,27 @@ class Command
     public static function getDefaultName() : ?string
     {
         $class = static::class;
-        if ($attribute = \method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(\RectorPrefix20220606\Symfony\Component\Console\Attribute\AsCommand::class) : []) {
+        if ($attribute = \method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(AsCommand::class) : []) {
             return $attribute[0]->newInstance()->name;
         }
         $r = new \ReflectionProperty($class, 'defaultName');
         if ($class !== $r->class || null === static::$defaultName) {
             return null;
         }
-        trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultName" for setting a command name is deprecated. Add the "%s" attribute to the "%s" class instead.', \RectorPrefix20220606\Symfony\Component\Console\Attribute\AsCommand::class, static::class);
+        trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultName" for setting a command name is deprecated. Add the "%s" attribute to the "%s" class instead.', AsCommand::class, static::class);
         return static::$defaultName;
     }
     public static function getDefaultDescription() : ?string
     {
         $class = static::class;
-        if ($attribute = \method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(\RectorPrefix20220606\Symfony\Component\Console\Attribute\AsCommand::class) : []) {
+        if ($attribute = \method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(AsCommand::class) : []) {
             return $attribute[0]->newInstance()->description;
         }
         $r = new \ReflectionProperty($class, 'defaultDescription');
         if ($class !== $r->class || null === static::$defaultDescription) {
             return null;
         }
-        trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultDescription" for setting a command description is deprecated. Add the "%s" attribute to the "%s" class instead.', \RectorPrefix20220606\Symfony\Component\Console\Attribute\AsCommand::class, static::class);
+        trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultDescription" for setting a command description is deprecated. Add the "%s" attribute to the "%s" class instead.', AsCommand::class, static::class);
         return static::$defaultDescription;
     }
     /**
@@ -136,7 +136,7 @@ class Command
      */
     public function __construct(string $name = null)
     {
-        $this->definition = new \RectorPrefix20220606\Symfony\Component\Console\Input\InputDefinition();
+        $this->definition = new InputDefinition();
         if (null === $name && null !== ($name = static::getDefaultName())) {
             $aliases = \explode('|', $name);
             if ('' === ($name = \array_shift($aliases))) {
@@ -162,7 +162,7 @@ class Command
     {
         $this->ignoreValidationErrors = \true;
     }
-    public function setApplication(\RectorPrefix20220606\Symfony\Component\Console\Application $application = null)
+    public function setApplication(Application $application = null)
     {
         $this->application = $application;
         if ($application) {
@@ -172,21 +172,21 @@ class Command
         }
         $this->fullDefinition = null;
     }
-    public function setHelperSet(\RectorPrefix20220606\Symfony\Component\Console\Helper\HelperSet $helperSet)
+    public function setHelperSet(HelperSet $helperSet)
     {
         $this->helperSet = $helperSet;
     }
     /**
      * Gets the helper set.
      */
-    public function getHelperSet() : ?\RectorPrefix20220606\Symfony\Component\Console\Helper\HelperSet
+    public function getHelperSet() : ?HelperSet
     {
         return $this->helperSet;
     }
     /**
      * Gets the application instance for this command.
      */
-    public function getApplication() : ?\RectorPrefix20220606\Symfony\Component\Console\Application
+    public function getApplication() : ?Application
     {
         return $this->application;
     }
@@ -222,9 +222,9 @@ class Command
      *
      * @see setCode()
      */
-    protected function execute(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException('You must override the execute() method in the concrete command class.');
+        throw new LogicException('You must override the execute() method in the concrete command class.');
     }
     /**
      * Interacts with the user.
@@ -233,7 +233,7 @@ class Command
      * This means that this is the only place where the command can
      * interactively ask for values of missing required arguments.
      */
-    protected function interact(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output)
     {
     }
     /**
@@ -246,7 +246,7 @@ class Command
      * @see InputInterface::bind()
      * @see InputInterface::validate()
      */
-    protected function initialize(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output)
     {
     }
     /**
@@ -263,14 +263,14 @@ class Command
      * @see setCode()
      * @see execute()
      */
-    public function run(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface $output) : int
+    public function run(InputInterface $input, OutputInterface $output) : int
     {
         // add the application arguments and options
         $this->mergeApplicationDefinition();
         // bind the input against the command specific arguments/options
         try {
             $input->bind($this->getDefinition());
-        } catch (\RectorPrefix20220606\Symfony\Component\Console\Exception\ExceptionInterface $e) {
+        } catch (ExceptionInterface $e) {
             if (!$this->ignoreValidationErrors) {
                 throw $e;
             }
@@ -280,14 +280,14 @@ class Command
             if (\function_exists('cli_set_process_title')) {
                 if (!@\cli_set_process_title($this->processTitle)) {
                     if ('Darwin' === \PHP_OS) {
-                        $output->writeln('<comment>Running "cli_set_process_title" as an unprivileged user is not supported on MacOS.</comment>', \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE);
+                        $output->writeln('<comment>Running "cli_set_process_title" as an unprivileged user is not supported on MacOS.</comment>', OutputInterface::VERBOSITY_VERY_VERBOSE);
                     } else {
                         \cli_set_process_title($this->processTitle);
                     }
                 }
             } elseif (\function_exists('RectorPrefix20220606\\setproctitle')) {
                 setproctitle($this->processTitle);
-            } elseif (\RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE === $output->getVerbosity()) {
+            } elseif (OutputInterface::VERBOSITY_VERY_VERBOSE === $output->getVerbosity()) {
                 $output->writeln('<comment>Install the proctitle PECL to be able to change the process title.</comment>');
             }
         }
@@ -314,12 +314,12 @@ class Command
     /**
      * Adds suggestions to $suggestions for the current completion input (e.g. option or argument).
      */
-    public function complete(\RectorPrefix20220606\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20220606\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions) : void
     {
         $definition = $this->getDefinition();
-        if (\RectorPrefix20220606\Symfony\Component\Console\Completion\CompletionInput::TYPE_OPTION_VALUE === $input->getCompletionType() && $definition->hasOption($input->getCompletionName())) {
+        if (CompletionInput::TYPE_OPTION_VALUE === $input->getCompletionType() && $definition->hasOption($input->getCompletionName())) {
             $definition->getOption($input->getCompletionName())->complete($input, $suggestions);
-        } elseif (\RectorPrefix20220606\Symfony\Component\Console\Completion\CompletionInput::TYPE_ARGUMENT_VALUE === $input->getCompletionType() && $definition->hasArgument($input->getCompletionName())) {
+        } elseif (CompletionInput::TYPE_ARGUMENT_VALUE === $input->getCompletionType() && $definition->hasArgument($input->getCompletionName())) {
             $definition->getArgument($input->getCompletionName())->complete($input, $suggestions);
         }
     }
@@ -372,7 +372,7 @@ class Command
         if (null === $this->application) {
             return;
         }
-        $this->fullDefinition = new \RectorPrefix20220606\Symfony\Component\Console\Input\InputDefinition();
+        $this->fullDefinition = new InputDefinition();
         $this->fullDefinition->setOptions($this->definition->getOptions());
         $this->fullDefinition->addOptions($this->application->getDefinition()->getOptions());
         if ($mergeArgs) {
@@ -390,7 +390,7 @@ class Command
      */
     public function setDefinition($definition)
     {
-        if ($definition instanceof \RectorPrefix20220606\Symfony\Component\Console\Input\InputDefinition) {
+        if ($definition instanceof InputDefinition) {
             $this->definition = $definition;
         } else {
             $this->definition->setDefinition($definition);
@@ -401,7 +401,7 @@ class Command
     /**
      * Gets the InputDefinition attached to this Command.
      */
-    public function getDefinition() : \RectorPrefix20220606\Symfony\Component\Console\Input\InputDefinition
+    public function getDefinition() : InputDefinition
     {
         return $this->fullDefinition ?? $this->getNativeDefinition();
     }
@@ -413,10 +413,10 @@ class Command
      *
      * This method is not part of public API and should not be used directly.
      */
-    public function getNativeDefinition() : \RectorPrefix20220606\Symfony\Component\Console\Input\InputDefinition
+    public function getNativeDefinition() : InputDefinition
     {
         if (!isset($this->definition)) {
-            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException(\sprintf('Command class "%s" is not correctly initialized. You probably forgot to call the parent constructor.', static::class));
+            throw new LogicException(\sprintf('Command class "%s" is not correctly initialized. You probably forgot to call the parent constructor.', static::class));
         }
         return $this->definition;
     }
@@ -437,8 +437,8 @@ class Command
         if (!\is_array($suggestedValues) && !$suggestedValues instanceof \Closure) {
             throw new \TypeError(\sprintf('Argument 5 passed to "%s()" must be array or \\Closure, "%s" given.', __METHOD__, \get_debug_type($suggestedValues)));
         }
-        $this->definition->addArgument(new \RectorPrefix20220606\Symfony\Component\Console\Input\InputArgument($name, $mode, $description, $default, $suggestedValues));
-        ($fullDefinition = $this->fullDefinition) ? $fullDefinition->addArgument(new \RectorPrefix20220606\Symfony\Component\Console\Input\InputArgument($name, $mode, $description, $default, $suggestedValues)) : null;
+        $this->definition->addArgument(new InputArgument($name, $mode, $description, $default, $suggestedValues));
+        ($fullDefinition = $this->fullDefinition) ? $fullDefinition->addArgument(new InputArgument($name, $mode, $description, $default, $suggestedValues)) : null;
         return $this;
     }
     /**
@@ -459,8 +459,8 @@ class Command
         if (!\is_array($suggestedValues) && !$suggestedValues instanceof \Closure) {
             throw new \TypeError(\sprintf('Argument 5 passed to "%s()" must be array or \\Closure, "%s" given.', __METHOD__, \get_debug_type($suggestedValues)));
         }
-        $this->definition->addOption(new \RectorPrefix20220606\Symfony\Component\Console\Input\InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues));
-        ($fullDefinition = $this->fullDefinition) ? $fullDefinition->addOption(new \RectorPrefix20220606\Symfony\Component\Console\Input\InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues)) : null;
+        $this->definition->addOption(new InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues));
+        ($fullDefinition = $this->fullDefinition) ? $fullDefinition->addOption(new InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues)) : null;
         return $this;
     }
     /**
@@ -633,7 +633,7 @@ class Command
     public function getHelper(string $name)
     {
         if (null === $this->helperSet) {
-            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException(\sprintf('Cannot retrieve helper "%s" because there is no HelperSet defined. Did you forget to add your command to the application or to set the application on the command using the setApplication() method? You can also set the HelperSet directly using the setHelperSet() method.', $name));
+            throw new LogicException(\sprintf('Cannot retrieve helper "%s" because there is no HelperSet defined. Did you forget to add your command to the application or to set the application on the command using the setApplication() method? You can also set the HelperSet directly using the setHelperSet() method.', $name));
         }
         return $this->helperSet->get($name);
     }
@@ -647,7 +647,7 @@ class Command
     private function validateName(string $name)
     {
         if (!\preg_match('/^[^\\:]++(\\:[^\\:]++)*$/', $name)) {
-            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Command name "%s" is invalid.', $name));
+            throw new InvalidArgumentException(\sprintf('Command name "%s" is invalid.', $name));
         }
     }
 }

@@ -11,7 +11,7 @@ use RectorPrefix20220606\React\EventLoop\TimerInterface;
  * @see TimerInterface
  * @internal
  */
-final class Timer implements \RectorPrefix20220606\React\EventLoop\TimerInterface
+final class Timer implements TimerInterface
 {
     const MIN_INTERVAL = 1.0E-6;
     private $interval;

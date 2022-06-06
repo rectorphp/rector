@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\ValueObject;
+namespace RectorPrefix20220606\Rector\Nette\ValueObject;
 
-use PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
 final class ParameterAssign
 {
     /**
@@ -16,12 +16,12 @@ final class ParameterAssign
      * @var string
      */
     private $parameterName;
-    public function __construct(\PhpParser\Node\Expr\Assign $assign, string $parameterName)
+    public function __construct(Assign $assign, string $parameterName)
     {
         $this->assign = $assign;
         $this->parameterName = $parameterName;
     }
-    public function getAssign() : \PhpParser\Node\Expr\Assign
+    public function getAssign() : Assign
     {
         return $this->assign;
     }

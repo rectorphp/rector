@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute;
+namespace RectorPrefix20220606\Rector\PhpAttribute;
 
-use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Rector\PhpAttribute\ValueObject\UseAliasMetadata;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Use_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\UseUse;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Rector\Php80\ValueObject\AnnotationToAttribute;
+use RectorPrefix20220606\Rector\PhpAttribute\ValueObject\UseAliasMetadata;
 /**
  * @see \Rector\Tests\PhpAttribute\UseAliasNameMatcherTest
  */
@@ -16,14 +16,14 @@ final class UseAliasNameMatcher
     /**
      * @param Use_[] $uses
      */
-    public function match(array $uses, string $shortAnnotationName, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : ?\Rector\PhpAttribute\ValueObject\UseAliasMetadata
+    public function match(array $uses, string $shortAnnotationName, AnnotationToAttribute $annotationToAttribute) : ?UseAliasMetadata
     {
         $shortAnnotationName = \trim($shortAnnotationName, '@');
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
                 // we need to use original use statement
-                $originalUseUse = $useUse->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
-                if (!$originalUseUse instanceof \PhpParser\Node\Stmt\UseUse) {
+                $originalUseUse = $useUse->getAttribute(AttributeKey::ORIGINAL_NODE);
+                if (!$originalUseUse instanceof UseUse) {
                     continue;
                 }
                 if ($originalUseUse->alias === null) {
@@ -51,7 +51,7 @@ final class UseAliasNameMatcher
                 // +1, to remove the alias part
                 $attributeParts = \array_slice($attributeParts, -$shortNamePartCount);
                 $shortAttributeName = $alias . '\\' . \implode('\\', $attributeParts);
-                return new \Rector\PhpAttribute\ValueObject\UseAliasMetadata($shortAttributeName, $newAttributeImport, $useUse);
+                return new UseAliasMetadata($shortAttributeName, $newAttributeImport, $useUse);
             }
         }
         return null;

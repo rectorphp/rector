@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp55\Rector\ClassConstFetch;
+namespace RectorPrefix20220606\Rector\DowngradePhp55\Rector\ClassConstFetch;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\String_;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/class_name_scalars
  *
  * @see Rector\Tests\DowngradePhp55\Rector\ClassConstFetch\DowngradeClassConstantToStringRector\DowngradeClassConstantToStringRectorTest
  */
-final class DowngradeClassConstantToStringRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeClassConstantToStringRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace <class>::class constant by string class names', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace <class>::class constant by string class names', [new CodeSample(<<<'CODE_SAMPLE'
 class AnotherClass
 {
 }
@@ -51,20 +51,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\ClassConstFetch::class];
+        return [ClassConstFetch::class];
     }
     /**
      * @param ClassConstFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->name instanceof \PhpParser\Node\Identifier) {
+        if (!$node->name instanceof Identifier) {
             return null;
         }
         if (\strtolower($node->name->name) !== 'class') {
             return null;
         }
-        if (!$node->class instanceof \PhpParser\Node\Name) {
+        if (!$node->class instanceof Name) {
             return null;
         }
         $className = $node->class->toString();
@@ -85,6 +85,6 @@ CODE_SAMPLE
         if ($func !== null) {
             return $this->nodeFactory->createFuncCall($func);
         }
-        return new \PhpParser\Node\Scalar\String_($className);
+        return new String_($className);
     }
 }

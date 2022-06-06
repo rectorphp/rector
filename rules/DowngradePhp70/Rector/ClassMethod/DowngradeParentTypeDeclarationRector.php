@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp70\Rector\ClassMethod;
+namespace RectorPrefix20220606\Rector\DowngradePhp70\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ClassReflection;
-use Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
-use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector\DowngradeParentTypeDeclarationRectorTest
  */
-final class DowngradeParentTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeParentTypeDeclarationRector extends AbstractRector
 {
     /**
      * @readonly
@@ -28,7 +28,7 @@ final class DowngradeParentTypeDeclarationRector extends \Rector\Core\Rector\Abs
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator, ReflectionResolver $reflectionResolver)
     {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
         $this->reflectionResolver = $reflectionResolver;
@@ -38,11 +38,11 @@ final class DowngradeParentTypeDeclarationRector extends \Rector\Core\Rector\Abs
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove "parent" return type, add a "@return parent" tag instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove "parent" return type, add a "@return parent" tag instead', [new CodeSample(<<<'CODE_SAMPLE'
 class ParentClass
 {
 }
@@ -76,17 +76,17 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         $parentClassReflection = $classReflection->getParentClass();
-        if ($parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            $staticType = new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($parentClassReflection);
+        if ($parentClassReflection instanceof ClassReflection) {
+            $staticType = new ParentStaticType($parentClassReflection);
         } else {
-            $staticType = new \Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType();
+            $staticType = new ParentObjectWithoutClassType();
         }
         if (!$this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $staticType)) {
             return null;

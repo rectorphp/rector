@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\DeadCode\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Include_;
-use PhpParser\Node\Expr\Variable;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Include_;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use RectorPrefix20220606\Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
+use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
 final class ExprUsedInNodeAnalyzer
 {
     /**
@@ -33,29 +33,29 @@ final class ExprUsedInNodeAnalyzer
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer $compactFuncCallAnalyzer, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
+    public function __construct(NodeComparator $nodeComparator, UsedVariableNameAnalyzer $usedVariableNameAnalyzer, CompactFuncCallAnalyzer $compactFuncCallAnalyzer, NodePrinterInterface $nodePrinter)
     {
         $this->nodeComparator = $nodeComparator;
         $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
         $this->nodePrinter = $nodePrinter;
     }
-    public function isUsed(\PhpParser\Node $node, \PhpParser\Node\Expr $expr) : bool
+    public function isUsed(Node $node, Expr $expr) : bool
     {
-        if ($node instanceof \PhpParser\Node\Expr\Include_) {
+        if ($node instanceof Include_) {
             return \true;
         }
         // variable as variable variable need mark as used
-        if ($node instanceof \PhpParser\Node\Expr\Variable && $expr instanceof \PhpParser\Node\Expr\Variable) {
+        if ($node instanceof Variable && $expr instanceof Variable) {
             $print = $this->nodePrinter->print($node);
             if (\strncmp($print, '${$', \strlen('${$')) === 0) {
                 return \true;
             }
         }
-        if ($node instanceof \PhpParser\Node\Expr\FuncCall && $expr instanceof \PhpParser\Node\Expr\Variable) {
+        if ($node instanceof FuncCall && $expr instanceof Variable) {
             return $this->compactFuncCallAnalyzer->isInCompact($node, $expr);
         }
-        if ($expr instanceof \PhpParser\Node\Expr\Variable) {
+        if ($expr instanceof Variable) {
             return $this->usedVariableNameAnalyzer->isVariableNamed($node, $expr);
         }
         return $this->nodeComparator->areNodesEqual($node, $expr);

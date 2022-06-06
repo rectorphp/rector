@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\NeonParser\Services;
+namespace RectorPrefix20220606\Rector\Nette\NeonParser\Services;
 
 use RectorPrefix20220606\Nette\Neon\Node;
 use RectorPrefix20220606\Nette\Neon\Node\ArrayItemNode;
@@ -20,12 +20,12 @@ final class ServiceTypeResolver
     /**
      * @return string|null
      */
-    public function resolve(\RectorPrefix20220606\Nette\Neon\Node $serviceNode)
+    public function resolve(Node $serviceNode)
     {
-        if (!$serviceNode instanceof \RectorPrefix20220606\Nette\Neon\Node\ArrayItemNode) {
+        if (!$serviceNode instanceof ArrayItemNode) {
             return null;
         }
-        if (!$serviceNode->value instanceof \RectorPrefix20220606\Nette\Neon\Node\ArrayNode) {
+        if (!$serviceNode->value instanceof ArrayNode) {
             return null;
         }
         foreach ($serviceNode->value->items as $serviceConfigurationItem) {
@@ -33,13 +33,13 @@ final class ServiceTypeResolver
                 continue;
             }
             if ($serviceConfigurationItem->key->toString() === self::FACTORY_KEYWORD) {
-                if ($serviceConfigurationItem->value instanceof \RectorPrefix20220606\Nette\Neon\Node\EntityNode) {
+                if ($serviceConfigurationItem->value instanceof EntityNode) {
                     return $serviceConfigurationItem->value->value->toString();
                 }
                 return $serviceConfigurationItem->value->toString();
             }
             if ($serviceConfigurationItem->key->toString() === self::CLASS_KEYWORD) {
-                if ($serviceConfigurationItem->value instanceof \RectorPrefix20220606\Nette\Neon\Node\EntityNode) {
+                if ($serviceConfigurationItem->value instanceof EntityNode) {
                     return $serviceConfigurationItem->value->value->toString();
                 }
                 return $serviceConfigurationItem->value->toString();

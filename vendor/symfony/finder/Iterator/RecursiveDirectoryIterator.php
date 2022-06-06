@@ -59,7 +59,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     /**
      * Return an instance of SplFileInfo with support for relative paths.
      */
-    public function current() : \RectorPrefix20220606\Symfony\Component\Finder\SplFileInfo
+    public function current() : SplFileInfo
     {
         // the logic here avoids redoing the same work in all iterations
         if (!isset($this->subPath)) {
@@ -73,7 +73,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
         if ('/' !== ($basePath = $this->rootPath)) {
             $basePath .= $this->directorySeparator;
         }
-        return new \RectorPrefix20220606\Symfony\Component\Finder\SplFileInfo($basePath . $subPathname, $this->subPath, $subPathname);
+        return new SplFileInfo($basePath . $subPathname, $this->subPath, $subPathname);
     }
     public function hasChildren($allowLinks = \false) : bool
     {
@@ -105,7 +105,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
             }
             return $children;
         } catch (\UnexpectedValueException $e) {
-            throw new \RectorPrefix20220606\Symfony\Component\Finder\Exception\AccessDeniedException($e->getMessage(), $e->getCode(), $e);
+            throw new AccessDeniedException($e->getMessage(), $e->getCode(), $e);
         }
     }
     /**

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodingStyle\ClassNameImport;
+namespace RectorPrefix20220606\Rector\CodingStyle\ClassNameImport;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt\GroupUse;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Use_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\UseUse;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class UseImportsTraverser
 {
@@ -22,7 +22,7 @@ final class UseImportsTraverser
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -33,7 +33,7 @@ final class UseImportsTraverser
      */
     public function traverserStmts(array $stmts, callable $callable) : void
     {
-        $this->traverseForType($stmts, $callable, \PhpParser\Node\Stmt\Use_::TYPE_NORMAL);
+        $this->traverseForType($stmts, $callable, Use_::TYPE_NORMAL);
     }
     /**
      * @param Stmt[] $stmts
@@ -41,7 +41,7 @@ final class UseImportsTraverser
      */
     public function traverserStmtsForFunctions(array $stmts, callable $callable) : void
     {
-        $this->traverseForType($stmts, $callable, \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION);
+        $this->traverseForType($stmts, $callable, Use_::TYPE_FUNCTION);
     }
     /**
      * @param callable(UseUse $useUse, string $name): void $callable
@@ -49,8 +49,8 @@ final class UseImportsTraverser
      */
     private function traverseForType(array $stmts, callable $callable, int $desiredType) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use($callable, $desiredType) {
-            if ($node instanceof \PhpParser\Node\Stmt\Use_) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use($callable, $desiredType) {
+            if ($node instanceof Use_) {
                 // only import uses
                 if ($node->type !== $desiredType) {
                     return null;
@@ -63,7 +63,7 @@ final class UseImportsTraverser
                     $callable($useUse, $name);
                 }
             }
-            if ($node instanceof \PhpParser\Node\Stmt\GroupUse) {
+            if ($node instanceof GroupUse) {
                 $this->processGroupUse($node, $desiredType, $callable);
             }
             return null;
@@ -72,9 +72,9 @@ final class UseImportsTraverser
     /**
      * @param callable(UseUse $useUse, string $name): void $callable
      */
-    private function processGroupUse(\PhpParser\Node\Stmt\GroupUse $groupUse, int $desiredType, callable $callable) : void
+    private function processGroupUse(GroupUse $groupUse, int $desiredType, callable $callable) : void
     {
-        if ($groupUse->type !== \PhpParser\Node\Stmt\Use_::TYPE_UNKNOWN) {
+        if ($groupUse->type !== Use_::TYPE_UNKNOWN) {
             return;
         }
         $prefixName = $groupUse->prefix->toString();

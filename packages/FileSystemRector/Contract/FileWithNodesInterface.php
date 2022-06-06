@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\FileSystemRector\Contract;
+namespace RectorPrefix20220606\Rector\FileSystemRector\Contract;
 
-use PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
 interface FileWithNodesInterface
 {
     /**

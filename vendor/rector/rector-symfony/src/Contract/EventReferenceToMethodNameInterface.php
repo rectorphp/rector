@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Contract;
+namespace RectorPrefix20220606\Rector\Symfony\Contract;
 
-use PhpParser\Node\Expr\ClassConstFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
 interface EventReferenceToMethodNameInterface
 {
-    public function getClassConstFetch() : \PhpParser\Node\Expr\ClassConstFetch;
+    public function getClassConstFetch() : ClassConstFetch;
     public function getMethodName() : string;
 }

@@ -1,43 +1,43 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\Rector\StmtsAwareInterface;
+namespace RectorPrefix20220606\Rector\DeadCode\Rector\StmtsAwareInterface;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\While_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\ValueObject\PropertyFetchToVariableAssign;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Stmt\While_;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\DeadCode\ValueObject\PropertyFetchToVariableAssign;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Rector\ReadWrite\NodeFinder\NodeUsageFinder;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\StmtsAwareInterface\RemoveJustPropertyFetchRector\RemoveJustPropertyFetchRectorTest
  */
-final class RemoveJustPropertyFetchRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveJustPropertyFetchRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\ReadWrite\NodeFinder\NodeUsageFinder
      */
     private $nodeUsageFinder;
-    public function __construct(\Rector\ReadWrite\NodeFinder\NodeUsageFinder $nodeUsageFinder)
+    public function __construct(NodeUsageFinder $nodeUsageFinder)
     {
         $this->nodeUsageFinder = $nodeUsageFinder;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Inline property fetch assign to a variable, that has no added value', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Inline property fetch assign to a variable, that has no added value', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $name;
@@ -68,12 +68,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface::class];
+        return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $stmts = (array) $node->stmts;
         if ($stmts === []) {
@@ -84,12 +84,12 @@ CODE_SAMPLE
         $variableToPropertyAssign = null;
         foreach ($stmts as $key => $stmt) {
             $variableToPropertyAssign = $this->matchVariableToPropertyAssign($stmt);
-            if (!$variableToPropertyAssign instanceof \Rector\DeadCode\ValueObject\PropertyFetchToVariableAssign) {
+            if (!$variableToPropertyAssign instanceof PropertyFetchToVariableAssign) {
                 continue;
             }
             $assignPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($stmt);
             // there is a @var tag on purpose, keep the assign
-            if ($assignPhpDocInfo->getVarTagValueNode() instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+            if ($assignPhpDocInfo->getVarTagValueNode() instanceof VarTagValueNode) {
                 continue;
             }
             $followingStmts = \array_slice($stmts, $key + 1);
@@ -100,7 +100,7 @@ CODE_SAMPLE
         }
         // filter out variable usages that are part of nested property fetch, or change variable
         $variableUsages = $this->filterOutReferencedVariableUsages($variableUsages);
-        if (!$variableToPropertyAssign instanceof \Rector\DeadCode\ValueObject\PropertyFetchToVariableAssign) {
+        if (!$variableToPropertyAssign instanceof PropertyFetchToVariableAssign) {
             return null;
         }
         if ($variableUsages === []) {
@@ -112,11 +112,11 @@ CODE_SAMPLE
     /**
      * @param Variable[] $variableUsages
      */
-    private function replaceVariablesWithPropertyFetch(\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmtsAware, int $currentStmtsKey, array $variableUsages, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
+    private function replaceVariablesWithPropertyFetch(StmtsAwareInterface $stmtsAware, int $currentStmtsKey, array $variableUsages, PropertyFetch $propertyFetch) : StmtsAwareInterface
     {
         // remove assign node
         unset($stmtsAware->stmts[$currentStmtsKey]);
-        $this->traverseNodesWithCallable($stmtsAware, function (\PhpParser\Node $node) use($variableUsages, $propertyFetch) : ?PropertyFetch {
+        $this->traverseNodesWithCallable($stmtsAware, function (Node $node) use($variableUsages, $propertyFetch) : ?PropertyFetch {
             if (!\in_array($node, $variableUsages, \true)) {
                 return null;
             }
@@ -130,58 +130,58 @@ CODE_SAMPLE
      */
     private function filterOutReferencedVariableUsages(array $variableUsages) : array
     {
-        return \array_filter($variableUsages, function (\PhpParser\Node\Expr\Variable $variable) : bool {
-            $variableUsageParent = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($variableUsageParent instanceof \PhpParser\Node\Arg) {
-                $variableUsageParent = $variableUsageParent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        return \array_filter($variableUsages, function (Variable $variable) : bool {
+            $variableUsageParent = $variable->getAttribute(AttributeKey::PARENT_NODE);
+            if ($variableUsageParent instanceof Arg) {
+                $variableUsageParent = $variableUsageParent->getAttribute(AttributeKey::PARENT_NODE);
             }
             // skip nested property fetch, the assign is for purpose of named variable
-            if ($variableUsageParent instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            if ($variableUsageParent instanceof PropertyFetch) {
                 return \false;
             }
             // skip, as assign can be used in a loop
-            $parentWhile = $this->betterNodeFinder->findParentType($variable, \PhpParser\Node\Stmt\While_::class);
-            if ($parentWhile instanceof \PhpParser\Node\Stmt\While_) {
+            $parentWhile = $this->betterNodeFinder->findParentType($variable, While_::class);
+            if ($parentWhile instanceof While_) {
                 return \false;
             }
-            if (!$variableUsageParent instanceof \PhpParser\Node\Expr\FuncCall) {
+            if (!$variableUsageParent instanceof FuncCall) {
                 return \true;
             }
             return !$this->isName($variableUsageParent, 'array_pop');
         });
     }
-    private function matchVariableToPropertyAssign(\PhpParser\Node\Stmt $stmt) : ?\Rector\DeadCode\ValueObject\PropertyFetchToVariableAssign
+    private function matchVariableToPropertyAssign(Stmt $stmt) : ?PropertyFetchToVariableAssign
     {
-        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$stmt instanceof Expression) {
             return null;
         }
-        if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$stmt->expr instanceof Assign) {
             return null;
         }
         $assign = $stmt->expr;
-        if (!$assign->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$assign->expr instanceof PropertyFetch) {
             return null;
         }
         if ($this->isPropertyFetchCallerNode($assign->expr)) {
             return null;
         }
         // keep property fetch nesting
-        if ($assign->expr->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if ($assign->expr->var instanceof PropertyFetch) {
             return null;
         }
-        if (!$assign->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$assign->var instanceof Variable) {
             return null;
         }
-        return new \Rector\DeadCode\ValueObject\PropertyFetchToVariableAssign($assign->var, $assign->expr);
+        return new PropertyFetchToVariableAssign($assign->var, $assign->expr);
     }
-    private function isPropertyFetchCallerNode(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
+    private function isPropertyFetchCallerNode(PropertyFetch $propertyFetch) : bool
     {
         // skip nodes as mostly used with public property fetches
         $propertyFetchCallerType = $this->getType($propertyFetch->var);
-        if (!$propertyFetchCallerType instanceof \PHPStan\Type\ObjectType) {
+        if (!$propertyFetchCallerType instanceof ObjectType) {
             return \false;
         }
-        $nodeObjectType = new \PHPStan\Type\ObjectType('PhpParser\\Node');
+        $nodeObjectType = new ObjectType('PhpParser\\Node');
         return $nodeObjectType->isSuperTypeOf($propertyFetchCallerType)->yes();
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\ChangesReporting\ValueObject;
+namespace RectorPrefix20220606\Rector\ChangesReporting\ValueObject;
 
-use Rector\Core\Contract\Rector\RectorInterface;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
 use RectorPrefix20220606\Symplify\EasyParallel\Contract\SerializableInterface;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
-final class RectorWithLineChange implements \RectorPrefix20220606\Symplify\EasyParallel\Contract\SerializableInterface
+final class RectorWithLineChange implements SerializableInterface
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ final class RectorWithLineChange implements \RectorPrefix20220606\Symplify\EasyP
     public function __construct($rectorClass, int $line)
     {
         $this->line = $line;
-        if ($rectorClass instanceof \Rector\Core\Contract\Rector\RectorInterface) {
+        if ($rectorClass instanceof RectorInterface) {
             $rectorClass = \get_class($rectorClass);
         }
         $this->rectorClass = $rectorClass;
@@ -55,9 +55,9 @@ final class RectorWithLineChange implements \RectorPrefix20220606\Symplify\EasyP
     public static function decode(array $json) : \RectorPrefix20220606\Symplify\EasyParallel\Contract\SerializableInterface
     {
         $rectorClass = $json[self::KEY_RECTOR_CLASS];
-        \RectorPrefix20220606\Webmozart\Assert\Assert::string($rectorClass);
+        Assert::string($rectorClass);
         $line = $json[self::KEY_LINE];
-        \RectorPrefix20220606\Webmozart\Assert\Assert::integer($line);
+        Assert::integer($line);
         return new self($rectorClass, $line);
     }
     /**

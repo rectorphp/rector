@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Laravel\Rector\StaticCall;
+namespace RectorPrefix20220606\Rector\Laravel\Rector\StaticCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\Mul;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Scalar\LNumber;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Mul;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/laravel/framework/pull/27276
  * @see https://laravel.com/docs/5.8/upgrade#cache-ttl-in-seconds
  *
  * @see \Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\MinutesToSecondsInCacheRectorTest
  */
-final class MinutesToSecondsInCacheRector extends \Rector\Core\Rector\AbstractRector
+final class MinutesToSecondsInCacheRector extends AbstractRector
 {
     /**
      * @var string
@@ -40,11 +40,11 @@ final class MinutesToSecondsInCacheRector extends \Rector\Core\Rector\AbstractRe
     private $typeToTimeMethodsAndPositions = [];
     public function __construct()
     {
-        $this->typeToTimeMethodsAndPositions = [new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::PUT, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::PUT, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::PUT, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::ADD, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::ADD, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::ADD, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::REMEMBER, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::REMEMBER, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::REMEMBER, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', 'putMany', 1)];
+        $this->typeToTimeMethodsAndPositions = [new TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::PUT, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::PUT, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::PUT, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::ADD, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::ADD, 2), new TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::ADD, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::REMEMBER, 2), new TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::REMEMBER, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::REMEMBER, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', 'putMany', 1)];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change minutes argument to seconds in Illuminate\\Contracts\\Cache\\Store and Illuminate\\Support\\Facades\\Cache', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change minutes argument to seconds in Illuminate\\Contracts\\Cache\\Store and Illuminate\\Support\\Facades\\Cache', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -69,15 +69,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\MethodCall::class];
+        return [StaticCall::class, MethodCall::class];
     }
     /**
      * @param StaticCall|MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->typeToTimeMethodsAndPositions as $typeToTimeMethodAndPosition) {
-            if (!$this->isObjectType($node instanceof \PhpParser\Node\Expr\MethodCall ? $node->var : $node->class, $typeToTimeMethodAndPosition->getObjectType())) {
+            if (!$this->isObjectType($node instanceof MethodCall ? $node->var : $node->class, $typeToTimeMethodAndPosition->getObjectType())) {
                 continue;
             }
             if (!$this->isName($node->name, $typeToTimeMethodAndPosition->getMethodName())) {
@@ -86,7 +86,7 @@ CODE_SAMPLE
             if (!isset($node->args[$typeToTimeMethodAndPosition->getPosition()])) {
                 continue;
             }
-            if (!$node->args[$typeToTimeMethodAndPosition->getPosition()] instanceof \PhpParser\Node\Arg) {
+            if (!$node->args[$typeToTimeMethodAndPosition->getPosition()] instanceof Arg) {
                 continue;
             }
             $argValue = $node->args[$typeToTimeMethodAndPosition->getPosition()]->value;
@@ -98,17 +98,17 @@ CODE_SAMPLE
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|null
      */
-    private function processArgumentOnPosition($node, \PhpParser\Node\Expr $argExpr, int $argumentPosition)
+    private function processArgumentOnPosition($node, Expr $argExpr, int $argumentPosition)
     {
         if (!$this->nodeTypeResolver->isNumberType($argExpr)) {
             return null;
         }
         // already multiplied
-        if ($argExpr instanceof \PhpParser\Node\Expr\BinaryOp\Mul) {
+        if ($argExpr instanceof Mul) {
             return null;
         }
-        $mul = new \PhpParser\Node\Expr\BinaryOp\Mul($argExpr, new \PhpParser\Node\Scalar\LNumber(60));
-        $node->args[$argumentPosition] = new \PhpParser\Node\Arg($mul);
+        $mul = new Mul($argExpr, new LNumber(60));
+        $node->args[$argumentPosition] = new Arg($mul);
         return $node;
     }
 }

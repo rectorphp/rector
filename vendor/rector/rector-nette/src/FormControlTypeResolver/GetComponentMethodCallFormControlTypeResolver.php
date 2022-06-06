@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\FormControlTypeResolver;
+namespace RectorPrefix20220606\Rector\Nette\FormControlTypeResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Type\TypeWithClassName;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\ValueObject\MethodName;
-use Rector\Nette\Contract\FormControlTypeResolverInterface;
-use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Core\PhpParser\AstResolver;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\Value\ValueResolver;
+use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
+use RectorPrefix20220606\Rector\Nette\Contract\FormControlTypeResolverInterface;
+use RectorPrefix20220606\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
-final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
+final class GetComponentMethodCallFormControlTypeResolver implements FormControlTypeResolverInterface
 {
     /**
      * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
@@ -42,7 +42,7 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ValueResolver $valueResolver, AstResolver $astResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -52,16 +52,16 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
     /**
      * @required
      */
-    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
     /**
      * @return array<string, string>
      */
-    public function resolve(\PhpParser\Node $node) : array
+    public function resolve(Node $node) : array
     {
-        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$node instanceof MethodCall) {
             return [];
         }
         if (!$this->nodeNameResolver->isName($node->name, 'getComponent')) {
@@ -69,17 +69,17 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
         }
         $createComponentClassMethodName = $this->createCreateComponentMethodName($node);
         $staticType = $this->nodeTypeResolver->getType($node);
-        if (!$staticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+        if (!$staticType instanceof FullyQualifiedObjectType) {
             return [];
         }
         // combine constructor + method body name
         $constructorClassMethodData = [];
-        $constructorClassMethod = $this->astResolver->resolveClassMethod($staticType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $constructorClassMethod = $this->astResolver->resolveClassMethod($staticType->getClassName(), MethodName::CONSTRUCT);
         if ($constructorClassMethod !== null) {
             $constructorClassMethodData = $this->methodNamesByInputNamesResolver->resolveExpr($constructorClassMethod);
         }
         $callerType = $this->nodeTypeResolver->getType($node->var);
-        if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$callerType instanceof TypeWithClassName) {
             return $constructorClassMethodData;
         }
         $createComponentClassMethodData = [];
@@ -89,12 +89,12 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
         }
         return \array_merge($constructorClassMethodData, $createComponentClassMethodData);
     }
-    private function createCreateComponentMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : string
+    private function createCreateComponentMethodName(MethodCall $methodCall) : string
     {
         $firstArgumentValue = $methodCall->args[0]->value;
         $componentName = $this->valueResolver->getValue($firstArgumentValue);
         if (!\is_string($componentName)) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         return 'createComponent' . \ucfirst($componentName);
     }

@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
+namespace RectorPrefix20220606\Rector\PhpAttribute\AnnotationToAttributeMapper;
 
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\PhpAttribute\AnnotationToAttributeMapper;
-use Rector\PhpAttribute\AttributeArrayNameInliner;
-use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use Rector\PhpAttribute\Exception\InvalidNestedAttributeException;
-use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\New_;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Core\Php\PhpVersionProvider;
+use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
+use RectorPrefix20220606\Rector\PhpAttribute\AnnotationToAttributeMapper;
+use RectorPrefix20220606\Rector\PhpAttribute\AttributeArrayNameInliner;
+use RectorPrefix20220606\Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
+use RectorPrefix20220606\Rector\PhpAttribute\Exception\InvalidNestedAttributeException;
+use RectorPrefix20220606\Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<DoctrineAnnotationTagValueNode>
  */
-final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface
+final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationToAttributeMapperInterface
 {
     /**
      * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
@@ -40,7 +40,7 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
      * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
     private $attributeArrayNameInliner;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer, \Rector\PhpAttribute\AttributeArrayNameInliner $attributeArrayNameInliner)
+    public function __construct(PhpVersionProvider $phpVersionProvider, UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer, AttributeArrayNameInliner $attributeArrayNameInliner)
     {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unwrapableAnnotationAnalyzer = $unwrapableAnnotationAnalyzer;
@@ -50,7 +50,7 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
      * Avoid circular reference
      * @required
      */
-    public function autowire(\Rector\PhpAttribute\AnnotationToAttributeMapper $annotationToAttributeMapper) : void
+    public function autowire(AnnotationToAttributeMapper $annotationToAttributeMapper) : void
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
     }
@@ -59,7 +59,7 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
      */
     public function isCandidate($value) : bool
     {
-        if (!$value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+        if (!$value instanceof DoctrineAnnotationTagValueNode) {
             return \false;
         }
         return !$this->unwrapableAnnotationAnalyzer->areUnwrappable([$value]);
@@ -67,28 +67,28 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
     /**
      * @param DoctrineAnnotationTagValueNode $value
      */
-    public function map($value) : \PhpParser\Node\Expr
+    public function map($value) : \RectorPrefix20220606\PhpParser\Node\Expr
     {
         // if PHP 8.0- throw exception
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS)) {
-            throw new \Rector\PhpAttribute\Exception\InvalidNestedAttributeException();
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NEW_INITIALIZERS)) {
+            throw new InvalidNestedAttributeException();
         }
         $annotationShortName = $this->resolveAnnotationName($value);
         $values = $value->getValues();
         if ($values !== []) {
             $argValues = $this->annotationToAttributeMapper->map($value->getValuesWithExplicitSilentAndWithoutQuotes());
-            if ($argValues instanceof \PhpParser\Node\Expr\Array_) {
+            if ($argValues instanceof Array_) {
                 // create named args
                 $args = $this->attributeArrayNameInliner->inlineArrayToArgs($argValues);
             } else {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
+                throw new ShouldNotHappenException();
             }
         } else {
             $args = [];
         }
-        return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name($annotationShortName), $args);
+        return new New_(new Name($annotationShortName), $args);
     }
-    private function resolveAnnotationName(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : string
+    private function resolveAnnotationName(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : string
     {
         $annotationShortName = $doctrineAnnotationTagValueNode->identifierTypeNode->name;
         return \ltrim($annotationShortName, '@');

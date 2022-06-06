@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php80\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Php80\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Match_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\Throw_;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php80\Enum\MatchKind;
-use Rector\Php80\ValueObject\CondAndExpr;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\Match_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Switch_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Throw_;
+use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Rector\Php80\Enum\MatchKind;
+use RectorPrefix20220606\Rector\Php80\ValueObject\CondAndExpr;
 final class MatchSwitchAnalyzer
 {
     /**
@@ -34,7 +34,7 @@ final class MatchSwitchAnalyzer
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Php80\NodeAnalyzer\SwitchAnalyzer $switchAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(SwitchAnalyzer $switchAnalyzer, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator)
     {
         $this->switchAnalyzer = $switchAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -43,7 +43,7 @@ final class MatchSwitchAnalyzer
     /**
      * @param CondAndExpr[] $condAndExprs
      */
-    public function shouldSkipSwitch(\PhpParser\Node\Stmt\Switch_ $switch, array $condAndExprs) : bool
+    public function shouldSkipSwitch(Switch_ $switch, array $condAndExprs) : bool
     {
         if ($condAndExprs === []) {
             return \true;
@@ -78,10 +78,10 @@ final class MatchSwitchAnalyzer
         $assignVariableNames = [];
         foreach ($condAndExprs as $condAndExpr) {
             $expr = $condAndExpr->getExpr();
-            if (!$expr instanceof \PhpParser\Node\Expr\Assign) {
+            if (!$expr instanceof Assign) {
                 continue;
             }
-            if ($expr->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            if ($expr->var instanceof ArrayDimFetch) {
                 $arrayDimFethName = $this->nodeNameResolver->getName($expr->var->var);
                 $assignVariableNames[] = \get_class($expr->var) . $arrayDimFethName . '[]';
             } else {
@@ -91,7 +91,7 @@ final class MatchSwitchAnalyzer
         $assignVariableNames = \array_unique($assignVariableNames);
         return \count($assignVariableNames) <= 1;
     }
-    public function hasDefaultValue(\PhpParser\Node\Expr\Match_ $match) : bool
+    public function hasDefaultValue(Match_ $match) : bool
     {
         foreach ($match->arms as $matchArm) {
             if ($matchArm->conds === null) {
@@ -111,29 +111,29 @@ final class MatchSwitchAnalyzer
     {
         $condAndExprKinds = [];
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->equalsMatchKind(\Rector\Php80\Enum\MatchKind::THROW)) {
+            if ($condAndExpr->equalsMatchKind(MatchKind::THROW)) {
                 continue;
             }
             $condAndExprKinds[] = $condAndExpr->getMatchKind();
         }
         return \array_unique($condAndExprKinds);
     }
-    private function isNextStmtReturnWithExpr(\PhpParser\Node\Stmt\Switch_ $switch) : bool
+    private function isNextStmtReturnWithExpr(Switch_ $switch) : bool
     {
-        $next = $switch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        if (!$next instanceof \PhpParser\Node\Stmt\Return_) {
+        $next = $switch->getAttribute(AttributeKey::NEXT_NODE);
+        if (!$next instanceof Return_) {
             return \false;
         }
-        if (!$next->expr instanceof \PhpParser\Node\Expr) {
+        if (!$next->expr instanceof Expr) {
             return \false;
         }
         foreach ($switch->cases as $case) {
             /** @var Expression[] $expressions */
-            $expressions = \array_filter($case->stmts, function (\PhpParser\Node $node) : bool {
-                return $node instanceof \PhpParser\Node\Stmt\Expression;
+            $expressions = \array_filter($case->stmts, function (Node $node) : bool {
+                return $node instanceof Expression;
             });
             foreach ($expressions as $expression) {
-                if (!$expression->expr instanceof \PhpParser\Node\Expr\Assign) {
+                if (!$expression->expr instanceof Assign) {
                     continue;
                 }
                 if (!$this->nodeComparator->areNodesEqual($expression->expr->var, $next->expr)) {
@@ -143,9 +143,9 @@ final class MatchSwitchAnalyzer
         }
         return \true;
     }
-    private function isNextStmtThrows(\PhpParser\Node\Stmt\Switch_ $switch) : bool
+    private function isNextStmtThrows(Switch_ $switch) : bool
     {
-        $next = $switch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        return $next instanceof \PhpParser\Node\Stmt\Throw_;
+        $next = $switch->getAttribute(AttributeKey::NEXT_NODE);
+        return $next instanceof Throw_;
     }
 }

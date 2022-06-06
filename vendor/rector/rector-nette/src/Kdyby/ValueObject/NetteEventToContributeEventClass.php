@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\Kdyby\ValueObject;
+namespace RectorPrefix20220606\Rector\Nette\Kdyby\ValueObject;
 
 final class NetteEventToContributeEventClass
 {

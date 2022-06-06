@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Composer\ValueObject;
+namespace RectorPrefix20220606\Rector\Composer\ValueObject;
 
 final class RenamePackage
 {

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Caching\Enum;
+namespace RectorPrefix20220606\Rector\Caching\Enum;
 
 /**
  * @enum

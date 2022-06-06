@@ -4,13 +4,13 @@ declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\Astral\Naming;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
 use RectorPrefix20220606\Symplify\Astral\Contract\NodeNameResolverInterface;
 /**
  * @see \Symplify\Astral\Tests\Naming\SimpleNameResolverTest
@@ -47,14 +47,14 @@ final class SimpleNameResolver
             }
             return $nodeNameResolver->resolve($node);
         }
-        if ($node instanceof \PhpParser\Node\Expr\ClassConstFetch && $this->isName($node->name, 'class')) {
+        if ($node instanceof ClassConstFetch && $this->isName($node->name, 'class')) {
             return $this->getName($node->class);
         }
-        if ($node instanceof \PhpParser\Node\Stmt\Property) {
+        if ($node instanceof Property) {
             $propertyProperty = $node->props[0];
             return $this->getName($propertyProperty->name);
         }
-        if ($node instanceof \PhpParser\Node\Expr\Variable) {
+        if ($node instanceof Variable) {
             return $this->getName($node->name);
         }
         return null;
@@ -62,7 +62,7 @@ final class SimpleNameResolver
     /**
      * @param string[] $desiredNames
      */
-    public function isNames(\PhpParser\Node $node, array $desiredNames) : bool
+    public function isNames(Node $node, array $desiredNames) : bool
     {
         foreach ($desiredNames as $desiredName) {
             if ($this->isName($node, $desiredName)) {
@@ -85,7 +85,7 @@ final class SimpleNameResolver
         }
         return $name === $desiredName;
     }
-    public function areNamesEqual(\PhpParser\Node $firstNode, \PhpParser\Node $secondNode) : bool
+    public function areNamesEqual(Node $firstNode, Node $secondNode) : bool
     {
         $firstName = $this->getName($firstNode);
         if ($firstName === null) {
@@ -93,19 +93,19 @@ final class SimpleNameResolver
         }
         return $this->isName($secondNode, $firstName);
     }
-    public function resolveShortNameFromNode(\PhpParser\Node\Stmt\ClassLike $classLike) : ?string
+    public function resolveShortNameFromNode(ClassLike $classLike) : ?string
     {
         $className = $this->getName($classLike);
         if ($className === null) {
             return null;
         }
         // anonymous class return null name
-        if (\RectorPrefix20220606\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_REGEX)) {
+        if (Strings::match($className, self::ANONYMOUS_CLASS_REGEX)) {
             return null;
         }
         return $this->resolveShortName($className);
     }
-    public function resolveShortNameFromScope(\PHPStan\Analyser\Scope $scope) : ?string
+    public function resolveShortNameFromScope(Scope $scope) : ?string
     {
         $className = $this->getClassNameFromScope($scope);
         if ($className === null) {
@@ -113,34 +113,34 @@ final class SimpleNameResolver
         }
         return $this->resolveShortName($className);
     }
-    public function getClassNameFromScope(\PHPStan\Analyser\Scope $scope) : ?string
+    public function getClassNameFromScope(Scope $scope) : ?string
     {
         if ($scope->isInTrait()) {
             $traitReflection = $scope->getTraitReflection();
-            if (!$traitReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            if (!$traitReflection instanceof ClassReflection) {
                 return null;
             }
             return $traitReflection->getName();
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         return $classReflection->getName();
     }
-    public function isNameMatch(\PhpParser\Node $node, string $desiredNameRegex) : bool
+    public function isNameMatch(Node $node, string $desiredNameRegex) : bool
     {
         $name = $this->getName($node);
         if ($name === null) {
             return \false;
         }
-        return (bool) \RectorPrefix20220606\Nette\Utils\Strings::match($name, $desiredNameRegex);
+        return (bool) Strings::match($name, $desiredNameRegex);
     }
     public function resolveShortName(string $className) : string
     {
         if (\strpos($className, '\\') === \false) {
             return $className;
         }
-        return (string) \RectorPrefix20220606\Nette\Utils\Strings::after($className, '\\', -1);
+        return (string) Strings::after($className, '\\', -1);
     }
 }

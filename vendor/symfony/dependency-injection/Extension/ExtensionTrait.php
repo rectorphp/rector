@@ -28,13 +28,13 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\YamlFileLo
  */
 trait ExtensionTrait
 {
-    private function executeConfiguratorCallback(\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $container, \Closure $callback, \RectorPrefix20220606\Symfony\Component\DependencyInjection\Extension\ConfigurableExtensionInterface $subject) : void
+    private function executeConfiguratorCallback(ContainerBuilder $container, \Closure $callback, ConfigurableExtensionInterface $subject) : void
     {
         $env = $container->getParameter('kernel.environment');
         $loader = $this->createContainerLoader($container, $env);
         $file = (new \ReflectionObject($subject))->getFileName();
         $bundleLoader = $loader->getResolver()->resolve($file);
-        if (!$bundleLoader instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\PhpFileLoader) {
+        if (!$bundleLoader instanceof PhpFileLoader) {
             throw new \LogicException('Unable to create the ContainerConfigurator.');
         }
         $bundleLoader->setCurrentDir(\dirname($file));
@@ -42,17 +42,17 @@ trait ExtensionTrait
             return $this->instanceof;
         }, $bundleLoader, $bundleLoader)();
         try {
-            $callback(new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator($container, $bundleLoader, $instanceof, $file, $file, $env));
+            $callback(new ContainerConfigurator($container, $bundleLoader, $instanceof, $file, $file, $env));
         } finally {
             $instanceof = [];
             $bundleLoader->registerAliasesForSinglyImplementedInterfaces();
         }
     }
-    private function createContainerLoader(\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $env) : \RectorPrefix20220606\Symfony\Component\Config\Loader\DelegatingLoader
+    private function createContainerLoader(ContainerBuilder $container, string $env) : DelegatingLoader
     {
         $buildDir = $container->getParameter('kernel.build_dir');
-        $locator = new \RectorPrefix20220606\Symfony\Component\Config\FileLocator();
-        $resolver = new \RectorPrefix20220606\Symfony\Component\Config\Loader\LoaderResolver([new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\XmlFileLoader($container, $locator, $env), new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, $locator, $env), new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\IniFileLoader($container, $locator, $env), new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($container, $locator, $env, new \RectorPrefix20220606\Symfony\Component\Config\Builder\ConfigBuilderGenerator($buildDir)), new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\GlobFileLoader($container, $locator, $env), new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\DirectoryLoader($container, $locator, $env), new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\ClosureLoader($container, $env)]);
-        return new \RectorPrefix20220606\Symfony\Component\Config\Loader\DelegatingLoader($resolver);
+        $locator = new FileLocator();
+        $resolver = new LoaderResolver([new XmlFileLoader($container, $locator, $env), new YamlFileLoader($container, $locator, $env), new IniFileLoader($container, $locator, $env), new PhpFileLoader($container, $locator, $env, new ConfigBuilderGenerator($buildDir)), new GlobFileLoader($container, $locator, $env), new DirectoryLoader($container, $locator, $env), new ClosureLoader($container, $env)]);
+        return new DelegatingLoader($resolver);
     }
 }

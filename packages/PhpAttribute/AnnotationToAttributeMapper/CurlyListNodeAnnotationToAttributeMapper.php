@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
+namespace RectorPrefix20220606\Rector\PhpAttribute\AnnotationToAttributeMapper;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
-use Rector\PhpAttribute\AnnotationToAttributeMapper;
-use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use Rector\PhpAttribute\Enum\DocTagNodeState;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+use RectorPrefix20220606\Rector\PhpAttribute\AnnotationToAttributeMapper;
+use RectorPrefix20220606\Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
+use RectorPrefix20220606\Rector\PhpAttribute\Enum\DocTagNodeState;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @implements AnnotationToAttributeMapperInterface<CurlyListNode>
  */
-final class CurlyListNodeAnnotationToAttributeMapper implements \Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface
+final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttributeMapperInterface
 {
     /**
      * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
@@ -25,7 +25,7 @@ final class CurlyListNodeAnnotationToAttributeMapper implements \Rector\PhpAttri
      * Avoid circular reference
      * @required
      */
-    public function autowire(\Rector\PhpAttribute\AnnotationToAttributeMapper $annotationToAttributeMapper) : void
+    public function autowire(AnnotationToAttributeMapper $annotationToAttributeMapper) : void
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
     }
@@ -34,28 +34,28 @@ final class CurlyListNodeAnnotationToAttributeMapper implements \Rector\PhpAttri
      */
     public function isCandidate($value) : bool
     {
-        return $value instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+        return $value instanceof CurlyListNode;
     }
     /**
      * @param CurlyListNode $value
      */
-    public function map($value) : \PhpParser\Node\Expr
+    public function map($value) : \RectorPrefix20220606\PhpParser\Node\Expr
     {
         $arrayItems = [];
         foreach ($value->getValuesWithExplicitSilentAndWithoutQuotes() as $key => $singleValue) {
             $valueExpr = $this->annotationToAttributeMapper->map($singleValue);
             // remove node
-            if ($valueExpr === \Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY) {
+            if ($valueExpr === DocTagNodeState::REMOVE_ARRAY) {
                 continue;
             }
-            \RectorPrefix20220606\Webmozart\Assert\Assert::isInstanceOf($valueExpr, \PhpParser\Node\Expr::class);
+            Assert::isInstanceOf($valueExpr, Expr::class);
             $keyExpr = null;
             if (!\is_int($key)) {
                 $keyExpr = $this->annotationToAttributeMapper->map($key);
-                \RectorPrefix20220606\Webmozart\Assert\Assert::isInstanceOf($keyExpr, \PhpParser\Node\Expr::class);
+                Assert::isInstanceOf($keyExpr, Expr::class);
             }
-            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($valueExpr, $keyExpr);
+            $arrayItems[] = new ArrayItem($valueExpr, $keyExpr);
         }
-        return new \PhpParser\Node\Expr\Array_($arrayItems);
+        return new Array_($arrayItems);
     }
 }

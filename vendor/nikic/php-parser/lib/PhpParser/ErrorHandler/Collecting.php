@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\ErrorHandler;
+namespace RectorPrefix20220606\PhpParser\ErrorHandler;
 
-use PhpParser\Error;
-use PhpParser\ErrorHandler;
+use RectorPrefix20220606\PhpParser\Error;
+use RectorPrefix20220606\PhpParser\ErrorHandler;
 /**
  * Error handler that collects all errors into an array.
  *
  * This allows graceful handling of errors.
  */
-class Collecting implements \PhpParser\ErrorHandler
+class Collecting implements ErrorHandler
 {
     /** @var Error[] Collected errors */
     private $errors = [];
-    public function handleError(\PhpParser\Error $error)
+    public function handleError(Error $error)
     {
         $this->errors[] = $error;
     }

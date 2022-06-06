@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Core\NodeAnalyzer;
 
-use PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Param;
 final class PromotedPropertyParamCleaner
 {
     /**

@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeTypeResolver\NodeTypeResolver;
+namespace RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Return_;
-use PHPStan\Type\Type;
-use PHPStan\Type\VoidType;
-use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
-use Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\PHPStan\Type\VoidType;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeTypeResolverInterface<Return_>
  */
-final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
+final class ReturnTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
@@ -22,7 +22,7 @@ final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
     /**
      * @required
      */
-    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -31,15 +31,15 @@ final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
      */
     public function getNodeClasses() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve(Node $node) : Type
     {
         if ($node->expr === null) {
-            return new \PHPStan\Type\VoidType();
+            return new VoidType();
         }
         return $this->nodeTypeResolver->getType($node->expr);
     }

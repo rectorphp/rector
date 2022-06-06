@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\ValueObject;
+namespace RectorPrefix20220606\Rector\DeadCode\ValueObject;
 
-use Rector\DeadCode\Contract\ConditionInterface;
-final class BinaryToVersionCompareCondition implements \Rector\DeadCode\Contract\ConditionInterface
+use RectorPrefix20220606\Rector\DeadCode\Contract\ConditionInterface;
+final class BinaryToVersionCompareCondition implements ConditionInterface
 {
     /**
      * @readonly
@@ -23,13 +23,13 @@ final class BinaryToVersionCompareCondition implements \Rector\DeadCode\Contract
     /**
      * @param mixed $expectedValue
      */
-    public function __construct(\Rector\DeadCode\ValueObject\VersionCompareCondition $versionCompareCondition, string $binaryClass, $expectedValue)
+    public function __construct(VersionCompareCondition $versionCompareCondition, string $binaryClass, $expectedValue)
     {
         $this->versionCompareCondition = $versionCompareCondition;
         $this->binaryClass = $binaryClass;
         $this->expectedValue = $expectedValue;
     }
-    public function getVersionCompareCondition() : \Rector\DeadCode\ValueObject\VersionCompareCondition
+    public function getVersionCompareCondition() : VersionCompareCondition
     {
         return $this->versionCompareCondition;
     }

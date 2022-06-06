@@ -15,7 +15,7 @@ use function is_array, is_object, strlen;
 class Strings
 {
     use Nette\StaticClass;
-    public const TRIM_CHARACTERS = " \t\n\r\0\v¬†";
+    public const TRIM_CHARACTERS = " \t\n\r\x00\v¬†";
     /**
      * Checks if the string is valid in UTF-8 encoding.
      */
@@ -38,9 +38,9 @@ class Strings
     public static function chr(int $code) : string
     {
         if ($code < 0 || $code >= 0xd800 && $code <= 0xdfff || $code > 0x10ffff) {
-            throw new \RectorPrefix20220606\Nette\InvalidArgumentException('Code point must be in range 0x0 to 0xD7FF or 0xE000 to 0x10FFFF.');
+            throw new Nette\InvalidArgumentException('Code point must be in range 0x0 to 0xD7FF or 0xE000 to 0x10FFFF.');
         } elseif (!\extension_loaded('iconv')) {
-            throw new \RectorPrefix20220606\Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
+            throw new Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
         }
         return \iconv('UTF-32BE', 'UTF-8//IGNORE', \pack('N', $code));
     }
@@ -49,14 +49,14 @@ class Strings
      */
     public static function startsWith(string $haystack, string $needle) : bool
     {
-        return \strncmp($haystack, $needle, \strlen($needle)) === 0;
+        return \strncmp($haystack, $needle, strlen($needle)) === 0;
     }
     /**
      * Ends the $haystack string with the suffix $needle?
      */
     public static function endsWith(string $haystack, string $needle) : bool
     {
-        return $needle === '' || \substr($haystack, -\strlen($needle)) === $needle;
+        return $needle === '' || \substr($haystack, -strlen($needle)) === $needle;
     }
     /**
      * Does $haystack contain $needle?
@@ -75,7 +75,7 @@ class Strings
             return \mb_substr($s, $start, $length, 'UTF-8');
             // MB is much faster
         } elseif (!\extension_loaded('iconv')) {
-            throw new \RectorPrefix20220606\Nette\NotSupportedException(__METHOD__ . '() requires extension ICONV or MBSTRING, neither is loaded.');
+            throw new Nette\NotSupportedException(__METHOD__ . '() requires extension ICONV or MBSTRING, neither is loaded.');
         } elseif ($length === null) {
             $length = self::length($s);
         } elseif ($start < 0 && $length < 0) {
@@ -138,10 +138,10 @@ class Strings
             $s = $transliterator->transliterate($s);
             // use iconv because The transliterator leaves some characters out of ASCII, eg ‚Üí  æ
             if ($iconv === 'glibc') {
-                $s = \strtr($s, '?', "\1");
+                $s = \strtr($s, '?', "\x01");
                 // temporarily hide ? to distinguish them from the garbage that iconv creates
                 $s = \iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);
-                $s = \str_replace(['?', "\1"], ['', '?'], $s);
+                $s = \str_replace(['?', "\x01"], ['', '?'], $s);
                 // remove garbage and restore ? characters
             } elseif ($iconv === 'libiconv') {
                 $s = \iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);
@@ -152,11 +152,11 @@ class Strings
             }
         } elseif ($iconv === 'glibc' || $iconv === 'libiconv') {
             // temporarily hide these characters to distinguish them from the garbage that iconv creates
-            $s = \strtr($s, '`\'"^~?', "\1\2\3\4\5\6");
+            $s = \strtr($s, '`\'"^~?', "\x01\x02\x03\x04\x05\x06");
             if ($iconv === 'glibc') {
                 // glibc implementation is very limited. transliterate into Windows-1250 and then into ASCII, so most Eastern European characters are preserved
                 $s = \iconv('UTF-8', 'WINDOWS-1250//TRANSLIT//IGNORE', $s);
-                $s = \strtr($s, "•£ºåßä™çèéØπ≥æúö∫ùüûø¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ¯˘˙˚¸˝˛ñ†ãóõ¶≠∑", 'ALLSSSSTZZZallssstzzzRAAAALCCCEEEEIIDDNNOOOOxRUUUUYTsraaaalccceeeeiiddnnooooruuuuyt- <->|-.');
+                $s = \strtr($s, "\xa5\xa3\xbc\x8c\xa7\x8a\xaa\x8d\x8f\x8e\xaf\xb9\xb3\xbe\x9c\x9a\xba\x9d\x9f\x9e\xbf\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf8\xf9\xfa\xfb\xfc\xfd\xfe\x96\xa0\x8b\x97\x9b\xa6\xad\xb7", 'ALLSSSSTZZZallssstzzzRAAAALCCCEEEEIIDDNNOOOOxRUUUUYTsraaaalccceeeeiiddnnooooruuuuyt- <->|-.');
                 $s = self::pcre('preg_replace', ['#[^\\x00-\\x7F]++#', '', $s]);
             } else {
                 $s = \iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);
@@ -164,7 +164,7 @@ class Strings
             // remove garbage that iconv creates during transliteration (eg √ù -> Y')
             $s = \str_replace(['`', "'", '"', '^', '~', '?'], '', $s);
             // restore temporarily hidden characters
-            $s = \strtr($s, "\1\2\3\4\5\6", '`\'"^~?');
+            $s = \strtr($s, "\x01\x02\x03\x04\x05\x06", '`\'"^~?');
         } else {
             $s = self::pcre('preg_replace', ['#[^\\x00-\\x7F]++#', '', $s]);
             // remove non-ascii chars
@@ -278,10 +278,10 @@ class Strings
     public static function findPrefix(array $strings) : string
     {
         $first = \array_shift($strings);
-        for ($i = 0; $i < \strlen($first); $i++) {
+        for ($i = 0; $i < strlen($first); $i++) {
             foreach ($strings as $s) {
                 if (!isset($s[$i]) || $first[$i] !== $s[$i]) {
-                    while ($i && $first[$i - 1] >= "Ä" && $first[$i] >= "Ä" && $first[$i] < "¿") {
+                    while ($i && $first[$i - 1] >= "\x80" && $first[$i] >= "\x80" && $first[$i] < "\xc0") {
                         $i--;
                     }
                     return \substr($first, 0, $i);
@@ -296,7 +296,7 @@ class Strings
      */
     public static function length(string $s) : int
     {
-        return \function_exists('mb_strlen') ? \mb_strlen($s, 'UTF-8') : \strlen(\utf8_decode($s));
+        return \function_exists('mb_strlen') ? \mb_strlen($s, 'UTF-8') : strlen(\utf8_decode($s));
     }
     /**
      * Removes all left and right side spaces (or the characters passed as second argument) from a UTF-8 encoded string.
@@ -330,7 +330,7 @@ class Strings
     public static function reverse(string $s) : string
     {
         if (!\extension_loaded('iconv')) {
-            throw new \RectorPrefix20220606\Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
+            throw new Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
         }
         return \iconv('UTF-32LE', 'UTF-8', \strrev(\iconv('UTF-8', 'UTF-32BE', $s)));
     }
@@ -350,7 +350,7 @@ class Strings
     public static function after(string $haystack, string $needle, int $nth = 1) : ?string
     {
         $pos = self::pos($haystack, $needle, $nth);
-        return $pos === null ? null : \substr($haystack, $pos + \strlen($needle));
+        return $pos === null ? null : \substr($haystack, $pos + strlen($needle));
     }
     /**
      * Returns position in characters of $nth occurence of $needle in $haystack or null if the $needle was not found.
@@ -377,7 +377,7 @@ class Strings
                 $pos++;
             }
         } else {
-            $len = \strlen($haystack);
+            $len = strlen($haystack);
             if ($needle === '') {
                 return $len;
             } elseif ($len === 0) {
@@ -388,7 +388,7 @@ class Strings
                 $pos--;
             }
         }
-        return \RectorPrefix20220606\Nette\Utils\Helpers::falseToNull($pos);
+        return Helpers::falseToNull($pos);
     }
     /**
      * Splits a string into array by the regular expression. Parenthesized expression in the delimiter are captured.
@@ -404,7 +404,7 @@ class Strings
      */
     public static function match(string $subject, string $pattern, int $flags = 0, int $offset = 0) : ?array
     {
-        if ($offset > \strlen($subject)) {
+        if ($offset > strlen($subject)) {
             return null;
         }
         return self::pcre('preg_match', [$pattern, $subject, &$m, $flags, $offset]) ? $m : null;
@@ -415,7 +415,7 @@ class Strings
      */
     public static function matchAll(string $subject, string $pattern, int $flags = 0, int $offset = 0) : array
     {
-        if ($offset > \strlen($subject)) {
+        if ($offset > strlen($subject)) {
             return [];
         }
         self::pcre('preg_match_all', [$pattern, $subject, &$m, $flags & \PREG_PATTERN_ORDER ? $flags : $flags | \PREG_SET_ORDER, $offset]);
@@ -428,12 +428,12 @@ class Strings
      */
     public static function replace(string $subject, $pattern, $replacement = '', int $limit = -1) : string
     {
-        if (\is_object($replacement) || \is_array($replacement)) {
+        if (is_object($replacement) || is_array($replacement)) {
             if (!\is_callable($replacement, \false, $textual)) {
-                throw new \RectorPrefix20220606\Nette\InvalidStateException("Callback '{$textual}' is not callable.");
+                throw new Nette\InvalidStateException("Callback '{$textual}' is not callable.");
             }
             return self::pcre('preg_replace_callback', [$pattern, $replacement, $subject, $limit]);
-        } elseif (\is_array($pattern) && \is_string(\key($pattern))) {
+        } elseif (is_array($pattern) && \is_string(\key($pattern))) {
             $replacement = \array_values($pattern);
             $pattern = \array_keys($pattern);
         }
@@ -442,12 +442,12 @@ class Strings
     /** @internal */
     public static function pcre(string $func, array $args)
     {
-        $res = \RectorPrefix20220606\Nette\Utils\Callback::invokeSafe($func, $args, function (string $message) use($args) : void {
+        $res = Callback::invokeSafe($func, $args, function (string $message) use($args) : void {
             // compile-time error, not detectable by preg_last_error
-            throw new \RectorPrefix20220606\Nette\Utils\RegexpException($message . ' in pattern: ' . \implode(' or ', (array) $args[0]));
+            throw new RegexpException($message . ' in pattern: ' . \implode(' or ', (array) $args[0]));
         });
         if (($code = \preg_last_error()) && ($res === null || !\in_array($func, ['preg_filter', 'preg_replace_callback', 'preg_replace'], \true))) {
-            throw new \RectorPrefix20220606\Nette\Utils\RegexpException((\RectorPrefix20220606\Nette\Utils\RegexpException::MESSAGES[$code] ?? 'Unknown error') . ' (pattern: ' . \implode(' or ', (array) $args[0]) . ')', $code);
+            throw new RegexpException((RegexpException::MESSAGES[$code] ?? 'Unknown error') . ' (pattern: ' . \implode(' or ', (array) $args[0]) . ')', $code);
         }
         return $res;
     }

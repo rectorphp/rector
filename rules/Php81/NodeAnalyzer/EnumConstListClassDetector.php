@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php81\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Php81\NodeAnalyzer;
 
-use PhpParser\Node\Scalar;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
-use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\PhpParser\Node\Scalar;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassConst;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
 final class EnumConstListClassDetector
 {
     /**
@@ -15,11 +15,11 @@ final class EnumConstListClassDetector
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function detect(\PhpParser\Node\Stmt\Class_ $class) : bool
+    public function detect(Class_ $class) : bool
     {
         $classConstants = $class->getConstants();
         // must have at least 2 constants, otherwise probably not enum
@@ -43,7 +43,7 @@ final class EnumConstListClassDetector
         // only scalar values are allowed
         foreach ($classConstants as $classConstant) {
             $onlyConstConst = $classConstant->consts[0];
-            if (!$onlyConstConst->value instanceof \PhpParser\Node\Scalar) {
+            if (!$onlyConstConst->value instanceof Scalar) {
                 return \false;
             }
         }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CakePHP\Set;
+namespace RectorPrefix20220606\Rector\CakePHP\Set;
 
-use Rector\Set\Contract\SetListInterface;
-final class CakePHPLevelSetList implements \Rector\Set\Contract\SetListInterface
+use RectorPrefix20220606\Rector\Set\Contract\SetListInterface;
+final class CakePHPLevelSetList implements SetListInterface
 {
     /**
      * @var string

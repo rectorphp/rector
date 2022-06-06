@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v8\v6;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v6;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\Helper\ArrayUtility;
-use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\ArrayUtility;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\TcaHelperTrait;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79440-TcaChanges.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\MigrateLastPiecesOfDefaultExtrasRector\MigrateLastPiecesOfDefaultExtrasRectorTest
  */
-final class MigrateLastPiecesOfDefaultExtrasRector extends \Rector\Core\Rector\AbstractRector
+final class MigrateLastPiecesOfDefaultExtrasRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -29,41 +29,41 @@ final class MigrateLastPiecesOfDefaultExtrasRector extends \Rector\Core\Rector\A
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$columnsArrayItem instanceof ArrayItem) {
             return null;
         }
         $columnItems = $columnsArrayItem->value;
-        if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$columnItems instanceof Array_) {
             return null;
         }
         $this->refactorDefaultExtras($columnItems);
         $types = $this->extractTypes($node);
-        if (!$types instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$types instanceof ArrayItem) {
             return $this->hasAstBeenChanged ? $node : null;
         }
         $typesItems = $types->value;
-        if (!$typesItems instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$typesItems instanceof Array_) {
             return $this->hasAstBeenChanged ? $node : null;
         }
         foreach ($typesItems->items as $typesItem) {
-            if (!$typesItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$typesItem instanceof ArrayItem) {
                 continue;
             }
             if (null === $typesItem->key) {
                 continue;
             }
-            if (!$typesItem->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$typesItem->value instanceof Array_) {
                 continue;
             }
             foreach ($typesItem->value->items as $configValue) {
@@ -76,7 +76,7 @@ final class MigrateLastPiecesOfDefaultExtrasRector extends \Rector\Core\Rector\A
                 if (!$this->valueResolver->isValue($configValue->key, 'columnsOverrides')) {
                     continue;
                 }
-                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
+                if (!$configValue->value instanceof Array_) {
                     continue;
                 }
                 $this->refactorDefaultExtras($configValue->value);
@@ -87,9 +87,9 @@ final class MigrateLastPiecesOfDefaultExtrasRector extends \Rector\Core\Rector\A
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate last pieces of default extras', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Migrate last pieces of default extras', [new CodeSample(<<<'CODE_SAMPLE'
 return [
             'ctrl' => [],
             'columns' => [
@@ -157,16 +157,16 @@ return [
 CODE_SAMPLE
 )]);
     }
-    private function refactorDefaultExtras(\PhpParser\Node\Expr\Array_ $columnItemsArray) : void
+    private function refactorDefaultExtras(Array_ $columnItemsArray) : void
     {
         foreach ($columnItemsArray->items as $columnItem) {
-            if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$columnItem instanceof ArrayItem) {
                 continue;
             }
             if (null === $columnItem->key) {
                 continue;
             }
-            if (!$columnItem->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$columnItem->value instanceof Array_) {
                 continue;
             }
             $additionalConfigItems = [];
@@ -184,14 +184,14 @@ CODE_SAMPLE
                 if (!\is_string($defaultExtras)) {
                     continue;
                 }
-                $defaultExtrasArray = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(':', $defaultExtras, \true);
+                $defaultExtrasArray = ArrayUtility::trimExplode(':', $defaultExtras, \true);
                 foreach ($defaultExtrasArray as $defaultExtrasSetting) {
                     if ('nowrap' === $defaultExtrasSetting) {
-                        $additionalConfigItems[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('off'), new \PhpParser\Node\Scalar\String_('wrap'));
+                        $additionalConfigItems[] = new ArrayItem(new String_('off'), new String_('wrap'));
                     } elseif ('enable-tab' === $defaultExtrasSetting) {
-                        $additionalConfigItems[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createTrue(), new \PhpParser\Node\Scalar\String_('enableTabulator'));
+                        $additionalConfigItems[] = new ArrayItem($this->nodeFactory->createTrue(), new String_('enableTabulator'));
                     } elseif ('fixed-font' === $defaultExtrasSetting) {
-                        $additionalConfigItems[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createTrue(), new \PhpParser\Node\Scalar\String_('fixedFont'));
+                        $additionalConfigItems[] = new ArrayItem($this->nodeFactory->createTrue(), new String_('fixedFont'));
                     }
                 }
                 // Remove the defaultExtras
@@ -200,11 +200,11 @@ CODE_SAMPLE
             if ([] !== $additionalConfigItems) {
                 $this->hasAstBeenChanged = \true;
                 $config = $this->extractArrayItemByKey($columnItem->value, 'config');
-                if (!$config instanceof \PhpParser\Node\Expr\ArrayItem) {
-                    $config = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Array_(), new \PhpParser\Node\Scalar\String_('config'));
+                if (!$config instanceof ArrayItem) {
+                    $config = new ArrayItem(new Array_(), new String_('config'));
                     $columnItem->value->items[] = $config;
                 }
-                if (!$config->value instanceof \PhpParser\Node\Expr\Array_) {
+                if (!$config->value instanceof Array_) {
                     continue;
                 }
                 foreach ($additionalConfigItems as $additionalConfigItem) {

@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v8\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.0/Deprecation-73482-LANG-csConvObjAndLANG-parserFactory.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v0\RemoveLangCsConvObjAndParserFactoryRector\RemoveLangCsConvObjAndParserFactoryRectorTest
  */
-final class RemoveLangCsConvObjAndParserFactoryRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveLangCsConvObjAndParserFactoryRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -32,12 +32,12 @@ final class RemoveLangCsConvObjAndParserFactoryRector extends \Rector\Core\Recto
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\PropertyFetch::class];
+        return [MethodCall::class, PropertyFetch::class];
     }
     /**
      * @param MethodCall|PropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -50,9 +50,9 @@ final class RemoveLangCsConvObjAndParserFactoryRector extends \Rector\Core\Recto
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove CsConvObj and ParserFactory from LanguageService::class and $GLOBALS[\'lang\']', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove CsConvObj and ParserFactory from LanguageService::class and $GLOBALS[\'lang\']', [new CodeSample(<<<'CODE_SAMPLE'
 $languageService = GeneralUtility::makeInstance(LanguageService::class);
 $charsetConverter = $languageService->csConvObj;
 $Localization = $languageService->parserFactory();
@@ -76,22 +76,22 @@ CODE_SAMPLE
         if ($this->isLanguageServiceCall($node)) {
             return \false;
         }
-        return $node instanceof \PhpParser\Node\Expr\PropertyFetch;
+        return $node instanceof PropertyFetch;
     }
-    private function isLanguageServiceCall(\PhpParser\Node $node) : bool
+    private function isLanguageServiceCall(Node $node) : bool
     {
         if (!(\property_exists($node, 'var') && null !== $node->var)) {
             return \false;
         }
-        if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Localization\\LanguageService'))) {
+        if ($this->isObjectType($node->var, new ObjectType('TYPO3\\CMS\\Core\\Localization\\LanguageService'))) {
             return \true;
         }
-        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::LANG)) {
+        if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($node, Typo3NodeResolver::LANG)) {
             return \true;
         }
-        return $this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::LANG);
+        return $this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, Typo3NodeResolver::LANG);
     }
-    private function refactorLanguageServiceCall(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\StaticCall
+    private function refactorLanguageServiceCall(Node $node) : ?StaticCall
     {
         if (!(\property_exists($node, 'name') && null !== $node->name)) {
             return null;

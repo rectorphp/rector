@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v9\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Scalar\MagicConst\Class_;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\Helper\OldSeverityToLogLevelMapper;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Scalar\MagicConst\Class_;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\OldSeverityToLogLevelMapper;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Breaking-82430-ReplacedGeneralUtilitysysLogWithLoggingAPI.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\ReplacedGeneralUtilitySysLogWithLogginApiRector\ReplacedGeneralUtilitySysLogWithLogginApiRectorTest
  */
-final class ReplacedGeneralUtilitySysLogWithLogginApiRector extends \Rector\Core\Rector\AbstractRector
+final class ReplacedGeneralUtilitySysLogWithLogginApiRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\OldSeverityToLogLevelMapper
      */
     private $oldSeverityToLogLevelMapper;
-    public function __construct(\Ssch\TYPO3Rector\Helper\OldSeverityToLogLevelMapper $oldSeverityToLogLevelMapper)
+    public function __construct(OldSeverityToLogLevelMapper $oldSeverityToLogLevelMapper)
     {
         $this->oldSeverityToLogLevelMapper = $oldSeverityToLogLevelMapper;
     }
@@ -32,14 +32,14 @@ final class ReplacedGeneralUtilitySysLogWithLogginApiRector extends \Rector\Core
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['initSysLog', 'sysLog'])) {
@@ -50,22 +50,22 @@ final class ReplacedGeneralUtilitySysLogWithLogginApiRector extends \Rector\Core
             return null;
         }
         $makeInstanceCall = $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Log\\LogManager')]);
-        $loggerCall = $this->nodeFactory->createMethodCall($makeInstanceCall, 'getLogger', [new \PhpParser\Node\Scalar\MagicConst\Class_()]);
+        $loggerCall = $this->nodeFactory->createMethodCall($makeInstanceCall, 'getLogger', [new Class_()]);
         $args = [];
         $severity = $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Log\\LogLevel', 'INFO');
         if (isset($node->args[2]) && ($severityValue = $this->valueResolver->getValue($node->args[2]->value))) {
             $severity = $this->oldSeverityToLogLevelMapper->mapSeverityToLogLevel($severityValue);
         }
         $args[] = $severity;
-        $args[] = $node->args[0] ?? $this->nodeFactory->createArg(new \PhpParser\Node\Scalar\String_(''));
+        $args[] = $node->args[0] ?? $this->nodeFactory->createArg(new String_(''));
         return $this->nodeFactory->createMethodCall($loggerCall, 'log', $args);
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaced GeneralUtility::sysLog with Logging API', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaced GeneralUtility::sysLog with Logging API', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 GeneralUtility::initSysLog();
 GeneralUtility::sysLog('message', 'foo', 0);

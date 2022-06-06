@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Caching;
+namespace RectorPrefix20220606\Rector\Caching;
 
-use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
-use Rector\Core\Configuration\Option;
+use RectorPrefix20220606\Rector\Caching\ValueObject\Storage\FileCacheStorage;
+use RectorPrefix20220606\Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
+use RectorPrefix20220606\Rector\Core\Configuration\Option;
 use RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20220606\Symplify\SmartFileSystem\SmartFileSystem;
 final class CacheFactory
@@ -20,26 +20,26 @@ final class CacheFactory
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220606\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(ParameterProvider $parameterProvider, SmartFileSystem $smartFileSystem)
     {
         $this->parameterProvider = $parameterProvider;
         $this->smartFileSystem = $smartFileSystem;
     }
-    public function create() : \Rector\Caching\Cache
+    public function create() : Cache
     {
-        $cacheDirectory = $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::CACHE_DIR);
-        $cacheClass = \Rector\Caching\ValueObject\Storage\FileCacheStorage::class;
-        if ($this->parameterProvider->hasParameter(\Rector\Core\Configuration\Option::CACHE_CLASS)) {
-            $cacheClass = $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::CACHE_CLASS);
+        $cacheDirectory = $this->parameterProvider->provideStringParameter(Option::CACHE_DIR);
+        $cacheClass = FileCacheStorage::class;
+        if ($this->parameterProvider->hasParameter(Option::CACHE_CLASS)) {
+            $cacheClass = $this->parameterProvider->provideStringParameter(Option::CACHE_CLASS);
         }
-        if ($cacheClass === \Rector\Caching\ValueObject\Storage\FileCacheStorage::class) {
+        if ($cacheClass === FileCacheStorage::class) {
             // ensure cache directory exists
             if (!$this->smartFileSystem->exists($cacheDirectory)) {
                 $this->smartFileSystem->mkdir($cacheDirectory);
             }
-            $fileCacheStorage = new \Rector\Caching\ValueObject\Storage\FileCacheStorage($cacheDirectory, $this->smartFileSystem);
-            return new \Rector\Caching\Cache($fileCacheStorage);
+            $fileCacheStorage = new FileCacheStorage($cacheDirectory, $this->smartFileSystem);
+            return new Cache($fileCacheStorage);
         }
-        return new \Rector\Caching\Cache(new \Rector\Caching\ValueObject\Storage\MemoryCacheStorage());
+        return new Cache(new MemoryCacheStorage());
     }
 }

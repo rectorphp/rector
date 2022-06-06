@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\ValueObject;
+namespace RectorPrefix20220606\Rector\Core\ValueObject;
 
 final class StaticNonPhpFileSuffixes
 {

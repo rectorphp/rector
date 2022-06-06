@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Template;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Template;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class TemplateFinder
@@ -15,12 +15,12 @@ final class TemplateFinder
     {
         $this->templateDirectory = __DIR__ . '/../../templates/maker/';
     }
-    public function getCommand() : \Symplify\SmartFileSystem\SmartFileInfo
+    public function getCommand() : SmartFileInfo
     {
         return $this->createSmartFileInfo('Commands/Command.tpl');
     }
-    private function createSmartFileInfo(string $template) : \Symplify\SmartFileSystem\SmartFileInfo
+    private function createSmartFileInfo(string $template) : SmartFileInfo
     {
-        return new \Symplify\SmartFileSystem\SmartFileInfo($this->templateDirectory . $template);
+        return new SmartFileInfo($this->templateDirectory . $template);
     }
 }

@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php80\NodeFactory;
+namespace RectorPrefix20220606\Rector\Php80\NodeFactory;
 
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
-use Rector\Php80\ValueObject\StrStartsWith;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\Rector\Php80\ValueObject\StrStartsWith;
 final class StrStartsWithFuncCallFactory
 {
     /**
      * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot
      */
-    public function createStrStartsWith(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith)
+    public function createStrStartsWith(StrStartsWith $strStartsWith)
     {
-        $args = [new \PhpParser\Node\Arg($strStartsWith->getHaystackExpr()), new \PhpParser\Node\Arg($strStartsWith->getNeedleExpr())];
-        $funcCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('str_starts_with'), $args);
+        $args = [new Arg($strStartsWith->getHaystackExpr()), new Arg($strStartsWith->getNeedleExpr())];
+        $funcCall = new FuncCall(new Name('str_starts_with'), $args);
         if ($strStartsWith->isPositive()) {
             return $funcCall;
         }
-        return new \PhpParser\Node\Expr\BooleanNot($funcCall);
+        return new BooleanNot($funcCall);
     }
 }

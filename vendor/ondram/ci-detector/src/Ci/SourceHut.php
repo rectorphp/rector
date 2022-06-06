@@ -6,19 +6,19 @@ namespace RectorPrefix20220606\OndraM\CiDetector\Ci;
 use RectorPrefix20220606\OndraM\CiDetector\CiDetector;
 use RectorPrefix20220606\OndraM\CiDetector\Env;
 use RectorPrefix20220606\OndraM\CiDetector\TrinaryLogic;
-class SourceHut extends \RectorPrefix20220606\OndraM\CiDetector\Ci\AbstractCi
+class SourceHut extends AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220606\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(Env $env) : bool
     {
         return $env->getString('CI_NAME') === 'sourcehut';
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220606\OndraM\CiDetector\CiDetector::CI_SOURCEHUT;
+        return CiDetector::CI_SOURCEHUT;
     }
-    public function isPullRequest() : \RectorPrefix20220606\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : TrinaryLogic
     {
-        return \RectorPrefix20220606\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('BUILD_REASON') === 'patchset');
+        return TrinaryLogic::createFromBoolean($this->env->getString('BUILD_REASON') === 'patchset');
     }
     public function getBuildNumber() : string
     {

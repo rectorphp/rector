@@ -16,14 +16,14 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurat
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-interface ConfigurableExtensionInterface extends \RectorPrefix20220606\Symfony\Component\Config\Definition\ConfigurableInterface
+interface ConfigurableExtensionInterface extends ConfigurableInterface
 {
     /**
      * Allows an extension to prepend the extension configurations.
      */
-    public function prependExtension(\RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $container, \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $builder) : void;
+    public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder) : void;
     /**
      * Loads a specific configuration.
      */
-    public function loadExtension(array $config, \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $container, \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $builder) : void;
+    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder) : void;
 }

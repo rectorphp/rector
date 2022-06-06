@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp70\Rector\Spaceship;
+namespace RectorPrefix20220606\Rector\DowngradePhp70\Rector\Spaceship;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\Smaller;
-use PhpParser\Node\Expr\BinaryOp\Spaceship;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\NodeManipulator\IfManipulator;
-use Rector\Core\PhpParser\Node\NamedVariableFactory;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Identical;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Smaller;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Spaceship;
+use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Ternary;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\Rector\Core\NodeManipulator\IfManipulator;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\NamedVariableFactory;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector\DowngradeSpaceshipRectorTest
  */
-final class DowngradeSpaceshipRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeSpaceshipRector extends AbstractRector
 {
     /**
      * @readonly
@@ -37,7 +37,7 @@ final class DowngradeSpaceshipRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
     private $namedVariableFactory;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
+    public function __construct(IfManipulator $ifManipulator, NamedVariableFactory $namedVariableFactory)
     {
         $this->ifManipulator = $ifManipulator;
         $this->namedVariableFactory = $namedVariableFactory;
@@ -47,11 +47,11 @@ final class DowngradeSpaceshipRector extends \Rector\Core\Rector\AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp\Spaceship::class];
+        return [Spaceship::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change spaceship with check equal, and ternary to result 0, -1, 1', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change spaceship with check equal, and ternary to result 0, -1, 1', [new CodeSample(<<<'CODE_SAMPLE'
 return $a <=> $b;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -68,28 +68,28 @@ CODE_SAMPLE
     /**
      * @param Spaceship $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor(Node $node) : FuncCall
     {
-        $leftVariableParam = new \PhpParser\Node\Expr\Variable('left');
-        $rightVariableParam = new \PhpParser\Node\Expr\Variable('right');
-        $anonymousFunction = new \PhpParser\Node\Expr\Closure();
-        $leftParam = new \PhpParser\Node\Param($leftVariableParam);
-        $rightParam = new \PhpParser\Node\Param($rightVariableParam);
+        $leftVariableParam = new Variable('left');
+        $rightVariableParam = new Variable('right');
+        $anonymousFunction = new Closure();
+        $leftParam = new Param($leftVariableParam);
+        $rightParam = new Param($rightVariableParam);
         $anonymousFunction->params = [$leftParam, $rightParam];
-        $if = $this->ifManipulator->createIfStmt(new \PhpParser\Node\Expr\BinaryOp\Identical($leftVariableParam, $rightVariableParam), new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Scalar\LNumber(0)));
+        $if = $this->ifManipulator->createIfStmt(new Identical($leftVariableParam, $rightVariableParam), new Return_(new LNumber(0)));
         $anonymousFunction->stmts[0] = $if;
-        $smaller = new \PhpParser\Node\Expr\BinaryOp\Smaller($leftVariableParam, $rightVariableParam);
-        $ternaryIf = new \PhpParser\Node\Scalar\LNumber(-1);
-        $ternaryElse = new \PhpParser\Node\Scalar\LNumber(1);
-        $ternary = new \PhpParser\Node\Expr\Ternary($smaller, $ternaryIf, $ternaryElse);
-        $anonymousFunction->stmts[1] = new \PhpParser\Node\Stmt\Return_($ternary);
+        $smaller = new Smaller($leftVariableParam, $rightVariableParam);
+        $ternaryIf = new LNumber(-1);
+        $ternaryElse = new LNumber(1);
+        $ternary = new Ternary($smaller, $ternaryIf, $ternaryElse);
+        $anonymousFunction->stmts[1] = new Return_($ternary);
         $assignVariable = $this->namedVariableFactory->createVariable($node, 'battleShipcompare');
         $assignExpression = $this->getAssignExpression($anonymousFunction, $assignVariable);
         $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node, $this->file->getSmartFileInfo());
-        return new \PhpParser\Node\Expr\FuncCall($assignVariable, [new \PhpParser\Node\Arg($node->left), new \PhpParser\Node\Arg($node->right)]);
+        return new FuncCall($assignVariable, [new Arg($node->left), new Arg($node->right)]);
     }
-    private function getAssignExpression(\PhpParser\Node\Expr\Closure $closure, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Stmt\Expression
+    private function getAssignExpression(Closure $closure, Variable $variable) : Expression
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $closure));
+        return new Expression(new Assign($variable, $closure));
     }
 }

@@ -13,6 +13,6 @@ namespace RectorPrefix20220606\Symfony\Component\Filesystem\Exception;
 /**
  * @author Christian Flothmann <christian.flothmann@sensiolabs.de>
  */
-class InvalidArgumentException extends \InvalidArgumentException implements \RectorPrefix20220606\Symfony\Component\Filesystem\Exception\ExceptionInterface
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
 }

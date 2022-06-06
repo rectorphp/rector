@@ -16,7 +16,7 @@ namespace RectorPrefix20220606\Symfony\Component\DependencyInjection\Attribute;
  * @author Nicolas Grekas <p@tchwork.com>
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-class AutoconfigureTag extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Attribute\Autoconfigure
+class AutoconfigureTag extends Autoconfigure
 {
     public function __construct(string $name = null, array $attributes = [])
     {

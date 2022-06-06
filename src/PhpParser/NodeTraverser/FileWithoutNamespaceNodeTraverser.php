@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser\NodeTraverser;
+namespace RectorPrefix20220606\Rector\Core\PhpParser\NodeTraverser;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\NodeFinder;
-use PhpParser\NodeTraverser;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-final class FileWithoutNamespaceNodeTraverser extends \PhpParser\NodeTraverser
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Namespace_;
+use RectorPrefix20220606\PhpParser\NodeFinder;
+use RectorPrefix20220606\PhpParser\NodeTraverser;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+final class FileWithoutNamespaceNodeTraverser extends NodeTraverser
 {
     /**
      * @readonly
      * @var \PhpParser\NodeFinder
      */
     private $nodeFinder;
-    public function __construct(\PhpParser\NodeFinder $nodeFinder)
+    public function __construct(NodeFinder $nodeFinder)
     {
         $this->nodeFinder = $nodeFinder;
     }
@@ -27,11 +27,11 @@ final class FileWithoutNamespaceNodeTraverser extends \PhpParser\NodeTraverser
      */
     public function traverse(array $nodes) : array
     {
-        $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, \PhpParser\Node\Stmt\Namespace_::class);
+        $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if (!$hasNamespace && $nodes !== []) {
-            $fileWithoutNamespace = new \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace($nodes);
+            $fileWithoutNamespace = new FileWithoutNamespace($nodes);
             foreach ($nodes as $node) {
-                $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, $fileWithoutNamespace);
+                $node->setAttribute(AttributeKey::PARENT_NODE, $fileWithoutNamespace);
             }
             return [$fileWithoutNamespace];
         }

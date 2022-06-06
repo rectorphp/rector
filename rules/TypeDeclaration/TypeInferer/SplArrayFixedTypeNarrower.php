@@ -1,35 +1,35 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\TypeInferer;
+namespace RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer;
 
-use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
+use RectorPrefix20220606\PHPStan\Type\Generic\GenericObjectType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
 final class SplArrayFixedTypeNarrower
 {
-    public function narrow(\PHPStan\Type\Type $paramType) : \PHPStan\Type\Type
+    public function narrow(Type $paramType) : Type
     {
-        if ($paramType->isSuperTypeOf(new \PHPStan\Type\ObjectType('SplFixedArray'))->no()) {
+        if ($paramType->isSuperTypeOf(new ObjectType('SplFixedArray'))->no()) {
             return $paramType;
         }
-        if (!$paramType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$paramType instanceof TypeWithClassName) {
             return $paramType;
         }
-        if ($paramType instanceof \PHPStan\Type\Generic\GenericObjectType) {
+        if ($paramType instanceof GenericObjectType) {
             return $paramType;
         }
         $types = [];
         if ($paramType->getClassName() === 'PhpCsFixer\\Tokenizer\\Tokens') {
-            $types[] = new \PHPStan\Type\ObjectType('PhpCsFixer\\Tokenizer\\Token');
+            $types[] = new ObjectType('PhpCsFixer\\Tokenizer\\Token');
         }
         if ($paramType->getClassName() === 'PhpCsFixer\\Doctrine\\Annotation\\Tokens') {
-            $types[] = new \PHPStan\Type\ObjectType('PhpCsFixer\\Doctrine\\Annotation\\Token');
+            $types[] = new ObjectType('PhpCsFixer\\Doctrine\\Annotation\\Token');
         }
         if ($types === []) {
             return $paramType;
         }
-        return new \PHPStan\Type\Generic\GenericObjectType($paramType->getClassName(), $types);
+        return new GenericObjectType($paramType->getClassName(), $types);
     }
 }

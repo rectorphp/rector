@@ -1,34 +1,34 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\Rector\Param;
+namespace RectorPrefix20220606\Rector\TypeDeclaration\Rector\Param;
 
-use PhpParser\Node;
-use PhpParser\Node\ComplexType;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\Php\PhpPropertyReflection;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\ComplexType;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PhpParser\Node\NullableType;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PHPStan\Reflection\Php\PhpPropertyReflection;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\PHPStan\Type\UnionType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use RectorPrefix20220606\Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
+use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector\ParamTypeFromStrictTypedPropertyRectorTest
  */
-final class ParamTypeFromStrictTypedPropertyRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ParamTypeFromStrictTypedPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -40,14 +40,14 @@ final class ParamTypeFromStrictTypedPropertyRector extends \Rector\Core\Rector\A
      * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
+    public function __construct(ReflectionResolver $reflectionResolver, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add param type from $param set to typed property', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add param type from $param set to typed property', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     private int $age;
@@ -76,20 +76,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Param::class];
+        return [Param::class];
     }
     /**
      * @param Param $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof ClassMethod) {
             return null;
         }
         return $this->decorateParamWithType($parent, $node);
     }
-    public function decorateParamWithType(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param) : ?\PhpParser\Node\Param
+    public function decorateParamWithType(ClassMethod $classMethod, Param $param) : ?Param
     {
         if ($param->type !== null) {
             return null;
@@ -100,19 +100,19 @@ CODE_SAMPLE
         $originalParamType = $this->resolveParamOriginalType($param);
         $paramName = $this->getName($param);
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->getStmts(), \PhpParser\Node\Expr\Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->getStmts(), Assign::class);
         foreach ($assigns as $assign) {
             if (!$this->nodeComparator->areNodesEqual($assign->expr, $param->var)) {
                 continue;
             }
-            if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            if (!$assign->var instanceof PropertyFetch) {
                 continue;
             }
             if ($this->hasTypeChangedBeforeAssign($assign, $paramName, $originalParamType)) {
                 return null;
             }
             $singlePropertyTypeNode = $this->matchPropertySingleTypeNode($assign->var);
-            if (!$singlePropertyTypeNode instanceof \PhpParser\Node) {
+            if (!$singlePropertyTypeNode instanceof Node) {
                 return null;
             }
             $param->type = $singlePropertyTypeNode;
@@ -122,33 +122,33 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
+        return PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
      * @return Name|ComplexType|null
      */
-    private function matchPropertySingleTypeNode(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
+    private function matchPropertySingleTypeNode(PropertyFetch $propertyFetch) : ?Node
     {
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetch);
-        if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+        if (!$phpPropertyReflection instanceof PhpPropertyReflection) {
             return null;
         }
         $propertyType = $phpPropertyReflection->getNativeType();
-        if ($propertyType instanceof \PHPStan\Type\MixedType) {
+        if ($propertyType instanceof MixedType) {
             return null;
         }
-        if ($propertyType instanceof \PHPStan\Type\UnionType) {
+        if ($propertyType instanceof UnionType) {
             return null;
         }
-        if ($propertyType instanceof \PhpParser\Node\NullableType) {
+        if ($propertyType instanceof NullableType) {
             return null;
         }
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
     }
-    private function hasTypeChangedBeforeAssign(\PhpParser\Node\Expr\Assign $assign, string $paramName, \PHPStan\Type\Type $originalType) : bool
+    private function hasTypeChangedBeforeAssign(Assign $assign, string $paramName, Type $originalType) : bool
     {
-        $scope = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $assign->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return \false;
         }
         if (!$scope->hasVariableType($paramName)->yes()) {
@@ -157,15 +157,15 @@ CODE_SAMPLE
         $currentParamType = $scope->getVariableType($paramName);
         return !$currentParamType->equals($originalType);
     }
-    private function resolveParamOriginalType(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
+    private function resolveParamOriginalType(Param $param) : Type
     {
-        $scope = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return new \PHPStan\Type\MixedType();
+        $scope = $param->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            return new MixedType();
         }
         $paramName = $this->getName($param);
         if (!$scope->hasVariableType($paramName)->yes()) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         return $scope->getVariableType($paramName);
     }

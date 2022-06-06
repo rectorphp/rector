@@ -13,7 +13,7 @@ final class StaticFixtureUpdater
     /**
      * @param \Symplify\SmartFileSystem\SmartFileInfo|string $originalFileInfo
      */
-    public static function updateFixtureContent($originalFileInfo, string $changedContent, \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo) : void
+    public static function updateFixtureContent($originalFileInfo, string $changedContent, SmartFileInfo $fixtureFileInfo) : void
     {
         if (!\getenv('UPDATE_TESTS') && !\getenv('UT')) {
             return;
@@ -21,23 +21,23 @@ final class StaticFixtureUpdater
         $newOriginalContent = self::resolveNewFixtureContent($originalFileInfo, $changedContent);
         self::getSmartFileSystem()->dumpFile($fixtureFileInfo->getRealPath(), $newOriginalContent);
     }
-    public static function updateExpectedFixtureContent(string $newOriginalContent, \Symplify\SmartFileSystem\SmartFileInfo $expectedFixtureFileInfo) : void
+    public static function updateExpectedFixtureContent(string $newOriginalContent, SmartFileInfo $expectedFixtureFileInfo) : void
     {
         if (!\getenv('UPDATE_TESTS') && !\getenv('UT')) {
             return;
         }
         self::getSmartFileSystem()->dumpFile($expectedFixtureFileInfo->getRealPath(), $newOriginalContent);
     }
-    private static function getSmartFileSystem() : \RectorPrefix20220606\Symplify\SmartFileSystem\SmartFileSystem
+    private static function getSmartFileSystem() : SmartFileSystem
     {
-        return new \RectorPrefix20220606\Symplify\SmartFileSystem\SmartFileSystem();
+        return new SmartFileSystem();
     }
     /**
      * @param \Symplify\SmartFileSystem\SmartFileInfo|string $originalFileInfo
      */
     private static function resolveNewFixtureContent($originalFileInfo, string $changedContent) : string
     {
-        if ($originalFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
+        if ($originalFileInfo instanceof SmartFileInfo) {
             $originalContent = $originalFileInfo->getContents();
         } else {
             $originalContent = $originalFileInfo;

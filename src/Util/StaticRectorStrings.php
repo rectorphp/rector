@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Util;
+namespace RectorPrefix20220606\Rector\Core\Util;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
 final class StaticRectorStrings
@@ -19,7 +19,7 @@ final class StaticRectorStrings
         if ($input === \strtolower($input)) {
             return $input;
         }
-        $matches = \RectorPrefix20220606\Nette\Utils\Strings::matchAll($input, self::CAMEL_CASE_SPLIT_REGEX);
+        $matches = Strings::matchAll($input, self::CAMEL_CASE_SPLIT_REGEX);
         $parts = [];
         foreach ($matches as $match) {
             $matchedPart = (string) $match[0];
@@ -47,7 +47,7 @@ final class StaticRectorStrings
     {
         foreach ($prefixesToRemove as $prefixToRemove) {
             if (\strncmp($value, $prefixToRemove, \strlen($prefixToRemove)) === 0) {
-                $value = \RectorPrefix20220606\Nette\Utils\Strings::substring($value, \RectorPrefix20220606\Nette\Utils\Strings::length($prefixToRemove));
+                $value = Strings::substring($value, Strings::length($prefixToRemove));
             }
         }
         return $value;
@@ -59,7 +59,7 @@ final class StaticRectorStrings
     {
         foreach ($suffixesToRemove as $suffixToRemove) {
             if (\substr_compare($value, $suffixToRemove, -\strlen($suffixToRemove)) === 0) {
-                $value = \RectorPrefix20220606\Nette\Utils\Strings::substring($value, 0, -\RectorPrefix20220606\Nette\Utils\Strings::length($suffixToRemove));
+                $value = Strings::substring($value, 0, -Strings::length($suffixToRemove));
             }
         }
         return $value;

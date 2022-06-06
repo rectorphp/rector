@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\NodeCollector;
+namespace RectorPrefix20220606\Rector\DeadCode\NodeCollector;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ModifiedVariableNamesCollector
 {
@@ -24,7 +24,7 @@ final class ModifiedVariableNamesCollector
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -32,7 +32,7 @@ final class ModifiedVariableNamesCollector
     /**
      * @return string[]
      */
-    public function collectModifiedVariableNames(\PhpParser\Node\Stmt $stmt) : array
+    public function collectModifiedVariableNames(Stmt $stmt) : array
     {
         $argNames = $this->collectFromArgs($stmt);
         $assignNames = $this->collectFromAssigns($stmt);
@@ -41,11 +41,11 @@ final class ModifiedVariableNamesCollector
     /**
      * @return string[]
      */
-    private function collectFromArgs(\PhpParser\Node\Stmt $stmt) : array
+    private function collectFromArgs(Stmt $stmt) : array
     {
         $variableNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (\PhpParser\Node $node) use(&$variableNames) {
-            if (!$node instanceof \PhpParser\Node\Arg) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use(&$variableNames) {
+            if (!$node instanceof Arg) {
                 return null;
             }
             if (!$this->isVariableChangedInReference($node)) {
@@ -62,14 +62,14 @@ final class ModifiedVariableNamesCollector
     /**
      * @return string[]
      */
-    private function collectFromAssigns(\PhpParser\Node\Stmt $stmt) : array
+    private function collectFromAssigns(Stmt $stmt) : array
     {
         $modifiedVariableNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (\PhpParser\Node $node) use(&$modifiedVariableNames) {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use(&$modifiedVariableNames) {
+            if (!$node instanceof Assign) {
                 return null;
             }
-            if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
+            if (!$node->var instanceof Variable) {
                 return null;
             }
             $variableName = $this->nodeNameResolver->getName($node->var);
@@ -80,10 +80,10 @@ final class ModifiedVariableNamesCollector
         });
         return $modifiedVariableNames;
     }
-    private function isVariableChangedInReference(\PhpParser\Node\Arg $arg) : bool
+    private function isVariableChangedInReference(Arg $arg) : bool
     {
-        $parentNode = $arg->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node\Expr\FuncCall) {
+        $parentNode = $arg->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof FuncCall) {
             return \false;
         }
         return $this->nodeNameResolver->isNames($parentNode, ['array_shift', 'array_pop']);

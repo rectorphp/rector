@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\BetterPhpDocParser\ValueObject\Type;
+namespace RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\Type;
 
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Stringable;
-final class FullyQualifiedIdentifierTypeNode extends \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode
+final class FullyQualifiedIdentifierTypeNode extends IdentifierTypeNode
 {
     public function __toString() : string
     {

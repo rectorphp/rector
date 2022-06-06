@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v8\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Plus;
-use PhpParser\Node\Expr\StaticCall;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Plus;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.0/Breaking-72342-RemovedDeprecatedCodeFromGeneralUtility.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v0\RefactorRemovedMethodsFromGeneralUtilityRector\RefactorRemovedMethodsFromGeneralUtilityRectorTest
  */
-final class RefactorRemovedMethodsFromGeneralUtilityRector extends \Rector\Core\Rector\AbstractRector
+final class RefactorRemovedMethodsFromGeneralUtilityRector extends AbstractRector
 {
     /**
      * List of nodes this class checks, classes that implements \PhpParser\Node See beautiful map of all nodes
@@ -27,12 +27,12 @@ final class RefactorRemovedMethodsFromGeneralUtilityRector extends \Rector\Core\
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node->class, 'TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) {
             return null;
@@ -52,7 +52,7 @@ final class RefactorRemovedMethodsFromGeneralUtilityRector extends \Rector\Core\
         }
         if ('array_merge' === $methodName) {
             [$arg1, $arg2] = $node->args;
-            return new \PhpParser\Node\Expr\BinaryOp\Plus($arg1->value, $arg2->value);
+            return new Plus($arg1->value, $arg2->value);
         }
         if ('cleanOutputBuffers' === $methodName) {
             return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'flushOutputBuffers');
@@ -65,8 +65,8 @@ final class RefactorRemovedMethodsFromGeneralUtilityRector extends \Rector\Core\
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor removed methods from GeneralUtility.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('GeneralUtility::gif_compress();', \RectorPrefix20220606\TYPO3\CMS\Core\Imaging\GraphicalFunctions::class . '::gifCompress();')]);
+        return new RuleDefinition('Refactor removed methods from GeneralUtility.', [new CodeSample('GeneralUtility::gif_compress();', GraphicalFunctions::class . '::gifCompress();')]);
     }
 }

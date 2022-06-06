@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\NodeFactory;
+namespace RectorPrefix20220606\Rector\PHPUnit\NodeFactory;
 
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 final class ExpectExceptionCodeFactory
 {
     /**
@@ -24,19 +24,19 @@ final class ExpectExceptionCodeFactory
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PHPUnit\NodeFactory\ArgumentShiftingFactory $argumentShiftingFactory, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, ArgumentShiftingFactory $argumentShiftingFactory, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->argumentShiftingFactory = $argumentShiftingFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function create(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Variable $exceptionVariable) : ?\PhpParser\Node\Expr\MethodCall
+    public function create(MethodCall $methodCall, Variable $exceptionVariable) : ?MethodCall
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($methodCall, ['assertSame', 'assertEquals'])) {
             return null;
         }
         $secondArgument = $methodCall->args[1]->value;
-        if (!$secondArgument instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$secondArgument instanceof MethodCall) {
             return null;
         }
         // looking for "$exception->getMessage()"

@@ -13,8 +13,8 @@ namespace RectorPrefix20220606\Symfony\Contracts\Service;
 use RectorPrefix20220606\Psr\Container\ContainerExceptionInterface;
 use RectorPrefix20220606\Psr\Container\NotFoundExceptionInterface;
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20220606\Psr\Container\ContainerExceptionInterface::class);
-\class_exists(\RectorPrefix20220606\Psr\Container\NotFoundExceptionInterface::class);
+\class_exists(ContainerExceptionInterface::class);
+\class_exists(NotFoundExceptionInterface::class);
 /**
  * A trait to help implement ServiceProviderInterface.
  *
@@ -89,7 +89,7 @@ trait ServiceLocatorTrait
         }
         return $this->providedTypes;
     }
-    private function createNotFoundException(string $id) : \RectorPrefix20220606\Psr\Container\NotFoundExceptionInterface
+    private function createNotFoundException(string $id) : NotFoundExceptionInterface
     {
         if (!($alternatives = \array_keys($this->factories))) {
             $message = 'is empty...';
@@ -106,13 +106,13 @@ trait ServiceLocatorTrait
         } else {
             $message = \sprintf('Service "%s" not found: the current service locator %s', $id, $message);
         }
-        return new class($message) extends \InvalidArgumentException implements \RectorPrefix20220606\Psr\Container\NotFoundExceptionInterface
+        return new class($message) extends \InvalidArgumentException implements NotFoundExceptionInterface
         {
         };
     }
-    private function createCircularReferenceException(string $id, array $path) : \RectorPrefix20220606\Psr\Container\ContainerExceptionInterface
+    private function createCircularReferenceException(string $id, array $path) : ContainerExceptionInterface
     {
-        return new class(\sprintf('Circular reference detected for service "%s", path: "%s".', $id, \implode(' -> ', $path))) extends \RuntimeException implements \RectorPrefix20220606\Psr\Container\ContainerExceptionInterface
+        return new class(\sprintf('Circular reference detected for service "%s", path: "%s".', $id, \implode(' -> ', $path))) extends \RuntimeException implements ContainerExceptionInterface
         {
         };
     }

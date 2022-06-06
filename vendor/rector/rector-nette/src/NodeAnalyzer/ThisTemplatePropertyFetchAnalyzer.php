@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Nette\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class ThisTemplatePropertyFetchAnalyzer
 {
     /**
@@ -15,13 +15,13 @@ final class ThisTemplatePropertyFetchAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolveTemplateParameterNameFromAssign(\PhpParser\Node\Expr\Assign $assign) : ?string
+    public function resolveTemplateParameterNameFromAssign(Assign $assign) : ?string
     {
-        if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$assign->var instanceof PropertyFetch) {
             return null;
         }
         $propertyFetch = $assign->var;
@@ -35,12 +35,12 @@ final class ThisTemplatePropertyFetchAnalyzer
      *
      * $template
      */
-    private function isTemplatePropertyFetch(\PhpParser\Node\Expr $expr) : bool
+    private function isTemplatePropertyFetch(Expr $expr) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$expr instanceof PropertyFetch) {
             return \false;
         }
-        if (!$expr->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$expr->var instanceof Variable) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($expr->var, 'this')) {

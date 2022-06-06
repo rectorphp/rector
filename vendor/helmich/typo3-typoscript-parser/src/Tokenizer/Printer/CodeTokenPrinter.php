@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Printer;
 
 use RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
-class CodeTokenPrinter implements \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Printer\TokenPrinterInterface
+class CodeTokenPrinter implements TokenPrinterInterface
 {
     /**
      * @param TokenInterface[] $tokens

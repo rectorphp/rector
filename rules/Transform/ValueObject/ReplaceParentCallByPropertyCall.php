@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Transform\ValueObject;
+namespace RectorPrefix20220606\Rector\Transform\ValueObject;
 
-use PHPStan\Type\ObjectType;
-use Rector\Core\Validation\RectorAssert;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
 final class ReplaceParentCallByPropertyCall
 {
     /**
@@ -27,11 +27,11 @@ final class ReplaceParentCallByPropertyCall
         $this->class = $class;
         $this->method = $method;
         $this->property = $property;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getMethod() : string
     {

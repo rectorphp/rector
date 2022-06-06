@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace PHPStan\PhpDocParser\Ast\PhpDoc;
+namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc;
 
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-class GenericTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
+class GenericTagValueNode implements PhpDocTagValueNode
 {
     use NodeAttributes;
     /** @var string (may be empty) */

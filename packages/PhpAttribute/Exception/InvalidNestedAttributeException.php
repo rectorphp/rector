@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute\Exception;
+namespace RectorPrefix20220606\Rector\PhpAttribute\Exception;
 
 use Exception;
-final class InvalidNestedAttributeException extends \Exception
+final class InvalidNestedAttributeException extends Exception
 {
 }

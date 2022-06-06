@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\ValueObject;
+namespace RectorPrefix20220606\Rector\PHPUnit\ValueObject;
 
-use PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
 final class ArrayArgumentToDataProvider
 {
     /**
@@ -33,9 +33,9 @@ final class ArrayArgumentToDataProvider
         $this->newMethod = $newMethod;
         $this->variableName = $variableName;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getOldMethod() : string
     {

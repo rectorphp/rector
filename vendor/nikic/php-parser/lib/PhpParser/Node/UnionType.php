@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node;
+namespace RectorPrefix20220606\PhpParser\Node;
 
-class UnionType extends \PhpParser\Node\ComplexType
+class UnionType extends ComplexType
 {
     /** @var (Identifier|Name)[] Types */
     public $types;

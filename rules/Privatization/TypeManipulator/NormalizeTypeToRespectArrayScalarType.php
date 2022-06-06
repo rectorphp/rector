@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Privatization\TypeManipulator;
+namespace RectorPrefix20220606\Rector\Privatization\TypeManipulator;
 
-use PhpParser\Node;
-use PHPStan\Type\Accessory\NonEmptyArrayType;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PHPStan\Type\Accessory\NonEmptyArrayType;
+use RectorPrefix20220606\PHPStan\Type\ArrayType;
+use RectorPrefix20220606\PHPStan\Type\IntersectionType;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\PHPStan\Type\UnionType;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class NormalizeTypeToRespectArrayScalarType
 {
     /**
@@ -18,11 +18,11 @@ final class NormalizeTypeToRespectArrayScalarType
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function normalizeToArray(\PHPStan\Type\Type $type, ?\PhpParser\Node $returnNode) : \PHPStan\Type\Type
+    public function normalizeToArray(Type $type, ?Node $returnNode) : Type
     {
         if ($returnNode === null) {
             return $type;
@@ -30,38 +30,38 @@ final class NormalizeTypeToRespectArrayScalarType
         if (!$this->nodeNameResolver->isName($returnNode, 'array')) {
             return $type;
         }
-        if ($type instanceof \PHPStan\Type\UnionType) {
+        if ($type instanceof UnionType) {
             return $this->normalizeUnionType($type);
         }
-        if ($type instanceof \PHPStan\Type\MixedType) {
-            return new \PHPStan\Type\ArrayType($type, $type);
+        if ($type instanceof MixedType) {
+            return new ArrayType($type, $type);
         }
-        if ($type instanceof \PHPStan\Type\ArrayType) {
+        if ($type instanceof ArrayType) {
             return $this->resolveArrayType($type);
         }
         return $type;
     }
-    private function resolveArrayType(\PHPStan\Type\ArrayType $arrayType) : \PHPStan\Type\ArrayType
+    private function resolveArrayType(ArrayType $arrayType) : ArrayType
     {
         $itemType = $arrayType->getItemType();
-        if (!$itemType instanceof \PHPStan\Type\IntersectionType) {
+        if (!$itemType instanceof IntersectionType) {
             return $arrayType;
         }
         $types = $itemType->getTypes();
         foreach ($types as $key => $itemTypeType) {
-            if ($itemTypeType instanceof \PHPStan\Type\Accessory\NonEmptyArrayType) {
+            if ($itemTypeType instanceof NonEmptyArrayType) {
                 unset($types[$key]);
             }
         }
-        $arrayItemType = \count($types) === 1 ? \array_pop($types) : new \PHPStan\Type\IntersectionType($types);
-        return new \PHPStan\Type\ArrayType($arrayType->getKeyType(), $arrayItemType);
+        $arrayItemType = \count($types) === 1 ? \array_pop($types) : new IntersectionType($types);
+        return new ArrayType($arrayType->getKeyType(), $arrayItemType);
     }
-    private function normalizeUnionType(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\UnionType
+    private function normalizeUnionType(UnionType $unionType) : UnionType
     {
         $normalizedTypes = [];
         foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof \PHPStan\Type\MixedType) {
-                $normalizedTypes[] = new \PHPStan\Type\ArrayType($unionedType, $unionedType);
+            if ($unionedType instanceof MixedType) {
+                $normalizedTypes[] = new ArrayType($unionedType, $unionedType);
                 continue;
             }
             $normalizedTypes[] = $unionedType;
@@ -69,6 +69,6 @@ final class NormalizeTypeToRespectArrayScalarType
         if ($unionType->getTypes() === $normalizedTypes) {
             return $unionType;
         }
-        return new \PHPStan\Type\UnionType($normalizedTypes);
+        return new UnionType($normalizedTypes);
     }
 }

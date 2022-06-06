@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v9\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Feature-83092-ReplaceTransientWithTYPO3CMSExtbaseAnnotationORMTransient.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\ReplaceAnnotationRector\ReplaceAnnotationRectorTest
  */
-final class ReplaceAnnotationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ReplaceAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api
@@ -39,7 +39,7 @@ final class ReplaceAnnotationRector extends \Rector\Core\Rector\AbstractRector i
      * @var \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory
      */
     private $importExtbaseAnnotationIfMissingFactory;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory $importExtbaseAnnotationIfMissingFactory)
+    public function __construct(PhpDocTagRemover $phpDocTagRemover, ImportExtbaseAnnotationIfMissingFactory $importExtbaseAnnotationIfMissingFactory)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->importExtbaseAnnotationIfMissingFactory = $importExtbaseAnnotationIfMissingFactory;
@@ -49,12 +49,12 @@ final class ReplaceAnnotationRector extends \Rector\Core\Rector\AbstractRector i
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\ClassMethod::class];
+        return [Property::class, ClassMethod::class];
     }
     /**
      * @param Property|ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $annotationChanged = \false;
@@ -64,7 +64,7 @@ final class ReplaceAnnotationRector extends \Rector\Core\Rector\AbstractRector i
             }
             $this->phpDocTagRemover->removeByName($phpDocInfo, $oldAnnotation);
             $tag = $this->prepareNewAnnotation($newAnnotation);
-            $phpDocTagNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($tag, new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode(''));
+            $phpDocTagNode = new PhpDocTagNode($tag, new GenericTagValueNode(''));
             $phpDocInfo->addPhpDocTagNode($phpDocTagNode);
             $annotationChanged = \true;
         }
@@ -77,9 +77,9 @@ final class ReplaceAnnotationRector extends \Rector\Core\Rector\AbstractRector i
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace old annotation by new one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace old annotation by new one', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 /**
  * @transient
  */

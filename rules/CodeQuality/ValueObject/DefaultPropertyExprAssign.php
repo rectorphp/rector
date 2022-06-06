@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality\ValueObject;
+namespace RectorPrefix20220606\Rector\CodeQuality\ValueObject;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
 final class DefaultPropertyExprAssign
 {
     /**
@@ -22,13 +22,13 @@ final class DefaultPropertyExprAssign
      * @var \PhpParser\Node\Expr
      */
     private $defaultExpr;
-    public function __construct(\PhpParser\Node\Stmt\Expression $assignExpression, string $propertyName, \PhpParser\Node\Expr $defaultExpr)
+    public function __construct(Expression $assignExpression, string $propertyName, Expr $defaultExpr)
     {
         $this->assignExpression = $assignExpression;
         $this->propertyName = $propertyName;
         $this->defaultExpr = $defaultExpr;
     }
-    public function getAssignExpression() : \PhpParser\Node\Stmt\Expression
+    public function getAssignExpression() : Expression
     {
         return $this->assignExpression;
     }
@@ -36,7 +36,7 @@ final class DefaultPropertyExprAssign
     {
         return $this->propertyName;
     }
-    public function getDefaultExpr() : \PhpParser\Node\Expr
+    public function getDefaultExpr() : Expr
     {
         return $this->defaultExpr;
     }

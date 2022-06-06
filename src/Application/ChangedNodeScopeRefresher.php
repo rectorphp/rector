@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Application;
+namespace RectorPrefix20220606\Rector\Core\Application;
 
-use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Analyser\MutatingScope;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
-use Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Attribute;
+use RectorPrefix20220606\PhpParser\Node\AttributeGroup;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\Analyser\MutatingScope;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ScopeAnalyzer;
+use RectorPrefix20220606\Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * In case of changed node, we need to re-traverse the PHPStan Scope to make all the new nodes aware of what is going on.
@@ -43,20 +43,20 @@ final class ChangedNodeScopeRefresher
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver $phpStanNodeScopeResolver, \Rector\Core\NodeAnalyzer\ScopeAnalyzer $scopeAnalyzer, \Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer $unreachableStmtAnalyzer, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer, UnreachableStmtAnalyzer $unreachableStmtAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->scopeAnalyzer = $scopeAnalyzer;
         $this->unreachableStmtAnalyzer = $unreachableStmtAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function refresh(\PhpParser\Node $node, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, ?\PHPStan\Analyser\MutatingScope $mutatingScope) : void
+    public function refresh(Node $node, SmartFileInfo $smartFileInfo, ?MutatingScope $mutatingScope) : void
     {
         // nothing to refresh
         if (!$this->scopeAnalyzer->hasScope($node)) {
             return;
         }
-        if (!$mutatingScope instanceof \PHPStan\Analyser\MutatingScope) {
+        if (!$mutatingScope instanceof MutatingScope) {
             /**
              * Node does not has Scope, while:
              *
@@ -65,17 +65,17 @@ final class ChangedNodeScopeRefresher
              */
             $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
             if (!$this->unreachableStmtAnalyzer->isStmtPHPStanUnreachable($currentStmt)) {
-                $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-                $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), $parent instanceof \PhpParser\Node ? \get_class($parent) : null);
-                throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
+                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+                $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), $parent instanceof Node ? \get_class($parent) : null);
+                throw new ShouldNotHappenException($errorMessage);
             }
         }
         // note from flight: when we traverse ClassMethod, the scope must be already in Class_, otherwise it crashes
         // so we need to somehow get a parent scope that is already in the same place the $node is
-        if ($node instanceof \PhpParser\Node\Attribute) {
+        if ($node instanceof Attribute) {
             // we'll have to fake-traverse 2 layers up, as PHPStan skips Scope for AttributeGroups and consequently Attributes
-            $attributeGroup = new \PhpParser\Node\AttributeGroup([$node]);
-            $node = new \PhpParser\Node\Stmt\Property(0, [], [], null, [$attributeGroup]);
+            $attributeGroup = new AttributeGroup([$node]);
+            $node = new Property(0, [], [], null, [$attributeGroup]);
         }
         $stmts = $this->resolveStmts($node);
         $this->phpStanNodeScopeResolver->processNodes($stmts, $smartFileInfo, $mutatingScope);
@@ -83,15 +83,15 @@ final class ChangedNodeScopeRefresher
     /**
      * @return Stmt[]
      */
-    private function resolveStmts(\PhpParser\Node $node) : array
+    private function resolveStmts(Node $node) : array
     {
-        if ($node instanceof \PhpParser\Node\Stmt) {
+        if ($node instanceof Stmt) {
             return [$node];
         }
-        if ($node instanceof \PhpParser\Node\Expr) {
-            return [new \PhpParser\Node\Stmt\Expression($node)];
+        if ($node instanceof Expr) {
+            return [new Expression($node)];
         }
         $errorMessage = \sprintf('Complete parent node of "%s" be a stmt.', \get_class($node));
-        throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
+        throw new ShouldNotHappenException($errorMessage);
     }
 }

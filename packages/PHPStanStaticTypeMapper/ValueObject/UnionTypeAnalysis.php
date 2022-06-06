@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPStanStaticTypeMapper\ValueObject;
+namespace RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\ValueObject;
 
 final class UnionTypeAnalysis
 {

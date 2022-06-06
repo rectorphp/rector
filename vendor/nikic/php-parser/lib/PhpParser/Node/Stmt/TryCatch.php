@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node\Stmt;
+namespace RectorPrefix20220606\PhpParser\Node\Stmt;
 
-use PhpParser\Node;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-class TryCatch extends \PhpParser\Node\Stmt implements \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+class TryCatch extends Node\Stmt implements StmtsAwareInterface
 {
     /** @var Node\Stmt[] Statements */
     public $stmts;
@@ -21,7 +21,7 @@ class TryCatch extends \PhpParser\Node\Stmt implements \Rector\Core\Contract\Php
      * @param null|Finally_ $finally    Optional finally node
      * @param array         $attributes Additional attributes
      */
-    public function __construct(array $stmts, array $catches, \PhpParser\Node\Stmt\Finally_ $finally = null, array $attributes = [])
+    public function __construct(array $stmts, array $catches, Finally_ $finally = null, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->stmts = $stmts;

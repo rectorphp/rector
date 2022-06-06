@@ -16,7 +16,7 @@ namespace RectorPrefix20220606\Symfony\Component\Config;
  *
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-class ResourceCheckerConfigCacheFactory implements \RectorPrefix20220606\Symfony\Component\Config\ConfigCacheFactoryInterface
+class ResourceCheckerConfigCacheFactory implements ConfigCacheFactoryInterface
 {
     /**
      * @var mixed[]
@@ -32,9 +32,9 @@ class ResourceCheckerConfigCacheFactory implements \RectorPrefix20220606\Symfony
     /**
      * {@inheritdoc}
      */
-    public function cache(string $file, callable $callable) : \RectorPrefix20220606\Symfony\Component\Config\ConfigCacheInterface
+    public function cache(string $file, callable $callable) : ConfigCacheInterface
     {
-        $cache = new \RectorPrefix20220606\Symfony\Component\Config\ResourceCheckerConfigCache($file, $this->resourceCheckers);
+        $cache = new ResourceCheckerConfigCache($file, $this->resourceCheckers);
         if (!$cache->isFresh()) {
             $callable($cache);
         }

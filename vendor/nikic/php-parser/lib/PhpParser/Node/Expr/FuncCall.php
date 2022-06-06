@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node\Expr;
+namespace RectorPrefix20220606\PhpParser\Node\Expr;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-class FuncCall extends \PhpParser\Node\Expr\CallLike
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+class FuncCall extends CallLike
 {
     /** @var Node\Name|Expr Function name */
     public $name;

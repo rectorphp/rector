@@ -1,34 +1,34 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeNameResolver\NodeNameResolver;
+namespace RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @implements NodeNameResolverInterface<Variable>
  */
-final class VariableNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class VariableNameResolver implements NodeNameResolverInterface
 {
     public function getNode() : string
     {
-        return \PhpParser\Node\Expr\Variable::class;
+        return Variable::class;
     }
     /**
      * @param Variable $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         // skip $some->$dynamicMethodName()
-        if ($parentNode instanceof \PhpParser\Node\Expr\MethodCall && $node === $parentNode->name) {
+        if ($parentNode instanceof MethodCall && $node === $parentNode->name) {
             return null;
         }
-        if ($node->name instanceof \PhpParser\Node\Expr) {
+        if ($node->name instanceof Expr) {
             return null;
         }
         return $node->name;

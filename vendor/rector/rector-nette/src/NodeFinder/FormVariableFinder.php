@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\NodeFinder;
+namespace RectorPrefix20220606\Rector\Nette\NodeFinder;
 
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Expression;
-use PHPStan\Type\ObjectType;
-use Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
 /**
  * @see \Rector\Nette\Tests\NodeFinder\FormFinder\FormFinderTest
  */
@@ -19,11 +19,11 @@ final class FormVariableFinder
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function find(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node\Expr\Variable
+    public function find(Class_ $class) : ?Variable
     {
         foreach ($class->getMethods() as $classMethod) {
             $classMethodStmts = $classMethod->getStmts();
@@ -31,18 +31,18 @@ final class FormVariableFinder
                 continue;
             }
             foreach ($classMethodStmts as $classMethodStmt) {
-                if (!$classMethodStmt instanceof \PhpParser\Node\Stmt\Expression) {
+                if (!$classMethodStmt instanceof Expression) {
                     continue;
                 }
-                if (!$classMethodStmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+                if (!$classMethodStmt->expr instanceof Assign) {
                     continue;
                 }
                 $var = $classMethodStmt->expr->var;
                 $expr = $classMethodStmt->expr->expr;
-                if (!$var instanceof \PhpParser\Node\Expr\Variable) {
+                if (!$var instanceof Variable) {
                     continue;
                 }
-                if (!$this->nodeTypeResolver->isObjectType($expr, new \PHPStan\Type\ObjectType('Nette\\Forms\\Form'))) {
+                if (!$this->nodeTypeResolver->isObjectType($expr, new ObjectType('Nette\\Forms\\Form'))) {
                     continue;
                 }
                 return $var;

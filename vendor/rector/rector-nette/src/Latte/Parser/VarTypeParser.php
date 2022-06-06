@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\Latte\Parser;
+namespace RectorPrefix20220606\Rector\Nette\Latte\Parser;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use Rector\Nette\ValueObject\LatteVariableType;
+use RectorPrefix20220606\Rector\Nette\ValueObject\LatteVariableType;
 final class VarTypeParser
 {
     /**
@@ -17,10 +17,10 @@ final class VarTypeParser
      */
     public function parse(string $content) : array
     {
-        $matches = \RectorPrefix20220606\Nette\Utils\Strings::matchAll($content, self::VAR_TYPE_REGEX);
+        $matches = Strings::matchAll($content, self::VAR_TYPE_REGEX);
         $variableTypes = [];
         foreach ($matches as $match) {
-            $variableTypes[] = new \Rector\Nette\ValueObject\LatteVariableType($match['variable'], $match['type']);
+            $variableTypes[] = new LatteVariableType($match['variable'], $match['type']);
         }
         return $variableTypes;
     }

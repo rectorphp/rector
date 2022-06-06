@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\FileSystem;
+namespace RectorPrefix20220606\Rector\Core\FileSystem;
 
-use Rector\Caching\UnchangedFilesFilter;
-use Rector\Core\Util\StringUtils;
+use RectorPrefix20220606\Rector\Caching\UnchangedFilesFilter;
+use RectorPrefix20220606\Rector\Core\Util\StringUtils;
 use RectorPrefix20220606\Symfony\Component\Finder\Finder;
 use RectorPrefix20220606\Symfony\Component\Finder\SplFileInfo;
 use RectorPrefix20220606\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
@@ -51,7 +51,7 @@ final class FilesFinder
      * @var \Rector\Caching\UnchangedFilesFilter
      */
     private $unchangedFilesFilter;
-    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, \RectorPrefix20220606\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20220606\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter, \RectorPrefix20220606\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver, \Rector\Caching\UnchangedFilesFilter $unchangedFilesFilter)
+    public function __construct(FilesystemTweaker $filesystemTweaker, FinderSanitizer $finderSanitizer, FileSystemFilter $fileSystemFilter, SkippedPathsResolver $skippedPathsResolver, UnchangedFilesFilter $unchangedFilesFilter)
     {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->finderSanitizer = $finderSanitizer;
@@ -82,7 +82,7 @@ final class FilesFinder
         if ($directories === []) {
             return [];
         }
-        $finder = \RectorPrefix20220606\Symfony\Component\Finder\Finder::create()->files()->size('> 0')->in($directories)->sortByName();
+        $finder = Finder::create()->files()->size('> 0')->in($directories)->sortByName();
         if ($suffixes !== []) {
             $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
             $finder->name($suffixesPattern);
@@ -99,13 +99,13 @@ final class FilesFinder
         $suffixesPattern = \implode('|', $suffixes);
         return '#\\.(' . $suffixesPattern . ')$#';
     }
-    private function addFilterWithExcludedPaths(\RectorPrefix20220606\Symfony\Component\Finder\Finder $finder) : void
+    private function addFilterWithExcludedPaths(Finder $finder) : void
     {
         $excludePaths = $this->skippedPathsResolver->resolve();
         if ($excludePaths === []) {
             return;
         }
-        $finder->filter(function (\RectorPrefix20220606\Symfony\Component\Finder\SplFileInfo $splFileInfo) use($excludePaths) : bool {
+        $finder->filter(function (SplFileInfo $splFileInfo) use($excludePaths) : bool {
             /** @var string|false $realPath */
             $realPath = $splFileInfo->getRealPath();
             if ($realPath === \false) {
@@ -118,7 +118,7 @@ final class FilesFinder
             foreach ($excludePaths as $excludePath) {
                 // make the path work accross different OSes
                 $excludePath = \str_replace('\\', '/', $excludePath);
-                if (\Rector\Core\Util\StringUtils::isMatch($realPath, '#' . \preg_quote($excludePath, '#') . '#')) {
+                if (StringUtils::isMatch($realPath, '#' . \preg_quote($excludePath, '#') . '#')) {
                     return \false;
                 }
                 $excludePath = $this->normalizeForFnmatch($excludePath);
@@ -136,11 +136,11 @@ final class FilesFinder
     private function normalizeForFnmatch(string $path) : string
     {
         // ends with *
-        if (\Rector\Core\Util\StringUtils::isMatch($path, self::ENDS_WITH_ASTERISK_REGEX)) {
+        if (StringUtils::isMatch($path, self::ENDS_WITH_ASTERISK_REGEX)) {
             return '*' . $path;
         }
         // starts with *
-        if (\Rector\Core\Util\StringUtils::isMatch($path, self::STARTS_WITH_ASTERISK_REGEX)) {
+        if (StringUtils::isMatch($path, self::STARTS_WITH_ASTERISK_REGEX)) {
             return $path . '*';
         }
         return $path;

@@ -1,38 +1,38 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\NodeFinder;
+namespace RectorPrefix20220606\Rector\Nette\NodeFinder;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
 final class FormOnSuccessCallbackValuesParamFinder
 {
-    public function find(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr $onSuccessCallback) : ?\PhpParser\Node\Param
+    public function find(Class_ $class, Expr $onSuccessCallback) : ?Param
     {
-        if ($onSuccessCallback instanceof \PhpParser\Node\Expr\Closure) {
+        if ($onSuccessCallback instanceof Closure) {
             return $onSuccessCallback->params[1] ?? null;
         }
         $methodName = null;
-        if ($onSuccessCallback instanceof \PhpParser\Node\Expr\Array_) {
+        if ($onSuccessCallback instanceof Array_) {
             $varPart = $onSuccessCallback->items[0] ?? null;
             $methodNamePart = $onSuccessCallback->items[1] ?? null;
-            if (!$varPart instanceof \PhpParser\Node\Expr\ArrayItem || !$methodNamePart instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$varPart instanceof ArrayItem || !$methodNamePart instanceof ArrayItem) {
                 return null;
             }
-            if (!$varPart->value instanceof \PhpParser\Node\Expr\Variable) {
+            if (!$varPart->value instanceof Variable) {
                 return null;
             }
             if ($varPart->value->name !== 'this') {
                 return null;
             }
-            if (!$methodNamePart->value instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$methodNamePart->value instanceof String_) {
                 return null;
             }
             $methodName = $methodNamePart->value->value;
@@ -41,7 +41,7 @@ final class FormOnSuccessCallbackValuesParamFinder
             return null;
         }
         $classMethod = $class->getMethod($methodName);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$classMethod instanceof ClassMethod) {
             return null;
         }
         return $classMethod->params[1] ?? null;

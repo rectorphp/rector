@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\ValueObject;
+namespace RectorPrefix20220606\Rector\Symfony\ValueObject;
 
-use PhpParser\Node\Expr\ClassConstFetch;
-use Rector\Symfony\Contract\EventReferenceToMethodNameInterface;
-final class EventReferenceToMethodName implements \Rector\Symfony\Contract\EventReferenceToMethodNameInterface
+use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
+use RectorPrefix20220606\Rector\Symfony\Contract\EventReferenceToMethodNameInterface;
+final class EventReferenceToMethodName implements EventReferenceToMethodNameInterface
 {
     /**
      * @readonly
@@ -17,12 +17,12 @@ final class EventReferenceToMethodName implements \Rector\Symfony\Contract\Event
      * @var string
      */
     private $methodName;
-    public function __construct(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch, string $methodName)
+    public function __construct(ClassConstFetch $classConstFetch, string $methodName)
     {
         $this->classConstFetch = $classConstFetch;
         $this->methodName = $methodName;
     }
-    public function getClassConstFetch() : \PhpParser\Node\Expr\ClassConstFetch
+    public function getClassConstFetch() : ClassConstFetch
     {
         return $this->classConstFetch;
     }

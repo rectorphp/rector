@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\NodeManipulator;
+namespace RectorPrefix20220606\Rector\DeadCode\NodeManipulator;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\FunctionLike;
-use PhpParser\NodeTraverser;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\FunctionLike;
+use RectorPrefix20220606\PhpParser\NodeTraverser;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class VariadicFunctionLikeDetector
 {
@@ -25,23 +25,23 @@ final class VariadicFunctionLikeDetector
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isVariadic(\PhpParser\Node\FunctionLike $functionLike) : bool
+    public function isVariadic(FunctionLike $functionLike) : bool
     {
         $isVariadic = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (\PhpParser\Node $node) use(&$isVariadic) : ?int {
-            if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $node) use(&$isVariadic) : ?int {
+            if (!$node instanceof FuncCall) {
                 return null;
             }
             if (!$this->nodeNameResolver->isNames($node, self::VARIADIC_FUNCTION_NAMES)) {
                 return null;
             }
             $isVariadic = \true;
-            return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
+            return NodeTraverser::STOP_TRAVERSAL;
         });
         return $isVariadic;
     }

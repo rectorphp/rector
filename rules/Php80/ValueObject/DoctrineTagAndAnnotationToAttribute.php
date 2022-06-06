@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php80\ValueObject;
+namespace RectorPrefix20220606\Rector\Php80\ValueObject;
 
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 final class DoctrineTagAndAnnotationToAttribute
 {
     /**
@@ -16,16 +16,16 @@ final class DoctrineTagAndAnnotationToAttribute
      * @var \Rector\Php80\ValueObject\AnnotationToAttribute
      */
     private $annotationToAttribute;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute)
+    public function __construct(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, AnnotationToAttribute $annotationToAttribute)
     {
         $this->doctrineAnnotationTagValueNode = $doctrineAnnotationTagValueNode;
         $this->annotationToAttribute = $annotationToAttribute;
     }
-    public function getDoctrineAnnotationTagValueNode() : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+    public function getDoctrineAnnotationTagValueNode() : DoctrineAnnotationTagValueNode
     {
         return $this->doctrineAnnotationTagValueNode;
     }
-    public function getAnnotationToAttribute() : \Rector\Php80\ValueObject\AnnotationToAttribute
+    public function getAnnotationToAttribute() : AnnotationToAttribute
     {
         return $this->annotationToAttribute;
     }

@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php73\NodeTypeAnalyzer;
+namespace RectorPrefix20220606\Rector\Php73\NodeTypeAnalyzer;
 
-use PHPStan\Type\Accessory\AccessoryNumericStringType;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
+use RectorPrefix20220606\PHPStan\Type\Accessory\AccessoryNumericStringType;
+use RectorPrefix20220606\PHPStan\Type\IntersectionType;
+use RectorPrefix20220606\PHPStan\Type\StringType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\PHPStan\Type\UnionType;
 final class NodeTypeAnalyzer
 {
-    public function isStringyType(\PHPStan\Type\Type $type) : bool
+    public function isStringyType(Type $type) : bool
     {
-        if ($type instanceof \PHPStan\Type\StringType) {
+        if ($type instanceof StringType) {
             return \true;
         }
-        if ($type instanceof \PHPStan\Type\Accessory\AccessoryNumericStringType) {
+        if ($type instanceof AccessoryNumericStringType) {
             return \true;
         }
-        if ($type instanceof \PHPStan\Type\IntersectionType || $type instanceof \PHPStan\Type\UnionType) {
+        if ($type instanceof IntersectionType || $type instanceof UnionType) {
             foreach ($type->getTypes() as $innerType) {
                 if (!$this->isStringyType($innerType)) {
                     return \false;

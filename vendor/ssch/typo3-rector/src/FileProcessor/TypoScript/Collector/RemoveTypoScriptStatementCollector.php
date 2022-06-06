@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Collector;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\TypoScript\Collector;
 
 use Helmich\TypoScriptParser\Parser\AST\Statement;
-use Rector\Core\ValueObject\Application\File;
+use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
 final class RemoveTypoScriptStatementCollector
 {
     /**
      * @var Statement[][]
      */
     private $statementsToBeRemoved = [];
-    public function removeStatement(\Helmich\TypoScriptParser\Parser\AST\Statement $statement, \Rector\Core\ValueObject\Application\File $file) : void
+    public function removeStatement(Statement $statement, File $file) : void
     {
         $filePath = $file->getFilePath();
         if (!isset($this->statementsToBeRemoved[$filePath])) {
@@ -19,7 +19,7 @@ final class RemoveTypoScriptStatementCollector
         }
         $this->statementsToBeRemoved[$filePath][$statement->sourceLine] = $statement;
     }
-    public function shouldStatementBeRemoved(\Helmich\TypoScriptParser\Parser\AST\Statement $originalStatement, \Rector\Core\ValueObject\Application\File $file) : bool
+    public function shouldStatementBeRemoved(Statement $originalStatement, File $file) : bool
     {
         if (!isset($this->statementsToBeRemoved[$file->getFilePath()])) {
             return \false;

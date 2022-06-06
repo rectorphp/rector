@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\Rector\Ternary;
+namespace RectorPrefix20220606\Rector\DeadCode\Rector\Ternary;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\Ternary;
-use PHPStan\Type\BooleanType;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use RectorPrefix20220606\PhpParser\Node\Expr\Ternary;
+use RectorPrefix20220606\PHPStan\Type\BooleanType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector\TernaryToBooleanOrFalseToBooleanAndRectorTest
  */
-final class TernaryToBooleanOrFalseToBooleanAndRector extends \Rector\Core\Rector\AbstractRector
+final class TernaryToBooleanOrFalseToBooleanAndRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change ternary of bool : false to && bool', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change ternary of bool : false to && bool', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go()
@@ -52,12 +52,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Ternary::class];
+        return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->if === null) {
             return null;
@@ -69,9 +69,9 @@ CODE_SAMPLE
             return null;
         }
         $ifType = $this->getType($node->if);
-        if (!$ifType instanceof \PHPStan\Type\BooleanType) {
+        if (!$ifType instanceof BooleanType) {
             return null;
         }
-        return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($node->cond, $node->if);
+        return new BooleanAnd($node->cond, $node->if);
     }
 }

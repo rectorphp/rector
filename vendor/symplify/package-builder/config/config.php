@@ -9,12 +9,12 @@ use RectorPrefix20220606\Symplify\PackageBuilder\Console\Formatter\ColorConsoleD
 use RectorPrefix20220606\Symplify\PackageBuilder\Console\Output\ConsoleDiffer;
 use RectorPrefix20220606\Symplify\PackageBuilder\Diff\Output\CompleteUnifiedDiffOutputBuilderFactory;
 use RectorPrefix20220606\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->set(\RectorPrefix20220606\Symplify\PackageBuilder\Console\Formatter\ColorConsoleDiffFormatter::class);
-    $services->set(\RectorPrefix20220606\Symplify\PackageBuilder\Console\Output\ConsoleDiffer::class);
-    $services->set(\RectorPrefix20220606\Symplify\PackageBuilder\Diff\Output\CompleteUnifiedDiffOutputBuilderFactory::class);
-    $services->set(\RectorPrefix20220606\SebastianBergmann\Diff\Differ::class);
-    $services->set(\RectorPrefix20220606\Symplify\PackageBuilder\Reflection\PrivatesAccessor::class);
+    $services->set(ColorConsoleDiffFormatter::class);
+    $services->set(ConsoleDiffer::class);
+    $services->set(CompleteUnifiedDiffOutputBuilderFactory::class);
+    $services->set(Differ::class);
+    $services->set(PrivatesAccessor::class);
 };

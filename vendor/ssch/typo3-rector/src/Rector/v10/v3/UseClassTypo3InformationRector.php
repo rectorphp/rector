@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v10\v3;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v10\v3;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\ConstFetch;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.3/Deprecation-89866-Global-TYPO3-information-related-constants.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v3\UseClassTypo3InformationRector\UseClassTypo3InformationRectorTest
  */
-final class UseClassTypo3InformationRector extends \Rector\Core\Rector\AbstractRector
+final class UseClassTypo3InformationRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -23,12 +23,12 @@ final class UseClassTypo3InformationRector extends \Rector\Core\Rector\AbstractR
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\ConstFetch::class];
+        return [ConstFetch::class];
     }
     /**
      * @param ConstFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isNames($node->name, self::CONSTANTS_TO_REFACTOR)) {
             return null;
@@ -54,9 +54,9 @@ final class UseClassTypo3InformationRector extends \Rector\Core\Rector\AbstractR
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use class Typo3Information', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use class Typo3Information', [new CodeSample(<<<'CODE_SAMPLE'
 $urlGeneral = TYPO3_URL_GENERAL;
 $urlLicense = TYPO3_URL_LICENSE;
 $urlException = TYPO3_URL_EXCEPTION;

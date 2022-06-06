@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v11\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v11\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/11.0/Breaking-90799-DependencyInjectionWithNonPublicPropertiesHasBeenRemoved.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v0\ReplaceInjectAnnotationWithMethodRector\ReplaceInjectAnnotationWithMethodRectorTest
  */
-final class ReplaceInjectAnnotationWithMethodRector extends \Rector\Core\Rector\AbstractRector
+final class ReplaceInjectAnnotationWithMethodRector extends AbstractRector
 {
     /**
      * @var class-string
@@ -25,7 +25,7 @@ final class ReplaceInjectAnnotationWithMethodRector extends \Rector\Core\Rector\
      * @var \Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory
      */
     private $injectMethodFactory;
-    public function __construct(\Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory $injectMethodFactory)
+    public function __construct(InjectMethodFactory $injectMethodFactory)
     {
         $this->injectMethodFactory = $injectMethodFactory;
     }
@@ -34,12 +34,12 @@ final class ReplaceInjectAnnotationWithMethodRector extends \Rector\Core\Rector\
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $injectMethods = [];
         $properties = $node->getProperties();
@@ -56,9 +56,9 @@ final class ReplaceInjectAnnotationWithMethodRector extends \Rector\Core\Rector\
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns properties with `@TYPO3\\CMS\\Extbase\\Annotation\\Inject` to setter injection', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns properties with `@TYPO3\\CMS\\Extbase\\Annotation\\Inject` to setter injection', [new CodeSample(<<<'CODE_SAMPLE'
 /**
  * @var SomeService
  * @TYPO3\CMS\Extbase\Annotation\Inject

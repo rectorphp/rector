@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality\Rector\Array_;
+namespace RectorPrefix20220606\Rector\CodeQuality\Rector\Array_;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\Rector\AbstractRector;
-use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
-use Rector\NodeCollector\ValueObject\ArrayCallable;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
+use RectorPrefix20220606\Rector\NodeCollector\ValueObject\ArrayCallable;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector\ArrayThisCallToThisMethodCallRectorTest
  */
-final class ArrayThisCallToThisMethodCallRector extends \Rector\Core\Rector\AbstractRector
+final class ArrayThisCallToThisMethodCallRector extends AbstractRector
 {
     /**
      * @readonly
@@ -34,14 +34,14 @@ final class ArrayThisCallToThisMethodCallRector extends \Rector\Core\Rector\Abst
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher $arrayCallableMethodMatcher, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ArrayCallableMethodMatcher $arrayCallableMethodMatcher, ReflectionProvider $reflectionProvider)
     {
         $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change `[$this, someMethod]` without any args to $this->someMethod()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `[$this, someMethod]` without any args to $this->someMethod()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -76,15 +76,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Array_::class];
+        return [Array_::class];
     }
     /**
      * @param Array_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $arrayCallable = $this->arrayCallableMethodMatcher->match($node);
-        if (!$arrayCallable instanceof \Rector\NodeCollector\ValueObject\ArrayCallable) {
+        if (!$arrayCallable instanceof ArrayCallable) {
             return null;
         }
         if ($this->isAssignedToNetteMagicOnProperty($node)) {
@@ -93,9 +93,9 @@ CODE_SAMPLE
         if ($this->isInsideProperty($node)) {
             return null;
         }
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         // skip if part of method
-        if ($parentNode instanceof \PhpParser\Node\Arg) {
+        if ($parentNode instanceof Arg) {
             return null;
         }
         if (!$this->reflectionProvider->hasClass($arrayCallable->getClass())) {
@@ -108,30 +108,30 @@ CODE_SAMPLE
         $nativeReflectionClass = $classReflection->getNativeReflection();
         $nativeReflectionMethod = $nativeReflectionClass->getMethod($arrayCallable->getMethod());
         if ($nativeReflectionMethod->getNumberOfParameters() === 0) {
-            return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable('this'), $arrayCallable->getMethod());
+            return new MethodCall(new Variable('this'), $arrayCallable->getMethod());
         }
         $methodReflection = $classReflection->getNativeMethod($arrayCallable->getMethod());
         return $this->nodeFactory->createClosureFromMethodReflection($methodReflection);
     }
-    private function isAssignedToNetteMagicOnProperty(\PhpParser\Node\Expr\Array_ $array) : bool
+    private function isAssignedToNetteMagicOnProperty(Array_ $array) : bool
     {
-        $parent = $array->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Expr\Assign) {
+        $parent = $array->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof Assign) {
             return \false;
         }
-        if (!$parent->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if (!$parent->var instanceof ArrayDimFetch) {
             return \false;
         }
-        if (!$parent->var->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$parent->var->var instanceof PropertyFetch) {
             return \false;
         }
         /** @var PropertyFetch $propertyFetch */
         $propertyFetch = $parent->var->var;
         return $this->isName($propertyFetch->name, 'on*');
     }
-    private function isInsideProperty(\PhpParser\Node\Expr\Array_ $array) : bool
+    private function isInsideProperty(Array_ $array) : bool
     {
-        $parentProperty = $this->betterNodeFinder->findParentType($array, \PhpParser\Node\Stmt\Property::class);
+        $parentProperty = $this->betterNodeFinder->findParentType($array, Property::class);
         return $parentProperty !== null;
     }
 }

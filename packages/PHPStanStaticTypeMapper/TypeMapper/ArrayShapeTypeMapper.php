@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
+namespace RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\TypeMapper;
 
-use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NeverType;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
+use RectorPrefix20220606\PHPStan\Type\ArrayType;
+use RectorPrefix20220606\PHPStan\Type\Constant\ConstantArrayType;
+use RectorPrefix20220606\PHPStan\Type\Constant\ConstantStringType;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\PHPStan\Type\NeverType;
+use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 final class ArrayShapeTypeMapper
 {
     /**
@@ -26,7 +26,7 @@ final class ArrayShapeTypeMapper
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(PHPStanStaticTypeMapper $phpStanStaticTypeMapper, ReflectionProvider $reflectionProvider)
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->reflectionProvider = $reflectionProvider;
@@ -34,27 +34,27 @@ final class ArrayShapeTypeMapper
     /**
      * @return \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\Type\ArrayType|null
      */
-    public function mapConstantArrayType(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType)
+    public function mapConstantArrayType(ConstantArrayType $constantArrayType)
     {
         // empty array
-        if ($constantArrayType->getKeyType() instanceof \PHPStan\Type\NeverType) {
-            return new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
+        if ($constantArrayType->getKeyType() instanceof NeverType) {
+            return new ArrayType(new MixedType(), new MixedType());
         }
         $arrayShapeItemNodes = [];
         foreach ($constantArrayType->getKeyTypes() as $index => $keyType) {
             // not real array shape
-            if (!$keyType instanceof \PHPStan\Type\Constant\ConstantStringType) {
+            if (!$keyType instanceof ConstantStringType) {
                 return null;
             }
             $keyValue = $keyType->getValue();
             if ($this->reflectionProvider->hasClass($keyValue)) {
                 return null;
             }
-            $keyDocTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($keyValue);
+            $keyDocTypeNode = new IdentifierTypeNode($keyValue);
             $valueType = $constantArrayType->getValueTypes()[$index];
-            $valueDocTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($valueType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
-            $arrayShapeItemNodes[] = new \PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode($keyDocTypeNode, $constantArrayType->isOptionalKey($index), $valueDocTypeNode);
+            $valueDocTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($valueType, TypeKind::RETURN);
+            $arrayShapeItemNodes[] = new ArrayShapeItemNode($keyDocTypeNode, $constantArrayType->isOptionalKey($index), $valueDocTypeNode);
         }
-        return new \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode($arrayShapeItemNodes);
+        return new ArrayShapeNode($arrayShapeItemNodes);
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node\Scalar;
+namespace RectorPrefix20220606\PhpParser\Node\Scalar;
 
-use PhpParser\Error;
-use PhpParser\Node\Scalar;
-class String_ extends \PhpParser\Node\Scalar
+use RectorPrefix20220606\PhpParser\Error;
+use RectorPrefix20220606\PhpParser\Node\Scalar;
+class String_ extends Scalar
 {
     /* For use in "kind" attribute */
     const KIND_SINGLE_QUOTED = 1;
@@ -14,7 +14,7 @@ class String_ extends \PhpParser\Node\Scalar
     const KIND_NOWDOC = 4;
     /** @var string String value */
     public $value;
-    protected static $replacements = ['\\' => '\\', '$' => '$', 'n' => "\n", 'r' => "\r", 't' => "\t", 'f' => "\f", 'v' => "\v", 'e' => "\33"];
+    protected static $replacements = ['\\' => '\\', '$' => '$', 'n' => "\n", 'r' => "\r", 't' => "\t", 'f' => "\f", 'v' => "\v", 'e' => "\x1b"];
     /**
      * Constructs a string scalar node.
      *
@@ -35,7 +35,7 @@ class String_ extends \PhpParser\Node\Scalar
      */
     public static function fromString(string $str, array $attributes = [], bool $parseUnicodeEscape = \true) : self
     {
-        $attributes['kind'] = $str[0] === "'" || $str[1] === "'" && ($str[0] === 'b' || $str[0] === 'B') ? \PhpParser\Node\Scalar\String_::KIND_SINGLE_QUOTED : \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED;
+        $attributes['kind'] = $str[0] === "'" || $str[1] === "'" && ($str[0] === 'b' || $str[0] === 'B') ? Scalar\String_::KIND_SINGLE_QUOTED : Scalar\String_::KIND_DOUBLE_QUOTED;
         $attributes['rawValue'] = $str;
         $string = self::parse($str, $parseUnicodeEscape);
         return new self($string, $attributes);
@@ -116,7 +116,7 @@ class String_ extends \PhpParser\Node\Scalar
         if ($num <= 0x1fffff) {
             return \chr(($num >> 18) + 0xf0) . \chr(($num >> 12 & 0x3f) + 0x80) . \chr(($num >> 6 & 0x3f) + 0x80) . \chr(($num & 0x3f) + 0x80);
         }
-        throw new \PhpParser\Error('Invalid UTF-8 codepoint escape sequence: Codepoint too large');
+        throw new Error('Invalid UTF-8 codepoint escape sequence: Codepoint too large');
     }
     public function getType() : string
     {

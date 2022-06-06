@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\ChangesReporting\Annotation;
+namespace RectorPrefix20220606\Rector\ChangesReporting\Annotation;
 
-use Rector\Core\Contract\Rector\RectorInterface;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
 final class RectorsChangelogResolver
 {
     /**
@@ -11,7 +11,7 @@ final class RectorsChangelogResolver
      * @var \Rector\ChangesReporting\Annotation\AnnotationExtractor
      */
     private $annotationExtractor;
-    public function __construct(\Rector\ChangesReporting\Annotation\AnnotationExtractor $annotationExtractor)
+    public function __construct(AnnotationExtractor $annotationExtractor)
     {
         $this->annotationExtractor = $annotationExtractor;
     }

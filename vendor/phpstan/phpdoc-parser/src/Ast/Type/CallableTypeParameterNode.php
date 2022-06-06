@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace PHPStan\PhpDocParser\Ast\Type;
+namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type;
 
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-class CallableTypeParameterNode implements \PHPStan\PhpDocParser\Ast\Node
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Node;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
+class CallableTypeParameterNode implements Node
 {
     use NodeAttributes;
     /** @var TypeNode */
@@ -18,7 +18,7 @@ class CallableTypeParameterNode implements \PHPStan\PhpDocParser\Ast\Node
     public $parameterName;
     /** @var bool */
     public $isOptional;
-    public function __construct(\PHPStan\PhpDocParser\Ast\Type\TypeNode $type, bool $isReference, bool $isVariadic, string $parameterName, bool $isOptional)
+    public function __construct(TypeNode $type, bool $isReference, bool $isVariadic, string $parameterName, bool $isOptional)
     {
         $this->type = $type;
         $this->isReference = $isReference;

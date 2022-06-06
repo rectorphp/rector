@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\Laravel\\": "src"
+            "RectorPrefix20220606\\Rector\\Laravel\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Laravel\\Tests\\": "tests"
+            "RectorPrefix20220606\\Rector\\Laravel\\Tests\\": "tests"
         },
         "classmap": [
             "stubs"

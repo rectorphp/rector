@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node;
+namespace RectorPrefix20220606\PhpParser\Node;
 
-use PhpParser\NodeAbstract;
-class IntersectionType extends \PhpParser\Node\ComplexType
+use RectorPrefix20220606\PhpParser\NodeAbstract;
+class IntersectionType extends ComplexType
 {
     /** @var (Identifier|Name)[] Types */
     public $types;

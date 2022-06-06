@@ -19,7 +19,7 @@ trait EventEmitterTrait
     public function on($event, callable $listener)
     {
         if ($event === null) {
-            throw new \InvalidArgumentException('event name must not be null');
+            throw new InvalidArgumentException('event name must not be null');
         }
         if (!isset($this->listeners[$event])) {
             $this->listeners[$event] = [];
@@ -30,7 +30,7 @@ trait EventEmitterTrait
     public function once($event, callable $listener)
     {
         if ($event === null) {
-            throw new \InvalidArgumentException('event name must not be null');
+            throw new InvalidArgumentException('event name must not be null');
         }
         if (!isset($this->onceListeners[$event])) {
             $this->onceListeners[$event] = [];
@@ -41,7 +41,7 @@ trait EventEmitterTrait
     public function removeListener($event, callable $listener)
     {
         if ($event === null) {
-            throw new \InvalidArgumentException('event name must not be null');
+            throw new InvalidArgumentException('event name must not be null');
         }
         if (isset($this->listeners[$event])) {
             $index = \array_search($listener, $this->listeners[$event], \true);
@@ -90,7 +90,7 @@ trait EventEmitterTrait
     public function emit($event, array $arguments = [])
     {
         if ($event === null) {
-            throw new \InvalidArgumentException('event name must not be null');
+            throw new InvalidArgumentException('event name must not be null');
         }
         if (isset($this->listeners[$event])) {
             foreach ($this->listeners[$event] as $listener) {

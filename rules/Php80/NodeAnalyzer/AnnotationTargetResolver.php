@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php80\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Php80\NodeAnalyzer;
 
-use PhpParser\Node\Expr\ClassConstFetch;
-use Rector\Core\PhpParser\Node\NodeFactory;
+use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
 final class AnnotationTargetResolver
 {
     /**
@@ -25,7 +25,7 @@ final class AnnotationTargetResolver
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }

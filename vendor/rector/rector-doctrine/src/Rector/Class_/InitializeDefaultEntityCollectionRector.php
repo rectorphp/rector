@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\Rector\Class_;
+namespace RectorPrefix20220606\Rector\Doctrine\Rector\Class_;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Expression;
-use Rector\Core\NodeManipulator\ClassDependencyManipulator;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
-use Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory;
-use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\Rector\Core\NodeManipulator\ClassDependencyManipulator;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
+use RectorPrefix20220606\Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory;
+use RectorPrefix20220606\Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/best-practices.html#initialize-collections-in-the-constructor
  *
  * @see \Rector\Doctrine\Tests\Rector\Class_\InitializeDefaultEntityCollectionRector\InitializeDefaultEntityCollectionRectorTest
  */
-final class InitializeDefaultEntityCollectionRector extends \Rector\Core\Rector\AbstractRector
+final class InitializeDefaultEntityCollectionRector extends AbstractRector
 {
     /**
      * @var class-string[]
@@ -44,16 +44,16 @@ final class InitializeDefaultEntityCollectionRector extends \Rector\Core\Rector\
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
-    public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator, \Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory $arrayCollectionAssignFactory, \Rector\Doctrine\NodeAnalyzer\AttrinationFinder $attrinationFinder, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector)
+    public function __construct(ClassDependencyManipulator $classDependencyManipulator, ArrayCollectionAssignFactory $arrayCollectionAssignFactory, AttrinationFinder $attrinationFinder, ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->arrayCollectionAssignFactory = $arrayCollectionAssignFactory;
         $this->attrinationFinder = $attrinationFinder;
         $this->constructorAssignDetector = $constructorAssignDetector;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Initialize collection property in Entity constructor', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Initialize collection property in Entity constructor', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -93,12 +93,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->attrinationFinder->hasByOne($node, 'Doctrine\\ORM\\Mapping\\Entity')) {
             return null;
@@ -108,7 +108,7 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function resolveToManyPropertyNames(\PhpParser\Node\Stmt\Class_ $class) : array
+    private function resolveToManyPropertyNames(Class_ $class) : array
     {
         $collectionPropertyNames = [];
         foreach ($class->getProperties() as $property) {
@@ -142,7 +142,7 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Stmt\Class_|null
      */
-    private function refactorClass(\PhpParser\Node\Stmt\Class_ $class)
+    private function refactorClass(Class_ $class)
     {
         $toManyPropertyNames = $this->resolveToManyPropertyNames($class);
         if ($toManyPropertyNames === []) {

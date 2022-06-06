@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeCollector\ScopeResolver;
+namespace RectorPrefix20220606\Rector\NodeCollector\ScopeResolver;
 
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
 final class ParentClassScopeResolver
 {
-    public function resolveParentClassName(\PHPStan\Analyser\Scope $scope) : ?string
+    public function resolveParentClassName(Scope $scope) : ?string
     {
         $parentClassReflection = $this->resolveParentClassReflection($scope);
-        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$parentClassReflection instanceof ClassReflection) {
             return null;
         }
         return $parentClassReflection->getName();
     }
-    public function resolveParentClassReflection(\PHPStan\Analyser\Scope $scope) : ?\PHPStan\Reflection\ClassReflection
+    public function resolveParentClassReflection(Scope $scope) : ?ClassReflection
     {
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         return $classReflection->getParentClass();

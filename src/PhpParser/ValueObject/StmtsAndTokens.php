@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser\ValueObject;
+namespace RectorPrefix20220606\Rector\Core\PhpParser\ValueObject;
 
-use PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
 final class StmtsAndTokens
 {
     /**

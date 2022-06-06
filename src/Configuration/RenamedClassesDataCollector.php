@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Configuration;
+namespace RectorPrefix20220606\Rector\Core\Configuration;
 
-use PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
 final class RenamedClassesDataCollector
 {
     /**
@@ -35,14 +35,14 @@ final class RenamedClassesDataCollector
     {
         return $this->oldToNewClasses;
     }
-    public function matchClassName(\PHPStan\Type\ObjectType $objectType) : ?\PHPStan\Type\ObjectType
+    public function matchClassName(ObjectType $objectType) : ?ObjectType
     {
         $className = $objectType->getClassName();
         $renamedClassName = $this->oldToNewClasses[$className] ?? null;
         if ($renamedClassName === null) {
             return null;
         }
-        return new \PHPStan\Type\ObjectType($renamedClassName);
+        return new ObjectType($renamedClassName);
     }
     /**
      * @return string[]

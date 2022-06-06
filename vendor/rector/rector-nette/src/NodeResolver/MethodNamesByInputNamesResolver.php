@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\NodeResolver;
+namespace RectorPrefix20220606\Rector\Nette\NodeResolver;
 
-use PhpParser\Node;
-use Rector\Nette\Contract\FormControlTypeResolverInterface;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\Rector\Nette\Contract\FormControlTypeResolverInterface;
 final class MethodNamesByInputNamesResolver
 {
     /**
@@ -22,7 +22,7 @@ final class MethodNamesByInputNamesResolver
     /**
      * @return array<string, string>
      */
-    public function resolveExpr(\PhpParser\Node $node) : array
+    public function resolveExpr(Node $node) : array
     {
         $methodNamesByInputNames = [];
         foreach ($this->formControlTypeResolvers as $formControlTypeResolver) {

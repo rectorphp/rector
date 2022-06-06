@@ -3,19 +3,19 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\Astral\PhpDocParser\StaticFactory;
 
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\ConstExprParser;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
-use PHPStan\PhpDocParser\Parser\TypeParser;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Lexer\Lexer;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Parser\ConstExprParser;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Parser\PhpDocParser;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Parser\TypeParser;
 use RectorPrefix20220606\Symplify\Astral\PhpDocParser\SimplePhpDocParser;
 /**
  * @api
  */
 final class SimplePhpDocParserStaticFactory
 {
-    public static function create() : \RectorPrefix20220606\Symplify\Astral\PhpDocParser\SimplePhpDocParser
+    public static function create() : SimplePhpDocParser
     {
-        $phpDocParser = new \PHPStan\PhpDocParser\Parser\PhpDocParser(new \PHPStan\PhpDocParser\Parser\TypeParser(), new \PHPStan\PhpDocParser\Parser\ConstExprParser());
-        return new \RectorPrefix20220606\Symplify\Astral\PhpDocParser\SimplePhpDocParser($phpDocParser, new \PHPStan\PhpDocParser\Lexer\Lexer());
+        $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
+        return new SimplePhpDocParser($phpDocParser, new Lexer());
     }
 }

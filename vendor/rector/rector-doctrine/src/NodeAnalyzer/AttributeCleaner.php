@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Doctrine\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Attribute;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class AttributeCleaner
 {
     /**
@@ -22,7 +22,7 @@ final class AttributeCleaner
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(AttributeFinder $attributeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->attributeFinder = $attributeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -33,11 +33,11 @@ final class AttributeCleaner
     public function clearAttributeAndArgName($node, string $attributeClass, string $argName) : void
     {
         $attribute = $this->attributeFinder->findAttributeByClass($node, $attributeClass);
-        if (!$attribute instanceof \PhpParser\Node\Attribute) {
+        if (!$attribute instanceof Attribute) {
             return;
         }
         foreach ($attribute->args as $key => $arg) {
-            if (!$arg->name instanceof \PhpParser\Node) {
+            if (!$arg->name instanceof Node) {
                 continue;
             }
             if (!$this->nodeNameResolver->isName($arg->name, $argName)) {

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node;
+namespace RectorPrefix20220606\PhpParser\Node;
 
-use PhpParser\Node;
-use PhpParser\NodeAbstract;
-class AttributeGroup extends \PhpParser\NodeAbstract
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\NodeAbstract;
+class AttributeGroup extends NodeAbstract
 {
     /** @var Attribute[] Attributes */
     public $attrs;

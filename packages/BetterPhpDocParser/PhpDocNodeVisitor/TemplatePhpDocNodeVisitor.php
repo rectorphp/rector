@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
+namespace RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
-use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
-use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SpacingAwareTemplateTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
-use Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Node;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Lexer\Lexer;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\PhpDoc\SpacingAwareTemplateTagValueNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
 use RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class TemplatePhpDocNodeVisitor extends \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
+final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
     /**
      * @readonly
@@ -27,34 +27,34 @@ final class TemplatePhpDocNodeVisitor extends \RectorPrefix20220606\Symplify\Ast
      * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
     private $attributeMirrorer;
-    public function __construct(\Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider $currentTokenIteratorProvider, \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)
+    public function __construct(CurrentTokenIteratorProvider $currentTokenIteratorProvider, AttributeMirrorer $attributeMirrorer)
     {
         $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
+    public function enterNode(Node $node) : ?Node
     {
-        if (!$node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode) {
+        if (!$node instanceof TemplateTagValueNode) {
             return null;
         }
-        if ($node instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\SpacingAwareTemplateTagValueNode) {
+        if ($node instanceof SpacingAwareTemplateTagValueNode) {
             return null;
         }
         $betterTokenIterator = $this->currentTokenIteratorProvider->provide();
-        $startAndEnd = $node->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
-        if (!$startAndEnd instanceof \Rector\BetterPhpDocParser\ValueObject\StartAndEnd) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $startAndEnd = $node->getAttribute(PhpDocAttributeKey::START_AND_END);
+        if (!$startAndEnd instanceof StartAndEnd) {
+            throw new ShouldNotHappenException();
         }
         $prepositions = $this->resolvePreposition($betterTokenIterator, $startAndEnd);
-        $spacingAwareTemplateTagValueNode = new \Rector\BetterPhpDocParser\ValueObject\PhpDoc\SpacingAwareTemplateTagValueNode($node->name, $node->bound, $node->description, $prepositions);
+        $spacingAwareTemplateTagValueNode = new SpacingAwareTemplateTagValueNode($node->name, $node->bound, $node->description, $prepositions);
         $this->attributeMirrorer->mirror($node, $spacingAwareTemplateTagValueNode);
         return $spacingAwareTemplateTagValueNode;
     }
-    private function resolvePreposition(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator, \Rector\BetterPhpDocParser\ValueObject\StartAndEnd $startAndEnd) : string
+    private function resolvePreposition(BetterTokenIterator $betterTokenIterator, StartAndEnd $startAndEnd) : string
     {
         $partialTokens = $betterTokenIterator->partialTokens($startAndEnd->getStart(), $startAndEnd->getEnd());
         foreach ($partialTokens as $partialToken) {
-            if ($partialToken[1] !== \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER) {
+            if ($partialToken[1] !== Lexer::TOKEN_IDENTIFIER) {
                 continue;
             }
             if (!\in_array($partialToken[0], ['as', 'of'], \true)) {

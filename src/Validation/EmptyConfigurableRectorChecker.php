@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Validation;
+namespace RectorPrefix20220606\Rector\Core\Validation;
 
-use Rector\Core\Contract\Console\OutputStyleInterface;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
+use RectorPrefix20220606\Rector\Core\Contract\Console\OutputStyleInterface;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use RectorPrefix20220606\Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 final class EmptyConfigurableRectorChecker
 {
     /**
@@ -18,7 +18,7 @@ final class EmptyConfigurableRectorChecker
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;
-    public function __construct(\Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector $emptyConfigurableRectorCollector, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle)
+    public function __construct(EmptyConfigurableRectorCollector $emptyConfigurableRectorCollector, OutputStyleInterface $rectorOutputStyle)
     {
         $this->emptyConfigurableRectorCollector = $emptyConfigurableRectorCollector;
         $this->rectorOutputStyle = $rectorOutputStyle;

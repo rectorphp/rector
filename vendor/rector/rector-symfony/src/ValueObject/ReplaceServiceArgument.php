@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\ValueObject;
+namespace RectorPrefix20220606\Rector\Symfony\ValueObject;
 
-use PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr;
 final class ReplaceServiceArgument
 {
     /**
@@ -19,7 +19,7 @@ final class ReplaceServiceArgument
     /**
      * @param mixed $oldValue
      */
-    public function __construct($oldValue, \PhpParser\Node\Expr $newValueExpr)
+    public function __construct($oldValue, Expr $newValueExpr)
     {
         $this->oldValue = $oldValue;
         $this->newValueExpr = $newValueExpr;
@@ -31,7 +31,7 @@ final class ReplaceServiceArgument
     {
         return $this->oldValue;
     }
-    public function getNewValueExpr() : \PhpParser\Node\Expr
+    public function getNewValueExpr() : Expr
     {
         return $this->newValueExpr;
     }

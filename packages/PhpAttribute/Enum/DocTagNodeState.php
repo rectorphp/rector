@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute\Enum;
+namespace RectorPrefix20220606\Rector\PhpAttribute\Enum;
 
 final class DocTagNodeState
 {

@@ -48,16 +48,16 @@ class MultilineTokenBuilder
      * @param string $append Token content to append
      * @return TokenInterface
      */
-    public function endMultilineToken(string $append = '') : \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+    public function endMultilineToken(string $append = '') : TokenInterface
     {
         $value = ($this->value ?? "") . $append;
         $type = $this->type;
         $startLine = $this->startLine;
         $startColumn = $this->startColumn;
         if ($type === null || $startLine === null || $startColumn === null) {
-            throw new \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenizerException('cannot call "endMultilineToken" before calling "startMultilineToken"');
+            throw new TokenizerException('cannot call "endMultilineToken" before calling "startMultilineToken"');
         }
-        $token = new \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Token($type, \rtrim($value), $startLine, $startColumn);
+        $token = new Token($type, \rtrim($value), $startLine, $startColumn);
         $this->reset();
         return $token;
     }

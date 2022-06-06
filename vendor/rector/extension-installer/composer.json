@@ -18,12 +18,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\RectorInstaller\\": "src"
+            "RectorPrefix20220606\\Rector\\RectorInstaller\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\RectorInstaller\\Tests\\": "tests"
+            "RectorPrefix20220606\\Rector\\RectorInstaller\\Tests\\": "tests"
         }
     },
     "scripts": {

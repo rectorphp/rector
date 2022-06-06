@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\ValueObject;
+namespace RectorPrefix20220606\Rector\Doctrine\ValueObject;
 
 final class ArgName
 {

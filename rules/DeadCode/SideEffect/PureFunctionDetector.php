@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\SideEffect;
+namespace RectorPrefix20220606\Rector\DeadCode\SideEffect;
 
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
-use PHPStan\Reflection\Native\NativeFunctionReflection;
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PHPStan\Reflection\Native\NativeFunctionReflection;
+use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 final class PureFunctionDetector
 {
     /**
@@ -235,25 +235,25 @@ final class PureFunctionDetector
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function detect(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    public function detect(FuncCall $funcCall) : bool
     {
         $funcCallName = $this->nodeNameResolver->getName($funcCall);
         if ($funcCallName === null) {
             return \false;
         }
-        $scope = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        $name = new \PhpParser\Node\Name($funcCallName);
+        $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
+        $name = new Name($funcCallName);
         $hasFunction = $this->reflectionProvider->hasFunction($name, $scope);
         if (!$hasFunction) {
             return \false;
         }
         $function = $this->reflectionProvider->getFunction($name, $scope);
-        if (!$function instanceof \PHPStan\Reflection\Native\NativeFunctionReflection) {
+        if (!$function instanceof NativeFunctionReflection) {
             return \false;
         }
         return !$this->nodeNameResolver->isNames($funcCall, self::IMPURE_FUNCTIONS);

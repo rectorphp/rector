@@ -8,7 +8,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Symplify\\RuleDocGenerator\\": "src"
+            "RectorPrefix20220606\\Symplify\\RuleDocGenerator\\": "src"
         }
     },
     "extra": {

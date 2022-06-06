@@ -15,7 +15,7 @@ use RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-class Reference extends \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryObjectOperator
+class Reference extends BinaryObjectOperator
 {
     /**
      * Constructs a new reference statement.
@@ -24,7 +24,7 @@ class Reference extends \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AS
      * @param ObjectPath $target     The target object.
      * @param int        $sourceLine The original source line.
      */
-    public function __construct(\RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ObjectPath $target, int $sourceLine)
+    public function __construct(ObjectPath $object, ObjectPath $target, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;

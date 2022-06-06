@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Transform\Rector\New_;
+namespace RectorPrefix20220606\Rector\Transform\Rector\New_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Class_;
-use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\NodeManipulator\PropertyManipulator;
-use Rector\Core\Rector\AbstractRector;
-use Rector\PostRector\Collector\PropertyToAddCollector;
-use Rector\PostRector\ValueObject\PropertyMetadata;
-use Rector\Transform\ValueObject\NewToMethodCall;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\New_;
+use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\Rector\CodingStyle\Naming\ClassNaming;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use RectorPrefix20220606\Rector\Core\NodeManipulator\PropertyManipulator;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\PostRector\Collector\PropertyToAddCollector;
+use RectorPrefix20220606\Rector\PostRector\ValueObject\PropertyMetadata;
+use RectorPrefix20220606\Rector\Transform\ValueObject\NewToMethodCall;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\NewToMethodCallRectorTest
  */
-final class NewToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class NewToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var NewToMethodCall[]
@@ -43,15 +43,15 @@ final class NewToMethodCallRector extends \Rector\Core\Rector\AbstractRector imp
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
+    public function __construct(ClassNaming $classNaming, PropertyManipulator $propertyManipulator, PropertyToAddCollector $propertyToAddCollector)
     {
         $this->classNaming = $classNaming;
         $this->propertyManipulator = $propertyManipulator;
         $this->propertyToAddCollector = $propertyToAddCollector;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces creating object instances with "new" keyword with factory method.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces creating object instances with "new" keyword with factory method.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
 	public function example() {
@@ -72,22 +72,22 @@ class SomeClass
 	}
 }
 CODE_SAMPLE
-, [new \Rector\Transform\ValueObject\NewToMethodCall('MyClass', 'MyClassFactory', 'create')])]);
+, [new NewToMethodCall('MyClass', 'MyClassFactory', 'create')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\New_::class];
+        return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$class instanceof Class_) {
             return null;
         }
         $className = $this->getName($class);
@@ -107,11 +107,11 @@ CODE_SAMPLE
                 $serviceObjectType = $newToMethodCall->getServiceObjectType();
                 $propertyName = $this->classNaming->getShortName($serviceObjectType->getClassName());
                 $propertyName = \lcfirst($propertyName);
-                $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $newToMethodCall->getServiceObjectType(), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+                $propertyMetadata = new PropertyMetadata($propertyName, $newToMethodCall->getServiceObjectType(), Class_::MODIFIER_PRIVATE);
                 $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             }
-            $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $propertyName);
-            return new \PhpParser\Node\Expr\MethodCall($propertyFetch, $newToMethodCall->getServiceMethod(), $node->args);
+            $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+            return new MethodCall($propertyFetch, $newToMethodCall->getServiceMethod(), $node->args);
         }
         return $node;
     }
@@ -120,7 +120,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220606\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\NewToMethodCall::class);
+        Assert::allIsAOf($configuration, NewToMethodCall::class);
         $this->newsToMethodCalls = $configuration;
     }
 }

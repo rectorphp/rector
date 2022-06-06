@@ -1,41 +1,41 @@
 <?php
 
 declare (strict_types=1);
-namespace PHPStan\Rules\PHPUnit;
+namespace RectorPrefix20220606\PHPStan\Rules\PHPUnit;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\NodeAbstract;
-use PHPStan\Analyser\Scope;
-use PHPStan\Rules\Rule;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\NodeAbstract;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PHPStan\Rules\Rule;
 use function count;
 use function strtolower;
 /**
  * @implements Rule<NodeAbstract>
  */
-class AssertSameBooleanExpectedRule implements \PHPStan\Rules\Rule
+class AssertSameBooleanExpectedRule implements Rule
 {
     public function getNodeType() : string
     {
-        return \PhpParser\NodeAbstract::class;
+        return NodeAbstract::class;
     }
-    public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : array
+    public function processNode(Node $node, Scope $scope) : array
     {
-        if (!\PHPStan\Rules\PHPUnit\AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
+        if (!AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
             return [];
         }
         /** @var MethodCall|StaticCall $node */
         $node = $node;
-        if (\count($node->getArgs()) < 2) {
+        if (count($node->getArgs()) < 2) {
             return [];
         }
-        if (!$node->name instanceof \PhpParser\Node\Identifier || \strtolower($node->name->name) !== 'assertsame') {
+        if (!$node->name instanceof Node\Identifier || strtolower($node->name->name) !== 'assertsame') {
             return [];
         }
         $expectedArgumentValue = $node->getArgs()[0]->value;
-        if (!$expectedArgumentValue instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if (!$expectedArgumentValue instanceof ConstFetch) {
             return [];
         }
         if ($expectedArgumentValue->name->toLowerString() === 'true') {

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\Guard;
+namespace RectorPrefix20220606\Rector\TypeDeclaration\Guard;
 
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ClassReflection;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class PropertyTypeOverrideGuard
 {
     /**
@@ -19,15 +19,15 @@ final class PropertyTypeOverrideGuard
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isLegal(\PhpParser\Node\Stmt\Property $property) : bool
+    public function isLegal(Property $property) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($property);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
         $propertyName = $this->nodeNameResolver->getName($property);

@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
+namespace RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\TypeMapper;
 
-use PhpParser\Node;
-use PhpParser\Node\Name;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\Constant\ConstantBooleanType;
-use PHPStan\Type\Type;
-use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use RectorPrefix20220606\PHPStan\Type\BooleanType;
+use RectorPrefix20220606\PHPStan\Type\Constant\ConstantBooleanType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\Core\Php\PhpVersionProvider;
+use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
+use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 /**
  * @implements TypeMapperInterface<BooleanType>
  */
-final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
+final class BooleanTypeMapper implements TypeMapperInterface
 {
     /**
      * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
@@ -32,43 +32,43 @@ final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
      */
     public function getNodeClass() : string
     {
-        return \PHPStan\Type\BooleanType::class;
+        return BooleanType::class;
     }
     /**
      * @param BooleanType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
     {
         if ($this->isFalseBooleanTypeWithUnion($type)) {
-            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('false');
+            return new IdentifierTypeNode('false');
         }
-        if ($type instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
+        if ($type instanceof ConstantBooleanType) {
             // cannot be parent of union
-            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('true');
+            return new IdentifierTypeNode('true');
         }
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('bool');
+        return new IdentifierTypeNode('bool');
     }
     /**
      * @param BooleanType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return null;
         }
         if ($this->isFalseBooleanTypeWithUnion($type)) {
-            return new \PhpParser\Node\Name('false');
+            return new Name('false');
         }
-        return new \PhpParser\Node\Name('bool');
+        return new Name('bool');
     }
-    private function isFalseBooleanTypeWithUnion(\PHPStan\Type\Type $type) : bool
+    private function isFalseBooleanTypeWithUnion(Type $type) : bool
     {
-        if (!$type instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
+        if (!$type instanceof ConstantBooleanType) {
             return \false;
         }
         if ($type->getValue()) {
             return \false;
         }
-        return $this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES);
+        return $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES);
     }
 }

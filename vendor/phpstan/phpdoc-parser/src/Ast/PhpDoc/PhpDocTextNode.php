@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace PHPStan\PhpDocParser\Ast\PhpDoc;
+namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc;
 
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-class PhpDocTextNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
+class PhpDocTextNode implements PhpDocChildNode
 {
     use NodeAttributes;
     /** @var string */

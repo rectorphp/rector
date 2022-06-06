@@ -34,7 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PHPStan\\": "src\/"
+            "RectorPrefix20220606\\PHPStan\\": "src\/"
         }
     },
     "autoload-dev": {

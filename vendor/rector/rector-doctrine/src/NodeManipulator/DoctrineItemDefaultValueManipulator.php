@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\NodeManipulator;
+namespace RectorPrefix20220606\Rector\Doctrine\NodeManipulator;
 
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 final class DoctrineItemDefaultValueManipulator
 {
     /**
      * @param string|bool|int $defaultValue
      */
-    public function remove(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, string $item, $defaultValue) : void
+    public function remove(PhpDocInfo $phpDocInfo, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, string $item, $defaultValue) : void
     {
         if (!$this->hasItemWithDefaultValue($doctrineAnnotationTagValueNode, $item, $defaultValue)) {
             return;
@@ -24,19 +24,19 @@ final class DoctrineItemDefaultValueManipulator
     /**
      * @param string|bool|int $defaultValue
      */
-    private function hasItemWithDefaultValue(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, string $itemKey, $defaultValue) : bool
+    private function hasItemWithDefaultValue(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, string $itemKey, $defaultValue) : bool
     {
         $currentValue = $doctrineAnnotationTagValueNode->getValueWithoutQuotes($itemKey);
         if ($currentValue === null) {
             return \false;
         }
         if ($defaultValue === \false) {
-            return $currentValue instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
+            return $currentValue instanceof ConstExprFalseNode;
         }
         if ($defaultValue === \true) {
-            return $currentValue instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
+            return $currentValue instanceof ConstExprTrueNode;
         }
-        if (\is_int($defaultValue) && $currentValue instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode) {
+        if (\is_int($defaultValue) && $currentValue instanceof ConstExprIntegerNode) {
             $currentValue = (int) $currentValue->value;
         }
         return $currentValue === $defaultValue;

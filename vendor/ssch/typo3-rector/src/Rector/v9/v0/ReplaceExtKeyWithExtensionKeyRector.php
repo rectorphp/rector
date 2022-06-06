@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v9\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v0;
 
 use RectorPrefix20220606\Nette\Utils\Json;
-use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
-use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Ssch\TYPO3Rector\Helper\FilesFinder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\FilesFinder;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
@@ -21,23 +21,23 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\ReplaceExtKeyWithExtensionKeyRector\ReplaceExtKeyWithExtensionKeyFromComposerJsonNameRectorTest
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\ReplaceExtKeyWithExtensionKeyRector\ReplaceExtKeyWithExtensionKeyFromComposerJsonExtensionKeyExtraSectionRectorTest
  */
-final class ReplaceExtKeyWithExtensionKeyRector extends \Rector\Core\Rector\AbstractRector
+final class ReplaceExtKeyWithExtensionKeyRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;
-    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder)
+    public function __construct(FilesFinder $filesFinder)
     {
         $this->filesFinder = $filesFinder;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace $_EXTKEY with extension key', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace $_EXTKEY with extension key', [new CodeSample(<<<'CODE_SAMPLE'
 ExtensionUtility::configurePlugin(
     'Foo.'.$_EXTKEY,
     'ArticleTeaser',
@@ -62,12 +62,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Variable::class];
+        return [Variable::class];
     }
     /**
      * @param Variable $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $fileInfo = $this->file->getSmartFileInfo();
         if ($this->filesFinder->isExtEmconf($fileInfo)) {
@@ -77,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
         $extEmConf = $this->createExtensionKeyFromFolder($fileInfo);
-        if (!$extEmConf instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
+        if (!$extEmConf instanceof SmartFileInfo) {
             return null;
         }
         if ($this->isAssignment($node)) {
@@ -87,27 +87,27 @@ CODE_SAMPLE
         if (null === $extensionKey) {
             $extensionKey = \basename($extEmConf->getRealPathDirectory());
         }
-        return new \PhpParser\Node\Scalar\String_($extensionKey);
+        return new String_($extensionKey);
     }
-    private function isExtensionKeyVariable(\PhpParser\Node\Expr\Variable $variable) : bool
+    private function isExtensionKeyVariable(Variable $variable) : bool
     {
         return $this->isName($variable, '_EXTKEY');
     }
-    private function createExtensionKeyFromFolder(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : ?\Symplify\SmartFileSystem\SmartFileInfo
+    private function createExtensionKeyFromFolder(SmartFileInfo $fileInfo) : ?SmartFileInfo
     {
         return $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($fileInfo);
     }
-    private function isAssignment(\PhpParser\Node\Expr\Variable $node) : bool
+    private function isAssignment(Variable $node) : bool
     {
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         // Check if we have an assigment to the property, if so do not change it
-        return $parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var === $node;
+        return $parentNode instanceof Assign && $parentNode->var === $node;
     }
-    private function resolveExtensionKeyByComposerJson(\Symplify\SmartFileSystem\SmartFileInfo $extEmConf) : ?string
+    private function resolveExtensionKeyByComposerJson(SmartFileInfo $extEmConf) : ?string
     {
         try {
-            $composerJson = new \Symplify\SmartFileSystem\SmartFileInfo($extEmConf->getRealPathDirectory() . '/composer.json');
-            $json = \RectorPrefix20220606\Nette\Utils\Json::decode($composerJson->getContents(), \RectorPrefix20220606\Nette\Utils\Json::FORCE_ARRAY);
+            $composerJson = new SmartFileInfo($extEmConf->getRealPathDirectory() . '/composer.json');
+            $json = Json::decode($composerJson->getContents(), Json::FORCE_ARRAY);
             if (isset($json['extra']['typo3/cms']['extension-key'])) {
                 return $json['extra']['typo3/cms']['extension-key'];
             }
@@ -115,7 +115,7 @@ CODE_SAMPLE
                 [, $extensionKey] = \explode('/', (string) $json['name'], 2);
                 return \str_replace('-', '_', $extensionKey);
             }
-        } catch (\RectorPrefix20220606\Symplify\SmartFileSystem\Exception\FileNotFoundException $exception) {
+        } catch (FileNotFoundException $exception) {
             return null;
         }
         return null;

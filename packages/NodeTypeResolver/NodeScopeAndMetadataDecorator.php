@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeTypeResolver;
+namespace RectorPrefix20220606\Rector\NodeTypeResolver;
 
-use PhpParser\Node\Stmt;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\CloningVisitor;
-use PhpParser\NodeVisitor\NodeConnectingVisitor;
-use Rector\Core\ValueObject\Application\File;
-use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\NodeTraverser;
+use RectorPrefix20220606\PhpParser\NodeVisitor\CloningVisitor;
+use RectorPrefix20220606\PhpParser\NodeVisitor\NodeConnectingVisitor;
+use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
+use RectorPrefix20220606\Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 final class NodeScopeAndMetadataDecorator
 {
     /**
@@ -32,7 +32,7 @@ final class NodeScopeAndMetadataDecorator
      * @var \Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor
      */
     private $functionLikeParamArgPositionNodeVisitor;
-    public function __construct(\PhpParser\NodeVisitor\CloningVisitor $cloningVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver $phpStanNodeScopeResolver, \PhpParser\NodeVisitor\NodeConnectingVisitor $nodeConnectingVisitor, \Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor)
+    public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, NodeConnectingVisitor $nodeConnectingVisitor, FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor)
     {
         $this->cloningVisitor = $cloningVisitor;
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
@@ -43,11 +43,11 @@ final class NodeScopeAndMetadataDecorator
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function decorateNodesFromFile(\Rector\Core\ValueObject\Application\File $file, array $stmts) : array
+    public function decorateNodesFromFile(File $file, array $stmts) : array
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $smartFileInfo);
-        $nodeTraverser = new \PhpParser\NodeTraverser();
+        $nodeTraverser = new NodeTraverser();
         // needed also for format preserving printing
         $nodeTraverser->addVisitor($this->cloningVisitor);
         // this one has to be run again to re-connect nodes with new attributes
@@ -61,7 +61,7 @@ final class NodeScopeAndMetadataDecorator
      */
     public function decorateStmtsFromString(array $stmts) : array
     {
-        $nodeTraverser = new \PhpParser\NodeTraverser();
+        $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
         return $nodeTraverser->traverse($stmts);
     }

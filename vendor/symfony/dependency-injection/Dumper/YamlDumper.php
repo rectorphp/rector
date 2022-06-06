@@ -33,7 +33,7 @@ use RectorPrefix20220606\Symfony\Component\Yaml\Yaml;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class YamlDumper extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Dumper\Dumper
+class YamlDumper extends Dumper
 {
     /**
      * @var YmlDumper
@@ -44,13 +44,13 @@ class YamlDumper extends \RectorPrefix20220606\Symfony\Component\DependencyInjec
      */
     public function dump(array $options = []) : string
     {
-        if (!\class_exists(\RectorPrefix20220606\Symfony\Component\Yaml\Dumper::class)) {
-            throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\LogicException('Unable to dump the container as the Symfony Yaml Component is not installed.');
+        if (!\class_exists(YmlDumper::class)) {
+            throw new LogicException('Unable to dump the container as the Symfony Yaml Component is not installed.');
         }
-        $this->dumper = $this->dumper ?? new \RectorPrefix20220606\Symfony\Component\Yaml\Dumper();
+        $this->dumper = $this->dumper ?? new YmlDumper();
         return $this->container->resolveEnvPlaceholders($this->addParameters() . "\n" . $this->addServices());
     }
-    private function addService(string $id, \RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition $definition) : string
+    private function addService(string $id, Definition $definition) : string
     {
         $code = "    {$id}:\n";
         if ($class = $definition->getClass()) {
@@ -123,9 +123,9 @@ class YamlDumper extends \RectorPrefix20220606\Symfony\Component\DependencyInjec
             if (0 !== $priority) {
                 $code .= \sprintf("        decoration_priority: %s\n", $priority);
             }
-            $decorationOnInvalid = $decoratedService[3] ?? \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
-            if (\in_array($decorationOnInvalid, [\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE, \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE])) {
-                $invalidBehavior = \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE === $decorationOnInvalid ? 'null' : 'ignore';
+            $decorationOnInvalid = $decoratedService[3] ?? ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
+            if (\in_array($decorationOnInvalid, [ContainerInterface::IGNORE_ON_INVALID_REFERENCE, ContainerInterface::NULL_ON_INVALID_REFERENCE])) {
+                $invalidBehavior = ContainerInterface::NULL_ON_INVALID_REFERENCE === $decorationOnInvalid ? 'null' : 'ignore';
                 $code .= \sprintf("        decoration_on_invalid: %s\n", $invalidBehavior);
             }
         }
@@ -137,7 +137,7 @@ class YamlDumper extends \RectorPrefix20220606\Symfony\Component\DependencyInjec
         }
         return $code;
     }
-    private function addServiceAlias(string $alias, \RectorPrefix20220606\Symfony\Component\DependencyInjection\Alias $id) : string
+    private function addServiceAlias(string $alias, Alias $id) : string
     {
         $deprecated = '';
         if ($id->isDeprecated()) {
@@ -190,7 +190,7 @@ class YamlDumper extends \RectorPrefix20220606\Symfony\Component\DependencyInjec
     private function dumpCallable($callable)
     {
         if (\is_array($callable)) {
-            if ($callable[0] instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference) {
+            if ($callable[0] instanceof Reference) {
                 $callable = [$this->getServiceCall((string) $callable[0], $callable[0]), $callable[1]];
             } else {
                 $callable = [$callable[0], $callable[1]];
@@ -207,13 +207,13 @@ class YamlDumper extends \RectorPrefix20220606\Symfony\Component\DependencyInjec
      */
     private function dumpValue($value)
     {
-        if ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
+        if ($value instanceof ServiceClosureArgument) {
             $value = $value->getValues()[0];
-            return new \RectorPrefix20220606\Symfony\Component\Yaml\Tag\TaggedValue('service_closure', $this->dumpValue($value));
+            return new TaggedValue('service_closure', $this->dumpValue($value));
         }
-        if ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ArgumentInterface) {
+        if ($value instanceof ArgumentInterface) {
             $tag = $value;
-            if ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument || $value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument && ($tag = $value->getTaggedIteratorArgument())) {
+            if ($value instanceof TaggedIteratorArgument || $value instanceof ServiceLocatorArgument && ($tag = $value->getTaggedIteratorArgument())) {
                 if (null === $tag->getIndexAttribute()) {
                     $content = $tag->getTag();
                 } else {
@@ -225,16 +225,16 @@ class YamlDumper extends \RectorPrefix20220606\Symfony\Component\DependencyInjec
                         $content['default_priority_method'] = $tag->getDefaultPriorityMethod();
                     }
                 }
-                return new \RectorPrefix20220606\Symfony\Component\Yaml\Tag\TaggedValue($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument ? 'tagged_iterator' : 'tagged_locator', $content);
+                return new TaggedValue($value instanceof TaggedIteratorArgument ? 'tagged_iterator' : 'tagged_locator', $content);
             }
-            if ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\IteratorArgument) {
+            if ($value instanceof IteratorArgument) {
                 $tag = 'iterator';
-            } elseif ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument) {
+            } elseif ($value instanceof ServiceLocatorArgument) {
                 $tag = 'service_locator';
             } else {
-                throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('Unspecified Yaml tag for type "%s".', \get_debug_type($value)));
+                throw new RuntimeException(\sprintf('Unspecified Yaml tag for type "%s".', \get_debug_type($value)));
             }
-            return new \RectorPrefix20220606\Symfony\Component\Yaml\Tag\TaggedValue($tag, $this->dumpValue($value->getValues()));
+            return new TaggedValue($tag, $this->dumpValue($value->getValues()));
         }
         if (\is_array($value)) {
             $code = [];
@@ -242,32 +242,32 @@ class YamlDumper extends \RectorPrefix20220606\Symfony\Component\DependencyInjec
                 $code[$k] = $this->dumpValue($v);
             }
             return $code;
-        } elseif ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference) {
+        } elseif ($value instanceof Reference) {
             return $this->getServiceCall((string) $value, $value);
-        } elseif ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Parameter) {
+        } elseif ($value instanceof Parameter) {
             return $this->getParameterCall((string) $value);
-        } elseif ($value instanceof \RectorPrefix20220606\Symfony\Component\ExpressionLanguage\Expression) {
+        } elseif ($value instanceof Expression) {
             return $this->getExpressionCall((string) $value);
-        } elseif ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition) {
-            return new \RectorPrefix20220606\Symfony\Component\Yaml\Tag\TaggedValue('service', (new \RectorPrefix20220606\Symfony\Component\Yaml\Parser())->parse("_:\n" . $this->addService('_', $value), \RectorPrefix20220606\Symfony\Component\Yaml\Yaml::PARSE_CUSTOM_TAGS)['_']['_']);
-        } elseif ($value instanceof \RectorPrefix20220606\UnitEnum) {
-            return new \RectorPrefix20220606\Symfony\Component\Yaml\Tag\TaggedValue('php/const', \sprintf('%s::%s', \get_class($value), $value->name));
-        } elseif ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\AbstractArgument) {
-            return new \RectorPrefix20220606\Symfony\Component\Yaml\Tag\TaggedValue('abstract', $value->getText());
+        } elseif ($value instanceof Definition) {
+            return new TaggedValue('service', (new Parser())->parse("_:\n" . $this->addService('_', $value), Yaml::PARSE_CUSTOM_TAGS)['_']['_']);
+        } elseif ($value instanceof \UnitEnum) {
+            return new TaggedValue('php/const', \sprintf('%s::%s', \get_class($value), $value->name));
+        } elseif ($value instanceof AbstractArgument) {
+            return new TaggedValue('abstract', $value->getText());
         } elseif (\is_object($value) || \is_resource($value)) {
-            throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\RuntimeException('Unable to dump a service container if a parameter is an object or a resource.');
+            throw new RuntimeException('Unable to dump a service container if a parameter is an object or a resource.');
         }
         return $value;
     }
-    private function getServiceCall(string $id, \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference $reference = null) : string
+    private function getServiceCall(string $id, Reference $reference = null) : string
     {
         if (null !== $reference) {
             switch ($reference->getInvalidBehavior()) {
-                case \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerInterface::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE:
+                case ContainerInterface::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE:
                     break;
-                case \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE:
+                case ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE:
                     break;
-                case \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE:
+                case ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE:
                     return \sprintf('@!%s', $id);
                 default:
                     return \sprintf('@?%s', $id);
@@ -289,7 +289,7 @@ class YamlDumper extends \RectorPrefix20220606\Symfony\Component\DependencyInjec
         foreach ($parameters as $key => $value) {
             if (\is_array($value)) {
                 $value = $this->prepareParameters($value, $escape);
-            } elseif ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference || \is_string($value) && \strncmp($value, '@', \strlen('@')) === 0) {
+            } elseif ($value instanceof Reference || \is_string($value) && \strncmp($value, '@', \strlen('@')) === 0) {
                 $value = '@' . $value;
             }
             $filtered[$key] = $value;

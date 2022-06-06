@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v9\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Nop;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Nop;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Deprecation-83121-LoggingMethodDataHandler-newlog2.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\UseLogMethodInsteadOfNewLog2Rector\UseLogMethodInsteadOfNewLog2RectorTest
  */
-final class UseLogMethodInsteadOfNewLog2Rector extends \Rector\Core\Rector\AbstractRector
+final class UseLogMethodInsteadOfNewLog2Rector extends AbstractRector
 {
     /**
      * @var string
@@ -33,35 +33,35 @@ final class UseLogMethodInsteadOfNewLog2Rector extends \Rector\Core\Rector\Abstr
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\DataHandling\\DataHandler'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\DataHandling\\DataHandler'))) {
             return null;
         }
         if (!$this->isName($node->name, 'newlog2')) {
             return null;
         }
         if (!isset($node->args[3]) || isset($node->args[3]) && $this->valueResolver->isNull($node->args[3]->value)) {
-            $propArrayAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('propArr'), $this->nodeFactory->createMethodCall($node->var, 'getRecordProperties', [$node->args[1], $node->args[2]]));
+            $propArrayAssign = new Assign(new Variable('propArr'), $this->nodeFactory->createMethodCall($node->var, 'getRecordProperties', [$node->args[1], $node->args[2]]));
             $this->nodesToAddCollector->addNodeBeforeNode($propArrayAssign, $node);
-            $pidAssignExpression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PID), new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('propArr'), new \PhpParser\Node\Scalar\String_(self::PID))));
-            $this->nodesToAddCollector->addNodesBeforeNode([$pidAssignExpression, new \PhpParser\Node\Stmt\Nop()], $node);
+            $pidAssignExpression = new Expression(new Assign(new Variable(self::PID), new ArrayDimFetch(new Variable('propArr'), new String_(self::PID))));
+            $this->nodesToAddCollector->addNodesBeforeNode([$pidAssignExpression, new Nop()], $node);
         }
-        $node->name = new \PhpParser\Node\Identifier('log');
-        $node->args = $this->nodeFactory->createArgs([$node->args[1], $node->args[2], new \PhpParser\Node\Scalar\LNumber(0), new \PhpParser\Node\Scalar\LNumber(0), $node->args[4] ?? new \PhpParser\Node\Scalar\LNumber(0), $node->args[0], new \PhpParser\Node\Scalar\LNumber(-1), new \PhpParser\Node\Expr\Array_(), $this->nodeFactory->createMethodCall($node->var, 'eventPid', [$node->args[1], $node->args[2], isset($node->args[3]) && !$this->valueResolver->isNull($node->args[3]->value) ? $node->args[3] : new \PhpParser\Node\Expr\Variable(self::PID)])]);
+        $node->name = new Identifier('log');
+        $node->args = $this->nodeFactory->createArgs([$node->args[1], $node->args[2], new LNumber(0), new LNumber(0), $node->args[4] ?? new LNumber(0), $node->args[0], new LNumber(-1), new Array_(), $this->nodeFactory->createMethodCall($node->var, 'eventPid', [$node->args[1], $node->args[2], isset($node->args[3]) && !$this->valueResolver->isNull($node->args[3]->value) ? $node->args[3] : new Variable(self::PID)])]);
         return $node;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use log method instead of newlog2 from class DataHandler', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use log method instead of newlog2 from class DataHandler', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 

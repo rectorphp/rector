@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
+namespace RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
-use PhpParser\Node\Param;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower;
-final class SplFixedArrayParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
+use RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower;
+final class SplFixedArrayParamTypeInferer implements ParamTypeInfererInterface
 {
     /**
      * @readonly
@@ -21,15 +21,15 @@ final class SplFixedArrayParamTypeInferer implements \Rector\TypeDeclaration\Con
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower, NodeTypeResolver $nodeTypeResolver)
     {
         $this->splArrayFixedTypeNarrower = $splArrayFixedTypeNarrower;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
+    public function inferParam(Param $param) : Type
     {
         if ($param->type === null) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         $paramType = $this->nodeTypeResolver->getType($param->type);
         return $this->splArrayFixedTypeNarrower->narrow($paramType);

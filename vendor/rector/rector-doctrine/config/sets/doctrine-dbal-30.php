@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use PHPStan\Type\VoidType;
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
+use RectorPrefix20220606\PHPStan\Type\VoidType;
+use RectorPrefix20220606\Rector\Config\RectorConfig;
+use RectorPrefix20220606\Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use RectorPrefix20220606\Rector\Renaming\Rector\Name\RenameClassRector;
+use RectorPrefix20220606\Rector\Renaming\ValueObject\MethodCallRename;
+use RectorPrefix20220606\Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use RectorPrefix20220606\Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 # https://github.com/doctrine/dbal/blob/master/UPGRADE.md#bc-break-changes-in-handling-string-and-binary-columns
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Platforms\\AbstractPlatform', 'getVarcharTypeDeclarationSQL', 'getStringTypeDeclarationSQL'), new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Driver\\DriverException', 'getErrorCode', 'getCode')]);
-    $rectorConfig->ruleWithConfiguration(\Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector::class, [new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Doctrine\\DBAL\\Connection', 'ping', new \PHPStan\Type\VoidType())]);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('Doctrine\\DBAL\\Platforms\\AbstractPlatform', 'getVarcharTypeDeclarationSQL', 'getStringTypeDeclarationSQL'), new MethodCallRename('Doctrine\\DBAL\\Driver\\DriverException', 'getErrorCode', 'getCode')]);
+    $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [new AddReturnTypeDeclaration('Doctrine\\DBAL\\Connection', 'ping', new VoidType())]);
     # https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecated-abstractionresult
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, ['Doctrine\\DBAL\\Abstraction\\Result' => 'Doctrine\\DBAL\\Result']);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['Doctrine\\DBAL\\Abstraction\\Result' => 'Doctrine\\DBAL\\Result']);
 };

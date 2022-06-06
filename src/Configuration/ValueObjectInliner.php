@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Configuration;
+namespace RectorPrefix20220606\Rector\Core\Configuration;
 
 use ReflectionClass;
 use ReflectionMethod;
@@ -25,11 +25,11 @@ final class ValueObjectInliner
      * @param ReflectionClass<object> $reflectionClass
      * @return mixed[]
      */
-    public static function resolveArgumentValues(\ReflectionClass $reflectionClass, object $object) : array
+    public static function resolveArgumentValues(ReflectionClass $reflectionClass, object $object) : array
     {
         $argumentValues = [];
         $constructorReflectionMethod = $reflectionClass->getConstructor();
-        if (!$constructorReflectionMethod instanceof \ReflectionMethod) {
+        if (!$constructorReflectionMethod instanceof ReflectionMethod) {
             // value object without constructor
             return [];
         }
@@ -55,12 +55,12 @@ final class ValueObjectInliner
         }
         return $inlineServices;
     }
-    private static function inlineSingle(object $object) : \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
+    private static function inlineSingle(object $object) : InlineServiceConfigurator
     {
-        $reflectionClass = new \ReflectionClass($object);
+        $reflectionClass = new ReflectionClass($object);
         $className = $reflectionClass->getName();
         $argumentValues = self::resolveArgumentValues($reflectionClass, $object);
-        $inlineServiceConfigurator = new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator(new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition($className));
+        $inlineServiceConfigurator = new InlineServiceConfigurator(new Definition($className));
         if ($argumentValues !== []) {
             $inlineServiceConfigurator->args($argumentValues);
         }

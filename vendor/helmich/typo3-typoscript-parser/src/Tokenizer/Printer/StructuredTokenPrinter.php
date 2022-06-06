@@ -5,13 +5,13 @@ namespace RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Printer;
 
 use RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
 use RectorPrefix20220606\Symfony\Component\Yaml\Yaml;
-class StructuredTokenPrinter implements \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Printer\TokenPrinterInterface
+class StructuredTokenPrinter implements TokenPrinterInterface
 {
     /** @var Yaml */
     private $yaml;
-    public function __construct(\RectorPrefix20220606\Symfony\Component\Yaml\Yaml $yaml = null)
+    public function __construct(Yaml $yaml = null)
     {
-        $this->yaml = $yaml ?: new \RectorPrefix20220606\Symfony\Component\Yaml\Yaml();
+        $this->yaml = $yaml ?: new Yaml();
     }
     /**
      * @param TokenInterface[] $tokens

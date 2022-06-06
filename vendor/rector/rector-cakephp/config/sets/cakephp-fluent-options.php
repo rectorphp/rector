@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
-use Rector\CakePHP\ValueObject\ArrayToFluentCall;
-use Rector\CakePHP\ValueObject\FactoryMethod;
-use Rector\Config\RectorConfig;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::class, [\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => [new \Rector\CakePHP\ValueObject\ArrayToFluentCall('Cake\\ORM\\Association', [
+use RectorPrefix20220606\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
+use RectorPrefix20220606\Rector\CakePHP\ValueObject\ArrayToFluentCall;
+use RectorPrefix20220606\Rector\CakePHP\ValueObject\FactoryMethod;
+use RectorPrefix20220606\Rector\Config\RectorConfig;
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->ruleWithConfiguration(ArrayToFluentCallRector::class, [ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => [new ArrayToFluentCall('Cake\\ORM\\Association', [
         'bindingKey' => 'setBindingKey',
         'cascadeCallbacks' => 'setCascadeCallbacks',
         'className' => 'setClassName',
@@ -27,7 +27,7 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         # BelongsToMany only
         'targetForeignKey' => 'setTargetForeignKey',
         'through' => 'setThrough',
-    ]), new \Rector\CakePHP\ValueObject\ArrayToFluentCall('Cake\\ORM\\Query', ['fields' => 'select', 'conditions' => 'where', 'join' => 'join', 'order' => 'order', 'limit' => 'limit', 'offset' => 'offset', 'group' => 'group', 'having' => 'having', 'contain' => 'contain', 'page' => 'page']), new \Rector\CakePHP\ValueObject\ArrayToFluentCall('Cake\\ORM\\Association', [
+    ]), new ArrayToFluentCall('Cake\\ORM\\Query', ['fields' => 'select', 'conditions' => 'where', 'join' => 'join', 'order' => 'order', 'limit' => 'limit', 'offset' => 'offset', 'group' => 'group', 'having' => 'having', 'contain' => 'contain', 'page' => 'page']), new ArrayToFluentCall('Cake\\ORM\\Association', [
         'bindingKey' => 'setBindingKey',
         'cascadeCallbacks' => 'setCascadeCallbacks',
         'className' => 'setClassName',
@@ -46,5 +46,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         # BelongsToMany only
         'targetForeignKey' => 'setTargetForeignKey',
         'through' => 'setThrough',
-    ]), new \Rector\CakePHP\ValueObject\ArrayToFluentCall('Cake\\ORM\\Query', ['fields' => 'select', 'conditions' => 'where', 'join' => 'join', 'order' => 'order', 'limit' => 'limit', 'offset' => 'offset', 'group' => 'group', 'having' => 'having', 'contain' => 'contain', 'page' => 'page'])], \Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::FACTORY_METHODS => [new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'belongsTo', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'belongsToMany', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'hasMany', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'hasOne', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'find', 'Cake\\ORM\\Query', 2)]]);
+    ]), new ArrayToFluentCall('Cake\\ORM\\Query', ['fields' => 'select', 'conditions' => 'where', 'join' => 'join', 'order' => 'order', 'limit' => 'limit', 'offset' => 'offset', 'group' => 'group', 'having' => 'having', 'contain' => 'contain', 'page' => 'page'])], ArrayToFluentCallRector::FACTORY_METHODS => [new FactoryMethod('Cake\\ORM\\Table', 'belongsTo', 'Cake\\ORM\\Association', 2), new FactoryMethod('Cake\\ORM\\Table', 'belongsToMany', 'Cake\\ORM\\Association', 2), new FactoryMethod('Cake\\ORM\\Table', 'hasMany', 'Cake\\ORM\\Association', 2), new FactoryMethod('Cake\\ORM\\Table', 'hasOne', 'Cake\\ORM\\Association', 2), new FactoryMethod('Cake\\ORM\\Table', 'find', 'Cake\\ORM\\Query', 2)]]);
 };

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\PhpDoc\TagRemover;
+namespace RectorPrefix20220606\Rector\DeadCode\PhpDoc\TagRemover;
 
-use PhpParser\Node\FunctionLike;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
+use RectorPrefix20220606\PhpParser\Node\FunctionLike;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Node;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use RectorPrefix20220606\Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
 use RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class ParamTagRemover
 {
@@ -17,19 +17,19 @@ final class ParamTagRemover
      * @var \Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer
      */
     private $deadParamTagValueNodeAnalyzer;
-    public function __construct(\Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer)
+    public function __construct(DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer)
     {
         $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;
     }
-    public function removeParamTagsIfUseless(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\FunctionLike $functionLike) : bool
+    public function removeParamTagsIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike) : bool
     {
         $hasChanged = \false;
-        $phpDocNodeTraverser = new \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $docNode) use($functionLike, $phpDocInfo, &$hasChanged) : ?int {
-            if (!$docNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (Node $docNode) use($functionLike, $phpDocInfo, &$hasChanged) : ?int {
+            if (!$docNode instanceof PhpDocTagNode) {
                 return null;
             }
-            if (!$docNode->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode) {
+            if (!$docNode->value instanceof ParamTagValueNode) {
                 return null;
             }
             // handle only basic types, keep phpstan/psalm helper ones
@@ -41,7 +41,7 @@ final class ParamTagRemover
             }
             $phpDocInfo->markAsChanged();
             $hasChanged = \true;
-            return \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+            return PhpDocNodeTraverser::NODE_REMOVE;
         });
         return $hasChanged;
     }

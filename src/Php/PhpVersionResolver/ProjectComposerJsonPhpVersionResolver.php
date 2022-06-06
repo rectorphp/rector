@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Php\PhpVersionResolver;
+namespace RectorPrefix20220606\Rector\Core\Php\PhpVersionResolver;
 
 use RectorPrefix20220606\Composer\Semver\VersionParser;
-use Rector\Core\Util\PhpVersionFactory;
+use RectorPrefix20220606\Rector\Core\Util\PhpVersionFactory;
 use RectorPrefix20220606\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 /**
  * @see \Rector\Core\Tests\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver\ProjectComposerJsonPhpVersionResolverTest
@@ -26,7 +26,7 @@ final class ProjectComposerJsonPhpVersionResolver
      * @var \Rector\Core\Util\PhpVersionFactory
      */
     private $phpVersionFactory;
-    public function __construct(\RectorPrefix20220606\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20220606\Composer\Semver\VersionParser $versionParser, \Rector\Core\Util\PhpVersionFactory $phpVersionFactory)
+    public function __construct(ComposerJsonFactory $composerJsonFactory, VersionParser $versionParser, PhpVersionFactory $phpVersionFactory)
     {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->versionParser = $versionParser;

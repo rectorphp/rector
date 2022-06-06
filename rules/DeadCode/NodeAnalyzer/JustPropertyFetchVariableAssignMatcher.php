@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\DeadCode\NodeAnalyzer;
 
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
+use RectorPrefix20220606\Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign;
 final class JustPropertyFetchVariableAssignMatcher
 {
     /**
@@ -18,11 +18,11 @@ final class JustPropertyFetchVariableAssignMatcher
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(NodeComparator $nodeComparator)
     {
         $this->nodeComparator = $nodeComparator;
     }
-    public function match(\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmtsAware) : ?\Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign
+    public function match(StmtsAwareInterface $stmtsAware) : ?VariableAndPropertyFetchAssign
     {
         $stmts = (array) $stmtsAware->stmts;
         $stmtCount = \count($stmts);
@@ -31,11 +31,11 @@ final class JustPropertyFetchVariableAssignMatcher
             return null;
         }
         $firstVariableAndPropertyFetchAssign = $this->matchVariableAndPropertyFetchAssign($stmts[0]);
-        if (!$firstVariableAndPropertyFetchAssign instanceof \Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign) {
+        if (!$firstVariableAndPropertyFetchAssign instanceof VariableAndPropertyFetchAssign) {
             return null;
         }
         $thirdVariableAndPropertyFetchAssign = $this->matchRevertedVariableAndPropertyFetchAssign($stmts[2]);
-        if (!$thirdVariableAndPropertyFetchAssign instanceof \Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign) {
+        if (!$thirdVariableAndPropertyFetchAssign instanceof VariableAndPropertyFetchAssign) {
             return null;
         }
         // property fetch are the same
@@ -48,38 +48,38 @@ final class JustPropertyFetchVariableAssignMatcher
         }
         return $firstVariableAndPropertyFetchAssign;
     }
-    private function matchVariableAndPropertyFetchAssign(\PhpParser\Node\Stmt $stmt) : ?\Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign
+    private function matchVariableAndPropertyFetchAssign(Stmt $stmt) : ?VariableAndPropertyFetchAssign
     {
-        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$stmt instanceof Expression) {
             return null;
         }
-        if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$stmt->expr instanceof Assign) {
             return null;
         }
         $assign = $stmt->expr;
-        if (!$assign->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$assign->expr instanceof PropertyFetch) {
             return null;
         }
-        if (!$assign->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$assign->var instanceof Variable) {
             return null;
         }
-        return new \Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign($assign->var, $assign->expr);
+        return new VariableAndPropertyFetchAssign($assign->var, $assign->expr);
     }
-    private function matchRevertedVariableAndPropertyFetchAssign(\PhpParser\Node\Stmt $stmt) : ?\Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign
+    private function matchRevertedVariableAndPropertyFetchAssign(Stmt $stmt) : ?VariableAndPropertyFetchAssign
     {
-        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$stmt instanceof Expression) {
             return null;
         }
-        if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$stmt->expr instanceof Assign) {
             return null;
         }
         $assign = $stmt->expr;
-        if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$assign->var instanceof PropertyFetch) {
             return null;
         }
-        if (!$assign->expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$assign->expr instanceof Variable) {
             return null;
         }
-        return new \Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign($assign->expr, $assign->var);
+        return new VariableAndPropertyFetchAssign($assign->expr, $assign->var);
     }
 }

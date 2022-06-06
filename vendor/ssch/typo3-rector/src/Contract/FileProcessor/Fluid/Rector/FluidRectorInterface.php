@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector;
 
-use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\ValueObject\Application\File;
-interface FluidRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface
+use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
+use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
+interface FluidRectorInterface extends RectorInterface
 {
-    public function transform(\Rector\Core\ValueObject\Application\File $file) : void;
+    public function transform(File $file) : void;
 }

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php80\NodeManipulator;
+namespace RectorPrefix20220606\Rector\Php80\NodeManipulator;
 
-use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PhpParser\Node\Attribute;
+use RectorPrefix20220606\PhpParser\Node\AttributeGroup;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
 final class AttributeGroupNamedArgumentManipulator
 {
     /**
@@ -27,7 +27,7 @@ final class AttributeGroupNamedArgumentManipulator
     /**
      * Special case for JMS Access type, where string is replaced by specific value
      */
-    private function processReplaceAttr(\PhpParser\Node\Attribute $attribute, string $attrName) : void
+    private function processReplaceAttr(Attribute $attribute, string $attrName) : void
     {
         if (!\in_array($attrName, ['JMS\\Serializer\\Annotation\\AccessType', 'JMS\\AccessType'], \true)) {
             return;
@@ -40,9 +40,9 @@ final class AttributeGroupNamedArgumentManipulator
         if ($currentArg->name !== null) {
             return;
         }
-        if (!$currentArg->value instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$currentArg->value instanceof String_) {
             return;
         }
-        $currentArg->name = new \PhpParser\Node\Identifier('type');
+        $currentArg->name = new Identifier('type');
     }
 }

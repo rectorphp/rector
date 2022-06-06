@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\FileProcessor\Yaml;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\Yaml;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
 final class YamlIndentResolver
@@ -21,7 +21,7 @@ final class YamlIndentResolver
     private const DEFAULT_INDENT_SPACE_COUNT = 4;
     public function resolveIndentSpaceCount(string $yamlFileContent) : int
     {
-        $firstSpaceMatch = \RectorPrefix20220606\Nette\Utils\Strings::match($yamlFileContent, self::FIRST_INDENT_REGEX);
+        $firstSpaceMatch = Strings::match($yamlFileContent, self::FIRST_INDENT_REGEX);
         if (!isset($firstSpaceMatch[self::FIRST_INDENT_KEY])) {
             return self::DEFAULT_INDENT_SPACE_COUNT;
         }

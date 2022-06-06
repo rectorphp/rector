@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\MethodCall;
+namespace RectorPrefix20220606\Rector\Symfony\Rector\MethodCall;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
-use PHPStan\Type\StringType;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\PropertyNaming;
-use Rector\PostRector\Collector\PropertyToAddCollector;
-use Rector\PostRector\ValueObject\PropertyMetadata;
-use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PHPStan\Type\StringType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Naming\Naming\PropertyNaming;
+use RectorPrefix20220606\Rector\PostRector\Collector\PropertyToAddCollector;
+use RectorPrefix20220606\Rector\PostRector\ValueObject\PropertyMetadata;
+use RectorPrefix20220606\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\MethodCall\GetParameterToConstructorInjectionRector\GetParameterToConstructorInjectionRectorTest
  */
-final class GetParameterToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector
+final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @readonly
@@ -37,15 +37,15 @@ final class GetParameterToConstructorInjectionRector extends \Rector\Core\Rector
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer)
+    public function __construct(PropertyNaming $propertyNaming, PropertyToAddCollector $propertyToAddCollector, ControllerAnalyzer $controllerAnalyzer)
     {
         $this->propertyNaming = $propertyNaming;
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->controllerAnalyzer = $controllerAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns fetching of parameters via `getParameter()` in ContainerAware to constructor injection in Command and Controller in Symfony', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns fetching of parameters via `getParameter()` in ContainerAware to constructor injection in Command and Controller in Symfony', [new CodeSample(<<<'CODE_SAMPLE'
 class MyCommand extends ContainerAwareCommand
 {
     public function someMethod()
@@ -77,12 +77,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->controllerAnalyzer->isController($node->var)) {
             return null;
@@ -91,21 +91,21 @@ CODE_SAMPLE
             return null;
         }
         $firstArg = $node->args[0];
-        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+        if (!$firstArg instanceof Arg) {
             return null;
         }
         $stringArgument = $firstArg->value;
-        if (!$stringArgument instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$stringArgument instanceof String_) {
             return null;
         }
         $parameterName = $stringArgument->value;
-        $parameterName = \RectorPrefix20220606\Nette\Utils\Strings::replace($parameterName, '#\\.#', '_');
+        $parameterName = Strings::replace($parameterName, '#\\.#', '_');
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
-        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$class instanceof Class_) {
             return null;
         }
-        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, new \PHPStan\Type\StringType(), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $propertyMetadata = new PropertyMetadata($propertyName, new StringType(), Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }

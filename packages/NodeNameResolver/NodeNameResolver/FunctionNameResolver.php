@@ -1,30 +1,30 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeNameResolver\NodeNameResolver;
+namespace RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Function_;
-use PHPStan\Analyser\Scope;
-use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Function_;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @implements NodeNameResolverInterface<Function_>
  */
-final class FunctionNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class FunctionNameResolver implements NodeNameResolverInterface
 {
     public function getNode() : string
     {
-        return \PhpParser\Node\Stmt\Function_::class;
+        return Function_::class;
     }
     /**
      * @param Function_ $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         $bareName = (string) $node->name;
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return $bareName;
         }
         $namespaceName = $scope->getNamespace();

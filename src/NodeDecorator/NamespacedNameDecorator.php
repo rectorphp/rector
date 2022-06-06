@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeDecorator;
+namespace RectorPrefix20220606\Rector\Core\NodeDecorator;
 
-use PhpParser\Node;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\NodeTraverser;
+use RectorPrefix20220606\PhpParser\NodeVisitor\NameResolver;
 final class NamespacedNameDecorator
 {
     /**
@@ -15,8 +15,8 @@ final class NamespacedNameDecorator
     {
         $nodes = \is_array($node) ? $node : [$node];
         // traverse with node name resolver, to to comply with PHPStan default parser
-        $nameResolver = new \PhpParser\NodeVisitor\NameResolver(null, ['replaceNodes' => \false, 'preserveOriginalNames' => \true]);
-        $nodeTraverser = new \PhpParser\NodeTraverser();
+        $nameResolver = new NameResolver(null, ['replaceNodes' => \false, 'preserveOriginalNames' => \true]);
+        $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($nameResolver);
         $nodeTraverser->traverse($nodes);
     }

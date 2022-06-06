@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\NodeFactory\Annotations;
+namespace RectorPrefix20220606\Rector\Symfony\NodeFactory\Annotations;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class DoctrineAnnotationKeyToValuesResolver
 {
     /**
@@ -14,19 +14,19 @@ final class DoctrineAnnotationKeyToValuesResolver
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
     /**
      * @return array<string|null, mixed>
      */
-    public function resolveFromExpr(\PhpParser\Node\Expr $expr) : array
+    public function resolveFromExpr(Expr $expr) : array
     {
         $annotationKeyToValues = [];
-        if ($expr instanceof \PhpParser\Node\Expr\Array_) {
+        if ($expr instanceof Array_) {
             foreach ($expr->items as $arrayItem) {
-                if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+                if (!$arrayItem instanceof ArrayItem) {
                     continue;
                 }
                 $key = $this->resolveKey($arrayItem);
@@ -39,9 +39,9 @@ final class DoctrineAnnotationKeyToValuesResolver
         }
         return $annotationKeyToValues;
     }
-    private function resolveKey(\PhpParser\Node\Expr\ArrayItem $arrayItem) : ?string
+    private function resolveKey(ArrayItem $arrayItem) : ?string
     {
-        if (!$arrayItem->key instanceof \PhpParser\Node\Expr) {
+        if (!$arrayItem->key instanceof Expr) {
             return null;
         }
         return $this->valueResolver->getValue($arrayItem->key);

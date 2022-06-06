@@ -28,7 +28,7 @@ interface OutputFormatterInterface
     /**
      * Sets a new style.
      */
-    public function setStyle(string $name, \RectorPrefix20220606\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style);
+    public function setStyle(string $name, OutputFormatterStyleInterface $style);
     /**
      * Checks if output formatter has style with specified name.
      */
@@ -38,7 +38,7 @@ interface OutputFormatterInterface
      *
      * @throws \InvalidArgumentException When style isn't defined
      */
-    public function getStyle(string $name) : \RectorPrefix20220606\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface;
+    public function getStyle(string $name) : OutputFormatterStyleInterface;
     /**
      * Formats a message according to the given styles.
      */

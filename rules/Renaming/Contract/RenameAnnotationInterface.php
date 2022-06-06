@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Renaming\Contract;
+namespace RectorPrefix20220606\Rector\Renaming\Contract;
 
 interface RenameAnnotationInterface
 {

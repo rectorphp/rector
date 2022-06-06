@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v11\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v11\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Exit_;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Throw_;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Exit_;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Throw_;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.0/Deprecation-92784-ExtbaseControllerActionsMustReturnResponseInterface.html
  *
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v0\ExtbaseControllerActionsMustReturnResponseInterfaceRector\ExtbaseControllerActionsMustReturnResponseInterfaceRectorTest
  */
-final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends \Rector\Core\Rector\AbstractRector
+final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends AbstractRector
 {
     /**
      * @var string
@@ -36,12 +36,12 @@ final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends \R
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -49,11 +49,11 @@ final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends \R
         $returns = $this->findReturns($node);
         foreach ($returns as $return) {
             $returnCallExpression = $return->expr;
-            if ($returnCallExpression instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($returnCallExpression->name, 'json_encode')) {
+            if ($returnCallExpression instanceof FuncCall && $this->isName($returnCallExpression->name, 'json_encode')) {
                 $return->expr = $this->nodeFactory->createMethodCall(self::THIS, 'jsonResponse', [$return->expr]);
             } else {
                 // avoid duplication
-                if ($return->expr instanceof \PhpParser\Node\Expr\MethodCall && $this->isName($return->expr->name, self::HTML_RESPONSE)) {
+                if ($return->expr instanceof MethodCall && $this->isName($return->expr->name, self::HTML_RESPONSE)) {
                     $args = [];
                 } else {
                     $args = [$return->expr];
@@ -61,24 +61,24 @@ final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends \R
                 $return->expr = $this->nodeFactory->createMethodCall(self::THIS, self::HTML_RESPONSE, $args);
             }
         }
-        $node->returnType = new \PhpParser\Node\Name\FullyQualified('Psr\\Http\\Message\\ResponseInterface');
+        $node->returnType = new FullyQualified('Psr\\Http\\Message\\ResponseInterface');
         $statements = $node->stmts;
         $lastStatement = null;
         if (\is_array($statements)) {
             $lastStatement = \array_pop($statements);
         }
-        if (!$lastStatement instanceof \PhpParser\Node\Stmt\Return_) {
+        if (!$lastStatement instanceof Return_) {
             $returnResponse = $this->nodeFactory->createMethodCall(self::THIS, self::HTML_RESPONSE);
-            $node->stmts[] = new \PhpParser\Node\Stmt\Return_($returnResponse);
+            $node->stmts[] = new Return_($returnResponse);
         }
         return $node;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Extbase controller actions must return ResponseInterface', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Extbase controller actions must return ResponseInterface', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 class MyController extends ActionController
@@ -104,9 +104,9 @@ class MyController extends ActionController
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassMethod $classMethod) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($classMethod, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($classMethod, new ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
             return \true;
         }
         if (!$classMethod->isPublic()) {
@@ -142,35 +142,35 @@ CODE_SAMPLE
     /**
      * @return Return_[]
      */
-    private function findReturns(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    private function findReturns(ClassMethod $classMethod) : array
     {
-        return $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, \PhpParser\Node\Stmt\Return_::class);
+        return $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Return_::class);
     }
-    private function hasRedirectCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function hasRedirectCall(ClassMethod $classMethod) : bool
     {
-        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) : bool {
+            if (!$node instanceof MethodCall) {
                 return \false;
             }
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
                 return \false;
             }
             return $this->isNames($node->name, ['redirect', 'redirectToUri']);
         });
     }
-    private function lastStatementIsExitCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function lastStatementIsExitCall(ClassMethod $classMethod) : bool
     {
         if (null === $classMethod->stmts) {
             return \false;
         }
         $statements = $classMethod->stmts;
         $lastStatement = \array_pop($statements);
-        return $lastStatement instanceof \PhpParser\Node\Stmt\Expression && $lastStatement->expr instanceof \PhpParser\Node\Expr\Exit_;
+        return $lastStatement instanceof Expression && $lastStatement->expr instanceof Exit_;
     }
-    private function isAlreadyResponseReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isAlreadyResponseReturnType(ClassMethod $classMethod) : bool
     {
         $returns = $this->findReturns($classMethod);
-        $responseObjectType = new \PHPStan\Type\ObjectType('Psr\\Http\\Message\\ResponseInterface');
+        $responseObjectType = new ObjectType('Psr\\Http\\Message\\ResponseInterface');
         foreach ($returns as $return) {
             if (null === $return->expr) {
                 continue;
@@ -179,36 +179,36 @@ CODE_SAMPLE
             if ($returnType->isSuperTypeOf($responseObjectType)->yes()) {
                 return \true;
             }
-            if ($returnType instanceof \PHPStan\Type\ObjectType && $returnType->isInstanceOf('Psr\\Http\\Message\\ResponseInterface')->yes()) {
+            if ($returnType instanceof ObjectType && $returnType->isInstanceOf('Psr\\Http\\Message\\ResponseInterface')->yes()) {
                 return \true;
             }
         }
         return \false;
     }
-    private function hasExceptionCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function hasExceptionCall(ClassMethod $classMethod) : bool
     {
         if (null === $classMethod->stmts) {
             return \false;
         }
         $statements = $classMethod->stmts;
         $lastStatement = \array_pop($statements);
-        if (!$lastStatement instanceof \PhpParser\Node\Stmt\Throw_) {
+        if (!$lastStatement instanceof Throw_) {
             return \false;
         }
-        $propagateResponseException = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Http\\PropagateResponseException');
+        $propagateResponseException = new ObjectType('TYPO3\\CMS\\Core\\Http\\PropagateResponseException');
         return $this->getType($lastStatement->expr)->isSuperTypeOf($propagateResponseException)->yes();
     }
-    private function lastStatementIsForwardCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function lastStatementIsForwardCall(ClassMethod $classMethod) : bool
     {
         if (null === $classMethod->stmts) {
             return \false;
         }
         $statements = $classMethod->stmts;
         $lastStatement = \array_pop($statements);
-        if (!$lastStatement instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$lastStatement instanceof Expression) {
             return \false;
         }
-        if (!$lastStatement->expr instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$lastStatement->expr instanceof MethodCall) {
             return \false;
         }
         return $this->isName($lastStatement->expr->name, 'forward');

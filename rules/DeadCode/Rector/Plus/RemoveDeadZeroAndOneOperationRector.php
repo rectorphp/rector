@@ -1,33 +1,33 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\Rector\Plus;
+namespace RectorPrefix20220606\Rector\DeadCode\Rector\Plus;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\AssignOp;
-use PhpParser\Node\Expr\AssignOp\Div as AssignDiv;
-use PhpParser\Node\Expr\AssignOp\Minus as AssignMinus;
-use PhpParser\Node\Expr\AssignOp\Mul as AssignMul;
-use PhpParser\Node\Expr\AssignOp\Plus as AssignPlus;
-use PhpParser\Node\Expr\BinaryOp\Div;
-use PhpParser\Node\Expr\BinaryOp\Minus;
-use PhpParser\Node\Expr\BinaryOp\Mul;
-use PhpParser\Node\Expr\BinaryOp\Plus;
-use PhpParser\Node\Expr\UnaryMinus;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\AssignOp;
+use RectorPrefix20220606\PhpParser\Node\Expr\AssignOp\Div as AssignDiv;
+use RectorPrefix20220606\PhpParser\Node\Expr\AssignOp\Minus as AssignMinus;
+use RectorPrefix20220606\PhpParser\Node\Expr\AssignOp\Mul as AssignMul;
+use RectorPrefix20220606\PhpParser\Node\Expr\AssignOp\Plus as AssignPlus;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Div;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Minus;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Mul;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Plus;
+use RectorPrefix20220606\PhpParser\Node\Expr\UnaryMinus;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://3v4l.org/I0BGs
  *
  * @see \Rector\Tests\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector\RemoveDeadZeroAndOneOperationRectorTest
  */
-final class RemoveDeadZeroAndOneOperationRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDeadZeroAndOneOperationRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove operation with 1 and 0, that have no effect on the value', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove operation with 1 and 0, that have no effect on the value', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -54,23 +54,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp\Plus::class, \PhpParser\Node\Expr\BinaryOp\Minus::class, \PhpParser\Node\Expr\BinaryOp\Mul::class, \PhpParser\Node\Expr\BinaryOp\Div::class, \PhpParser\Node\Expr\AssignOp\Plus::class, \PhpParser\Node\Expr\AssignOp\Minus::class, \PhpParser\Node\Expr\AssignOp\Mul::class, \PhpParser\Node\Expr\AssignOp\Div::class];
+        return [Plus::class, Minus::class, Mul::class, Div::class, AssignPlus::class, AssignMinus::class, AssignMul::class, AssignDiv::class];
     }
     /**
      * @param Plus|Minus|Mul|Div|AssignPlus|AssignMinus|AssignMul|AssignDiv $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\AssignOp) {
+        if ($node instanceof AssignOp) {
             return $this->processAssignOp($node);
         }
         // -, +
         return $this->processBinaryOp($node);
     }
-    private function processAssignOp(\PhpParser\Node\Expr\AssignOp $assignOp) : ?\PhpParser\Node\Expr
+    private function processAssignOp(AssignOp $assignOp) : ?Expr
     {
         // +=, -=
-        if ($assignOp instanceof \PhpParser\Node\Expr\AssignOp\Plus || $assignOp instanceof \PhpParser\Node\Expr\AssignOp\Minus) {
+        if ($assignOp instanceof AssignPlus || $assignOp instanceof AssignMinus) {
             if (!$this->valueResolver->isValue($assignOp->expr, 0)) {
                 return null;
             }
@@ -79,7 +79,7 @@ CODE_SAMPLE
             }
         }
         // *, /
-        if ($assignOp instanceof \PhpParser\Node\Expr\AssignOp\Mul || $assignOp instanceof \PhpParser\Node\Expr\AssignOp\Div) {
+        if ($assignOp instanceof AssignMul || $assignOp instanceof AssignDiv) {
             if (!$this->valueResolver->isValue($assignOp->expr, 1)) {
                 return null;
             }
@@ -89,16 +89,16 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processBinaryOp(\PhpParser\Node $node) : ?\PhpParser\Node\Expr
+    private function processBinaryOp(Node $node) : ?Expr
     {
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Plus || $node instanceof \PhpParser\Node\Expr\BinaryOp\Minus) {
+        if ($node instanceof Plus || $node instanceof Minus) {
             return $this->processBinaryPlusAndMinus($node);
         }
         // *, /
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Mul) {
+        if ($node instanceof Mul) {
             return $this->processBinaryMulAndDiv($node);
         }
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Div) {
+        if ($node instanceof Div) {
             return $this->processBinaryMulAndDiv($node);
         }
         return null;
@@ -106,11 +106,11 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Plus|\PhpParser\Node\Expr\BinaryOp\Minus $binaryOp
      */
-    private function processBinaryPlusAndMinus($binaryOp) : ?\PhpParser\Node\Expr
+    private function processBinaryPlusAndMinus($binaryOp) : ?Expr
     {
         if ($this->valueResolver->isValue($binaryOp->left, 0) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
-            if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Minus) {
-                return new \PhpParser\Node\Expr\UnaryMinus($binaryOp->right);
+            if ($binaryOp instanceof Minus) {
+                return new UnaryMinus($binaryOp->right);
             }
             return $binaryOp->right;
         }
@@ -125,9 +125,9 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Mul|\PhpParser\Node\Expr\BinaryOp\Div $binaryOp
      */
-    private function processBinaryMulAndDiv($binaryOp) : ?\PhpParser\Node\Expr
+    private function processBinaryMulAndDiv($binaryOp) : ?Expr
     {
-        if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Mul && $this->valueResolver->isValue($binaryOp->left, 1) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
+        if ($binaryOp instanceof Mul && $this->valueResolver->isValue($binaryOp->left, 1) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
             return $binaryOp->right;
         }
         if (!$this->valueResolver->isValue($binaryOp->right, 1)) {

@@ -1,40 +1,40 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\Experimental;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\Experimental;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\Coalesce;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Coalesce;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Feature-84112-SymfonyDependencyInjectionForCoreAndExtbase.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\Experimental\OptionalConstructorToHardRequirementRector\OptionalConstructorToHardRequirementRectorTest
  */
-final class OptionalConstructorToHardRequirementRector extends \Rector\Core\Rector\AbstractRector
+final class OptionalConstructorToHardRequirementRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isName($node, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if (!$this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
         if (!\is_iterable($node->stmts)) {
@@ -51,7 +51,7 @@ final class OptionalConstructorToHardRequirementRector extends \Rector\Core\Rect
             if (!$this->valueResolver->isNull($param->default)) {
                 continue;
             }
-            if (!$param->type instanceof \PhpParser\Node\Name\FullyQualified) {
+            if (!$param->type instanceof FullyQualified) {
                 continue;
             }
             $paramName = $this->nodeNameResolver->getName($param->var);
@@ -63,29 +63,29 @@ final class OptionalConstructorToHardRequirementRector extends \Rector\Core\Rect
         }
         $potentialStmtsToRemove = [];
         foreach ($node->stmts as $stmt) {
-            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if (!$stmt instanceof Expression) {
                 continue;
             }
-            if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+            if (!$stmt->expr instanceof Assign) {
                 continue;
             }
-            if (!$stmt->expr->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
+            if (!$stmt->expr->expr instanceof Coalesce) {
                 continue;
             }
             $variableName = $this->nodeNameResolver->getName($stmt->expr->var);
-            if ($stmt->expr->var instanceof \PhpParser\Node\Expr\Variable && null !== $variableName) {
+            if ($stmt->expr->var instanceof Variable && null !== $variableName) {
                 $potentialStmtsToRemove[$variableName] = $stmt;
             }
-            if (!$stmt->expr->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            if (!$stmt->expr->var instanceof PropertyFetch) {
                 continue;
             }
-            if (!$stmt->expr->expr->left instanceof \PhpParser\Node\Expr\Variable) {
+            if (!$stmt->expr->expr->left instanceof Variable) {
                 continue;
             }
             if (!$this->isNames($stmt->expr->expr->left, \array_keys($paramsToCheck))) {
                 continue;
             }
-            if ($stmt->expr->expr->right instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
+            if ($stmt->expr->expr->right instanceof Coalesce) {
                 // Reset param default value
                 $paramDefault = $this->nodeNameResolver->getName($stmt->expr->expr->left);
                 if (null === $paramDefault) {
@@ -97,13 +97,13 @@ final class OptionalConstructorToHardRequirementRector extends \Rector\Core\Rect
             $stmt->expr->expr = $stmt->expr->expr->left;
         }
         foreach ($node->stmts as $stmt) {
-            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if (!$stmt instanceof Expression) {
                 continue;
             }
-            if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+            if (!$stmt->expr instanceof Assign) {
                 continue;
             }
-            if (!$stmt->expr->expr instanceof \PhpParser\Node\Expr\MethodCall) {
+            if (!$stmt->expr->expr instanceof MethodCall) {
                 continue;
             }
             if (!$this->isNames($stmt->expr->expr->var, \array_keys($potentialStmtsToRemove))) {
@@ -120,9 +120,9 @@ final class OptionalConstructorToHardRequirementRector extends \Rector\Core\Rect
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Option constructor arguments to hard requirement', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Option constructor arguments to hard requirement', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;

@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\Kdyby\NodeFactory;
+namespace RectorPrefix20220606\Rector\Nette\Kdyby\NodeFactory;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
-use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\ValueObject\MethodName;
-use Rector\Nette\Kdyby\BlueprintFactory\VariableWithTypesFactory;
-use Rector\Nette\Kdyby\ValueObject\VariableWithType;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Namespace_;
+use RectorPrefix20220606\PhpParser\NodeTraverser;
+use RectorPrefix20220606\PhpParser\NodeVisitor\NameResolver;
+use RectorPrefix20220606\Rector\CodingStyle\Naming\ClassNaming;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
+use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
+use RectorPrefix20220606\Rector\Nette\Kdyby\BlueprintFactory\VariableWithTypesFactory;
+use RectorPrefix20220606\Rector\Nette\Kdyby\ValueObject\VariableWithType;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder;
@@ -48,7 +48,7 @@ final class EventValueObjectClassFactory
      * @var \Rector\Nette\Kdyby\BlueprintFactory\VariableWithTypesFactory
      */
     private $variableWithTypesFactory;
-    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Nette\Kdyby\BlueprintFactory\VariableWithTypesFactory $variableWithTypesFactory)
+    public function __construct(ClassNaming $classNaming, NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, VariableWithTypesFactory $variableWithTypesFactory)
     {
         $this->classNaming = $classNaming;
         $this->nodeFactory = $nodeFactory;
@@ -58,30 +58,30 @@ final class EventValueObjectClassFactory
     /**
      * @param Arg[] $args
      */
-    public function create(string $className, array $args) : \PhpParser\Node\Stmt\Namespace_
+    public function create(string $className, array $args) : Namespace_
     {
         $classBuilder = $this->createEventClassBuilder($className);
         $this->decorateWithConstructorIfHasArgs($classBuilder, $args);
         $class = $classBuilder->getNode();
         // traverse with node name resolver, to to comply with PHPStan default parser
-        $nameResolver = new \PhpParser\NodeVisitor\NameResolver(null, ['replaceNodes' => \false, 'preserveOriginalNames' => \true]);
-        $nodeTraverser = new \PhpParser\NodeTraverser();
+        $nameResolver = new NameResolver(null, ['replaceNodes' => \false, 'preserveOriginalNames' => \true]);
+        $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($nameResolver);
         $nodeTraverser->traverse([$class]);
         return $this->wrapClassToNamespace($className, $class);
     }
-    private function createEventClassBuilder(string $className) : \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder
+    private function createEventClassBuilder(string $className) : ClassBuilder
     {
         $shortClassName = $this->classNaming->getShortName($className);
-        $classBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder($shortClassName);
+        $classBuilder = new ClassBuilder($shortClassName);
         $classBuilder->makeFinal();
-        $classBuilder->extend(new \PhpParser\Node\Name\FullyQualified('Symfony\\Contracts\\EventDispatcher\\Event'));
+        $classBuilder->extend(new FullyQualified('Symfony\\Contracts\\EventDispatcher\\Event'));
         return $classBuilder;
     }
     /**
      * @param Arg[] $args
      */
-    private function decorateWithConstructorIfHasArgs(\RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder $classBuilder, array $args) : void
+    private function decorateWithConstructorIfHasArgs(ClassBuilder $classBuilder, array $args) : void
     {
         if ($args === []) {
             return;
@@ -101,24 +101,24 @@ final class EventValueObjectClassFactory
             $classBuilder->addStmt($getterClassMethod);
         }
     }
-    private function wrapClassToNamespace(string $className, \PhpParser\Node\Stmt\Class_ $class) : \PhpParser\Node\Stmt\Namespace_
+    private function wrapClassToNamespace(string $className, Class_ $class) : Namespace_
     {
-        $namespace = \RectorPrefix20220606\Nette\Utils\Strings::before($className, '\\', -1);
-        $namespaceBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder($namespace);
+        $namespace = Strings::before($className, '\\', -1);
+        $namespaceBuilder = new NamespaceBuilder($namespace);
         $namespaceBuilder->addStmt($class);
         return $namespaceBuilder->getNode();
     }
     /**
      * @param VariableWithType[] $variablesWithTypes
      */
-    private function ensureVariablesAreUnique(array $variablesWithTypes, \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder $classBuilder) : void
+    private function ensureVariablesAreUnique(array $variablesWithTypes, ClassBuilder $classBuilder) : void
     {
         $usedVariableNames = [];
         foreach ($variablesWithTypes as $variablesWithType) {
             if (\in_array($variablesWithType->getName(), $usedVariableNames, \true)) {
                 $className = $this->nodeNameResolver->getName($classBuilder->getNode());
                 $message = \sprintf('Variable "$%s" is duplicated in to be created "%s" class', $variablesWithType->getName(), $className);
-                throw new \Rector\Core\Exception\ShouldNotHappenException($message);
+                throw new ShouldNotHappenException($message);
             }
             $usedVariableNames[] = $variablesWithType->getName();
         }
@@ -126,12 +126,12 @@ final class EventValueObjectClassFactory
     /**
      * @param VariableWithType[] $variableWithTypes
      */
-    private function createConstructClassMethod(array $variableWithTypes) : \PhpParser\Node\Stmt\ClassMethod
+    private function createConstructClassMethod(array $variableWithTypes) : ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $methodBuilder = new MethodBuilder(MethodName::CONSTRUCT);
         $methodBuilder->makePublic();
         foreach ($variableWithTypes as $variableWithType) {
-            $param = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($variableWithType->getName()));
+            $param = new Param(new Variable($variableWithType->getName()));
             if ($variableWithType->getPhpParserTypeNode() !== null) {
                 $param->type = $variableWithType->getPhpParserTypeNode();
             }

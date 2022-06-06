@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider;
+namespace RectorPrefix20220606\Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider;
 
-use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
-use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
-use PHPStan\Php\PhpVersion;
-use PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
-use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator;
-use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
-use Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface;
-use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use RectorPrefix20220606\PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
+use RectorPrefix20220606\PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
+use RectorPrefix20220606\PHPStan\Php\PhpVersion;
+use RectorPrefix20220606\PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
+use RectorPrefix20220606\PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator;
+use RectorPrefix20220606\PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface;
+use RectorPrefix20220606\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface
+final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterface
 {
     /**
      * @var string[]
@@ -36,12 +36,12 @@ final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Con
      * @var \PHPStan\Php\PhpVersion
      */
     private $phpVersion;
-    public function __construct(\PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher $fileNodesFetcher, \PHPStan\Php\PhpVersion $phpVersion)
+    public function __construct(FileNodesFetcher $fileNodesFetcher, PhpVersion $phpVersion)
     {
         $this->fileNodesFetcher = $fileNodesFetcher;
         $this->phpVersion = $phpVersion;
     }
-    public function setFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : void
+    public function setFileInfo(SmartFileInfo $fileInfo) : void
     {
         $this->files = [$fileInfo->getRealPath()];
     }
@@ -52,21 +52,21 @@ final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Con
     {
         $this->files = \array_merge($this->files, $files);
     }
-    public function provide() : \PHPStan\BetterReflection\SourceLocator\Type\SourceLocator
+    public function provide() : SourceLocator
     {
         // do not cache for PHPUnit, as in test every fixture is different
-        $isPHPUnitRun = \Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun();
-        if ($this->aggregateSourceLocator instanceof \PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator && !$isPHPUnitRun) {
+        $isPHPUnitRun = StaticPHPUnitEnvironment::isPHPUnitRun();
+        if ($this->aggregateSourceLocator instanceof AggregateSourceLocator && !$isPHPUnitRun) {
             return $this->aggregateSourceLocator;
         }
         $sourceLocators = [];
         foreach ($this->files as $file) {
-            $sourceLocators[] = new \PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator($this->fileNodesFetcher, $file);
+            $sourceLocators[] = new OptimizedSingleFileSourceLocator($this->fileNodesFetcher, $file);
         }
         foreach ($this->filesByDirectory as $files) {
-            $sourceLocators[] = new \PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator($this->fileNodesFetcher, $this->phpVersion, $files);
+            $sourceLocators[] = new OptimizedDirectorySourceLocator($this->fileNodesFetcher, $this->phpVersion, $files);
         }
-        $this->aggregateSourceLocator = new \PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator($sourceLocators);
+        $this->aggregateSourceLocator = new AggregateSourceLocator($sourceLocators);
         return $this->aggregateSourceLocator;
     }
     /**

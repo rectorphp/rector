@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Laravel\ValueObject;
+namespace RectorPrefix20220606\Rector\Laravel\ValueObject;
 
-use PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
 final class AddArgumentDefaultValue
 {
     /**
@@ -35,9 +35,9 @@ final class AddArgumentDefaultValue
         $this->position = $position;
         $this->defaultValue = $defaultValue;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getMethod() : string
     {

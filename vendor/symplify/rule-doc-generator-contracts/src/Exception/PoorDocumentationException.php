@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\RuleDocGenerator\Exception;
+namespace RectorPrefix20220606\Symplify\RuleDocGenerator\Exception;
 
 use Exception;
-final class PoorDocumentationException extends \Exception
+final class PoorDocumentationException extends Exception
 {
 }

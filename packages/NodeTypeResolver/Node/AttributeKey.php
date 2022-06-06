@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeTypeResolver\Node;
+namespace RectorPrefix20220606\Rector\NodeTypeResolver\Node;
 
 /**
  * @enum

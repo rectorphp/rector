@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\NodeAnalyzer\Annotations;
+namespace RectorPrefix20220606\Rector\Symfony\NodeAnalyzer\Annotations;
 
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\New_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\Value\ValueResolver;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory;
 final class ConstraintAnnotationResolver
 {
     /**
@@ -33,7 +33,7 @@ final class ConstraintAnnotationResolver
      * @var \Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory
      */
     private $doctrineAnnotationFromNewFactory;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory)
+    public function __construct(NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
@@ -43,7 +43,7 @@ final class ConstraintAnnotationResolver
     /**
      * @return array<string, DoctrineAnnotationTagValueNode>
      */
-    public function resolvePropertyTagValueNodes(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function resolvePropertyTagValueNodes(ClassMethod $classMethod) : array
     {
         $constraintsMethodCalls = $this->findMethodCallsByName($classMethod, 'addPropertyConstraint');
         $annotationsToPropertyNames = [];
@@ -54,7 +54,7 @@ final class ConstraintAnnotationResolver
             if (!\is_string($propertyName)) {
                 continue;
             }
-            if (!$constraintsExpr instanceof \PhpParser\Node\Expr\New_) {
+            if (!$constraintsExpr instanceof New_) {
                 // nothing we can do... or can we?
                 continue;
             }
@@ -66,7 +66,7 @@ final class ConstraintAnnotationResolver
     /**
      * @return array<string, DoctrineAnnotationTagValueNode>
      */
-    public function resolveGetterTagValueNodes(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function resolveGetterTagValueNodes(ClassMethod $classMethod) : array
     {
         $constraintsMethodCalls = $this->findMethodCallsByName($classMethod, 'addGetterConstraint');
         $annotationsToMethodNames = [];
@@ -76,7 +76,7 @@ final class ConstraintAnnotationResolver
             $propertyName = $this->valueResolver->getValue($firstArgValue);
             $getterMethodName = 'get' . \ucfirst($propertyName);
             $secondArgValue = $args[1]->value;
-            if (!$secondArgValue instanceof \PhpParser\Node\Expr\New_) {
+            if (!$secondArgValue instanceof New_) {
                 // nothing we can do... or can we?
                 continue;
             }
@@ -88,10 +88,10 @@ final class ConstraintAnnotationResolver
     /**
      * @return MethodCall[]
      */
-    private function findMethodCallsByName(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $methodName) : array
+    private function findMethodCallsByName(ClassMethod $classMethod, string $methodName) : array
     {
-        $methodCalls = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Expr\MethodCall::class);
-        return \array_filter($methodCalls, function (\PhpParser\Node\Expr\MethodCall $methodCall) use($methodName) : bool {
+        $methodCalls = $this->betterNodeFinder->findInstanceOf($classMethod, MethodCall::class);
+        return \array_filter($methodCalls, function (MethodCall $methodCall) use($methodName) : bool {
             return $this->nodeNameResolver->isName($methodCall->name, $methodName);
         });
     }

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Naming\Contract\Guard;
+namespace RectorPrefix20220606\Rector\Naming\Contract\Guard;
 
-use Rector\Naming\Contract\RenameValueObjectInterface;
+use RectorPrefix20220606\Rector\Naming\Contract\RenameValueObjectInterface;
 /**
  * @template TRename as RenameValueObjectInterface
  */
@@ -12,5 +12,5 @@ interface ConflictingNameGuardInterface
     /**
      * @param TRename $renameValueObject
      */
-    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool;
+    public function isConflicting(RenameValueObjectInterface $renameValueObject) : bool;
 }

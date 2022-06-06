@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\EarlyReturn\NodeFactory;
+namespace RectorPrefix20220606\Rector\EarlyReturn\NodeFactory;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\Continue_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
-use Rector\NodeNestingScope\ContextAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Continue_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\EarlyReturn\NodeTransformer\ConditionInverter;
+use RectorPrefix20220606\Rector\NodeNestingScope\ContextAnalyzer;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 final class InvertedIfFactory
 {
     /**
@@ -29,7 +29,7 @@ final class InvertedIfFactory
      * @var \Rector\NodeNestingScope\ContextAnalyzer
      */
     private $contextAnalyzer;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\EarlyReturn\NodeTransformer\ConditionInverter $conditionInverter, \Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer)
+    public function __construct(BetterNodeFinder $betterNodeFinder, ConditionInverter $conditionInverter, ContextAnalyzer $contextAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->conditionInverter = $conditionInverter;
@@ -39,36 +39,36 @@ final class InvertedIfFactory
      * @param Expr[] $conditions
      * @return If_[]
      */
-    public function createFromConditions(\PhpParser\Node\Stmt\If_ $if, array $conditions, \PhpParser\Node\Stmt\Return_ $return) : array
+    public function createFromConditions(If_ $if, array $conditions, Return_ $return) : array
     {
         $ifs = [];
         $ifNextReturn = $this->getIfNextReturn($if);
-        $stmt = $this->contextAnalyzer->isInLoop($if) && !$ifNextReturn instanceof \PhpParser\Node\Stmt\Return_ ? [new \PhpParser\Node\Stmt\Continue_()] : [$return];
-        if ($ifNextReturn instanceof \PhpParser\Node\Stmt\Return_) {
-            $stmt[0]->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $ifNextReturn->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS));
+        $stmt = $this->contextAnalyzer->isInLoop($if) && !$ifNextReturn instanceof Return_ ? [new Continue_()] : [$return];
+        if ($ifNextReturn instanceof Return_) {
+            $stmt[0]->setAttribute(AttributeKey::COMMENTS, $ifNextReturn->getAttribute(AttributeKey::COMMENTS));
         }
         $getNextReturnExpr = $this->getNextReturnExpr($if);
-        if ($getNextReturnExpr instanceof \PhpParser\Node\Stmt\Return_) {
+        if ($getNextReturnExpr instanceof Return_) {
             $return->expr = $getNextReturnExpr->expr;
         }
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
-            $if = new \PhpParser\Node\Stmt\If_($invertedCondition);
+            $if = new If_($invertedCondition);
             $if->stmts = $stmt;
             $ifs[] = $if;
         }
         return $ifs;
     }
-    private function getNextReturnExpr(\PhpParser\Node\Stmt\If_ $if) : ?\PhpParser\Node
+    private function getNextReturnExpr(If_ $if) : ?Node
     {
-        return $this->betterNodeFinder->findFirstNext($if, function (\PhpParser\Node $node) : bool {
-            return $node instanceof \PhpParser\Node\Stmt\Return_ && $node->expr instanceof \PhpParser\Node\Expr;
+        return $this->betterNodeFinder->findFirstNext($if, function (Node $node) : bool {
+            return $node instanceof Return_ && $node->expr instanceof Expr;
         });
     }
-    private function getIfNextReturn(\PhpParser\Node\Stmt\If_ $if) : ?\PhpParser\Node\Stmt\Return_
+    private function getIfNextReturn(If_ $if) : ?Return_
     {
-        $nextNode = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_) {
+        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof Return_) {
             return null;
         }
         return $nextNode;

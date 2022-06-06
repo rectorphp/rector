@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\Contract;
+namespace RectorPrefix20220606\Rector\Nette\Contract;
 
-use PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node;
 interface FormControlTypeResolverInterface
 {
     /**
      * @return array<string, string>
      */
-    public function resolve(\PhpParser\Node $node) : array;
+    public function resolve(Node $node) : array;
 }

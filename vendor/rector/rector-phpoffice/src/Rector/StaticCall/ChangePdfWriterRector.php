@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPOffice\Rector\StaticCall;
+namespace RectorPrefix20220606\Rector\PHPOffice\Rector\StaticCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name\FullyQualified;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StringUtils;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\New_;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Core\Util\StringUtils;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#writing-pdf
  *
  * @see \Rector\PHPOffice\Tests\Rector\StaticCall\ChangePdfWriterRector\ChangePdfWriterRectorTest
  */
-final class ChangePdfWriterRector extends \Rector\Core\Rector\AbstractRector
+final class ChangePdfWriterRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change init of PDF writer', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change init of PDF writer', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -49,19 +49,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $callerType = $this->nodeTypeResolver->getType($node->class);
         if ($this->isSettingsPdfRendererStaticCall($callerType, $node)) {
             $this->removeNode($node);
             return null;
         }
-        if ($callerType->isSuperTypeOf(new \PHPStan\Type\ObjectType('PHPExcel_IOFactory'))->yes() && $this->nodeNameResolver->isName($node->name, 'createWriter')) {
+        if ($callerType->isSuperTypeOf(new ObjectType('PHPExcel_IOFactory'))->yes() && $this->nodeNameResolver->isName($node->name, 'createWriter')) {
             if (!isset($node->args[1])) {
                 return null;
             }
@@ -69,15 +69,15 @@ CODE_SAMPLE
             if (!\is_string($secondArgValue)) {
                 return null;
             }
-            if (\Rector\Core\Util\StringUtils::isMatch($secondArgValue, '#pdf#i')) {
-                return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('PhpOffice\\PhpSpreadsheet\\Writer\\Pdf\\Mpdf'), [$node->args[0]]);
+            if (StringUtils::isMatch($secondArgValue, '#pdf#i')) {
+                return new New_(new FullyQualified('PhpOffice\\PhpSpreadsheet\\Writer\\Pdf\\Mpdf'), [$node->args[0]]);
             }
         }
         return null;
     }
-    private function isSettingsPdfRendererStaticCall(\PHPStan\Type\Type $callerType, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    private function isSettingsPdfRendererStaticCall(Type $callerType, StaticCall $staticCall) : bool
     {
-        if (!$callerType->isSuperTypeOf(new \PHPStan\Type\ObjectType('PHPExcel_Settings'))->yes()) {
+        if (!$callerType->isSuperTypeOf(new ObjectType('PHPExcel_Settings'))->yes()) {
             return \false;
         }
         return $this->nodeNameResolver->isNames($staticCall->name, ['setPdfRendererName', 'setPdfRenderer']);

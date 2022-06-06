@@ -3,19 +3,19 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\Astral\NodeNameResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
 use RectorPrefix20220606\Symplify\Astral\Contract\NodeNameResolverInterface;
-final class ClassLikeNodeNameResolver implements \RectorPrefix20220606\Symplify\Astral\Contract\NodeNameResolverInterface
+final class ClassLikeNodeNameResolver implements NodeNameResolverInterface
 {
-    public function match(\PhpParser\Node $node) : bool
+    public function match(Node $node) : bool
     {
-        return $node instanceof \PhpParser\Node\Stmt\ClassLike;
+        return $node instanceof ClassLike;
     }
     /**
      * @param ClassLike $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         if (\property_exists($node, 'namespacedName')) {
             return (string) $node->namespacedName;

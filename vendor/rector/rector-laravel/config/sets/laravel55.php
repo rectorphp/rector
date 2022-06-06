@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\RenameProperty;
+use RectorPrefix20220606\Rector\Config\RectorConfig;
+use RectorPrefix20220606\Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use RectorPrefix20220606\Rector\Renaming\Rector\Name\RenameClassRector;
+use RectorPrefix20220606\Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
+use RectorPrefix20220606\Rector\Renaming\ValueObject\MethodCallRename;
+use RectorPrefix20220606\Rector\Renaming\ValueObject\RenameProperty;
 # see: https://laravel.com/docs/5.5/upgrade
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [new \Rector\Renaming\ValueObject\MethodCallRename('Illuminate\\Console\\Command', 'fire', 'handle')]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector::class, [new \Rector\Renaming\ValueObject\RenameProperty('Illuminate\\Database\\Eloquent\\Concerns\\HasEvents', 'events', 'dispatchesEvents'), new \Rector\Renaming\ValueObject\RenameProperty('Illuminate\\Database\\Eloquent\\Relations\\Pivot', 'parent', 'pivotParent')]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, ['Illuminate\\Translation\\LoaderInterface' => 'Illuminate\\Contracts\\Translation\\Loader']);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('Illuminate\\Console\\Command', 'fire', 'handle')]);
+    $rectorConfig->ruleWithConfiguration(RenamePropertyRector::class, [new RenameProperty('Illuminate\\Database\\Eloquent\\Concerns\\HasEvents', 'events', 'dispatchesEvents'), new RenameProperty('Illuminate\\Database\\Eloquent\\Relations\\Pivot', 'parent', 'pivotParent')]);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['Illuminate\\Translation\\LoaderInterface' => 'Illuminate\\Contracts\\Translation\\Loader']);
 };

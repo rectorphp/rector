@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\RectorGenerator\NodeFactory;
+namespace RectorPrefix20220606\Rector\RectorGenerator\NodeFactory;
 
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
 final class ConfigurationNodeFactory
 {
     /**
@@ -12,7 +12,7 @@ final class ConfigurationNodeFactory
      * @var \Rector\RectorGenerator\NodeFactory\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\RectorGenerator\NodeFactory\NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
@@ -25,7 +25,7 @@ final class ConfigurationNodeFactory
         $properties = [];
         foreach (\array_keys($ruleConfiguration) as $privatePropertyName) {
             $property = $this->nodeFactory->createPrivateArrayProperty($privatePropertyName);
-            $property->props[0]->default = new \PhpParser\Node\Expr\Array_([]);
+            $property->props[0]->default = new Array_([]);
             $properties[] = $property;
         }
         return $properties;

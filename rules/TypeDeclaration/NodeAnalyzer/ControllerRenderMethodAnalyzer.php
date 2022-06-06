@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\TypeDeclaration\NodeAnalyzer;
 
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ClassReflection;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use RectorPrefix20220606\Symplify\Astral\Naming\SimpleNameResolver;
 final class ControllerRenderMethodAnalyzer
 {
@@ -32,18 +32,18 @@ final class ControllerRenderMethodAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\RectorPrefix20220606\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(SimpleNameResolver $simpleNameResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isRenderMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function isRenderMethod(ClassMethod $classMethod) : bool
     {
         // nette one?
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         if ($this->isNetteRenderMethod($classReflection, $classMethod)) {
@@ -51,7 +51,7 @@ final class ControllerRenderMethodAnalyzer
         }
         return $this->isSymfonyRenderMethod($classReflection, $classMethod);
     }
-    private function isNetteRenderMethod(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isNetteRenderMethod(ClassReflection $classReflection, ClassMethod $classMethod) : bool
     {
         if (!$classReflection->isSubclassOf('Nette\\Application\\UI\\Control')) {
             return \false;
@@ -61,7 +61,7 @@ final class ControllerRenderMethodAnalyzer
         }
         return $this->simpleNameResolver->isNames($classMethod->name, ['render*', 'handle*', 'action*']);
     }
-    private function isSymfonyRenderMethod(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isSymfonyRenderMethod(ClassReflection $classReflection, ClassMethod $classMethod) : bool
     {
         if (!$classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller') && !$classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController')) {
             return \false;
@@ -76,7 +76,7 @@ final class ControllerRenderMethodAnalyzer
             return \true;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
-        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+        if (!$phpDocInfo instanceof PhpDocInfo) {
             return \false;
         }
         return $phpDocInfo->hasByAnnotationClass('Symfony\\Component\\Routing\\Annotation\\Route');

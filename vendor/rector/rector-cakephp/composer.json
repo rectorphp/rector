@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\CakePHP\\": "src"
+            "RectorPrefix20220606\\Rector\\CakePHP\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\CakePHP\\Tests\\": "tests"
+            "RectorPrefix20220606\\Rector\\CakePHP\\Tests\\": "tests"
         }
     },
     "scripts": {

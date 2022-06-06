@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\PHPUnit\\": "src"
+            "RectorPrefix20220606\\Rector\\PHPUnit\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\PHPUnit\\Tests\\": "tests"
+            "RectorPrefix20220606\\Rector\\PHPUnit\\Tests\\": "tests"
         },
         "classmap": [
             "stubs"

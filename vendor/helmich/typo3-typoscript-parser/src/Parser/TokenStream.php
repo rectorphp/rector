@@ -13,7 +13,7 @@ use Iterator;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser
  */
-class TokenStream implements \Iterator, \ArrayAccess
+class TokenStream implements Iterator, \ArrayAccess
 {
     /** @var array */
     private $tokens;
@@ -27,7 +27,7 @@ class TokenStream implements \Iterator, \ArrayAccess
      * @param int $lookAhead
      * @return TokenInterface
      */
-    public function current(int $lookAhead = 0) : \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+    public function current(int $lookAhead = 0) : TokenInterface
     {
         return $this[$this->index + $lookAhead];
     }
@@ -74,7 +74,7 @@ class TokenStream implements \Iterator, \ArrayAccess
      * @param int $offset
      * @return TokenInterface
      */
-    public function offsetGet($offset) : \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+    public function offsetGet($offset) : TokenInterface
     {
         return $this->tokens[$offset];
     }
@@ -86,7 +86,7 @@ class TokenStream implements \Iterator, \ArrayAccess
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
-        throw new \BadMethodCallException('changing a token stream is not permitted');
+        throw new BadMethodCallException('changing a token stream is not permitted');
     }
     /**
      * @param int $offset
@@ -95,7 +95,7 @@ class TokenStream implements \Iterator, \ArrayAccess
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
-        throw new \BadMethodCallException('changing a token stream is not permitted');
+        throw new BadMethodCallException('changing a token stream is not permitted');
     }
     /**
      * Normalizes the token stream.
@@ -110,17 +110,17 @@ class TokenStream implements \Iterator, \ArrayAccess
      *
      * @return TokenStream
      */
-    public function normalized() : \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\TokenStream
+    public function normalized() : TokenStream
     {
         $filteredTokens = [];
         $maxLine = 0;
         foreach ($this->tokens as $token) {
             $maxLine = (int) \max($token->getLine(), $maxLine);
             // Trim unnecessary whitespace, but leave line breaks! These are important!
-            if ($token->getType() === \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE) {
+            if ($token->getType() === TokenInterface::TYPE_WHITESPACE) {
                 $value = \trim($token->getValue(), "\t ");
                 if (\strlen($value) > 0) {
-                    $filteredTokens[] = new \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Token(\RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $value, $token->getLine(), $token->getColumn());
+                    $filteredTokens[] = new Token(TokenInterface::TYPE_WHITESPACE, $value, $token->getLine(), $token->getColumn());
                 }
             } else {
                 $filteredTokens[] = $token;
@@ -129,8 +129,8 @@ class TokenStream implements \Iterator, \ArrayAccess
         // Add two linebreak tokens; during parsing, we usually do not look more than two
         // tokens ahead; this hack ensures that there will always be at least two more tokens
         // present and we do not have to check whether these tokens exists.
-        $filteredTokens[] = new \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Token(\RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, "\n", $maxLine + 1, 1);
-        $filteredTokens[] = new \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Token(\RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, "\n", $maxLine + 2, 1);
-        return new \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\TokenStream($filteredTokens);
+        $filteredTokens[] = new Token(TokenInterface::TYPE_WHITESPACE, "\n", $maxLine + 1, 1);
+        $filteredTokens[] = new Token(TokenInterface::TYPE_WHITESPACE, "\n", $maxLine + 2, 1);
+        return new TokenStream($filteredTokens);
     }
 }

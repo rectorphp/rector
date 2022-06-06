@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\NodeFactory;
+namespace RectorPrefix20220606\Rector\Nette\NodeFactory;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
-use PHPStan\Type\ObjectType;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ParentGetterStmtsToExternalStmtsFactory
 {
@@ -31,7 +31,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeComparator $nodeComparator)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -45,17 +45,17 @@ final class ParentGetterStmtsToExternalStmtsFactory
     {
         $userExpression = null;
         foreach ($getUserStmts as $key => $getUserStmt) {
-            if (!$getUserStmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if (!$getUserStmt instanceof Expression) {
                 continue;
             }
             $getUserStmt = $getUserStmt->expr;
-            if (!$getUserStmt instanceof \PhpParser\Node\Expr\Assign) {
+            if (!$getUserStmt instanceof Assign) {
                 continue;
             }
-            if (!$getUserStmt->expr instanceof \PhpParser\Node\Expr\StaticCall) {
+            if (!$getUserStmt->expr instanceof StaticCall) {
                 continue;
             }
-            if (!$this->nodeTypeResolver->isObjectType($getUserStmt->expr, new \PHPStan\Type\ObjectType('Nette\\Security\\User'))) {
+            if (!$this->nodeTypeResolver->isObjectType($getUserStmt->expr, new ObjectType('Nette\\Security\\User'))) {
                 continue;
             }
             $userExpression = $getUserStmt->var;
@@ -67,11 +67,11 @@ final class ParentGetterStmtsToExternalStmtsFactory
             return [];
         }
         // stmts without assign
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($getUserStmts, function (\PhpParser\Node $node) use($userExpression) : ?MethodCall {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($getUserStmts, function (Node $node) use($userExpression) : ?MethodCall {
             if (!$this->nodeComparator->areNodesEqual($node, $userExpression)) {
                 return null;
             }
-            return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable('this'), 'getUser');
+            return new MethodCall(new Variable('this'), 'getUser');
         });
         return $getUserStmts;
     }
@@ -82,7 +82,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
     private function removeReturn(array $stmts) : array
     {
         foreach ($stmts as $key => $stmt) {
-            if (!$stmt instanceof \PhpParser\Node\Stmt\Return_) {
+            if (!$stmt instanceof Return_) {
                 continue;
             }
             unset($stmts[$key]);

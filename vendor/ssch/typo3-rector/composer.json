@@ -41,8 +41,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Ssch\\TYPO3Rector\\": "src",
-            "Ssch\\TYPO3Rector\\PHPStan\\": "utils\/phpstan\/src"
+            "RectorPrefix20220606\\Ssch\\TYPO3Rector\\": "src",
+            "RectorPrefix20220606\\Ssch\\TYPO3Rector\\PHPStan\\": "utils\/phpstan\/src"
         }
     },
     "autoload-dev": {
@@ -50,13 +50,13 @@
             "stubs"
         ],
         "psr-4": {
-            "Ssch\\TYPO3Rector\\ComposerPackages\\": "utils\/composer-packages\/src",
-            "Ssch\\TYPO3Rector\\Generator\\": "utils\/generator\/src",
-            "Ssch\\TYPO3Rector\\ComposerPackages\\Tests\\": "utils\/composer-packages\/tests",
-            "Ssch\\TYPO3Rector\\Tests\\": "tests",
-            "Ssch\\TYPO3Rector\\PHPStan\\Tests\\": "utils\/phpstan\/tests",
-            "Ssch\\TYPO3Rector\\Rules\\Tests\\": "utils\/rules\/tests",
-            "Ssch\\TYPO3Rector\\Rules\\": "utils\/rules\/src"
+            "RectorPrefix20220606\\Ssch\\TYPO3Rector\\ComposerPackages\\": "utils\/composer-packages\/src",
+            "RectorPrefix20220606\\Ssch\\TYPO3Rector\\Generator\\": "utils\/generator\/src",
+            "RectorPrefix20220606\\Ssch\\TYPO3Rector\\ComposerPackages\\Tests\\": "utils\/composer-packages\/tests",
+            "RectorPrefix20220606\\Ssch\\TYPO3Rector\\Tests\\": "tests",
+            "RectorPrefix20220606\\Ssch\\TYPO3Rector\\PHPStan\\Tests\\": "utils\/phpstan\/tests",
+            "RectorPrefix20220606\\Ssch\\TYPO3Rector\\Rules\\Tests\\": "utils\/rules\/tests",
+            "RectorPrefix20220606\\Ssch\\TYPO3Rector\\Rules\\": "utils\/rules\/src"
         },
         "exclude-from-classmap": [
             "**.php.inc"

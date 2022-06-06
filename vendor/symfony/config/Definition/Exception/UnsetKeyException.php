@@ -16,6 +16,6 @@ namespace RectorPrefix20220606\Symfony\Component\Config\Definition\Exception;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class UnsetKeyException extends \RectorPrefix20220606\Symfony\Component\Config\Definition\Exception\Exception
+class UnsetKeyException extends Exception
 {
 }

@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use Rector\Config\RectorConfig;
-use Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
-use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector::class);
-    $rectorConfig->rule(\Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector::class);
+use RectorPrefix20220606\Rector\Config\RectorConfig;
+use RectorPrefix20220606\Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
+use RectorPrefix20220606\Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(SetClassWithArgumentToSetFactoryRector::class);
+    $rectorConfig->rule(BuilderExpandToHelperExpandRector::class);
 };

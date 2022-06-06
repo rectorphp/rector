@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Template;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Template;
 
-use Rector\Core\Contract\Template\TemplateResolverInterface;
+use RectorPrefix20220606\Rector\Core\Contract\Template\TemplateResolverInterface;
 use Stringable;
-final class TemplateResolver implements \Rector\Core\Contract\Template\TemplateResolverInterface
+final class TemplateResolver implements TemplateResolverInterface
 {
     /**
      * @var string

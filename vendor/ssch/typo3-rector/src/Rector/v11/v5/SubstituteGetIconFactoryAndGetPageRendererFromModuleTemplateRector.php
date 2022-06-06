@@ -1,30 +1,30 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v11\v5;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v11\v5;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Stmt\Class_;
-use PHPStan\Type\ObjectType;
-use Rector\Core\NodeManipulator\ClassDependencyManipulator;
-use Rector\Core\Rector\AbstractRector;
-use Rector\PostRector\ValueObject\PropertyMetadata;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\NodeManipulator\ClassDependencyManipulator;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\PostRector\ValueObject\PropertyMetadata;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.5/Deprecation-95235-PublicGetterOfServicesInModuleTemplate.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v5\SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector\SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRectorTest
  */
-final class SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector extends \Rector\Core\Rector\AbstractRector
+final class SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator)
+    public function __construct(ClassDependencyManipulator $classDependencyManipulator)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
     }
@@ -33,12 +33,12 @@ final class SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector e
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $iconPropertyFetch = $this->nodeFactory->createPropertyFetch('this', 'iconFactory');
         $iconFactoryMethodCalls = $this->findModuleTemplateMethodCallsByName($node, 'getIconFactory', $iconPropertyFetch);
@@ -58,9 +58,9 @@ final class SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector e
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use PageRenderer and IconFactory directly instead of getting them from the ModuleTemplate', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use PageRenderer and IconFactory directly instead of getting them from the ModuleTemplate', [new CodeSample(<<<'CODE_SAMPLE'
 class MyController extends ActionController
 {
     protected ModuleTemplateFactory $moduleTemplateFactory;
@@ -107,14 +107,14 @@ class MyController extends ActionController
 CODE_SAMPLE
 )]);
     }
-    private function findModuleTemplateMethodCallsByName(\PhpParser\Node\Stmt\Class_ $class, string $methodCallName, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
+    private function findModuleTemplateMethodCallsByName(Class_ $class, string $methodCallName, PropertyFetch $propertyFetch) : bool
     {
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $node) use($methodCallName, &$hasChanged, $propertyFetch) {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use($methodCallName, &$hasChanged, $propertyFetch) {
+            if (!$node instanceof MethodCall) {
                 return null;
             }
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Template\\ModuleTemplate'))) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Backend\\Template\\ModuleTemplate'))) {
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node->name, $methodCallName)) {
@@ -125,14 +125,14 @@ CODE_SAMPLE
         });
         return $hasChanged;
     }
-    private function addIconFactoryToConstructor(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function addIconFactoryToConstructor(Class_ $class) : void
     {
-        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata('iconFactory', new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Imaging\\IconFactory'), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $propertyMetadata = new PropertyMetadata('iconFactory', new ObjectType('TYPO3\\CMS\\Core\\Imaging\\IconFactory'), Class_::MODIFIER_PRIVATE);
         $this->classDependencyManipulator->addConstructorDependency($class, $propertyMetadata);
     }
-    private function addPageRendererToConstructor(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function addPageRendererToConstructor(Class_ $class) : void
     {
-        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata('pageRenderer', new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Page\\PageRenderer'), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $propertyMetadata = new PropertyMetadata('pageRenderer', new ObjectType('TYPO3\\CMS\\Core\\Page\\PageRenderer'), Class_::MODIFIER_PRIVATE);
         $this->classDependencyManipulator->addConstructorDependency($class, $propertyMetadata);
     }
 }

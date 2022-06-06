@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\StaticTypeMapper\ValueObject\Type;
+namespace RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type;
 
-use PHPStan\TrinaryLogic;
-use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\Type;
-final class ShortenedGenericObjectType extends \PHPStan\Type\Generic\GenericObjectType
+use RectorPrefix20220606\PHPStan\TrinaryLogic;
+use RectorPrefix20220606\PHPStan\Type\Generic\GenericObjectType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+final class ShortenedGenericObjectType extends GenericObjectType
 {
     /**
      * @var class-string
@@ -21,9 +21,9 @@ final class ShortenedGenericObjectType extends \PHPStan\Type\Generic\GenericObje
         $this->fullyQualifiedName = $fullyQualifiedName;
         parent::__construct($shortName, $types);
     }
-    public function isSuperTypeOf(\PHPStan\Type\Type $type) : \PHPStan\TrinaryLogic
+    public function isSuperTypeOf(Type $type) : TrinaryLogic
     {
-        $genericObjectType = new \PHPStan\Type\Generic\GenericObjectType($this->fullyQualifiedName, $this->getTypes());
+        $genericObjectType = new GenericObjectType($this->fullyQualifiedName, $this->getTypes());
         return $genericObjectType->isSuperTypeOf($type);
     }
     public function getShortName() : string

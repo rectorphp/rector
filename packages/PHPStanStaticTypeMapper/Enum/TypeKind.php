@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPStanStaticTypeMapper\Enum;
+namespace RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum;
 
 final class TypeKind
 {

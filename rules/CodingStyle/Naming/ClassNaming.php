@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodingStyle\Naming;
+namespace RectorPrefix20220606\Rector\CodingStyle\Naming;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
 final class ClassNaming
 {
     /**
@@ -22,17 +22,17 @@ final class ClassNaming
      */
     public function getShortName($name) : string
     {
-        if ($name instanceof \PhpParser\Node\Stmt\ClassLike) {
+        if ($name instanceof ClassLike) {
             if ($name->name === null) {
                 return '';
             }
             return $this->getShortName($name->name);
         }
-        if ($name instanceof \PhpParser\Node\Name || $name instanceof \PhpParser\Node\Identifier) {
+        if ($name instanceof Name || $name instanceof Identifier) {
             $name = $name->toString();
         }
         $name = \trim($name, '\\');
-        $shortName = \RectorPrefix20220606\Nette\Utils\Strings::after($name, '\\', -1);
+        $shortName = Strings::after($name, '\\', -1);
         if (\is_string($shortName)) {
             return $shortName;
         }
@@ -41,6 +41,6 @@ final class ClassNaming
     public function getNamespace(string $fullyQualifiedName) : ?string
     {
         $fullyQualifiedName = \trim($fullyQualifiedName, '\\');
-        return \RectorPrefix20220606\Nette\Utils\Strings::before($fullyQualifiedName, '\\', -1);
+        return Strings::before($fullyQualifiedName, '\\', -1);
     }
 }

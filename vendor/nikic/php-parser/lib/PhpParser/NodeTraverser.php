@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser;
+namespace RectorPrefix20220606\PhpParser;
 
-class NodeTraverser implements \PhpParser\NodeTraverserInterface
+class NodeTraverser implements NodeTraverserInterface
 {
     /**
      * If NodeVisitor::enterNode() returns DONT_TRAVERSE_CHILDREN, child nodes
@@ -49,7 +49,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
      *
      * @param NodeVisitor $visitor Visitor to add
      */
-    public function addVisitor(\PhpParser\NodeVisitor $visitor)
+    public function addVisitor(NodeVisitor $visitor)
     {
         $this->visitors[] = $visitor;
     }
@@ -58,7 +58,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
      *
      * @param NodeVisitor $visitor
      */
-    public function removeVisitor(\PhpParser\NodeVisitor $visitor)
+    public function removeVisitor(NodeVisitor $visitor)
     {
         foreach ($this->visitors as $index => $storedVisitor) {
             if ($storedVisitor === $visitor) {
@@ -97,7 +97,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
      *
      * @return Node Result of traversal (may be original node or new one)
      */
-    protected function traverseNode(\PhpParser\Node $node) : \PhpParser\Node
+    protected function traverseNode(Node $node) : Node
     {
         foreach ($node->getSubNodeNames() as $name) {
             $subNode =& $node->{$name};
@@ -106,13 +106,13 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
                 if ($this->stopTraversal) {
                     break;
                 }
-            } elseif ($subNode instanceof \PhpParser\Node) {
+            } elseif ($subNode instanceof Node) {
                 $traverseChildren = \true;
                 $breakVisitorIndex = null;
                 foreach ($this->visitors as $visitorIndex => $visitor) {
                     $return = $visitor->enterNode($subNode);
                     if (null !== $return) {
-                        if ($return instanceof \PhpParser\Node) {
+                        if ($return instanceof Node) {
                             $this->ensureReplacementReasonable($subNode, $return);
                             $subNode = $return;
                         } elseif (self::DONT_TRAVERSE_CHILDREN === $return) {
@@ -138,7 +138,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
                 foreach ($this->visitors as $visitorIndex => $visitor) {
                     $return = $visitor->leaveNode($subNode);
                     if (null !== $return) {
-                        if ($return instanceof \PhpParser\Node) {
+                        if ($return instanceof Node) {
                             $this->ensureReplacementReasonable($subNode, $return);
                             $subNode = $return;
                         } elseif (self::STOP_TRAVERSAL === $return) {
@@ -169,13 +169,13 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
     {
         $doNodes = [];
         foreach ($nodes as $i => &$node) {
-            if ($node instanceof \PhpParser\Node) {
+            if ($node instanceof Node) {
                 $traverseChildren = \true;
                 $breakVisitorIndex = null;
                 foreach ($this->visitors as $visitorIndex => $visitor) {
                     $return = $visitor->enterNode($node);
                     if (null !== $return) {
-                        if ($return instanceof \PhpParser\Node) {
+                        if ($return instanceof Node) {
                             $this->ensureReplacementReasonable($node, $return);
                             $node = $return;
                         } elseif (self::DONT_TRAVERSE_CHILDREN === $return) {
@@ -201,7 +201,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
                 foreach ($this->visitors as $visitorIndex => $visitor) {
                     $return = $visitor->leaveNode($node);
                     if (null !== $return) {
-                        if ($return instanceof \PhpParser\Node) {
+                        if ($return instanceof Node) {
                             $this->ensureReplacementReasonable($node, $return);
                             $node = $return;
                         } elseif (\is_array($return)) {
@@ -236,10 +236,10 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
     }
     private function ensureReplacementReasonable($old, $new)
     {
-        if ($old instanceof \PhpParser\Node\Stmt && $new instanceof \PhpParser\Node\Expr) {
+        if ($old instanceof Node\Stmt && $new instanceof Node\Expr) {
             throw new \LogicException("Trying to replace statement ({$old->getType()}) " . "with expression ({$new->getType()}). Are you missing a " . "Stmt_Expression wrapper?");
         }
-        if ($old instanceof \PhpParser\Node\Expr && $new instanceof \PhpParser\Node\Stmt) {
+        if ($old instanceof Node\Expr && $new instanceof Node\Stmt) {
             throw new \LogicException("Trying to replace expression ({$old->getType()}) " . "with statement ({$new->getType()})");
         }
     }

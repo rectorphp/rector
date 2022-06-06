@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute;
+namespace RectorPrefix20220606\Rector\PhpAttribute;
 
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\String_;
-use Rector\Core\Exception\NotImplementedYetException;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\Rector\Core\Exception\NotImplementedYetException;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 final class AttributeArrayNameInliner
 {
@@ -26,19 +26,19 @@ final class AttributeArrayNameInliner
     /**
      * @return Arg[]
      */
-    private function inlineArrayNode(\PhpParser\Node\Expr\Array_ $array) : array
+    private function inlineArrayNode(Array_ $array) : array
     {
         $args = [];
         foreach ($array->items as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
-            if ($arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
+            if ($arrayItem->key instanceof String_) {
                 $string = $arrayItem->key;
-                $argumentName = new \PhpParser\Node\Identifier($string->value);
-                $args[] = new \PhpParser\Node\Arg($arrayItem->value, \false, \false, [], $argumentName);
+                $argumentName = new Identifier($string->value);
+                $args[] = new Arg($arrayItem->value, \false, \false, [], $argumentName);
             } else {
-                $args[] = new \PhpParser\Node\Arg($arrayItem->value);
+                $args[] = new Arg($arrayItem->value);
             }
         }
         return $args;
@@ -49,20 +49,20 @@ final class AttributeArrayNameInliner
      */
     private function inlineArray(array $args) : array
     {
-        \RectorPrefix20220606\Webmozart\Assert\Assert::allIsAOf($args, \PhpParser\Node\Arg::class);
+        Assert::allIsAOf($args, Arg::class);
         $newArgs = [];
         foreach ($args as $arg) {
             // matching top root array key
-            if ($arg->value instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if ($arg->value instanceof ArrayItem) {
                 $arrayItem = $arg->value;
-                if ($arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
+                if ($arrayItem->key instanceof String_) {
                     $arrayItemString = $arrayItem->key;
-                    $newArgs[] = new \PhpParser\Node\Arg($arrayItem->value, \false, \false, [], new \PhpParser\Node\Identifier($arrayItemString->value));
+                    $newArgs[] = new Arg($arrayItem->value, \false, \false, [], new Identifier($arrayItemString->value));
                 } elseif ($arrayItem->key === null) {
                     // silent key
-                    $newArgs[] = new \PhpParser\Node\Arg($arrayItem->value);
+                    $newArgs[] = new Arg($arrayItem->value);
                 } else {
-                    throw new \Rector\Core\Exception\NotImplementedYetException(\get_debug_type($arrayItem->key));
+                    throw new NotImplementedYetException(\get_debug_type($arrayItem->key));
                 }
             }
         }

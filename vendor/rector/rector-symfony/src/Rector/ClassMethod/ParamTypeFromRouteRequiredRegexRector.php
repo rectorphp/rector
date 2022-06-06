@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\ClassMethod;
+namespace RectorPrefix20220606\Rector\Symfony\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Rector\AbstractRector;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\Symfony\NodeAnalyzer\RouteRequiredParamNameToTypesResolver;
-use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use RectorPrefix20220606\Rector\Symfony\NodeAnalyzer\RouteRequiredParamNameToTypesResolver;
+use RectorPrefix20220606\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector\ParamTypeFromRouteRequiredRegexRectorTest
  */
-final class ParamTypeFromRouteRequiredRegexRector extends \Rector\Core\Rector\AbstractRector
+final class ParamTypeFromRouteRequiredRegexRector extends AbstractRector
 {
     /**
      * @readonly
@@ -27,14 +27,14 @@ final class ParamTypeFromRouteRequiredRegexRector extends \Rector\Core\Rector\Ab
      * @var \Rector\Symfony\NodeAnalyzer\RouteRequiredParamNameToTypesResolver
      */
     private $routeRequiredParamNameToTypesResolver;
-    public function __construct(\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer, \Rector\Symfony\NodeAnalyzer\RouteRequiredParamNameToTypesResolver $routeRequiredParamNameToTypesResolver)
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, RouteRequiredParamNameToTypesResolver $routeRequiredParamNameToTypesResolver)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->routeRequiredParamNameToTypesResolver = $routeRequiredParamNameToTypesResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete strict param type declaration based on route annotation', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Complete strict param type declaration based on route annotation', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -73,12 +73,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->controllerAnalyzer->isInsideController($node)) {
             return null;
@@ -93,13 +93,13 @@ CODE_SAMPLE
         $hasChanged = \false;
         foreach ($paramsToTypes as $paramName => $paramType) {
             $param = $this->findParamByName($node, $paramName);
-            if (!$param instanceof \PhpParser\Node\Param) {
+            if (!$param instanceof Param) {
                 continue;
             }
             if ($param->type !== null) {
                 continue;
             }
-            $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
+            $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
             $param->type = $paramTypeNode;
             $hasChanged = \true;
         }
@@ -108,7 +108,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function findParamByName(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $paramName) : ?\PhpParser\Node\Param
+    private function findParamByName(ClassMethod $classMethod, string $paramName) : ?Param
     {
         foreach ($classMethod->getParams() as $param) {
             if (!$this->isName($param, $paramName)) {

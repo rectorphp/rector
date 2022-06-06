@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PSR4\FileInfoAnalyzer;
+namespace RectorPrefix20220606\Rector\PSR4\FileInfoAnalyzer;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use PhpParser\Node\Stmt\ClassLike;
-use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\ValueObject\Application\File;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix20220606\Rector\CodingStyle\Naming\ClassNaming;
+use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class FileInfoDeletionAnalyzer
 {
     /**
@@ -25,12 +25,12 @@ final class FileInfoDeletionAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(ClassNaming $classNaming, NodeNameResolver $nodeNameResolver)
     {
         $this->classNaming = $classNaming;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isClassLikeAndFileInfoMatch(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node\Stmt\ClassLike $classLike) : bool
+    public function isClassLikeAndFileInfoMatch(File $file, ClassLike $classLike) : bool
     {
         $className = (string) $this->nodeNameResolver->getName($classLike);
         $smartFileInfo = $file->getSmartFileInfo();
@@ -40,6 +40,6 @@ final class FileInfoDeletionAnalyzer
     }
     public function clearNameFromTestingPrefix(string $name) : string
     {
-        return \RectorPrefix20220606\Nette\Utils\Strings::replace($name, self::TESTING_PREFIX_REGEX, '');
+        return Strings::replace($name, self::TESTING_PREFIX_REGEX, '');
     }
 }

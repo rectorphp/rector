@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Naming\Naming;
+namespace RectorPrefix20220606\Rector\Naming\Naming;
 
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\GroupUse;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PhpParser\Node\Stmt\GroupUse;
 final class AliasNameResolver
 {
     /**
@@ -13,18 +13,18 @@ final class AliasNameResolver
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
-    public function __construct(\Rector\Naming\Naming\UseImportsResolver $useImportsResolver)
+    public function __construct(UseImportsResolver $useImportsResolver)
     {
         $this->useImportsResolver = $useImportsResolver;
     }
-    public function resolveByName(\PhpParser\Node\Name $name) : ?string
+    public function resolveByName(Name $name) : ?string
     {
         $uses = $this->useImportsResolver->resolveForNode($name);
         $nameString = $name->toString();
         foreach ($uses as $use) {
-            $prefix = $use instanceof \PhpParser\Node\Stmt\GroupUse ? $use->prefix . '\\' : '';
+            $prefix = $use instanceof GroupUse ? $use->prefix . '\\' : '';
             foreach ($use->uses as $useUse) {
-                if (!$useUse->alias instanceof \PhpParser\Node\Identifier) {
+                if (!$useUse->alias instanceof Identifier) {
                     continue;
                 }
                 $name = $prefix . $useUse->name->toString();

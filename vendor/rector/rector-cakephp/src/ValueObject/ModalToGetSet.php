@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CakePHP\ValueObject;
+namespace RectorPrefix20220606\Rector\CakePHP\ValueObject;
 
-use PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
 final class ModalToGetSet
 {
     /**
@@ -45,9 +45,9 @@ final class ModalToGetSet
         $this->getMethod = $getMethod ?? 'get' . \ucfirst($unprefixedMethod);
         $this->setMethod = $setMethod ?? 'set' . \ucfirst($unprefixedMethod);
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->type);
+        return new ObjectType($this->type);
     }
     public function getUnprefixedMethod() : string
     {

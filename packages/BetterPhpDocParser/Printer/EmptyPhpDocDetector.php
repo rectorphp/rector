@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\BetterPhpDocParser\Printer;
+namespace RectorPrefix20220606\Rector\BetterPhpDocParser\Printer;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 final class EmptyPhpDocDetector
 {
-    public function isPhpDocNodeEmpty(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode) : bool
+    public function isPhpDocNodeEmpty(PhpDocNode $phpDocNode) : bool
     {
         if ($phpDocNode->children === []) {
             return \true;
         }
         foreach ($phpDocNode->children as $phpDocChildNode) {
-            if ($phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode) {
+            if ($phpDocChildNode instanceof PhpDocTextNode) {
                 if ($phpDocChildNode->text !== '') {
                     return \false;
                 }

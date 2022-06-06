@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Naming;
+namespace RectorPrefix20220606\Rector\PHPUnit\Naming;
 
 interface TestClassNameResolverInterface
 {

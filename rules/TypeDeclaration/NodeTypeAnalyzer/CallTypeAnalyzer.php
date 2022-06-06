@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\NodeTypeAnalyzer;
+namespace RectorPrefix20220606\Rector\TypeDeclaration\NodeTypeAnalyzer;
 
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Type\Type;
-use Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PHPStan\Reflection\ParameterReflection;
+use RectorPrefix20220606\PHPStan\Reflection\ParametersAcceptorSelector;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
 final class CallTypeAnalyzer
 {
     /**
@@ -16,7 +16,7 @@ final class CallTypeAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
     }
@@ -30,7 +30,7 @@ final class CallTypeAnalyzer
         if ($methodReflection === null) {
             return [];
         }
-        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
         $parameterTypes = [];
         /** @var ParameterReflection $parameterReflection */
         foreach ($parametersAcceptor->getParameters() as $parameterReflection) {

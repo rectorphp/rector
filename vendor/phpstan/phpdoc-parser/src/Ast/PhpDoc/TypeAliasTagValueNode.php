@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace PHPStan\PhpDocParser\Ast\PhpDoc;
+namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc;
 
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use function trim;
-class TypeAliasTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
+class TypeAliasTagValueNode implements PhpDocTagValueNode
 {
     use NodeAttributes;
     /** @var string */
     public $alias;
     /** @var TypeNode */
     public $type;
-    public function __construct(string $alias, \PHPStan\PhpDocParser\Ast\Type\TypeNode $type)
+    public function __construct(string $alias, TypeNode $type)
     {
         $this->alias = $alias;
         $this->type = $type;
     }
     public function __toString() : string
     {
-        return \trim("{$this->alias} {$this->type}");
+        return trim("{$this->alias} {$this->type}");
     }
 }

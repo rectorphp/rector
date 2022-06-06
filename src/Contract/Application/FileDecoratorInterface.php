@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Contract\Application;
+namespace RectorPrefix20220606\Rector\Core\Contract\Application;
 
-use Rector\Core\ValueObject\Application\File;
+use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
 interface FileDecoratorInterface
 {
     /**

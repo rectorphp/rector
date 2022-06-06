@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\RectorInstaller;
+namespace RectorPrefix20220606\Rector\RectorInstaller;
 
 interface Filesystem
 {

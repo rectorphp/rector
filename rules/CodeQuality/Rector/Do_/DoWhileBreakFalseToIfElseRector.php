@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality\Rector\Do_;
+namespace RectorPrefix20220606\Rector\CodeQuality\Rector\Do_;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\If_;
-use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Break_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Do_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Else_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector\DoWhileBreakFalseToIfElseRectorTest
  */
-final class DoWhileBreakFalseToIfElseRector extends \Rector\Core\Rector\AbstractRector
+final class DoWhileBreakFalseToIfElseRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace do (...} while (false); with more readable if/else conditions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace do (...} while (false); with more readable if/else conditions', [new CodeSample(<<<'CODE_SAMPLE'
 do {
     if (mt_rand(0, 1)) {
         $value = 5;
@@ -44,13 +44,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Do_::class];
+        return [Do_::class];
     }
     /**
      * @param Do_ $node
      * @return mixed[]|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
         if (!$this->valueResolver->isFalse($node->cond)) {
             return null;
@@ -64,28 +64,28 @@ CODE_SAMPLE
      */
     private function resolveNewStmts(array $currentStmts) : array
     {
-        $foundBreak = $this->betterNodeFinder->findFirstInstanceOf($currentStmts, \PhpParser\Node\Stmt\Break_::class);
-        if (!$foundBreak instanceof \PhpParser\Node\Stmt\Break_) {
+        $foundBreak = $this->betterNodeFinder->findFirstInstanceOf($currentStmts, Break_::class);
+        if (!$foundBreak instanceof Break_) {
             return $currentStmts;
         }
         $newStmts = [];
         foreach ($currentStmts as $key => $currentStmt) {
-            $foundBreak = $this->betterNodeFinder->findFirstInstanceOf($currentStmt, \PhpParser\Node\Stmt\Break_::class);
-            if (!$foundBreak instanceof \PhpParser\Node\Stmt\Break_) {
+            $foundBreak = $this->betterNodeFinder->findFirstInstanceOf($currentStmt, Break_::class);
+            if (!$foundBreak instanceof Break_) {
                 continue;
             }
             $this->removeNode($foundBreak);
             // collect rest of nodes
             $restOfStmts = \array_slice($currentStmts, $key + 1, \count($currentStmts));
-            $currentIf = $currentStmt instanceof \PhpParser\Node\Stmt\If_ ? $currentStmt : $this->betterNodeFinder->findInstanceOf($currentStmt, \PhpParser\Node\Stmt\If_::class);
-            if (!$currentIf instanceof \PhpParser\Node\Stmt\If_) {
+            $currentIf = $currentStmt instanceof If_ ? $currentStmt : $this->betterNodeFinder->findInstanceOf($currentStmt, If_::class);
+            if (!$currentIf instanceof If_) {
                 continue;
             }
             // reprint new tokens
-            $currentIf->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            $currentIf->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             if ($restOfStmts !== []) {
                 $restOfStmts = $this->resolveNewStmts($restOfStmts);
-                $currentIf->else = new \PhpParser\Node\Stmt\Else_($restOfStmts);
+                $currentIf->else = new Else_($restOfStmts);
             }
             $newStmts[] = $currentStmt;
             break;

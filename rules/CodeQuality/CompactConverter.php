@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality;
+namespace RectorPrefix20220606\Rector\CodeQuality;
 
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class CompactConverter
 {
     /**
@@ -18,15 +18,15 @@ final class CompactConverter
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
-    public function hasAllArgumentsNamed(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    public function hasAllArgumentsNamed(FuncCall $funcCall) : bool
     {
         foreach ($funcCall->args as $arg) {
             // VariadicPlaceholder doesn't has name, so it return false directly
-            if (!$arg instanceof \PhpParser\Node\Arg) {
+            if (!$arg instanceof Arg) {
                 return \false;
             }
             /** @var string|null $variableName */
@@ -37,19 +37,19 @@ final class CompactConverter
         }
         return \true;
     }
-    public function convertToArray(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\Array_
+    public function convertToArray(FuncCall $funcCall) : Array_
     {
-        $array = new \PhpParser\Node\Expr\Array_();
+        $array = new Array_();
         foreach ($funcCall->args as $arg) {
-            if (!$arg instanceof \PhpParser\Node\Arg) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            if (!$arg instanceof Arg) {
+                throw new ShouldNotHappenException();
             }
             /** @var string|null $variableName */
             $variableName = $this->valueResolver->getValue($arg->value);
             if (!\is_string($variableName)) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
+                throw new ShouldNotHappenException();
             }
-            $array->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Variable($variableName), new \PhpParser\Node\Scalar\String_($variableName));
+            $array->items[] = new ArrayItem(new Variable($variableName), new String_($variableName));
         }
         return $array;
     }

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Renaming\Contract;
+namespace RectorPrefix20220606\Rector\Renaming\Contract;
 
-use PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
 interface RenameClassConstFetchInterface
 {
-    public function getOldObjectType() : \PHPStan\Type\ObjectType;
+    public function getOldObjectType() : ObjectType;
     public function getOldConstant() : string;
     public function getNewConstant() : string;
 }

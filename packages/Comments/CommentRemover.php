@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Comments;
+namespace RectorPrefix20220606\Rector\Comments;
 
-use PhpParser\Node;
-use Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser;
 /**
  * @see \Rector\Tests\Comments\CommentRemover\CommentRemoverTest
  */
@@ -15,7 +15,7 @@ final class CommentRemover
      * @var \Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser
      */
     private $commentRemovingNodeTraverser;
-    public function __construct(\Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser $commentRemovingNodeTraverser)
+    public function __construct(CommentRemovingNodeTraverser $commentRemovingNodeTraverser)
     {
         $this->commentRemovingNodeTraverser = $commentRemovingNodeTraverser;
     }

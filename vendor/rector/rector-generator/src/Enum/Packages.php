@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\RectorGenerator\Enum;
+namespace RectorPrefix20220606\Rector\RectorGenerator\Enum;
 
 final class Packages
 {

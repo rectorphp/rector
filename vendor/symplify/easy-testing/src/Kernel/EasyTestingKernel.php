@@ -6,14 +6,14 @@ namespace RectorPrefix20220606\Symplify\EasyTesting\Kernel;
 use RectorPrefix20220606\Psr\Container\ContainerInterface;
 use RectorPrefix20220606\Symplify\EasyTesting\ValueObject\EasyTestingConfig;
 use RectorPrefix20220606\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
-final class EasyTestingKernel extends \RectorPrefix20220606\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
+final class EasyTestingKernel extends AbstractSymplifyKernel
 {
     /**
      * @param string[] $configFiles
      */
-    public function createFromConfigs(array $configFiles) : \RectorPrefix20220606\Psr\Container\ContainerInterface
+    public function createFromConfigs(array $configFiles) : ContainerInterface
     {
-        $configFiles[] = \RectorPrefix20220606\Symplify\EasyTesting\ValueObject\EasyTestingConfig::FILE_PATH;
+        $configFiles[] = EasyTestingConfig::FILE_PATH;
         return $this->create($configFiles);
     }
 }

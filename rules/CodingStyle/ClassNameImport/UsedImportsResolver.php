@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodingStyle\ClassNameImport;
+namespace RectorPrefix20220606\Rector\CodingStyle\ClassNameImport;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\UseUse;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Namespace_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\UseUse;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UsedImportsResolver
 {
     /**
@@ -29,7 +29,7 @@ final class UsedImportsResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, UseImportsTraverser $useImportsTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useImportsTraverser = $useImportsTraverser;
@@ -38,10 +38,10 @@ final class UsedImportsResolver
     /**
      * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
-    public function resolveForNode(\PhpParser\Node $node) : array
+    public function resolveForNode(Node $node) : array
     {
-        $namespace = $node instanceof \PhpParser\Node\Stmt\Namespace_ ? $node : $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);
-        if ($namespace instanceof \PhpParser\Node\Stmt\Namespace_) {
+        $namespace = $node instanceof Namespace_ ? $node : $this->betterNodeFinder->findParentType($node, Namespace_::class);
+        if ($namespace instanceof Namespace_) {
             return $this->resolveForNamespace($namespace);
         }
         return [];
@@ -54,18 +54,18 @@ final class UsedImportsResolver
     {
         $usedImports = [];
         /** @var Class_|null $class */
-        $class = $this->betterNodeFinder->findFirstInstanceOf($stmts, \PhpParser\Node\Stmt\Class_::class);
+        $class = $this->betterNodeFinder->findFirstInstanceOf($stmts, Class_::class);
         // add class itself
         // is not anonymous class
-        if ($class instanceof \PhpParser\Node\Stmt\Class_) {
+        if ($class instanceof Class_) {
             $className = (string) $this->nodeNameResolver->getName($class);
-            $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
+            $usedImports[] = new FullyQualifiedObjectType($className);
         }
-        $this->useImportsTraverser->traverserStmts($stmts, function (\PhpParser\Node\Stmt\UseUse $useUse, string $name) use(&$usedImports) : void {
+        $this->useImportsTraverser->traverserStmts($stmts, function (UseUse $useUse, string $name) use(&$usedImports) : void {
             if ($useUse->alias !== null) {
-                $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($useUse->alias->toString(), $name);
+                $usedImports[] = new AliasedObjectType($useUse->alias->toString(), $name);
             } else {
-                $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($name);
+                $usedImports[] = new FullyQualifiedObjectType($name);
             }
         });
         return $usedImports;
@@ -77,15 +77,15 @@ final class UsedImportsResolver
     public function resolveFunctionImportsForStmts(array $stmts) : array
     {
         $usedFunctionImports = [];
-        $this->useImportsTraverser->traverserStmtsForFunctions($stmts, function (\PhpParser\Node\Stmt\UseUse $useUse, string $name) use(&$usedFunctionImports) : void {
-            $usedFunctionImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($name);
+        $this->useImportsTraverser->traverserStmtsForFunctions($stmts, function (UseUse $useUse, string $name) use(&$usedFunctionImports) : void {
+            $usedFunctionImports[] = new FullyQualifiedObjectType($name);
         });
         return $usedFunctionImports;
     }
     /**
      * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
-    private function resolveForNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace) : array
+    private function resolveForNamespace(Namespace_ $namespace) : array
     {
         return $this->resolveForStmts($namespace->stmts);
     }

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\ValueObject;
+namespace RectorPrefix20220606\Rector\Symfony\ValueObject;
 
-use Rector\Symfony\Contract\Tag\TagInterface;
+use RectorPrefix20220606\Rector\Symfony\Contract\Tag\TagInterface;
 final class ServiceDefinition
 {
     /**
@@ -75,7 +75,7 @@ final class ServiceDefinition
     {
         return $this->tags;
     }
-    public function getTag(string $name) : ?\Rector\Symfony\Contract\Tag\TagInterface
+    public function getTag(string $name) : ?TagInterface
     {
         foreach ($this->tags as $tag) {
             if ($tag->getName() !== $name) {

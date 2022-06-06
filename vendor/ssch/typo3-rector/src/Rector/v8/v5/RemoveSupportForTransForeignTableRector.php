@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v8\v5;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v5;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\TcaHelperTrait;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.5/Breaking-78191-RemoveSupportForTransForeignTableInTCA.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v5\RemoveSupportForTransForeignTableRector\RemoveSupportForTransForeignTableRectorTest
  */
-final class RemoveSupportForTransForeignTableRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveSupportForTransForeignTableRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -23,27 +23,27 @@ final class RemoveSupportForTransForeignTableRector extends \Rector\Core\Rector\
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $ctrlArrayItem = $this->extractCtrl($node);
-        if (!$ctrlArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$ctrlArrayItem instanceof ArrayItem) {
             return null;
         }
         $items = $ctrlArrayItem->value;
-        if (!$items instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$items instanceof Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($items->items as $fieldValue) {
-            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$fieldValue instanceof ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
@@ -59,9 +59,9 @@ final class RemoveSupportForTransForeignTableRector extends \Rector\Core\Rector\
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove support for transForeignTable in TCA', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove support for transForeignTable in TCA', [new CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
         'transForeignTable' => 'l10n_parent',

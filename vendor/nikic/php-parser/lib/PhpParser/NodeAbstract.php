@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser;
+namespace RectorPrefix20220606\PhpParser;
 
-abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
+abstract class NodeAbstract implements Node, \JsonSerializable
 {
     protected $attributes;
     /**
@@ -115,7 +115,7 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
         $comments = $this->getComments();
         for ($i = \count($comments) - 1; $i >= 0; $i--) {
             $comment = $comments[$i];
-            if ($comment instanceof \PhpParser\Comment\Doc) {
+            if ($comment instanceof Comment\Doc) {
                 return $comment;
             }
         }
@@ -128,11 +128,11 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
      *
      * @param Comment\Doc $docComment Doc comment to set
      */
-    public function setDocComment(\PhpParser\Comment\Doc $docComment)
+    public function setDocComment(Comment\Doc $docComment)
     {
         $comments = $this->getComments();
         for ($i = \count($comments) - 1; $i >= 0; $i--) {
-            if ($comments[$i] instanceof \PhpParser\Comment\Doc) {
+            if ($comments[$i] instanceof Comment\Doc) {
                 // Replace existing doc comment.
                 $comments[$i] = $docComment;
                 $this->setAttribute('comments', $comments);

@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\DeadCode\NodeAnalyzer;
 
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ClassReflection;
-use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
-use Rector\NodeCollector\ValueObject\ArrayCallable;
-use Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\Rector\Core\PhpParser\AstResolver;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\Value\ValueResolver;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
+use RectorPrefix20220606\Rector\NodeCollector\ValueObject\ArrayCallable;
+use RectorPrefix20220606\Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class IsClassMethodUsedAnalyzer
 {
     /**
@@ -56,7 +56,7 @@ final class IsClassMethodUsedAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher $arrayCallableMethodMatcher, \Rector\DeadCode\NodeAnalyzer\CallCollectionAnalyzer $callCollectionAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, AstResolver $astResolver, BetterNodeFinder $betterNodeFinder, ValueResolver $valueResolver, ArrayCallableMethodMatcher $arrayCallableMethodMatcher, CallCollectionAnalyzer $callCollectionAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->astResolver = $astResolver;
@@ -66,10 +66,10 @@ final class IsClassMethodUsedAnalyzer
         $this->callCollectionAnalyzer = $callCollectionAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isClassMethodUsed(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function isClassMethodUsed(ClassMethod $classMethod) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        if (!$class instanceof Class_) {
             return \true;
         }
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
@@ -88,24 +88,24 @@ final class IsClassMethodUsedAnalyzer
         // 4. private method exists in trait and is overwritten by the class
         return $this->doesMethodExistInTrait($classMethod, $classMethodName);
     }
-    private function isClassMethodUsedInLocalStaticCall(\PhpParser\Node\Stmt\Class_ $class, string $classMethodName) : bool
+    private function isClassMethodUsedInLocalStaticCall(Class_ $class, string $classMethodName) : bool
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         /** @var StaticCall[] $staticCalls */
-        $staticCalls = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\StaticCall::class);
+        $staticCalls = $this->betterNodeFinder->findInstanceOf($class, StaticCall::class);
         return $this->callCollectionAnalyzer->isExists($staticCalls, $classMethodName, $className);
     }
-    private function isClassMethodCalledInLocalMethodCall(\PhpParser\Node\Stmt\Class_ $class, string $classMethodName) : bool
+    private function isClassMethodCalledInLocalMethodCall(Class_ $class, string $classMethodName) : bool
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         /** @var MethodCall[] $methodCalls */
-        $methodCalls = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\MethodCall::class);
+        $methodCalls = $this->betterNodeFinder->findInstanceOf($class, MethodCall::class);
         return $this->callCollectionAnalyzer->isExists($methodCalls, $classMethodName, $className);
     }
-    private function isInArrayMap(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\Array_ $array) : bool
+    private function isInArrayMap(Class_ $class, Array_ $array) : bool
     {
-        $parentFuncCall = $this->betterNodeFinder->findParentType($array, \PhpParser\Node\Expr\FuncCall::class);
-        if (!$parentFuncCall instanceof \PhpParser\Node\Expr\FuncCall) {
+        $parentFuncCall = $this->betterNodeFinder->findParentType($array, FuncCall::class);
+        if (!$parentFuncCall instanceof FuncCall) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($parentFuncCall->name, 'array_map')) {
@@ -114,25 +114,25 @@ final class IsClassMethodUsedAnalyzer
         if (\count($array->items) !== 2) {
             return \false;
         }
-        if (!$array->items[1] instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$array->items[1] instanceof ArrayItem) {
             return \false;
         }
         $value = $this->valueResolver->getValue($array->items[1]->value);
         if (!\is_string($value)) {
             return \false;
         }
-        return $class->getMethod($value) instanceof \PhpParser\Node\Stmt\ClassMethod;
+        return $class->getMethod($value) instanceof ClassMethod;
     }
-    private function isClassMethodCalledInLocalArrayCall(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isClassMethodCalledInLocalArrayCall(Class_ $class, ClassMethod $classMethod) : bool
     {
         /** @var Array_[] $arrays */
-        $arrays = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\Array_::class);
+        $arrays = $this->betterNodeFinder->findInstanceOf($class, Array_::class);
         foreach ($arrays as $array) {
             if ($this->isInArrayMap($class, $array)) {
                 return \true;
             }
             $arrayCallable = $this->arrayCallableMethodMatcher->match($array);
-            if ($arrayCallable instanceof \Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod) {
+            if ($arrayCallable instanceof ArrayCallableDynamicMethod) {
                 return \true;
             }
             if ($this->shouldSkipArrayCallable($class, $arrayCallable)) {
@@ -149,24 +149,24 @@ final class IsClassMethodUsedAnalyzer
     /**
      * @param null|\Rector\NodeCollector\ValueObject\ArrayCallable $arrayCallable
      */
-    private function shouldSkipArrayCallable(\PhpParser\Node\Stmt\Class_ $class, $arrayCallable) : bool
+    private function shouldSkipArrayCallable(Class_ $class, $arrayCallable) : bool
     {
-        if (!$arrayCallable instanceof \Rector\NodeCollector\ValueObject\ArrayCallable) {
+        if (!$arrayCallable instanceof ArrayCallable) {
             return \true;
         }
         // is current class method?
         return !$this->nodeNameResolver->isName($class, $arrayCallable->getClass());
     }
-    private function doesMethodExistInTrait(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $classMethodName) : bool
+    private function doesMethodExistInTrait(ClassMethod $classMethod, string $classMethodName) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         $traits = $this->astResolver->parseClassReflectionTraits($classReflection);
         foreach ($traits as $trait) {
             $method = $trait->getMethod($classMethodName);
-            if (!$method instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            if (!$method instanceof ClassMethod) {
                 continue;
             }
             return \true;

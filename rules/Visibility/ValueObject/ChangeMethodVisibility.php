@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Visibility\ValueObject;
+namespace RectorPrefix20220606\Rector\Visibility\ValueObject;
 
-use Rector\Core\Validation\RectorAssert;
+use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
 final class ChangeMethodVisibility
 {
     /**
@@ -26,7 +26,7 @@ final class ChangeMethodVisibility
         $this->class = $class;
         $this->method = $method;
         $this->visibility = $visibility;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
     public function getClass() : string
     {

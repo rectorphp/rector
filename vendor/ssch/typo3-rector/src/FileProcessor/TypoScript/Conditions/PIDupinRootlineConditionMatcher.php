@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
-final class PIDupinRootlineConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\AbstractRootlineConditionMatcher
+final class PIDupinRootlineConditionMatcher extends AbstractRootlineConditionMatcher
 {
     /**
      * @var string

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeNameResolver\Contract;
+namespace RectorPrefix20220606\Rector\NodeNameResolver\Contract;
 
-use PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node;
 /**
  * @template TNode as Node
  */
@@ -16,5 +16,5 @@ interface NodeNameResolverInterface
     /**
      * @param TNode $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string;
+    public function resolve(Node $node) : ?string;
 }

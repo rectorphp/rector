@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\ValueObject\Application;
+namespace RectorPrefix20220606\Rector\Core\ValueObject\Application;
 
-use PhpParser\Node\Stmt;
-use Rector\FileSystemRector\Contract\FileWithNodesInterface;
-final class MovedFile implements \Rector\FileSystemRector\Contract\FileWithNodesInterface
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\Rector\FileSystemRector\Contract\FileWithNodesInterface;
+final class MovedFile implements FileWithNodesInterface
 {
     /**
      * @readonly
@@ -17,12 +17,12 @@ final class MovedFile implements \Rector\FileSystemRector\Contract\FileWithNodes
      * @var string
      */
     private $newFilePath;
-    public function __construct(\Rector\Core\ValueObject\Application\File $file, string $newFilePath)
+    public function __construct(File $file, string $newFilePath)
     {
         $this->file = $file;
         $this->newFilePath = $newFilePath;
     }
-    public function getFile() : \Rector\Core\ValueObject\Application\File
+    public function getFile() : File
     {
         return $this->file;
     }

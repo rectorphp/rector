@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\PHPStan\Rules;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\PHPStan\Rules;
 
-use PhpParser\Comment\Doc;
-use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Rules\Rule;
-use PHPStan\ShouldNotHappenException;
-use PHPStan\Type\FileTypeMapper;
-use Rector\Core\Contract\Rector\PhpRectorInterface;
+use RectorPrefix20220606\PhpParser\Comment\Doc;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\PHPStan\Rules\Rule;
+use RectorPrefix20220606\PHPStan\ShouldNotHappenException;
+use RectorPrefix20220606\PHPStan\Type\FileTypeMapper;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\PhpRectorInterface;
 /**
  * @see \Ssch\TYPO3Rector\PHPStan\Tests\Rules\AddCodeCoverageIgnoreForRectorDefinition\AddCodeCoverageIgnoreForRectorDefinitionTest
  * @implements Rule<ClassMethod>
  */
-final class AddCodeCoverageIgnoreForRectorDefinitionRule implements \PHPStan\Rules\Rule
+final class AddCodeCoverageIgnoreForRectorDefinitionRule implements Rule
 {
     /**
      * @var string
@@ -27,27 +27,27 @@ final class AddCodeCoverageIgnoreForRectorDefinitionRule implements \PHPStan\Rul
      * @var \PHPStan\Type\FileTypeMapper
      */
     private $fileTypeMapper;
-    public function __construct(\PHPStan\Type\FileTypeMapper $fileTypeMapper)
+    public function __construct(FileTypeMapper $fileTypeMapper)
     {
         $this->fileTypeMapper = $fileTypeMapper;
     }
     public function getNodeType() : string
     {
-        return \PhpParser\Node\Stmt\ClassMethod::class;
+        return ClassMethod::class;
     }
     /**
      * @return string[]
      */
-    public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : array
+    public function processNode(Node $node, Scope $scope) : array
     {
         if (!$scope->isInClass()) {
-            throw new \PHPStan\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return [];
         }
-        if (!$classReflection->isSubclassOf(\Rector\Core\Contract\Rector\PhpRectorInterface::class)) {
+        if (!$classReflection->isSubclassOf(PhpRectorInterface::class)) {
             return [];
         }
         $methodName = $node->name->toString();
@@ -56,7 +56,7 @@ final class AddCodeCoverageIgnoreForRectorDefinitionRule implements \PHPStan\Rul
         }
         $className = $classReflection->getName();
         $docComment = $node->getDocComment();
-        if (!$docComment instanceof \PhpParser\Comment\Doc) {
+        if (!$docComment instanceof Doc) {
             return [\sprintf(self::ERROR_MESSAGE, $className)];
         }
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc($scope->getFile(), $classReflection->getName(), null, $methodName, $docComment->getText());

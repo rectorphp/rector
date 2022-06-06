@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\TypeNodeAnalyzer;
+namespace RectorPrefix20220606\Rector\DeadCode\TypeNodeAnalyzer;
 
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 final class GenericTypeNodeAnalyzer
 {
-    public function hasGenericType(\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $unionTypeNode) : bool
+    public function hasGenericType(UnionTypeNode $unionTypeNode) : bool
     {
         $types = $unionTypeNode->types;
         foreach ($types as $type) {
-            if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
+            if ($type instanceof GenericTypeNode) {
                 return \true;
             }
         }

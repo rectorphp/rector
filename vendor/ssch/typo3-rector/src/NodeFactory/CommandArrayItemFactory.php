@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\NodeFactory;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\NodeFactory;
 
-use PhpParser\Comment;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar\String_;
-use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Comment;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 final class CommandArrayItemFactory
 {
     /**
@@ -16,7 +16,7 @@ final class CommandArrayItemFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
@@ -28,11 +28,11 @@ final class CommandArrayItemFactory
     {
         $arrayItems = [];
         foreach ($commands as $commandName => $command) {
-            $commandArray = new \PhpParser\Node\Expr\Array_();
+            $commandArray = new Array_();
             $value = $this->nodeFactory->createClassConstReference($command);
-            $key = new \PhpParser\Node\Scalar\String_('class');
-            $commandArray->items[] = new \PhpParser\Node\Expr\ArrayItem($value, $key, \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
-            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($commandArray, new \PhpParser\Node\Scalar\String_($commandName), \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
+            $key = new String_('class');
+            $commandArray->items[] = new ArrayItem($value, $key, \false, [AttributeKey::COMMENTS => [new Comment(\PHP_EOL)]]);
+            $arrayItems[] = new ArrayItem($commandArray, new String_($commandName), \false, [AttributeKey::COMMENTS => [new Comment(\PHP_EOL)]]);
         }
         return $arrayItems;
     }

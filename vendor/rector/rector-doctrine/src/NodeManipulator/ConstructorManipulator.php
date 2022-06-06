@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\NodeManipulator;
+namespace RectorPrefix20220606\Rector\Doctrine\NodeManipulator;
 
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use Rector\Core\NodeManipulator\ClassInsertManipulator;
-use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\ValueObject\MethodName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\Rector\Core\NodeManipulator\ClassInsertManipulator;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
+use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 final class ConstructorManipulator
 {
     /**
@@ -22,21 +22,21 @@ final class ConstructorManipulator
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator)
+    public function __construct(NodeFactory $nodeFactory, ClassInsertManipulator $classInsertManipulator)
     {
         $this->nodeFactory = $nodeFactory;
         $this->classInsertManipulator = $classInsertManipulator;
     }
-    public function addStmtToConstructor(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\Expression $newExpression) : void
+    public function addStmtToConstructor(Class_ $class, Expression $newExpression) : void
     {
-        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if ($constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if ($constructClassMethod instanceof ClassMethod) {
             $constructClassMethod->stmts[] = $newExpression;
         } else {
-            $constructClassMethod = $this->nodeFactory->createPublicMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+            $constructClassMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
             $constructClassMethod->stmts[] = $newExpression;
             $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
-            $class->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            $class->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\ValueObject;
+namespace RectorPrefix20220606\Rector\PHPUnit\ValueObject;
 
 final class FunctionNameWithAssertMethods
 {

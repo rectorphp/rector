@@ -1,33 +1,33 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DependencyInjection\Rector\ClassMethod;
+namespace RectorPrefix20220606\Rector\DependencyInjection\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use RectorPrefix20220606\Rector\Core\Enum\ObjectReference;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
  */
-final class AddMethodParentCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class AddMethodParentCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var array<string, string>
      */
     private $methodByParentTypes = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add method parent call, in case new parent method is added', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add method parent call, in case new parent method is added', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SunshineCommand extends ParentClassWithNewConstructor
 {
     public function __construct()
@@ -47,27 +47,27 @@ class SunshineCommand extends ParentClassWithNewConstructor
     }
 }
 CODE_SAMPLE
-, ['ParentClassWithNewConstructor' => \Rector\Core\ValueObject\MethodName::CONSTRUCT])]);
+, ['ParentClassWithNewConstructor' => MethodName::CONSTRUCT])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         $className = (string) $this->nodeNameResolver->getName($classLike);
         foreach ($this->methodByParentTypes as $type => $method) {
-            if (!$this->isObjectType($classLike, new \PHPStan\Type\ObjectType($type))) {
+            if (!$this->isObjectType($classLike, new ObjectType($type))) {
                 continue;
             }
             // not itself
@@ -87,33 +87,33 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220606\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220606\Webmozart\Assert\Assert::allString($configuration);
+        Assert::allString(\array_keys($configuration));
+        Assert::allString($configuration);
         /** @var array<string, string> $configuration */
         $this->methodByParentTypes = $configuration;
     }
-    private function shouldSkipMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $method) : bool
+    private function shouldSkipMethod(ClassMethod $classMethod, string $method) : bool
     {
         if (!$this->isName($classMethod, $method)) {
             return \true;
         }
         return $this->hasParentCallOfMethod($classMethod, $method);
     }
-    private function createParentStaticCall(string $method) : \PhpParser\Node\Stmt\Expression
+    private function createParentStaticCall(string $method) : Expression
     {
-        $staticCall = $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::PARENT, $method);
-        return new \PhpParser\Node\Stmt\Expression($staticCall);
+        $staticCall = $this->nodeFactory->createStaticCall(ObjectReference::PARENT, $method);
+        return new Expression($staticCall);
     }
     /**
      * Looks for "parent::<methodName>
      */
-    private function hasParentCallOfMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $method) : bool
+    private function hasParentCallOfMethod(ClassMethod $classMethod, string $method) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) use($method) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use($method) : bool {
+            if (!$node instanceof StaticCall) {
                 return \false;
             }
-            if (!$this->isName($node->class, \Rector\Core\Enum\ObjectReference::PARENT)) {
+            if (!$this->isName($node->class, ObjectReference::PARENT)) {
                 return \false;
             }
             return $this->isName($node->name, $method);

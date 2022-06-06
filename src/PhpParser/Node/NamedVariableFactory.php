@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser\Node;
+namespace RectorPrefix20220606\Rector\Core\PhpParser\Node;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Naming\Naming\VariableNaming;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 final class NamedVariableFactory
 {
     /**
@@ -20,19 +20,19 @@ final class NamedVariableFactory
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(VariableNaming $variableNaming, BetterNodeFinder $betterNodeFinder)
     {
         $this->variableNaming = $variableNaming;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function createVariable(\PhpParser\Node $node, string $variableName) : \PhpParser\Node\Expr\Variable
+    public function createVariable(Node $node, string $variableName) : Variable
     {
         $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
-        if (!$currentStmt instanceof \PhpParser\Node) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$currentStmt instanceof Node) {
+            throw new ShouldNotHappenException();
         }
-        $scope = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
         $variableName = $this->variableNaming->createCountedValueName($variableName, $scope);
-        return new \PhpParser\Node\Expr\Variable($variableName);
+        return new Variable($variableName);
     }
 }

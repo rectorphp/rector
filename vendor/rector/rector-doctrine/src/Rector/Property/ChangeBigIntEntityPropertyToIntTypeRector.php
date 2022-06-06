@@ -1,40 +1,40 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\Rector\Property;
+namespace RectorPrefix20220606\Rector\Doctrine\Rector\Property;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\StringType;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
-use Rector\NodeTypeResolver\ValueObject\OldToNewType;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use RectorPrefix20220606\PHPStan\Type\BooleanType;
+use RectorPrefix20220606\PHPStan\Type\FloatType;
+use RectorPrefix20220606\PHPStan\Type\IntegerType;
+use RectorPrefix20220606\PHPStan\Type\StringType;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
+use RectorPrefix20220606\Rector\NodeTypeResolver\ValueObject\OldToNewType;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://www.doctrine-project.org/projects/doctrine-dbal/en/2.10/reference/types.html#bigint
  *
  * @see \Rector\Doctrine\Tests\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector\ChangeBigIntEntityPropertyToIntTypeRectorTest
  */
-final class ChangeBigIntEntityPropertyToIntTypeRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeBigIntEntityPropertyToIntTypeRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer
      */
     private $docBlockClassRenamer;
-    public function __construct(\Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer $docBlockClassRenamer)
+    public function __construct(DocBlockClassRenamer $docBlockClassRenamer)
     {
         $this->docBlockClassRenamer = $docBlockClassRenamer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change database type "bigint" for @var/type declaration to string', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change database type "bigint" for @var/type declaration to string', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -71,16 +71,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\Column');
-        if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
         $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
@@ -88,10 +88,10 @@ CODE_SAMPLE
             return null;
         }
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+        if (!$varTagValueNode instanceof VarTagValueNode) {
             return null;
         }
-        $oldToNewTypes = [new \Rector\NodeTypeResolver\ValueObject\OldToNewType(new \PHPStan\Type\IntegerType(), new \PHPStan\Type\StringType()), new \Rector\NodeTypeResolver\ValueObject\OldToNewType(new \PHPStan\Type\FloatType(), new \PHPStan\Type\StringType()), new \Rector\NodeTypeResolver\ValueObject\OldToNewType(new \PHPStan\Type\BooleanType(), new \PHPStan\Type\StringType())];
+        $oldToNewTypes = [new OldToNewType(new IntegerType(), new StringType()), new OldToNewType(new FloatType(), new StringType()), new OldToNewType(new BooleanType(), new StringType())];
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
         return $node;
     }

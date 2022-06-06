@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Provider;
+namespace RectorPrefix20220606\Rector\Core\Provider;
 
-use Rector\Core\ValueObject\Application\File;
+use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
 final class CurrentFileProvider
 {
     /**
      * @var \Rector\Core\ValueObject\Application\File|null
      */
     private $file;
-    public function setFile(\Rector\Core\ValueObject\Application\File $file) : void
+    public function setFile(File $file) : void
     {
         $this->file = $file;
     }
-    public function getFile() : ?\Rector\Core\ValueObject\Application\File
+    public function getFile() : ?File
     {
         return $this->file;
     }

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\RectorGenerator\ValueObject;
+namespace RectorPrefix20220606\Rector\RectorGenerator\ValueObject;
 
 use RectorPrefix20220606\Nette\Utils\Json;
 use RectorPrefix20220606\Nette\Utils\Strings;
-use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use Rector\RectorGenerator\Exception\ConfigurationException;
-use Rector\RectorGenerator\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\Rector\RectorGenerator\Exception\ConfigurationException;
+use RectorPrefix20220606\Rector\RectorGenerator\Exception\ShouldNotHappenException;
 final class RectorRecipe
 {
     /**
@@ -73,7 +73,7 @@ final class RectorRecipe
         $this->setName($name);
         $this->setNodeTypes($nodeTypes);
         if ($codeBefore === $codeAfter) {
-            throw new \Rector\RectorGenerator\Exception\ConfigurationException('Code before and after are identical. They have to be different');
+            throw new ConfigurationException('Code before and after are identical. They have to be different');
         }
         $this->setCodeBefore($codeBefore);
         $this->setCodeAfter($codeAfter);
@@ -170,7 +170,7 @@ final class RectorRecipe
     {
         if (\is_file($package)) {
             $message = \sprintf('The "%s()" method only accepts package name, file path "%s" given', __METHOD__, $package);
-            throw new \Rector\RectorGenerator\Exception\ShouldNotHappenException($message);
+            throw new ShouldNotHappenException($message);
         }
         $this->package = $package;
     }
@@ -178,7 +178,7 @@ final class RectorRecipe
     {
         if (\substr_compare($name, 'Rector', -\strlen('Rector')) !== 0) {
             $message = \sprintf('Rector name "%s" must end with "Rector"', $name);
-            throw new \Rector\RectorGenerator\Exception\ConfigurationException($message);
+            throw new ConfigurationException($message);
         }
         $this->name = $name;
     }
@@ -188,15 +188,15 @@ final class RectorRecipe
     private function setNodeTypes(array $nodeTypes) : void
     {
         foreach ($nodeTypes as $nodeType) {
-            if (\is_a($nodeType, \PhpParser\Node::class, \true)) {
+            if (\is_a($nodeType, Node::class, \true)) {
                 continue;
             }
-            $message = \sprintf('Node type "%s" does not exist, implement "%s" interface or is not imported in "rector-recipe.php"', $nodeType, \PhpParser\Node::class);
-            throw new \Rector\RectorGenerator\Exception\ShouldNotHappenException($message);
+            $message = \sprintf('Node type "%s" does not exist, implement "%s" interface or is not imported in "rector-recipe.php"', $nodeType, Node::class);
+            throw new ShouldNotHappenException($message);
         }
         if (\count($nodeTypes) < 1) {
-            $message = \sprintf('"$nodeTypes" argument requires at least one item, e.g. "%s"', \PhpParser\Node\Expr\FuncCall::class);
-            throw new \Rector\RectorGenerator\Exception\ConfigurationException($message);
+            $message = \sprintf('"$nodeTypes" argument requires at least one item, e.g. "%s"', FuncCall::class);
+            throw new ConfigurationException($message);
         }
         $this->nodeTypes = $nodeTypes;
     }
@@ -213,7 +213,7 @@ final class RectorRecipe
      */
     private function resolveCategory(array $nodeTypes) : void
     {
-        $this->category = (string) \RectorPrefix20220606\Nette\Utils\Strings::after($nodeTypes[0], '\\', -1);
+        $this->category = (string) Strings::after($nodeTypes[0], '\\', -1);
     }
     private function normalizeCode(string $code) : string
     {
@@ -233,7 +233,7 @@ final class RectorRecipe
             if ($composerJsonContent === \false) {
                 continue;
             }
-            $composerJson = \RectorPrefix20220606\Nette\Utils\Json::decode($composerJsonContent, \RectorPrefix20220606\Nette\Utils\Json::FORCE_ARRAY);
+            $composerJson = Json::decode($composerJsonContent, Json::FORCE_ARRAY);
             if (!isset($composerJson['name'])) {
                 continue;
             }

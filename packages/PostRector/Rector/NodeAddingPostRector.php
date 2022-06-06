@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PostRector\Rector;
+namespace RectorPrefix20220606\Rector\PostRector\Rector;
 
-use PhpParser\Node;
-use Rector\PostRector\Collector\NodesToAddCollector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\Rector\PostRector\Collector\NodesToAddCollector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * This class collects all to-be-added expresssions (= 1 line in code)
  * and then adds new expressions to list of $nodes
@@ -18,14 +18,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * - $this->someCall();
  * - $value = this->someNewCall(); // added expression
  */
-final class NodeAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
+final class NodeAddingPostRector extends AbstractPostRector
 {
     /**
      * @readonly
      * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;
-    public function __construct(\Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector)
+    public function __construct(NodesToAddCollector $nodesToAddCollector)
     {
         $this->nodesToAddCollector = $nodesToAddCollector;
     }
@@ -36,7 +36,7 @@ final class NodeAddingPostRector extends \Rector\PostRector\Rector\AbstractPostR
     /**
      * @return mixed[]|\PhpParser\Node
      */
-    public function leaveNode(\PhpParser\Node $node)
+    public function leaveNode(Node $node)
     {
         $newNodes = [$node];
         $nodesToAddAfter = $this->nodesToAddCollector->getNodesToAddAfterNode($node);
@@ -54,9 +54,9 @@ final class NodeAddingPostRector extends \Rector\PostRector\Rector\AbstractPostR
         }
         return $newNodes;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add nodes on weird positions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add nodes on weird positions', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)

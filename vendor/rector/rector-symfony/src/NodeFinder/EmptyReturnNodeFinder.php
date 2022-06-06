@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\NodeFinder;
+namespace RectorPrefix20220606\Rector\Symfony\NodeFinder;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class EmptyReturnNodeFinder
 {
     /**
@@ -14,19 +14,19 @@ final class EmptyReturnNodeFinder
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function hasNoOrEmptyReturns(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function hasNoOrEmptyReturns(ClassMethod $classMethod) : bool
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, \PhpParser\Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
         if ($returns === []) {
             return \true;
         }
         foreach ($returns as $return) {
-            if ($return->expr instanceof \PhpParser\Node\Expr) {
+            if ($return->expr instanceof Expr) {
                 continue;
             }
             return \true;

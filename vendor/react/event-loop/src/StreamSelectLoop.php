@@ -49,7 +49,7 @@ use RectorPrefix20220606\React\EventLoop\Timer\Timers;
  *
  * @link https://www.php.net/manual/en/function.stream-select.php
  */
-final class StreamSelectLoop implements \RectorPrefix20220606\React\EventLoop\LoopInterface
+final class StreamSelectLoop implements LoopInterface
 {
     /** @internal */
     const MICROSECONDS_PER_SECOND = 1000000;
@@ -65,11 +65,11 @@ final class StreamSelectLoop implements \RectorPrefix20220606\React\EventLoop\Lo
     private $signals;
     public function __construct()
     {
-        $this->futureTickQueue = new \RectorPrefix20220606\React\EventLoop\Tick\FutureTickQueue();
-        $this->timers = new \RectorPrefix20220606\React\EventLoop\Timer\Timers();
+        $this->futureTickQueue = new FutureTickQueue();
+        $this->timers = new Timers();
         $this->pcntl = \function_exists('pcntl_signal') && \function_exists('pcntl_signal_dispatch');
         $this->pcntlPoll = $this->pcntl && !\function_exists('pcntl_async_signals');
-        $this->signals = new \RectorPrefix20220606\React\EventLoop\SignalsHandler();
+        $this->signals = new SignalsHandler();
         // prefer async signals if available (PHP 7.1+) or fall back to dispatching on each tick
         if ($this->pcntl && !$this->pcntlPoll) {
             \pcntl_async_signals(\true);
@@ -103,17 +103,17 @@ final class StreamSelectLoop implements \RectorPrefix20220606\React\EventLoop\Lo
     }
     public function addTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20220606\React\EventLoop\Timer\Timer($interval, $callback, \false);
+        $timer = new Timer($interval, $callback, \false);
         $this->timers->add($timer);
         return $timer;
     }
     public function addPeriodicTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20220606\React\EventLoop\Timer\Timer($interval, $callback, \true);
+        $timer = new Timer($interval, $callback, \true);
         $this->timers->add($timer);
         return $timer;
     }
-    public function cancelTimer(\RectorPrefix20220606\React\EventLoop\TimerInterface $timer)
+    public function cancelTimer(TimerInterface $timer)
     {
         $this->timers->cancel($timer);
     }

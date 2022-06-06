@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\Rector\Class_;
+namespace RectorPrefix20220606\Rector\Nette\Rector\Class_;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer;
-use Rector\PostRector\Collector\PropertyToAddCollector;
-use Rector\PostRector\ValueObject\PropertyMetadata;
-use Rector\Privatization\NodeManipulator\VisibilityManipulator;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use RectorPrefix20220606\Rector\Core\Php\PhpVersionProvider;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
+use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
+use RectorPrefix20220606\Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer;
+use RectorPrefix20220606\Rector\PostRector\Collector\PropertyToAddCollector;
+use RectorPrefix20220606\Rector\PostRector\ValueObject\PropertyMetadata;
+use RectorPrefix20220606\Rector\Privatization\NodeManipulator\VisibilityManipulator;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\MoveInjectToExistingConstructorRectorTest
  */
-final class MoveInjectToExistingConstructorRector extends \Rector\Core\Rector\AbstractRector
+final class MoveInjectToExistingConstructorRector extends AbstractRector
 {
     /**
      * @readonly
@@ -48,7 +48,7 @@ final class MoveInjectToExistingConstructorRector extends \Rector\Core\Rector\Ab
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(PropertyUsageAnalyzer $propertyUsageAnalyzer, PhpDocTagRemover $phpDocTagRemover, PropertyToAddCollector $propertyToAddCollector, VisibilityManipulator $visibilityManipulator, PhpVersionProvider $phpVersionProvider)
     {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
@@ -56,9 +56,9 @@ final class MoveInjectToExistingConstructorRector extends \Rector\Core\Rector\Ab
         $this->visibilityManipulator = $visibilityManipulator;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move @inject properties to constructor, if there already is one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move @inject properties to constructor, if there already is one', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -105,19 +105,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $injectProperties = $this->getInjectProperties($node);
         if ($injectProperties === []) {
             return null;
         }
-        $constructClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return null;
         }
         foreach ($injectProperties as $injectProperty) {
@@ -125,9 +125,9 @@ CODE_SAMPLE
             $this->changePropertyVisibility($injectProperty);
             $propertyName = $this->nodeNameResolver->getName($injectProperty);
             $propertyType = $this->nodeTypeResolver->getType($injectProperty);
-            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyType, $injectProperty->flags);
+            $propertyMetadata = new PropertyMetadata($propertyName, $propertyType, $injectProperty->flags);
             $this->propertyToAddCollector->addPropertyToClass($node, $propertyMetadata);
-            if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {
+            if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
                 $this->removeNode($injectProperty);
             }
         }
@@ -136,21 +136,21 @@ CODE_SAMPLE
     /**
      * @return Property[]
      */
-    private function getInjectProperties(\PhpParser\Node\Stmt\Class_ $class) : array
+    private function getInjectProperties(Class_ $class) : array
     {
-        return \array_filter($class->getProperties(), function (\PhpParser\Node\Stmt\Property $property) : bool {
+        return \array_filter($class->getProperties(), function (Property $property) : bool {
             return $this->isInjectProperty($property);
         });
     }
-    private function removeInjectAnnotation(\PhpParser\Node\Stmt\Property $property) : void
+    private function removeInjectAnnotation(Property $property) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $injectTagValueNode = $phpDocInfo->getByName('inject');
-        if ($injectTagValueNode instanceof \PHPStan\PhpDocParser\Ast\Node) {
+        if ($injectTagValueNode instanceof \RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Node) {
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $injectTagValueNode);
         }
     }
-    private function changePropertyVisibility(\PhpParser\Node\Stmt\Property $injectProperty) : void
+    private function changePropertyVisibility(Property $injectProperty) : void
     {
         if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($injectProperty)) {
             $this->visibilityManipulator->makeProtected($injectProperty);
@@ -158,7 +158,7 @@ CODE_SAMPLE
             $this->visibilityManipulator->makePrivate($injectProperty);
         }
     }
-    private function isInjectProperty(\PhpParser\Node\Stmt\Property $property) : bool
+    private function isInjectProperty(Property $property) : bool
     {
         if (!$property->isPublic()) {
             return \false;

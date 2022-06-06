@@ -32,12 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\RectorGenerator\\": "src"
+            "RectorPrefix20220606\\Rector\\RectorGenerator\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\RectorGenerator\\Tests\\": "tests"
+            "RectorPrefix20220606\\Rector\\RectorGenerator\\Tests\\": "tests"
         }
     },
     "scripts": {

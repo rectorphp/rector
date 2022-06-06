@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\Rector\Class_;
+namespace RectorPrefix20220606\Rector\Nette\Rector\Class_;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\NotImplementedYetException;
-use Rector\Core\NodeManipulator\ClassInsertManipulator;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Nette\NodeFactory\CheckRequirementsClassMethodFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Exception\NotImplementedYetException;
+use RectorPrefix20220606\Rector\Core\NodeManipulator\ClassInsertManipulator;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Nette\NodeFactory\CheckRequirementsClassMethodFactory;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/nette/application/commit/a70c7256b645a2bee0b0c2c735020d7043a14558#diff-549e1fc650c1fc7e138900598027656a50d12b031605f8a63a38bd69a3985fafR1324
  */
-final class MoveFinalGetUserToCheckRequirementsClassMethodRector extends \Rector\Core\Rector\AbstractRector
+final class MoveFinalGetUserToCheckRequirementsClassMethodRector extends AbstractRector
 {
     /**
      * @readonly
@@ -28,14 +28,14 @@ final class MoveFinalGetUserToCheckRequirementsClassMethodRector extends \Rector
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
-    public function __construct(\Rector\Nette\NodeFactory\CheckRequirementsClassMethodFactory $checkRequirementsClassMethodFactory, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator)
+    public function __construct(CheckRequirementsClassMethodFactory $checkRequirementsClassMethodFactory, ClassInsertManipulator $classInsertManipulator)
     {
         $this->checkRequirementsClassMethodFactory = $checkRequirementsClassMethodFactory;
         $this->classInsertManipulator = $classInsertManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Presenter method getUser() is now final, move logic to checkRequirements()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Presenter method getUser() is now final, move logic to checkRequirements()', [new CodeSample(<<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 
 class SomeControl extends Presenter
@@ -69,26 +69,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Presenter'))) {
+        if (!$this->isObjectType($node, new ObjectType('Nette\\Application\\UI\\Presenter'))) {
             return null;
         }
         $getUserClassMethod = $node->getMethod('getUser');
-        if (!$getUserClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$getUserClassMethod instanceof ClassMethod) {
             return null;
         }
         $checkRequirementsClassMethod = $node->getMethod('checkRequirements');
-        if (!$checkRequirementsClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$checkRequirementsClassMethod instanceof ClassMethod) {
             $checkRequirementsClassMethod = $this->checkRequirementsClassMethodFactory->create((array) $getUserClassMethod->stmts);
             $this->classInsertManipulator->addAsFirstMethod($node, $checkRequirementsClassMethod);
         } else {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
+            throw new NotImplementedYetException();
         }
         $this->removeNode($getUserClassMethod);
         return $node;

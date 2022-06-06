@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php80\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Php80\NodeAnalyzer;
 
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\PhpParser\AstResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
+use RectorPrefix20220606\Rector\Core\PhpParser\AstResolver;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class PhpAttributeAnalyzer
 {
     /**
@@ -28,7 +28,7 @@ final class PhpAttributeAnalyzer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\Core\PhpParser\AstResolver $astResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(AstResolver $astResolver, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->astResolver = $astResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -49,7 +49,7 @@ final class PhpAttributeAnalyzer
         }
         return \false;
     }
-    public function hasInheritedPhpAttribute(\PhpParser\Node\Stmt\ClassLike $classLike, string $attributeClass) : bool
+    public function hasInheritedPhpAttribute(ClassLike $classLike, string $attributeClass) : bool
     {
         $className = (string) $this->nodeNameResolver->getName($classLike);
         if (!$this->reflectionProvider->hasClass($className)) {
@@ -60,7 +60,7 @@ final class PhpAttributeAnalyzer
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             $ancestorClassName = $ancestorClassReflection->getName();
             $class = $this->astResolver->resolveClassFromName($ancestorClassName);
-            if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            if (!$class instanceof Class_) {
                 continue;
             }
             if ($this->hasPhpAttribute($class, $attributeClass)) {

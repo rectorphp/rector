@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
+use RectorPrefix20220606\Rector\Config\RectorConfig;
+use RectorPrefix20220606\Rector\Renaming\Rector\Name\RenameClassRector;
+use RectorPrefix20220606\Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
 // @see https://symfony.com/blog/the-end-of-swiftmailer
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector::class);
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(SwiftCreateMessageToNewEmailRector::class);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         'Swift_Mailer' => 'Symfony\\Component\\Mailer\\MailerInterface',
         'Swift_Message' => 'Symfony\\Component\\Mime\\Email',
         // message

@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeNestingScope;
+namespace RectorPrefix20220606\Rector\NodeNestingScope;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeNestingScope\ValueObject\ControlStructure;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\FunctionLike;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Else_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\NodeNestingScope\ValueObject\ControlStructure;
 final class ScopeNestingComparator
 {
     /**
@@ -28,46 +28,46 @@ final class ScopeNestingComparator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
     }
-    public function areReturnScopeNested(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node $secondNodeScopeNode) : bool
+    public function areReturnScopeNested(Return_ $return, Node $secondNodeScopeNode) : bool
     {
-        $firstNodeScopeNode = $this->betterNodeFinder->findParentByTypes($return, \Rector\NodeNestingScope\ValueObject\ControlStructure::RETURN_ISOLATING_SCOPE_NODE_TYPES);
+        $firstNodeScopeNode = $this->betterNodeFinder->findParentByTypes($return, ControlStructure::RETURN_ISOLATING_SCOPE_NODE_TYPES);
         return $this->nodeComparator->areNodesEqual($firstNodeScopeNode, $secondNodeScopeNode);
     }
-    public function areScopeNestingEqual(\PhpParser\Node $firstNode, \PhpParser\Node $secondNode) : bool
+    public function areScopeNestingEqual(Node $firstNode, Node $secondNode) : bool
     {
         $firstNodeScopeNode = $this->findParentControlStructure($firstNode);
         $secondNodeScopeNode = $this->findParentControlStructure($secondNode);
         return $this->nodeComparator->areNodesEqual($firstNodeScopeNode, $secondNodeScopeNode);
     }
-    public function isNodeConditionallyScoped(\PhpParser\Node\Expr $expr) : bool
+    public function isNodeConditionallyScoped(Expr $expr) : bool
     {
-        $foundParent = $this->betterNodeFinder->findParentByTypes($expr, \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [\PhpParser\Node\FunctionLike::class]);
-        if (!$foundParent instanceof \PhpParser\Node) {
+        $foundParent = $this->betterNodeFinder->findParentByTypes($expr, ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [FunctionLike::class]);
+        if (!$foundParent instanceof Node) {
             return \false;
         }
         // is in both if/else branches
         if ($this->isInBothIfElseBranch($foundParent, $expr)) {
             return \false;
         }
-        if (!$foundParent instanceof \PhpParser\Node\Stmt\Else_) {
-            return !$foundParent instanceof \PhpParser\Node\FunctionLike;
+        if (!$foundParent instanceof Else_) {
+            return !$foundParent instanceof FunctionLike;
         }
         if (!$this->nodeComparator->areNodesEqual($expr, $this->doubleIfBranchExprs)) {
-            return !$foundParent instanceof \PhpParser\Node\FunctionLike;
+            return !$foundParent instanceof FunctionLike;
         }
         return \false;
     }
-    public function isInBothIfElseBranch(\PhpParser\Node $foundParentNode, \PhpParser\Node\Expr $seekedExpr) : bool
+    public function isInBothIfElseBranch(Node $foundParentNode, Expr $seekedExpr) : bool
     {
-        if ($foundParentNode instanceof \PhpParser\Node\Stmt\Else_) {
+        if ($foundParentNode instanceof Else_) {
             return $this->nodeComparator->isNodeEqual($seekedExpr, $this->doubleIfBranchExprs);
         }
-        if (!$foundParentNode instanceof \PhpParser\Node\Stmt\If_) {
+        if (!$foundParentNode instanceof If_) {
             return \false;
         }
         $foundIfNode = (bool) $this->betterNodeFinder->findFirst($foundParentNode->stmts, function ($node) use($seekedExpr) : bool {
@@ -85,8 +85,8 @@ final class ScopeNestingComparator
         }
         return \false;
     }
-    private function findParentControlStructure(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function findParentControlStructure(Node $node) : ?Node
     {
-        return $this->betterNodeFinder->findParentByTypes($node, \Rector\NodeNestingScope\ValueObject\ControlStructure::BREAKING_SCOPE_NODE_TYPES);
+        return $this->betterNodeFinder->findParentByTypes($node, ControlStructure::BREAKING_SCOPE_NODE_TYPES);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Transform\ValueObject;
+namespace RectorPrefix20220606\Rector\Transform\ValueObject;
 
-use PHPStan\Type\ObjectType;
-use Rector\Core\Validation\RectorAssert;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
 final class NewToStaticCall
 {
     /**
@@ -27,12 +27,12 @@ final class NewToStaticCall
         $this->type = $type;
         $this->staticCallClass = $staticCallClass;
         $this->staticCallMethod = $staticCallMethod;
-        \Rector\Core\Validation\RectorAssert::className($type);
-        \Rector\Core\Validation\RectorAssert::className($staticCallClass);
+        RectorAssert::className($type);
+        RectorAssert::className($staticCallClass);
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->type);
+        return new ObjectType($this->type);
     }
     public function getStaticCallClass() : string
     {

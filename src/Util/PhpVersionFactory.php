@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Util;
+namespace RectorPrefix20220606\Rector\Core\Util;
 
 final class PhpVersionFactory
 {

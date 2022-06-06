@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Transform\ValueObject;
+namespace RectorPrefix20220606\Rector\Transform\ValueObject;
 
-use Rector\Core\Validation\RectorAssert;
+use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
 final class MethodCallToMethodCall
 {
     /**
@@ -36,8 +36,8 @@ final class MethodCallToMethodCall
         $this->oldMethod = $oldMethod;
         $this->newType = $newType;
         $this->newMethod = $newMethod;
-        \Rector\Core\Validation\RectorAssert::className($oldType);
-        \Rector\Core\Validation\RectorAssert::className($newType);
+        RectorAssert::className($oldType);
+        RectorAssert::className($newType);
     }
     public function getOldType() : string
     {

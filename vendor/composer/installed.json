@@ -714,7 +714,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "PhpParser\\": "lib\/PhpParser"
+                    "RectorPrefix20220606\\PhpParser\\": "lib\/PhpParser"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -849,7 +849,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "PHPStan\\PhpDocParser\\": [
+                    "RectorPrefix20220606\\PHPStan\\PhpDocParser\\": [
                         "src\/"
                     ]
                 }
@@ -968,7 +968,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "PHPStan\\": "src\/"
+                    "RectorPrefix20220606\\PHPStan\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1897,7 +1897,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\RectorInstaller\\": "src"
+                    "RectorPrefix20220606\\Rector\\RectorInstaller\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1966,7 +1966,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\CakePHP\\": "src"
+                    "RectorPrefix20220606\\Rector\\CakePHP\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2034,7 +2034,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\Doctrine\\": "src"
+                    "RectorPrefix20220606\\Rector\\Doctrine\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2103,7 +2103,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\RectorGenerator\\": "src"
+                    "RectorPrefix20220606\\Rector\\RectorGenerator\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2177,7 +2177,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\Laravel\\": "src"
+                    "RectorPrefix20220606\\Rector\\Laravel\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2252,7 +2252,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\Nette\\": [
+                    "RectorPrefix20220606\\Rector\\Nette\\": [
                         "src",
                         "packages"
                     ]
@@ -2322,7 +2322,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\PHPOffice\\": "src"
+                    "RectorPrefix20220606\\Rector\\PHPOffice\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2390,7 +2390,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\PHPUnit\\": "src"
+                    "RectorPrefix20220606\\Rector\\PHPUnit\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2462,7 +2462,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\Symfony\\": "src"
+                    "RectorPrefix20220606\\Rector\\Symfony\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2603,8 +2603,8 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Ssch\\TYPO3Rector\\": "src",
-                    "Ssch\\TYPO3Rector\\PHPStan\\": "utils\/phpstan\/src"
+                    "RectorPrefix20220606\\Ssch\\TYPO3Rector\\": "src",
+                    "RectorPrefix20220606\\Ssch\\TYPO3Rector\\PHPStan\\": "utils\/phpstan\/src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -4032,7 +4032,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Symplify\\RuleDocGenerator\\": "src"
+                    "RectorPrefix20220606\\Symplify\\RuleDocGenerator\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",

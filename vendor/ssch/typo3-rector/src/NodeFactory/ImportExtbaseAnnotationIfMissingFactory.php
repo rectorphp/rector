@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\NodeFactory;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\NodeFactory;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Use_;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PostRector\Collector\UseNodesToAddCollector;
-use Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Namespace_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Use_;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\PostRector\Collector\UseNodesToAddCollector;
+use RectorPrefix20220606\Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 final class ImportExtbaseAnnotationIfMissingFactory
 {
     /**
@@ -28,24 +28,24 @@ final class ImportExtbaseAnnotationIfMissingFactory
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, UseNodesToAddCollector $useNodesToAddCollector, NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function addExtbaseAliasAnnotationIfMissing(\PhpParser\Node $node) : void
+    public function addExtbaseAliasAnnotationIfMissing(Node $node) : void
     {
-        $namespace = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);
-        $completeImportForPartialAnnotation = new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('TYPO3\\CMS\\Extbase\\Annotation', 'Extbase');
-        if ($namespace instanceof \PhpParser\Node\Stmt\Namespace_ && $this->isImportMissing($namespace, $completeImportForPartialAnnotation)) {
-            $this->useNodesToAddCollector->addUseImport(new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType('Extbase', 'TYPO3\\CMS\\Extbase\\Annotation'));
+        $namespace = $this->betterNodeFinder->findParentType($node, Namespace_::class);
+        $completeImportForPartialAnnotation = new CompleteImportForPartialAnnotation('TYPO3\\CMS\\Extbase\\Annotation', 'Extbase');
+        if ($namespace instanceof Namespace_ && $this->isImportMissing($namespace, $completeImportForPartialAnnotation)) {
+            $this->useNodesToAddCollector->addUseImport(new AliasedObjectType('Extbase', 'TYPO3\\CMS\\Extbase\\Annotation'));
         }
     }
-    private function isImportMissing(\PhpParser\Node\Stmt\Namespace_ $namespace, \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : bool
+    private function isImportMissing(Namespace_ $namespace, CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : bool
     {
         foreach ($namespace->stmts as $stmt) {
-            if (!$stmt instanceof \PhpParser\Node\Stmt\Use_) {
+            if (!$stmt instanceof Use_) {
                 continue;
             }
             $useUse = $stmt->uses[0];

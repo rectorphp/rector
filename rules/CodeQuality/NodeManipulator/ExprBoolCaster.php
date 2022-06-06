@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality\NodeManipulator;
+namespace RectorPrefix20220606\Rector\CodeQuality\NodeManipulator;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Cast\Bool_;
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\UnionType;
-use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
-use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
+use RectorPrefix20220606\PhpParser\Node\Expr\Cast\Bool_;
+use RectorPrefix20220606\PHPStan\Type\BooleanType;
+use RectorPrefix20220606\PHPStan\Type\UnionType;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
+use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class ExprBoolCaster
 {
     /**
@@ -36,45 +36,45 @@ final class ExprBoolCaster
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer $staticTypeAnalyzer, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeUnwrapper $typeUnwrapper, StaticTypeAnalyzer $staticTypeAnalyzer, NodeFactory $nodeFactory)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
         $this->nodeFactory = $nodeFactory;
     }
-    public function boolCastOrNullCompareIfNeeded(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
+    public function boolCastOrNullCompareIfNeeded(Expr $expr) : Expr
     {
         if (!$this->nodeTypeResolver->isNullableType($expr)) {
             if (!$this->isBoolCastNeeded($expr)) {
                 return $expr;
             }
-            return new \PhpParser\Node\Expr\Cast\Bool_($expr);
+            return new Bool_($expr);
         }
         $exprStaticType = $this->nodeTypeResolver->getType($expr);
         // if we remove null type, still has to be trueable
-        if ($exprStaticType instanceof \PHPStan\Type\UnionType) {
+        if ($exprStaticType instanceof UnionType) {
             $unionTypeWithoutNullType = $this->typeUnwrapper->removeNullTypeFromUnionType($exprStaticType);
             if ($this->staticTypeAnalyzer->isAlwaysTruableType($unionTypeWithoutNullType)) {
-                return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $this->nodeFactory->createNull());
+                return new NotIdentical($expr, $this->nodeFactory->createNull());
             }
         } elseif ($this->staticTypeAnalyzer->isAlwaysTruableType($exprStaticType)) {
-            return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $this->nodeFactory->createNull());
+            return new NotIdentical($expr, $this->nodeFactory->createNull());
         }
         if (!$this->isBoolCastNeeded($expr)) {
             return $expr;
         }
-        return new \PhpParser\Node\Expr\Cast\Bool_($expr);
+        return new Bool_($expr);
     }
-    private function isBoolCastNeeded(\PhpParser\Node\Expr $expr) : bool
+    private function isBoolCastNeeded(Expr $expr) : bool
     {
-        if ($expr instanceof \PhpParser\Node\Expr\BooleanNot) {
+        if ($expr instanceof BooleanNot) {
             return \false;
         }
         $exprType = $this->nodeTypeResolver->getType($expr);
-        if ($exprType instanceof \PHPStan\Type\BooleanType) {
+        if ($exprType instanceof BooleanType) {
             return \false;
         }
-        return !$expr instanceof \PhpParser\Node\Expr\BinaryOp;
+        return !$expr instanceof BinaryOp;
     }
 }

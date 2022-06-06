@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Naming\PhpArray;
+namespace RectorPrefix20220606\Rector\Naming\PhpArray;
 
 final class ArrayFilter
 {

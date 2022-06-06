@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\ValueObject;
+namespace RectorPrefix20220606\Rector\DeadCode\ValueObject;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Validation\RectorAssert;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 final class VariableNodeUse
 {
     /**
@@ -43,14 +43,14 @@ final class VariableNodeUse
      * @var string|null
      */
     private $nestingHash;
-    public function __construct(int $startTokenPosition, string $variableName, string $type, \PhpParser\Node\Expr\Variable $variable, ?string $nestingHash = null)
+    public function __construct(int $startTokenPosition, string $variableName, string $type, Variable $variable, ?string $nestingHash = null)
     {
         $this->startTokenPosition = $startTokenPosition;
         $this->variableName = $variableName;
         $this->type = $type;
         $this->variable = $variable;
         $this->nestingHash = $nestingHash;
-        \Rector\Core\Validation\RectorAssert::className($type);
+        RectorAssert::className($type);
     }
     public function isName(string $name) : bool
     {
@@ -64,15 +64,15 @@ final class VariableNodeUse
     {
         return $this->type === $type;
     }
-    public function getVariableNode() : \PhpParser\Node\Expr\Variable
+    public function getVariableNode() : Variable
     {
         return $this->variable;
     }
-    public function getParentNode() : \PhpParser\Node
+    public function getParentNode() : Node
     {
-        $parentNode = $this->variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $parentNode = $this->variable->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Node) {
+            throw new ShouldNotHappenException();
         }
         return $parentNode;
     }

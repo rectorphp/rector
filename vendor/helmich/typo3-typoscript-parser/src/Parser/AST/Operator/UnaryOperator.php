@@ -11,7 +11,7 @@ use Helmich\TypoScriptParser\Parser\AST\Statement;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-abstract class UnaryOperator extends \Helmich\TypoScriptParser\Parser\AST\Statement
+abstract class UnaryOperator extends Statement
 {
     /**
      * The object the operator should be applied on.
@@ -25,7 +25,7 @@ abstract class UnaryOperator extends \Helmich\TypoScriptParser\Parser\AST\Statem
      * @param ObjectPath $object     The object to operate on.
      * @param int        $sourceLine The original source line.
      */
-    public function __construct(\RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, int $sourceLine)
+    public function __construct(ObjectPath $object, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;

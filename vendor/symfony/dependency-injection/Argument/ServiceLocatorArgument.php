@@ -15,7 +15,7 @@ namespace RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ServiceLocatorArgument implements \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
+class ServiceLocatorArgument implements ArgumentInterface
 {
     /**
      * @var mixed[]
@@ -30,13 +30,13 @@ class ServiceLocatorArgument implements \RectorPrefix20220606\Symfony\Component\
      */
     public function __construct($values = [])
     {
-        if ($values instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument) {
+        if ($values instanceof TaggedIteratorArgument) {
             $this->taggedIteratorArgument = $values;
             $values = [];
         }
         $this->setValues($values);
     }
-    public function getTaggedIteratorArgument() : ?\RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument
+    public function getTaggedIteratorArgument() : ?TaggedIteratorArgument
     {
         return $this->taggedIteratorArgument;
     }

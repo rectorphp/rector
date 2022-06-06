@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v10\v4;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v10\v4;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Mul;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Scalar\LNumber;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Mul;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.4/Deprecation-91001-VariousMethodsWithinGeneralUtility.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v4\SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRector\SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRectorTest
  */
-final class SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRector extends \Rector\Core\Rector\AbstractRector
+final class SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -26,14 +26,14 @@ final class SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRector extends 
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, self::METHOD_CALL_TO_REFACTOR)) {
@@ -50,16 +50,16 @@ final class SubstituteGeneralUtilityMethodsWithNativePhpFunctionsRector extends 
             return $this->nodeFactory->createFuncCall('inet_ntop', [$this->nodeFactory->createFuncCall('inet_pton', $node->args)]);
         }
         if ('milliseconds' === $nodeName) {
-            return $this->nodeFactory->createFuncCall('round', [new \PhpParser\Node\Expr\BinaryOp\Mul($this->nodeFactory->createFuncCall('microtime', [$this->nodeFactory->createArg($this->nodeFactory->createTrue())]), new \PhpParser\Node\Scalar\LNumber(1000))]);
+            return $this->nodeFactory->createFuncCall('round', [new Mul($this->nodeFactory->createFuncCall('microtime', [$this->nodeFactory->createArg($this->nodeFactory->createTrue())]), new LNumber(1000))]);
         }
         return null;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Substitute deprecated method calls of class GeneralUtility', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Substitute deprecated method calls of class GeneralUtility', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 $hex = '127.0.0.1';

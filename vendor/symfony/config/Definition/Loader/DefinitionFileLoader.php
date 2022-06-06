@@ -22,7 +22,7 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-class DefinitionFileLoader extends \RectorPrefix20220606\Symfony\Component\Config\Loader\FileLoader
+class DefinitionFileLoader extends FileLoader
 {
     /**
      * @var \Symfony\Component\Config\Definition\Builder\TreeBuilder
@@ -32,7 +32,7 @@ class DefinitionFileLoader extends \RectorPrefix20220606\Symfony\Component\Confi
      * @var \Symfony\Component\DependencyInjection\ContainerBuilder|null
      */
     private $container;
-    public function __construct(\RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\TreeBuilder $treeBuilder, \RectorPrefix20220606\Symfony\Component\Config\FileLocatorInterface $locator, ?\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $container = null)
+    public function __construct(TreeBuilder $treeBuilder, FileLocatorInterface $locator, ?ContainerBuilder $container = null)
     {
         $this->treeBuilder = $treeBuilder;
         $this->container = $container;
@@ -53,10 +53,10 @@ class DefinitionFileLoader extends \RectorPrefix20220606\Symfony\Component\Confi
         // the closure forbids access to the private scope in the included file
         $load = \Closure::bind(static function ($file) use($loader) {
             return include $file;
-        }, null, \RectorPrefix20220606\Symfony\Component\Config\Definition\Loader\ProtectedDefinitionFileLoader::class);
+        }, null, ProtectedDefinitionFileLoader::class);
         $callback = $load($path);
         if (\is_object($callback) && \is_callable($callback)) {
-            $this->executeCallback($callback, new \RectorPrefix20220606\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator($this->treeBuilder, $this, $path, $resource), $path);
+            $this->executeCallback($callback, new DefinitionConfigurator($this->treeBuilder, $this, $path, $resource), $path);
         }
         return null;
     }
@@ -74,7 +74,7 @@ class DefinitionFileLoader extends \RectorPrefix20220606\Symfony\Component\Confi
         }
         return 'php' === $type;
     }
-    private function executeCallback(callable $callback, \RectorPrefix20220606\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator $configurator, string $path) : void
+    private function executeCallback(callable $callback, DefinitionConfigurator $configurator, string $path) : void
     {
         $callback = \Closure::fromCallable($callback);
         $arguments = [];
@@ -82,16 +82,16 @@ class DefinitionFileLoader extends \RectorPrefix20220606\Symfony\Component\Confi
         foreach ($r->getParameters() as $parameter) {
             $reflectionType = $parameter->getType();
             if (!$reflectionType instanceof \ReflectionNamedType) {
-                throw new \InvalidArgumentException(\sprintf('Could not resolve argument "$%s" for "%s". You must typehint it (for example with "%s").', $parameter->getName(), $path, \RectorPrefix20220606\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator::class));
+                throw new \InvalidArgumentException(\sprintf('Could not resolve argument "$%s" for "%s". You must typehint it (for example with "%s").', $parameter->getName(), $path, DefinitionConfigurator::class));
             }
             switch ($reflectionType->getName()) {
-                case \RectorPrefix20220606\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator::class:
+                case DefinitionConfigurator::class:
                     $arguments[] = $configurator;
                     break;
-                case \RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\TreeBuilder::class:
+                case TreeBuilder::class:
                     $arguments[] = $this->treeBuilder;
                     break;
-                case \RectorPrefix20220606\Symfony\Component\Config\Loader\FileLoader::class:
+                case FileLoader::class:
                 case self::class:
                     $arguments[] = $this;
                     break;
@@ -103,6 +103,6 @@ class DefinitionFileLoader extends \RectorPrefix20220606\Symfony\Component\Confi
 /**
  * @internal
  */
-final class ProtectedDefinitionFileLoader extends \RectorPrefix20220606\Symfony\Component\Config\Definition\Loader\DefinitionFileLoader
+final class ProtectedDefinitionFileLoader extends DefinitionFileLoader
 {
 }

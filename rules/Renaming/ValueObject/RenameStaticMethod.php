@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Renaming\ValueObject;
+namespace RectorPrefix20220606\Rector\Renaming\ValueObject;
 
-use PHPStan\Type\ObjectType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
 final class RenameStaticMethod
 {
     /**
@@ -33,9 +33,9 @@ final class RenameStaticMethod
         $this->newClass = $newClass;
         $this->newMethod = $newMethod;
     }
-    public function getOldObjectType() : \PHPStan\Type\ObjectType
+    public function getOldObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->oldClass);
+        return new ObjectType($this->oldClass);
     }
     public function getOldMethod() : string
     {

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute\ValueObject;
+namespace RectorPrefix20220606\Rector\PhpAttribute\ValueObject;
 
-use PhpParser\Node\Stmt\UseUse;
+use RectorPrefix20220606\PhpParser\Node\Stmt\UseUse;
 final class UseAliasMetadata
 {
     /**
@@ -21,7 +21,7 @@ final class UseAliasMetadata
      * @var \PhpParser\Node\Stmt\UseUse
      */
     private $useUse;
-    public function __construct(string $shortAttributeName, string $useImportName, \PhpParser\Node\Stmt\UseUse $useUse)
+    public function __construct(string $shortAttributeName, string $useImportName, UseUse $useUse)
     {
         $this->shortAttributeName = $shortAttributeName;
         $this->useImportName = $useImportName;
@@ -35,7 +35,7 @@ final class UseAliasMetadata
     {
         return $this->useImportName;
     }
-    public function getUseUse() : \PhpParser\Node\Stmt\UseUse
+    public function getUseUse() : UseUse
     {
         return $this->useUse;
     }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\StaticTypeMapper\Contract\PhpParser;
+namespace RectorPrefix20220606\Rector\StaticTypeMapper\Contract\PhpParser;
 
-use PhpParser\Node;
-use PHPStan\Type\Type;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PHPStan\Type\Type;
 /**
  * @template TNode as \PhpParser\Node
  */
@@ -17,5 +17,5 @@ interface PhpParserNodeMapperInterface
     /**
      * @param TNode $node
      */
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type;
+    public function mapToPHPStan(Node $node) : Type;
 }

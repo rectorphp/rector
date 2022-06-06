@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Contract\PhpParser;
+namespace RectorPrefix20220606\Rector\Core\Contract\PhpParser;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
 /**
  * This contract allows to autowire custom printer implementation
  */

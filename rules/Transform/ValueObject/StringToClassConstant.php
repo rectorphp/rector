@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Transform\ValueObject;
+namespace RectorPrefix20220606\Rector\Transform\ValueObject;
 
-use Rector\Core\Validation\RectorAssert;
+use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
 final class StringToClassConstant
 {
     /**
@@ -26,7 +26,7 @@ final class StringToClassConstant
         $this->string = $string;
         $this->class = $class;
         $this->constant = $constant;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
     public function getString() : string
     {

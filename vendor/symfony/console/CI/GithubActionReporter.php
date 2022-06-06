@@ -30,7 +30,7 @@ class GithubActionReporter
      * @see https://github.com/actions/toolkit/blob/5e5e1b7aacba68a53836a34db4a288c3c1c1585b/packages/core/src/command.ts#L87-L94
      */
     private const ESCAPED_PROPERTIES = ['%' => '%25', "\r" => '%0D', "\n" => '%0A', ':' => '%3A', ',' => '%2C'];
-    public function __construct(\RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface $output)
+    public function __construct(OutputInterface $output)
     {
         $this->output = $output;
     }

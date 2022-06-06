@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Restoration\ValueObject;
+namespace RectorPrefix20220606\Rector\Restoration\ValueObject;
 
 final class CompleteImportForPartialAnnotation
 {

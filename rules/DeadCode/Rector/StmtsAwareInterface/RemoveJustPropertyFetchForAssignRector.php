@@ -1,36 +1,36 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\Rector\StmtsAwareInterface;
+namespace RectorPrefix20220606\Rector\DeadCode\Rector\StmtsAwareInterface;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\NodeAnalyzer\JustPropertyFetchVariableAssignMatcher;
-use Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\DeadCode\NodeAnalyzer\JustPropertyFetchVariableAssignMatcher;
+use RectorPrefix20220606\Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\StmtsAwareInterface\RemoveJustPropertyFetchForAssignRector\RemoveJustPropertyFetchForAssignRectorTest
  */
-final class RemoveJustPropertyFetchForAssignRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveJustPropertyFetchForAssignRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\JustPropertyFetchVariableAssignMatcher
      */
     private $justPropertyFetchVariableAssignMatcher;
-    public function __construct(\Rector\DeadCode\NodeAnalyzer\JustPropertyFetchVariableAssignMatcher $justPropertyFetchVariableAssignMatcher)
+    public function __construct(JustPropertyFetchVariableAssignMatcher $justPropertyFetchVariableAssignMatcher)
     {
         $this->justPropertyFetchVariableAssignMatcher = $justPropertyFetchVariableAssignMatcher;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove assign of property, just for value assign', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove assign of property, just for value assign', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $items = [];
@@ -61,39 +61,39 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface::class];
+        return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $variableAndPropertyFetchAssign = $this->justPropertyFetchVariableAssignMatcher->match($node);
-        if (!$variableAndPropertyFetchAssign instanceof \Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign) {
+        if (!$variableAndPropertyFetchAssign instanceof VariableAndPropertyFetchAssign) {
             return null;
         }
         $secondStmt = $node->stmts[1];
-        if (!$secondStmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$secondStmt instanceof Expression) {
             return null;
         }
-        if (!$secondStmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$secondStmt->expr instanceof Assign) {
             return null;
         }
         $middleAssign = $secondStmt->expr;
         $assignVar = $middleAssign->var;
         // unwrap all array dim fetch nesting
         $lastArrayDimFetch = null;
-        while ($assignVar instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        while ($assignVar instanceof ArrayDimFetch) {
             $lastArrayDimFetch = $assignVar;
             $assignVar = $assignVar->var;
         }
-        if (!$assignVar instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$assignVar instanceof Variable) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($assignVar, $variableAndPropertyFetchAssign->getVariable())) {
             return null;
         }
-        if ($lastArrayDimFetch instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if ($lastArrayDimFetch instanceof ArrayDimFetch) {
             $lastArrayDimFetch->var = $variableAndPropertyFetchAssign->getPropertyFetch();
         } else {
             $middleAssign->var = $variableAndPropertyFetchAssign->getPropertyFetch();

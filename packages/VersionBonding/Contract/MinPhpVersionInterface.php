@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\VersionBonding\Contract;
+namespace RectorPrefix20220606\Rector\VersionBonding\Contract;
 
-use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\ValueObject\PhpVersion;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
+use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersion;
 /**
  * Can be implemented by @see RectorInterface
  * All rules that do not meet this PHP version will not be run and user will be warned about it.

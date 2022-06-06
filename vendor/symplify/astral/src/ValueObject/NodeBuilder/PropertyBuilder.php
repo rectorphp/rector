@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder;
 
-use PhpParser\Builder\Property;
+use RectorPrefix20220606\PhpParser\Builder\Property;
 /**
  * @api
  * Fixed duplicated naming in php-parser and prevents confusion
  */
-final class PropertyBuilder extends \PhpParser\Builder\Property
+final class PropertyBuilder extends Property
 {
 }

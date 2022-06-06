@@ -7,5 +7,5 @@ use RectorPrefix20220606\Symfony\Component\Config\Loader\LoaderInterface;
 use RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder;
 interface LoaderFactoryInterface
 {
-    public function create(\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, string $currentWorkingDirectory) : \RectorPrefix20220606\Symfony\Component\Config\Loader\LoaderInterface;
+    public function create(ContainerBuilder $containerBuilder, string $currentWorkingDirectory) : LoaderInterface;
 }

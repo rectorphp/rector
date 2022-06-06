@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\ValueObject;
+namespace RectorPrefix20220606\Rector\Doctrine\ValueObject;
 
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 final class PropertyNameAndPhpDocInfo
 {
     /**
@@ -16,7 +16,7 @@ final class PropertyNameAndPhpDocInfo
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
      */
     private $phpDocInfo;
-    public function __construct(string $propertyName, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo)
+    public function __construct(string $propertyName, PhpDocInfo $phpDocInfo)
     {
         $this->propertyName = $propertyName;
         $this->phpDocInfo = $phpDocInfo;
@@ -25,7 +25,7 @@ final class PropertyNameAndPhpDocInfo
     {
         return $this->propertyName;
     }
-    public function getPhpDocInfo() : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    public function getPhpDocInfo() : PhpDocInfo
     {
         return $this->phpDocInfo;
     }

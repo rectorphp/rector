@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Naming\RenameGuard;
+namespace RectorPrefix20220606\Rector\Naming\RenameGuard;
 
-use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
-use Rector\Naming\Contract\RenameValueObjectInterface;
+use RectorPrefix20220606\Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
+use RectorPrefix20220606\Rector\Naming\Contract\RenameValueObjectInterface;
 final class PropertyRenameGuard
 {
     /**
@@ -19,7 +19,7 @@ final class PropertyRenameGuard
     {
         $this->conflictingNameGuards = $conflictingNameGuards;
     }
-    public function shouldSkip(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
+    public function shouldSkip(RenameValueObjectInterface $renameValueObject) : bool
     {
         foreach ($this->conflictingNameGuards as $conflictingNameGuard) {
             if ($conflictingNameGuard->isConflicting($renameValueObject)) {

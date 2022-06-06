@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v12\v0\typo3;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v12\v0\typo3;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Deprecation-96996-DeprecateTypoScriptFrontendController-checkEnableFields.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v12\v0\typo3\ReplaceTSFECheckEnableFieldsRector\ReplaceTSFECheckEnableFieldsRectorTest
  */
-final class ReplaceTSFECheckEnableFieldsRector extends \Rector\Core\Rector\AbstractRector
+final class ReplaceTSFECheckEnableFieldsRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -32,12 +32,12 @@ final class ReplaceTSFECheckEnableFieldsRector extends \Rector\Core\Rector\Abstr
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -46,9 +46,9 @@ final class ReplaceTSFECheckEnableFieldsRector extends \Rector\Core\Rector\Abstr
             return null;
         }
         $contextCall = $this->nodeFactory->createMethodCall($node->var, 'getContext');
-        $rowArgument = $node->args[0] ?? new \PhpParser\Node\Expr\Array_();
+        $rowArgument = $node->args[0] ?? new Array_();
         if ($this->isName($node->name, 'checkEnableFields')) {
-            $arguments = [new \PhpParser\Node\Scalar\String_('pages'), $rowArgument, $contextCall];
+            $arguments = [new String_('pages'), $rowArgument, $contextCall];
             $replacementMethod = 'accessGranted';
         } else {
             $arguments = [$rowArgument, $contextCall];
@@ -59,9 +59,9 @@ final class ReplaceTSFECheckEnableFieldsRector extends \Rector\Core\Rector\Abstr
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace TSFE calls to checkEnableFields with new RecordAccessVoter->accessGranted method ', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace TSFE calls to checkEnableFields with new RecordAccessVoter->accessGranted method ', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 $row = [];
@@ -90,11 +90,11 @@ $baz = GeneralUtility::makeInstance(RecordAccessVoter::class)->accessGrantedForP
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkip(MethodCall $methodCall) : bool
     {
-        if ($this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if ($this->typo3NodeResolver->isAnyMethodCallOnGlobals($methodCall, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \false;
         }
-        return !$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
+        return !$this->isObjectType($methodCall->var, new ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
     }
 }

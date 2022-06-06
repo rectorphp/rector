@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\Astral\PhpParser;
 
-use PhpParser\Lexer\Emulative;
-use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\Parser;
-use PhpParser\ParserFactory;
-use PHPStan\Parser\CachedParser;
-use PHPStan\Parser\SimpleParser;
+use RectorPrefix20220606\PhpParser\Lexer\Emulative;
+use RectorPrefix20220606\PhpParser\NodeVisitor\NameResolver;
+use RectorPrefix20220606\PhpParser\Parser;
+use RectorPrefix20220606\PhpParser\ParserFactory;
+use RectorPrefix20220606\PHPStan\Parser\CachedParser;
+use RectorPrefix20220606\PHPStan\Parser\SimpleParser;
 /**
  * Based on PHPStan-based PHP-Parser best practices:
  *
@@ -17,22 +17,22 @@ use PHPStan\Parser\SimpleParser;
  */
 final class SmartPhpParserFactory
 {
-    public function create() : \RectorPrefix20220606\Symplify\Astral\PhpParser\SmartPhpParser
+    public function create() : SmartPhpParser
     {
         $nativePhpParser = $this->createNativePhpParser();
         $cachedParser = $this->createPHPStanParser($nativePhpParser);
-        return new \RectorPrefix20220606\Symplify\Astral\PhpParser\SmartPhpParser($cachedParser);
+        return new SmartPhpParser($cachedParser);
     }
-    private function createNativePhpParser() : \PhpParser\Parser
+    private function createNativePhpParser() : Parser
     {
-        $parserFactory = new \PhpParser\ParserFactory();
-        $lexerEmulative = new \PhpParser\Lexer\Emulative();
-        return $parserFactory->create(\PhpParser\ParserFactory::PREFER_PHP7, $lexerEmulative);
+        $parserFactory = new ParserFactory();
+        $lexerEmulative = new Emulative();
+        return $parserFactory->create(ParserFactory::PREFER_PHP7, $lexerEmulative);
     }
-    private function createPHPStanParser(\PhpParser\Parser $parser) : \PHPStan\Parser\CachedParser
+    private function createPHPStanParser(Parser $parser) : CachedParser
     {
-        $nameResolver = new \PhpParser\NodeVisitor\NameResolver();
-        $simpleParser = new \PHPStan\Parser\SimpleParser($parser, $nameResolver);
-        return new \PHPStan\Parser\CachedParser($simpleParser, 1024);
+        $nameResolver = new NameResolver();
+        $simpleParser = new SimpleParser($parser, $nameResolver);
+        return new CachedParser($simpleParser, 1024);
     }
 }

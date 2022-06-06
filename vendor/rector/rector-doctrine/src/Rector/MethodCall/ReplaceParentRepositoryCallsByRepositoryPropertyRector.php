@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\Rector\MethodCall;
+namespace RectorPrefix20220606\Rector\Doctrine\Rector\MethodCall;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\Class_;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Rector\AbstractRector;
-use Rector\PostRector\Collector\PropertyToAddCollector;
-use Rector\PostRector\ValueObject\PropertyMetadata;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\PostRector\Collector\PropertyToAddCollector;
+use RectorPrefix20220606\Rector\PostRector\ValueObject\PropertyMetadata;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\Set\DoctrineRepositoryAsServiceSet\DoctrineRepositoryAsServiceSetTest
  */
-final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends \Rector\Core\Rector\AbstractRector
+final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -30,13 +30,13 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends \Rect
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    public function __construct(\Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
+    public function __construct(PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyToAddCollector = $propertyToAddCollector;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Handles method calls in child of Doctrine EntityRepository and moves them to $this->repository property.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Handles method calls in child of Doctrine EntityRepository and moves them to $this->repository property.', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\EntityRepository;
 
 class SomeRepository extends EntityRepository
@@ -65,65 +65,65 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Doctrine\\ORM\\EntityRepository'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Doctrine\\ORM\\EntityRepository'))) {
             return null;
         }
         if (!$this->isNames($node->name, self::ENTITY_REPOSITORY_PUBLIC_METHODS)) {
             return null;
         }
         // is it getRepository(), replace it with DI property
-        if ($node->var instanceof \PhpParser\Node\Expr\MethodCall && $this->isName($node->var->name, 'getRepository')) {
+        if ($node->var instanceof MethodCall && $this->isName($node->var->name, 'getRepository')) {
             return $this->refactorGetRepositoryMethodCall($node);
         }
         $node->var = $this->nodeFactory->createPropertyFetch('this', 'repository');
         return $node;
     }
-    private function resolveRepositoryName(\PhpParser\Node\Expr $expr) : string
+    private function resolveRepositoryName(Expr $expr) : string
     {
         $entityReferenceName = $this->valueResolver->getValue($expr);
         if (!\is_string($entityReferenceName)) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
-        $lastNamePart = (string) \RectorPrefix20220606\Nette\Utils\Strings::after($entityReferenceName, '\\', -1);
+        $lastNamePart = (string) Strings::after($entityReferenceName, '\\', -1);
         return \lcfirst($lastNamePart) . 'Repository';
     }
-    private function guessRepositoryType(\PhpParser\Node\Expr $expr) : string
+    private function guessRepositoryType(Expr $expr) : string
     {
-        if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+        if ($expr instanceof ClassConstFetch) {
             $entityClass = $this->getName($expr->class);
             if ($entityClass === null) {
                 return 'Unknown_Repository_Class';
             }
-            $entityClassNamespace = (string) \RectorPrefix20220606\Nette\Utils\Strings::before($entityClass, '\\', -2);
-            $lastNamePart = (string) \RectorPrefix20220606\Nette\Utils\Strings::after($entityClass, '\\', -1);
+            $entityClassNamespace = (string) Strings::before($entityClass, '\\', -2);
+            $lastNamePart = (string) Strings::after($entityClass, '\\', -1);
             return $entityClassNamespace . '\\Repository\\' . $lastNamePart . 'Repository';
         }
         return 'Unknown_Repository_Class';
     }
-    private function refactorGetRepositoryMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function refactorGetRepositoryMethodCall(MethodCall $methodCall) : ?MethodCall
     {
         /** @var MethodCall $parentMethodCall */
         $parentMethodCall = $methodCall->var;
         if (\count($parentMethodCall->args) === 1) {
-            $class = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\Class_::class);
-            if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
+            if (!$class instanceof Class_) {
                 return null;
             }
-            if ($this->isObjectType($class, new \PHPStan\Type\ObjectType('Doctrine\\ORM\\EntityRepository'))) {
+            if ($this->isObjectType($class, new ObjectType('Doctrine\\ORM\\EntityRepository'))) {
                 return null;
             }
             $firstArgValue = $parentMethodCall->args[0]->value;
             $repositoryPropertyName = $this->resolveRepositoryName($firstArgValue);
             $repositoryType = $this->guessRepositoryType($firstArgValue);
-            $objectType = new \PHPStan\Type\ObjectType($repositoryType);
-            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($repositoryPropertyName, $objectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $objectType = new ObjectType($repositoryType);
+            $propertyMetadata = new PropertyMetadata($repositoryPropertyName, $objectType, Class_::MODIFIER_PRIVATE);
             $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             $methodCall->var = $this->nodeFactory->createPropertyFetch('this', $repositoryPropertyName);
             return $methodCall;

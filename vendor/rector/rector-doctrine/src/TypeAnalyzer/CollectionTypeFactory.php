@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\TypeAnalyzer;
+namespace RectorPrefix20220606\Rector\Doctrine\TypeAnalyzer;
 
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\UnionType;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use RectorPrefix20220606\PHPStan\Type\ArrayType;
+use RectorPrefix20220606\PHPStan\Type\Generic\GenericObjectType;
+use RectorPrefix20220606\PHPStan\Type\IntegerType;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\PHPStan\Type\UnionType;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class CollectionTypeFactory
 {
-    public function createType(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : \PHPStan\Type\UnionType
+    public function createType(FullyQualifiedObjectType $fullyQualifiedObjectType) : UnionType
     {
         $genericObjectType = $this->createGenericObjectType($fullyQualifiedObjectType);
-        $arrayType = new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), $fullyQualifiedObjectType);
-        return new \PHPStan\Type\UnionType([$genericObjectType, $arrayType]);
+        $arrayType = new ArrayType(new MixedType(), $fullyQualifiedObjectType);
+        return new UnionType([$genericObjectType, $arrayType]);
     }
-    private function createGenericObjectType(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : \PHPStan\Type\Generic\GenericObjectType
+    private function createGenericObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType) : GenericObjectType
     {
-        $genericTypes = [new \PHPStan\Type\IntegerType(), $fullyQualifiedObjectType];
-        return new \PHPStan\Type\Generic\GenericObjectType('Doctrine\\Common\\Collections\\Collection', $genericTypes);
+        $genericTypes = [new IntegerType(), $fullyQualifiedObjectType];
+        return new GenericObjectType('Doctrine\\Common\\Collections\\Collection', $genericTypes);
     }
 }

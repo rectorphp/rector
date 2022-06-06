@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Removing\ValueObject;
+namespace RectorPrefix20220606\Rector\Removing\ValueObject;
 
 final class RemoveFuncCallArg
 {

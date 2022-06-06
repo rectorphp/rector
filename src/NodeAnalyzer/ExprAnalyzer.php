@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Core\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Scalar;
-use PhpParser\Node\Scalar\Encapsed;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\NodeManipulator\ArrayManipulator;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\FunctionLike;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PhpParser\Node\Scalar;
+use RectorPrefix20220606\PhpParser\Node\Scalar\Encapsed;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use RectorPrefix20220606\Rector\Core\NodeManipulator\ArrayManipulator;
+use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class ExprAnalyzer
 {
     /**
@@ -46,7 +46,7 @@ final class ExprAnalyzer
      * @var \Rector\Core\NodeManipulator\ArrayManipulator
      */
     private $arrayManipulator;
-    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\ArrayManipulator $arrayManipulator)
+    public function __construct(NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver, ArrayManipulator $arrayManipulator)
     {
         $this->nodeComparator = $nodeComparator;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -54,13 +54,13 @@ final class ExprAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayManipulator = $arrayManipulator;
     }
-    public function isNonTypedFromParam(\PhpParser\Node\Expr $expr) : bool
+    public function isNonTypedFromParam(Expr $expr) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$expr instanceof Variable) {
             return \false;
         }
-        $functionLike = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\FunctionLike::class);
-        if (!$functionLike instanceof \PhpParser\Node\FunctionLike) {
+        $functionLike = $this->betterNodeFinder->findParentType($expr, FunctionLike::class);
+        if (!$functionLike instanceof FunctionLike) {
             return \false;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
@@ -74,28 +74,28 @@ final class ExprAnalyzer
                 continue;
             }
             $paramTag = $phpDocInfo->getParamTagValueByName($paramName);
-            return $paramTag instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode && $param->type === null;
+            return $paramTag instanceof ParamTagValueNode && $param->type === null;
         }
         return \false;
     }
-    public function isDynamicExpr(\PhpParser\Node\Expr $expr) : bool
+    public function isDynamicExpr(Expr $expr) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\Array_) {
-            if ($expr instanceof \PhpParser\Node\Scalar) {
+        if (!$expr instanceof Array_) {
+            if ($expr instanceof Scalar) {
                 // string interpolation is true, otherwise false
-                return $expr instanceof \PhpParser\Node\Scalar\Encapsed;
+                return $expr instanceof Encapsed;
             }
             return !$this->isAllowedConstFetchOrClassConstFetch($expr);
         }
         return $this->arrayManipulator->isDynamicArray($expr);
     }
-    private function isAllowedConstFetchOrClassConstFetch(\PhpParser\Node\Expr $expr) : bool
+    private function isAllowedConstFetchOrClassConstFetch(Expr $expr) : bool
     {
-        if ($expr instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if ($expr instanceof ConstFetch) {
             return \true;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-            return $expr->class instanceof \PhpParser\Node\Name && $expr->name instanceof \PhpParser\Node\Identifier;
+        if ($expr instanceof ClassConstFetch) {
+            return $expr->class instanceof Name && $expr->name instanceof Identifier;
         }
         return \false;
     }

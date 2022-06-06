@@ -1,33 +1,33 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeTypeResolver\NodeTypeResolver;
+namespace RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
 
-use PhpParser\Node\Identifier;
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\StringType;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PHPStan\Type\BooleanType;
+use RectorPrefix20220606\PHPStan\Type\FloatType;
+use RectorPrefix20220606\PHPStan\Type\IntegerType;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\PHPStan\Type\StringType;
 final class IdentifierTypeResolver
 {
     /**
      * @return \PHPStan\Type\StringType|\PHPStan\Type\BooleanType|\PHPStan\Type\IntegerType|\PHPStan\Type\FloatType|\PHPStan\Type\MixedType
      */
-    public function resolve(\PhpParser\Node\Identifier $identifier)
+    public function resolve(Identifier $identifier)
     {
         if ($identifier->toLowerString() === 'string') {
-            return new \PHPStan\Type\StringType();
+            return new StringType();
         }
         if ($identifier->toLowerString() === 'bool') {
-            return new \PHPStan\Type\BooleanType();
+            return new BooleanType();
         }
         if ($identifier->toLowerString() === 'int') {
-            return new \PHPStan\Type\IntegerType();
+            return new IntegerType();
         }
         if ($identifier->toLowerString() === 'float') {
-            return new \PHPStan\Type\FloatType();
+            return new FloatType();
         }
-        return new \PHPStan\Type\MixedType();
+        return new MixedType();
     }
 }

@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\PrettyPrinter\Standard;
-use PHPStan\Type\TypeWithClassName;
-use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\PrettyPrinter\Standard;
+use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
+use RectorPrefix20220606\Rector\Core\PhpParser\AstResolver;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class AssertCallAnalyzer
 {
     /**
@@ -54,7 +54,7 @@ final class AssertCallAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\Core\PhpParser\AstResolver $astResolver, \PhpParser\PrettyPrinter\Standard $printerStandard, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(AstResolver $astResolver, Standard $printerStandard, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->astResolver = $astResolver;
         $this->printerStandard = $printerStandard;
@@ -66,7 +66,7 @@ final class AssertCallAnalyzer
     {
         $this->classMethodNestingLevel = 0;
     }
-    public function containsAssertCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function containsAssertCall(ClassMethod $classMethod) : bool
     {
         ++$this->classMethodNestingLevel;
         // probably no assert method in the end
@@ -88,28 +88,28 @@ final class AssertCallAnalyzer
         $this->containsAssertCallByClassMethod[$cacheHash] = $hasNestedAssertCall;
         return $hasNestedAssertCall;
     }
-    private function hasDirectAssertCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function hasDirectAssertCall(ClassMethod $classMethod) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
-            if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) : bool {
+            if ($node instanceof MethodCall) {
                 $type = $this->nodeTypeResolver->getType($node->var);
-                if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && \in_array($type->getClassName(), ['PHPUnit\\Framework\\MockObject\\MockBuilder', 'Prophecy\\Prophet'], \true)) {
+                if ($type instanceof FullyQualifiedObjectType && \in_array($type->getClassName(), ['PHPUnit\\Framework\\MockObject\\MockBuilder', 'Prophecy\\Prophet'], \true)) {
                     return \true;
                 }
                 return $this->isAssertMethodName($node);
             }
-            if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
+            if ($node instanceof StaticCall) {
                 return $this->isAssertMethodName($node);
             }
             return \false;
         });
     }
-    private function hasNestedAssertCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function hasNestedAssertCall(ClassMethod $classMethod) : bool
     {
         $currentClassMethod = $classMethod;
         // over and over the same method :/
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) use($currentClassMethod) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall && !$node instanceof \PhpParser\Node\Expr\StaticCall) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use($currentClassMethod) : bool {
+            if (!$node instanceof MethodCall && !$node instanceof StaticCall) {
                 return \false;
             }
             $classMethod = $this->resolveClassMethodFromCall($node);
@@ -126,15 +126,15 @@ final class AssertCallAnalyzer
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    private function resolveClassMethodFromCall($call) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function resolveClassMethodFromCall($call) : ?ClassMethod
     {
-        if ($call instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($call instanceof MethodCall) {
             $objectType = $this->nodeTypeResolver->getType($call->var);
         } else {
             // StaticCall
             $objectType = $this->nodeTypeResolver->getType($call->class);
         }
-        if (!$objectType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$objectType instanceof TypeWithClassName) {
             return null;
         }
         $methodName = $this->nodeNameResolver->getName($call->name);

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\NodeFactory\Annotations;
+namespace RectorPrefix20220606\Rector\Symfony\NodeFactory\Annotations;
 
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node\Expr\New_;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode;
+use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 final class DoctrineAnnotationFromNewFactory
 {
     /**
@@ -16,11 +16,11 @@ final class DoctrineAnnotationFromNewFactory
      * @var \Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationKeyToValuesResolver
      */
     private $doctrineAnnotationKeyToValuesResolver;
-    public function __construct(\Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationKeyToValuesResolver $doctrineAnnotationKeyToValuesResolver)
+    public function __construct(DoctrineAnnotationKeyToValuesResolver $doctrineAnnotationKeyToValuesResolver)
     {
         $this->doctrineAnnotationKeyToValuesResolver = $doctrineAnnotationKeyToValuesResolver;
     }
-    public function create(\PhpParser\Node\Expr\New_ $new) : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+    public function create(New_ $new) : DoctrineAnnotationTagValueNode
     {
         $annotationName = $this->resolveAnnotationName($new);
         $newArgs = $new->getArgs();
@@ -30,14 +30,14 @@ final class DoctrineAnnotationFromNewFactory
         } else {
             $annotationKeyToValues = [];
         }
-        return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode($annotationName), null, $annotationKeyToValues);
+        return new DoctrineAnnotationTagValueNode(new ShortenedIdentifierTypeNode($annotationName), null, $annotationKeyToValues);
     }
-    private function resolveAnnotationName(\PhpParser\Node\Expr\New_ $new) : string
+    private function resolveAnnotationName(New_ $new) : string
     {
         $className = $new->class;
-        $originalName = $className->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
-        if (!$originalName instanceof \PhpParser\Node\Name) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $originalName = $className->getAttribute(AttributeKey::ORIGINAL_NAME);
+        if (!$originalName instanceof Name) {
+            throw new ShouldNotHappenException();
         }
         return $originalName->toString();
     }

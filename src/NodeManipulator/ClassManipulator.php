@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeManipulator;
+namespace RectorPrefix20220606\Rector\Core\NodeManipulator;
 
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
-use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PostRector\Collector\NodesToRemoveCollector;
+use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Interface_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\PostRector\Collector\NodesToRemoveCollector;
 final class ClassManipulator
 {
     /**
@@ -34,14 +34,14 @@ final class ClassManipulator
      * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
     private $classChildAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodesToRemoveCollector $nodesToRemoveCollector, ReflectionProvider $reflectionProvider, ClassChildAnalyzer $classChildAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->reflectionProvider = $reflectionProvider;
         $this->classChildAnalyzer = $classChildAnalyzer;
     }
-    public function hasParentMethodOrInterface(\PHPStan\Type\ObjectType $objectType, string $oldMethod, string $newMethod) : bool
+    public function hasParentMethodOrInterface(ObjectType $objectType, string $oldMethod, string $newMethod) : bool
     {
         if (!$this->reflectionProvider->hasClass($objectType->getClassName())) {
             return \false;
@@ -62,14 +62,14 @@ final class ClassManipulator
     /**
      * @return string[]
      */
-    public function getPrivatePropertyNames(\PhpParser\Node\Stmt\Class_ $class) : array
+    public function getPrivatePropertyNames(Class_ $class) : array
     {
-        $privateProperties = \array_filter($class->getProperties(), function (\PhpParser\Node\Stmt\Property $property) : bool {
+        $privateProperties = \array_filter($class->getProperties(), function (Property $property) : bool {
             return $property->isPrivate();
         });
         return $this->nodeNameResolver->getNames($privateProperties);
     }
-    public function hasTrait(\PhpParser\Node\Stmt\Class_ $class, string $desiredTrait) : bool
+    public function hasTrait(Class_ $class, string $desiredTrait) : bool
     {
         foreach ($class->getTraitUses() as $traitUse) {
             foreach ($traitUse->traits as $traitName) {
@@ -81,14 +81,14 @@ final class ClassManipulator
         }
         return \false;
     }
-    public function replaceTrait(\PhpParser\Node\Stmt\Class_ $class, string $oldTrait, string $newTrait) : void
+    public function replaceTrait(Class_ $class, string $oldTrait, string $newTrait) : void
     {
         foreach ($class->getTraitUses() as $traitUse) {
             foreach ($traitUse->traits as $key => $traitTrait) {
                 if (!$this->nodeNameResolver->isName($traitTrait, $oldTrait)) {
                     continue;
                 }
-                $traitUse->traits[$key] = new \PhpParser\Node\Name\FullyQualified($newTrait);
+                $traitUse->traits[$key] = new FullyQualified($newTrait);
                 break;
             }
         }
@@ -99,12 +99,12 @@ final class ClassManipulator
      */
     public function getClassLikeNodeParentInterfaceNames($classLike) : array
     {
-        if ($classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        if ($classLike instanceof Class_) {
             return $this->nodeNameResolver->getNames($classLike->implements);
         }
         return $this->nodeNameResolver->getNames($classLike->extends);
     }
-    public function removeInterface(\PhpParser\Node\Stmt\Class_ $class, string $desiredInterface) : void
+    public function removeInterface(Class_ $class, string $desiredInterface) : void
     {
         foreach ($class->implements as $implement) {
             if (!$this->nodeNameResolver->isName($implement, $desiredInterface)) {

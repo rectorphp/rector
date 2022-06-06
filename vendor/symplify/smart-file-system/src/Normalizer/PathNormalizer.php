@@ -32,7 +32,7 @@ final class PathNormalizer
     public function normalizePath(string $originalPath) : string
     {
         $directorySeparator = \DIRECTORY_SEPARATOR;
-        $matches = \RectorPrefix20220606\Nette\Utils\Strings::match($originalPath, self::SCHEME_PATH_REGEX);
+        $matches = Strings::match($originalPath, self::SCHEME_PATH_REGEX);
         if ($matches !== null) {
             [, $scheme, $path] = $matches;
         } else {
@@ -40,7 +40,7 @@ final class PathNormalizer
             $path = $originalPath;
         }
         $normalizedPath = \str_replace('\\', '/', $path);
-        $path = \RectorPrefix20220606\Nette\Utils\Strings::replace($normalizedPath, self::TWO_AND_MORE_SLASHES_REGEX, '/');
+        $path = Strings::replace($normalizedPath, self::TWO_AND_MORE_SLASHES_REGEX, '/');
         $pathRoot = \strncmp($path, '/', \strlen('/')) === 0 ? $directorySeparator : '';
         $pathParts = \explode('/', \trim($path, '/'));
         $normalizedPathParts = $this->normalizePathParts($pathParts, $scheme);

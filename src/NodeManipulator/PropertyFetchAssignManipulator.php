@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeManipulator;
+namespace RectorPrefix20220606\Rector\Core\NodeManipulator;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\NodeTraverser;
-use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\ValueObject\MethodName;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PhpParser\NodeTraverser;
+use RectorPrefix20220606\Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class PropertyFetchAssignManipulator
 {
@@ -38,39 +38,39 @@ final class PropertyFetchAssignManipulator
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(\RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
-    public function isAssignedMultipleTimesInConstructor(\PhpParser\Node\Stmt\Property $property) : bool
+    public function isAssignedMultipleTimesInConstructor(Property $property) : bool
     {
-        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return \false;
         }
-        $classMethod = $classLike->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
+        if (!$classMethod instanceof ClassMethod) {
             return \false;
         }
         $count = 0;
         $propertyName = $this->nodeNameResolver->getName($property);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (\PhpParser\Node $node) use($propertyName, $classLike, &$count) : ?int {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use($propertyName, $classLike, &$count) : ?int {
+            if (!$node instanceof Assign) {
                 return null;
             }
             if (!$this->propertyFetchAnalyzer->isLocalPropertyFetchName($node->var, $propertyName)) {
                 return null;
             }
-            $parentClassLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
+            $parentClassLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
             if ($parentClassLike !== $classLike) {
                 return null;
             }
             ++$count;
             if ($count === 2) {
-                return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
+                return NodeTraverser::STOP_TRAVERSAL;
             }
             return null;
         });
@@ -79,11 +79,11 @@ final class PropertyFetchAssignManipulator
     /**
      * @return string[]
      */
-    public function getPropertyNamesOfAssignOfVariable(\PhpParser\Node $node, string $paramName) : array
+    public function getPropertyNamesOfAssignOfVariable(Node $node, string $paramName) : array
     {
         $propertyNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (\PhpParser\Node $node) use($paramName, &$propertyNames) {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use($paramName, &$propertyNames) {
+            if (!$node instanceof Assign) {
                 return null;
             }
             if (!$this->isVariableAssignToThisPropertyFetch($node, $paramName)) {
@@ -102,15 +102,15 @@ final class PropertyFetchAssignManipulator
      * Matches:
      * "$this->someValue = $<variableName>;"
      */
-    private function isVariableAssignToThisPropertyFetch(\PhpParser\Node\Expr\Assign $assign, string $variableName) : bool
+    private function isVariableAssignToThisPropertyFetch(Assign $assign, string $variableName) : bool
     {
-        if (!$assign->expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$assign->expr instanceof Variable) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($assign->expr, $variableName)) {
             return \false;
         }
-        if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$assign->var instanceof PropertyFetch) {
             return \false;
         }
         $propertyFetch = $assign->var;

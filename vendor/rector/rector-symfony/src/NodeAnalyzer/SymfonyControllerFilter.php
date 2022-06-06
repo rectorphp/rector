@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Symfony\NodeAnalyzer;
 
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
 final class SymfonyControllerFilter
 {
     /**
      * @return ClassMethod[]
      */
-    public function filterActionMethods(\PhpParser\Node\Stmt\Class_ $class) : array
+    public function filterActionMethods(Class_ $class) : array
     {
-        return \array_filter($class->getMethods(), function (\PhpParser\Node\Stmt\ClassMethod $classMethod) {
+        return \array_filter($class->getMethods(), function (ClassMethod $classMethod) {
             if ($classMethod->isMagic()) {
                 return \false;
             }

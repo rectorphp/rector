@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp71\Rector\TryCatch;
+namespace RectorPrefix20220606\Rector\DowngradePhp71\Rector\TryCatch;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Catch_;
-use PhpParser\Node\Stmt\TryCatch;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Catch_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\TryCatch;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp71\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector\DowngradePipeToMultiCatchExceptionRectorTest
  */
-final class DowngradePipeToMultiCatchExceptionRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradePipeToMultiCatchExceptionRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade single one | separated to multi catch exception', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade single one | separated to multi catch exception', [new CodeSample(<<<'CODE_SAMPLE'
 try {
     // Some code...
 } catch (ExceptionType1 | ExceptionType2 $exception) {
@@ -39,12 +39,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\TryCatch::class];
+        return [TryCatch::class];
     }
     /**
      * @param TryCatch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $hasChanged = \false;
         foreach ($node->catches as $key => $catch) {
@@ -56,7 +56,7 @@ CODE_SAMPLE
             $firstType = \array_shift($catchTypes);
             $catch->types = [$firstType];
             foreach ($catchTypes as $catchType) {
-                $newCatch = new \PhpParser\Node\Stmt\Catch_([$catchType], $catch->var, $catch->stmts);
+                $newCatch = new Catch_([$catchType], $catch->var, $catch->stmts);
                 \array_splice($node->catches, $key + 1, 0, [$newCatch]);
                 $hasChanged = \true;
             }

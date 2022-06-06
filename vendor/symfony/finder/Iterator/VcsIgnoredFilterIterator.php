@@ -122,7 +122,7 @@ final class VcsIgnoredFilterIterator extends \FilterIterator
             throw new \RuntimeException("The \"ignoreVCSIgnored\" option cannot be used by the Finder as the \"{$path}\" file is not readable.");
         }
         $gitignoreFileContent = \file_get_contents($path);
-        return $this->gitignoreFilesCache[$path] = [\RectorPrefix20220606\Symfony\Component\Finder\Gitignore::toRegex($gitignoreFileContent), \RectorPrefix20220606\Symfony\Component\Finder\Gitignore::toRegexMatchingNegatedPatterns($gitignoreFileContent)];
+        return $this->gitignoreFilesCache[$path] = [Gitignore::toRegex($gitignoreFileContent), Gitignore::toRegexMatchingNegatedPatterns($gitignoreFileContent)];
     }
     private function normalizePath(string $path) : string
     {

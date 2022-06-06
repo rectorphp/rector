@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\BetterPhpDocParser\Annotation;
+namespace RectorPrefix20220606\Rector\BetterPhpDocParser\Annotation;
 
 final class AnnotationNaming
 {

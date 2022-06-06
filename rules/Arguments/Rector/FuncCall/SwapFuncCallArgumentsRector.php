@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Arguments\Rector\FuncCall;
+namespace RectorPrefix20220606\Rector\Arguments\Rector\FuncCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\FuncCall;
-use Rector\Arguments\ValueObject\SwapFuncCallArguments;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\Rector\Arguments\ValueObject\SwapFuncCallArguments;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector\SwapFuncCallArgumentsRectorTest
  */
-final class SwapFuncCallArgumentsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class SwapFuncCallArgumentsRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -25,9 +25,9 @@ final class SwapFuncCallArgumentsRector extends \Rector\Core\Rector\AbstractRect
      * @var SwapFuncCallArguments[]
      */
     private $functionArgumentSwaps = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Swap arguments in function calls', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Swap arguments in function calls', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one, $two)
@@ -45,19 +45,19 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [new \Rector\Arguments\ValueObject\SwapFuncCallArguments('some_function', [1, 0])])]);
+, [new SwapFuncCallArguments('some_function', [1, 0])])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\FuncCall
+    public function refactor(Node $node) : ?FuncCall
     {
         $isJustSwapped = (bool) $node->getAttribute(self::JUST_SWAPPED, \false);
         if ($isJustSwapped) {
@@ -84,13 +84,13 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220606\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\SwapFuncCallArguments::class);
+        Assert::allIsAOf($configuration, SwapFuncCallArguments::class);
         $this->functionArgumentSwaps = $configuration;
     }
     /**
      * @return array<int, Node\Arg>
      */
-    private function resolveNewArguments(\Rector\Arguments\ValueObject\SwapFuncCallArguments $swapFuncCallArguments, \PhpParser\Node\Expr\FuncCall $funcCall) : array
+    private function resolveNewArguments(SwapFuncCallArguments $swapFuncCallArguments, FuncCall $funcCall) : array
     {
         $newArguments = [];
         foreach ($swapFuncCallArguments->getOrder() as $oldPosition => $newPosition) {
@@ -100,7 +100,7 @@ CODE_SAMPLE
             if (!isset($funcCall->args[$newPosition])) {
                 continue;
             }
-            if (!$funcCall->args[$oldPosition] instanceof \PhpParser\Node\Arg) {
+            if (!$funcCall->args[$oldPosition] instanceof Arg) {
                 continue;
             }
             $newArguments[$newPosition] = $funcCall->args[$oldPosition];

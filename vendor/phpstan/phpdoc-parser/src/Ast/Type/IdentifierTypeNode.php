@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace PHPStan\PhpDocParser\Ast\Type;
+namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type;
 
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-class IdentifierTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
+class IdentifierTypeNode implements TypeNode
 {
     use NodeAttributes;
     /** @var string */

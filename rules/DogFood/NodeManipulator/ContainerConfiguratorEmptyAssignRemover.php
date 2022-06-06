@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DogFood\NodeManipulator;
+namespace RectorPrefix20220606\Rector\DogFood\NodeManipulator;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
-use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class ContainerConfiguratorEmptyAssignRemover
 {
     /**
@@ -23,12 +23,12 @@ final class ContainerConfiguratorEmptyAssignRemover
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
      */
     private $exprUsedInNextNodeAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->exprUsedInNextNodeAnalyzer = $exprUsedInNextNodeAnalyzer;
     }
-    public function removeFromClosure(\PhpParser\Node\Expr\Closure $closure) : void
+    public function removeFromClosure(Closure $closure) : void
     {
         foreach ($closure->getStmts() as $key => $stmt) {
             if (!$this->isHelperAssign($stmt)) {
@@ -51,16 +51,16 @@ final class ContainerConfiguratorEmptyAssignRemover
      * $services = $containerConfigurator->services();
      * $parameters = $containerConfigurator->parameters();
      */
-    private function isHelperAssign(\PhpParser\Node\Stmt $stmt) : bool
+    private function isHelperAssign(Stmt $stmt) : bool
     {
-        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$stmt instanceof Expression) {
             return \false;
         }
         $expression = $stmt->expr;
-        if (!$expression instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$expression instanceof Assign) {
             return \false;
         }
-        if (!$expression->expr instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$expression->expr instanceof MethodCall) {
             return \false;
         }
         $methodCall = $expression->expr;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\ValueObject\InvokableController;
+namespace RectorPrefix20220606\Rector\Symfony\ValueObject\InvokableController;
 
 final class ActiveClassElements
 {

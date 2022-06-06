@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\ValueObject;
+namespace RectorPrefix20220606\Rector\Core\ValueObject;
 
-use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use RectorPrefix20220606\Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 final class Configuration
 {
     /**
@@ -25,7 +25,7 @@ final class Configuration
      * @readonly
      * @var string
      */
-    private $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;
+    private $outputFormat = ConsoleOutputFormatter::NAME;
     /**
      * @var string[]
      * @readonly
@@ -68,7 +68,7 @@ final class Configuration
      * @param string|null $parallelIdentifier
      * @param string|null $memoryLimit
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, $parallelPort = null, $parallelIdentifier = null, bool $isParallel = \false, $memoryLimit = null)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, $parallelPort = null, $parallelIdentifier = null, bool $isParallel = \false, $memoryLimit = null)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;

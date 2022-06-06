@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Renaming\ValueObject;
+namespace RectorPrefix20220606\Rector\Renaming\ValueObject;
 
-use PHPStan\Type\ObjectType;
-use Rector\Core\Validation\RectorAssert;
-use Rector\Renaming\Contract\MethodCallRenameInterface;
-final class MethodCallRenameWithArrayKey implements \Rector\Renaming\Contract\MethodCallRenameInterface
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
+use RectorPrefix20220606\Rector\Renaming\Contract\MethodCallRenameInterface;
+final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
 {
     /**
      * @readonly
@@ -36,15 +36,15 @@ final class MethodCallRenameWithArrayKey implements \Rector\Renaming\Contract\Me
         $this->oldMethod = $oldMethod;
         $this->newMethod = $newMethod;
         $this->arrayKey = $arrayKey;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
     public function getClass() : string
     {
         return $this->class;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getOldMethod() : string
     {

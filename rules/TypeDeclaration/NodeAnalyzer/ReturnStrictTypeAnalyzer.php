@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\TypeDeclaration\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Return_;
-use PHPStan\Type\MixedType;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\StaticTypeMapper\StaticTypeMapper;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PhpParser\Node\NullableType;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
 final class ReturnStrictTypeAnalyzer
 {
     /**
@@ -32,7 +32,7 @@ final class ReturnStrictTypeAnalyzer
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(ReflectionResolver $reflectionResolver, TypeNodeUnwrapper $typeNodeUnwrapper, StaticTypeMapper $staticTypeMapper)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->typeNodeUnwrapper = $typeNodeUnwrapper;
@@ -50,12 +50,12 @@ final class ReturnStrictTypeAnalyzer
                 return [];
             }
             $returnedExpr = $return->expr;
-            if ($returnedExpr instanceof \PhpParser\Node\Expr\MethodCall || $returnedExpr instanceof \PhpParser\Node\Expr\StaticCall || $returnedExpr instanceof \PhpParser\Node\Expr\FuncCall) {
+            if ($returnedExpr instanceof MethodCall || $returnedExpr instanceof StaticCall || $returnedExpr instanceof FuncCall) {
                 $returnNode = $this->resolveMethodCallReturnNode($returnedExpr);
             } else {
                 return [];
             }
-            if (!$returnNode instanceof \PhpParser\Node) {
+            if (!$returnNode instanceof Node) {
                 return [];
             }
             $returnedStrictTypeNodes[] = $returnNode;
@@ -65,7 +65,7 @@ final class ReturnStrictTypeAnalyzer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
      */
-    private function resolveMethodCallReturnNode($call) : ?\PhpParser\Node
+    private function resolveMethodCallReturnNode($call) : ?Node
     {
         $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
         if ($methodReflection === null) {
@@ -73,9 +73,9 @@ final class ReturnStrictTypeAnalyzer
         }
         $parametersAcceptor = $methodReflection->getVariants()[0];
         $returnType = $parametersAcceptor->getReturnType();
-        if ($returnType instanceof \PHPStan\Type\MixedType) {
+        if ($returnType instanceof MixedType) {
             return null;
         }
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeCollector;
+namespace RectorPrefix20220606\Rector\NodeCollector;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp;
 /**
  * @see \Rector\Tests\NodeCollector\BinaryOpConditionsCollectorTest
  */
@@ -22,7 +22,7 @@ final class BinaryOpConditionsCollector
      * @param class-string<BinaryOp> $binaryOpClass
      * @return array<int, Expr>
      */
-    public function findConditions(\PhpParser\Node\Expr $expr, string $binaryOpClass) : array
+    public function findConditions(Expr $expr, string $binaryOpClass) : array
     {
         if (\get_class($expr) !== $binaryOpClass) {
             // Different binary operators, as well as non-BinaryOp expressions
@@ -31,7 +31,7 @@ final class BinaryOpConditionsCollector
         }
         $conditions = [];
         /** @var BinaryOp|Expr $expr */
-        while ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
+        while ($expr instanceof BinaryOp) {
             $conditions[] = $expr->right;
             $expr = $expr->left;
             if ($binaryOpClass !== \get_class($expr)) {

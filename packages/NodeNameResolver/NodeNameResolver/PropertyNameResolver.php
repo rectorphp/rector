@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeNameResolver\NodeNameResolver;
+namespace RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Property;
-use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeNameResolverInterface<Property>
  */
-final class PropertyNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class PropertyNameResolver implements NodeNameResolverInterface
 {
     /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -20,18 +20,18 @@ final class PropertyNameResolver implements \Rector\NodeNameResolver\Contract\No
     /**
      * @required
      */
-    public function autowire(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
+    public function autowire(NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     public function getNode() : string
     {
-        return \PhpParser\Node\Stmt\Property::class;
+        return Property::class;
     }
     /**
      * @param Property $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         if ($node->props === []) {
             return null;

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\ValueObject;
+namespace RectorPrefix20220606\Rector\PHPUnit\ValueObject;
 
-use PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Arg;
 final class DataProviderClassMethodRecipe
 {
     /**

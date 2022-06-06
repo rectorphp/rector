@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CakePHP\ValueObject;
+namespace RectorPrefix20220606\Rector\CakePHP\ValueObject;
 
 final class ArrayToFluentCall
 {

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node;
+namespace RectorPrefix20220606\PhpParser\Node;
 
-use PhpParser\NodeAbstract;
+use RectorPrefix20220606\PhpParser\NodeAbstract;
 /**
  * Represents the "..." in "foo(...)" of the first-class callable syntax.
  */
-class VariadicPlaceholder extends \PhpParser\NodeAbstract
+class VariadicPlaceholder extends NodeAbstract
 {
     /**
      * Create a variadic argument placeholder (first-class callable syntax).

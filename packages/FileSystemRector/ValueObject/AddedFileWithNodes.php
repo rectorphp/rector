@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\FileSystemRector\ValueObject;
+namespace RectorPrefix20220606\Rector\FileSystemRector\ValueObject;
 
-use PhpParser\Node;
-use Rector\FileSystemRector\Contract\AddedFileInterface;
-use Rector\FileSystemRector\Contract\FileWithNodesInterface;
-final class AddedFileWithNodes implements \Rector\FileSystemRector\Contract\AddedFileInterface, \Rector\FileSystemRector\Contract\FileWithNodesInterface
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\Rector\FileSystemRector\Contract\AddedFileInterface;
+use RectorPrefix20220606\Rector\FileSystemRector\Contract\FileWithNodesInterface;
+final class AddedFileWithNodes implements AddedFileInterface, FileWithNodesInterface
 {
     /**
      * @readonly

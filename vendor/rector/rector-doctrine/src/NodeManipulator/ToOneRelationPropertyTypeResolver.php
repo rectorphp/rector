@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\NodeManipulator;
+namespace RectorPrefix20220606\Rector\Doctrine\NodeManipulator;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeCombinator;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
-use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
-use Rector\Doctrine\NodeAnalyzer\TargetEntityResolver;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\PHPStan\Type\NullType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\PHPStan\Type\TypeCombinator;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
+use RectorPrefix20220606\Rector\Doctrine\NodeAnalyzer\AttributeFinder;
+use RectorPrefix20220606\Rector\Doctrine\NodeAnalyzer\TargetEntityResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ToOneRelationPropertyTypeResolver
 {
     /**
@@ -50,7 +50,7 @@ final class ToOneRelationPropertyTypeResolver
      * @var \Rector\Doctrine\NodeAnalyzer\TargetEntityResolver
      */
     private $targetEntityResolver;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher, \Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder, \Rector\Doctrine\NodeAnalyzer\TargetEntityResolver $targetEntityResolver)
+    public function __construct(TypeFactory $typeFactory, PhpDocInfoFactory $phpDocInfoFactory, ClassAnnotationMatcher $classAnnotationMatcher, AttributeFinder $attributeFinder, TargetEntityResolver $targetEntityResolver)
     {
         $this->typeFactory = $typeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -58,67 +58,67 @@ final class ToOneRelationPropertyTypeResolver
         $this->attributeFinder = $attributeFinder;
         $this->targetEntityResolver = $targetEntityResolver;
     }
-    public function resolve(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
+    public function resolve(Property $property) : ?Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(self::TO_ONE_ANNOTATION_CLASSES);
-        if ($doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+        if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return $this->resolveFromDocBlock($phpDocInfo, $property, $doctrineAnnotationTagValueNode);
         }
         $targetEntity = $this->attributeFinder->findAttributeByClassesArgByName($property, self::TO_ONE_ANNOTATION_CLASSES, 'targetEntity');
-        if (!$targetEntity instanceof \PhpParser\Node\Expr) {
+        if (!$targetEntity instanceof Expr) {
             return null;
         }
         $targetEntityClass = $this->targetEntityResolver->resolveFromExpr($targetEntity);
         if ($targetEntityClass !== null) {
-            $fullyQualifiedObjectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($targetEntityClass);
+            $fullyQualifiedObjectType = new FullyQualifiedObjectType($targetEntityClass);
             // @todo resolve nullable value
             return $this->resolveFromObjectType($fullyQualifiedObjectType, \false);
         }
         return null;
     }
-    private function processToOneRelation(\PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $toOneDoctrineAnnotationTagValueNode, ?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $joinDoctrineAnnotationTagValueNode) : \PHPStan\Type\Type
+    private function processToOneRelation(Property $property, DoctrineAnnotationTagValueNode $toOneDoctrineAnnotationTagValueNode, ?DoctrineAnnotationTagValueNode $joinDoctrineAnnotationTagValueNode) : Type
     {
         $targetEntity = $toOneDoctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
         if (!\is_string($targetEntity)) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         if (\substr_compare($targetEntity, '::class', -\strlen('::class')) === 0) {
-            $targetEntity = \RectorPrefix20220606\Nette\Utils\Strings::before($targetEntity, '::class');
+            $targetEntity = Strings::before($targetEntity, '::class');
         }
         // resolve to FQN
         $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($targetEntity, $property);
-        $fullyQualifiedObjectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($tagFullyQualifiedName);
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType($tagFullyQualifiedName);
         $isNullable = $this->isNullableType($joinDoctrineAnnotationTagValueNode);
         return $this->resolveFromObjectType($fullyQualifiedObjectType, $isNullable);
     }
-    private function shouldAddNullType(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : bool
+    private function shouldAddNullType(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : bool
     {
         $isNullableValue = $doctrineAnnotationTagValueNode->getValue('nullable');
-        return $isNullableValue instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
+        return $isNullableValue instanceof ConstExprTrueNode;
     }
-    private function resolveFromDocBlock(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : \PHPStan\Type\Type
+    private function resolveFromDocBlock(PhpDocInfo $phpDocInfo, Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : Type
     {
         $joinDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('Doctrine\\ORM\\Mapping\\JoinColumn');
         return $this->processToOneRelation($property, $doctrineAnnotationTagValueNode, $joinDoctrineAnnotationTagValueNode);
     }
-    private function resolveFromObjectType(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, bool $isNullable) : \PHPStan\Type\Type
+    private function resolveFromObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType, bool $isNullable) : Type
     {
         $types = [];
         $types[] = $fullyQualifiedObjectType;
         if ($isNullable) {
-            $types[] = new \PHPStan\Type\NullType();
+            $types[] = new NullType();
         }
         $propertyType = $this->typeFactory->createMixedPassedOrUnionType($types);
         // add default null if missing
-        if (!\PHPStan\Type\TypeCombinator::containsNull($propertyType)) {
-            $propertyType = \PHPStan\Type\TypeCombinator::addNull($propertyType);
+        if (!TypeCombinator::containsNull($propertyType)) {
+            $propertyType = TypeCombinator::addNull($propertyType);
         }
         return $propertyType;
     }
-    private function isNullableType(?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $joinDoctrineAnnotationTagValueNode) : bool
+    private function isNullableType(?DoctrineAnnotationTagValueNode $joinDoctrineAnnotationTagValueNode) : bool
     {
-        if (!$joinDoctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+        if (!$joinDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return \false;
         }
         return $this->shouldAddNullType($joinDoctrineAnnotationTagValueNode);

@@ -1,35 +1,35 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp56\Rector\FuncCall;
+namespace RectorPrefix20220606\Rector\DowngradePhp56\Rector\FuncCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
+use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Foreach_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Naming\Naming\VariableNaming;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.php.net/manual/en/function.array-filter.php
  *
  * @see \Rector\Tests\DowngradePhp56\Rector\FuncCall\DowngradeArrayFilterUseConstantRector\DowngradeArrayFilterUseConstantRectorTest
  */
-final class DowngradeArrayFilterUseConstantRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeArrayFilterUseConstantRector extends AbstractRector
 {
     /**
      * @readonly
@@ -41,14 +41,14 @@ final class DowngradeArrayFilterUseConstantRector extends \Rector\Core\Rector\Ab
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(VariableNaming $variableNaming, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->variableNaming = $variableNaming;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace use ARRAY_FILTER_USE_BOTH and ARRAY_FILTER_USE_KEY to loop to filter it', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace use ARRAY_FILTER_USE_BOTH and ARRAY_FILTER_USE_KEY to loop to filter it', [new CodeSample(<<<'CODE_SAMPLE'
 $arr = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
 
 var_dump(array_filter($arr, function($v, $k) {
@@ -74,18 +74,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $args = $node->getArgs();
         if ($this->shouldSkip($node, $args)) {
             return null;
         }
-        if ($args[1]->value instanceof \PhpParser\Node\Expr\Closure) {
+        if ($args[1]->value instanceof Closure) {
             return $this->processClosure($node, $args);
         }
         return null;
@@ -93,18 +93,18 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function processClosure(\PhpParser\Node\Expr\FuncCall $funcCall, array $args) : ?\PhpParser\Node\Expr\Variable
+    private function processClosure(FuncCall $funcCall, array $args) : ?Variable
     {
         /** @var Closure $closure */
         $closure = $args[1]->value;
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($closure, \PhpParser\Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($closure, Return_::class);
         if ($returns === []) {
             return null;
         }
-        $scope = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        $variable = new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('result', $scope));
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, new \PhpParser\Node\Expr\Array_([]))), $funcCall, $this->file->getSmartFileInfo());
+        $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
+        $variable = new Variable($this->variableNaming->createCountedValueName('result', $scope));
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression(new Assign($variable, new Array_([]))), $funcCall, $this->file->getSmartFileInfo());
         /** @var ConstFetch $constant */
         $constant = $args[2]->value;
         $foreach = $this->nodeNameResolver->isName($constant, 'ARRAY_FILTER_USE_KEY') ? $this->applyArrayFilterUseKey($args, $closure, $variable) : $this->applyArrayFilterUseBoth($args, $closure, $variable);
@@ -114,27 +114,27 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function applyArrayFilterUseBoth(array $args, \PhpParser\Node\Expr\Closure $closure, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Stmt\Foreach_
+    private function applyArrayFilterUseBoth(array $args, Closure $closure, Variable $variable) : Foreach_
     {
         $arrayValue = $args[0]->value;
         $value = $closure->params[0]->var;
         $key = $closure->params[1]->var;
-        $foreach = new \PhpParser\Node\Stmt\Foreach_($arrayValue, $value, ['keyVar' => $key]);
+        $foreach = new Foreach_($arrayValue, $value, ['keyVar' => $key]);
         $stmts = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (\PhpParser\Node $subNode) use($variable, $key, $value, &$stmts) {
-            if (!$subNode instanceof \PhpParser\Node\Stmt) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (Node $subNode) use($variable, $key, $value, &$stmts) {
+            if (!$subNode instanceof Stmt) {
                 return null;
             }
-            if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
+            if (!$subNode instanceof Return_) {
                 $stmts[] = $subNode;
                 return null;
             }
-            if (!$subNode->expr instanceof \PhpParser\Node\Expr) {
+            if (!$subNode->expr instanceof Expr) {
                 $stmts[] = $subNode;
                 return null;
             }
-            $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\ArrayDimFetch($variable, $key), $value);
-            $stmts[] = new \PhpParser\Node\Stmt\If_($subNode->expr, ['stmts' => [new \PhpParser\Node\Stmt\Expression($assign)]]);
+            $assign = new Assign(new ArrayDimFetch($variable, $key), $value);
+            $stmts[] = new If_($subNode->expr, ['stmts' => [new Expression($assign)]]);
             return null;
         });
         $foreach->stmts = $stmts;
@@ -143,27 +143,27 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function applyArrayFilterUseKey(array $args, \PhpParser\Node\Expr\Closure $closure, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Stmt\Foreach_
+    private function applyArrayFilterUseKey(array $args, Closure $closure, Variable $variable) : Foreach_
     {
         $arrayValue = $args[0]->value;
         $funcCall = $this->nodeFactory->createFuncCall('array_keys', [$arrayValue]);
         $key = $closure->params[0]->var;
-        $foreach = new \PhpParser\Node\Stmt\Foreach_($funcCall, $key);
+        $foreach = new Foreach_($funcCall, $key);
         $stmts = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (\PhpParser\Node $subNode) use($variable, $key, $arrayValue, &$stmts) {
-            if (!$subNode instanceof \PhpParser\Node\Stmt) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (Node $subNode) use($variable, $key, $arrayValue, &$stmts) {
+            if (!$subNode instanceof Stmt) {
                 return null;
             }
-            if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
+            if (!$subNode instanceof Return_) {
                 $stmts[] = $subNode;
                 return null;
             }
-            if (!$subNode->expr instanceof \PhpParser\Node\Expr) {
+            if (!$subNode->expr instanceof Expr) {
                 $stmts[] = $subNode;
                 return null;
             }
-            $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\ArrayDimFetch($variable, $key), new \PhpParser\Node\Expr\ArrayDimFetch($arrayValue, $key));
-            $stmts[] = new \PhpParser\Node\Stmt\If_($subNode->expr, ['stmts' => [new \PhpParser\Node\Stmt\Expression($assign)]]);
+            $assign = new Assign(new ArrayDimFetch($variable, $key), new ArrayDimFetch($arrayValue, $key));
+            $stmts[] = new If_($subNode->expr, ['stmts' => [new Expression($assign)]]);
             return null;
         });
         $foreach->stmts = $stmts;
@@ -172,7 +172,7 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall, array $args) : bool
+    private function shouldSkip(FuncCall $funcCall, array $args) : bool
     {
         if (!$this->nodeNameResolver->isName($funcCall, 'array_filter')) {
             return \true;
@@ -180,7 +180,7 @@ CODE_SAMPLE
         if (!isset($args[2])) {
             return \true;
         }
-        if (!$args[2]->value instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if (!$args[2]->value instanceof ConstFetch) {
             return \true;
         }
         return !$this->nodeNameResolver->isNames($args[2]->value, ['ARRAY_FILTER_USE_KEY', 'ARRAY_FILTER_USE_BOTH']);

@@ -3,23 +3,23 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\Astral\NodeNameResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PhpParser\Node\Name;
 use RectorPrefix20220606\Symplify\Astral\Contract\NodeNameResolverInterface;
-final class IdentifierNodeNameResolver implements \RectorPrefix20220606\Symplify\Astral\Contract\NodeNameResolverInterface
+final class IdentifierNodeNameResolver implements NodeNameResolverInterface
 {
-    public function match(\PhpParser\Node $node) : bool
+    public function match(Node $node) : bool
     {
-        if ($node instanceof \PhpParser\Node\Identifier) {
+        if ($node instanceof Identifier) {
             return \true;
         }
-        return $node instanceof \PhpParser\Node\Name;
+        return $node instanceof Name;
     }
     /**
      * @param Identifier|Name $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         return (string) $node;
     }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\NodeManipulator;
+namespace RectorPrefix20220606\Rector\PHPUnit\NodeManipulator;
 
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
 final class ArgumentMover
 {
     /**

@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v8\v5;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v5;
 
-use PhpParser\Node;
-use PhpParser\Node\Scalar\String_;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.5/Deprecation-78647-MoveLanguageFilesFromEXTlanglocallang_ToResourcesPrivateLanguage.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v5\MoveLanguageFilesFromLocallangToResourcesRector\MoveLanguageFilesFromLocallangToResourcesRectorTest
  */
-final class MoveLanguageFilesFromLocallangToResourcesRector extends \Rector\Core\Rector\AbstractRector
+final class MoveLanguageFilesFromLocallangToResourcesRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -23,17 +23,17 @@ final class MoveLanguageFilesFromLocallangToResourcesRector extends \Rector\Core
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Scalar\String_::class];
+        return [String_::class];
     }
     /**
      * @param String_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $value = $node->value;
         foreach (self::MAPPING_OLD_TO_NEW_PATHS as $oldPath => $newPath) {
             if (\strpos($value, $oldPath) !== \false) {
-                return new \PhpParser\Node\Scalar\String_(\str_replace($oldPath, $newPath, $value));
+                return new String_(\str_replace($oldPath, $newPath, $value));
             }
         }
         return null;
@@ -41,9 +41,9 @@ final class MoveLanguageFilesFromLocallangToResourcesRector extends \Rector\Core
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move language files from EXT:lang/locallang_* to Resources/Private/Language', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move language files from EXT:lang/locallang_* to Resources/Private/Language', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Localization\LanguageService;
 $languageService = new LanguageService();
 $languageService->sL('LLL:EXT:lang/locallang_alt_doc.xlf:label.confirm.delete_record.title');

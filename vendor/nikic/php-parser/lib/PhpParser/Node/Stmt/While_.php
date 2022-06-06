@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node\Stmt;
+namespace RectorPrefix20220606\PhpParser\Node\Stmt;
 
-use PhpParser\Node;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-class While_ extends \PhpParser\Node\Stmt implements \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+class While_ extends Node\Stmt implements StmtsAwareInterface
 {
     /** @var Node\Expr Condition */
     public $cond;
@@ -18,7 +18,7 @@ class While_ extends \PhpParser\Node\Stmt implements \Rector\Core\Contract\PhpPa
      * @param Node\Stmt[] $stmts      Statements
      * @param array       $attributes Additional attributes
      */
-    public function __construct(\PhpParser\Node\Expr $cond, array $stmts = [], array $attributes = [])
+    public function __construct(Node\Expr $cond, array $stmts = [], array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->cond = $cond;

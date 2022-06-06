@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Node\Stmt;
+namespace RectorPrefix20220606\PhpParser\Node\Stmt;
 
-use PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node;
 /** Nop/empty statement (;). */
-class Nop extends \PhpParser\Node\Stmt
+class Nop extends Node\Stmt
 {
     public function getSubNodeNames() : array
     {

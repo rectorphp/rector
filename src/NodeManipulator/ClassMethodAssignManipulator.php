@@ -1,32 +1,32 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeManipulator;
+namespace RectorPrefix20220606\Rector\Core\NodeManipulator;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ClosureUse;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Foreach_;
-use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Type\Type;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Core\ValueObject\Application\File;
-use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
+use RectorPrefix20220606\PhpParser\Node\Expr\ClosureUse;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\New_;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\FunctionLike;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Foreach_;
+use RectorPrefix20220606\PHPStan\Reflection\MethodReflection;
+use RectorPrefix20220606\PHPStan\Reflection\ParameterReflection;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
+use RectorPrefix20220606\Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassMethodAssignManipulator
 {
     /**
@@ -73,7 +73,7 @@ final class ClassMethodAssignManipulator
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
      */
     private $exprUsedInNextNodeAnalyzer;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, VariableManipulator $variableManipulator, NodeComparator $nodeComparator, ReflectionResolver $reflectionResolver, ArrayDestructVariableFilter $arrayDestructVariableFilter, ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeFactory = $nodeFactory;
@@ -87,7 +87,7 @@ final class ClassMethodAssignManipulator
     /**
      * @return Assign[]
      */
-    public function collectReadyOnlyAssignScalarVariables(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\Core\ValueObject\Application\File $file) : array
+    public function collectReadyOnlyAssignScalarVariables(ClassMethod $classMethod, File $file) : array
     {
         $assignsOfScalarOrArrayToVariable = $this->variableManipulator->collectScalarOrArrayAssignsOfVariable($classMethod);
         // filter out [$value] = $array, array destructing
@@ -102,13 +102,13 @@ final class ClassMethodAssignManipulator
         $readOnlyVariableAssigns = $this->filterOutNeverUsedNext($readOnlyVariableAssigns);
         return $this->variableManipulator->filterOutChangedVariables($readOnlyVariableAssigns, $classMethod);
     }
-    public function addParameterAndAssignToMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $name, ?\PHPStan\Type\Type $type, \PhpParser\Node\Expr\Assign $assign) : void
+    public function addParameterAndAssignToMethod(ClassMethod $classMethod, string $name, ?Type $type, Assign $assign) : void
     {
         if ($this->hasMethodParameter($classMethod, $name)) {
             return;
         }
         $classMethod->params[] = $this->nodeFactory->createParamFromNameAndType($name, $type);
-        $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($assign);
+        $classMethod->stmts[] = new Expression($assign);
         $classMethodHash = \spl_object_hash($classMethod);
         $this->alreadyAddedClassMethodNames[$classMethodHash][] = $name;
     }
@@ -118,7 +118,7 @@ final class ClassMethodAssignManipulator
      */
     private function filterOutNeverUsedNext(array $readOnlyVariableAssigns) : array
     {
-        return \array_filter($readOnlyVariableAssigns, function (\PhpParser\Node\Expr\Assign $assign) : bool {
+        return \array_filter($readOnlyVariableAssigns, function (Assign $assign) : bool {
             return $this->exprUsedInNextNodeAnalyzer->isUsed($assign->var);
         });
     }
@@ -126,10 +126,10 @@ final class ClassMethodAssignManipulator
      * @param Assign[] $variableAssigns
      * @return Assign[]
      */
-    private function filterOutReferencedVariables(array $variableAssigns, \PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    private function filterOutReferencedVariables(array $variableAssigns, ClassMethod $classMethod) : array
     {
         $referencedVariables = $this->collectReferenceVariableNames($classMethod);
-        return \array_filter($variableAssigns, function (\PhpParser\Node\Expr\Assign $assign) use($referencedVariables) : bool {
+        return \array_filter($variableAssigns, function (Assign $assign) use($referencedVariables) : bool {
             return !$this->nodeNameResolver->isNames($assign->var, $referencedVariables);
         });
     }
@@ -141,9 +141,9 @@ final class ClassMethodAssignManipulator
      */
     private function filterOutMultiAssigns(array $readOnlyVariableAssigns) : array
     {
-        return \array_filter($readOnlyVariableAssigns, function (\PhpParser\Node\Expr\Assign $assign) : bool {
-            $parent = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            return !$parent instanceof \PhpParser\Node\Expr\Assign;
+        return \array_filter($readOnlyVariableAssigns, function (Assign $assign) : bool {
+            $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
+            return !$parent instanceof Assign;
         });
     }
     /**
@@ -154,7 +154,7 @@ final class ClassMethodAssignManipulator
     {
         foreach ($variableAssigns as $key => $variableAssign) {
             $foreach = $this->findParentForeach($variableAssign);
-            if (!$foreach instanceof \PhpParser\Node\Stmt\Foreach_) {
+            if (!$foreach instanceof Foreach_) {
                 continue;
             }
             if ($this->nodeComparator->areNodesEqual($foreach->valueVar, $variableAssign->var)) {
@@ -167,7 +167,7 @@ final class ClassMethodAssignManipulator
         }
         return $variableAssigns;
     }
-    private function hasMethodParameter(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $name) : bool
+    private function hasMethodParameter(ClassMethod $classMethod, string $name) : bool
     {
         foreach ($classMethod->params as $param) {
             if ($this->nodeNameResolver->isName($param->var, $name)) {
@@ -183,16 +183,16 @@ final class ClassMethodAssignManipulator
     /**
      * @return string[]
      */
-    private function collectReferenceVariableNames(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    private function collectReferenceVariableNames(ClassMethod $classMethod) : array
     {
         $referencedVariables = [];
         /** @var Variable[] $variables */
-        $variables = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Expr\Variable::class);
+        $variables = $this->betterNodeFinder->findInstanceOf($classMethod, Variable::class);
         foreach ($variables as $variable) {
             if ($this->nodeNameResolver->isName($variable, 'this')) {
                 continue;
             }
-            $parent = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
             if ($parent !== null && $this->isExplicitlyReferenced($parent)) {
                 $variableName = $this->nodeNameResolver->getName($variable);
                 if ($variableName === null) {
@@ -202,11 +202,11 @@ final class ClassMethodAssignManipulator
                 continue;
             }
             $argumentPosition = null;
-            if ($parent instanceof \PhpParser\Node\Arg) {
-                $argumentPosition = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION);
-                $parent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if ($parent instanceof Arg) {
+                $argumentPosition = $parent->getAttribute(AttributeKey::ARGUMENT_POSITION);
+                $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
             }
-            if (!$parent instanceof \PhpParser\Node) {
+            if (!$parent instanceof Node) {
                 continue;
             }
             if ($argumentPosition === null) {
@@ -223,23 +223,23 @@ final class ClassMethodAssignManipulator
         }
         return $referencedVariables;
     }
-    private function findParentForeach(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Stmt\Foreach_
+    private function findParentForeach(Assign $assign) : ?Foreach_
     {
         /** @var Foreach_|FunctionLike|null $foundNode */
-        $foundNode = $this->betterNodeFinder->findParentByTypes($assign, [\PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\FunctionLike::class]);
-        if (!$foundNode instanceof \PhpParser\Node\Stmt\Foreach_) {
+        $foundNode = $this->betterNodeFinder->findParentByTypes($assign, [Foreach_::class, FunctionLike::class]);
+        if (!$foundNode instanceof Foreach_) {
             return null;
         }
         return $foundNode;
     }
-    private function isExplicitlyReferenced(\PhpParser\Node $node) : bool
+    private function isExplicitlyReferenced(Node $node) : bool
     {
-        if ($node instanceof \PhpParser\Node\Arg || $node instanceof \PhpParser\Node\Expr\ClosureUse || $node instanceof \PhpParser\Node\Param) {
+        if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
             return $node->byRef;
         }
         return \false;
     }
-    private function isCallOrConstructorWithReference(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable, int $argumentPosition) : bool
+    private function isCallOrConstructorWithReference(Node $node, Variable $variable, int $argumentPosition) : bool
     {
         if ($this->isMethodCallWithReferencedArgument($node, $variable)) {
             return \true;
@@ -249,13 +249,13 @@ final class ClassMethodAssignManipulator
         }
         return $this->isConstructorWithReference($node, $argumentPosition);
     }
-    private function isMethodCallWithReferencedArgument(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable) : bool
+    private function isMethodCallWithReferencedArgument(Node $node, Variable $variable) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$node instanceof MethodCall) {
             return \false;
         }
         $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($node);
-        if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+        if (!$methodReflection instanceof MethodReflection) {
             return \false;
         }
         $variableName = $this->nodeNameResolver->getName($variable);
@@ -274,9 +274,9 @@ final class ClassMethodAssignManipulator
      * - array_shift($value)
      * - sort($values)
      */
-    private function isFuncCallWithReferencedArgument(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable) : bool
+    private function isFuncCallWithReferencedArgument(Node $node, Variable $variable) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$node instanceof FuncCall) {
             return \false;
         }
         if (!$this->nodeNameResolver->isNames($node, ['array_shift', '*sort'])) {
@@ -285,23 +285,23 @@ final class ClassMethodAssignManipulator
         if (!isset($node->args[0])) {
             return \false;
         }
-        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[0] instanceof Arg) {
             return \false;
         }
         // is 1t argument
         return $node->args[0]->value !== $variable;
     }
-    private function isConstructorWithReference(\PhpParser\Node $node, int $argumentPosition) : bool
+    private function isConstructorWithReference(Node $node, int $argumentPosition) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\New_) {
+        if (!$node instanceof New_) {
             return \false;
         }
         return $this->isParameterReferencedInMethodReflection($node, $argumentPosition);
     }
-    private function isParameterReferencedInMethodReflection(\PhpParser\Node\Expr\New_ $new, int $argumentPosition) : bool
+    private function isParameterReferencedInMethodReflection(New_ $new, int $argumentPosition) : bool
     {
         $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($new);
-        if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+        if (!$methodReflection instanceof MethodReflection) {
             return \false;
         }
         foreach ($methodReflection->getVariants() as $parametersAcceptor) {

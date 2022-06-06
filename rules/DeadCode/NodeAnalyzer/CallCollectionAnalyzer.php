@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\DeadCode\NodeAnalyzer;
 
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PHPStan\Type\TypeWithClassName;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
 final class CallCollectionAnalyzer
 {
     /**
@@ -21,7 +21,7 @@ final class CallCollectionAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -32,15 +32,15 @@ final class CallCollectionAnalyzer
     public function isExists(array $calls, string $classMethodName, ?string $className) : bool
     {
         foreach ($calls as $call) {
-            $callerRoot = $call instanceof \PhpParser\Node\Expr\StaticCall ? $call->class : $call->var;
+            $callerRoot = $call instanceof StaticCall ? $call->class : $call->var;
             $callerType = $this->nodeTypeResolver->getType($callerRoot);
-            if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
+            if (!$callerType instanceof TypeWithClassName) {
                 continue;
             }
             if ($callerType->getClassName() !== $className) {
                 continue;
             }
-            if (!$call->name instanceof \PhpParser\Node\Identifier) {
+            if (!$call->name instanceof Identifier) {
                 return \true;
             }
             // the method is used

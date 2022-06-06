@@ -1,32 +1,32 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Transform\Rector\New_;
+namespace RectorPrefix20220606\Rector\Transform\Rector\New_;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Transform\ValueObject\NewArgToMethodCall;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\New_;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Transform\ValueObject\NewArgToMethodCall;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/symfony/symfony/pull/35308
  *
  * @see \Rector\Tests\Transform\Rector\New_\NewArgToMethodCallRector\NewArgToMethodCallRectorTest
  */
-final class NewArgToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class NewArgToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var NewArgToMethodCall[]
      */
     private $newArgsToMethodCalls = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change new with specific argument to method call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change new with specific argument to method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -45,19 +45,19 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new \Rector\Transform\ValueObject\NewArgToMethodCall('Dotenv', \true, 'usePutenv')])]);
+, [new NewArgToMethodCall('Dotenv', \true, 'usePutenv')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\New_::class];
+        return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->newArgsToMethodCalls as $newArgToMethodCall) {
             if (!$this->isObjectType($node->class, $newArgToMethodCall->getObjectType())) {
@@ -66,7 +66,7 @@ CODE_SAMPLE
             if (!isset($node->args[0])) {
                 return null;
             }
-            if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            if (!$node->args[0] instanceof Arg) {
                 return null;
             }
             $firstArgValue = $node->args[0]->value;
@@ -74,7 +74,7 @@ CODE_SAMPLE
                 continue;
             }
             unset($node->args[0]);
-            return new \PhpParser\Node\Expr\MethodCall($node, 'usePutenv');
+            return new MethodCall($node, 'usePutenv');
         }
         return null;
     }
@@ -83,7 +83,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220606\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\NewArgToMethodCall::class);
+        Assert::allIsAOf($configuration, NewArgToMethodCall::class);
         $this->newArgsToMethodCalls = $configuration;
     }
 }

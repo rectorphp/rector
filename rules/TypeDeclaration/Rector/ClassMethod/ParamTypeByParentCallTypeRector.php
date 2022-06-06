@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\Rector\ClassMethod;
+namespace RectorPrefix20220606\Rector\TypeDeclaration\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
-use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Param;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\Rector\Core\Enum\ObjectReference;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractScopeAwareRector;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector\ParamTypeByParentCallTypeRectorTest
  */
-final class ParamTypeByParentCallTypeRector extends \Rector\Core\Rector\AbstractScopeAwareRector
+final class ParamTypeByParentCallTypeRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -31,14 +31,14 @@ final class ParamTypeByParentCallTypeRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher $callerParamMatcher, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(CallerParamMatcher $callerParamMatcher, ReflectionResolver $reflectionResolver)
     {
         $this->callerParamMatcher = $callerParamMatcher;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change param type based on parent param type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change param type based on parent param type', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeControl
 {
     public function __construct(string $name)
@@ -77,18 +77,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         $parentStaticCall = $this->findParentStaticCall($node);
-        if (!$parentStaticCall instanceof \PhpParser\Node\Expr\StaticCall) {
+        if (!$parentStaticCall instanceof StaticCall) {
             return null;
         }
         $hasChanged = \false;
@@ -98,7 +98,7 @@ CODE_SAMPLE
                 continue;
             }
             $parentParam = $this->callerParamMatcher->matchParentParam($parentStaticCall, $param, $scope);
-            if (!$parentParam instanceof \PhpParser\Node\Param) {
+            if (!$parentParam instanceof Param) {
                 continue;
             }
             if ($parentParam->type === null) {
@@ -107,8 +107,8 @@ CODE_SAMPLE
             // mimic type
             $paramType = $parentParam->type;
             // original attributes have to removed to avoid tokens crashing from origin positions
-            $this->traverseNodesWithCallable($paramType, function (\PhpParser\Node $node) {
-                $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            $this->traverseNodesWithCallable($paramType, function (Node $node) {
+                $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
                 return null;
             });
             $param->type = $paramType;
@@ -119,13 +119,13 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function findParentStaticCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr\StaticCall
+    private function findParentStaticCall(ClassMethod $classMethod) : ?StaticCall
     {
         $classMethodName = $this->getName($classMethod);
         /** @var StaticCall[] $staticCalls */
-        $staticCalls = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Expr\StaticCall::class);
+        $staticCalls = $this->betterNodeFinder->findInstanceOf($classMethod, StaticCall::class);
         foreach ($staticCalls as $staticCall) {
-            if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT)) {
+            if (!$this->isName($staticCall->class, ObjectReference::PARENT)) {
                 continue;
             }
             if (!$this->isName($staticCall->name, $classMethodName)) {
@@ -135,13 +135,13 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassMethod $classMethod) : bool
     {
         if ($classMethod->params === []) {
             return \true;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
         return !$classReflection->isClass();

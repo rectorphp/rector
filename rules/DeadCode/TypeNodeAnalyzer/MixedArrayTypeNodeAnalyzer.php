@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DeadCode\TypeNodeAnalyzer;
+namespace RectorPrefix20220606\Rector\DeadCode\TypeNodeAnalyzer;
 
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 final class MixedArrayTypeNodeAnalyzer
 {
-    public function hasMixedArrayType(\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $unionTypeNode) : bool
+    public function hasMixedArrayType(UnionTypeNode $unionTypeNode) : bool
     {
         $types = $unionTypeNode->types;
         foreach ($types as $type) {
-            if ($type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode) {
+            if ($type instanceof SpacingAwareArrayTypeNode) {
                 $typeNode = $type->type;
-                if (!$typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+                if (!$typeNode instanceof IdentifierTypeNode) {
                     continue;
                 }
                 if ($typeNode->name === 'mixed') {

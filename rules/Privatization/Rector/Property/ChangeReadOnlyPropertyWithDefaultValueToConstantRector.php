@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Privatization\Rector\Property;
+namespace RectorPrefix20220606\Rector\Privatization\Rector\Property;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
-use PHPStan\Type\ObjectType;
-use Rector\Core\NodeManipulator\PropertyManipulator;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Privatization\NodeFactory\ClassConstantFactory;
-use Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use RectorPrefix20220606\PhpParser\Node\Stmt\PropertyProperty;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\NodeManipulator\PropertyManipulator;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Privatization\NodeFactory\ClassConstantFactory;
+use RectorPrefix20220606\Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\ChangeReadOnlyPropertyWithDefaultValueToConstantRectorTest
  */
-final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends AbstractRector
 {
     /**
      * @readonly
@@ -34,15 +34,15 @@ final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends \Rect
      * @var \Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer
      */
     private $propertyFetchWithConstFetchReplacer;
-    public function __construct(\Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Privatization\NodeFactory\ClassConstantFactory $classConstantFactory, \Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer)
+    public function __construct(PropertyManipulator $propertyManipulator, ClassConstantFactory $classConstantFactory, PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer)
     {
         $this->propertyManipulator = $propertyManipulator;
         $this->classConstantFactory = $classConstantFactory;
         $this->propertyFetchWithConstFetchReplacer = $propertyFetchWithConstFetchReplacer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change property with read only status with default value to constant', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change property with read only status with default value to constant', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -87,12 +87,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -106,8 +106,8 @@ CODE_SAMPLE
         if (!$node->isPrivate()) {
             return null;
         }
-        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$class instanceof Class_) {
             return null;
         }
         // is property read only?
@@ -115,22 +115,22 @@ CODE_SAMPLE
             return null;
         }
         /** @var Class_ $classLike */
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         $this->propertyFetchWithConstFetchReplacer->replace($classLike, $node);
         return $this->classConstantFactory->createFromProperty($node);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Property $property) : bool
+    private function shouldSkip(Property $property) : bool
     {
         if (\count($property->props) !== 1) {
             return \true;
         }
-        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($property, Class_::class);
+        if (!$classLike instanceof Class_) {
             return \true;
         }
         if ($property->attrGroups !== []) {
             return \true;
         }
-        return $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff'));
+        return $this->isObjectType($classLike, new ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff'));
     }
 }

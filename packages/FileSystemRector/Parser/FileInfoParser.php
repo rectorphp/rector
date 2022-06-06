@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\FileSystemRector\Parser;
+namespace RectorPrefix20220606\Rector\FileSystemRector\Parser;
 
-use PhpParser\Node\Stmt;
-use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
-use Rector\Core\PhpParser\Parser\RectorParser;
-use Rector\Core\ValueObject\Application\File;
-use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use RectorPrefix20220606\PhpParser\Node\Stmt;
+use RectorPrefix20220606\Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
+use RectorPrefix20220606\Rector\Core\PhpParser\Parser\RectorParser;
+use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileInfoParser
 {
@@ -26,7 +26,7 @@ final class FileInfoParser
      * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
     private $rectorParser;
-    public function __construct(\Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser)
+    public function __construct(NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser, RectorParser $rectorParser)
     {
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->fileWithoutNamespaceNodeTraverser = $fileWithoutNamespaceNodeTraverser;
@@ -35,11 +35,11 @@ final class FileInfoParser
     /**
      * @return Stmt[]
      */
-    public function parseFileInfoToNodesAndDecorate(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
+    public function parseFileInfoToNodesAndDecorate(SmartFileInfo $smartFileInfo) : array
     {
         $stmts = $this->rectorParser->parseFile($smartFileInfo);
         $stmts = $this->fileWithoutNamespaceNodeTraverser->traverse($stmts);
-        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
+        $file = new File($smartFileInfo, $smartFileInfo->getContents());
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $stmts);
     }
 }

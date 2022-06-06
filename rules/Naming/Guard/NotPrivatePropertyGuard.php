@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Naming\Guard;
+namespace RectorPrefix20220606\Rector\Naming\Guard;
 
-use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
-use Rector\Naming\Contract\RenameValueObjectInterface;
-use Rector\Naming\ValueObject\PropertyRename;
+use RectorPrefix20220606\Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
+use RectorPrefix20220606\Rector\Naming\Contract\RenameValueObjectInterface;
+use RectorPrefix20220606\Rector\Naming\ValueObject\PropertyRename;
 /**
  * @implements ConflictingNameGuardInterface<PropertyRename>
  */
-final class NotPrivatePropertyGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
+final class NotPrivatePropertyGuard implements ConflictingNameGuardInterface
 {
     /**
      * @param PropertyRename $renameValueObject
      */
-    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
+    public function isConflicting(RenameValueObjectInterface $renameValueObject) : bool
     {
         return !$renameValueObject->isPrivateProperty();
     }

@@ -20,7 +20,7 @@ use SplObjectStorage;
  * @see http://php.net/manual/en/book.ev.php
  * @see https://bitbucket.org/osmanov/pecl-ev/overview
  */
-class ExtEvLoop implements \RectorPrefix20220606\React\EventLoop\LoopInterface
+class ExtEvLoop implements LoopInterface
 {
     /**
      * @var EvLoop
@@ -56,10 +56,10 @@ class ExtEvLoop implements \RectorPrefix20220606\React\EventLoop\LoopInterface
     private $signalEvents = array();
     public function __construct()
     {
-        $this->loop = new \EvLoop();
-        $this->futureTickQueue = new \RectorPrefix20220606\React\EventLoop\Tick\FutureTickQueue();
-        $this->timers = new \SplObjectStorage();
-        $this->signals = new \RectorPrefix20220606\React\EventLoop\SignalsHandler();
+        $this->loop = new EvLoop();
+        $this->futureTickQueue = new FutureTickQueue();
+        $this->timers = new SplObjectStorage();
+        $this->signals = new SignalsHandler();
     }
     public function addReadStream($stream, $listener)
     {
@@ -68,7 +68,7 @@ class ExtEvLoop implements \RectorPrefix20220606\React\EventLoop\LoopInterface
             return;
         }
         $callback = $this->getStreamListenerClosure($stream, $listener);
-        $event = $this->loop->io($stream, \Ev::READ, $callback);
+        $event = $this->loop->io($stream, Ev::READ, $callback);
         $this->readStreams[$key] = $event;
     }
     /**
@@ -90,7 +90,7 @@ class ExtEvLoop implements \RectorPrefix20220606\React\EventLoop\LoopInterface
             return;
         }
         $callback = $this->getStreamListenerClosure($stream, $listener);
-        $event = $this->loop->io($stream, \Ev::WRITE, $callback);
+        $event = $this->loop->io($stream, Ev::WRITE, $callback);
         $this->writeStreams[$key] = $event;
     }
     public function removeReadStream($stream)
@@ -113,7 +113,7 @@ class ExtEvLoop implements \RectorPrefix20220606\React\EventLoop\LoopInterface
     }
     public function addTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20220606\React\EventLoop\Timer\Timer($interval, $callback, \false);
+        $timer = new Timer($interval, $callback, \false);
         $that = $this;
         $timers = $this->timers;
         $callback = function () use($timer, $timers, $that) {
@@ -128,7 +128,7 @@ class ExtEvLoop implements \RectorPrefix20220606\React\EventLoop\LoopInterface
     }
     public function addPeriodicTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20220606\React\EventLoop\Timer\Timer($interval, $callback, \true);
+        $timer = new Timer($interval, $callback, \true);
         $callback = function () use($timer) {
             \call_user_func($timer->getCallback(), $timer);
         };
@@ -136,7 +136,7 @@ class ExtEvLoop implements \RectorPrefix20220606\React\EventLoop\LoopInterface
         $this->timers->attach($timer, $event);
         return $timer;
     }
-    public function cancelTimer(\RectorPrefix20220606\React\EventLoop\TimerInterface $timer)
+    public function cancelTimer(TimerInterface $timer)
     {
         if (!isset($this->timers[$timer])) {
             return;
@@ -157,9 +157,9 @@ class ExtEvLoop implements \RectorPrefix20220606\React\EventLoop\LoopInterface
             $hasPendingCallbacks = !$this->futureTickQueue->isEmpty();
             $wasJustStopped = !$this->running;
             $nothingLeftToDo = !$this->readStreams && !$this->writeStreams && !$this->timers->count() && $this->signals->isEmpty();
-            $flags = \Ev::RUN_ONCE;
+            $flags = Ev::RUN_ONCE;
             if ($wasJustStopped || $hasPendingCallbacks) {
-                $flags |= \Ev::RUN_NOWAIT;
+                $flags |= Ev::RUN_NOWAIT;
             } elseif ($nothingLeftToDo) {
                 break;
             }

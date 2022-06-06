@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\ValueObject;
+namespace RectorPrefix20220606\Rector\TypeDeclaration\ValueObject;
 
-use PHPStan\Type\Type;
-use Rector\Core\Validation\RectorAssert;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
 final class AddPropertyTypeDeclaration
 {
     /**
@@ -22,12 +22,12 @@ final class AddPropertyTypeDeclaration
      * @var \PHPStan\Type\Type
      */
     private $type;
-    public function __construct(string $class, string $propertyName, \PHPStan\Type\Type $type)
+    public function __construct(string $class, string $propertyName, Type $type)
     {
         $this->class = $class;
         $this->propertyName = $propertyName;
         $this->type = $type;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
     public function getClass() : string
     {
@@ -37,7 +37,7 @@ final class AddPropertyTypeDeclaration
     {
         return $this->propertyName;
     }
-    public function getType() : \PHPStan\Type\Type
+    public function getType() : Type
     {
         return $this->type;
     }

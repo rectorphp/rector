@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Defluent\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Defluent\NodeAnalyzer;
 
-use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Reflection\MethodReflection;
-use Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PHPStan\Reflection\MethodReflection;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
 final class SameClassMethodCallAnalyzer
 {
     /**
@@ -13,7 +13,7 @@ final class SameClassMethodCallAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
     }
@@ -26,7 +26,7 @@ final class SameClassMethodCallAnalyzer
         $classOfClassMethod = [];
         foreach ($chainMethodCalls as $chainMethodCall) {
             $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($chainMethodCall);
-            if ($methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+            if ($methodReflection instanceof MethodReflection) {
                 $declaringClass = $methodReflection->getDeclaringClass();
                 $classOfClassMethod[] = $declaringClass->getName();
             } else {

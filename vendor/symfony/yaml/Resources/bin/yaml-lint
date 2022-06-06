@@ -21,12 +21,12 @@ function includeIfExists(string $file) : bool
 {
     return \file_exists($file) && (include $file);
 }
-if (!\RectorPrefix20220606\includeIfExists(__DIR__ . '/../../../../autoload.php') && !\RectorPrefix20220606\includeIfExists(__DIR__ . '/../../vendor/autoload.php') && !\RectorPrefix20220606\includeIfExists(__DIR__ . '/../../../../../../vendor/autoload.php')) {
+if (!includeIfExists(__DIR__ . '/../../../../autoload.php') && !includeIfExists(__DIR__ . '/../../vendor/autoload.php') && !includeIfExists(__DIR__ . '/../../../../../../vendor/autoload.php')) {
     \fwrite(\STDERR, 'Install dependencies using Composer.' . \PHP_EOL);
     exit(1);
 }
-if (!\class_exists(\RectorPrefix20220606\Symfony\Component\Console\Application::class)) {
+if (!\class_exists(Application::class)) {
     \fwrite(\STDERR, 'You need the "symfony/console" component in order to run the Yaml linter.' . \PHP_EOL);
     exit(1);
 }
-(new \RectorPrefix20220606\Symfony\Component\Console\Application())->add($command = new \RectorPrefix20220606\Symfony\Component\Yaml\Command\LintCommand())->getApplication()->setDefaultCommand($command->getName(), \true)->run();
+(new Application())->add($command = new LintCommand())->getApplication()->setDefaultCommand($command->getName(), \true)->run();

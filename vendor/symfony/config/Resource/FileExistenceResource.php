@@ -20,7 +20,7 @@ namespace RectorPrefix20220606\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class FileExistenceResource implements \RectorPrefix20220606\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class FileExistenceResource implements SelfCheckingResourceInterface
 {
     /**
      * @var string

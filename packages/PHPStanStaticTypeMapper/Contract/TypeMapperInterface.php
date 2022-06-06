@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPStanStaticTypeMapper\Contract;
+namespace RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Contract;
 
-use PhpParser\Node;
-use PhpParser\Node\ComplexType;
-use PhpParser\Node\Name;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\Type;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\ComplexType;
+use RectorPrefix20220606\PhpParser\Node\Name;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 /**
  * @template TType of Type
  */
@@ -22,11 +22,11 @@ interface TypeMapperInterface
      * @param TType $type
      * @param TypeKind::* $typeKind
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode;
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode;
     /**
      * @param TType $type
      * @param TypeKind::* $typeKind
      * @return Name|ComplexType|null
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node;
+    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node;
 }

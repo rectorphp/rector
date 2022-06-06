@@ -10,7 +10,7 @@
  */
 namespace RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument;
 
-trigger_deprecation('symfony/dependency-injection', '6.1', '"%s" is deprecated.', \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ReferenceSetArgumentTrait::class);
+trigger_deprecation('symfony/dependency-injection', '6.1', '"%s" is deprecated.', ReferenceSetArgumentTrait::class);
 use RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference;
 /**
@@ -45,8 +45,8 @@ trait ReferenceSetArgumentTrait
     public function setValues(array $values)
     {
         foreach ($values as $k => $v) {
-            if (null !== $v && !$v instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference) {
-                throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('A "%s" must hold only Reference instances, "%s" given.', __CLASS__, \get_debug_type($v)));
+            if (null !== $v && !$v instanceof Reference) {
+                throw new InvalidArgumentException(\sprintf('A "%s" must hold only Reference instances, "%s" given.', __CLASS__, \get_debug_type($v)));
             }
         }
         $this->values = $values;

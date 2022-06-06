@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\NodeManipulator;
+namespace RectorPrefix20220606\Rector\PHPUnit\NodeManipulator;
 
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Variable;
-use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\PHPUnit\ValueObject\ParamAndArg;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use RectorPrefix20220606\Rector\PHPUnit\ValueObject\ParamAndArg;
 final class ParamAndArgFromArrayResolver
 {
     /**
@@ -22,7 +22,7 @@ final class ParamAndArgFromArrayResolver
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
@@ -30,7 +30,7 @@ final class ParamAndArgFromArrayResolver
     /**
      * @return ParamAndArg[]
      */
-    public function resolve(\PhpParser\Node\Expr\Array_ $array, string $variableName) : array
+    public function resolve(Array_ $array, string $variableName) : array
     {
         $isNestedArray = $this->isNestedArray($array);
         if ($isNestedArray) {
@@ -39,13 +39,13 @@ final class ParamAndArgFromArrayResolver
         $itemsStaticType = $this->resolveItemStaticType($array, $isNestedArray);
         return $this->collectParamAndArgsFromNonNestedArray($array, $variableName, $itemsStaticType);
     }
-    private function isNestedArray(\PhpParser\Node\Expr\Array_ $array) : bool
+    private function isNestedArray(Array_ $array) : bool
     {
         foreach ($array->items as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
-            if ($arrayItem->value instanceof \PhpParser\Node\Expr\Array_) {
+            if ($arrayItem->value instanceof Array_) {
                 return \true;
             }
         }
@@ -54,36 +54,36 @@ final class ParamAndArgFromArrayResolver
     /**
      * @return ParamAndArg[]
      */
-    private function collectParamAndArgsFromNestedArray(\PhpParser\Node\Expr\Array_ $array, string $variableName) : array
+    private function collectParamAndArgsFromNestedArray(Array_ $array, string $variableName) : array
     {
         $paramAndArgs = [];
         $i = 1;
         foreach ($array->items as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
             $nestedArray = $arrayItem->value;
-            if (!$nestedArray instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$nestedArray instanceof Array_) {
                 continue;
             }
             foreach ($nestedArray->items as $nestedArrayItem) {
-                if (!$nestedArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+                if (!$nestedArrayItem instanceof ArrayItem) {
                     continue;
                 }
-                $variable = new \PhpParser\Node\Expr\Variable($variableName . ($i === 1 ? '' : $i));
+                $variable = new Variable($variableName . ($i === 1 ? '' : $i));
                 $itemsStaticType = $this->nodeTypeResolver->getType($nestedArrayItem->value);
-                $paramAndArgs[] = new \Rector\PHPUnit\ValueObject\ParamAndArg($variable, $itemsStaticType);
+                $paramAndArgs[] = new ParamAndArg($variable, $itemsStaticType);
                 ++$i;
             }
         }
         return $paramAndArgs;
     }
-    private function resolveItemStaticType(\PhpParser\Node\Expr\Array_ $array, bool $isNestedArray) : \PHPStan\Type\Type
+    private function resolveItemStaticType(Array_ $array, bool $isNestedArray) : Type
     {
         $staticTypes = [];
         if (!$isNestedArray) {
             foreach ($array->items as $arrayItem) {
-                if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+                if (!$arrayItem instanceof ArrayItem) {
                     continue;
                 }
                 $staticTypes[] = $this->nodeTypeResolver->getType($arrayItem->value);
@@ -94,18 +94,18 @@ final class ParamAndArgFromArrayResolver
     /**
      * @return ParamAndArg[]
      */
-    private function collectParamAndArgsFromNonNestedArray(\PhpParser\Node\Expr\Array_ $array, string $variableName, \PHPStan\Type\Type $itemsStaticType) : array
+    private function collectParamAndArgsFromNonNestedArray(Array_ $array, string $variableName, Type $itemsStaticType) : array
     {
         $i = 1;
         $paramAndArgs = [];
         foreach ($array->items as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
-            $variable = new \PhpParser\Node\Expr\Variable($variableName . ($i === 1 ? '' : $i));
-            $paramAndArgs[] = new \Rector\PHPUnit\ValueObject\ParamAndArg($variable, $itemsStaticType);
+            $variable = new Variable($variableName . ($i === 1 ? '' : $i));
+            $paramAndArgs[] = new ParamAndArg($variable, $itemsStaticType);
             ++$i;
-            if (!$arrayItem->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$arrayItem->value instanceof Array_) {
                 break;
             }
         }

@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php74\TypeAnalyzer;
+namespace RectorPrefix20220606\Rector\Php74\TypeAnalyzer;
 
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\PHPStan\Type\UnionType;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 final class ObjectTypeAnalyzer
 {
-    public function isSpecial(\PHPStan\Type\Type $varType) : bool
+    public function isSpecial(Type $varType) : bool
     {
         // we are not sure what object type this is
-        if ($varType instanceof \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType) {
+        if ($varType instanceof NonExistingObjectType) {
             return \true;
         }
-        $types = $varType instanceof \PHPStan\Type\UnionType ? $varType->getTypes() : [$varType];
+        $types = $varType instanceof UnionType ? $varType->getTypes() : [$varType];
         foreach ($types as $type) {
-            if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+            if (!$type instanceof FullyQualifiedObjectType) {
                 continue;
             }
             if ($type->getClassName() !== 'Prophecy\\Prophecy\\ObjectProphecy') {

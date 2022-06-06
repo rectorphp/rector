@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php70\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Php70\NodeAnalyzer;
 
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
 final class Php4ConstructorClassMethodAnalyzer
 {
-    public function detect(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : bool
+    public function detect(ClassMethod $classMethod, Scope $scope) : bool
     {
         // catch only classes without namespace
         if ($scope->getNamespace() !== null) {
@@ -21,7 +21,7 @@ final class Php4ConstructorClassMethodAnalyzer
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         return !$classReflection->isAnonymous();

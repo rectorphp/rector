@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Caching;
+namespace RectorPrefix20220606\Rector\Caching;
 
-use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
+use RectorPrefix20220606\Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 final class Cache
 {
     /**
@@ -11,7 +11,7 @@ final class Cache
      * @var \Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface
      */
     private $cacheStorage;
-    public function __construct(\Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface $cacheStorage)
+    public function __construct(CacheStorageInterface $cacheStorage)
     {
         $this->cacheStorage = $cacheStorage;
     }

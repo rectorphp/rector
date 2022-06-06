@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Naming\ValueObject;
+namespace RectorPrefix20220606\Rector\Naming\ValueObject;
 
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
+use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
+use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Function_;
 final class VariableAndCallForeach
 {
     /**
@@ -36,14 +36,14 @@ final class VariableAndCallForeach
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function __construct(\PhpParser\Node\Expr\Variable $variable, $expr, string $variableName, $functionLike)
+    public function __construct(Variable $variable, $expr, string $variableName, $functionLike)
     {
         $this->variable = $variable;
         $this->expr = $expr;
         $this->variableName = $variableName;
         $this->functionLike = $functionLike;
     }
-    public function getVariable() : \PhpParser\Node\Expr\Variable
+    public function getVariable() : Variable
     {
         return $this->variable;
     }

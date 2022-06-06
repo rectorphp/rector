@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v8\v6;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v6;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\TcaHelperTrait;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79341-TCARichtextConfigurationInDefaultExtrasDropped.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\RichtextFromDefaultExtrasToEnableRichtextRector\RichtextFromDefaultExtrasToEnableRichtextRectorTest
  */
-final class RichtextFromDefaultExtrasToEnableRichtextRector extends \Rector\Core\Rector\AbstractRector
+final class RichtextFromDefaultExtrasToEnableRichtextRector extends AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -28,42 +28,42 @@ final class RichtextFromDefaultExtrasToEnableRichtextRector extends \Rector\Core
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $this->hasAstBeenChanged = \false;
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columns = $this->extractColumns($node);
-        if (!$columns instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$columns instanceof ArrayItem) {
             return null;
         }
         $columnItems = $columns->value;
-        if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$columnItems instanceof Array_) {
             return null;
         }
         $this->refactorRichtextColumns($columnItems);
         $types = $this->extractTypes($node);
-        if (!$types instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$types instanceof ArrayItem) {
             return $this->hasAstBeenChanged ? $node : null;
         }
         $typesItems = $types->value;
-        if (!$typesItems instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$typesItems instanceof Array_) {
             return $this->hasAstBeenChanged ? $node : null;
         }
         foreach ($typesItems->items as $typesItem) {
-            if (!$typesItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$typesItem instanceof ArrayItem) {
                 continue;
             }
             if (null === $typesItem->key) {
                 continue;
             }
-            if (!$typesItem->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$typesItem->value instanceof Array_) {
                 continue;
             }
             foreach ($typesItem->value->items as $configValue) {
@@ -76,7 +76,7 @@ final class RichtextFromDefaultExtrasToEnableRichtextRector extends \Rector\Core
                 if (!$this->valueResolver->isValue($configValue->key, 'columnsOverrides')) {
                     continue;
                 }
-                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
+                if (!$configValue->value instanceof Array_) {
                     continue;
                 }
                 $this->refactorRichtextColumns($configValue->value);
@@ -87,9 +87,9 @@ final class RichtextFromDefaultExtrasToEnableRichtextRector extends \Rector\Core
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA richtext configuration in defaultExtras dropped', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('TCA richtext configuration in defaultExtras dropped', [new CodeSample(<<<'CODE_SAMPLE'
 [
     'columns' => [
         'content' => [
@@ -115,7 +115,7 @@ CODE_SAMPLE
 CODE_SAMPLE
 )]);
     }
-    private function isRichtextInDefaultExtras(\PhpParser\Node\Expr\ArrayItem $configValueArrayItem) : bool
+    private function isRichtextInDefaultExtras(ArrayItem $configValueArrayItem) : bool
     {
         if (null === $configValueArrayItem->key) {
             return \false;
@@ -129,16 +129,16 @@ CODE_SAMPLE
         }
         return \strncmp($defaultExtras, 'richtext', \strlen('richtext')) === 0;
     }
-    private function refactorRichtextColumns(\PhpParser\Node\Expr\Array_ $columnItemsArray) : void
+    private function refactorRichtextColumns(Array_ $columnItemsArray) : void
     {
         foreach ($columnItemsArray->items as $columnItem) {
-            if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$columnItem instanceof ArrayItem) {
                 continue;
             }
             if (null === $columnItem->key) {
                 continue;
             }
-            if (!$columnItem->value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$columnItem->value instanceof Array_) {
                 continue;
             }
             $hasRichTextConfiguration = \false;
@@ -165,22 +165,22 @@ CODE_SAMPLE
                     if (!$this->valueResolver->isValue($configValue->key, 'config')) {
                         continue;
                     }
-                    if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
+                    if (!$configValue->value instanceof Array_) {
                         continue;
                     }
                     $configurationArray = $configValue;
                 }
                 if (null === $configurationArray) {
-                    $configurationArray = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Array_(), new \PhpParser\Node\Scalar\String_('config'));
+                    $configurationArray = new ArrayItem(new Array_(), new String_('config'));
                     $columnItem->value->items[] = $configurationArray;
                     $this->hasAstBeenChanged = \true;
                 }
-                if ($configurationArray instanceof \PhpParser\Node\Expr\ArrayItem && $configurationArray->value instanceof \PhpParser\Node\Expr\Array_) {
+                if ($configurationArray instanceof ArrayItem && $configurationArray->value instanceof Array_) {
                     if (null === $this->extractArrayItemByKey($configurationArray->value, 'enableRichtext')) {
-                        $configurationArray->value->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createTrue(), new \PhpParser\Node\Scalar\String_('enableRichtext'));
+                        $configurationArray->value->items[] = new ArrayItem($this->nodeFactory->createTrue(), new String_('enableRichtext'));
                     }
                     if (null === $this->extractArrayItemByKey($configurationArray->value, 'richtextConfiguration')) {
-                        $configurationArray->value->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('default'), new \PhpParser\Node\Scalar\String_('richtextConfiguration'));
+                        $configurationArray->value->items[] = new ArrayItem(new String_('default'), new String_('richtextConfiguration'));
                     }
                     $this->hasAstBeenChanged = \true;
                 }

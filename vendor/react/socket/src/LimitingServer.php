@@ -32,7 +32,7 @@ use OverflowException;
  * @see ServerInterface
  * @see ConnectionInterface
  */
-class LimitingServer extends \RectorPrefix20220606\Evenement\EventEmitter implements \RectorPrefix20220606\React\Socket\ServerInterface
+class LimitingServer extends EventEmitter implements ServerInterface
 {
     private $connections = array();
     private $server;
@@ -89,7 +89,7 @@ class LimitingServer extends \RectorPrefix20220606\Evenement\EventEmitter implem
      * @param int|null        $connectionLimit
      * @param bool            $pauseOnLimit
      */
-    public function __construct(\RectorPrefix20220606\React\Socket\ServerInterface $server, $connectionLimit, $pauseOnLimit = \false)
+    public function __construct(ServerInterface $server, $connectionLimit, $pauseOnLimit = \false)
     {
         $this->server = $server;
         $this->limit = $connectionLimit;
@@ -141,7 +141,7 @@ class LimitingServer extends \RectorPrefix20220606\Evenement\EventEmitter implem
         $this->server->close();
     }
     /** @internal */
-    public function handleConnection(\RectorPrefix20220606\React\Socket\ConnectionInterface $connection)
+    public function handleConnection(ConnectionInterface $connection)
     {
         // close connection if limit exceeded
         if ($this->limit !== null && \count($this->connections) >= $this->limit) {
@@ -164,7 +164,7 @@ class LimitingServer extends \RectorPrefix20220606\Evenement\EventEmitter implem
         $this->emit('connection', array($connection));
     }
     /** @internal */
-    public function handleDisconnection(\RectorPrefix20220606\React\Socket\ConnectionInterface $connection)
+    public function handleDisconnection(ConnectionInterface $connection)
     {
         unset($this->connections[\array_search($connection, $this->connections)]);
         // continue accepting new connection if below limit

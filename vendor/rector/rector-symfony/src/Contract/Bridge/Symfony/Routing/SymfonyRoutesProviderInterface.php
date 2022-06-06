@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Contract\Bridge\Symfony\Routing;
+namespace RectorPrefix20220606\Rector\Symfony\Contract\Bridge\Symfony\Routing;
 
-use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
+use RectorPrefix20220606\Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 interface SymfonyRoutesProviderInterface
 {
     /**

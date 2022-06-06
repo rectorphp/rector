@@ -8,7 +8,7 @@ namespace RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
  *
  * @package Helmich\TypoScriptParser\Tokenizer\Preprocessing
  */
-class ProcessorChain implements \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
+class ProcessorChain implements Preprocessor
 {
     /** @var Preprocessor[] */
     protected $processors = [];
@@ -16,7 +16,7 @@ class ProcessorChain implements \RectorPrefix20220606\Helmich\TypoScriptParser\T
      * @param Preprocessor $next
      * @return self
      */
-    public function with(\RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor $next) : self
+    public function with(Preprocessor $next) : self
     {
         $new = new self();
         $new->processors = \array_merge($this->processors, [$next]);

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Set;
+namespace RectorPrefix20220606\Rector\Symfony\Set;
 
-use Rector\Set\Contract\SetListInterface;
-final class SwiftmailerSetList implements \Rector\Set\Contract\SetListInterface
+use RectorPrefix20220606\Rector\Set\Contract\SetListInterface;
+final class SwiftmailerSetList implements SetListInterface
 {
     /**
      * @var string

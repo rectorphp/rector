@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace PHPStan\PhpDocParser\Ast\ConstExpr;
+namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\ConstExpr;
 
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
+use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
 use function implode;
-class ConstExprArrayNode implements \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode
+class ConstExprArrayNode implements ConstExprNode
 {
     use NodeAttributes;
     /** @var ConstExprArrayItemNode[] */
@@ -19,6 +19,6 @@ class ConstExprArrayNode implements \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExp
     }
     public function __toString() : string
     {
-        return '[' . \implode(', ', $this->items) . ']';
+        return '[' . implode(', ', $this->items) . ']';
     }
 }

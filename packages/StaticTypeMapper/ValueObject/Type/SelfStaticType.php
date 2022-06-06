@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\StaticTypeMapper\ValueObject\Type;
+namespace RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type;
 
-use PHPStan\Type\ThisType;
-final class SelfStaticType extends \PHPStan\Type\ThisType
+use RectorPrefix20220606\PHPStan\Type\ThisType;
+final class SelfStaticType extends ThisType
 {
 }

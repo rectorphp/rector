@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NodeCollector\ValueObject;
+namespace RectorPrefix20220606\Rector\NodeCollector\ValueObject;
 
-use PhpParser\Node\Expr;
-use Rector\Core\Validation\RectorAssert;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
 final class ArrayCallableDynamicMethod
 {
     /**
@@ -22,22 +22,22 @@ final class ArrayCallableDynamicMethod
      * @var \PhpParser\Node\Expr
      */
     private $method;
-    public function __construct(\PhpParser\Node\Expr $callerExpr, string $class, \PhpParser\Node\Expr $method)
+    public function __construct(Expr $callerExpr, string $class, Expr $method)
     {
         $this->callerExpr = $callerExpr;
         $this->class = $class;
         $this->method = $method;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
     public function getClass() : string
     {
         return $this->class;
     }
-    public function getMethod() : \PhpParser\Node\Expr
+    public function getMethod() : Expr
     {
         return $this->method;
     }
-    public function getCallerExpr() : \PhpParser\Node\Expr
+    public function getCallerExpr() : Expr
     {
         return $this->callerExpr;
     }

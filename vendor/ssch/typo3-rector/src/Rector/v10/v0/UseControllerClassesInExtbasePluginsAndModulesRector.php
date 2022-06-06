@@ -1,39 +1,39 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\Rector\v10\v0;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v10\v0;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\Helper\StringUtility;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Concat;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PHPStan\Type\Constant\ConstantStringType;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\StringUtility;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Deprecation-87550-UseControllerClassesWhenRegisteringPluginsmodules.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v0\UseControllerClassesInExtbasePluginsAndModulesRector\UseControllerClassesInExtbasePluginsAndModulesRectorTest
  */
-final class UseControllerClassesInExtbasePluginsAndModulesRector extends \Rector\Core\Rector\AbstractRector
+final class UseControllerClassesInExtbasePluginsAndModulesRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['configurePlugin', 'registerModule'])) {
@@ -42,7 +42,7 @@ final class UseControllerClassesInExtbasePluginsAndModulesRector extends \Rector
         $extensionNameArgumentValue = $node->args[0]->value;
         $extensionName = $this->valueResolver->getValue($extensionNameArgumentValue);
         $fileInfo = $this->file->getSmartFileInfo();
-        if ($extensionNameArgumentValue instanceof \PhpParser\Node\Expr\BinaryOp\Concat && $this->isPotentiallyUndefinedExtensionKeyVariable($extensionNameArgumentValue)) {
+        if ($extensionNameArgumentValue instanceof Concat && $this->isPotentiallyUndefinedExtensionKeyVariable($extensionNameArgumentValue)) {
             $extensionName = $this->valueResolver->getValue($extensionNameArgumentValue->left) . \basename($fileInfo->getRelativeDirectoryPath());
         }
         if (!\is_string($extensionName)) {
@@ -53,7 +53,7 @@ final class UseControllerClassesInExtbasePluginsAndModulesRector extends \Rector
             return null;
         }
         $vendorName = $this->prepareVendorName($extensionName, $delimiterPosition);
-        $extensionName = \Ssch\TYPO3Rector\Helper\StringUtility::prepareExtensionName($extensionName, $delimiterPosition);
+        $extensionName = StringUtility::prepareExtensionName($extensionName, $delimiterPosition);
         if ('' === $extensionName) {
             return null;
         }
@@ -68,9 +68,9 @@ final class UseControllerClassesInExtbasePluginsAndModulesRector extends \Rector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use controller classes when registering extbase plugins/modules', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use controller classes when registering extbase plugins/modules', [new CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 ExtensionUtility::configurePlugin(
     'TYPO3.CMS.Form',
@@ -96,10 +96,10 @@ CODE_SAMPLE
         $objectName = \str_replace(['@extension', '@subpackage', '@controller', '@vendor', '\\\\'], [$extensionKey, $subPackageKey, $controllerAlias, $vendor, '\\'], '@vendor\\@extension\\@subpackage\\Controller\\@controllerController');
         return \trim($objectName, '\\');
     }
-    private function createNewControllerActionsArray(\PhpParser\Node\Expr\Array_ $controllerActions, string $vendorName, string $extensionName) : void
+    private function createNewControllerActionsArray(Array_ $controllerActions, string $vendorName, string $extensionName) : void
     {
         foreach ($controllerActions->items as $controllerActions) {
-            if (!$controllerActions instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$controllerActions instanceof ArrayItem) {
                 continue;
             }
             if (null === $controllerActions->key) {
@@ -110,31 +110,31 @@ CODE_SAMPLE
                 continue;
             }
             $controllerClassNameType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($controllerActions->key);
-            if ($controllerClassNameType instanceof \PHPStan\Type\Constant\ConstantStringType) {
+            if ($controllerClassNameType instanceof ConstantStringType) {
                 // Already transformed
                 continue;
             }
             $controllerActions->key = $this->nodeFactory->createClassConstReference($this->getControllerClassName($vendorName, $extensionName, '', $controllerClassName));
         }
     }
-    private function refactorConfigurePluginMethod(\PhpParser\Node\Expr\StaticCall $staticCall, string $vendorName, string $extensionName) : void
+    private function refactorConfigurePluginMethod(StaticCall $staticCall, string $vendorName, string $extensionName) : void
     {
-        if (isset($staticCall->args[2]) && $staticCall->args[2]->value instanceof \PhpParser\Node\Expr\Array_) {
+        if (isset($staticCall->args[2]) && $staticCall->args[2]->value instanceof Array_) {
             $this->createNewControllerActionsArray($staticCall->args[2]->value, $vendorName, $extensionName);
         }
-        if (isset($staticCall->args[3]) && $staticCall->args[3]->value instanceof \PhpParser\Node\Expr\Array_) {
+        if (isset($staticCall->args[3]) && $staticCall->args[3]->value instanceof Array_) {
             $this->createNewControllerActionsArray($staticCall->args[3]->value, $vendorName, $extensionName);
         }
     }
-    private function refactorRegisterPluginMethod(\PhpParser\Node\Expr\StaticCall $staticCall, string $vendorName, string $extensionName) : void
+    private function refactorRegisterPluginMethod(StaticCall $staticCall, string $vendorName, string $extensionName) : void
     {
-        if (isset($staticCall->args[4]) && $staticCall->args[4]->value instanceof \PhpParser\Node\Expr\Array_) {
+        if (isset($staticCall->args[4]) && $staticCall->args[4]->value instanceof Array_) {
             $this->createNewControllerActionsArray($staticCall->args[4]->value, $vendorName, $extensionName);
         }
     }
-    private function isPotentiallyUndefinedExtensionKeyVariable(\PhpParser\Node\Expr\BinaryOp\Concat $extensionNameArgumentValue) : bool
+    private function isPotentiallyUndefinedExtensionKeyVariable(Concat $extensionNameArgumentValue) : bool
     {
-        if (!$extensionNameArgumentValue->right instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$extensionNameArgumentValue->right instanceof Variable) {
             return \false;
         }
         return null === $this->valueResolver->getValue($extensionNameArgumentValue->right);

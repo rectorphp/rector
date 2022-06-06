@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST;
 
-final class Comment extends \Helmich\TypoScriptParser\Parser\AST\Statement
+final class Comment extends Statement
 {
     /**
      * @var string

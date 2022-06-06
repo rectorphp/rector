@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser\Internal;
+namespace RectorPrefix20220606\PhpParser\Internal;
 
 /**
  * @internal

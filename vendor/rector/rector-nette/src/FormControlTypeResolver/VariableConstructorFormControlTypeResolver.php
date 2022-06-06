@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\FormControlTypeResolver;
+namespace RectorPrefix20220606\Rector\Nette\FormControlTypeResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\TypeWithClassName;
-use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\ValueObject\MethodName;
-use Rector\Nette\Contract\FormControlTypeResolverInterface;
-use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
+use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
+use RectorPrefix20220606\Rector\Core\PhpParser\AstResolver;
+use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
+use RectorPrefix20220606\Rector\Nette\Contract\FormControlTypeResolverInterface;
+use RectorPrefix20220606\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
-final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
+final class VariableConstructorFormControlTypeResolver implements FormControlTypeResolverInterface
 {
     /**
      * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
@@ -41,7 +41,7 @@ final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, AstResolver $astResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -51,9 +51,9 @@ final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\
     /**
      * @return array<string, string>
      */
-    public function resolve(\PhpParser\Node $node) : array
+    public function resolve(Node $node) : array
     {
-        if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$node instanceof Variable) {
             return [];
         }
         // handled else-where
@@ -61,15 +61,15 @@ final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\
             return [];
         }
         $formType = $this->nodeTypeResolver->getType($node);
-        if (!$formType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$formType instanceof TypeWithClassName) {
             return [];
         }
         $formClassReflection = $this->reflectionProvider->getClass($formType->getClassName());
         if (!$formClassReflection->isSubclassOf('Nette\\Application\\UI\\Form')) {
             return [];
         }
-        $classMethod = $this->astResolver->resolveClassMethod($formType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $this->astResolver->resolveClassMethod($formType->getClassName(), MethodName::CONSTRUCT);
+        if (!$classMethod instanceof ClassMethod) {
             return [];
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($classMethod);
@@ -77,7 +77,7 @@ final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\
     /**
      * @required
      */
-    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\CodeQuality\NodeAnalyzer;
 
-use PhpParser\Node\Stmt\Class_;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class ClassLikeAnalyzer
 {
     /**
@@ -12,14 +12,14 @@ final class ClassLikeAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @return string[]
      */
-    public function resolvePropertyNames(\PhpParser\Node\Stmt\Class_ $class) : array
+    public function resolvePropertyNames(Class_ $class) : array
     {
         $propertyNames = [];
         foreach ($class->getProperties() as $property) {

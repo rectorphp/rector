@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\FamilyTree\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\FamilyTree\NodeAnalyzer;
 
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Reflection\Php\PhpMethodReflection;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
+use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
+use RectorPrefix20220606\PHPStan\Reflection\ParametersAcceptorSelector;
+use RectorPrefix20220606\PHPStan\Reflection\Php\PhpMethodReflection;
+use RectorPrefix20220606\PHPStan\Type\MixedType;
+use RectorPrefix20220606\PHPStan\Type\Type;
+use RectorPrefix20220606\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 final class ClassChildAnalyzer
 {
     /**
@@ -16,11 +16,11 @@ final class ClassChildAnalyzer
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
-    public function hasChildClassMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
+    public function hasChildClassMethod(ClassReflection $classReflection, string $methodName) : bool
     {
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
         foreach ($childrenClassReflections as $childClassReflection) {
@@ -28,7 +28,7 @@ final class ClassChildAnalyzer
                 continue;
             }
             $constructorReflectionMethod = $childClassReflection->getNativeMethod($methodName);
-            if (!$constructorReflectionMethod instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
+            if (!$constructorReflectionMethod instanceof PhpMethodReflection) {
                 continue;
             }
             $methodDeclaringClassReflection = $constructorReflectionMethod->getDeclaringClass();
@@ -38,14 +38,14 @@ final class ClassChildAnalyzer
         }
         return \false;
     }
-    public function hasParentClassMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
+    public function hasParentClassMethod(ClassReflection $classReflection, string $methodName) : bool
     {
         return $this->resolveParentClassMethods($classReflection, $methodName) !== [];
     }
     /**
      * Look both parent class and interface, yes, all PHP interface methods are abstract
      */
-    public function hasAbstractParentClassMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
+    public function hasAbstractParentClassMethod(ClassReflection $classReflection, string $methodName) : bool
     {
         $parentClassMethods = $this->resolveParentClassMethods($classReflection, $methodName);
         if ($parentClassMethods === []) {
@@ -58,25 +58,25 @@ final class ClassChildAnalyzer
         }
         return \false;
     }
-    public function resolveParentClassMethodReturnType(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : \PHPStan\Type\Type
+    public function resolveParentClassMethodReturnType(ClassReflection $classReflection, string $methodName) : Type
     {
         $parentClassMethods = $this->resolveParentClassMethods($classReflection, $methodName);
         if ($parentClassMethods === []) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         foreach ($parentClassMethods as $parentClassMethod) {
-            $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($parentClassMethod->getVariants());
+            $parametersAcceptor = ParametersAcceptorSelector::selectSingle($parentClassMethod->getVariants());
             $nativeReturnType = $parametersAcceptor->getNativeReturnType();
-            if (!$nativeReturnType instanceof \PHPStan\Type\MixedType) {
+            if (!$nativeReturnType instanceof MixedType) {
                 return $nativeReturnType;
             }
         }
-        return new \PHPStan\Type\MixedType();
+        return new MixedType();
     }
     /**
      * @return PhpMethodReflection[]
      */
-    public function resolveParentClassMethods(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : array
+    public function resolveParentClassMethods(ClassReflection $classReflection, string $methodName) : array
     {
         $parentClassMethods = [];
         $parents = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
@@ -85,7 +85,7 @@ final class ClassChildAnalyzer
                 continue;
             }
             $methodReflection = $parent->getNativeMethod($methodName);
-            if (!$methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
+            if (!$methodReflection instanceof PhpMethodReflection) {
                 continue;
             }
             $methodDeclaringMethodClass = $methodReflection->getDeclaringClass();

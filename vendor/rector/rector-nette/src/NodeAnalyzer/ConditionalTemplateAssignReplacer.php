@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\NodeAnalyzer;
+namespace RectorPrefix20220606\Rector\Nette\NodeAnalyzer;
 
-use PhpParser\Node\Expr\Variable;
-use Rector\Nette\ValueObject\TemplateParametersAssigns;
+use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use RectorPrefix20220606\Rector\Nette\ValueObject\TemplateParametersAssigns;
 /**
  * Replaces:
  *
@@ -16,11 +16,11 @@ use Rector\Nette\ValueObject\TemplateParametersAssigns;
  */
 final class ConditionalTemplateAssignReplacer
 {
-    public function processClassMethod(\Rector\Nette\ValueObject\TemplateParametersAssigns $templateParametersAssigns) : void
+    public function processClassMethod(TemplateParametersAssigns $templateParametersAssigns) : void
     {
         foreach ($templateParametersAssigns->getNonSingleParameterAssigns() as $parameterAssign) {
             $assign = $parameterAssign->getAssign();
-            $assign->var = new \PhpParser\Node\Expr\Variable($parameterAssign->getParameterName());
+            $assign->var = new Variable($parameterAssign->getParameterName());
         }
     }
 }

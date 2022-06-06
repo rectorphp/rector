@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Laravel\Rector\StaticCall;
+namespace RectorPrefix20220606\Rector\Laravel\Rector\StaticCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\Php\PhpMethodReflection;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Laravel\NodeFactory\RouterRegisterNodeAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Arg;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use RectorPrefix20220606\PhpParser\Node\Identifier;
+use RectorPrefix20220606\PHPStan\Analyser\Scope;
+use RectorPrefix20220606\PHPStan\Reflection\Php\PhpMethodReflection;
+use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use RectorPrefix20220606\Rector\Laravel\NodeFactory\RouterRegisterNodeAnalyzer;
+use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
@@ -25,7 +25,7 @@ use RectorPrefix20220606\Webmozart\Assert\Assert;
  *
  * @see \Rector\Laravel\Tests\Rector\StaticCall\RouteActionCallableRector\RouteActionCallableRectorTest
  */
-final class RouteActionCallableRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class RouteActionCallableRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -57,14 +57,14 @@ final class RouteActionCallableRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Laravel\NodeFactory\RouterRegisterNodeAnalyzer
      */
     private $routerRegisterNodeAnalyzer;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Laravel\NodeFactory\RouterRegisterNodeAnalyzer $routerRegisterNodeAnalyzer)
+    public function __construct(ReflectionResolver $reflectionResolver, RouterRegisterNodeAnalyzer $routerRegisterNodeAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->routerRegisterNodeAnalyzer = $routerRegisterNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use PHP callable syntax instead of string syntax for controller route declarations.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use PHP callable syntax instead of string syntax for controller route declarations.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 Route::get('/users', 'UserController@index');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -77,12 +77,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param Node\Expr\MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->routerRegisterNodeAnalyzer->isRegisterMethodStaticCall($node)) {
             return null;
@@ -91,7 +91,7 @@ CODE_SAMPLE
         if (!isset($node->args[$position])) {
             return null;
         }
-        if (!$node->args[$position] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[$position] instanceof Arg) {
             return null;
         }
         $arg = $node->args[$position];
@@ -100,12 +100,12 @@ CODE_SAMPLE
         if ($segments === null) {
             return null;
         }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return null;
         }
         $phpMethodReflection = $this->reflectionResolver->resolveMethodReflection($segments[0], $segments[1], $scope);
-        if (!$phpMethodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
+        if (!$phpMethodReflection instanceof PhpMethodReflection) {
             return null;
         }
         $node->args[$position]->value = $this->nodeFactory->createArray([$this->nodeFactory->createClassConstReference($segments[0]), $segments[1]]);
@@ -117,12 +117,12 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $routes = $configuration[self::ROUTES] ?? [];
-        \RectorPrefix20220606\Webmozart\Assert\Assert::isArray($routes);
-        \RectorPrefix20220606\Webmozart\Assert\Assert::allString(\array_keys($routes));
-        \RectorPrefix20220606\Webmozart\Assert\Assert::allString($routes);
+        Assert::isArray($routes);
+        Assert::allString(\array_keys($routes));
+        Assert::allString($routes);
         $this->routes = $routes;
         $namespace = $configuration[self::NAMESPACE] ?? self::DEFAULT_NAMESPACE;
-        \RectorPrefix20220606\Webmozart\Assert\Assert::string($namespace);
+        Assert::string($namespace);
         $this->namespace = $namespace;
     }
     /**
@@ -169,7 +169,7 @@ CODE_SAMPLE
         }
         return \strpos($action, '@') !== \false;
     }
-    private function getNamespace(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : string
+    private function getNamespace(SmartFileInfo $fileInfo) : string
     {
         $realpath = $fileInfo->getRealPath();
         return $this->routes[$realpath] ?? $this->namespace;

@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Laravel\Rector\ClassMethod;
+namespace RectorPrefix20220606\Rector\Laravel\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220606\PhpParser\Node;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use RectorPrefix20220606\Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://laracasts.com/discuss/channels/laravel/laravel-57-upgrade-observer-problem
  *
  * @see \Rector\Laravel\Tests\Rector\ClassMethod\AddParentBootToModelClassMethodRector\AddParentBootToModelClassMethodRectorTest
  */
-final class AddParentBootToModelClassMethodRector extends \Rector\Core\Rector\AbstractRector
+final class AddParentBootToModelClassMethodRector extends AbstractRector
 {
     /**
      * @var string
@@ -28,13 +28,13 @@ final class AddParentBootToModelClassMethodRector extends \Rector\Core\Rector\Ab
      * @var \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer
      */
     private $staticCallAnalyzer;
-    public function __construct(\Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer)
+    public function __construct(StaticCallAnalyzer $staticCallAnalyzer)
     {
         $this->staticCallAnalyzer = $staticCallAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add parent::boot(); call to boot() class method in child of Illuminate\\Database\\Eloquent\\Model', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add parent::boot(); call to boot() class method in child of Illuminate\\Database\\Eloquent\\Model', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -62,25 +62,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
-        if (!$this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Illuminate\\Database\\Eloquent\\Model'))) {
+        if (!$this->isObjectType($classLike, new ObjectType('Illuminate\\Database\\Eloquent\\Model'))) {
             return null;
         }
         if (!$this->isName($node->name, self::BOOT)) {
             return null;
         }
         foreach ((array) $node->stmts as $key => $classMethodStmt) {
-            if ($classMethodStmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if ($classMethodStmt instanceof Expression) {
                 $classMethodStmt = $classMethodStmt->expr;
             }
             // is in the 1st position? → only correct place
@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
         // missing, we need to add one
         $staticCall = $this->nodeFactory->createStaticCall('parent', self::BOOT);
-        $parentStaticCallExpression = new \PhpParser\Node\Stmt\Expression($staticCall);
+        $parentStaticCallExpression = new Expression($staticCall);
         $node->stmts = \array_merge([$parentStaticCallExpression], (array) $node->stmts);
         return $node;
     }

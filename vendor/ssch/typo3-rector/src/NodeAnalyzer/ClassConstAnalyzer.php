@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\NodeAnalyzer;
+namespace RectorPrefix20220606\Ssch\TYPO3Rector\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ClassConstFetch;
-use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20220606\PhpParser\Node\Expr;
+use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
+use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
 final class ClassConstAnalyzer
 {
     /**
@@ -13,16 +13,16 @@ final class ClassConstAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * Detects "SomeClass::class"
      */
-    public function isClassConstReference(\PhpParser\Node\Expr $expr, string $className) : bool
+    public function isClassConstReference(Expr $expr, string $className) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+        if (!$expr instanceof ClassConstFetch) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($expr->name, 'class')) {
