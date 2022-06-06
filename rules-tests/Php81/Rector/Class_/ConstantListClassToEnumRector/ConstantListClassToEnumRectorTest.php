@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Php80\Rector\Class_\ConstantListClassToEnumRector;
+namespace Rector\Tests\Php81\Rector\Class_\ConstantListClassToEnumRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

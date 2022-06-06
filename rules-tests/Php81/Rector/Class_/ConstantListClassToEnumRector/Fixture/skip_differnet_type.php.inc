@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php80\Rector\Class_\ConstantListClassToEnumRector\Fixture;
+namespace Rector\Tests\Php81\Rector\Class_\ConstantListClassToEnumRector\Fixture;
 
 final class SkipDifferentType
 {
