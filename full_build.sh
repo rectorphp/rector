@@ -37,7 +37,7 @@ sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
 
 # verify syntax valid in php 7.2
 composer global require php-parallel-lint/php-parallel-lint
-~/.composer/vendor/bin/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/ssch/typo3-rector/templates/maker --exclude rector-prefixed-downgraded/vendor/rector/rector-generator/templates --exclude rector-prefixed-downgraded/vendor/symfony/contracts/Cache --exclude rector-prefixed-downgraded/vendor/symfony/contracts/HttpClient/Test
+~/.composer/vendor/bin/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/rector/rector-generator/templates --exclude rector-prefixed-downgraded/vendor/symfony/contracts/Cache --exclude rector-prefixed-downgraded/vendor/symfony/contracts/HttpClient/Test
 
 # Check php 7.2 can be used locally with PHP72_BIN_PATH env
 # rector-prefixed-downgraded check

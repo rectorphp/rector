@@ -28,7 +28,6 @@ jobs:
                     - rectorphp/rector-nette
                     - rectorphp/rector-cakephp
                     - rectorphp/rector-phpoffice
-                    - sabbelasichon/typo3-rector
 
         steps:
             # see https://github.com/actions/checkout#usage

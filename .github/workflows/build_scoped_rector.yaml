@@ -85,7 +85,7 @@ jobs:
                     php-version: 7.2
                     coverage: none
             -   run: composer global require php-parallel-lint/php-parallel-lint
-            -   run: /home/runner/.composer/vendor/bin/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/ssch/typo3-rector/templates/maker --exclude rector-prefixed-downgraded/vendor/rector/rector-generator/templates --exclude rector-prefixed-downgraded/vendor/symfony/contracts/Cache --exclude rector-prefixed-downgraded/vendor/symfony/contracts/HttpClient/Test
+            -   run: /home/runner/.composer/vendor/bin/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/rector/rector-generator/templates --exclude rector-prefixed-downgraded/vendor/symfony/contracts/Cache --exclude rector-prefixed-downgraded/vendor/symfony/contracts/HttpClient/Test
 
             # 5. copy repository meta files
             -   run: |

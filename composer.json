@@ -33,7 +33,6 @@
         "rector/rector-phpunit": "dev-main",
         "rector/rector-symfony": "dev-main",
         "sebastian/diff": "^4.0.4",
-        "ssch/typo3-rector": "dev-main",
         "symfony/console": "6.1.*",
         "symfony/contracts": "3.1.*",
         "symfony/dependency-injection": "6.1.*",

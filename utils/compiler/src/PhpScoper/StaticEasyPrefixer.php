@@ -16,9 +16,6 @@ final class StaticEasyPrefixer
         'Symplify\SmartFileSystem\SmartFileInfo',
         // for ComposerJson because it is part of the public API. I.e. ComposerRectorInterface
         'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson',
-        // for usage in Helmich\TypoScriptParser\Parser\Traverser\Visitor
-        'Helmich\TypoScriptParser\Parser\AST\Statement',
-        'Helmich\TypoScriptParser\Parser\Traverser\Traverser',
         // for usage in packages/Testing/PHPUnit/PlatformAgnosticAssertions.php
         'PHPUnit\Framework\Constraint\IsEqual',
     ];
@@ -31,7 +28,6 @@ final class StaticEasyPrefixer
         'Rector\*',
         // we use this API a lot
         'PhpParser\*',
-        'Ssch\TYPO3Rector\*',
 
         // phpstan needs to be here, as phpstan/vendor autoload is statically generated and namespaces cannot be changed
         'PHPStan\*',

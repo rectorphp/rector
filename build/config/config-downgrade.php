@@ -33,9 +33,6 @@ final class DowngradeRectorConfig
         // symfony test are parts of package
         '*/Test/*',
 
-        // only for dev
-        'packages/Testing/PhpConfigPrinter/*',
-
         // Individual classes that can be excluded because
         // they are not used by Rector, and they use classes
         // loaded with "require-dev" so it'd throw an error
@@ -46,10 +43,7 @@ final class DowngradeRectorConfig
         'vendor/cweagans/*',
         // Rector doesn't use it, so we simply skip downgrading this class
         'vendor/symfony/contracts/Cache/*',
-        // depends on PHPUnit, that is only in dev deps
-        'vendor/myclabs/php-enum/src/PHPUnit/Comparator.php',
 
         'vendor/rector/rector-generator/templates',
-        'vendor/ssch/typo3-rector/config',
     ];
 }

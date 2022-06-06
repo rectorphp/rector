@@ -87,20 +87,6 @@ return [
             'Symplify\SmartFileSystem\SmartFileInfo'
         ),
 
-        // unprefixed Statement
-        fn (string $filePath, string $prefix, string $content): string => Strings::replace(
-            $content,
-            '#' . $prefix . '\\\\Helmich\\\\TypoScriptParser\\\\Parser\\\\AST\\\\Statement#',
-            'Helmich\TypoScriptParser\Parser\AST\Statement'
-        ),
-
-        // unprefixed Traverser
-        fn (string $filePath, string $prefix, string $content): string => Strings::replace(
-            $content,
-            '#' . $prefix . '\\\\Helmich\\\\TypoScriptParser\\\\Parser\\\\Traverser\\\\Traverser#',
-            'Helmich\TypoScriptParser\Parser\Traverser\Traverser'
-        ),
-
         // unprefixed PHPUnit IsEqual
         fn (string $filePath, string $prefix, string $content): string => Strings::replace(
             $content,
@@ -183,10 +169,7 @@ return [
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
             // skip vendor, expect rector packages
-            if (\str_contains($filePath, 'vendor/') && ! \str_contains($filePath, 'vendor/rector') && ! \str_contains(
-                $filePath,
-                'vendor/ssch/typo3-rector'
-            )) {
+            if (\str_contains($filePath, 'vendor/') && ! \str_contains($filePath, 'vendor/rector')) {
                 return $content;
             }
 
@@ -207,11 +190,6 @@ return [
 
             // skip "Rector\\" namespace
             if (\str_contains($content, '$services->load(\'Rector')) {
-                return $content;
-            }
-
-            // skip "Ssch\\" namespace
-            if (\str_contains($content, '$services->load(\'Ssch')) {
                 return $content;
             }
 
