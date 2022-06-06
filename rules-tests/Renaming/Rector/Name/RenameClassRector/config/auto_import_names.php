@@ -16,5 +16,6 @@ return static function (RectorConfig $rectorConfig): void {
         OldClass::class => NewClass::class,
         SomeServiceClassFirstNamespace::class => SomeServiceClass::class,
         'Storage' => 'Illuminate\Support\Facades\Storage',
+        Queue::class => \Illuminate\Support\Facades\Queue::class,
     ]);
 };
