@@ -60,6 +60,11 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             throw new ShouldNotHappenException();
         }
 
+        $virtualNode = $phpParserNode->getAttribute(AttributeKey::VIRTUAL_NODE);
+        if ($virtualNode === true) {
+            return null;
+        }
+
         $identifier = clone $node;
 
         $namespacedName = $this->resolveNamespacedName($phpParserNode, $identifier->name);
