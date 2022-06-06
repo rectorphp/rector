@@ -82,7 +82,8 @@
         "contribute": [
             "@fix-rector",
             "@fix-style",
-            "@analyze"
+            "@analyze",
+            "@docs"
         ],
         "check-style": "@php vendor\/bin\/ecs check --ansi",
         "fix-style": "@php vendor\/bin\/ecs check --fix --ansi",
