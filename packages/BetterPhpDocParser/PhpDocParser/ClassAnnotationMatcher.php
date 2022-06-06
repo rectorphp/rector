@@ -31,8 +31,21 @@ final class ClassAnnotationMatcher
     ) {
     }
 
-    public function resolveTagFullyQualifiedName(string $tag, Node $node): string
+    public function resolveTagToKnownFullyQualifiedName(string $tag, Node $node): ?string
     {
+        return $this->_resolveTagFullyQualifiedName($tag, $node, true);
+    }
+
+    public function resolveTagFullyQualifiedName(string $tag, Node $node): ?string
+    {
+        return $this->_resolveTagFullyQualifiedName($tag, $node, false);
+    }
+
+    private function _resolveTagFullyQualifiedName(
+        string $tag,
+        Node $node,
+        bool $returnNullOnUnknownClass
+    ): ?string {
         $uniqueHash = $tag . spl_object_hash($node);
         if (isset($this->fullyQualifiedNameByHash[$uniqueHash])) {
             return $this->fullyQualifiedNameByHash[$uniqueHash];
@@ -41,7 +54,15 @@ final class ClassAnnotationMatcher
         $tag = ltrim($tag, '@');
 
         $uses = $this->useImportsResolver->resolveForNode($node);
-        $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag);
+        $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag, $returnNullOnUnknownClass);
+
+        if ($fullyQualifiedClass === null) {
+            if ($returnNullOnUnknownClass) {
+                return null;
+            }
+
+            $fullyQualifiedClass = $tag;
+        }
 
         $this->fullyQualifiedNameByHash[$uniqueHash] = $fullyQualifiedClass;
 
@@ -51,7 +72,7 @@ final class ClassAnnotationMatcher
     /**
      * @param Use_[]|GroupUse[] $uses
      */
-    private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag): string
+    private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag, bool $returnNullOnUnknownClass): ?string
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
 
@@ -64,18 +85,24 @@ final class ClassAnnotationMatcher
                 }
 
                 if (! str_contains($tag, '\\')) {
-                    return $this->resolveAsAliased($uses, $tag);
+                    return $this->resolveAsAliased($uses, $tag, $returnNullOnUnknownClass);
+                }
+
+                if (str_starts_with($tag, '\\') && $this->reflectionProvider->hasClass($tag)) {
+                    // Global or absolute Class
+                    return $tag;
                 }
             }
         }
 
-        return $this->useImportNameMatcher->matchNameWithUses($tag, $uses) ?? $tag;
+        $class = $this->useImportNameMatcher->matchNameWithUses($tag, $uses);
+        return $this->resolveClass($class, $returnNullOnUnknownClass);
     }
 
     /**
      * @param Use_[]|GroupUse[] $uses
      */
-    private function resolveAsAliased(array $uses, string $tag): string
+    private function resolveAsAliased(array $uses, string $tag, bool $returnNullOnUnknownClass): ?string
     {
         foreach ($uses as $use) {
             $prefix = $use instanceof GroupUse
@@ -88,11 +115,22 @@ final class ClassAnnotationMatcher
                 }
 
                 if ($useUse->alias->toString() === $tag) {
-                    return $prefix . $useUse->name->toString();
+                    $class = $prefix . $useUse->name->toString();
+                    return $this->resolveClass($class, $returnNullOnUnknownClass);
                 }
             }
         }
 
-        return $this->useImportNameMatcher->matchNameWithUses($tag, $uses) ?? $tag;
+        $class = $this->useImportNameMatcher->matchNameWithUses($tag, $uses);
+        return $this->resolveClass($class, $returnNullOnUnknownClass);
+    }
+
+    private function resolveClass(?string $class, bool $returnNullOnUnknownClass): ?string
+    {
+        if (null === $class) {
+            return null;
+        }
+        $resolvedClass = $this->reflectionProvider->hasClass($class) ? $class : null;
+        return $returnNullOnUnknownClass ? $resolvedClass : $class;
     }
 }
